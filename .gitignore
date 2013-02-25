@@ -1,4 +1,6 @@
 */bin/
 *~
-*.jardesc
+*/*.jardesc
 */.settings/
+*/.classpath
+*/.project
