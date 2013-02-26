@@ -1,4 +1,4 @@
-package com.github.ribesg.ncore.nodes.cuboid.beans;
+package com.github.ribesg.ncuboid.beans;
 
 public enum Flag {
     BOOSTER,

@@ -12,8 +12,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.github.ribesg.ncore.Permissions;
-import com.github.ribesg.ncore.nodes.cuboid.beans.Flag;
 import com.github.ribesg.ncuboid.NCuboid;
+import com.github.ribesg.ncuboid.beans.Flag;
 import com.github.ribesg.ncuboid.events.extensions.ExtendedPlayerJoinEvent;
 import com.github.ribesg.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
 import com.github.ribesg.ncuboid.listeners.AbstractListener;

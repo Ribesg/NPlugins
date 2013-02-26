@@ -3,9 +3,6 @@ package com.github.ribesg.ncuboid.beans;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import com.github.ribesg.ncore.nodes.cuboid.beans.FlagAttributes;
-import com.github.ribesg.ncore.nodes.cuboid.beans.Flags;
-import com.github.ribesg.ncore.nodes.cuboid.beans.Rights;
 
 // This is a really different Cuboid type.
 public class WorldCuboid extends GeneralCuboid {

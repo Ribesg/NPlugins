@@ -13,9 +13,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
-import com.github.ribesg.ncore.nodes.cuboid.beans.Flag;
 import com.github.ribesg.ncuboid.NCuboid;
 import com.github.ribesg.ncuboid.beans.CuboidDB;
+import com.github.ribesg.ncuboid.beans.Flag;
 import com.github.ribesg.ncuboid.beans.PlayerCuboid;
 import com.github.ribesg.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import com.github.ribesg.ncuboid.events.extensions.ExtendedPlayerInteractEvent;

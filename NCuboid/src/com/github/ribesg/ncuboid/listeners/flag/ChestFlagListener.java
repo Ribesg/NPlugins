@@ -8,8 +8,8 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.github.ribesg.ncore.nodes.cuboid.beans.Flag;
 import com.github.ribesg.ncuboid.NCuboid;
+import com.github.ribesg.ncuboid.beans.Flag;
 import com.github.ribesg.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
 import com.github.ribesg.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
 import com.github.ribesg.ncuboid.events.extensions.ExtendedPlayerInteractEvent;

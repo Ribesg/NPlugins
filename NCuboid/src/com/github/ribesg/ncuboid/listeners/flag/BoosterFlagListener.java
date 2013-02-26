@@ -4,9 +4,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import com.github.ribesg.ncore.nodes.cuboid.beans.Flag;
-import com.github.ribesg.ncore.nodes.cuboid.beans.FlagAtt;
 import com.github.ribesg.ncuboid.NCuboid;
+import com.github.ribesg.ncuboid.beans.Flag;
+import com.github.ribesg.ncuboid.beans.FlagAtt;
 import com.github.ribesg.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
 import com.github.ribesg.ncuboid.listeners.AbstractListener;
 

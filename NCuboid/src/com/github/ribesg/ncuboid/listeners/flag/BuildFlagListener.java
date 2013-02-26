@@ -17,9 +17,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
 import org.bukkit.event.world.StructureGrowEvent;
 
-import com.github.ribesg.ncore.nodes.cuboid.beans.Flag;
 import com.github.ribesg.ncuboid.NCuboid;
 import com.github.ribesg.ncuboid.beans.CuboidDB;
+import com.github.ribesg.ncuboid.beans.Flag;
 import com.github.ribesg.ncuboid.beans.PlayerCuboid;
 import com.github.ribesg.ncuboid.events.extensions.ExtendedHangingBreakEvent;
 import com.github.ribesg.ncuboid.events.extensions.ExtendedPlayerInteractEvent;

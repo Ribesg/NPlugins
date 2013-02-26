@@ -3,12 +3,18 @@ package com.github.ribesg.npunisher;
 import lombok.Getter;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class NPunisher extends PunisherNode {
+import com.github.ribesg.ncore.NCore;
+import com.github.ribesg.ncore.nodes.cuboid.CuboidNode;
+import com.github.ribesg.npunisher.api.NPunisherAPI;
 
-	// Core plugin
+public class NPunisher extends JavaPlugin {
+
+	// Core plugin related
 	public static final String	NCORE			= "NCore";
 	@Getter public NCore		core;
+	public NPunisherAPI			api;
 
 	// Useful Nodes
 	public static final String	NCUBOID			= "NCuboid";
@@ -20,11 +26,7 @@ public class NPunisher extends PunisherNode {
 
 	@Override
 	public void onEnable() {
-		if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
-			// TODO
-		} else {
-			core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-			// TODO
+		if (linkCore()) {
 			afterEnable();
 		}
 	}
@@ -42,7 +44,6 @@ public class NPunisher extends PunisherNode {
 					} else {
 						cuboidNode = (CuboidNode) Bukkit.getPluginManager().getPlugin(NCUBOID);
 						// TODO
-						afterEnable();
 					}
 				}
 			});
@@ -54,9 +55,15 @@ public class NPunisher extends PunisherNode {
 
 	}
 
-	public void setCore(final NCore core) {
-		this.core = core;
-		core.setPunisherNode(this);
+	public boolean linkCore() {
+		if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
+			return false;
+		} else {
+			core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
+			api = new NPunisherAPI(this);
+			core.setPunisherNode(api);
+			return true;
+		}
 	}
 
 }

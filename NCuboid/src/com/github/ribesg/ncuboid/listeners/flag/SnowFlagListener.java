@@ -6,9 +6,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockFormEvent;
 
-import com.github.ribesg.ncore.nodes.cuboid.beans.Flag;
 import com.github.ribesg.ncuboid.NCuboid;
 import com.github.ribesg.ncuboid.beans.CuboidDB;
+import com.github.ribesg.ncuboid.beans.Flag;
 import com.github.ribesg.ncuboid.beans.PlayerCuboid;
 import com.github.ribesg.ncuboid.listeners.AbstractListener;
 

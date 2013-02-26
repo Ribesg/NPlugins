@@ -3,64 +3,69 @@ package com.github.ribesg.ndodgeball;
 import lombok.Getter;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.ribesg.ncore.NCore;
 import com.github.ribesg.ncore.nodes.cuboid.CuboidNode;
-import com.github.ribesg.ncore.nodes.dodgeball.DodgeBallNode;
 
-public class NDodgeBall extends DodgeBallNode {
+public class NDodgeBall extends JavaPlugin {
 
-    // Core plugin
-    public static final String NCORE           = "NCore";
-    @Getter public NCore       core;
+	// Core plugin
+	public static final String	NCORE			= "NCore";
+	@Getter public NCore		core;
+	public NDodgeBallAPI		api;
 
-    // Useful Nodes
-    public static final String NCUBOID         = "NCuboid";
-    @Getter public CuboidNode  cuboidNode;
+	// Useful Nodes
+	public static final String	NCUBOID			= "NCuboid";
+	@Getter public CuboidNode	cuboidNode;
 
-    // Set to true by afterEnable() call
-    // Prevent multiple calls to afterEnable
-    private boolean            loadingComplete = false;
+	// Set to true by afterEnable() call
+	// Prevent multiple calls to afterEnable
+	private boolean				loadingComplete	= false;
 
-    @Override
-    public void onEnable() {
-        if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
-            // TODO
-        } else {
-            core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-            // TODO
-            afterEnable();
-        }
-    }
+	@Override
+	public void onEnable() {
+		if (linkCore()) {
+			afterEnable();
+		} else {
+			// TODO Fails : this plugin requires NCuboid
+		}
+	}
 
-    public void afterEnable() {
-        if (!loadingComplete) {
-            loadingComplete = true;
-            Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+	public void afterEnable() {
+		if (!loadingComplete) {
+			loadingComplete = true;
+			Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 
-                @Override
-                public void run() {
-                    // Interact with other Nodes here
-                    if (!Bukkit.getPluginManager().isPluginEnabled(NCUBOID)) {
-                        // TODO
-                    } else {
-                        cuboidNode = (CuboidNode) Bukkit.getPluginManager().getPlugin(NCUBOID);
-                        // TODO
-                        afterEnable();
-                    }
-                }
-            });
-        }
-    }
+				@Override
+				public void run() {
+					// Interact with other Nodes here
+					if (!Bukkit.getPluginManager().isPluginEnabled(NCUBOID)) {
+						// TODO
+					} else {
+						cuboidNode = (CuboidNode) Bukkit.getPluginManager().getPlugin(NCUBOID);
+						// TODO
+						afterEnable();
+					}
+				}
+			});
+		}
+	}
 
-    @Override
-    public void onDisable() {
+	@Override
+	public void onDisable() {
 
-    }
+	}
 
-    public void setCore(final NCore core) {
-        this.core = core;
-        core.setDodgeBallNode(this);
-    }
+	public boolean linkCore() {
+		if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
+			return false;
+		} else {
+			core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
+			api = new NDodgeBallAPI(this);
+			core.setDodgeBallNode(api);
+			return true;
+		}
+	}
 
 }

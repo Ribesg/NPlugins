@@ -8,9 +8,6 @@ import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import com.github.ribesg.ncore.nodes.cuboid.beans.FlagAttributes;
-import com.github.ribesg.ncore.nodes.cuboid.beans.Flags;
-import com.github.ribesg.ncore.nodes.cuboid.beans.Rights;
 
 public abstract class PlayerCuboid extends GeneralCuboid {
 
