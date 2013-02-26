@@ -3,5 +3,5 @@ version: 0.0.0
 description: Core of the N plugins suite
 author: Ribesg
 website: http://itsn3w.fr/
-main: com.github.ribesg.ncore.NCore
+main: fr.ribesg.bukkit.ncore.NCore
 load: STARTUP

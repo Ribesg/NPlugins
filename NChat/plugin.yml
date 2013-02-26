@@ -3,4 +3,4 @@ version: 0.0.0
 description: Chat plugin for N plugins suite
 author: Ribesg
 website: http://itsn3w.fr/
-main: com.github.ribesg.nchat.NChat
+main: fr.ribesg.bukkit.nchat.NChat
