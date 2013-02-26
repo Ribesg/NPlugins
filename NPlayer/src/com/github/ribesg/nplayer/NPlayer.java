@@ -1,4 +1,4 @@
-package com.github.ribesg.npunisher;
+package com.github.ribesg.nplayer;
 
 import lombok.Getter;
 
@@ -7,14 +7,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.ribesg.ncore.NCore;
 import com.github.ribesg.ncore.nodes.cuboid.CuboidNode;
-import com.github.ribesg.npunisher.api.NPunisherAPI;
+import com.github.ribesg.nplayer.api.NPlayerAPI;
 
-public class NPunisher extends JavaPlugin {
+public class NPlayer extends JavaPlugin {
 
 	// Core plugin related
 	public static final String	NCORE			= "NCore";
 	@Getter public NCore		core;
-	public NPunisherAPI			api;
+	public NPlayerAPI			api;
 
 	// Useful Nodes
 	public static final String	NCUBOID			= "NCuboid";
@@ -60,7 +60,7 @@ public class NPunisher extends JavaPlugin {
 			return false;
 		} else {
 			core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-			api = new NPunisherAPI(this);
+			api = new NPlayerAPI(this);
 			core.setPunisherNode(api);
 			return true;
 		}
