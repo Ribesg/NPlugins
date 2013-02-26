@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.ribesg.nchat.api.NChatAPI;
 import com.github.ribesg.nchat.lang.Messages;
 import com.github.ribesg.nchat.lang.Messages.MessageId;
 import com.github.ribesg.nchat.listeners.PlayerChatListener;

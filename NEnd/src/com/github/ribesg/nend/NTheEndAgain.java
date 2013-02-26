@@ -1,4 +1,4 @@
-package com.github.ribesg.ndodgeball;
+package com.github.ribesg.nend;
 
 import lombok.Getter;
 
@@ -6,19 +6,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.ribesg.ncore.NCore;
-import com.github.ribesg.ncore.nodes.cuboid.CuboidNode;
-import com.github.ribesg.ndodgeball.api.NDodgeBallAPI;
+import com.github.ribesg.nend.api.NTheEndAgainAPI;
 
-public class NDodgeBall extends JavaPlugin {
+public class NTheEndAgain extends JavaPlugin {
 
 	// Core plugin
 	public static final String	NCORE			= "NCore";
 	@Getter public NCore		core;
-	public NDodgeBallAPI		api;
+	public NTheEndAgainAPI		api;
 
 	// Useful Nodes
-	public static final String	NCUBOID			= "NCuboid";
-	@Getter public CuboidNode	cuboidNode;
+	// // None
 
 	// Set to true by afterEnable() call
 	// Prevent multiple calls to afterEnable
@@ -28,8 +26,6 @@ public class NDodgeBall extends JavaPlugin {
 	public void onEnable() {
 		if (linkCore()) {
 			afterEnable();
-		} else {
-			// TODO Fails : this plugin requires NCuboid
 		}
 	}
 
@@ -41,13 +37,7 @@ public class NDodgeBall extends JavaPlugin {
 				@Override
 				public void run() {
 					// Interact with other Nodes here
-					if (!Bukkit.getPluginManager().isPluginEnabled(NCUBOID)) {
-						// TODO
-					} else {
-						cuboidNode = (CuboidNode) Bukkit.getPluginManager().getPlugin(NCUBOID);
-						// TODO
-						afterEnable();
-					}
+
 				}
 			});
 		}
@@ -63,8 +53,8 @@ public class NDodgeBall extends JavaPlugin {
 			return false;
 		} else {
 			core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-			api = new NDodgeBallAPI(this);
-			core.setDodgeBallNode(api);
+			api = new NTheEndAgainAPI(this);
+			core.setTheEndAgainNode(api);
 			return true;
 		}
 	}
