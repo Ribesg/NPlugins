@@ -11,13 +11,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-
 import fr.ribesg.bukkit.ncore.Utils;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.RectCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid.CuboidState;
+import fr.ribesg.bukkit.ncuboid.beans.RectCuboid;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
 import fr.ribesg.bukkit.ncuboid.lang.Messages.MessageId;

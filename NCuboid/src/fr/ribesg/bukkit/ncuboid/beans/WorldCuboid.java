@@ -3,7 +3,6 @@ package fr.ribesg.bukkit.ncuboid.beans;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-
 // This is a really different Cuboid type.
 public class WorldCuboid extends GeneralCuboid {
 

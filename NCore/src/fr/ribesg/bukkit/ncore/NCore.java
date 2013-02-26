@@ -15,21 +15,21 @@ import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
 
 public class NCore extends JavaPlugin {
 
-	@Getter @Setter private ChatNode			chatNode;
-	@Getter @Setter private CuboidNode			cuboidNode;
-	@Getter @Setter private DodgeBallNode		dodgeBallNode;
-	@Getter @Setter private EnchantingEggNode	enchantingEggNode;
-	@Getter @Setter private GeneralNode			generalNode;
-	@Getter @Setter private PunisherNode		punisherNode;
-	@Getter @Setter private TheEndAgainNode		theEndAgainNode;
+    @Getter @Setter private ChatNode          chatNode;
+    @Getter @Setter private CuboidNode        cuboidNode;
+    @Getter @Setter private DodgeBallNode     dodgeBallNode;
+    @Getter @Setter private EnchantingEggNode enchantingEggNode;
+    @Getter @Setter private GeneralNode       generalNode;
+    @Getter @Setter private PunisherNode      punisherNode;
+    @Getter @Setter private TheEndAgainNode   theEndAgainNode;
 
-	@Override
-	public void onEnable() {
-		// Nothing yet 
-	}
+    @Override
+    public void onEnable() {
+        // Nothing yet 
+    }
 
-	@Override
-	public void onDisable() {
-		// Nothing yet
-	}
+    @Override
+    public void onDisable() {
+        // Nothing yet
+    }
 }

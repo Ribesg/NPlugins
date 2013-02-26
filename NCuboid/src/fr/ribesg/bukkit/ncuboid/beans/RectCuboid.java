@@ -9,7 +9,6 @@ import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-
 public class RectCuboid extends PlayerCuboid {
     @Getter @Setter private Location minCorner, maxCorner;
     @Getter @Setter private int      minX, maxX, minY, maxY, minZ, maxZ;

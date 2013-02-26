@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-
 public abstract class PlayerCuboid extends GeneralCuboid {
 
     public static enum CuboidState {

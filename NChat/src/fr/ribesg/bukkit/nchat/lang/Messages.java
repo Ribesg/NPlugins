@@ -24,43 +24,20 @@ public class Messages {
         errorWhileLoadingConfiguration,
 
         // General deny response
-        actionCancelledByCuboid,
         noPermissionForCommand,
         cmdOnlyAvailableForPlayers,
 
-        // PlayerStickListener
-        blockInSelection,
-        blockNotInSelection,
-        blockNotProtected,
-        blockProtectedMultipleCuboids,
-        blockProtectedOneCuboid,
-        firstPointSelected,
-        noSelection,
-        secondPointSelected,
-        selectionReset,
-
         // Command - RELOAD
         cmdReloadConfig,
-        cmdReloadCuboids,
         cmdReloadMessages,
-
-        // Command - CREATE
-        cmdCreateAlreadyExists,
-        cmdCreateCreated,
-        cmdCreateNoValidSelection,
-
-        // Command - DELETE
-        cmdDeleteDoesNotExist,
-        cmdDeleteDeleted,
-        cmdDeleteNoPermission,
 
     }
 
     public static final String                         LINE_SEPARATOR = "%%";
-    public static final String                         MESSAGE_HEADER = "§0§l[§c§lN§6§lCuboid§0§l] §f";
+    public static final String                         MESSAGE_HEADER = "§0§l[§c§lN§6§lChat§0§l] §f";
     public static final Charset                        CHARSET        = Charset.defaultCharset();
 
-    @Getter private static EnumMap<MessageId, Message> messagesMap;                                    // Id ; Message
+    @Getter private static EnumMap<MessageId, Message> messagesMap;                                  // Id ; Message
 
     public static void loadConfig(final Path pathMessages) throws IOException {
         messagesMap = getDefaultConfig();
@@ -98,35 +75,12 @@ public class Messages {
         newMessages.add(new Message(MessageId.errorWhileLoadingConfiguration, "&cError while loading config file %filename%", new String[] { "%filename%" }, null));
 
         // General deny response
-        newMessages.add(new Message(MessageId.actionCancelledByCuboid, "&cAction cancelled by the cuboid %cuboid%", new String[] { "%cuboid%" }, null));
         newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null));
         newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null));
 
-        // PlayerStickListener
-        newMessages.add(new Message(MessageId.firstPointSelected, "&aFirst point selected : %coords%", new String[] { "%coords%" }, null));
-        newMessages.add(new Message(MessageId.secondPointSelected, "&aSecond point selected : %coords%%%&aSelection Size : %size%", new String[] { "%coords%", "%size%" }, null));
-        newMessages.add(new Message(MessageId.blockInSelection, "&aThis block is in your selection", null, null));
-        newMessages.add(new Message(MessageId.blockNotInSelection, "&cThis block is not in your selection", null, null));
-        newMessages.add(new Message(MessageId.blockNotProtected, "&aThis block is not protected", null, null));
-        newMessages.add(new Message(MessageId.blockProtectedOneCuboid, "&cThis block is protected by one cuboid:" + LINE_SEPARATOR + "%cuboidInfo%", new String[] { "%cuboidInfo%" }, null));
-        newMessages.add(new Message(MessageId.blockProtectedMultipleCuboids, "&cThis block is protected by %nb% cuboids:" + LINE_SEPARATOR + "%cuboidsInfos%", new String[] { "%nb%", "%cuboidsInfos%" }, null));
-        newMessages.add(new Message(MessageId.selectionReset, "&aYour selection has been reset", null, null));
-        newMessages.add(new Message(MessageId.noSelection, "&cYou have no selection to reset", null, null));
-
         // Command - RELOAD
-        newMessages.add(new Message(MessageId.cmdReloadCuboids, "&aCuboids reloaded !", null, null));
         newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null));
         newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null));
-
-        // Command - CREATE
-        newMessages.add(new Message(MessageId.cmdCreateAlreadyExists, "&cThis cuboid already exists !", null, null));
-        newMessages.add(new Message(MessageId.cmdCreateCreated, "&aYou created the cuboid &6%cuboidName% &a!", new String[] { "%cuboidName%" }, null));
-        newMessages.add(new Message(MessageId.cmdCreateNoValidSelection, "&cYou need a vallid selection to create a cuboid !", null, null));
-
-        // Command - DELETE
-        newMessages.add(new Message(MessageId.cmdDeleteDoesNotExist, "&cThis cuboid does not exist !", null, null));
-        newMessages.add(new Message(MessageId.cmdDeleteDeleted, "&aThe cuboid &6%cuboidName% &ahas been deleted !", new String[] { "%cuboidName%" }, null));
-        newMessages.add(new Message(MessageId.cmdDeleteNoPermission, "&cYou do not have the permission to delete &6%cuboidName% &c!", new String[] { "%cuboidName%" }, null));
 
         final EnumMap<MessageId, Message> map = new EnumMap<MessageId, Message>(MessageId.class);
         for (final Message m : newMessages) {
@@ -147,7 +101,7 @@ public class Messages {
         try (BufferedWriter writer = Files.newBufferedWriter(pathMessages, CHARSET, overwrite ? StandardOpenOption.TRUNCATE_EXISTING : StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
             final StringBuilder content = new StringBuilder();
             content.append("################################################################################\n");
-            content.append("# List of NCuboid messages. You're free to change text/colors/language here.   #\n");
+            content.append("# List of NChat messages. You're free to change text/colors/language here.     #\n");
             content.append("# Supports both '§' and '&' characters for colors.                      Ribesg #\n");
             content.append("################################################################################\n\n");
             for (final Message m : getMessagesMap().values()) {
