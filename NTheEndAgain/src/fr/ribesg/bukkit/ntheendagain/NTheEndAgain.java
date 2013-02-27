@@ -14,6 +14,7 @@ import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ntheendagain.api.NTheEndAgainAPI;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages.MessageId;
+import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
 
 public class NTheEndAgain extends JavaPlugin {
 
@@ -21,6 +22,7 @@ public class NTheEndAgain extends JavaPlugin {
     public static final String NCORE           = "NCore";
     public static final String F_MESSAGES      = "messages.yml";
     public static final String F_CONFIG        = "config.yml";
+    public static final String F_ENDCHUNKS     = "endChunksDB.yml";
 
     // Core plugin related
     @Getter public NCore       core;
@@ -32,6 +34,7 @@ public class NTheEndAgain extends JavaPlugin {
     // Files
     @Getter private Path       pathConfig;
     @Getter private Path       pathMessages;
+    @Getter private Path       pathEndChunks;
 
     // Set to true by afterEnable() call
     // Prevent multiple calls to afterEnable
@@ -65,6 +68,21 @@ public class NTheEndAgain extends JavaPlugin {
         if (linkCore()) {
             afterEnable();
         }
+
+        // EndChunks
+        try {
+            pathEndChunks = Paths.get(getDataFolder().getPath(), F_ENDCHUNKS);
+            new EndChunks(this);
+            EndChunks.load(pathEndChunks);
+        } catch (final IOException e) {
+            e.printStackTrace();
+            sendMessage(getServer().getConsoleSender(), MessageId.errorWhileLoadingConfiguration, F_ENDCHUNKS);
+            getServer().getPluginManager().disablePlugin(this);
+        }
+
+        if (linkCore()) {
+            afterEnable();
+        }
     }
 
     private void afterEnable() {
@@ -83,7 +101,13 @@ public class NTheEndAgain extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        // EndChunks
+        try {
+            EndChunks.write(pathEndChunks);
+        } catch (final IOException e) {
+            e.printStackTrace();
+            sendMessage(getServer().getConsoleSender(), MessageId.errorWhileLoadingConfiguration, F_ENDCHUNKS); // TODO Messages WHILE SAVING
+        }
     }
 
     private boolean linkCore() {

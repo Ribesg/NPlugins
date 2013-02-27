@@ -20,7 +20,13 @@ import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 
 public class EndChunks implements Iterable<EndChunk> {
 
-    private static final Charset                CHARSET = Charset.defaultCharset();
+    private static EndChunks instance;
+
+    public static EndChunks getInstance() {
+        return instance;
+    }
+
+    private final static Charset                CHARSET = Charset.defaultCharset();
 
     private final Logger                        log;
     private final HashMap<ChunkCoord, EndChunk> chunks;
@@ -28,6 +34,7 @@ public class EndChunks implements Iterable<EndChunk> {
     public EndChunks(final NTheEndAgain plugin) {
         log = plugin.getLogger();
         chunks = new HashMap<ChunkCoord, EndChunk>();
+        instance = this;
     }
 
     public void addChunk(final Chunk bukkitChunk) {
@@ -48,12 +55,12 @@ public class EndChunks implements Iterable<EndChunk> {
         }
     }
 
-    public void load(final Path pathConfig) throws IOException {
-        if (!Files.exists(pathConfig)) {
+    public static void load(final Path pathEndChunks) throws IOException {
+        if (!Files.exists(pathEndChunks)) {
             return;
         } else {
             final YamlConfiguration config = new YamlConfiguration();
-            try (BufferedReader reader = Files.newBufferedReader(pathConfig, CHARSET)) {
+            try (BufferedReader reader = Files.newBufferedReader(pathEndChunks, CHARSET)) {
                 final StringBuilder s = new StringBuilder();
                 while (reader.ready()) {
                     s.append(reader.readLine() + '\n');
@@ -67,26 +74,27 @@ public class EndChunks implements Iterable<EndChunk> {
                 for (final String s : config.getStringList("chunks")) {
                     ec = EndChunk.fromString(s);
                     if (ec == null) {
-                        log.warning("Error loading config: incorrect chunk format !"); // TODO Messages
-                        log.warning("Incorrect format: " + s); // TODO Messages
+                        getInstance().log.warning("Error loading config: incorrect chunk format !"); // TODO Messages
+                        getInstance().log.warning("Incorrect format: " + s); // TODO Messages
                     } else {
-                        addChunk(ec);
+                        getInstance().addChunk(ec);
                     }
                 }
             } else {
-                log.severe("Error loading config: 'chunks' list not found"); // TODO Messages
+                getInstance().log.severe("Error loading config: 'chunks' list not found"); // TODO Messages
+                throw new IOException("Error loading config");
             }
         }
     }
 
-    public void write(final Path pathConfig) throws IOException {
-        if (!Files.exists(pathConfig)) {
-            Files.createFile(pathConfig);
+    public static void write(final Path pathEndChunks) throws IOException {
+        if (!Files.exists(pathEndChunks)) {
+            Files.createFile(pathEndChunks);
         }
-        try (BufferedWriter writer = Files.newBufferedWriter(pathConfig, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(pathEndChunks, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
             final YamlConfiguration config = new YamlConfiguration();
             final List<String> endChunks = new ArrayList<String>();
-            for (final EndChunk ec : this) {
+            for (final EndChunk ec : getInstance()) {
                 endChunks.add(ec.toString());
             }
             config.set("chunks", endChunks);
