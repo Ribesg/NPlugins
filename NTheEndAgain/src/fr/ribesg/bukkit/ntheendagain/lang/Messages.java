@@ -34,10 +34,10 @@ public class Messages {
     }
 
     public static final String                         LINE_SEPARATOR = "%%";
-    public static final String                         MESSAGE_HEADER = "§0§l[§c§lN§6§lChat§0§l] §f";
+    public static final String                         MESSAGE_HEADER = "§0§l[§c§lN§6§lTheEndAgain§0§l] §f";
     public static final Charset                        CHARSET        = Charset.defaultCharset();
 
-    @Getter private static EnumMap<MessageId, Message> messagesMap;                                  // Id ; Message
+    @Getter private static EnumMap<MessageId, Message> messagesMap;                                         // Id ; Message
 
     public static void loadConfig(final Path pathMessages) throws IOException {
         messagesMap = getDefaultConfig();
