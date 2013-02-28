@@ -1,6 +1,6 @@
-name: NChat
+name: NTalk
 version: 0.0.0
 description: Chat plugin for N plugins suite
 author: Ribesg
 website: http://itsn3w.fr/
-main: fr.ribesg.bukkit.nchat.NChat
+main: fr.ribesg.bukkit.ntalk.NTalk

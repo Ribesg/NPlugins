@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.nchat.lang;
+package fr.ribesg.bukkit.ntalk.lang;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,7 +34,7 @@ public class Messages {
     }
 
     public static final String                         LINE_SEPARATOR = "%%";
-    public static final String                         MESSAGE_HEADER = "§0§l[§c§lN§6§lChat§0§l] §f";
+    public static final String                         MESSAGE_HEADER = "§0§l[§c§lN§6§lTalk§0§l] §f";
     public static final Charset                        CHARSET        = Charset.defaultCharset();
 
     @Getter private static EnumMap<MessageId, Message> messagesMap;                                  // Id ; Message
@@ -101,7 +101,7 @@ public class Messages {
         try (BufferedWriter writer = Files.newBufferedWriter(pathMessages, CHARSET, overwrite ? StandardOpenOption.TRUNCATE_EXISTING : StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
             final StringBuilder content = new StringBuilder();
             content.append("################################################################################\n");
-            content.append("# List of NChat messages. You're free to change text/colors/language here.     #\n");
+            content.append("# List of NTalk messages. You're free to change text/colors/language here.     #\n");
             content.append("# Supports both '§' and '&' characters for colors.                      Ribesg #\n");
             content.append("################################################################################\n\n");
             for (final Message m : getMessagesMap().values()) {

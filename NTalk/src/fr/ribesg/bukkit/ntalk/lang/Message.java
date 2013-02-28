@@ -1,8 +1,8 @@
-package fr.ribesg.bukkit.nchat.lang;
+package fr.ribesg.bukkit.ntalk.lang;
 
 import lombok.Getter;
 
-import fr.ribesg.bukkit.nchat.lang.Messages.MessageId;
+import fr.ribesg.bukkit.ntalk.lang.Messages.MessageId;
 
 public class Message {
     @Getter private final MessageId id;

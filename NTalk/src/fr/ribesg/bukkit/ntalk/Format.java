@@ -1,4 +1,4 @@
-﻿package fr.ribesg.bukkit.nchat;
+﻿package fr.ribesg.bukkit.ntalk;
 
 import lombok.Getter;
 

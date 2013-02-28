@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.nchat;
+package fr.ribesg.bukkit.ntalk;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -11,13 +11,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.ribesg.bukkit.nchat.api.NChatAPI;
-import fr.ribesg.bukkit.nchat.lang.Messages;
-import fr.ribesg.bukkit.nchat.lang.Messages.MessageId;
-import fr.ribesg.bukkit.nchat.listeners.PlayerChatListener;
 import fr.ribesg.bukkit.ncore.NCore;
+import fr.ribesg.bukkit.ntalk.api.NTalkAPI;
+import fr.ribesg.bukkit.ntalk.lang.Messages;
+import fr.ribesg.bukkit.ntalk.lang.Messages.MessageId;
+import fr.ribesg.bukkit.ntalk.listeners.PlayerChatListener;
 
-public class NChat extends JavaPlugin {
+public class NTalk extends JavaPlugin {
 
     // Constants
     public static final String NCORE           = "NCore";
@@ -26,7 +26,7 @@ public class NChat extends JavaPlugin {
 
     // Core plugin related
     @Getter public NCore       core;
-    public NChatAPI            api;
+    public NTalkAPI            api;
 
     // Useful Nodes
     // // None
@@ -105,7 +105,7 @@ public class NChat extends JavaPlugin {
             return false;
         } else {
             core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-            api = new NChatAPI(this);
+            api = new NTalkAPI(this);
             core.setChatNode(api);
             return true;
         }

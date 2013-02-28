@@ -1,4 +1,4 @@
-﻿package fr.ribesg.bukkit.nchat;
+﻿package fr.ribesg.bukkit.ntalk;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,7 +20,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import fr.ribesg.bukkit.nchat.Format.FormatType;
+import fr.ribesg.bukkit.ntalk.Format.FormatType;
 
 public class Formater {
 
@@ -165,7 +165,7 @@ public class Formater {
 
             // Header
             content.append("################################################################################\n");
-            content.append("# Config file for NChat plugin. If you don't understand something, please      #\n");
+            content.append("# Config file for NTalk plugin. If you don't understand something, please      #\n");
             content.append("# ask on dev.bukkit.org or on forum post.                               Ribesg #\n");
             content.append("################################################################################\n\n");
 

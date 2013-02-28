@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.nchat.listeners;
+package fr.ribesg.bukkit.ntalk.listeners;
 
 import lombok.Getter;
 
@@ -7,13 +7,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import fr.ribesg.bukkit.nchat.NChat;
+import fr.ribesg.bukkit.ntalk.NTalk;
 
 public class PlayerChatListener implements Listener {
 
-    @Getter private final NChat plugin;
+    @Getter private final NTalk plugin;
 
-    public PlayerChatListener(final NChat instance) {
+    public PlayerChatListener(final NTalk instance) {
         plugin = instance;
     }
 
