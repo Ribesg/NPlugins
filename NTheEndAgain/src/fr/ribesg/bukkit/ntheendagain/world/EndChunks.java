@@ -20,12 +20,6 @@ import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 
 public class EndChunks implements Iterable<EndChunk> {
 
-    private static EndChunks instance;
-
-    public static EndChunks getInstance() {
-        return instance;
-    }
-
     private final static Charset                CHARSET = Charset.defaultCharset();
 
     private final Logger                        log;
@@ -34,7 +28,6 @@ public class EndChunks implements Iterable<EndChunk> {
     public EndChunks(final NTheEndAgain plugin) {
         log = plugin.getLogger();
         chunks = new HashMap<ChunkCoord, EndChunk>();
-        instance = this;
     }
 
     public void addChunk(final Chunk bukkitChunk) {
@@ -55,7 +48,7 @@ public class EndChunks implements Iterable<EndChunk> {
         }
     }
 
-    public static void load(final Path pathEndChunks) throws IOException {
+    public void load(final Path pathEndChunks) throws IOException {
         if (!Files.exists(pathEndChunks)) {
             return;
         } else {
@@ -74,27 +67,27 @@ public class EndChunks implements Iterable<EndChunk> {
                 for (final String s : config.getStringList("chunks")) {
                     ec = EndChunk.fromString(s);
                     if (ec == null) {
-                        getInstance().log.warning("Error loading config: incorrect chunk format !"); // TODO Messages
-                        getInstance().log.warning("Incorrect format: " + s); // TODO Messages
+                        log.warning("Error loading config: incorrect chunk format !"); // TODO Messages
+                        log.warning("Incorrect format: " + s); // TODO Messages
                     } else {
-                        getInstance().addChunk(ec);
+                        this.addChunk(ec);
                     }
                 }
             } else {
-                getInstance().log.severe("Error loading config: 'chunks' list not found"); // TODO Messages
+                log.severe("Error loading config: 'chunks' list not found"); // TODO Messages
                 throw new IOException("Error loading config");
             }
         }
     }
 
-    public static void write(final Path pathEndChunks) throws IOException {
+    public void write(final Path pathEndChunks) throws IOException {
         if (!Files.exists(pathEndChunks)) {
             Files.createFile(pathEndChunks);
         }
         try (BufferedWriter writer = Files.newBufferedWriter(pathEndChunks, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
             final YamlConfiguration config = new YamlConfiguration();
             final List<String> endChunks = new ArrayList<String>();
-            for (final EndChunk ec : getInstance()) {
+            for (final EndChunk ec : this) {
                 endChunks.add(ec.toString());
             }
             config.set("chunks", endChunks);

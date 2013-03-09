@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import fr.ribesg.bukkit.ncore.Permissions;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.Permissions;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
 import fr.ribesg.bukkit.ncuboid.lang.Messages.MessageId;

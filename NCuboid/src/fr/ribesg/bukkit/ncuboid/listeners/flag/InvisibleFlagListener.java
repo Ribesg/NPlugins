@@ -11,9 +11,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-
-import fr.ribesg.bukkit.ncore.Permissions;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.Permissions;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerJoinEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerMoveEvent;

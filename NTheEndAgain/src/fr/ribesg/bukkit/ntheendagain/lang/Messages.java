@@ -22,6 +22,8 @@ public class Messages {
 
         // General plugin messages
         errorWhileLoadingConfiguration,
+        errorWhileSavingConfiguration,
+        incorrectValueInConfiguration,
 
         // General deny response
         noPermissionForCommand,
@@ -73,6 +75,8 @@ public class Messages {
 
         // General plugin messages
         newMessages.add(new Message(MessageId.errorWhileLoadingConfiguration, "&cError while loading config file %filename%", new String[] { "%filename%" }, null));
+        newMessages.add(new Message(MessageId.errorWhileSavingConfiguration, "&cError while saving config file %filename%", new String[] { "%filename%" }, null));
+        newMessages.add(new Message(MessageId.incorrectValueInConfiguration, "&cIncorrect value in configuration %filename% : \"%value%\" was restored to default (%default%)", new String[] { "%filename%", "%value%", "%default%" }, null));
 
         // General deny response
         newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null));

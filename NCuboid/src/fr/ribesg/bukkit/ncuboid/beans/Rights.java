@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.bukkit.entity.Player;
 
-import fr.ribesg.bukkit.ncore.Permissions;
+import fr.ribesg.bukkit.ncuboid.Permissions;
 
 public class Rights {
     private Set<String> allowedPlayers;

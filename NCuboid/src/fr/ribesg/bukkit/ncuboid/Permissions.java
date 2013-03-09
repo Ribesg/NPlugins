@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.ncore;
+package fr.ribesg.bukkit.ncuboid;
 
 public interface Permissions {
     // Cuboid node permissions
