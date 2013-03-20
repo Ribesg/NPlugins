@@ -113,8 +113,8 @@ public class FlagAttributes {
 
     private boolean isLocFlagAtt(final FlagAtt f) {
         switch (f) {
-            case WARP_POINT:
-            case CLOSED_POINT:
+            case EXTERNAL_POINT:
+            case INTERNAL_POINT:
                 return true;
             default:
                 return false;
@@ -180,8 +180,8 @@ public class FlagAttributes {
         defaultFlagMap.put(FlagAtt.FEED_MAX_FOOD, null);
 
         // Location
-        defaultFlagMap.put(FlagAtt.WARP_POINT, null);
-        defaultFlagMap.put(FlagAtt.CLOSED_POINT, null);
+        defaultFlagMap.put(FlagAtt.EXTERNAL_POINT, null);
+        defaultFlagMap.put(FlagAtt.INTERNAL_POINT, null);
 
         // Vector
         defaultFlagMap.put(FlagAtt.BOOSTER_VECTOR, null);
