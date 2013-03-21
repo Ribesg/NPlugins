@@ -11,50 +11,38 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.ribesg.bukkit.ncore.NCore;
-import fr.ribesg.bukkit.ntheendagain.api.NTheEndAgainAPI;
+import fr.ribesg.bukkit.ncore.lang.AbstractMessages.MessageId;
+import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages;
-import fr.ribesg.bukkit.ntheendagain.lang.Messages.MessageId;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 
-public class NTheEndAgain extends JavaPlugin {
+public class NTheEndAgain extends TheEndAgainNode {
 
-    // Constants
-    public static final String               NCORE           = "NCore";
-    public static final String               F_MESSAGES      = "messages.yml";
-
-    // Core plugin related
-    @Getter public NCore                     core;
-    public NTheEndAgainAPI                   api;
+    // Configs
+    @Getter private Messages                 messages;
+    @Getter private Config                   pluginConfig;
 
     // Useful Nodes
     // // None
-
-    // Files
-    @Getter private Path                     pathMessages;
-
-    // Set to true by afterEnable() call
-    // Prevent multiple calls to afterEnable
-    private boolean                          loadingComplete = false;
 
     // Actual plugin data
     private HashMap<String, EndWorldHandler> worldHandlers;
 
     @Override
-    public void onEnable() {
-        // AbstractMessages first !
+    public boolean onNodeEnable() {
+        // Messages first !
         try {
             if (!getDataFolder().isDirectory()) {
                 getDataFolder().mkdir();
             }
-            pathMessages = Paths.get(getDataFolder().getPath(), F_MESSAGES);
-            Messages.loadConfig(pathMessages);
+            messages = new Messages();
+            messages.loadMessages(this);
         } catch (final IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
-            sendMessage(getServer().getConsoleSender(), MessageId.errorWhileLoadingConfiguration, F_MESSAGES);
-            getServer().getPluginManager().disablePlugin(this);
+            getLogger().severe("This error occured when NTheEndAgain tried to load messages.yml");
+            return false;
         }
 
         // Load End worlds configs and chunks data
@@ -66,56 +54,59 @@ public class NTheEndAgain extends JavaPlugin {
                     handler.loadConfigs();
                     worldHandlers.put(w.getName(), handler);
                 } catch (final IOException e) {
+                    getLogger().severe("An error occured, stacktrace follows:");
                     e.printStackTrace();
-                    sendMessage(getServer().getConsoleSender(), MessageId.errorWhileLoadingConfiguration, e.getMessage());
+                    getLogger().severe("This error occured when NTheEndAgain tried to load " + e.getMessage() + ".yml");
+                    return false;
                 }
             }
         }
 
-        if (linkCore()) {
-            afterEnable();
-        }
+        return true;
     }
 
-    private void afterEnable() {
-        if (!loadingComplete) {
-            loadingComplete = true;
-            Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+    /**
+     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore()
+     */
+    @Override
+    protected void linkCore() {
+        getCore().setTheEndAgainNode(this);
+    }
 
-                @Override
-                public void run() {
-                    // Interact with other Nodes here
-
-                }
-            });
-        }
+    /**
+     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
+     */
+    @Override
+    protected void handleOtherNodes() {
+        // Nothing to do here for now
     }
 
     @Override
-    public void onDisable() {
+    public void onNodeDisable() {
         for (final EndWorldHandler handler : worldHandlers.values()) {
             try {
                 handler.saveChunks();
             } catch (final IOException e) {
+                getLogger().severe("An error occured, stacktrace follows:");
                 e.printStackTrace();
-                sendMessage(getServer().getConsoleSender(), MessageId.errorWhileLoadingConfiguration, e.getMessage());
+                getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
+                getLogger().severe("/!\\ THIS MEANS THAT PROTECTED CHUNKS COULD BE REGENERATED ON NEXT REGEN IN THIS WORLD /!\\");
             }
         }
     }
 
-    private boolean linkCore() {
-        if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
-            return false;
-        } else {
-            core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-            api = new NTheEndAgainAPI(this);
-            core.setTheEndAgainNode(api);
-            return true;
-        }
-    }
-
+    /**
+     * Send a message with arguments TODO <b>This may be moved<b>
+     * 
+     * @param to
+     *            Receiver
+     * @param messageId
+     *            The Message Id
+     * @param args
+     *            The arguments
+     */
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-        final String[] m = Messages.get(messageId, args);
+        final String[] m = messages.get(messageId, args);
         to.sendMessage(m);
     }
 

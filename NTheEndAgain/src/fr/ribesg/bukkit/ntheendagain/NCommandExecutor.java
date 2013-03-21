@@ -6,7 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import fr.ribesg.bukkit.ntheendagain.lang.Messages.MessageId;
+import fr.ribesg.bukkit.ncore.lang.AbstractMessages.MessageId;
 
 public class NCommandExecutor implements CommandExecutor {
 
@@ -58,6 +58,7 @@ public class NCommandExecutor implements CommandExecutor {
                         break;
                     case "chunk":
                         // TODO Check next level or args
+                        //      Permissions are per sub-command so CMD_CHUNK does not exists
                         if (sender.hasPermission(Permissions.CMD_CHUNK) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN)) {
                             return cmdChunk(sender, Arrays.copyOfRange(args, 1, args.length));
                         } else {

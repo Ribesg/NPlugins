@@ -10,11 +10,15 @@ import org.bukkit.World;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EntityType;
 
+import fr.ribesg.bukkit.ncore.Utils;
+import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 
 public class EndWorldHandler {
 
     private final static Random                          rand = new Random();
+
+    private final String                                 camelCaseWorldName;
 
     private final NTheEndAgain                           plugin;
     private final World                                  endWorld;
@@ -27,30 +31,31 @@ public class EndWorldHandler {
     public EndWorldHandler(final NTheEndAgain instance, final World world) {
         plugin = instance;
         endWorld = world;
+        camelCaseWorldName = Utils.toLowerCamelCase(endWorld.getName());
         chunks = new EndChunks(plugin);
-        config = new Config(plugin);
+        config = new Config(plugin, endWorld.getName());
         dragons = new HashMap<UUID, HashMap<String, Double>>();
         updateNumberOfAliveEDs();
     }
 
     public void loadConfigs() throws IOException {
         try {
-            chunks.load(plugin.getConfigFilePath(endWorld.getName() + "Chunks"));
+            chunks.load(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
         } catch (final IOException e) {
-            throw new IOException(endWorld.getName() + "Chunks");
+            throw new IOException(camelCaseWorldName + "Chunks.yml");
         }
         try {
-            config.loadConfig(plugin.getConfigFilePath(endWorld.getName() + "AbstractConfig"));
+            config.loadConfig(plugin, camelCaseWorldName + "Config.yml");
         } catch (final IOException e) {
-            throw new IOException(endWorld.getName() + "AbstractConfig");
+            throw new IOException(camelCaseWorldName + "Config.yml");
         }
     }
 
     public void saveChunks() throws IOException {
         try {
-            chunks.write(plugin.getConfigFilePath(endWorld.getName() + "Chunks"));
+            chunks.write(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
         } catch (final IOException e) {
-            throw new IOException(endWorld.getName() + "Chunks");
+            throw new IOException(camelCaseWorldName + "Chunks.yml");
         }
     }
 
