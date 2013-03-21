@@ -4,11 +4,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import fr.ribesg.bukkit.ncore.lang.AbstractMessages.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Permissions;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.CreateSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.ReloadSubcmdExecutor;
-import fr.ribesg.bukkit.ncuboid.lang.Messages.MessageId;
 
 public class MainCommandExecutor implements CommandExecutor {
 

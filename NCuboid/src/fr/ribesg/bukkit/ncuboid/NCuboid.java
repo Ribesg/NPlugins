@@ -1,22 +1,17 @@
 package fr.ribesg.bukkit.ncuboid;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import lombok.Getter;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.ribesg.bukkit.ncore.NCore;
-import fr.ribesg.bukkit.ncuboid.api.NCuboidAPI;
+import fr.ribesg.bukkit.ncore.lang.AbstractMessages.MessageId;
+import fr.ribesg.bukkit.ncore.nodes.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.commands.MainCommandExecutor;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
-import fr.ribesg.bukkit.ncuboid.lang.Messages.MessageId;
 import fr.ribesg.bukkit.ncuboid.listeners.EventExtensionListener;
 import fr.ribesg.bukkit.ncuboid.listeners.PlayerStickListener;
 import fr.ribesg.bukkit.ncuboid.listeners.flag.BoosterFlagListener;
@@ -40,60 +35,59 @@ import fr.ribesg.bukkit.ncuboid.listeners.flag.TeleportFlagListener;
 import fr.ribesg.bukkit.ncuboid.listeners.flag.UseFlagListener;
 import fr.ribesg.bukkit.ncuboid.listeners.flag.WarpgateFlagListener;
 
-public class NCuboid extends JavaPlugin {
-    // Constants
-    public static final String NCORE           = "NCore";
-    public static final String F_MESSAGES      = "messages.yml";
-    public static final String F_CONFIG        = "config.yml";
-    public static final String F_CUBOIDS       = "cuboidDB.yml";
-
-    // Core plugin related
-    @Getter public NCore       core;
-    public NCuboidAPI          api;
-
+/**
+ * TODO
+ * 
+ * @author Ribesg
+ */
+public class NCuboid extends CuboidNode {
+    
+    // Configs
+    @Getter private Messages messages;
+    @Getter private Config   pluginConfig;
+    
     // Useful Nodes
     // // None
-
-    // Files
-    @Getter private Path       pathConfig;
-    @Getter private Path       pathMessages;
-
-    // Set to true by afterEnable() call
-    // Prevent multiple calls to afterEnable
-    private boolean            loadingComplete = false;
-
+    
+    /**
+     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeEnable()
+     */
     @Override
-    public void onEnable() {
+    protected boolean onNodeEnable() {
         // Messages first !
         try {
             if (!getDataFolder().isDirectory()) {
                 getDataFolder().mkdir();
             }
-            pathMessages = Paths.get(getDataFolder().getPath(), F_MESSAGES);
-            Messages.loadConfig(pathMessages);
+            messages = new Messages();
+            messages.loadMessages(this);
         } catch (final IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
-            sendMessage(getServer().getConsoleSender(), MessageId.errorWhileLoadingConfiguration, F_MESSAGES);
-            getServer().getPluginManager().disablePlugin(this);
+            getLogger().severe("This error occured when NCuboid tried to load messages.yml");
+            return false;
         }
-
-        // Config
+        
+        // AbstractConfig
         try {
-            pathConfig = Paths.get(getDataFolder().getPath(), F_CONFIG);
-            Config.loadConfig(pathConfig);
+            pluginConfig = new Config();
+            pluginConfig.loadConfig(this);
         } catch (final IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
-            sendMessage(getServer().getConsoleSender(), MessageId.errorWhileLoadingConfiguration, F_CONFIG);
-            getServer().getPluginManager().disablePlugin(this);
+            getLogger().severe("This error occured when NCuboid tried to load config.yml");
+            return false;
         }
-
-        // Create the CuboidDB
+        
+        // Create the CuboidDB // TODO Load/Save from/to file
         new CuboidDB(this);
-
+        
         // Listeners
         final PluginManager pm = getServer().getPluginManager();
+        
         pm.registerEvents(new EventExtensionListener(this), this);
         pm.registerEvents(new PlayerStickListener(this), this);
+        
         // Flag Listeners
         pm.registerEvents(new BoosterFlagListener(this), this);
         pm.registerEvents(new BuildFlagListener(this), this);
@@ -115,47 +109,50 @@ public class NCuboid extends JavaPlugin {
         pm.registerEvents(new TeleportFlagListener(this), this);
         pm.registerEvents(new UseFlagListener(this), this);
         pm.registerEvents(new WarpgateFlagListener(this), this);
-
+        
         // Command
         getCommand("cuboid").setExecutor(new MainCommandExecutor(this));
-
-        // Dependencies handling
-        if (linkCore()) {
-            afterEnable();
-        }
+        
+        return true;
     }
-
-    private void afterEnable() {
-        if (!loadingComplete) {
-            loadingComplete = true;
-            Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-
-                @Override
-                public void run() {
-                    // Interact with other Nodes here
-
-                }
-            });
-        }
-    }
-
+    
+    /**
+     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore()
+     */
     @Override
-    public void onDisable() {
+    protected void linkCore() {
+        getCore().setCuboidNode(this);
     }
-
-    public boolean linkCore() {
-        if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
-            return false;
-        } else {
-            core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-            api = new NCuboidAPI(this);
-            core.setCuboidNode(api);
-            return true;
-        }
+    
+    /**
+     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
+     */
+    @Override
+    protected void handleOtherNodes() {
+        // Nothing to do here for now
     }
-
+    
+    /**
+     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeDisable()
+     */
+    @Override
+    protected void onNodeDisable() {
+        // TODO Save CuboidDB, do other things eventually (stop tasks etc)
+    }
+    
+    /**
+     * Send a message with arguments
+     * TODO <b>This may be moved<b>
+     * 
+     * @param to
+     *            Receiver
+     * @param messageId
+     *            The Message Id
+     * @param args
+     *            The arguments
+     */
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-        final String[] m = Messages.get(messageId, args);
+        final String[] m = messages.get(messageId, args);
         to.sendMessage(m);
     }
 }

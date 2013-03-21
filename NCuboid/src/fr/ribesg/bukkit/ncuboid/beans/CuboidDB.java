@@ -13,21 +13,21 @@ import org.bukkit.World;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 
 public class CuboidDB {
-
+    
     private static CuboidDB instance;
-
+    
     public static CuboidDB getInstance() {
         return instance;
     }
-
+    
     @SuppressWarnings("unused") private final NCuboid plugin;
-
+    
     private final Map<String, PlayerCuboid>           byName;    // CuboidName ; Cuboid
     private final Map<String, Set<PlayerCuboid>>      byOwner;   // OwnerName ; Cuboids of this owner
     private final Map<String, PlayerCuboid>           tmpCuboids; // OwnerName ; Temporary Cuboid (Owner's Selection)
     private final Map<ChunkKey, Set<PlayerCuboid>>    byChunks;  // Chunk ; Cuboids in this chunk
     private final Map<String, WorldCuboid>            byWorld;   // WorldName ; Cuboid
-
+                                                                  
     public CuboidDB(final NCuboid instance) {
         byName = new HashMap<String, PlayerCuboid>();
         byOwner = new HashMap<String, Set<PlayerCuboid>>();
@@ -37,17 +37,17 @@ public class CuboidDB {
         plugin = instance;
         CuboidDB.instance = this;
     }
-
+    
     public void add(final PlayerCuboid cuboid) {
         addByName(cuboid);
         addByOwner(cuboid);
         addByChunks(cuboid);
     }
-
+    
     public void addByName(final PlayerCuboid cuboid) {
         byName.put(cuboid.getCuboidName(), cuboid);
     }
-
+    
     public void addByOwner(final PlayerCuboid cuboid) {
         if (byOwner.containsKey(cuboid.getOwnerName())) {
             byOwner.get(cuboid.getOwnerName()).add(cuboid);
@@ -57,11 +57,11 @@ public class CuboidDB {
             byOwner.put(cuboid.getOwnerName(), newSet);
         }
     }
-
+    
     public void addTmp(final PlayerCuboid cuboid) {
         tmpCuboids.put(cuboid.getOwnerName(), cuboid);
     }
-
+    
     public void addByChunks(final PlayerCuboid cuboid) {
         for (final ChunkKey k : cuboid.getChunks()) {
             if (byChunks.containsKey(k)) {
@@ -73,23 +73,23 @@ public class CuboidDB {
             }
         }
     }
-
+    
     public void addByWorld(final WorldCuboid c) {
         byWorld.put(c.getWorld().getName(), c);
     }
-
+    
     public void del(final PlayerCuboid cuboid) {
         delByName(cuboid);
         delByOwner(cuboid);
         delByChunks(cuboid);
     }
-
+    
     public void delByName(final PlayerCuboid cuboid) {
         if (byName.containsKey(cuboid.getCuboidName())) {
             byName.remove(cuboid.getCuboidName());
         }
     }
-
+    
     public void delByOwner(final PlayerCuboid cuboid) {
         if (byOwner.containsKey(cuboid.getOwnerName())) {
             final Set<PlayerCuboid> set = byOwner.get(cuboid.getOwnerName());
@@ -101,14 +101,14 @@ public class CuboidDB {
             }
         }
     }
-
+    
     public PlayerCuboid delTmp(final String ownerName) {
         if (tmpCuboids.containsKey(ownerName)) {
             return tmpCuboids.remove(ownerName);
         }
         return null;
     }
-
+    
     public void delByChunks(final PlayerCuboid cuboid) {
         for (final ChunkKey k : cuboid.getChunks()) {
             if (byChunks.containsKey(k)) {
@@ -122,17 +122,17 @@ public class CuboidDB {
             }
         }
     }
-
+    
     public void delByWorld(final String worldName) {
         if (byWorld.containsKey(worldName)) {
             byWorld.remove(worldName);
         }
     }
-
+    
     public PlayerCuboid getPriorByLoc(final Location loc) {
         return getPrior(getAllByLoc(loc));
     }
-
+    
     public PlayerCuboid getPrior(final Set<PlayerCuboid> cuboids) {
         if (cuboids == null) {
             return null;
@@ -186,7 +186,7 @@ public class CuboidDB {
             }
         }
     }
-
+    
     public Set<PlayerCuboid> getAllByLoc(final Location loc) {
         final ChunkKey k = new ChunkKey(loc);
         if (!byChunks.containsKey(k)) {
@@ -203,19 +203,19 @@ public class CuboidDB {
             return chunks.isEmpty() ? null : chunks;
         }
     }
-
+    
     public PlayerCuboid getByName(final String cuboidName) {
         return byName.get(cuboidName);
     }
-
+    
     public Set<PlayerCuboid> getByOwner(final String ownerName) {
         return byOwner.get(ownerName);
     }
-
+    
     public PlayerCuboid getTmp(final String ownerName) {
         return tmpCuboids.get(ownerName);
     }
-
+    
     public WorldCuboid getByWorld(final World world) {
         return byWorld.get(world.getName());
     }
