@@ -1,8 +1,12 @@
 package fr.ribesg.bukkit.ncore.nodes.dodgeball;
 
-import fr.ribesg.bukkit.ncore.nodes.Node;
+import fr.ribesg.bukkit.ncore.nodes.NPlugin;
 
-//Represents DodgeBall plugin API
-public abstract class DodgeBallNode extends Node {
-
+/**
+ * Represents the NDodgeBall plugin
+ * 
+ * @author Ribesg
+ */
+public abstract class DodgeBallNode extends NPlugin {
+    
 }
