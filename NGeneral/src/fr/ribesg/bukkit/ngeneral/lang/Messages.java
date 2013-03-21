@@ -118,7 +118,7 @@ public class Messages {
         try {
             final Message m = getMessagesMap().get(id);
             if (args != null && args.length != m.getAwaitedArgsNb() || args == null && m.getAwaitedArgsNb() > 0) {
-                throw new IllegalArgumentException("Call to Messages.get(id,args...) with wrong number of args : " + (args == null ? 0 : args.length) + " (awaited : " + m.getAwaitedArgsNb() + ")");
+                throw new IllegalArgumentException("Call to AbstractMessages.get(id,args...) with wrong number of args : " + (args == null ? 0 : args.length) + " (awaited : " + m.getAwaitedArgsNb() + ")");
             }
             String res = m.getConfigMessage() == null ? m.getDefaultMessage() : m.getConfigMessage();
             // Replacing args by there values

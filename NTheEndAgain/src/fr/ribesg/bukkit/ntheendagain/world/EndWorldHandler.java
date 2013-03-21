@@ -40,9 +40,9 @@ public class EndWorldHandler {
             throw new IOException(endWorld.getName() + "Chunks");
         }
         try {
-            config.loadConfig(plugin.getConfigFilePath(endWorld.getName() + "Config"));
+            config.loadConfig(plugin.getConfigFilePath(endWorld.getName() + "AbstractConfig"));
         } catch (final IOException e) {
-            throw new IOException(endWorld.getName() + "Config");
+            throw new IOException(endWorld.getName() + "AbstractConfig");
         }
     }
 

@@ -67,14 +67,14 @@ public class EndChunks implements Iterable<EndChunk> {
                 for (final String s : config.getStringList("chunks")) {
                     ec = EndChunk.fromString(s);
                     if (ec == null) {
-                        log.warning("Error loading config: incorrect chunk format !"); // TODO Messages
-                        log.warning("Incorrect format: " + s); // TODO Messages
+                        log.warning("Error loading config: incorrect chunk format !"); // TODO AbstractMessages
+                        log.warning("Incorrect format: " + s); // TODO AbstractMessages
                     } else {
                         this.addChunk(ec);
                     }
                 }
             } else {
-                log.severe("Error loading config: 'chunks' list not found"); // TODO Messages
+                log.severe("Error loading config: 'chunks' list not found"); // TODO AbstractMessages
                 throw new IOException("Error loading config");
             }
         }

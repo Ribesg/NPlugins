@@ -44,7 +44,7 @@ public class NTheEndAgain extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Messages first !
+        // AbstractMessages first !
         try {
             if (!getDataFolder().isDirectory()) {
                 getDataFolder().mkdir();

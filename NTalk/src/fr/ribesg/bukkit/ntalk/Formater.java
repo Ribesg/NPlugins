@@ -165,7 +165,7 @@ public class Formater {
 
             // Header
             content.append("################################################################################\n");
-            content.append("# Config file for NTalk plugin. If you don't understand something, please      #\n");
+            content.append("# AbstractConfig file for NTalk plugin. If you don't understand something, please      #\n");
             content.append("# ask on dev.bukkit.org or on forum post.                               Ribesg #\n");
             content.append("################################################################################\n\n");
 

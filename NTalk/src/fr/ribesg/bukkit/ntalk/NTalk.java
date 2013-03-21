@@ -44,7 +44,7 @@ public class NTalk extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Messages first !
+        // AbstractMessages first !
         try {
             if (!getDataFolder().isDirectory()) {
                 getDataFolder().mkdir();
@@ -57,7 +57,7 @@ public class NTalk extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
 
-        // Config
+        // AbstractConfig
         formater = new Formater();
         try {
             pathConfig = Paths.get(getDataFolder().getPath(), F_CONFIG);
