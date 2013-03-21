@@ -20,12 +20,24 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author ribes
  */
 public abstract class AbstractConfig {
-    
+
     /**
      * The Charset used for reading/writing files
      */
     public static final Charset CHARSET = StandardCharsets.UTF_8;
-    
+
+    /**
+     * Default fileName to config.yml in call to {@link #loadConfig(JavaPlugin, String)}
+     * 
+     * @param plugin
+     *            The plugin
+     * @throws IOException
+     *             If there is an error reading / writing file
+     */
+    public void loadConfig(final JavaPlugin plugin) throws IOException {
+        loadConfig(plugin, "config.yml");
+    }
+
     /**
      * Load the config containing messages
      * Creates a new config if it does not exists
@@ -36,11 +48,11 @@ public abstract class AbstractConfig {
      * @throws IOException
      *             If there is an error reading / writing file
      */
-    public void loadConfig(JavaPlugin plugin) throws IOException {
-        Path path = Paths.get(
-                        plugin.getDataFolder().toPath().toAbsolutePath().toString()
-                                        + File.separator
-                                        + "config.yml");
+    public void loadConfig(final JavaPlugin plugin, final String fileName) throws IOException {
+        final Path path = Paths.get(
+                plugin.getDataFolder().toPath().toAbsolutePath().toString()
+                        + File.separator
+                        + fileName);
         if (!Files.exists(path)) {
             Files.createFile(path);
             writeConfig(plugin);
@@ -55,37 +67,37 @@ public abstract class AbstractConfig {
             } catch (final Exception e) {
                 e.printStackTrace();
             }
-            
+
             setValues(config);
-            
+
             // Rewrite the config to "clean" it
             writeConfig(plugin);
         }
     }
-    
-    private void writeConfig(JavaPlugin plugin) throws IOException {
-        Path path = Paths.get(
-                        plugin.getDataFolder().toPath().toAbsolutePath().toString()
-                                        + File.separator
-                                        + "config.yml");
+
+    private void writeConfig(final JavaPlugin plugin) throws IOException {
+        final Path path = Paths.get(
+                plugin.getDataFolder().toPath().toAbsolutePath().toString()
+                        + File.separator
+                        + "config.yml");
         writeConfig(path);
     }
-    
-    private void writeConfig(Path path) throws IOException {
+
+    private void writeConfig(final Path path) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(path, CHARSET, StandardOpenOption.TRUNCATE_EXISTING,
-                        StandardOpenOption.WRITE)) {
+                StandardOpenOption.WRITE)) {
             writer.write(getConfigString());
         }
     }
-    
+
     /**
      * Set the values in the config to there current values
      * 
      * @param config
      *            The config where to set values
      */
-    protected abstract void setValues(YamlConfiguration config);
-    
+    protected abstract void setValues(final YamlConfiguration config);
+
     /**
      * @return the String to be written to file
      */

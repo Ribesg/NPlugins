@@ -8,14 +8,14 @@ import org.bukkit.Location;
  * @author Ribesg
  */
 public class Utils {
-    
+
     /**
      * @param loc
      *            a Location
      * @return A human-readable String representation of this Location
      */
     public static String toString(final Location loc) {
-        StringBuilder s = new StringBuilder();
+        final StringBuilder s = new StringBuilder();
         s.append('<');
         s.append(loc.getWorld().getName());
         s.append(',');
@@ -26,5 +26,21 @@ public class Utils {
         s.append(loc.getBlockZ());
         s.append('>').toString();
         return s.toString();
+    }
+
+    /**
+     * Self Explanatory
+     */
+    public static String toLowerCamelCase(String originalString) {
+        originalString = originalString.replace('_', ' ');
+        final StringBuilder s = new StringBuilder();
+        for (final String word : originalString.split(" ")) {
+            s.append(word.substring(0, 1).toUpperCase());
+            s.append(word.substring(1).toLowerCase());
+        }
+        final String result = s.toString();
+        return new StringBuilder(
+                result.substring(0, 1).toLowerCase()).append(
+                result.substring(1)).toString();
     }
 }

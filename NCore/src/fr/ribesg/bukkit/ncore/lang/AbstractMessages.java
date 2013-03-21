@@ -25,29 +25,29 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Ribesg
  */
 public abstract class AbstractMessages {
-    
+
     /**
      * @author Ribesg
      */
     public enum MessageId {
-        
+
         // ######################### //
         // ## Not plugin-specific ## //
         // ######################### //
-        
+
         noPermissionForCommand,
-        
+
         cmdOnlyAvailableForPlayers,
-        
+
         cmdReloadConfig,
         cmdReloadMessages,
-        
+
         // ##################### //
         // ## NCuboid related ## //
         // ##################### //
-        
+
         cuboid_actionCancelledByCuboid,
-        
+
         cuboid_blockInSelection,
         cuboid_blockNotInSelection,
         cuboid_blockNotProtected,
@@ -57,62 +57,65 @@ public abstract class AbstractMessages {
         cuboid_noSelection,
         cuboid_secondPointSelected,
         cuboid_selectionReset,
-        
+
         cuboid_cmdReloadCuboids,
-        
+
         cuboid_cmdCreateAlreadyExists,
         cuboid_cmdCreateCreated,
         cuboid_cmdCreateNoValidSelection,
-        
+
         cuboid_cmdDeleteDoesNotExist,
         cuboid_cmdDeleteDeleted,
         cuboid_cmdDeleteNoPermission,
-        
+
+        // ########################## //
+        // ## NTheEndAgain related ## //
+        // ########################## //
+
+        theEndAgain_incorrectValueInConfiguration,
+
     }
-    
+
     /**
      * Separator used in config to define if you want to send multiple messages to player
      */
-    public static final String               LINE_SEPARATOR = "%%";
-    
+    public static final String                  LINE_SEPARATOR = "%%";
+
     /**
      * Header of each messages sent to player
      */
     public static String                        MESSAGE_HEADER = "§0§l[§c§lN§6§lCore§0§l] §f";
-    
+
     /**
      * Charset used for reading/writing config file
      */
     protected static final Charset              CHARSET        = StandardCharsets.UTF_8;
-    
+
     @Getter private EnumMap<MessageId, Message> messagesMap;                                  // Id ; Message
-                                                                                               
+
     /**
-     * Create a new AbstractMessages base for a plugin node
-     * Uses the node name for future Message Headers
+     * Create a new AbstractMessages base for a plugin node Uses the node name for future Message Headers
      * 
      * @param nodeName
      *            The plugin Node name
      */
-    public AbstractMessages(String nodeName) {
+    public AbstractMessages(final String nodeName) {
         MESSAGE_HEADER = "§0§l[§c§lN§6§l" + nodeName + "§0§l] §f";
     }
-    
+
     /**
-     * Load the config containing messages
-     * Creates a new config if it does not exists
-     * Fix the config after parsing
+     * Load the config containing messages Creates a new config if it does not exists Fix the config after parsing
      * 
      * @param plugin
      *            The plugin
      * @throws IOException
      *             If there is an error reading / writing file
      */
-    public void loadMessages(JavaPlugin plugin) throws IOException {
-        Path path = Paths.get(
-                        plugin.getDataFolder().toPath().toAbsolutePath().toString()
-                                        + File.separator
-                                        + "messages.yml");
+    public void loadMessages(final JavaPlugin plugin) throws IOException {
+        final Path path = Paths.get(
+                plugin.getDataFolder().toPath().toAbsolutePath().toString()
+                        + File.separator
+                        + "messages.yml");
         messagesMap = getDefaultConfig();
         if (!Files.exists(path)) {
             newMessages(path);
@@ -132,8 +135,8 @@ public abstract class AbstractMessages {
                     final MessageId id = MessageId.valueOf(idString);
                     final Message def = messagesMap.get(id);
                     messagesMap.put(id,
-                                    new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), cMessages.getString(
-                                                    idString, def.getDefaultMessage())));
+                            new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), cMessages.getString(
+                                    idString, def.getDefaultMessage())));
                 } catch (final IllegalArgumentException e) {
                     e.printStackTrace();
                     continue;
@@ -142,7 +145,7 @@ public abstract class AbstractMessages {
             overwriteConfig(path);
         }
     }
-    
+
     /**
      * @return a default AbstractMessages map
      */
@@ -153,35 +156,35 @@ public abstract class AbstractMessages {
         }
         return map;
     }
-    
+
     /**
      * Here we define the actual messages, for each node
      * 
      * @return a Set of messages for this plugin
      */
     protected abstract Set<Message> createMessage();
-    
+
     private void newMessages(final Path pathMessages) throws IOException {
         writeMessages(pathMessages, false);
     }
-    
+
     private void overwriteConfig(final Path pathMessages) throws IOException {
         writeMessages(pathMessages, true);
     }
-    
-    private void writeMessages(Path path, final boolean overwrite) throws IOException {
+
+    private void writeMessages(final Path path, final boolean overwrite) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(path, CHARSET,
-                        overwrite ? StandardOpenOption.TRUNCATE_EXISTING : StandardOpenOption.CREATE_NEW,
-                        StandardOpenOption.WRITE)) {
+                overwrite ? StandardOpenOption.TRUNCATE_EXISTING : StandardOpenOption.CREATE_NEW,
+                StandardOpenOption.WRITE)) {
             writer.write(getConfigString());
         }
     }
-    
+
     /**
      * @return the String that will be written in config file
      */
     protected abstract String getConfigString();
-    
+
     /**
      * @param id
      *            The Id of the message we want
@@ -194,9 +197,9 @@ public abstract class AbstractMessages {
             final Message m = getMessagesMap().get(id);
             if (args != null && args.length != m.getAwaitedArgsNb() || args == null && m.getAwaitedArgsNb() > 0) {
                 throw new IllegalArgumentException(
-                                "Call to AbstractMessages.get(id,args...) with wrong number of args : "
-                                                + (args == null ? 0 : args.length) + " (awaited : "
-                                                + m.getAwaitedArgsNb() + ")");
+                        "Call to AbstractMessages.get(id,args...) with wrong number of args : "
+                                + (args == null ? 0 : args.length) + " (awaited : "
+                                + m.getAwaitedArgsNb() + ")");
             }
             String res = m.getConfigMessage() == null ? m.getDefaultMessage() : m.getConfigMessage();
             // Replacing args by there values
@@ -214,7 +217,7 @@ public abstract class AbstractMessages {
             return new String[] { MESSAGE_HEADER + ChatColor.RED + "Something gone wrong, see console" };
         }
     }
-    
+
     /**
      * @param strings
      *            The strings to merge
