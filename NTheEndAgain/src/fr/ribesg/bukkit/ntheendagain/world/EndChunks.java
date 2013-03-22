@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -20,7 +21,7 @@ import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 
 public class EndChunks implements Iterable<EndChunk> {
 
-    private final static Charset                CHARSET = Charset.defaultCharset();
+    private final static Charset                CHARSET = StandardCharsets.UTF_8;
 
     private final Logger                        log;
     private final HashMap<ChunkCoord, EndChunk> chunks;
@@ -42,9 +43,9 @@ public class EndChunks implements Iterable<EndChunk> {
         return chunks.get(new ChunkCoord(x, z, world));
     }
 
-    public void softRegen(final String world) {
+    public void softRegen() {
         for (final EndChunk ec : this) {
-            ec.setToBeRegen(!ec.isProtected() && ec.getWorldName().equals(world));
+            ec.setToBeRegen(!ec.isProtected());
         }
     }
 
@@ -67,14 +68,14 @@ public class EndChunks implements Iterable<EndChunk> {
                 for (final String s : config.getStringList("chunks")) {
                     ec = EndChunk.fromString(s);
                     if (ec == null) {
-                        log.warning("Error loading config: incorrect chunk format !"); // TODO AbstractMessages
-                        log.warning("Incorrect format: " + s); // TODO AbstractMessages
+                        log.warning("Error loading config: incorrect chunk format !");
+                        log.warning("Incorrect format: " + s);
                     } else {
                         this.addChunk(ec);
                     }
                 }
             } else {
-                log.severe("Error loading config: 'chunks' list not found"); // TODO AbstractMessages
+                log.severe("Error loading config: 'chunks' list not found");
                 throw new IOException("Error loading config");
             }
         }
