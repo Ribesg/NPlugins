@@ -8,24 +8,24 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
 import fr.ribesg.bukkit.ncore.Utils;
-import fr.ribesg.bukkit.ncore.lang.AbstractMessages.MessageId;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 
 public class Config extends AbstractConfig {
 
     private final NTheEndAgain                         plugin;
     private final String                               worldName;
 
-    @Getter @Setter(AccessLevel.PRIVATE) private int   nbEnderDragons;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   enderDragonHealth;
-    @Getter @Setter(AccessLevel.PRIVATE) private float enderDragonDamageMultiplier;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   portalHandling;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   dragonEggHandling;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   xpHandling;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   xpReward;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimer;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnOnBoot;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   regenOnRespawn;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   actionOnRegen;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   nbEnderDragons              = 1;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   enderDragonHealth           = 200;
+    @Getter @Setter(AccessLevel.PRIVATE) private float enderDragonDamageMultiplier = 1.0f;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   portalHandling              = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   dragonEggHandling           = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   xpHandling                  = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   xpReward                    = 20_000;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimer                = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnOnBoot               = 1;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   regenOnRespawn              = 1;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   actionOnRegen               = 0;
 
     public Config(final NTheEndAgain instance, final String world) {
         plugin = instance;
@@ -109,7 +109,7 @@ public class Config extends AbstractConfig {
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "regenOnRespawn", "1");
         }
 
-        // actionOnRegen. Default: 1. Possible values: 0,1
+        // actionOnRegen. Default: 0. Possible values: 0,1
         setActionOnRegen(config.getInt("actionOnRegen", 0));
         if (getActionOnRegen() < 0 || getActionOnRegen() > 1) {
             setActionOnRegen(0);

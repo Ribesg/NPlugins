@@ -44,24 +44,12 @@ public class EndWorldHandler {
     }
 
     public void loadConfigs() throws IOException {
-        try {
-            chunks.load(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
-        } catch (final IOException e) {
-            throw new IOException(camelCaseWorldName + "Chunks.yml");
-        }
-        try {
-            config.loadConfig(plugin, camelCaseWorldName + "Config.yml");
-        } catch (final IOException e) {
-            throw new IOException(camelCaseWorldName + "Config.yml");
-        }
+        chunks.load(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
+        config.loadConfig(plugin, camelCaseWorldName + "Config.yml");
     }
 
     public void saveChunks() throws IOException {
-        try {
-            chunks.write(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
-        } catch (final IOException e) {
-            throw new IOException(camelCaseWorldName + "Chunks.yml");
-        }
+        chunks.write(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
     }
 
     public void init() {
@@ -83,10 +71,13 @@ public class EndWorldHandler {
         }
     }
 
-    public void respawnDragons() {
+    public int respawnDragons() {
+        int respawned = 0;
         for (int i = numberOfAliveEDs; i <= config.getNbEnderDragons(); i++) {
             respawnDragon();
+            respawned++;
         }
+        return respawned;
     }
 
     public void regen() {
