@@ -15,21 +15,33 @@ public class Config extends AbstractConfig {
     private final NTheEndAgain                         plugin;
     private final String                               worldName;
 
-    @Getter @Setter(AccessLevel.PRIVATE) private int   nbEnderDragons              = 1;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   enderDragonHealth           = 200;
-    @Getter @Setter(AccessLevel.PRIVATE) private float enderDragonDamageMultiplier = 1.0f;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   portalHandling              = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   dragonEggHandling           = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   xpHandling                  = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   xpReward                    = 20_000;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimer                = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnOnBoot               = 1;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   regenOnRespawn              = 1;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   actionOnRegen               = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   nbEnderDragons;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   enderDragonHealth;
+    @Getter @Setter(AccessLevel.PRIVATE) private float enderDragonDamageMultiplier;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   portalHandling;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   dragonEggHandling;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   xpHandling;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   xpReward;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimer;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnOnBoot;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   regenOnRespawn;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   actionOnRegen;
 
     public Config(final NTheEndAgain instance, final String world) {
         plugin = instance;
         worldName = world;
+
+        setNbEnderDragons(1);
+        setEnderDragonHealth(200);
+        setEnderDragonDamageMultiplier(1.0f);
+        setPortalHandling(0);
+        setDragonEggHandling(0);
+        setXpHandling(0);
+        setXpReward(20_000);
+        setRespawnTimer(0);
+        setRespawnOnBoot(1);
+        setRegenOnRespawn(1);
+        setActionOnRegen(0);
     }
 
     /**
@@ -42,21 +54,21 @@ public class Config extends AbstractConfig {
         setNbEnderDragons(config.getInt("nbEnderDragons", 1));
         if (getNbEnderDragons() < 0) {
             setNbEnderDragons(1);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "nbEnderDragons", "1");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "nbEnderDragons", "1");
         }
 
         // enderDragonHealth. Default: 200. Possible values: positive integers
         setEnderDragonHealth(config.getInt("enderDragonHealth", 200));
         if (getEnderDragonHealth() < 0) {
             setEnderDragonHealth(200);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "enderDragonHealth", "200");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "enderDragonHealth", "200");
         }
 
         // enderDragonDamageMultiplier. Default: 1.0. Possible values: positive floats
         setEnderDragonDamageMultiplier((float) config.getDouble("enderDragonDamageMultiplier", 1.0f));
         if (getEnderDragonDamageMultiplier() < 0.0) {
             setEnderDragonDamageMultiplier(1.0f);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml",
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml",
                     "enderDragonDamageMultiplier", "1.0");
         }
 
@@ -64,56 +76,56 @@ public class Config extends AbstractConfig {
         setPortalHandling(config.getInt("portalHandling", 0));
         if (getPortalHandling() < 0 || getPortalHandling() > 2) {
             setPortalHandling(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "portalHandling", "0");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "portalHandling", "0");
         }
 
         // dragonEggHandling. Default: 0. Possible values: 0,1
         setDragonEggHandling(config.getInt("dragonEggHandling", 0));
         if (getDragonEggHandling() < 0 || getDragonEggHandling() > 1) {
             setDragonEggHandling(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "dragonEggHandling", "0");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "dragonEggHandling", "0");
         }
 
         // xpHandling. Default: 0. Possible values: 0,1
         setXpHandling(config.getInt("xpHandling", 0));
         if (getXpHandling() < 0 || getXpHandling() > 1) {
             setXpHandling(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "xpHandling", "0");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "xpHandling", "0");
         }
 
         // xpReward. Default: 20 000. Possible values: positive or null integers
         setXpReward(config.getInt("xpReward", 20_000));
         if (getXpReward() < 0) {
             setXpReward(20_000);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "xpReward", "20 000");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "xpReward", "20 000");
         }
 
         // respawnTimer. Default: 0. Possible values: positive or null integers
         setRespawnTimer(config.getInt("respawnTimer", 0));
         if (getRespawnTimer() < 0) {
             setRespawnTimer(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnTimer", "0");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnTimer", "0");
         }
 
         // respawnOnBoot. Default: 1. Possible values: 0,1
         setRespawnOnBoot(config.getInt("respawnOnBoot", 1));
         if (getRespawnOnBoot() < 0 || getRespawnOnBoot() > 1) {
             setRespawnOnBoot(1);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnOnBoot", "1");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnOnBoot", "1");
         }
 
         // regenOnRespawn. Default: 1. Possible values: 0,1
         setRegenOnRespawn(config.getInt("regenOnRespawn", 1));
         if (getRegenOnRespawn() < 0 || getRegenOnRespawn() > 1) {
             setRegenOnRespawn(1);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "regenOnRespawn", "1");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "regenOnRespawn", "1");
         }
 
         // actionOnRegen. Default: 0. Possible values: 0,1
         setActionOnRegen(config.getInt("actionOnRegen", 0));
         if (getActionOnRegen() < 0 || getActionOnRegen() > 1) {
             setActionOnRegen(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.theEndAgain_incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "actionOnRegen", "0");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "actionOnRegen", "0");
         }
 
     }

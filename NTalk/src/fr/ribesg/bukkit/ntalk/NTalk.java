@@ -12,35 +12,29 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.ribesg.bukkit.ncore.NCore;
-import fr.ribesg.bukkit.ntalk.api.NTalkAPI;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ntalk.lang.Messages;
-import fr.ribesg.bukkit.ntalk.lang.Messages.MessageId;
 import fr.ribesg.bukkit.ntalk.listeners.PlayerChatListener;
 
 public class NTalk extends JavaPlugin {
 
-    // Constants
-    public static final String NCORE           = "NCore";
-    public static final String F_MESSAGES      = "messages.yml";
-    public static final String F_CONFIG        = "config.yml";
-
-    // Core plugin related
-    @Getter public NCore       core;
-    public NTalkAPI            api;
+    // Configs
+    @Getter private Messages messages;
+    @Getter private Config   pluginConfig;
 
     // Useful Nodes
     // // None
 
     // Formater
-    @Getter private Formater   formater;
+    @Getter private Formater formater;
 
     // Files
-    @Getter private Path       pathConfig;
-    @Getter private Path       pathMessages;
+    @Getter private Path     pathConfig;
+    @Getter private Path     pathMessages;
 
     // Set to true by afterEnable() call
     // Prevent multiple calls to afterEnable
-    private boolean            loadingComplete = false;
+    private boolean          loadingComplete = false;
 
     @Override
     public void onEnable() {
@@ -112,7 +106,7 @@ public class NTalk extends JavaPlugin {
     }
 
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-        final String[] m = Messages.get(messageId, args);
+        final String[] m = messages.get(messageId, args);
         to.sendMessage(m);
     }
 }

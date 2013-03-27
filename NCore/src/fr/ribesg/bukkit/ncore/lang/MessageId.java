@@ -16,6 +16,8 @@ public enum MessageId {
     cmdReloadConfig,
     cmdReloadMessages,
 
+    incorrectValueInConfiguration,
+
     // ##################### //
     // ## NCuboid related ## //
     // ##################### //
@@ -45,7 +47,5 @@ public enum MessageId {
     // ########################## //
     // ## NTheEndAgain related ## //
     // ########################## //
-
-    theEndAgain_incorrectValueInConfiguration,
 
 }
