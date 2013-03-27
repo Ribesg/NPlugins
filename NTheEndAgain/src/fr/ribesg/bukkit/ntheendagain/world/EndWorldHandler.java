@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,58 +20,46 @@ import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 
 public class EndWorldHandler {
-    
-    private final static Random                          rand = new Random();
-    
-    private final String                                 camelCaseWorldName;
-    
-    private final NTheEndAgain                           plugin;
-    @Getter private final World                          endWorld;
-    @Getter private final EndChunks                      chunks;
-    private final Config                                 config;
-    private final HashMap<UUID, HashMap<String, Double>> dragons;
-    
-    @Getter private int                                  numberOfAliveEDs;
-    
+
+    private final static Random                                rand = new Random();
+
+    private final String                                       camelCaseWorldName;
+
+    private final NTheEndAgain                                 plugin;
+    @Getter private final World                                endWorld;
+    @Getter private final EndChunks                            chunks;
+    @Getter private final Config                               config;
+    @Getter private final HashMap<UUID, HashMap<String, Long>> dragons;
+
+    @Getter @Setter private int                                numberOfAliveEDs;
+
     public EndWorldHandler(final NTheEndAgain instance, final World world) {
         plugin = instance;
         endWorld = world;
         camelCaseWorldName = Utils.toLowerCamelCase(endWorld.getName());
         chunks = new EndChunks(plugin);
         config = new Config(plugin, endWorld.getName());
-        dragons = new HashMap<UUID, HashMap<String, Double>>();
+        dragons = new HashMap<UUID, HashMap<String, Long>>();
         updateNumberOfAliveEDs();
     }
-    
+
     public void loadConfigs() throws IOException {
-        try {
-            chunks.load(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
-        } catch (final IOException e) {
-            throw new IOException(camelCaseWorldName + "Chunks.yml");
-        }
-        try {
-            config.loadConfig(plugin, camelCaseWorldName + "Config.yml");
-        } catch (final IOException e) {
-            throw new IOException(camelCaseWorldName + "Config.yml");
-        }
+        chunks.load(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
+        config.loadConfig(plugin, camelCaseWorldName + "Config.yml");
     }
-    
+
     public void saveChunks() throws IOException {
-        try {
-            chunks.write(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
-        } catch (final IOException e) {
-            throw new IOException(camelCaseWorldName + "Chunks.yml");
-        }
+        chunks.write(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
     }
-    
+
     public void init() {
         // TODO Call tasks here
     }
-    
-    public void playerHitED(final UUID enderDragonID, final String playerName, final double dmg) {
-        HashMap<String, Double> dragonMap;
+
+    public void playerHitED(final UUID enderDragonID, final String playerName, final long dmg) {
+        HashMap<String, Long> dragonMap;
         if (!dragons.containsKey(enderDragonID)) {
-            dragonMap = new HashMap<String, Double>();
+            dragonMap = new HashMap<String, Long>();
             dragons.put(enderDragonID, dragonMap);
         } else {
             dragonMap = dragons.get(enderDragonID);
@@ -81,21 +70,24 @@ public class EndWorldHandler {
             dragonMap.put(playerName, dmg);
         }
     }
-    
-    public void respawnDragons() {
+
+    public int respawnDragons() {
+        int respawned = 0;
         for (int i = numberOfAliveEDs; i <= config.getNbEnderDragons(); i++) {
             respawnDragon();
+            respawned++;
         }
+        return respawned;
     }
-    
+
     public void regen() {
         switch (config.getActionOnRegen()) {
             case 0:
-                for (Player p : endWorld.getPlayers()) {
+                for (final Player p : endWorld.getPlayers()) {
                     p.kickPlayer("End World Regenarating"); // TODO Messages
                 }
             case 1:
-                for (Player p : endWorld.getPlayers()) {
+                for (final Player p : endWorld.getPlayers()) {
                     // TODO Future: Use spawn point defined by NGeneral, when NGeneral will do it
                     //              and if NGeneral is enabled of course
                     p.teleport(Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
@@ -105,17 +97,17 @@ public class EndWorldHandler {
                 // Not possible.
                 break;
         }
-        for (EnderDragon e : endWorld.getEntitiesByClass(EnderDragon.class)) {
+        for (final EnderDragon e : endWorld.getEntitiesByClass(EnderDragon.class)) {
             e.remove();
         }
         dragons.clear();
         numberOfAliveEDs = 0;
         chunks.softRegen();
-        
+
         // TODO Messages
         // TODO Broadcast message 
     }
-    
+
     private void respawnDragon() {
         final int x = rand.nextInt(41) - 20; // [-20;20]
         final int y = 70 + rand.nextInt(21); // [70;90]
@@ -123,7 +115,7 @@ public class EndWorldHandler {
         final Location loc = new Location(endWorld, x, y, z);
         endWorld.spawnEntity(loc, EntityType.ENDER_DRAGON);
     }
-    
+
     private void updateNumberOfAliveEDs() {
         numberOfAliveEDs = endWorld.getEntitiesByClass(EnderDragon.class).size();
     }

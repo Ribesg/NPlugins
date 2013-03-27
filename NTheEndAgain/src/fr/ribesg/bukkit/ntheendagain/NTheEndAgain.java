@@ -13,23 +13,23 @@ import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 
 import fr.ribesg.bukkit.ncore.Utils;
-import fr.ribesg.bukkit.ncore.lang.AbstractMessages.MessageId;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 
 public class NTheEndAgain extends TheEndAgainNode {
-    
+
     // Configs
     @Getter private Messages                 messages;
     @Getter private Config                   pluginConfig;
-    
+
     // Useful Nodes
     // // None
-    
+
     // Actual plugin data
     private HashMap<String, EndWorldHandler> worldHandlers;
-    
+
     @Override
     public boolean onNodeEnable() {
         // Messages first !
@@ -45,7 +45,7 @@ public class NTheEndAgain extends TheEndAgainNode {
             getLogger().severe("This error occured when NTheEndAgain tried to load messages.yml");
             return false;
         }
-        
+
         // Load End worlds configs and chunks data
         worldHandlers = new HashMap<String, EndWorldHandler>();
         for (final World w : Bukkit.getWorlds()) {
@@ -62,10 +62,14 @@ public class NTheEndAgain extends TheEndAgainNode {
                 }
             }
         }
-        
+
+        getServer().getPluginManager().registerEvents(new NListener(this), this);
+
+        getCommand("end").setExecutor(new NCommandExecutor(this));
+
         return true;
     }
-    
+
     /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore()
      */
@@ -73,7 +77,7 @@ public class NTheEndAgain extends TheEndAgainNode {
     protected void linkCore() {
         getCore().setTheEndAgainNode(this);
     }
-    
+
     /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
      */
@@ -81,7 +85,7 @@ public class NTheEndAgain extends TheEndAgainNode {
     protected void handleOtherNodes() {
         // Nothing to do here for now
     }
-    
+
     @Override
     public void onNodeDisable() {
         for (final EndWorldHandler handler : worldHandlers.values()) {
@@ -95,7 +99,7 @@ public class NTheEndAgain extends TheEndAgainNode {
             }
         }
     }
-    
+
     /**
      * Send a message with arguments TODO <b>This may be moved<b>
      * 
@@ -110,18 +114,18 @@ public class NTheEndAgain extends TheEndAgainNode {
         final String[] m = messages.get(messageId, args);
         to.sendMessage(m);
     }
-    
+
     public Path getConfigFilePath(final String fileName) {
         return Paths.get(getDataFolder().getPath(), fileName + ".yml");
     }
-    
+
     /**
      * @param lowerCamelCaseWorldName
      *            Key
      * @return Value
      */
-    public EndWorldHandler getHandler(String lowerCamelCaseWorldName) {
+    public EndWorldHandler getHandler(final String lowerCamelCaseWorldName) {
         return worldHandlers.get(lowerCamelCaseWorldName);
     }
-    
+
 }

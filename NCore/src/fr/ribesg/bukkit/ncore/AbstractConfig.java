@@ -55,7 +55,7 @@ public abstract class AbstractConfig {
                         + fileName);
         if (!Files.exists(path)) {
             Files.createFile(path);
-            writeConfig(plugin);
+            writeConfig(path);
         } else {
             final YamlConfiguration config = new YamlConfiguration();
             try (BufferedReader reader = Files.newBufferedReader(path, CHARSET)) {
@@ -71,10 +71,11 @@ public abstract class AbstractConfig {
             setValues(config);
 
             // Rewrite the config to "clean" it
-            writeConfig(plugin);
+            writeConfig(path);
         }
     }
 
+    @SuppressWarnings("unused")
     private void writeConfig(final JavaPlugin plugin) throws IOException {
         final Path path = Paths.get(
                 plugin.getDataFolder().toPath().toAbsolutePath().toString()
