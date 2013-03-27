@@ -1,3 +1,3 @@
 NPlugins
 =====
-See http://www.ribesg.fr/bukkit/NPlugins/
+See http://www.ribesg.fr/bukkit/NPlugins
