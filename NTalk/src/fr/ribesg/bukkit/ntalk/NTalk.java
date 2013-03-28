@@ -1,110 +1,88 @@
 package fr.ribesg.bukkit.ntalk;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import lombok.Getter;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.nodes.chat.TalkNode;
 import fr.ribesg.bukkit.ntalk.lang.Messages;
 import fr.ribesg.bukkit.ntalk.listeners.PlayerChatListener;
 
-public class NTalk extends JavaPlugin {
-
+public class NTalk extends TalkNode {
+    
     // Configs
     @Getter private Messages messages;
     @Getter private Config   pluginConfig;
-
+    
     // Useful Nodes
     // // None
-
+    
     // Formater
     @Getter private Formater formater;
-
-    // Files
-    @Getter private Path     pathConfig;
-    @Getter private Path     pathMessages;
-
-    // Set to true by afterEnable() call
-    // Prevent multiple calls to afterEnable
-    private boolean          loadingComplete = false;
-
+    
     @Override
-    public void onEnable() {
-        // AbstractMessages first !
+    public boolean onNodeEnable() {
+        // Messages first !
         try {
             if (!getDataFolder().isDirectory()) {
                 getDataFolder().mkdir();
             }
-            pathMessages = Paths.get(getDataFolder().getPath(), F_MESSAGES);
-            Messages.loadConfig(pathMessages);
+            messages = new Messages();
+            messages.loadMessages(this);
         } catch (final IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
-            sendMessage(getServer().getConsoleSender(), MessageId.errorWhileLoadingConfiguration, F_MESSAGES);
-            getServer().getPluginManager().disablePlugin(this);
+            getLogger().severe("This error occured when NTalk tried to load messages.yml");
+            return false;
         }
-
-        // AbstractConfig
-        formater = new Formater();
+        
+        // Config
         try {
-            pathConfig = Paths.get(getDataFolder().getPath(), F_CONFIG);
-            formater.load(pathConfig);
+            pluginConfig = new Config(this);
+            pluginConfig.loadConfig(this);
         } catch (final IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
-            sendMessage(getServer().getConsoleSender(), MessageId.errorWhileLoadingConfiguration, F_CONFIG);
-            getServer().getPluginManager().disablePlugin(this);
+            getLogger().severe("This error occured when NTalk tried to load config.yml");
+            return false;
         }
-
+        formater = new Formater(this);
+        
         // Listeners
         final PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerChatListener(this), this);
-
+        
         // Command
         //getCommand("command").setExecutor(new MyCommandExecutor(this));
-
-        // Dependencies handling
-        if (linkCore()) {
-            afterEnable();
-        }
+        
+        return true;
     }
-
-    public void afterEnable() {
-        if (!loadingComplete) {
-            loadingComplete = true;
-            Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-
-                @Override
-                public void run() {
-                    // Interact with other Nodes here
-
-                }
-            });
-        }
-    }
-
+    
     @Override
-    public void onDisable() {
-
+    public void onNodeDisable() {
+        
     }
-
-    public boolean linkCore() {
-        if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
-            return false;
-        } else {
-            core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-            api = new NTalkAPI(this);
-            core.setChatNode(api);
-            return true;
-        }
+    
+    /**
+     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore()
+     */
+    @Override
+    protected void linkCore() {
+        getCore().setTalkNode(this);
     }
-
+    
+    /**
+     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
+     */
+    @Override
+    protected void handleOtherNodes() {
+        // Nothing to do here for now
+    }
+    
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
         final String[] m = messages.get(messageId, args);
         to.sendMessage(m);
