@@ -13,7 +13,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ntalk.Format.FormatType;
+import fr.ribesg.bukkit.ntalk.format.Format;
+import fr.ribesg.bukkit.ntalk.format.Format.FormatType;
 
 public class Config extends AbstractConfig {
     

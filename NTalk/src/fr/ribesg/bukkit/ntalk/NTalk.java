@@ -9,8 +9,8 @@ import org.bukkit.plugin.PluginManager;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.nodes.chat.TalkNode;
+import fr.ribesg.bukkit.ntalk.format.Formater;
 import fr.ribesg.bukkit.ntalk.lang.Messages;
-import fr.ribesg.bukkit.ntalk.listeners.PlayerChatListener;
 
 public class NTalk extends TalkNode {
     
@@ -54,7 +54,7 @@ public class NTalk extends TalkNode {
         
         // Listeners
         final PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new PlayerChatListener(this), this);
+        pm.registerEvents(new NListener(this), this);
         
         // Command
         //getCommand("command").setExecutor(new MyCommandExecutor(this));
