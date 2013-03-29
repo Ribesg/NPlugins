@@ -111,7 +111,7 @@ public class NCommandExecutor implements CommandExecutor {
     }
     
     private void sendMessage(CommandSender from, CommandSender to, String message) {
-        String formattedMessage = plugin.getFormater().parsePM(from instanceof Player ? (Player) from : null, to instanceof Player ? (Player) to : null, message);
+        String formattedMessage = plugin.getFormater().parsePM(from, to, message);
         from.sendMessage(formattedMessage);
         to.sendMessage(formattedMessage);
         lastReceivedPmMap.put(to.getName(), from.getName());
