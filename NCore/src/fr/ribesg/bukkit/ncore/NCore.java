@@ -12,6 +12,7 @@ import fr.ribesg.bukkit.ncore.nodes.enchantingegg.EnchantingEggNode;
 import fr.ribesg.bukkit.ncore.nodes.general.GeneralNode;
 import fr.ribesg.bukkit.ncore.nodes.player.PlayerNode;
 import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
+import fr.ribesg.bukkit.ncore.nodes.world.WorldNode;
 
 /**
  * The Core of the N Plugin Suite
@@ -19,7 +20,7 @@ import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
  * @author Ribesg
  */
 public class NCore extends JavaPlugin {
-    
+
     @Getter @Setter private TalkNode          talkNode;
     @Getter @Setter private CuboidNode        cuboidNode;
     @Getter @Setter private DodgeBallNode     dodgeBallNode;
@@ -27,12 +28,13 @@ public class NCore extends JavaPlugin {
     @Getter @Setter private GeneralNode       generalNode;
     @Getter @Setter private PlayerNode        playerNode;
     @Getter @Setter private TheEndAgainNode   theEndAgainNode;
-    
+    @Getter @Setter private WorldNode         worldNode;
+
     @Override
     public void onEnable() {
         // Nothing yet 
     }
-    
+
     @Override
     public void onDisable() {
         // Nothing yet

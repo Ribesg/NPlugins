@@ -34,14 +34,14 @@ public abstract class AbstractMessages {
     /**
      * Header of each messages sent to player
      */
-    public static String                        MESSAGE_HEADER = "§0§l[§c§lN§6§lCore§0§l] §f";
+    public static String                        MESSAGE_HEADER;
 
     /**
      * Charset used for reading/writing config file
      */
     protected static final Charset              CHARSET        = StandardCharsets.UTF_8;
 
-    @Getter private EnumMap<MessageId, Message> messagesMap;                                  // Id ; Message
+    @Getter private EnumMap<MessageId, Message> messagesMap;                            // Id ; Message
 
     /**
      * Create a new AbstractMessages base for a plugin node Uses the node name for future Message Headers
@@ -50,7 +50,7 @@ public abstract class AbstractMessages {
      *            The plugin Node name
      */
     public AbstractMessages(final String nodeName) {
-        MESSAGE_HEADER = "§0§l[§c§lN§6§l" + nodeName + "§0§l] §f";
+        MESSAGE_HEADER = "§0[§c§lN§6" + nodeName + "§0] §f";
     }
 
     /**
@@ -147,7 +147,7 @@ public abstract class AbstractMessages {
             final Message m = getMessagesMap().get(id);
             if (args != null && args.length != m.getAwaitedArgsNb() || args == null && m.getAwaitedArgsNb() > 0) {
                 throw new IllegalArgumentException(
-                        "Call to AbstractMessages.get(id,args...) with wrong number of args : "
+                        "Call to Messages.get(id,args...) with wrong number of args : "
                                 + (args == null ? 0 : args.length) + " (awaited : "
                                 + m.getAwaitedArgsNb() + ")");
             }

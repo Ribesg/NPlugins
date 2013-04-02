@@ -75,8 +75,7 @@ public abstract class AbstractConfig {
         }
     }
 
-    @SuppressWarnings("unused")
-    private void writeConfig(final JavaPlugin plugin) throws IOException {
+    public void writeConfig(final JavaPlugin plugin) throws IOException {
         final Path path = Paths.get(
                 plugin.getDataFolder().toPath().toAbsolutePath().toString()
                         + File.separator
