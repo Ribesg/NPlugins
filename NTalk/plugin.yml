@@ -1,6 +1,26 @@
 name: NTalk
-version: 0.0.0
+version: 0.0.5
 description: Chat plugin for N plugins suite
 author: Ribesg
 website: http://www.ribesg.fr/
 main: fr.ribesg.bukkit.ntalk.NTalk
+
+load: POSTWORLD
+
+depend: [NCore]
+
+commands:
+  pm:
+    description: Private message
+    aliases: [m]
+    usage: |
+      /<command>
+  pr:
+    description: Respond to latest PM
+    aliases: [r]
+    usage: |
+      /<command>
+  nick:
+    description: Nickname
+    usage: |
+      /<command> <realName> <nickName>

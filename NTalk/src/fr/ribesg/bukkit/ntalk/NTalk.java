@@ -13,17 +13,17 @@ import fr.ribesg.bukkit.ntalk.format.Formater;
 import fr.ribesg.bukkit.ntalk.lang.Messages;
 
 public class NTalk extends TalkNode {
-    
+
     // Configs
     @Getter private Messages messages;
     @Getter private Config   pluginConfig;
-    
+
     // Useful Nodes
     // // None
-    
+
     // Formater
     @Getter private Formater formater;
-    
+
     @Override
     public boolean onNodeEnable() {
         // Messages first !
@@ -39,7 +39,7 @@ public class NTalk extends TalkNode {
             getLogger().severe("This error occured when NTalk tried to load messages.yml");
             return false;
         }
-        
+
         // Config
         try {
             pluginConfig = new Config(this);
@@ -51,22 +51,28 @@ public class NTalk extends TalkNode {
             return false;
         }
         formater = new Formater(this);
-        
+
         // Listeners
         final PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new NListener(this), this);
-        
+
         // Command
-        //getCommand("command").setExecutor(new MyCommandExecutor(this));
-        
+        getCommand("pm").setExecutor(new NCommandExecutor(this));
+        getCommand("pr").setExecutor(new NCommandExecutor(this));
+        getCommand("nick").setExecutor(new NCommandExecutor(this));
+
         return true;
     }
-    
+
     @Override
     public void onNodeDisable() {
-        
+        try {
+            getPluginConfig().writeConfig(this);
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
     }
-    
+
     /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore()
      */
@@ -74,7 +80,7 @@ public class NTalk extends TalkNode {
     protected void linkCore() {
         getCore().setTalkNode(this);
     }
-    
+
     /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
      */
@@ -82,7 +88,7 @@ public class NTalk extends TalkNode {
     protected void handleOtherNodes() {
         // Nothing to do here for now
     }
-    
+
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
         final String[] m = messages.get(messageId, args);
         to.sendMessage(m);

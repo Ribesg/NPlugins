@@ -10,13 +10,13 @@ import fr.ribesg.bukkit.ntalk.NTalk;
 public class Formater {
     private static final String BUKKIT_PLAYERNAME = "%1$s";
     private static final String BUKKIT_MESSAGE    = "%2$s";
-    
+
     private final Config        cfg;
-    
+
     public Formater(final NTalk instance) {
         cfg = instance.getPluginConfig();
     }
-    
+
     public String getFormat(final Player player) {
         Format format = cfg.getDefaultFormat();
         if (cfg.getPlayerFormats().containsKey(player.getName())) {
@@ -36,13 +36,14 @@ public class Formater {
             }
         }
         String prefixedString = new String(cfg.getTemplate());
+        final String playerName = cfg.getPlayerNicknames().containsKey(player.getName()) ? cfg.getPlayerNicknames().get(player.getName()) : BUKKIT_PLAYERNAME;
         prefixedString = prefixedString.replaceAll("\\Q[prefix]\\E", format.getPrefix());
-        prefixedString = prefixedString.replace("[name]", BUKKIT_PLAYERNAME);
+        prefixedString = prefixedString.replace("[name]", playerName);
         prefixedString = prefixedString.replaceAll("\\Q[suffix]\\E", format.getSuffix());
         prefixedString = prefixedString.replace("[message]", BUKKIT_MESSAGE);
         return ChatColor.translateAlternateColorCodes('&', unicoder(prefixedString));
     }
-    
+
     public String parsePM(final CommandSender from, final CommandSender to, final String message) {
         Format formatFrom = cfg.getDefaultFormat(), formatTo = cfg.getDefaultFormat();
         String prefixedString = new String(cfg.getPmTemplate()); // The final String
@@ -67,8 +68,9 @@ public class Formater {
                     }
                 }
             }
+            final String fromName = cfg.getPlayerNicknames().containsKey(from.getName()) ? cfg.getPlayerNicknames().get(from.getName()) : from.getName();
             prefixedString = prefixedString.replaceAll("\\Q[prefixFrom]\\E", formatFrom.getPrefix());
-            prefixedString = prefixedString.replace("[nameFrom]", from.getName());
+            prefixedString = prefixedString.replace("[nameFrom]", fromName);
             prefixedString = prefixedString.replaceAll("\\Q[suffixFrom]\\E", formatFrom.getSuffix());
         }
         if (!(to instanceof Player)) {
@@ -92,16 +94,17 @@ public class Formater {
                     }
                 }
             }
+            final String toName = cfg.getPlayerNicknames().containsKey(to.getName()) ? cfg.getPlayerNicknames().get(to.getName()) : to.getName();
             prefixedString = prefixedString.replaceAll("\\Q[prefixTo]\\E", formatTo.getPrefix());
-            prefixedString = prefixedString.replace("[nameTo]", to.getName());
+            prefixedString = prefixedString.replace("[nameTo]", toName);
             prefixedString = prefixedString.replaceAll("\\Q[suffixTo]\\E", formatTo.getSuffix());
         }
-        
+
         prefixedString = prefixedString.replace("[message]", message);
-        
+
         return ChatColor.translateAlternateColorCodes('&', unicoder(prefixedString));
     }
-    
+
     // Replace {{unicode}} by the actual char with unicode representation "unicode"
     private String unicoder(String s) {
         if (!s.contains("{{") || !s.contains("}}")) {
