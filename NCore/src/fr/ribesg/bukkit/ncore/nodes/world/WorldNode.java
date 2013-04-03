@@ -9,4 +9,11 @@ import fr.ribesg.bukkit.ncore.nodes.NPlugin;
  */
 public abstract class WorldNode extends NPlugin {
 
+    /**
+     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore()
+     */
+    @Override
+    protected void linkCore() {
+        getCore().setWorldNode(this);
+    }
 }
