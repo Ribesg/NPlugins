@@ -12,9 +12,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import fr.ribesg.bukkit.ncore.Utils;
-import fr.ribesg.bukkit.ncore.lang.AbstractMessages.MessageId;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid.CuboidState;
 import fr.ribesg.bukkit.ncuboid.beans.RectCuboid;
@@ -22,11 +21,11 @@ import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
 
 public class PlayerStickListener extends AbstractListener {
-    
+
     public PlayerStickListener(final NCuboid instance) {
         super(instance);
     }
-    
+
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(final ExtendedPlayerInteractEvent ext) {
         final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
@@ -36,10 +35,10 @@ public class PlayerStickListener extends AbstractListener {
             if (event.hasBlock()) {
                 if (action == Action.RIGHT_CLICK_BLOCK) {
                     // Selection tool
-                    final RectCuboid selection = (RectCuboid) CuboidDB.getInstance().getTmp(p.getName());
+                    final RectCuboid selection = (RectCuboid) getPlugin().getDb().getTmp(p.getName());
                     final Location clickedBlockLocation = event.getClickedBlock().getLocation();
                     if (selection == null) {
-                        CuboidDB.getInstance().addTmp(new RectCuboid("tmp" + p.getName(), p.getName(), clickedBlockLocation.getWorld(), clickedBlockLocation));
+                        getPlugin().getDb().addTmp(new RectCuboid("tmp" + p.getName(), p.getName(), clickedBlockLocation.getWorld(), clickedBlockLocation));
                         getPlugin().sendMessage(p, MessageId.cuboid_firstPointSelected, Utils.toString(clickedBlockLocation));
                     } else if (selection.getState() == CuboidState.TMPSTATE1) {
                         selection.secondPoint(clickedBlockLocation);
@@ -72,7 +71,7 @@ public class PlayerStickListener extends AbstractListener {
             }
             else if (action == Action.RIGHT_CLICK_AIR || action == Action.LEFT_CLICK_AIR) {
                 // Selection reset
-                final PlayerCuboid deletedCuboid = CuboidDB.getInstance().delTmp(p.getName());
+                final PlayerCuboid deletedCuboid = getPlugin().getDb().delTmp(p.getName());
                 if (deletedCuboid == null) {
                     getPlugin().sendMessage(p, MessageId.cuboid_noSelection);
                 } else {

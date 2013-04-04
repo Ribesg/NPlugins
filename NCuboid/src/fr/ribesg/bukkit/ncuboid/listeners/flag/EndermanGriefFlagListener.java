@@ -8,7 +8,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
@@ -22,7 +21,7 @@ public class EndermanGriefFlagListener extends AbstractListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityChangeBlock(final EntityChangeBlockEvent event) {
         if (event.getEntityType() == EntityType.ENDERMAN) {
-            final PlayerCuboid cuboid = CuboidDB.getInstance().getPriorByLoc(event.getBlock().getLocation());
+            final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getBlock().getLocation());
             if (cuboid != null && cuboid.getFlag(Flag.ENDERMAN)) {
                 ((Enderman) event.getEntity()).setCarriedMaterial(Material.RED_ROSE.getNewData((byte) 0));
                 event.setCancelled(true);

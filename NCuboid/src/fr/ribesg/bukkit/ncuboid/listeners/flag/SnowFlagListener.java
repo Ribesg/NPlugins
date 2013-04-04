@@ -7,7 +7,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockFormEvent;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
@@ -22,7 +21,7 @@ public class SnowFlagListener extends AbstractListener {
     public void onBlockForm(final BlockFormEvent event) {
         final BlockState newState = event.getNewState();
         if (newState.getType() == Material.SNOW || newState.getType() == Material.ICE) {
-            final PlayerCuboid c = CuboidDB.getInstance().getPriorByLoc(event.getBlock().getLocation());
+            final PlayerCuboid c = getPlugin().getDb().getPriorByLoc(event.getBlock().getLocation());
             if (c != null && c.getFlag(Flag.SNOW)) {
                 event.setCancelled(true);
             }

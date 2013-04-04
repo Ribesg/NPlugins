@@ -5,6 +5,7 @@ import java.util.Set;
 
 import fr.ribesg.bukkit.ncore.lang.AbstractMessages;
 import fr.ribesg.bukkit.ncore.lang.Message;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 
 /**
  * Messages for NTheEndAgain

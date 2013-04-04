@@ -40,7 +40,7 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
     @Getter private final Map<LivingEntity, PlayerCuboid> entityCuboidsMap;
     private boolean                                       hasNegativeEffect = false;
 
-    public ExtendedPotionSplashEvent(final PotionSplashEvent event) {
+    public ExtendedPotionSplashEvent(final CuboidDB db, final PotionSplashEvent event) {
         super(event);
         final ThrownPotion potion = event.getPotion();
         for (final PotionEffect e : potion.getEffects()) {
@@ -51,7 +51,7 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
         }
         entityCuboidsMap = new HashMap<LivingEntity, PlayerCuboid>();
         for (final LivingEntity e : event.getAffectedEntities()) {
-            final PlayerCuboid cuboid = CuboidDB.getInstance().getPriorByLoc(e.getLocation());
+            final PlayerCuboid cuboid = db.getPriorByLoc(e.getLocation());
             if (cuboid != null) {
                 entityCuboidsMap.put(e, cuboid);
             }

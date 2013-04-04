@@ -17,12 +17,12 @@ public class ExtendedPlayerTeleportEvent extends AbstractExtendedEvent {
     @Getter private final PlayerCuboid      toCuboid;
     @Getter private final Set<PlayerCuboid> toCuboids;
 
-    public ExtendedPlayerTeleportEvent(final PlayerTeleportEvent event) {
+    public ExtendedPlayerTeleportEvent(final CuboidDB db, final PlayerTeleportEvent event) {
         super(event);
-        fromCuboids = CuboidDB.getInstance().getAllByLoc(event.getFrom());
-        fromCuboid = CuboidDB.getInstance().getPrior(fromCuboids);
-        toCuboids = CuboidDB.getInstance().getAllByLoc(event.getTo());
-        toCuboid = CuboidDB.getInstance().getPrior(toCuboids);
+        fromCuboids = db.getAllByLoc(event.getFrom());
+        fromCuboid = db.getPrior(fromCuboids);
+        toCuboids = db.getAllByLoc(event.getTo());
+        toCuboid = db.getPrior(toCuboids);
     }
 
 }

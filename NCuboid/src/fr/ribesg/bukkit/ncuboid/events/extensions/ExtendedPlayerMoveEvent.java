@@ -19,12 +19,12 @@ public class ExtendedPlayerMoveEvent extends AbstractExtendedEvent {
     @Getter private final Set<PlayerCuboid> toCuboids;
     @Setter private boolean                 customCancelled;
 
-    public ExtendedPlayerMoveEvent(final PlayerMoveEvent event) {
+    public ExtendedPlayerMoveEvent(final CuboidDB db, final PlayerMoveEvent event) {
         super(event);
-        fromCuboids = CuboidDB.getInstance().getAllByLoc(event.getFrom());
-        fromCuboid = CuboidDB.getInstance().getPrior(fromCuboids);
-        toCuboids = CuboidDB.getInstance().getAllByLoc(event.getTo());
-        toCuboid = CuboidDB.getInstance().getPrior(toCuboids);
+        fromCuboids = db.getAllByLoc(event.getFrom());
+        fromCuboid = db.getPrior(fromCuboids);
+        toCuboids = db.getAllByLoc(event.getTo());
+        toCuboid = db.getPrior(toCuboids);
         customCancelled = false;
     }
 

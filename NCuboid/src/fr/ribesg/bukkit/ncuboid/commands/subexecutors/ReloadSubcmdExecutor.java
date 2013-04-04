@@ -5,20 +5,20 @@ import java.io.IOException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import fr.ribesg.bukkit.ncore.lang.AbstractMessages.MessageId;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Permissions;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
 
 public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
-    
+
     private static final String USAGE = ChatColor.RED + "Usage : /cuboid reload <cuboids|config|messages>";
-    
+
     public ReloadSubcmdExecutor(final NCuboid instance, final CommandSender sender, final String[] superCommandArgs) {
         super(instance, sender, superCommandArgs);
     }
-    
+
     @Override
     public boolean exec() {
         if (getArgs().length != 1) {
@@ -73,5 +73,5 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
             return true;
         }
     }
-    
+
 }

@@ -16,11 +16,11 @@ public class ExtendedEntityExplodeEvent extends AbstractExtendedEvent {
 
     @Getter private final Map<Block, PlayerCuboid> blockCuboidsMap;
 
-    public ExtendedEntityExplodeEvent(final EntityExplodeEvent event) {
+    public ExtendedEntityExplodeEvent(final CuboidDB db, final EntityExplodeEvent event) {
         super(event);
         blockCuboidsMap = new HashMap<Block, PlayerCuboid>();
         for (final Block b : event.blockList()) {
-            final PlayerCuboid cuboid = CuboidDB.getInstance().getPriorByLoc(b.getLocation());
+            final PlayerCuboid cuboid = db.getPriorByLoc(b.getLocation());
             if (cuboid != null) {
                 blockCuboidsMap.put(b, cuboid);
             }

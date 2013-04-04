@@ -14,7 +14,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
@@ -78,7 +77,7 @@ public class FarmFlagListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerShearEntity(final PlayerShearEntityEvent event) {
-        final PlayerCuboid cuboid = CuboidDB.getInstance().getPriorByLoc(event.getEntity().getLocation());
+        final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getEntity().getLocation());
         if (cuboid != null && cuboid.getFlag(Flag.FARM) && !cuboid.isAllowedPlayer(event.getPlayer())) {
             event.setCancelled(true);
         }

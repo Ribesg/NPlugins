@@ -12,9 +12,9 @@ public class ExtendedPlayerDropItemEvent extends AbstractExtendedEvent {
 
     @Getter PlayerCuboid playerCuboid;
 
-    public ExtendedPlayerDropItemEvent(final PlayerDropItemEvent event) {
+    public ExtendedPlayerDropItemEvent(final CuboidDB db, final PlayerDropItemEvent event) {
         super(event);
-        playerCuboid = CuboidDB.getInstance().getPriorByLoc(event.getPlayer().getLocation());
+        playerCuboid = db.getPriorByLoc(event.getPlayer().getLocation());
     }
 
 }

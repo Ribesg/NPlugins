@@ -22,18 +22,18 @@ public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 
     private boolean                         isDamagerProjectile = false;
 
-    public ExtendedEntityDamageEvent(final EntityDamageEvent event) {
+    public ExtendedEntityDamageEvent(final CuboidDB db, final EntityDamageEvent event) {
         super(event);
-        entityCuboids = CuboidDB.getInstance().getAllByLoc(event.getEntity().getLocation());
-        entityCuboid = CuboidDB.getInstance().getPrior(entityCuboids);
+        entityCuboids = db.getAllByLoc(event.getEntity().getLocation());
+        entityCuboid = db.getPrior(entityCuboids);
         if (event instanceof EntityDamageByEntityEvent) {
             Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
             if (damager instanceof Projectile) {
                 damager = ((Projectile) damager).getShooter();
                 isDamagerProjectile = true;
             }
-            damagerCuboids = CuboidDB.getInstance().getAllByLoc(damager.getLocation());
-            damagerCuboid = CuboidDB.getInstance().getPrior(damagerCuboids);
+            damagerCuboids = db.getAllByLoc(damager.getLocation());
+            damagerCuboid = db.getPrior(damagerCuboids);
         }
     }
 

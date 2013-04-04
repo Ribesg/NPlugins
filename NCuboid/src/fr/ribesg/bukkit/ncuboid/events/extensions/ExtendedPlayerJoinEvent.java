@@ -15,10 +15,10 @@ public class ExtendedPlayerJoinEvent extends AbstractExtendedEvent {
     @Getter private final PlayerCuboid      cuboid;
     @Getter private final Set<PlayerCuboid> cuboids;
 
-    public ExtendedPlayerJoinEvent(final PlayerJoinEvent event) {
+    public ExtendedPlayerJoinEvent(final CuboidDB db, final PlayerJoinEvent event) {
         super(event);
-        cuboids = CuboidDB.getInstance().getAllByLoc(event.getPlayer().getLocation());
-        cuboid = CuboidDB.getInstance().getPrior(cuboids);
+        cuboids = db.getAllByLoc(event.getPlayer().getLocation());
+        cuboid = db.getPrior(cuboids);
     }
 
 }

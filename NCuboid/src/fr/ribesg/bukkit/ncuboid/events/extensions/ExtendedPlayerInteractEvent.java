@@ -16,11 +16,11 @@ public class ExtendedPlayerInteractEvent extends AbstractExtendedEvent {
     @Getter private final Set<PlayerCuboid> cuboids;
 
     // Called only if event.hasBlock()
-    public ExtendedPlayerInteractEvent(final PlayerInteractEvent event) {
+    public ExtendedPlayerInteractEvent(final CuboidDB db, final PlayerInteractEvent event) {
         super(event);
         if (event.hasBlock()) {
-            cuboids = CuboidDB.getInstance().getAllByLoc(event.getClickedBlock().getLocation());
-            cuboid = CuboidDB.getInstance().getPrior(cuboids);
+            cuboids = db.getAllByLoc(event.getClickedBlock().getLocation());
+            cuboid = db.getPrior(cuboids);
         } else {
             cuboids = null;
             cuboid = null;

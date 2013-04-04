@@ -5,11 +5,13 @@ import java.io.IOException;
 import lombok.Getter;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
-import fr.ribesg.bukkit.ncore.lang.AbstractMessages.MessageId;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.nodes.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.commands.MainCommandExecutor;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
 import fr.ribesg.bukkit.ncuboid.listeners.EventExtensionListener;
@@ -41,14 +43,17 @@ import fr.ribesg.bukkit.ncuboid.listeners.flag.WarpgateFlagListener;
  * @author Ribesg
  */
 public class NCuboid extends CuboidNode {
-    
+
     // Configs
     @Getter private Messages messages;
     @Getter private Config   pluginConfig;
-    
+
     // Useful Nodes
     // // None
-    
+
+    // Cuboids base
+    @Getter private CuboidDB db;
+
     /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeEnable()
      */
@@ -67,8 +72,8 @@ public class NCuboid extends CuboidNode {
             getLogger().severe("This error occured when NCuboid tried to load messages.yml");
             return false;
         }
-        
-        // AbstractConfig
+
+        // Config
         try {
             pluginConfig = new Config();
             pluginConfig.loadConfig(this);
@@ -78,16 +83,24 @@ public class NCuboid extends CuboidNode {
             getLogger().severe("This error occured when NCuboid tried to load config.yml");
             return false;
         }
-        
-        // Create the CuboidDB // TODO Load/Save from/to file
-        new CuboidDB(this);
-        
+
+        // Create the CuboidDB
+        try {
+            db = CuboidDBPersistenceHandler.loadDB(this);
+        } catch (final IOException e) {
+            // TODO
+            e.printStackTrace();
+        } catch (final InvalidConfigurationException e) {
+            // TODO
+            e.printStackTrace();
+        }
+
         // Listeners
         final PluginManager pm = getServer().getPluginManager();
-        
+
         pm.registerEvents(new EventExtensionListener(this), this);
         pm.registerEvents(new PlayerStickListener(this), this);
-        
+
         // Flag Listeners
         pm.registerEvents(new BoosterFlagListener(this), this);
         pm.registerEvents(new BuildFlagListener(this), this);
@@ -109,13 +122,13 @@ public class NCuboid extends CuboidNode {
         pm.registerEvents(new TeleportFlagListener(this), this);
         pm.registerEvents(new UseFlagListener(this), this);
         pm.registerEvents(new WarpgateFlagListener(this), this);
-        
+
         // Command
         getCommand("cuboid").setExecutor(new MainCommandExecutor(this));
-        
+
         return true;
     }
-    
+
     /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore()
      */
@@ -123,7 +136,7 @@ public class NCuboid extends CuboidNode {
     protected void linkCore() {
         getCore().setCuboidNode(this);
     }
-    
+
     /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
      */
@@ -131,15 +144,22 @@ public class NCuboid extends CuboidNode {
     protected void handleOtherNodes() {
         // Nothing to do here for now
     }
-    
+
     /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeDisable()
      */
     @Override
     protected void onNodeDisable() {
+        try {
+            CuboidDBPersistenceHandler.saveDB(this, getDb());
+        } catch (final IOException e) {
+            // TODOs
+            e.printStackTrace();
+        }
+
         // TODO Save CuboidDB, do other things eventually (stop tasks etc)
     }
-    
+
     /**
      * Send a message with arguments
      * TODO <b>This may be moved<b>

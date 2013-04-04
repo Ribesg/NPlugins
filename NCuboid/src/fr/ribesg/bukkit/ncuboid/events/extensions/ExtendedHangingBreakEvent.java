@@ -15,10 +15,10 @@ public class ExtendedHangingBreakEvent extends AbstractExtendedEvent {
     @Getter private final PlayerCuboid      cuboid;
     @Getter private final Set<PlayerCuboid> cuboids;
 
-    public ExtendedHangingBreakEvent(final HangingBreakEvent event) {
+    public ExtendedHangingBreakEvent(final CuboidDB db, final HangingBreakEvent event) {
         super(event);
-        cuboids = CuboidDB.getInstance().getAllByLoc(event.getEntity().getLocation());
-        cuboid = CuboidDB.getInstance().getPrior(cuboids);
+        cuboids = db.getAllByLoc(event.getEntity().getLocation());
+        cuboid = db.getPrior(cuboids);
     }
 
 }
