@@ -8,6 +8,12 @@ public class WorldCuboid extends GeneralCuboid {
     
     public WorldCuboid(final World world) {
         super(world, CuboidType.WORLD);
+        
+        // Default flags are a little different for worlds
+        // TODO Make this configurable
+        setFlag(Flag.BUILD, false);
+        setFlag(Flag.CHEST, false);
+        setFlag(Flag.USE, false);
     }
     
     public WorldCuboid(

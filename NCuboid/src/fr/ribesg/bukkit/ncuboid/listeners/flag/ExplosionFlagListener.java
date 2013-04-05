@@ -11,16 +11,20 @@ import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 
 public class ExplosionFlagListener extends AbstractListener {
-
+    
     public ExplosionFlagListener(final NCuboid instance) {
         super(instance);
     }
-
+    
+    // TODO Think about what to do with new explosions flags
+    // Example: On which cuboid should we rely for FlagAtt.EXPLOSION_BLOCK_DROP ?
+    // => First idea is to use ((EntityExplodeEvent)ext.getBaseEvent()).getEntity().getLocation()
+    //    cuboid, maybe we should add it in ExtendedEntityExplodeEvent
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityExplode(final ExtendedEntityExplodeEvent ext) {
         final EntityExplodeEvent event = (EntityExplodeEvent) ext.getBaseEvent();
         for (final Block b : ext.getBlockCuboidsMap().keySet()) {
-            if (ext.getBlockCuboidsMap().get(b).getFlag(Flag.EXPLOSION)) {
+            if (ext.getBlockCuboidsMap().get(b).getFlag(Flag.EXPLOSION_BLOCK)) {
                 event.blockList().remove(b);
             }
         }

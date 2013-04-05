@@ -29,7 +29,9 @@ public class Flags {
         defaultFlagMap.put(Flag.CREATIVE, false);
         defaultFlagMap.put(Flag.DROP, false);
         defaultFlagMap.put(Flag.ENDERMAN, true);
-        defaultFlagMap.put(Flag.EXPLOSION, true);
+        defaultFlagMap.put(Flag.EXPLOSION_BLOCK, true);
+        defaultFlagMap.put(Flag.EXPLOSION_PLAYER, false);
+        defaultFlagMap.put(Flag.EXPLOSION_ITEM, true);
         defaultFlagMap.put(Flag.FARM, true);
         defaultFlagMap.put(Flag.FEED, false);
         defaultFlagMap.put(Flag.FIRE, true);

@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
 public enum FlagAtt {
-
+    
     // Integer
     HEAL_AMOUNT,
     HEAL_TIMER,
@@ -11,11 +11,25 @@ public enum FlagAtt {
     FEED_TIMER,
     FEED_MIN_FOOD,
     FEED_MAX_FOOD,
-
+    EXPLOSION_BLOCK_DROP,
+    
     // Location
     EXTERNAL_POINT,
     INTERNAL_POINT,
-
+    
     // Vector
-    BOOSTER_VECTOR,
+    BOOSTER_VECTOR;
+    
+    public static boolean isIntFlagAtt(final FlagAtt f) {
+        return f != null && HEAL_AMOUNT.compareTo(f) <= 0 && f.compareTo(EXPLOSION_BLOCK_DROP) <= 0;
+        
+    }
+    
+    public static boolean isLocFlagAtt(final FlagAtt f) {
+        return f != null && EXTERNAL_POINT.compareTo(f) <= 0 && f.compareTo(INTERNAL_POINT) <= 0;
+    }
+    
+    public static boolean isVectFlagAtt(final FlagAtt f) {
+        return f != null && f == BOOSTER_VECTOR;
+    }
 }

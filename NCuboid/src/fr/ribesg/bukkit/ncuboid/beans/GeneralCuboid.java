@@ -15,16 +15,16 @@ public abstract class GeneralCuboid extends Cuboid {
     }
     
     // Identification / informations related
-    @Getter @Setter private World          world;
-    @Getter @Setter private CuboidType     type;
+    @Getter @Setter private World                  world;
+    @Getter @Setter private CuboidType             type;
     
     // Protection related
-    @Delegate private final Rights         rights;
-    @Getter @Setter private int            priority;
+    @Delegate private final Rights                 rights;
+    @Getter @Setter private int                    priority;
     
     // Flags related
-    @Delegate private final Flags          flags;
-    @Delegate private final FlagAttributes flagAtts;
+    @Delegate private final Flags                  flags;
+    @Getter @Delegate private final FlagAttributes flagAtts;
     
     // Create a new Cuboid, when user select points etc
     public GeneralCuboid(final World world, final CuboidType type) {

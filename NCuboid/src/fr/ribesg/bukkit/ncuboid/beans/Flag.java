@@ -9,7 +9,9 @@ public enum Flag {
     CREATIVE,
     DROP,
     ENDERMAN,
-    EXPLOSION,
+    EXPLOSION_BLOCK,
+    EXPLOSION_PLAYER,
+    EXPLOSION_ITEM,
     FARM,
     FEED,
     FIRE,
@@ -27,7 +29,7 @@ public enum Flag {
     TELEPORT,
     USE,
     WARPGATE;
-
+    
     public static Flag get(final String val) {
         final String in = val.toUpperCase();
         Flag f = null;
@@ -38,8 +40,12 @@ public enum Flag {
                 f = BOOSTER;
             } else if (in.equals("SPEAK")) {
                 f = CHAT;
-            } else if (in.equals("EXP")) {
-                f = EXPLOSION;
+            } else if (in.equals("EXPLOSIONBLOCK") || in.equals("EXP_BLOCK") || in.equals("EXPBLOCK")) {
+                f = EXPLOSION_BLOCK;
+            } else if (in.equals("EXPLOSIONPLAYER") || in.equals("EXP_PLAYER") || in.equals("EXPPLAYER")) {
+                f = EXPLOSION_PLAYER;
+            } else if (in.equals("EXPLOSIONITEM") || in.equals("EXP_ITEM") || in.equals("EXPITEM")) {
+                f = EXPLOSION_ITEM;
             } else if (in.equals("ENDERMAN")) {
                 f = ENDERMAN;
             } else if (in.equals("HIDE")) {

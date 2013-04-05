@@ -85,7 +85,7 @@ public class RectCuboid extends PlayerCuboid {
         setChunks(computeChunks());
     }
 
-    // Should only be used when the cuboid is not in th byChunks map
+    // Should only be used when the cuboid is not in the byChunks map
     public Set<ChunkKey> computeChunks() {
         final Set<ChunkKey> chunks = new HashSet<ChunkKey>();
         final ChunkKey cMin = new ChunkKey(getMinCorner());
