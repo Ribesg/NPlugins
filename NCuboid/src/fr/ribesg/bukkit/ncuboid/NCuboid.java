@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import lombok.Getter;
 
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
@@ -12,10 +13,12 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.nodes.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
+import fr.ribesg.bukkit.ncuboid.beans.WorldCuboid;
 import fr.ribesg.bukkit.ncuboid.commands.MainCommandExecutor;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
 import fr.ribesg.bukkit.ncuboid.listeners.EventExtensionListener;
 import fr.ribesg.bukkit.ncuboid.listeners.PlayerStickListener;
+import fr.ribesg.bukkit.ncuboid.listeners.WorldLoadingListener;
 import fr.ribesg.bukkit.ncuboid.listeners.flag.BoosterFlagListener;
 import fr.ribesg.bukkit.ncuboid.listeners.flag.BuildFlagListener;
 import fr.ribesg.bukkit.ncuboid.listeners.flag.ChatFlagListener;
@@ -100,6 +103,7 @@ public class NCuboid extends CuboidNode {
 
         pm.registerEvents(new EventExtensionListener(this), this);
         pm.registerEvents(new PlayerStickListener(this), this);
+        pm.registerEvents(new WorldLoadingListener(this), this);
 
         // Flag Listeners
         pm.registerEvents(new BoosterFlagListener(this), this);
@@ -142,7 +146,12 @@ public class NCuboid extends CuboidNode {
      */
     @Override
     protected void handleOtherNodes() {
-        // Nothing to do here for now
+        // See if there are new worlds
+        for (final World world : getServer().getWorlds()) {
+            if (db.getByWorld(world) == null) {
+                db.addByWorld(new WorldCuboid(world));
+            }
+        }
     }
 
     /**

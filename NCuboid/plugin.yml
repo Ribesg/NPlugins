@@ -1,10 +1,14 @@
 ﻿name: NCuboid
-version: 0.0.0
-description: Cuboid node of the N plugins suite
+version: 0.0.6
+description: Cuboid plugin for N plugin suite
 author: Ribesg
-website: http://itsn3w.fr/
+website: http://www.ribesg.fr
 main: fr.ribesg.bukkit.ncuboid.NCuboid
-load: STARTUP
+
+load: POSTWORLD
+
+depend: [NCore]
+softdepend: [NWorld]
 
 commands:
     cuboid:

@@ -19,7 +19,7 @@ import org.bukkit.event.world.StructureGrowEvent;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedHangingBreakEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
@@ -32,7 +32,7 @@ public class BuildFlagListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent ext) {
-        final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlockClicked().getRelative(ext.getBlockFace()).getLocation());
+        final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlockClicked().getRelative(ext.getBlockFace()).getLocation());
         if (cuboid == null) {
             return;
         } else if (cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
@@ -42,7 +42,7 @@ public class BuildFlagListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerBucketFill(final PlayerBucketFillEvent ext) {
-        final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlockClicked().getLocation());
+        final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlockClicked().getLocation());
         if (cuboid == null) {
             return;
         } else if (cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
@@ -63,7 +63,7 @@ public class BuildFlagListener extends AbstractListener {
                 // Fire or vehicle
                 if (event.getItem().getType() == Material.FLINT_AND_STEEL || event.getItem().getType() == Material.FIREBALL
                         || event.getItem().getType() == Material.MINECART || event.getItem().getType() == Material.BOAT) {
-                    final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
+                    final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
                     if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(event.getPlayer())) {
                         event.setCancelled(true);
                         return;
@@ -89,7 +89,7 @@ public class BuildFlagListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockBreak(final BlockBreakEvent ext) {
-        final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlock().getLocation());
+        final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlock().getLocation());
         if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
             ext.setCancelled(true);
             return;
@@ -98,7 +98,7 @@ public class BuildFlagListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockPlace(final BlockPlaceEvent ext) {
-        final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlock().getLocation());
+        final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlock().getLocation());
         if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
             ext.setCancelled(true);
             return;
@@ -107,7 +107,7 @@ public class BuildFlagListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockDamage(final BlockDamageEvent ext) {
-        final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlock().getLocation());
+        final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlock().getLocation());
         if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
             ext.setCancelled(true);
             return;
@@ -130,7 +130,7 @@ public class BuildFlagListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onHangingPlace(final HangingPlaceEvent ext) {
-        final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getEntity().getLocation());
+        final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getEntity().getLocation());
         if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
             ext.setCancelled(true);
             return;
@@ -141,7 +141,7 @@ public class BuildFlagListener extends AbstractListener {
     public void onVehicleDestroy(final VehicleDestroyEvent ext) {
         if (ext.getAttacker().getType() == EntityType.PLAYER) {
             final Player player = (Player) ext.getAttacker();
-            final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getVehicle().getLocation());
+            final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getVehicle().getLocation());
             if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(player)) {
                 ext.setCancelled(true);
                 return;
@@ -152,7 +152,7 @@ public class BuildFlagListener extends AbstractListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onStructureGrow(final StructureGrowEvent ext) {
         if (ext.isFromBonemeal()) {
-            final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getLocation());
+            final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getLocation());
             if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
                 ext.setCancelled(true);
                 return;

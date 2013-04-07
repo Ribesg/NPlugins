@@ -122,11 +122,11 @@ public class CuboidDB {
         }
     }
 
-    public PlayerCuboid getPriorByLoc(final Location loc) {
+    public GeneralCuboid getPriorByLoc(final Location loc) {
         return getPrior(getAllByLoc(loc));
     }
 
-    public PlayerCuboid getPrior(final Set<PlayerCuboid> cuboids) {
+    public GeneralCuboid getPrior(final Set<GeneralCuboid> cuboids) {
         if (cuboids == null) {
             return null;
         } else {
@@ -137,9 +137,9 @@ public class CuboidDB {
                 case 1: // We're done
                     return cuboids.iterator().next();
                 case 2: // It's not too complicated
-                    final Iterator<PlayerCuboid> it = cuboids.iterator();
-                    final PlayerCuboid c1 = it.next();
-                    final PlayerCuboid c2 = it.next();
+                    final Iterator<GeneralCuboid> it = cuboids.iterator();
+                    final GeneralCuboid c1 = it.next();
+                    final GeneralCuboid c2 = it.next();
                     switch (Integer.compare(c1.getPriority(), c2.getPriority())) {
                     // Check priority
                         case -1:
@@ -164,8 +164,8 @@ public class CuboidDB {
                     }
                 default: // Let's compare them all in O(n) time
                     final int maxPriority = 0; // "current" max priority in cuboids Set
-                    final TreeMap<Long, PlayerCuboid> sizeMap = new TreeMap<Long, PlayerCuboid>(); // TotalSize ; Cuboid
-                    for (final PlayerCuboid c : cuboids) {
+                    final TreeMap<Long, GeneralCuboid> sizeMap = new TreeMap<Long, GeneralCuboid>(); // TotalSize ; Cuboid
+                    for (final GeneralCuboid c : cuboids) {
                         if (c.getPriority() > maxPriority) {
                             // Higher priority spotted, all previous cuboids are less interesting
                             sizeMap.clear();
@@ -180,20 +180,23 @@ public class CuboidDB {
         }
     }
 
-    public Set<PlayerCuboid> getAllByLoc(final Location loc) {
+    public Set<GeneralCuboid> getAllByLoc(final Location loc) {
         final ChunkKey k = new ChunkKey(loc);
+        final Set<GeneralCuboid> cuboids = new HashSet<GeneralCuboid>();
+        if (byWorld.containsKey(loc.getWorld().getName())) {
+            cuboids.add(byWorld.get(loc.getWorld().getName()));
+        }
         if (!byChunks.containsKey(k)) {
-            return null;
+            return cuboids.isEmpty() ? null : cuboids;
         } else {
-            final Set<PlayerCuboid> chunks = new HashSet<PlayerCuboid>();
-            chunks.addAll(byChunks.get(k));
-            final Iterator<PlayerCuboid> it = chunks.iterator();
+            cuboids.addAll(byChunks.get(k));
+            final Iterator<GeneralCuboid> it = cuboids.iterator();
             while (it.hasNext()) {
                 if (!it.next().contains(loc)) {
                     it.remove();
                 }
             }
-            return chunks.isEmpty() ? null : chunks;
+            return cuboids.isEmpty() ? null : cuboids;
         }
     }
 

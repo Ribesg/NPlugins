@@ -1,5 +1,10 @@
 package fr.ribesg.bukkit.nworld;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -71,18 +76,7 @@ public class Config extends AbstractConfig {
                 w = plugin.getServer().createWorld(new WorldCreator(worldName));
             }
             final boolean availableForTeleportation = Integer.parseInt(split[1]) == 1;
-            final String[] location = split[2].split(LEVEL2_SEPARATOR);
-            Location loc = null;
-            try {
-                final double x = Integer.parseInt(location[0]) + 0.5;
-                final double y = Integer.parseInt(location[1]) + 0.25;
-                final double z = Integer.parseInt(location[2]) + 0.5;
-                final double yaw = Float.parseFloat(location[3]);
-                final double pitch = Float.parseFloat(location[4]);
-                loc = new Location(w, x, y, z, (float) yaw, (float) pitch);
-            } catch (final Exception e) {
-                plugin.getLogger().severe("Unable to load spawnpoint of world " + worldName);
-            }
+            final Location loc = buildLocation(w, split[2]);
             plugin.getWorldMap().put(worldName, availableForTeleportation);
             plugin.getSpawnMap().put(worldName, loc == null ? w.getSpawnLocation() : loc);
         }
@@ -139,5 +133,61 @@ public class Config extends AbstractConfig {
         }
 
         return content.toString();
+    }
+
+    Location buildLocation(final World world, final String string) {
+        final String[] location = string.split(LEVEL2_SEPARATOR);
+        Location loc = null;
+        try {
+            final double x = Integer.parseInt(location[0]) + 0.5;
+            final double y = Integer.parseInt(location[1]) + 0.25;
+            final double z = Integer.parseInt(location[2]) + 0.5;
+            final double yaw = Float.parseFloat(location[3]);
+            final double pitch = Float.parseFloat(location[4]);
+            loc = new Location(world, x, y, z, (float) yaw, (float) pitch);
+            return loc;
+        } catch (final Exception e) {
+            plugin.getLogger().severe("Unable to load spawnpoint of world " + world.getName());
+            return null;
+        }
+    }
+
+    public void loadWorldFromConfig(final World world) {
+        final Path path = Paths.get(
+                plugin.getDataFolder().toPath().toAbsolutePath().toString()
+                        + File.separator
+                        + "config.yml");
+        if (!Files.exists(path)) {
+            System.out.println("BLA1");
+            plugin.getWorldMap().put(world.getName(), false);
+            plugin.getSpawnMap().put(world.getName(), world.getSpawnLocation());
+        } else {
+            final YamlConfiguration config = new YamlConfiguration();
+            try (BufferedReader reader = Files.newBufferedReader(path, CHARSET)) {
+                final StringBuilder s = new StringBuilder();
+                while (reader.ready()) {
+                    s.append(reader.readLine() + '\n');
+                }
+                config.loadFromString(s.toString());
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
+
+            // Load known worlds list
+            final List<String> worldList = config.getStringList("worlds");
+            for (final String code : worldList) {
+                final String[] split = code.split(LEVEL1_SEPARATOR);
+                final String worldName = split[0];
+                if (worldName.equals(world.getName())) {
+                    final boolean availableForTeleportation = Integer.parseInt(split[1]) == 1;
+                    final Location loc = buildLocation(world, split[2]);
+                    plugin.getWorldMap().put(world.getName(), availableForTeleportation);
+                    plugin.getSpawnMap().put(world.getName(), loc == null ? world.getSpawnLocation() : loc);
+                    return;
+                }
+            }
+            plugin.getWorldMap().put(world.getName(), false);
+            plugin.getSpawnMap().put(world.getName(), world.getSpawnLocation());
+        }
     }
 }

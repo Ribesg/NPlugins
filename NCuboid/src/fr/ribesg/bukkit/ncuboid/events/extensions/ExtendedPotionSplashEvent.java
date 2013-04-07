@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 
 public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
@@ -37,8 +37,8 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
         return negativeEffects;
     }
 
-    @Getter private final Map<LivingEntity, PlayerCuboid> entityCuboidsMap;
-    private boolean                                       hasNegativeEffect = false;
+    @Getter private final Map<LivingEntity, GeneralCuboid> entityCuboidsMap;
+    private boolean                                        hasNegativeEffect = false;
 
     public ExtendedPotionSplashEvent(final CuboidDB db, final PotionSplashEvent event) {
         super(event);
@@ -49,9 +49,9 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
                 break;
             }
         }
-        entityCuboidsMap = new HashMap<LivingEntity, PlayerCuboid>();
+        entityCuboidsMap = new HashMap<LivingEntity, GeneralCuboid>();
         for (final LivingEntity e : event.getAffectedEntities()) {
-            final PlayerCuboid cuboid = db.getPriorByLoc(e.getLocation());
+            final GeneralCuboid cuboid = db.getPriorByLoc(e.getLocation());
             if (cuboid != null) {
                 entityCuboidsMap.put(e, cuboid);
             }

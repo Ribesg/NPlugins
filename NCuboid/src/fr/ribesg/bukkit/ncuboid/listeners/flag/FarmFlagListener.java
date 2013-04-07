@@ -3,6 +3,7 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -15,7 +16,7 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
@@ -68,8 +69,8 @@ public class FarmFlagListener extends AbstractListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteractEvent(final ExtendedPlayerInteractEvent ext) {
         final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
-        if (event.getAction() == Action.PHYSICAL) {
-            if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM) && !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
+        if (event.getAction() == Action.PHYSICAL && event.hasBlock() && event.getClickedBlock().getType() == Material.SOIL) {
+            if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
                 event.setCancelled(true);
             }
         }
@@ -77,7 +78,7 @@ public class FarmFlagListener extends AbstractListener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerShearEntity(final PlayerShearEntityEvent event) {
-        final PlayerCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getEntity().getLocation());
+        final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getEntity().getLocation());
         if (cuboid != null && cuboid.getFlag(Flag.FARM) && !cuboid.isAllowedPlayer(event.getPlayer())) {
             event.setCancelled(true);
         }

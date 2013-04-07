@@ -10,17 +10,18 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 
 public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 
-    @Getter private final Set<PlayerCuboid> entityCuboids;
-    @Getter private Set<PlayerCuboid>       damagerCuboids;
-    @Getter private final PlayerCuboid      entityCuboid;
-    @Getter private PlayerCuboid            damagerCuboid;
+    @Getter private final Set<GeneralCuboid> entityCuboids;
+    @Getter private Set<GeneralCuboid>       damagerCuboids;
+    @Getter private final GeneralCuboid      entityCuboid;
+    @Getter private GeneralCuboid            damagerCuboid;
 
-    private boolean                         isDamagerProjectile = false;
+    @Getter private boolean                  damagerProjectile = false;
+    @Getter private Entity                   shooter;
 
     public ExtendedEntityDamageEvent(final CuboidDB db, final EntityDamageEvent event) {
         super(event);
@@ -30,15 +31,12 @@ public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
             Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
             if (damager instanceof Projectile) {
                 damager = ((Projectile) damager).getShooter();
-                isDamagerProjectile = true;
+                damagerProjectile = true;
+                shooter = damager;
             }
             damagerCuboids = db.getAllByLoc(damager.getLocation());
             damagerCuboid = db.getPrior(damagerCuboids);
         }
-    }
-
-    public boolean isDamagerProjectile() {
-        return isDamagerProjectile;
     }
 
 }

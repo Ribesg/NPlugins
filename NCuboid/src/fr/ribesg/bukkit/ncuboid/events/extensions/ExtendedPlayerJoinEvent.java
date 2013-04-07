@@ -7,13 +7,13 @@ import lombok.Getter;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 
 public class ExtendedPlayerJoinEvent extends AbstractExtendedEvent {
 
-    @Getter private final PlayerCuboid      cuboid;
-    @Getter private final Set<PlayerCuboid> cuboids;
+    @Getter private final GeneralCuboid      cuboid;
+    @Getter private final Set<GeneralCuboid> cuboids;
 
     public ExtendedPlayerJoinEvent(final CuboidDB db, final PlayerJoinEvent event) {
         super(event);

@@ -1,6 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.listeners;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.bukkit.Location;
@@ -14,6 +15,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import fr.ribesg.bukkit.ncore.Utils;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid.CuboidType;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid.CuboidState;
 import fr.ribesg.bukkit.ncuboid.beans.RectCuboid;
@@ -52,20 +55,37 @@ public class PlayerStickListener extends AbstractListener {
                     }
                 } else { // Action.LEFT_CLICK_BLOCK
                     // Info tool
-                    final Set<PlayerCuboid> cuboids = ext.getCuboids();
-                    if (cuboids == null || cuboids.size() == 0) {
+                    final Set<GeneralCuboid> cuboids = ext.getCuboids();
+                    if (cuboids == null || cuboids.size() == 0 || cuboids.size() == 1 && cuboids.iterator().next().getType() == CuboidType.WORLD) {
                         getPlugin().sendMessage(p, MessageId.cuboid_blockNotProtected);
-                    } else if (cuboids.size() == 1) {
-                        final PlayerCuboid cuboid = cuboids.iterator().next();
-                        getPlugin().sendMessage(p, MessageId.cuboid_blockProtectedOneCuboid, cuboid.getInfoLine());
                     } else {
-                        final String[] strings = new String[cuboids.size()];
-                        int i = 0;
-                        for (final PlayerCuboid c : cuboids) {
-                            strings[i++] = c.getInfoLine();
+                        int size = cuboids.size();
+                        boolean containsWorldCuboid = false;
+                        for (final GeneralCuboid c : cuboids) {
+                            if (c.getType() == CuboidType.WORLD) {
+                                size--;
+                                containsWorldCuboid = true;
+                                break;
+                            }
                         }
-                        Arrays.sort(strings);
-                        getPlugin().sendMessage(p, MessageId.cuboid_blockProtectedMultipleCuboids, String.valueOf(strings.length), Messages.merge(strings));
+                        if (size == 1) {
+                            final Iterator<GeneralCuboid> it = cuboids.iterator();
+                            GeneralCuboid cuboid = it.next();
+                            if (cuboid.getType() == CuboidType.WORLD) {
+                                cuboid = it.next();
+                            }
+                            getPlugin().sendMessage(p, MessageId.cuboid_blockProtectedOneCuboid, ((PlayerCuboid) cuboid).getInfoLine());
+                        } else {
+                            final String[] strings = new String[cuboids.size() - (containsWorldCuboid ? 1 : 0)];
+                            int i = 0;
+                            for (final GeneralCuboid c : cuboids) {
+                                if (c.getType() != CuboidType.WORLD) {
+                                    strings[i++] = ((PlayerCuboid) c).getInfoLine();
+                                }
+                            }
+                            Arrays.sort(strings);
+                            getPlugin().sendMessage(p, MessageId.cuboid_blockProtectedMultipleCuboids, String.valueOf(strings.length), Messages.merge(strings));
+                        }
                     }
                 }
             }

@@ -23,13 +23,13 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
  * @author Ribesg
  */
 public class NCommandExecutor implements CommandExecutor {
-    
+
     private final NWorld plugin;
-    
+
     public NCommandExecutor(final NWorld instance) {
         plugin = instance;
     }
-    
+
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         if (command.getName().equalsIgnoreCase("nworld")) {
@@ -57,7 +57,7 @@ public class NCommandExecutor implements CommandExecutor {
             return false;
         }
     }
-    
+
     private boolean cmdWorld(final CommandSender sender, String[] args) {
         args = parseArgs(args);
         if (args.length == 0) {
@@ -72,7 +72,7 @@ public class NCommandExecutor implements CommandExecutor {
             // Warp to world
             return subCmdWorldWarp(sender, args[0]);
         } else { // Handle subcommands
-            String subCmd = args[0].toLowerCase();
+            final String subCmd = args[0].toLowerCase();
             args = Arrays.copyOfRange(args, 1, args.length);
             switch (subCmd) {
                 case "create":
@@ -92,8 +92,8 @@ public class NCommandExecutor implements CommandExecutor {
             }
         }
     }
-    
-    private boolean subCmdWorldWarp(CommandSender sender, String givenWorldName) {
+
+    private boolean subCmdWorldWarp(final CommandSender sender, final String givenWorldName) {
         if (!(sender instanceof Player)) {
             plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
             return true;
@@ -115,13 +115,13 @@ public class NCommandExecutor implements CommandExecutor {
             return true;
         }
     }
-    
-    private boolean subCmdWorldCreate(CommandSender sender, String[] args) {
+
+    private boolean subCmdWorldCreate(final CommandSender sender, final String[] args) {
         if (!sender.hasPermission(Permissions.CMD_WORLD_CREATE) && !sender.hasPermission(Permissions.ADMIN) && !sender.isOp()) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
-        String realWorldName = getRealWorldName(args[0]);
+        final String realWorldName = getRealWorldName(args[0]);
         if (realWorldName != null) {
             plugin.sendMessage(sender, MessageId.world_alreadyExists, realWorldName);
             return true;
@@ -151,13 +151,13 @@ public class NCommandExecutor implements CommandExecutor {
             return true;
         }
     }
-    
-    private boolean subCmdWorldLoad(CommandSender sender, String[] args) {
+
+    private boolean subCmdWorldLoad(final CommandSender sender, final String[] args) {
         if (!sender.hasPermission(Permissions.CMD_WORLD_LOAD) && !sender.hasPermission(Permissions.ADMIN) && !sender.isOp()) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
-        String realWorldName = getRealWorldName(args[0]);
+        final String realWorldName = getRealWorldName(args[0]);
         if (realWorldName == null) {
             plugin.sendMessage(sender, MessageId.world_unknownWorld, args[0]);
             return true;
@@ -170,23 +170,22 @@ public class NCommandExecutor implements CommandExecutor {
             } else {
                 plugin.sendMessage(sender, MessageId.world_loadingWorldMayBeLaggy);
             }
-            final World loadedWorld = plugin.getServer().createWorld(new WorldCreator(realWorldName));
+            plugin.getServer().createWorld(new WorldCreator(realWorldName));
             if (plugin.getPluginConfig().getBroadcastOnWorldLoad() == 1) {
                 plugin.broadcastMessage(MessageId.world_loaded);
             } else {
                 plugin.sendMessage(sender, MessageId.world_loaded);
             }
-            plugin.getWorldMap().put(loadedWorld.getName().toLowerCase(), false);
             return true;
         }
     }
-    
-    private boolean subCmdWorldUnload(CommandSender sender, String[] args) {
+
+    private boolean subCmdWorldUnload(final CommandSender sender, final String[] args) {
         if (!sender.hasPermission(Permissions.CMD_WORLD_UNLOAD) && !sender.hasPermission(Permissions.ADMIN) && !sender.isOp()) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
-        String realWorldName = getRealWorldName(args[0]);
+        final String realWorldName = getRealWorldName(args[0]);
         if (realWorldName == null) {
             plugin.sendMessage(sender, MessageId.world_unknownWorld, args[0]);
             return true;
@@ -205,17 +204,16 @@ public class NCommandExecutor implements CommandExecutor {
             } else {
                 plugin.sendMessage(sender, MessageId.world_unloaded);
             }
-            plugin.getWorldMap().remove(realWorldName.toLowerCase());
             return true;
         }
     }
-    
-    private boolean subCmdWorldWarpAllow(CommandSender sender, String[] args) {
+
+    private boolean subCmdWorldWarpAllow(final CommandSender sender, final String[] args) {
         if (!sender.hasPermission(Permissions.CMD_WORLD_WARP_EDIT) && !sender.hasPermission(Permissions.ADMIN) && !sender.isOp()) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
-        String realWorldName = getRealWorldName(args[0]);
+        final String realWorldName = getRealWorldName(args[0]);
         if (realWorldName == null) {
             plugin.sendMessage(sender, MessageId.world_unknownWorld, args[0]);
             return true;
@@ -233,13 +231,13 @@ public class NCommandExecutor implements CommandExecutor {
             }
         }
     }
-    
-    private boolean subCmdWorldWarpDeny(CommandSender sender, String[] args) {
+
+    private boolean subCmdWorldWarpDeny(final CommandSender sender, final String[] args) {
         if (!sender.hasPermission(Permissions.CMD_WORLD_WARP_EDIT) && !sender.hasPermission(Permissions.ADMIN) && !sender.isOp()) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
-        String realWorldName = getRealWorldName(args[0]);
+        final String realWorldName = getRealWorldName(args[0]);
         if (realWorldName == null) {
             plugin.sendMessage(sender, MessageId.world_unknownWorld, args[0]);
             return true;
@@ -257,7 +255,7 @@ public class NCommandExecutor implements CommandExecutor {
             }
         }
     }
-    
+
     private boolean cmdSpawn(final CommandSender sender) {
         if (!(sender instanceof Player)) {
             plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
@@ -268,7 +266,7 @@ public class NCommandExecutor implements CommandExecutor {
         plugin.sendMessage(player, MessageId.world_teleportingToSpawn);
         return true;
     }
-    
+
     private boolean cmdSetSpawn(final CommandSender sender) {
         if (!(sender instanceof Player)) {
             plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
@@ -281,7 +279,7 @@ public class NCommandExecutor implements CommandExecutor {
         plugin.sendMessage(player, MessageId.world_settingSpawnPoint, player.getWorld().getName());
         return true;
     }
-    
+
     // ############### //
     // ## Utilities ## //
     // ############### //
@@ -295,16 +293,16 @@ public class NCommandExecutor implements CommandExecutor {
      *            Original arguments
      * @return The new arguments array
      */
-    private String[] parseArgs(String[] args) {
+    private String[] parseArgs(final String[] args) {
         if (args == null || args.length == 0 || args.length == 1) {
             return args;
         } else {
-            List<String> newArgs = new ArrayList<String>();
+            final List<String> newArgs = new ArrayList<String>();
             for (int i = 0; i < args.length; i++) {
                 String arg = args[i];
                 if (arg.startsWith("\"") || arg.startsWith("'")) {
-                    StringBuilder newArg = new StringBuilder(arg.substring(1));
-                    String endChar = Character.toString(arg.charAt(0));
+                    final StringBuilder newArg = new StringBuilder(arg.substring(1));
+                    final String endChar = Character.toString(arg.charAt(0));
                     while (!arg.endsWith(endChar)) {
                         i++;
                         if (i == args.length) {
@@ -319,10 +317,15 @@ public class NCommandExecutor implements CommandExecutor {
                     newArgs.add(arg);
                 }
             }
-            return (String[]) newArgs.toArray();
+
+            final String[] result = new String[newArgs.size()];
+            for (int i = 0; i < newArgs.size(); i++) {
+                result[i] = newArgs.get(i);
+            }
+            return result;
         }
     }
-    
+
     /**
      * Check if a given world is loaded, not case sensitive.
      * 
@@ -330,15 +333,15 @@ public class NCommandExecutor implements CommandExecutor {
      *            The world name given by the sender
      * @return The correct name of the world if it is loaded, null otherwise
      */
-    private String isLoaded(String worldName) {
-        World world = plugin.getServer().getWorld(worldName);
+    private String isLoaded(final String worldName) {
+        final World world = plugin.getServer().getWorld(worldName);
         if (world != null) {
             return world.getName();
         } else {
             return null;
         }
     }
-    
+
     /**
      * Check if a given unloaded world exists in world folder, not case sensitive.
      * 
@@ -348,7 +351,7 @@ public class NCommandExecutor implements CommandExecutor {
      * @throws IOException
      *             If it was unable to iterate over the Worlds folder
      */
-    private String exists(String worldName) throws IOException {
+    private String exists(final String worldName) throws IOException {
         try {
             final Path worldFolderPath = plugin.getServer().getWorldContainer().toPath();
             for (final Path p : Files.newDirectoryStream(worldFolderPath)) {
@@ -363,7 +366,7 @@ public class NCommandExecutor implements CommandExecutor {
         }
         return null;
     }
-    
+
     /**
      * Returns the real world name of the given world
      * 
@@ -371,12 +374,14 @@ public class NCommandExecutor implements CommandExecutor {
      *            The world name given by the sender
      * @return The correct name of the world if it is loaded or exists, null otherwise
      */
-    private String getRealWorldName(String worldName) {
+    private String getRealWorldName(final String worldName) {
         try {
             String res = isLoaded(worldName);
-            if (res == null) res = exists(worldName);
+            if (res == null) {
+                res = exists(worldName);
+            }
             return res;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return null;
         }
     }

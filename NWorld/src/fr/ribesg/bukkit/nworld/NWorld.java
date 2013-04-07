@@ -22,24 +22,24 @@ import fr.ribesg.bukkit.nworld.lang.Messages;
  * @author Ribesg
  */
 public class NWorld extends WorldNode {
-    
+
     // Configs
     @Getter private Messages                  messages;
     @Getter private Config                    pluginConfig;
-    
+
     // Useful Nodes
     // // None
-    
+
     /**
-     * Map linking lowercased World Names as keys to a boolean saying if they are open to teleportation or not 
+     * Map linking lowercased World Names as keys to a boolean saying if they are open to teleportation or not
      */
     @Getter private HashMap<String, Boolean>  worldMap;
-    
+
     /**
      * Map linking lowercased World Names as keys to their spawn location, here uncluding Yaw and Pitch
      */
     @Getter private HashMap<String, Location> spawnMap;
-    
+
     @Override
     public boolean onNodeEnable() {
         // Messages first !
@@ -55,10 +55,10 @@ public class NWorld extends WorldNode {
             getLogger().severe("This error occured when NWorld tried to load messages.yml");
             return false;
         }
-        
+
         worldMap = new HashMap<String, Boolean>();
         spawnMap = new HashMap<String, Location>();
-        
+
         // Config
         try {
             pluginConfig = new Config(this);
@@ -69,13 +69,13 @@ public class NWorld extends WorldNode {
             getLogger().severe("This error occured when NWorld tried to load config.yml");
             return false;
         }
-        
+
         for (final World w : getServer().getWorlds()) {
-            if (!worldMap.containsKey(w.getName().toLowerCase())) {
-                worldMap.put(w.getName().toLowerCase(), false);
+            if (!worldMap.containsKey(w.getName())) {
+                worldMap.put(w.getName(), false);
             }
-            if (!spawnMap.containsKey(w.getName().toLowerCase())) {
-                
+            if (!spawnMap.containsKey(w.getName())) {
+
                 // Anti stuck in the wall
                 Location loc = w.getSpawnLocation();
                 loc.setX(loc.getBlockX() + 0.5);
@@ -84,7 +84,7 @@ public class NWorld extends WorldNode {
                 while (loc.getBlock().getType() != Material.AIR || loc.getBlock().getRelative(BlockFace.UP).getType() != Material.AIR) {
                     loc.add(0, 1, 0);
                 }
-                
+
                 // Anti burn in lava for the Nether (TODO Make this deactivable ?)
                 final Location loc2 = loc.clone();
                 while (loc2.getBlock().getType() == Material.AIR) {
@@ -93,25 +93,25 @@ public class NWorld extends WorldNode {
                 if (loc2.getBlock().getType() == Material.STATIONARY_LAVA || loc2.getBlock().getType() == Material.LAVA) {
                     loc2.getBlock().setType(Material.COBBLESTONE);
                 }
-                
+
                 loc = loc2.clone().add(0, 1, 0);
-                
-                spawnMap.put(w.getName().toLowerCase(), loc);
+
+                spawnMap.put(w.getName(), loc);
             }
         }
-        
+
         // Listener
         final PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new NListener(this), this);
-        
+
         // Commands
         getCommand("nworld").setExecutor(new NCommandExecutor(this));
         getCommand("spawn").setExecutor(new NCommandExecutor(this));
         getCommand("setspawn").setExecutor(new NCommandExecutor(this));
-        
+
         return true;
     }
-    
+
     @Override
     public void onNodeDisable() {
         try {
@@ -120,7 +120,7 @@ public class NWorld extends WorldNode {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
      */
@@ -128,15 +128,15 @@ public class NWorld extends WorldNode {
     protected void handleOtherNodes() {
         // Nothing to do here for now
     }
-    
+
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
         final String[] m = messages.get(messageId, args);
         to.sendMessage(m);
     }
-    
+
     public void broadcastMessage(final MessageId messageId, final String... args) {
         final String[] m = messages.get(messageId, args);
-        for (String mes : m) {
+        for (final String mes : m) {
             getServer().broadcastMessage(mes);
         }
     }

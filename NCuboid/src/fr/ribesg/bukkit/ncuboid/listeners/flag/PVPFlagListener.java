@@ -10,7 +10,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPotionSplashEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
@@ -38,7 +38,7 @@ public class PVPFlagListener extends AbstractListener {
         final PotionSplashEvent event = (PotionSplashEvent) ext.getBaseEvent();
         if (event.getPotion().getShooter().getType() == EntityType.PLAYER) {
             if (ext.hasNegativeEffect()) {
-                PlayerCuboid c;
+                GeneralCuboid c;
                 for (final LivingEntity e : ext.getEntityCuboidsMap().keySet()) {
                     if (e.getType() == EntityType.PLAYER) {
                         c = ext.getEntityCuboidsMap().get(e);
