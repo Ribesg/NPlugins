@@ -28,8 +28,9 @@ public class Messages extends AbstractMessages {
         final Set<Message> newMessages = new HashSet<Message>();
 
         // General plugin messages
-        newMessages.add(new Message(MessageId.incorrectValueInConfiguration, "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)", new String[] { "%filename%", "%value%", "%default%" },
-                null));
+        newMessages.add(new Message(MessageId.incorrectValueInConfiguration, "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)", new String[] {
+                        "%filename%", "%value%", "%default%" },
+                        null));
 
         // General deny response
         newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null));
@@ -50,7 +51,7 @@ public class Messages extends AbstractMessages {
         final StringBuilder content = new StringBuilder();
         content.append("###################################################################################\n");
         content.append("# List of NTheEndAgain messages. You're free to change text/colors/language here. #\n");
-        content.append("# Supports both 'ง' and '&' characters for colors.                         Ribesg #\n");
+        content.append("# Supports both 'ยง' and '&' characters for colors.                         Ribesg #\n");
         content.append("###################################################################################\n\n");
         for (final Message m : getMessagesMap().values()) {
             content.append("# Default value    : " + m.getDefaultMessage() + '\n');
