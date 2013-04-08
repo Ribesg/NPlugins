@@ -299,7 +299,7 @@ public class NListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEnderDragonRegainHealth(final EntityRegainHealthEvent event) {
         if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-            // TODO Add something in config for this
+            // TODO Add something in config for this "max health regain"
         }
     }
 }

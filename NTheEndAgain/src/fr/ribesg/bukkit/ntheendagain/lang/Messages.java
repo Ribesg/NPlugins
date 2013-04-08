@@ -50,7 +50,7 @@ public class Messages extends AbstractMessages {
         final StringBuilder content = new StringBuilder();
         content.append("###################################################################################\n");
         content.append("# List of NTheEndAgain messages. You're free to change text/colors/language here. #\n");
-        content.append("# Supports both 'ยง' and '&' characters for colors.                         Ribesg #\n");
+        content.append("# Supports both 'ง' and '&' characters for colors.                         Ribesg #\n");
         content.append("###################################################################################\n\n");
         for (final Message m : getMessagesMap().values()) {
             content.append("# Default value    : " + m.getDefaultMessage() + '\n');

@@ -26,6 +26,7 @@ public class Config extends AbstractConfig {
     @Getter @Setter(AccessLevel.PRIVATE) private int   respawnOnBoot;
     @Getter @Setter(AccessLevel.PRIVATE) private int   regenOnRespawn;
     @Getter @Setter(AccessLevel.PRIVATE) private int   actionOnRegen;
+    @Getter @Setter private long                       lastTaskExecTime;
 
     public Config(final NTheEndAgain instance, final String world) {
         plugin = instance;
@@ -42,6 +43,7 @@ public class Config extends AbstractConfig {
         setRespawnOnBoot(1);
         setRegenOnRespawn(1);
         setActionOnRegen(0);
+        setLastTaskExecTime(0);
     }
 
     /**
@@ -69,7 +71,7 @@ public class Config extends AbstractConfig {
         if (getEnderDragonDamageMultiplier() < 0.0) {
             setEnderDragonDamageMultiplier(1.0f);
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml",
-                    "enderDragonDamageMultiplier", "1.0");
+                            "enderDragonDamageMultiplier", "1.0");
         }
 
         // portalHandling. Default: 0. Possible values: 0,1,2
@@ -126,6 +128,13 @@ public class Config extends AbstractConfig {
         if (getActionOnRegen() < 0 || getActionOnRegen() > 1) {
             setActionOnRegen(0);
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "actionOnRegen", "0");
+        }
+
+        // lastTaskStartTime.
+        setLastTaskExecTime(config.getInt("lastTaskStartTime", 0));
+        if (getLastTaskExecTime() < 0 || getLastTaskExecTime() > System.currentTimeMillis()) {
+            setLastTaskExecTime(0);
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "lastTaskStartTime", "0");
         }
 
     }
@@ -218,6 +227,10 @@ public class Config extends AbstractConfig {
         content.append("#                   regen on chunk loading and mass join = mass load of chunks at the same time\n");
         content.append("#       1: Teleport them to the spawn point of the Main (= first) world.\n");
         content.append("actionOnRegen: " + getActionOnRegen() + "\n\n");
+
+        // lastTaskStartTime. Default: 0
+        content.append("# Used to allow task timer persistence. PLEASE DO NOT TOUCH THIS !\n");
+        content.append("lastTaskStartTime: " + getLastTaskExecTime() + "\n\n");
 
         return content.toString();
     }

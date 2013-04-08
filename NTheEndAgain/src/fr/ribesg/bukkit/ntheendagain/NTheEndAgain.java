@@ -32,6 +32,12 @@ public class NTheEndAgain extends TheEndAgainNode {
 
     @Override
     public boolean onNodeEnable() {
+        // ############################ Temporary check for alpha 0.0.7, will be removed
+        if (!getCore().getDescription().getVersion().equals("0.0.7")) {
+            getLogger().severe("This alpha version requires NCore 0.0.7 (Not more, not less)");
+        }
+        // #############################################################################
+
         // Messages first !
         try {
             if (!getDataFolder().isDirectory()) {
@@ -100,6 +106,19 @@ public class NTheEndAgain extends TheEndAgainNode {
         }
     }
 
+    public Path getConfigFilePath(final String fileName) {
+        return Paths.get(getDataFolder().getPath(), fileName + ".yml");
+    }
+
+    /**
+     * @param lowerCamelCaseWorldName
+     *            Key
+     * @return Value
+     */
+    public EndWorldHandler getHandler(final String lowerCamelCaseWorldName) {
+        return worldHandlers.get(lowerCamelCaseWorldName);
+    }
+
     /**
      * Send a message with arguments TODO <b>This may be moved<b>
      * 
@@ -115,17 +134,11 @@ public class NTheEndAgain extends TheEndAgainNode {
         to.sendMessage(m);
     }
 
-    public Path getConfigFilePath(final String fileName) {
-        return Paths.get(getDataFolder().getPath(), fileName + ".yml");
-    }
-
-    /**
-     * @param lowerCamelCaseWorldName
-     *            Key
-     * @return Value
-     */
-    public EndWorldHandler getHandler(final String lowerCamelCaseWorldName) {
-        return worldHandlers.get(lowerCamelCaseWorldName);
+    public void broadcastMessage(final MessageId messageId, final String... args) {
+        final String[] m = messages.get(messageId, args);
+        for (final String mes : m) {
+            getServer().broadcastMessage(mes);
+        }
     }
 
 }

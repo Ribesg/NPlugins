@@ -221,7 +221,7 @@ public class NCommandExecutor implements CommandExecutor {
         String lowerCamelCaseWorldName = null;
         if (args.length == 0) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage("Non-player should give a world name"); // TODO Messages
+                sender.sendMessage("Non-player should give a world name");
                 throw new Exception(); // We handle it locally so we don't care about having a special Exception name/message
             } else {
                 lowerCamelCaseWorldName = Utils.toLowerCamelCase(((Player) sender).getWorld().getName());
@@ -229,7 +229,8 @@ public class NCommandExecutor implements CommandExecutor {
         } else {
             final StringBuilder s = new StringBuilder();
             for (final String word : args) {
-                s.append(word + " ");
+                s.append(word);
+                s.append(' ');
             }
             lowerCamelCaseWorldName = Utils.toLowerCamelCase(s.toString());
         }

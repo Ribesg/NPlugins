@@ -14,10 +14,12 @@ import org.bukkit.World;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import fr.ribesg.bukkit.ncore.Utils;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
+import fr.ribesg.bukkit.ntheendagain.tasks.RespawnTask;
 
 public class EndWorldHandler {
 
@@ -40,7 +42,12 @@ public class EndWorldHandler {
         chunks = new EndChunks(plugin);
         config = new Config(plugin, endWorld.getName());
         dragons = new HashMap<UUID, HashMap<String, Long>>();
-        updateNumberOfAliveEDs();
+
+        if (config.getRespawnOnBoot() == 1) {
+            respawnDragons();
+        } else {
+            updateNumberOfAliveEDs();
+        }
     }
 
     public void loadConfigs() throws IOException {
@@ -53,7 +60,19 @@ public class EndWorldHandler {
     }
 
     public void init() {
-        // TODO Call tasks here
+        if (config.getRespawnTimer() != 0) {
+            long t = config.getLastTaskExecTime();
+            long initialDelay = 0;
+            if (t != 0) {
+                initialDelay = config.getRespawnTimer() - (System.currentTimeMillis() - t);
+                if (initialDelay < 0) {
+                    initialDelay = 0;
+                }
+            }
+            BukkitScheduler scheduler = plugin.getServer().getScheduler();
+            RespawnTask task = new RespawnTask(this);
+            scheduler.runTaskTimer(plugin, task, initialDelay, config.getRespawnTimer());
+        }
     }
 
     public void playerHitED(final UUID enderDragonID, final String playerName, final long dmg) {
@@ -72,10 +91,18 @@ public class EndWorldHandler {
     }
 
     public int respawnDragons() {
+        updateNumberOfAliveEDs();
         int respawned = 0;
         for (int i = numberOfAliveEDs; i <= config.getNbEnderDragons(); i++) {
             respawnDragon();
             respawned++;
+        }
+        if (respawned == 1) {
+            // TODO plugin.broadcastMessage(TODO) 1 spawned
+            plugin.getServer().broadcastMessage("An EnderDragon has been respawned");
+        } else if (respawned > 1) {
+            // TODO plugin.broadcastMessage(TODO) x spawned
+            plugin.getServer().broadcastMessage(respawned + " EnderDragons has been respawned");
         }
         return respawned;
     }
@@ -88,8 +115,8 @@ public class EndWorldHandler {
                 }
             case 1:
                 for (final Player p : endWorld.getPlayers()) {
-                    // TODO Future: Use spawn point defined by NGeneral, when NGeneral will do it
-                    //              and if NGeneral is enabled of course
+                    // TODO Future: Use spawn point defined by NWorld, when NWorld will do it
+                    //              and if NWorld is enabled of course
                     p.teleport(Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
                     p.sendMessage("End World Regenerating"); // TODO Messages
                 }
@@ -105,7 +132,8 @@ public class EndWorldHandler {
         chunks.softRegen();
 
         // TODO Messages
-        // TODO Broadcast message 
+        // TODO Broadcast message
+        plugin.getServer().broadcastMessage("End world " + endWorld.getName() + " regenerated");
     }
 
     private void respawnDragon() {
@@ -113,6 +141,9 @@ public class EndWorldHandler {
         final int y = 70 + rand.nextInt(21); // [70;90]
         final int z = rand.nextInt(41) - 20; // [-20;20]
         final Location loc = new Location(endWorld, x, y, z);
+        if (!loc.getChunk().isLoaded()) {
+            loc.getChunk().load(true);
+        }
         endWorld.spawnEntity(loc, EntityType.ENDER_DRAGON);
     }
 
