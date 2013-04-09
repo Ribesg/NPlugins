@@ -36,7 +36,13 @@ public abstract class GeneralCuboid extends Cuboid {
         flagAtts = new FlagAttributes();
     }
 
-    public GeneralCuboid(final World world, final CuboidType type, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
+    public GeneralCuboid(
+            final World world,
+            final CuboidType type,
+            final Rights rights,
+            final int priority,
+            final Flags flags,
+            final FlagAttributes flagAtts) {
         setWorld(world);
         setType(type);
         this.rights = rights;
