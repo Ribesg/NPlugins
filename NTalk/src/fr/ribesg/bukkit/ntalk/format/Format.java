@@ -5,8 +5,7 @@ import lombok.Getter;
 public class Format {
 
     public enum FormatType {
-        GROUP,
-        PLAYER,
+        GROUP, PLAYER,
     }
 
     @Getter private final FormatType type;

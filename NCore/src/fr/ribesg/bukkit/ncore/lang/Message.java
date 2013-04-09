@@ -38,8 +38,7 @@ public class Message {
      * @param configMessage
      *            The Message found in the configuration file
      */
-    public Message(final MessageId id, final String defaultMessage, final String[] awaitedArgs,
-            final String configMessage) {
+    public Message(final MessageId id, final String defaultMessage, final String[] awaitedArgs, final String configMessage) {
         this.id = id;
         this.defaultMessage = defaultMessage;
         this.awaitedArgs = awaitedArgs;

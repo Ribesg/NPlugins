@@ -1,34 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
 public enum Flag {
-    BOOSTER,
-    BUILD,
-    CHAT,
-    CHEST,
-    CLOSED,
-    CREATIVE,
-    DROP,
-    ENDERMAN,
-    EXPLOSION_BLOCK,
-    EXPLOSION_PLAYER,
-    EXPLOSION_ITEM,
-    FARM,
-    FEED,
-    FIRE,
-    GOD,
-    HEAL,
-    HIDDEN,
-    INVISIBLE,
-    JAIL,
-    MOB,
-    PASS,
-    PERMANENT,
-    PICKUP,
-    PVP,
-    SNOW,
-    TELEPORT,
-    USE,
-    WARPGATE;
+    BOOSTER, BUILD, CHAT, CHEST, CLOSED, CREATIVE, DROP, ENDERMAN, EXPLOSION_BLOCK, EXPLOSION_PLAYER, EXPLOSION_ITEM, FARM, FEED, FIRE, GOD, HEAL, HIDDEN, INVISIBLE, JAIL, MOB, PASS, PERMANENT, PICKUP, PVP, SNOW, TELEPORT, USE, WARPGATE;
 
     public static Flag get(final String val) {
         final String in = val.toUpperCase();

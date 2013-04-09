@@ -115,8 +115,7 @@ public class EndWorldHandler {
             case 0:
                 final String[] lines = plugin.getMessages().get(MessageId.theEndAgain_worldRegenerating);
                 final StringBuilder messageBuilder = new StringBuilder(lines[0]);
-                for (int i = 1; i < lines.length; i++)
-                {
+                for (int i = 1; i < lines.length; i++) {
                     messageBuilder.append('\n');
                     messageBuilder.append(lines[i]);
                 }

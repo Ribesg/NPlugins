@@ -190,12 +190,7 @@ public class NListener implements Listener {
                     // % of total damages done to the ED ; Player name
                     TreeMap<Float, String> ratioMap = new TreeMap<Float, String>();
                     long totalDamages = 0;
-                    for (final Entry<String, Long> e : handler
-                            .getDragons()
-                            .get(event
-                                    .getEntity()
-                                    .getUniqueId())
-                            .entrySet()) {
+                    for (final Entry<String, Long> e : handler.getDragons().get(event.getEntity().getUniqueId()).entrySet()) {
                         totalDamages += e.getValue();
                     }
                     for (final Entry<String, Long> e : handler.getDragons().get(event.getEntity().getUniqueId()).entrySet()) {

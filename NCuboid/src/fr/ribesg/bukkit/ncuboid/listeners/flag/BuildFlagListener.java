@@ -61,8 +61,7 @@ public class BuildFlagListener extends AbstractListener {
             }
             if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.hasItem()) {
                 // Fire or vehicle
-                if (event.getItem().getType() == Material.FLINT_AND_STEEL || event.getItem().getType() == Material.FIREBALL
-                        || event.getItem().getType() == Material.MINECART || event.getItem().getType() == Material.BOAT) {
+                if (event.getItem().getType() == Material.FLINT_AND_STEEL || event.getItem().getType() == Material.FIREBALL || event.getItem().getType() == Material.MINECART || event.getItem().getType() == Material.BOAT) {
                     final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
                     if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(event.getPlayer())) {
                         event.setCancelled(true);

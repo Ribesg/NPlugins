@@ -24,12 +24,10 @@ public class Messages {
         errorWhileLoadingConfiguration,
 
         // General deny response
-        noPermissionForCommand,
-        cmdOnlyAvailableForPlayers,
+        noPermissionForCommand, cmdOnlyAvailableForPlayers,
 
         // Command - RELOAD
-        cmdReloadConfig,
-        cmdReloadMessages,
+        cmdReloadConfig, cmdReloadMessages,
 
     }
 

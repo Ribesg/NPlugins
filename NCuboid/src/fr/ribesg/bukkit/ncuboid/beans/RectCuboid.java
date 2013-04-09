@@ -23,35 +23,9 @@ public class RectCuboid extends PlayerCuboid {
     }
 
     // Create a Rectangular Cuboid from a save
-    public RectCuboid(
-            final String cuboidName,
-            final String ownerName,
-            final World world,
-            final CuboidState state,
-            final long totalSize,
-            final String welcomeMessage,
-            final String farewellMessage,
-            final Set<ChunkKey> chunks,
-            final Rights rights,
-            final int priority,
-            final Flags flags,
-            final FlagAttributes flagAtts,
-            final Location minCorner,
-            final Location maxCorner) {
+    public RectCuboid(final String cuboidName, final String ownerName, final World world, final CuboidState state, final long totalSize, final String welcomeMessage, final String farewellMessage, final Set<ChunkKey> chunks, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts, final Location minCorner, final Location maxCorner) {
 
-        super(cuboidName,
-                ownerName,
-                world,
-                state,
-                totalSize,
-                welcomeMessage,
-                farewellMessage,
-                chunks,
-                CuboidType.RECT,
-                rights,
-                priority,
-                flags,
-                flagAtts);
+        super(cuboidName, ownerName, world, state, totalSize, welcomeMessage, farewellMessage, chunks, CuboidType.RECT, rights, priority, flags, flagAtts);
 
         setMinCorner(minCorner);
         setMaxCorner(maxCorner);

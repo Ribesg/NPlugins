@@ -70,8 +70,7 @@ public class Config extends AbstractConfig {
         setEnderDragonDamageMultiplier((float) config.getDouble("enderDragonDamageMultiplier", 1.0f));
         if (getEnderDragonDamageMultiplier() < 0.0) {
             setEnderDragonDamageMultiplier(1.0f);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml",
-                    "enderDragonDamageMultiplier", "1.0");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "enderDragonDamageMultiplier", "1.0");
         }
 
         // portalHandling. Default: 0. Possible values: 0,1,2

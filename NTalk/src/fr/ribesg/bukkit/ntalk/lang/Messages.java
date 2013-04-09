@@ -28,9 +28,7 @@ public class Messages extends AbstractMessages {
         final Set<Message> newMessages = new HashSet<Message>();
 
         // General plugin messages
-        newMessages.add(new Message(MessageId.incorrectValueInConfiguration, "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)", new String[] {
-                "%filename%", "%value%", "%default%" },
-                null));
+        newMessages.add(new Message(MessageId.incorrectValueInConfiguration, "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)", new String[] { "%filename%", "%value%", "%default%" }, null));
 
         // General deny response
         newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null));

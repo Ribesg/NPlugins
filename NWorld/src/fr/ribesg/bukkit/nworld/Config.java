@@ -153,10 +153,7 @@ public class Config extends AbstractConfig {
     }
 
     public void loadWorldFromConfig(final World world) {
-        final Path path = Paths.get(
-                plugin.getDataFolder().toPath().toAbsolutePath().toString()
-                        + File.separator
-                        + "config.yml");
+        final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + "config.yml");
         if (!Files.exists(path)) {
             System.out.println("BLA1");
             plugin.getWorldMap().put(world.getName(), false);

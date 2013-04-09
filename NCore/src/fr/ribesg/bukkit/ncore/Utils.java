@@ -165,8 +165,6 @@ public class Utils {
             }
         }
         final String result = s.toString();
-        return new StringBuilder(
-                result.substring(0, 1).toLowerCase()).append(
-                result.substring(1)).toString();
+        return new StringBuilder(result.substring(0, 1).toLowerCase()).append(result.substring(1)).toString();
     }
 }

@@ -88,8 +88,7 @@ public class PlayerStickListener extends AbstractListener {
                         }
                     }
                 }
-            }
-            else if (action == Action.RIGHT_CLICK_AIR || action == Action.LEFT_CLICK_AIR) {
+            } else if (action == Action.RIGHT_CLICK_AIR || action == Action.LEFT_CLICK_AIR) {
                 // Selection reset
                 final PlayerCuboid deletedCuboid = getPlugin().getDb().delTmp(p.getName());
                 if (deletedCuboid == null) {

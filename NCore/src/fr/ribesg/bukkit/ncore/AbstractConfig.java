@@ -51,10 +51,7 @@ public abstract class AbstractConfig {
      *             If there is an error reading / writing file
      */
     public void loadConfig(final JavaPlugin plugin, final String fileName) throws IOException {
-        final Path path = Paths.get(
-                plugin.getDataFolder().toPath().toAbsolutePath().toString()
-                        + File.separator
-                        + fileName);
+        final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + fileName);
         if (!Files.exists(path)) {
             Files.createFile(path);
             writeConfig(path);
@@ -78,16 +75,12 @@ public abstract class AbstractConfig {
     }
 
     public void writeConfig(final JavaPlugin plugin) throws IOException {
-        final Path path = Paths.get(
-                plugin.getDataFolder().toPath().toAbsolutePath().toString()
-                        + File.separator
-                        + "config.yml");
+        final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + "config.yml");
         writeConfig(path);
     }
 
     private void writeConfig(final Path path) throws IOException {
-        try (BufferedWriter writer = Files.newBufferedWriter(path, CHARSET, StandardOpenOption.TRUNCATE_EXISTING,
-                StandardOpenOption.WRITE)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(path, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
             writer.write(getConfigString());
         }
     }

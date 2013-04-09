@@ -36,20 +36,7 @@ public abstract class PlayerCuboid extends GeneralCuboid {
     }
 
     // Create a Cuboid from a save
-    public PlayerCuboid(
-            final String cuboidName,
-            final String ownerName,
-            final World world,
-            final CuboidState state,
-            final long totalSize,
-            final String welcomeMessage,
-            final String farewellMessage,
-            final Set<ChunkKey> chunks,
-            final CuboidType type,
-            final Rights rights,
-            final int priority,
-            final Flags flags,
-            final FlagAttributes flagAtts) {
+    public PlayerCuboid(final String cuboidName, final String ownerName, final World world, final CuboidState state, final long totalSize, final String welcomeMessage, final String farewellMessage, final Set<ChunkKey> chunks, final CuboidType type, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
 
         super(world, type, rights, priority, flags, flagAtts);
         setCuboidName(cuboidName);
