@@ -54,10 +54,14 @@ public class NTheEndAgain extends TheEndAgainNode {
             return false;
         }
 
+        getServer().getPluginManager().registerEvents(new NListener(this), this);
+
         // Load End worlds configs and chunks data
         worldHandlers = new HashMap<String, EndWorldHandler>();
         for (final World w : Bukkit.getWorlds()) {
             if (w.getEnvironment() == Environment.THE_END) {
+                // Load the (0,0) chunk, an ED may spawn here, and we want to know it
+                w.loadChunk(0, 0, true);
                 final EndWorldHandler handler = new EndWorldHandler(this, w);
                 try {
                     handler.loadConfigs();
@@ -70,8 +74,6 @@ public class NTheEndAgain extends TheEndAgainNode {
                 }
             }
         }
-
-        getServer().getPluginManager().registerEvents(new NListener(this), this);
 
         getCommand("end").setExecutor(new NCommandExecutor(this));
 

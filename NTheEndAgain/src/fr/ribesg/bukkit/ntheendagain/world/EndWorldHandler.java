@@ -43,11 +43,17 @@ public class EndWorldHandler {
         chunks = new EndChunks(plugin);
         config = new Config(plugin, endWorld.getName());
         dragons = new HashMap<UUID, HashMap<String, Long>>();
+        numberOfAliveEDs = 0;
+
+        for (final EnderDragon ed : endWorld.getEntitiesByClass(EnderDragon.class)) {
+            ed.setMaxHealth(config.getEnderDragonHealth());
+            ed.setHealth(ed.getMaxHealth());
+            dragons.put(ed.getUniqueId(), new HashMap<String, Long>());
+            numberOfAliveEDs++;
+        }
 
         if (config.getRespawnOnBoot() == 1) {
             respawnDragons();
-        } else {
-            updateNumberOfAliveEDs();
         }
     }
 
@@ -62,7 +68,7 @@ public class EndWorldHandler {
 
     public void init() {
         if (config.getRespawnTimer() != 0) {
-            long t = config.getLastTaskExecTime();
+            final long t = config.getLastTaskExecTime();
             long initialDelay = 0;
             if (t != 0) {
                 initialDelay = config.getRespawnTimer() - (System.currentTimeMillis() - t);
@@ -70,8 +76,8 @@ public class EndWorldHandler {
                     initialDelay = 0;
                 }
             }
-            BukkitScheduler scheduler = plugin.getServer().getScheduler();
-            RespawnTask task = new RespawnTask(this);
+            final BukkitScheduler scheduler = plugin.getServer().getScheduler();
+            final RespawnTask task = new RespawnTask(this);
             scheduler.runTaskTimer(plugin, task, initialDelay, config.getRespawnTimer());
         }
     }
@@ -107,14 +113,14 @@ public class EndWorldHandler {
     public void regen() {
         switch (config.getActionOnRegen()) {
             case 0:
-                String[] lines = plugin.getMessages().get(MessageId.theEndAgain_worldRegenerating);
-                StringBuilder messageBuilder = new StringBuilder(lines[0]);
+                final String[] lines = plugin.getMessages().get(MessageId.theEndAgain_worldRegenerating);
+                final StringBuilder messageBuilder = new StringBuilder(lines[0]);
                 for (int i = 1; i < lines.length; i++)
                 {
                     messageBuilder.append('\n');
                     messageBuilder.append(lines[i]);
                 }
-                String message = messageBuilder.toString();
+                final String message = messageBuilder.toString();
                 for (final Player p : endWorld.getPlayers()) {
                     p.kickPlayer(message);
                 }
