@@ -20,12 +20,12 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author ribes
  */
 public abstract class AbstractConfig {
-    
+
     /**
      * The Charset used for reading/writing files
      */
     public static final Charset CHARSET = StandardCharsets.UTF_8;
-    
+
     /**
      * Default fileName to config.yml in call to {@link #loadConfig(JavaPlugin, String)}
      * 
@@ -37,7 +37,7 @@ public abstract class AbstractConfig {
     public void loadConfig(final JavaPlugin plugin) throws IOException {
         loadConfig(plugin, "config.yml");
     }
-    
+
     /**
      * Load the config containing messages
      * Creates a new config if it does not exists
@@ -52,9 +52,9 @@ public abstract class AbstractConfig {
      */
     public void loadConfig(final JavaPlugin plugin, final String fileName) throws IOException {
         final Path path = Paths.get(
-                        plugin.getDataFolder().toPath().toAbsolutePath().toString()
-                                        + File.separator
-                                        + fileName);
+                plugin.getDataFolder().toPath().toAbsolutePath().toString()
+                        + File.separator
+                        + fileName);
         if (!Files.exists(path)) {
             Files.createFile(path);
             writeConfig(path);
@@ -69,29 +69,29 @@ public abstract class AbstractConfig {
             } catch (final Exception e) {
                 e.printStackTrace();
             }
-            
+
             setValues(config);
-            
+
             // Rewrite the config to "clean" it
             writeConfig(path);
         }
     }
-    
+
     public void writeConfig(final JavaPlugin plugin) throws IOException {
         final Path path = Paths.get(
-                        plugin.getDataFolder().toPath().toAbsolutePath().toString()
-                                        + File.separator
-                                        + "config.yml");
+                plugin.getDataFolder().toPath().toAbsolutePath().toString()
+                        + File.separator
+                        + "config.yml");
         writeConfig(path);
     }
-    
+
     private void writeConfig(final Path path) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(path, CHARSET, StandardOpenOption.TRUNCATE_EXISTING,
-                        StandardOpenOption.WRITE)) {
+                StandardOpenOption.WRITE)) {
             writer.write(getConfigString());
         }
     }
-    
+
     /**
      * Set the values in the config to there current values
      * 
@@ -99,7 +99,7 @@ public abstract class AbstractConfig {
      *            The config where to set values
      */
     protected abstract void setValues(final YamlConfiguration config);
-    
+
     /**
      * @return the String to be written to file
      */

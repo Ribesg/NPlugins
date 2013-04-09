@@ -8,5 +8,5 @@ import fr.ribesg.bukkit.ncore.nodes.NPlugin;
  * @author Ribesg
  */
 public abstract class TheEndAgainNode extends NPlugin {
-    
+
 }

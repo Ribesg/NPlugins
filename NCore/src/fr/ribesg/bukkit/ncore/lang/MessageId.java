@@ -48,7 +48,7 @@ public enum MessageId {
     // ########################## //
     // ## NTheEndAgain related ## //
     // ########################## //
-    
+
     theEndAgain_unkownSubCmd,
 
     theEndAgain_unknownWorld,
@@ -64,7 +64,7 @@ public enum MessageId {
     theEndAgain_unprotectedChunkInfo,
     theEndAgain_unprotectedChunkProtect,
     theEndAgain_unprotectedChunkUnprotect,
-    
+
     theEndAgain_worldRegenerating,
 
     theEndAgain_receivedXP,

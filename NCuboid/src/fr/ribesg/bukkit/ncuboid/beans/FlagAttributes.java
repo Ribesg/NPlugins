@@ -1,23 +1,26 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
-import static fr.ribesg.bukkit.ncuboid.beans.FlagAtt.*;
+import static fr.ribesg.bukkit.ncuboid.beans.FlagAtt.isIntFlagAtt;
+import static fr.ribesg.bukkit.ncuboid.beans.FlagAtt.isLocFlagAtt;
+import static fr.ribesg.bukkit.ncuboid.beans.FlagAtt.isVectFlagAtt;
+
 import java.util.EnumMap;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 public class FlagAttributes {
-    
+
     private EnumMap<FlagAtt, Object> atts;
-    
+
     public FlagAttributes() {
         atts = null;
     }
-    
+
     private void newMap() {
         atts = getDefaultFlagAttMap();
     }
-    
+
     // Integers handling
     public Integer getIntFlagAtt(final FlagAtt f) {
         if (atts == null) {
@@ -29,7 +32,7 @@ public class FlagAttributes {
             return null;
         }
     }
-    
+
     public void setIntFlagAtt(final FlagAtt f, final Integer i) {
         if (atts == null) {
             newMap();
@@ -41,11 +44,11 @@ public class FlagAttributes {
             new IllegalArgumentException(f.name()).printStackTrace();
         }
     }
-    
+
     private void setIntFlagAttNoCheck(final FlagAtt f, final Integer i) {
         atts.put(f, i);
     }
-    
+
     private void checkIntFlagAttCorrection() {
         if (getIntFlagAtt(FlagAtt.HEAL_TIMER) != null && getIntFlagAtt(FlagAtt.HEAL_TIMER) < 5) {
             setIntFlagAttNoCheck(FlagAtt.HEAL_TIMER, 5);
@@ -76,7 +79,7 @@ public class FlagAttributes {
             setIntFlagAtt(FlagAtt.EXPLOSION_BLOCK_DROP, 100);
         }
     }
-    
+
     // Locations handling
     public Location getLocFlagAtt(final FlagAtt f) {
         if (atts == null) {
@@ -88,7 +91,7 @@ public class FlagAttributes {
             return null;
         }
     }
-    
+
     public void setLocFlagAtt(final FlagAtt f, final Location loc) {
         if (atts == null) {
             newMap();
@@ -100,11 +103,11 @@ public class FlagAttributes {
             new IllegalArgumentException(f.name()).printStackTrace();
         }
     }
-    
+
     private void checkLocFlagAttCorrection() {
         // Nothing to do yet
     }
-    
+
     // Vectors handling
     public Vector getVectFlagAtt(final FlagAtt f) {
         if (atts == null) {
@@ -116,7 +119,7 @@ public class FlagAttributes {
             return null;
         }
     }
-    
+
     public void setVectFlagAtt(final FlagAtt f, final Vector v) {
         if (atts == null) {
             newMap();
@@ -128,20 +131,20 @@ public class FlagAttributes {
             new IllegalArgumentException(f.name()).printStackTrace();
         }
     }
-    
+
     private void checkVectFlagAttCorrection() {
         if (getVectFlagAtt(FlagAtt.BOOSTER_VECTOR) != null && getVectFlagAtt(FlagAtt.BOOSTER_VECTOR).lengthSquared() > 100) {
             // XXX: Bukkit does not allow > 10 m/s Velocity
             setVectFlagAtt(FlagAtt.BOOSTER_VECTOR, getVectFlagAtt(FlagAtt.BOOSTER_VECTOR).normalize().multiply(10));
         }
     }
-    
+
     // Default map
     private static EnumMap<FlagAtt, Object> getDefaultFlagAttMap() {
         final EnumMap<FlagAtt, Object> defaultFlagMap = new EnumMap<FlagAtt, Object>(FlagAtt.class);
-        
+
         // We do not put anything in the map, we do not want to store useless objects / references
-        
+
         return defaultFlagMap;
     }
 }

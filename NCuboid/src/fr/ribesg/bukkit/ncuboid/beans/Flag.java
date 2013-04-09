@@ -29,7 +29,7 @@ public enum Flag {
     TELEPORT,
     USE,
     WARPGATE;
-    
+
     public static Flag get(final String val) {
         final String in = val.toUpperCase();
         Flag f = null;
