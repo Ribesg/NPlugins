@@ -28,9 +28,7 @@ public class Messages extends AbstractMessages {
         final Set<Message> newMessages = new HashSet<Message>();
 
         // General plugin messages
-        newMessages.add(new Message(MessageId.incorrectValueInConfiguration, "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)", new String[] {
-                        "%filename%", "%value%", "%default%" },
-                        null));
+        newMessages.add(new Message(MessageId.incorrectValueInConfiguration, "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)", new String[] { "%filename%", "%value%", "%default%" }, null));
 
         // General deny response
         newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null));
@@ -39,6 +37,30 @@ public class Messages extends AbstractMessages {
         // Command - RELOAD
         newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null));
         newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null));
+
+        // Command - END
+        newMessages.add(new Message(MessageId.theEndAgain_unkownSubCmd, "&cUnkown sub-command: %arg%", new String[] { "%arg%" }, null));
+        newMessages.add(new Message(MessageId.theEndAgain_unknownWorld, "&cUnknown world", null, null));
+        newMessages.add(new Message(MessageId.theEndAgain_regenerating, "&aRegeneration of world %world% in progress", new String[] { "%world%" }, null));
+        newMessages.add(new Message(MessageId.theEndAgain_respawned, "&a%nb% EnderDragons have been respawned in world %world%", new String[] { "%nb%", "%world%" }, null));
+        newMessages.add(new Message(MessageId.theEndAgain_nbAlive, "&aThere are %nb% EnderDragons alive in world %world%", new String[] { "%nb%", "%world%" }, null));
+        newMessages.add(new Message(MessageId.theEndAgain_notInAnEndWorld, "&cYou're not in an End world, please provide an End world name.", null, null));
+
+        newMessages.add(new Message(MessageId.theEndAgain_protectedChunkInfo, "&aChunk (&6%x%&a,&6%z%&a) in world &6%world% &ais protected", new String[] { "%x%", "%z%", "%world%" }, null));
+        newMessages.add(new Message(MessageId.theEndAgain_protectedChunkProtect, "&cChunk (&6%x%&c,&6%z%&c) in world &6%world% &cis already protected", new String[] { "%x%", "%z%", "%world%" }, null));
+        newMessages.add(new Message(MessageId.theEndAgain_protectedChunkUnprotect, "&aChunk (&6%x%&a,&6%z%&a) in world &6%world% &ais no longer protected", new String[] { "%x%", "%z%", "%world%" }, null));
+
+        newMessages.add(new Message(MessageId.theEndAgain_unprotectedChunkInfo, "&aChunk (&6%x%&a,&6%z%&a) in world &6%world% &ais not protected", new String[] { "%x%", "%z%", "%world%" }, null));
+        newMessages.add(new Message(MessageId.theEndAgain_unprotectedChunkProtect, "&aChunk (&6%x%&a,&6%z%&a) in world &6%world% &ais now protected", new String[] { "%x%", "%z%", "%world%" }, null));
+        newMessages.add(new Message(MessageId.theEndAgain_unprotectedChunkUnprotect, "&cChunk (&6%x%&c,&6%z%&c) in world &6%world% &cis already not protected", new String[] { "%x%", "%z%", "%world%" }, null));
+
+        newMessages.add(new Message(MessageId.theEndAgain_missingWorldArg, "&cNon-player user should provide a world name", null, null));
+
+        // Others - Events
+        newMessages.add(new Message(MessageId.theEndAgain_worldRegenerating, "&aEnd world regenerating", null, null));
+        newMessages.add(new Message(MessageId.theEndAgain_receivedXP, "&aYou received %nb% XP points", new String[] { "%nb%" }, null));
+        newMessages.add(new Message(MessageId.theEndAgain_receivedDragonEgg, "&aYou received a Dragon Egg !", null, null));
+        newMessages.add(new Message(MessageId.theEndAgain_droppedDragonEgg, "&aYou're inventory is full, dropped a DragonEgg !", null, null));
 
         return newMessages;
     }

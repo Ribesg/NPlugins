@@ -28,6 +28,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.ribesg.bukkit.ncore.Utils;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
@@ -89,8 +90,7 @@ public class NListener implements Listener {
                             final Player p = plugin.getServer().getPlayerExact(entry.getKey());
                             final int reward = (int) (config.getXpReward() * entry.getValue() / totalDamages);
                             p.giveExp(reward);
-                            // TODO Send message to the player
-                            p.sendMessage("You received " + reward + " exp points.");
+                            plugin.sendMessage(p, MessageId.theEndAgain_receivedXP, Integer.toString(reward));
                         }
                         break;
                     default:
@@ -191,11 +191,11 @@ public class NListener implements Listener {
                     TreeMap<Float, String> ratioMap = new TreeMap<Float, String>();
                     long totalDamages = 0;
                     for (final Entry<String, Long> e : handler
-                            .getDragons()
-                            .get(event
-                                    .getEntity()
-                                    .getUniqueId())
-                            .entrySet()) {
+                                    .getDragons()
+                                    .get(event
+                                                    .getEntity()
+                                                    .getUniqueId())
+                                    .entrySet()) {
                         totalDamages += e.getValue();
                     }
                     for (final Entry<String, Long> e : handler.getDragons().get(event.getEntity().getUniqueId()).entrySet()) {
@@ -245,11 +245,10 @@ public class NListener implements Listener {
                             final HashMap<Integer, ItemStack> notGiven = p.getInventory().addItem(new ItemStack(Material.DRAGON_EGG));
                             if (notGiven.size() > 0) {
                                 p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.DRAGON_EGG));
-                                p.sendMessage("Inventory full ! Dragon Egg dropped");
+                                plugin.sendMessage(p, MessageId.theEndAgain_droppedDragonEgg);
                             } else {
-                                p.sendMessage("You received a Dragon Egg");
+                                plugin.sendMessage(p, MessageId.theEndAgain_receivedDragonEgg);
                             }
-                            // TODO Messages
                         }
                     }
                 }

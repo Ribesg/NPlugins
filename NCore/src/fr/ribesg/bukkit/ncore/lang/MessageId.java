@@ -48,6 +48,28 @@ public enum MessageId {
     // ########################## //
     // ## NTheEndAgain related ## //
     // ########################## //
+    
+    theEndAgain_unkownSubCmd,
+
+    theEndAgain_unknownWorld,
+    theEndAgain_regenerating,
+    theEndAgain_respawned,
+    theEndAgain_nbAlive,
+    theEndAgain_notInAnEndWorld,
+    theEndAgain_missingWorldArg,
+
+    theEndAgain_protectedChunkInfo,
+    theEndAgain_protectedChunkProtect,
+    theEndAgain_protectedChunkUnprotect,
+    theEndAgain_unprotectedChunkInfo,
+    theEndAgain_unprotectedChunkProtect,
+    theEndAgain_unprotectedChunkUnprotect,
+    
+    theEndAgain_worldRegenerating,
+
+    theEndAgain_receivedXP,
+    theEndAgain_receivedDragonEgg,
+    theEndAgain_droppedDragonEgg,
 
     // #################### //
     // ## NWorld related ## //

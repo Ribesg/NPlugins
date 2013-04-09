@@ -86,13 +86,13 @@ public class NCommandExecutor implements CommandExecutor {
                                         return true;
                                     }
                                 default:
-                                    sender.sendMessage("Unknown subcommand: " + args[1]);
+                                    plugin.sendMessage(sender, MessageId.theEndAgain_unkownSubCmd, args[1]);
                                     return true;
 
                             }
                         }
                     default:
-                        sender.sendMessage("Unknown subcommand: " + args[0]);
+                        plugin.sendMessage(sender, MessageId.theEndAgain_unkownSubCmd, args[0]);
                         return true;
                 }
             }
@@ -101,7 +101,8 @@ public class NCommandExecutor implements CommandExecutor {
         }
     }
 
-    private boolean cmdHelp(final CommandSender sender) { // TODO Messages
+    private boolean cmdHelp(final CommandSender sender) {
+        // TODO We will create some kind of great Help thing later for the whole NPlugins suite
         sender.sendMessage("Available subcommands: help, regen, respawn, nb, chunk info, chunk protect, chunk unprotect");
         return true;
     }
@@ -110,9 +111,9 @@ public class NCommandExecutor implements CommandExecutor {
         try {
             final EndWorldHandler handler = getWorldHandlerRelatedTo(sender, args);
             if (handler == null) {
-                sender.sendMessage("Unknown world"); // TODO Messages
+                plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             } else {
-                sender.sendMessage("Regenerating " + handler.getEndWorld().getName()); // TODO Messages
+                plugin.sendMessage(sender, MessageId.theEndAgain_regenerating, handler.getEndWorld().getName());
                 handler.regen();
             }
             return true;
@@ -125,9 +126,10 @@ public class NCommandExecutor implements CommandExecutor {
         try {
             final EndWorldHandler handler = getWorldHandlerRelatedTo(sender, args);
             if (handler == null) {
-                sender.sendMessage("Unknown world"); // TODO Messages
+                plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             } else {
-                sender.sendMessage("Respawned " + handler.respawnDragons() + " dragons");
+                Integer respawned = handler.respawnDragons();
+                plugin.sendMessage(sender, MessageId.theEndAgain_respawned, respawned.toString(), handler.getEndWorld().getName());
             }
             return true;
         } catch (final Exception e) {
@@ -139,9 +141,10 @@ public class NCommandExecutor implements CommandExecutor {
         try {
             final EndWorldHandler handler = getWorldHandlerRelatedTo(sender, args);
             if (handler == null) {
-                sender.sendMessage("Unknown world"); // TODO Messages
+                plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             } else {
-                sender.sendMessage("There are " + handler.getNumberOfAliveEDs() + " dragons alive in " + handler.getEndWorld().getName()); // TODO Messages
+                Integer nb = handler.getNumberOfAliveEDs();
+                plugin.sendMessage(sender, MessageId.theEndAgain_nbAlive, nb.toString(), handler.getEndWorld().getName());
             }
             return true;
         } catch (final Exception e) {
@@ -159,13 +162,15 @@ public class NCommandExecutor implements CommandExecutor {
             final String worldName = player.getWorld().getName();
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(worldName));
             if (handler == null) {
-                sender.sendMessage("Not in an End world"); // TODO Messages
+                plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
                 return true;
             } else {
                 final EndChunks chunks = handler.getChunks();
                 final EndChunk chunk = chunks.getChunk(worldName, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
-                // TODO Messages
-                player.sendMessage("Chunk (" + chunk.getX() + ", " + chunk.getZ() + ") in world " + worldName + " is " + (chunk.isProtected() ? "" : "not ") + "protected");
+                Integer x = chunk.getX();
+                Integer z = chunk.getZ();
+                MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkInfo : MessageId.theEndAgain_unprotectedChunkInfo;
+                plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
                 return true;
             }
         }
@@ -181,13 +186,15 @@ public class NCommandExecutor implements CommandExecutor {
             final String worldName = player.getWorld().getName();
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(worldName));
             if (handler == null) {
-                sender.sendMessage("Not in an End world"); // TODO Messages
+                plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
                 return true;
             } else {
                 final EndChunks chunks = handler.getChunks();
                 final EndChunk chunk = chunks.getChunk(worldName, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
-                // TODO Messages
-                player.sendMessage("Chunk (" + chunk.getX() + ", " + chunk.getZ() + ") in world " + worldName + " is " + (chunk.isProtected() ? "already" : "now") + " protected");
+                Integer x = chunk.getX();
+                Integer z = chunk.getZ();
+                MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkProtect : MessageId.theEndAgain_unprotectedChunkProtect;
+                plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
                 chunk.setProtected(true);
                 return true;
             }
@@ -204,13 +211,15 @@ public class NCommandExecutor implements CommandExecutor {
             final String worldName = player.getWorld().getName();
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(worldName));
             if (handler == null) {
-                sender.sendMessage("Not in an End world"); // TODO Messages
+                plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
                 return true;
             } else {
                 final EndChunks chunks = handler.getChunks();
                 final EndChunk chunk = chunks.getChunk(worldName, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
-                // TODO Messages
-                player.sendMessage("Chunk (" + chunk.getX() + ", " + chunk.getZ() + ") in world " + worldName + " is " + (chunk.isProtected() ? "no longer" : "already not") + " protected");
+                Integer x = chunk.getX();
+                Integer z = chunk.getZ();
+                MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkUnprotect : MessageId.theEndAgain_unprotectedChunkUnprotect;
+                plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
                 chunk.setProtected(true);
                 return true;
             }
@@ -221,7 +230,7 @@ public class NCommandExecutor implements CommandExecutor {
         String lowerCamelCaseWorldName = null;
         if (args.length == 0) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage("Non-player should give a world name");
+                plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
                 throw new Exception(); // We handle it locally so we don't care about having a special Exception name/message
             } else {
                 lowerCamelCaseWorldName = Utils.toLowerCamelCase(((Player) sender).getWorld().getName());

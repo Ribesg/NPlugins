@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import fr.ribesg.bukkit.ncore.Utils;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.tasks.RespawnTask;
@@ -97,12 +98,8 @@ public class EndWorldHandler {
             respawnDragon();
             respawned++;
         }
-        if (respawned == 1) {
-            // TODO plugin.broadcastMessage(TODO) 1 spawned
-            plugin.getServer().broadcastMessage("An EnderDragon has been respawned");
-        } else if (respawned > 1) {
-            // TODO plugin.broadcastMessage(TODO) x spawned
-            plugin.getServer().broadcastMessage(respawned + " EnderDragons has been respawned");
+        if (respawned >= 1) {
+            plugin.broadcastMessage(MessageId.theEndAgain_respawned, Integer.toString(respawned), endWorld.getName());
         }
         return respawned;
     }
@@ -111,14 +108,14 @@ public class EndWorldHandler {
         switch (config.getActionOnRegen()) {
             case 0:
                 for (final Player p : endWorld.getPlayers()) {
-                    p.kickPlayer("End World Regenarating"); // TODO Messages
+                    p.kickPlayer(plugin.getMessages().get(MessageId.theEndAgain_worldRegenerating)[0]);
                 }
             case 1:
                 for (final Player p : endWorld.getPlayers()) {
                     // TODO Future: Use spawn point defined by NWorld, when NWorld will do it
                     //              and if NWorld is enabled of course
                     p.teleport(Bukkit.getServer().getWorlds().get(0).getSpawnLocation());
-                    p.sendMessage("End World Regenerating"); // TODO Messages
+                    plugin.sendMessage(p, MessageId.theEndAgain_worldRegenerating);
                 }
             default:
                 // Not possible.
@@ -130,10 +127,6 @@ public class EndWorldHandler {
         dragons.clear();
         numberOfAliveEDs = 0;
         chunks.softRegen();
-
-        // TODO Messages
-        // TODO Broadcast message
-        plugin.getServer().broadcastMessage("End world " + endWorld.getName() + " regenerated");
     }
 
     private void respawnDragon() {

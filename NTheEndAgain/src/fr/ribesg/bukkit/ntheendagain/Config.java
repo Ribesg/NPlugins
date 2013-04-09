@@ -229,7 +229,7 @@ public class Config extends AbstractConfig {
         content.append("actionOnRegen: " + getActionOnRegen() + "\n\n");
 
         // lastTaskStartTime. Default: 0
-        content.append("# Used to allow task timer persistence. PLEASE DO NOT TOUCH THIS !\n");
+        content.append("# Used to allow task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");
         content.append("lastTaskStartTime: " + getLastTaskExecTime() + "\n\n");
 
         return content.toString();
