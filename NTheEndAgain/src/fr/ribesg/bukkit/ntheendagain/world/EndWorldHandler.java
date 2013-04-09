@@ -107,8 +107,16 @@ public class EndWorldHandler {
     public void regen() {
         switch (config.getActionOnRegen()) {
             case 0:
+                String[] lines = plugin.getMessages().get(MessageId.theEndAgain_worldRegenerating);
+                StringBuilder messageBuilder = new StringBuilder(lines[0]);
+                for (int i = 1; i < lines.length; i++)
+                {
+                    messageBuilder.append('\n');
+                    messageBuilder.append(lines[i]);
+                }
+                String message = messageBuilder.toString();
                 for (final Player p : endWorld.getPlayers()) {
-                    p.kickPlayer(plugin.getMessages().get(MessageId.theEndAgain_worldRegenerating)[0]);
+                    p.kickPlayer(message);
                 }
             case 1:
                 for (final Player p : endWorld.getPlayers()) {
