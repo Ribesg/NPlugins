@@ -214,9 +214,7 @@ public class Config extends AbstractConfig {
         // regenOnRespawn. Default: 1
         content.append("# Should we regen the End world before respawning Dragons ? Default: 1\n");
         content.append("#       0: Disabled.\n");
-        content.append("#       1: Enabled. World will be regen if:\n");
-        content.append("#                                           1) There is no EnderDragon alive\n");
-        content.append("#                                           2) We are respawning one or more Dragons\n");
+        content.append("#       1: Enabled. World will be regen, even if EnderDragons are still alive.\n");
         content.append("regenOnRespawn: " + getRegenOnRespawn() + "\n\n");
 
         // actionOnRegen. Default: 0
