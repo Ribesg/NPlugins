@@ -32,10 +32,10 @@ public class NTheEndAgain extends TheEndAgainNode {
 
     @Override
     public boolean onNodeEnable() {
-        // ############################ Temporary check for alpha 0.0.8, will be removed
-        if (!getCore().getDescription().getVersion().equals("0.0.8")) {
+        // ############################ Temporary check for alpha 0.0.9, will be removed
+        if (!getCore().getDescription().getVersion().equals("0.0.9")) {
             getLogger().severe("##################################################################");
-            getLogger().severe("## This alpha version requires NCore 0.0.8 (Not more, not less) ##");
+            getLogger().severe("## This alpha version requires NCore 0.0.9 (Not more, not less) ##");
             getLogger().severe("##################################################################");
         }
         // #############################################################################
