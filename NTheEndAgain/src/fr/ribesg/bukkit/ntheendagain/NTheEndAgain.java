@@ -60,12 +60,13 @@ public class NTheEndAgain extends TheEndAgainNode {
         worldHandlers = new HashMap<String, EndWorldHandler>();
         for (final World w : Bukkit.getWorlds()) {
             if (w.getEnvironment() == Environment.THE_END) {
-                // Load the (0,0) chunk, an ED may spawn here, and we want to know it
-                w.loadChunk(0, 0, true);
                 final EndWorldHandler handler = new EndWorldHandler(this, w);
                 try {
                     handler.loadConfigs();
                     worldHandlers.put(Utils.toLowerCamelCase(w.getName()), handler);
+                    // Load&Create the chunk at (0,0) to be sure no EnderDragon is missed
+                    w.loadChunk(0, 0, true);
+                    handler.init();
                 } catch (final IOException e) {
                     getLogger().severe("An error occured, stacktrace follows:");
                     e.printStackTrace();
