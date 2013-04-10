@@ -75,8 +75,8 @@ public class BuildFlagListener extends AbstractListener {
                         return;
                     }
                 }
-                // Repeater
-                if (event.getAction() == Action.RIGHT_CLICK_BLOCK && (event.getClickedBlock().getType() == Material.DIODE_BLOCK_OFF || event.getClickedBlock().getType() == Material.DIODE_BLOCK_ON)) {
+                // Repeater, Comparator
+                if (event.getAction() == Action.RIGHT_CLICK_BLOCK && (event.getClickedBlock().getType() == Material.DIODE_BLOCK_OFF || event.getClickedBlock().getType() == Material.DIODE_BLOCK_ON || event.getClickedBlock().getType() == Material.REDSTONE_COMPARATOR_OFF || event.getClickedBlock().getType() == Material.REDSTONE_COMPARATOR_ON)) {
                     if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.BUILD) && !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
                         event.setCancelled(true);
                         return;
@@ -137,12 +137,12 @@ public class BuildFlagListener extends AbstractListener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onVehicleDestroy(final VehicleDestroyEvent ext) {
-        if (ext.getAttacker().getType() == EntityType.PLAYER) {
-            final Player player = (Player) ext.getAttacker();
-            final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getVehicle().getLocation());
+    public void onVehicleDestroy(final VehicleDestroyEvent event) {
+        if (event.getAttacker() != null && event.getAttacker().getType() == EntityType.PLAYER) {
+            final Player player = (Player) event.getAttacker();
+            final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getVehicle().getLocation());
             if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(player)) {
-                ext.setCancelled(true);
+                event.setCancelled(true);
                 return;
             }
         }

@@ -23,7 +23,7 @@ public class EndermanGriefFlagListener extends AbstractListener {
         if (event.getEntityType() == EntityType.ENDERMAN) {
             final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getBlock().getLocation());
             if (cuboid != null && cuboid.getFlag(Flag.ENDERMAN)) {
-                ((Enderman) event.getEntity()).setCarriedMaterial(Material.RED_ROSE.getNewData((byte) 0));
+                ((Enderman) event.getEntity()).setCarriedMaterial(Material.JACK_O_LANTERN.getNewData((byte) 0));
                 event.setCancelled(true);
             }
         }

@@ -27,6 +27,7 @@ public class UseFlagListener extends AbstractListener {
             denyUseEntities.add(EntityType.BOAT);
             denyUseEntities.add(EntityType.ITEM_FRAME);
             denyUseEntities.add(EntityType.MINECART);
+            denyUseEntities.add(EntityType.MINECART_FURNACE);
         }
         return denyUseEntities;
     }

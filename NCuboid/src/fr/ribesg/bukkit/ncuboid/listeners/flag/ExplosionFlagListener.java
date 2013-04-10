@@ -21,10 +21,6 @@ public class ExplosionFlagListener extends AbstractListener {
         super(instance);
     }
 
-    // TODO Think about what to do with new explosions flags
-    // Example: On which cuboid should we rely for FlagAtt.EXPLOSION_BLOCK_DROP ?
-    // => First idea is to use ((EntityExplodeEvent)ext.getBaseEvent()).getEntity().getLocation()
-    //    cuboid, maybe we should add it in ExtendedEntityExplodeEvent
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityExplode(final ExtendedEntityExplodeEvent ext) {
         final EntityExplodeEvent event = (EntityExplodeEvent) ext.getBaseEvent();

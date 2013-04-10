@@ -1,7 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
 import org.bukkit.block.Block;
-import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -29,7 +28,10 @@ public class ChestFlagListener extends AbstractListener {
             if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.CHEST) && !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
                 switch (event.getClickedBlock().getType()) {
                     case CHEST:
+                    case TRAPPED_CHEST:
                     case DISPENSER:
+                    case DROPPER:
+                    case HOPPER:
                     case FURNACE:
                     case BURNING_FURNACE:
                     case BREWING_STAND:
@@ -49,10 +51,10 @@ public class ChestFlagListener extends AbstractListener {
         if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.CHEST) && !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
             switch (event.getRightClicked().getType()) {
                 case ITEM_FRAME:
+                case MINECART_CHEST:
+                case MINECART_HOPPER:
+                case MINECART_FURNACE:
                     event.setCancelled(true);
-                    break;
-                case MINECART:
-                    event.setCancelled(event.getRightClicked() instanceof StorageMinecart);
                     break;
                 default:
                     break;
@@ -67,8 +69,11 @@ public class ChestFlagListener extends AbstractListener {
             if (ext.getBlockCuboidsMap().get(b).getFlag(Flag.CHEST)) {
                 switch (b.getType()) {
                     case CHEST:
+                    case TRAPPED_CHEST:
                     case DISPENSER:
                     case FURNACE:
+                    case DROPPER:
+                    case HOPPER:
                     case BURNING_FURNACE:
                     case BREWING_STAND:
                     case BEACON:

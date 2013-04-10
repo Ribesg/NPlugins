@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
-import org.bukkit.entity.StorageMinecart;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.Permissions;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerDropItemEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
@@ -38,7 +39,10 @@ public class CreativeFlagListener extends AbstractListener {
             if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.CREATIVE)) {
                 switch (event.getClickedBlock().getType()) {
                     case CHEST:
+                    case TRAPPED_CHEST:
                     case DISPENSER:
+                    case DROPPER:
+                    case HOPPER:
                     case FURNACE:
                     case BURNING_FURNACE:
                     case BREWING_STAND:
@@ -55,13 +59,14 @@ public class CreativeFlagListener extends AbstractListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
         final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
-        if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.CHEST)) {
+        if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.CREATIVE)) {
+            Player p = event.getPlayer();
             switch (event.getRightClicked().getType()) {
                 case ITEM_FRAME:
-                    event.setCancelled(true);
-                    break;
-                case MINECART:
-                    event.setCancelled(event.getRightClicked() instanceof StorageMinecart);
+                case MINECART_CHEST:
+                case MINECART_FURNACE:
+                case MINECART_HOPPER:
+                    event.setCancelled(!p.isOp() && !p.hasPermission(Permissions.ADMIN));
                     break;
                 default:
                     break;
