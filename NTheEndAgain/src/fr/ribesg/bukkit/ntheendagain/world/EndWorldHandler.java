@@ -43,7 +43,7 @@ public class EndWorldHandler {
         chunks = new EndChunks(plugin);
         config = new Config(plugin, endWorld.getName());
         dragons = new HashMap<UUID, HashMap<String, Long>>();
-        
+
         // Config is not yet loaded here
     }
 
@@ -58,7 +58,7 @@ public class EndWorldHandler {
 
     public void init() {
         // Config is now loaded
-        
+
         numberOfAliveEDs = 0;
 
         for (final EnderDragon ed : endWorld.getEntitiesByClass(EnderDragon.class)) {
@@ -71,7 +71,7 @@ public class EndWorldHandler {
         if (config.getRespawnOnBoot() == 1) {
             respawnDragons();
         }
-        
+
         if (config.getRespawnTimer() != 0) {
             final long t = config.getLastTaskExecTime();
             long initialDelay = 0;
