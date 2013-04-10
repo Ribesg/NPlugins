@@ -50,8 +50,8 @@ public class BuildFlagListener extends AbstractListener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     // We don't care if hasBlock()==false, so ignoreCancelled is true
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteract(final ExtendedPlayerInteractEvent ext) {
         final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
         if (event.hasBlock()) {

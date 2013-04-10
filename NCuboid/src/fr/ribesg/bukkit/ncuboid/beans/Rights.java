@@ -14,8 +14,7 @@ public class Rights {
     @Getter private Set<String> allowedGroups;
     @Getter private Set<String> disallowedCommands;
 
-    public Rights() {
-    }
+    public Rights() {}
 
     public Rights(final Set<String> allowedPlayers, final Set<String> allowedGroups, final Set<String> disallowedCommands) {
         this.allowedPlayers = allowedPlayers;
