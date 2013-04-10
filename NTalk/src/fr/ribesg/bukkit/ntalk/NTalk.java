@@ -74,14 +74,6 @@ public class NTalk extends TalkNode {
     }
 
     /**
-     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore()
-     */
-    @Override
-    protected void linkCore() {
-        getCore().setTalkNode(this);
-    }
-
-    /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
      */
     @Override

@@ -134,14 +134,6 @@ public class NCuboid extends CuboidNode {
     }
 
     /**
-     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore()
-     */
-    @Override
-    protected void linkCore() {
-        getCore().setCuboidNode(this);
-    }
-
-    /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
      */
     @Override

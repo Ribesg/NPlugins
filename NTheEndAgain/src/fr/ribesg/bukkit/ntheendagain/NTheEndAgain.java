@@ -82,14 +82,6 @@ public class NTheEndAgain extends TheEndAgainNode {
     }
 
     /**
-     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore()
-     */
-    @Override
-    protected void linkCore() {
-        getCore().setTheEndAgainNode(this);
-    }
-
-    /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
      */
     @Override
