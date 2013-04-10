@@ -5,12 +5,12 @@ import lombok.Setter;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.ribesg.bukkit.ncore.nodes.chat.TalkNode;
 import fr.ribesg.bukkit.ncore.nodes.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.nodes.dodgeball.DodgeBallNode;
 import fr.ribesg.bukkit.ncore.nodes.enchantingegg.EnchantingEggNode;
 import fr.ribesg.bukkit.ncore.nodes.general.GeneralNode;
 import fr.ribesg.bukkit.ncore.nodes.player.PlayerNode;
+import fr.ribesg.bukkit.ncore.nodes.talk.TalkNode;
 import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ncore.nodes.world.WorldNode;
 

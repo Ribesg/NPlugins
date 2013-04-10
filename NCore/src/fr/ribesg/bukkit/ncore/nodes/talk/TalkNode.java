@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.ncore.nodes.chat;
+package fr.ribesg.bukkit.ncore.nodes.talk;
 
 import fr.ribesg.bukkit.ncore.nodes.NPlugin;
 
