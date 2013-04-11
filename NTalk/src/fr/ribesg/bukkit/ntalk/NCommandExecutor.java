@@ -31,14 +31,14 @@ public class NCommandExecutor implements CommandExecutor {
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         if (command.getName().equalsIgnoreCase("pm")) {
             if (sender.hasPermission(Permissions.CMD_PM) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN) || sender.isOp()) {
-                return cmdPm(sender, args);
+                return cmdPrivateMessage(sender, args);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
             }
         } else if (command.getName().equalsIgnoreCase("pr")) {
             if (sender.hasPermission(Permissions.CMD_PR) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN) || sender.isOp()) {
-                return cmdPr(sender, args);
+                return cmdPrivateResponse(sender, args);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
@@ -55,7 +55,7 @@ public class NCommandExecutor implements CommandExecutor {
         }
     }
 
-    private boolean cmdPm(final CommandSender sender, final String[] args) {
+    private boolean cmdPrivateMessage(final CommandSender sender, final String[] args) {
         if (args.length < 2) {
             return false;
         } else {
@@ -80,12 +80,12 @@ public class NCommandExecutor implements CommandExecutor {
                 messageBuilder.append(' ').append(args[i]);
             }
 
-            sendMessage(sender, targets, messageBuilder.toString());
+            sendMessages(sender, targets, messageBuilder.toString());
             return true;
         }
     }
 
-    private boolean cmdPr(final CommandSender sender, final String[] args) {
+    private boolean cmdPrivateResponse(final CommandSender sender, final String[] args) {
         if (args.length < 1) {
             return false;
         } else if (lastReceivedPmMap.containsKey(sender.getName())) {
@@ -136,7 +136,7 @@ public class NCommandExecutor implements CommandExecutor {
         }
     }
 
-    private void sendMessage(final CommandSender from, final Set<CommandSender> toSet, final String message) {
+    private void sendMessages(final CommandSender from, final Set<CommandSender> toSet, final String message) {
         for (final CommandSender to : toSet) {
             sendMessage(from, to, message);
         }

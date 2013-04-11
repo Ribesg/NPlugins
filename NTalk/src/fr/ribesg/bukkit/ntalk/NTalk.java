@@ -57,9 +57,10 @@ public class NTalk extends TalkNode {
         pm.registerEvents(new NListener(this), this);
 
         // Command
-        getCommand("pm").setExecutor(new NCommandExecutor(this));
-        getCommand("pr").setExecutor(new NCommandExecutor(this));
-        getCommand("nick").setExecutor(new NCommandExecutor(this));
+        NCommandExecutor executor = new NCommandExecutor(this);
+        getCommand("pm").setExecutor(executor);
+        getCommand("pr").setExecutor(executor);
+        getCommand("nick").setExecutor(executor);
 
         return true;
     }
