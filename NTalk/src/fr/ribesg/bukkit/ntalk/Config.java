@@ -188,7 +188,6 @@ public class Config extends AbstractConfig {
         playerNames.addAll(getPlayerFormats().keySet());
         playerNames.addAll(getPlayerNicknames().keySet());
         for (final String playerName : playerNames) {
-            System.out.println(playerName);
             String prefix = "";
             String nickName = "";
             String suffix = "";
