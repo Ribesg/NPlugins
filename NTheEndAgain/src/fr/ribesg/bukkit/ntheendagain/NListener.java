@@ -308,7 +308,7 @@ public class NListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEnderDragonRegainHealth(final EntityRegainHealthEvent event) {
         if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-            event.setCancelled(true);
+            // TODO Config thing for this
         }
     }
 }
