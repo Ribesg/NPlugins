@@ -16,10 +16,12 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -103,9 +105,16 @@ public class NListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEntityDamageByEntity(final EntityDamageByEntityEvent event) {
         // EnderDragon damaged by Player
-        if (event.getEntityType() == EntityType.ENDER_DRAGON && event.getDamager().getType() == EntityType.PLAYER) {
+        if (event.getEntityType() == EntityType.ENDER_DRAGON) {
+            Player player = null;
+            if (event.getDamager().getType() == EntityType.PLAYER) {
+                player = (Player) event.getDamager();
+            } else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER) {
+                player = (Player) ((Projectile) event.getDamager()).getShooter();
+            } else {
+                return;
+            }
             final EnderDragon dragon = (EnderDragon) event.getEntity();
-            final Player player = (Player) event.getDamager();
             final World endWorld = dragon.getWorld();
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(endWorld.getName()));
             if (handler != null) {
@@ -279,13 +288,19 @@ public class NListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEnderDragonSpawn(final CreatureSpawnEvent event) {
         if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getLocation().getWorld().getName()));
-            if (handler == null) {
-                return;
+            if (event.getSpawnReason() != SpawnReason.CUSTOM && event.getSpawnReason() != SpawnReason.SPAWNER_EGG) {
+                // Prevent an additional ED to be spawned
+                event.setCancelled(true);
             } else {
-                handler.getDragons().put(event.getEntity().getUniqueId(), new HashMap<String, Long>());
-                handler.setNumberOfAliveEDs(handler.getNumberOfAliveEDs() + 1);
-                event.getEntity().setMaxHealth(handler.getConfig().getEnderDragonHealth());
+                final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getLocation().getWorld().getName()));
+                if (handler == null) {
+                    return;
+                } else {
+                    handler.getDragons().put(event.getEntity().getUniqueId(), new HashMap<String, Long>());
+                    handler.setNumberOfAliveEDs(handler.getNumberOfAliveEDs() + 1);
+                    event.getEntity().setMaxHealth(handler.getConfig().getEnderDragonHealth());
+                    event.getEntity().setHealth(event.getEntity().getMaxHealth());
+                }
             }
         }
     }
@@ -293,7 +308,7 @@ public class NListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEnderDragonRegainHealth(final EntityRegainHealthEvent event) {
         if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-            // TODO Add something in config for this "max health regain"
+            event.setCancelled(true);
         }
     }
 }

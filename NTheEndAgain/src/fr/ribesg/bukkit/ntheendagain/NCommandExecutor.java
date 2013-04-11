@@ -128,8 +128,7 @@ public class NCommandExecutor implements CommandExecutor {
             if (handler == null) {
                 plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             } else {
-                Integer respawned = handler.respawnDragons();
-                plugin.sendMessage(sender, MessageId.theEndAgain_respawned, respawned.toString(), handler.getEndWorld().getName());
+                handler.respawnDragons();
             }
             return true;
         } catch (final Exception e) {
@@ -143,7 +142,7 @@ public class NCommandExecutor implements CommandExecutor {
             if (handler == null) {
                 plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             } else {
-                Integer nb = handler.getNumberOfAliveEDs();
+                final Integer nb = handler.getNumberOfAliveEDs();
                 plugin.sendMessage(sender, MessageId.theEndAgain_nbAlive, nb.toString(), handler.getEndWorld().getName());
             }
             return true;
@@ -167,9 +166,9 @@ public class NCommandExecutor implements CommandExecutor {
             } else {
                 final EndChunks chunks = handler.getChunks();
                 final EndChunk chunk = chunks.getChunk(worldName, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
-                Integer x = chunk.getX();
-                Integer z = chunk.getZ();
-                MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkInfo : MessageId.theEndAgain_unprotectedChunkInfo;
+                final Integer x = chunk.getX();
+                final Integer z = chunk.getZ();
+                final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkInfo : MessageId.theEndAgain_unprotectedChunkInfo;
                 plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
                 return true;
             }
@@ -191,9 +190,9 @@ public class NCommandExecutor implements CommandExecutor {
             } else {
                 final EndChunks chunks = handler.getChunks();
                 final EndChunk chunk = chunks.getChunk(worldName, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
-                Integer x = chunk.getX();
-                Integer z = chunk.getZ();
-                MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkProtect : MessageId.theEndAgain_unprotectedChunkProtect;
+                final Integer x = chunk.getX();
+                final Integer z = chunk.getZ();
+                final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkProtect : MessageId.theEndAgain_unprotectedChunkProtect;
                 plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
                 chunk.setProtected(true);
                 return true;
@@ -216,9 +215,9 @@ public class NCommandExecutor implements CommandExecutor {
             } else {
                 final EndChunks chunks = handler.getChunks();
                 final EndChunk chunk = chunks.getChunk(worldName, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
-                Integer x = chunk.getX();
-                Integer z = chunk.getZ();
-                MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkUnprotect : MessageId.theEndAgain_unprotectedChunkUnprotect;
+                final Integer x = chunk.getX();
+                final Integer z = chunk.getZ();
+                final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkUnprotect : MessageId.theEndAgain_unprotectedChunkUnprotect;
                 plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
                 chunk.setProtected(true);
                 return true;

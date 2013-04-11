@@ -38,7 +38,7 @@ public class Config extends AbstractConfig {
         setPortalHandling(0);
         setDragonEggHandling(0);
         setXpHandling(0);
-        setXpReward(20_000);
+        setXpReward(12_000);
         setRespawnTimer(0);
         setRespawnOnBoot(1);
         setRegenOnRespawn(1);
@@ -94,11 +94,11 @@ public class Config extends AbstractConfig {
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "xpHandling", "0");
         }
 
-        // xpReward. Default: 20 000. Possible values: positive or null integers
-        setXpReward(config.getInt("xpReward", 20_000));
+        // xpReward. Default: 12 000. Possible values: positive or null integers
+        setXpReward(config.getInt("xpReward", 12_000));
         if (getXpReward() < 0) {
-            setXpReward(20_000);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "xpReward", "20 000");
+            setXpReward(12_000);
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "xpReward", "12 000");
         }
 
         // respawnTimer. Default: 0. Possible values: positive or null integers
@@ -184,8 +184,8 @@ public class Config extends AbstractConfig {
         content.append("# 	1: Enabled. XP will be splitted between fighters, more XP for better fighters.\n");
         content.append("xpHandling: " + getXpHandling() + "\n\n");
 
-        // xpReward. Default: 20 000
-        content.append("# The value of the XP drop. Default: 20 000\n");
+        // xpReward. Default: 12 000
+        content.append("# The value of the XP drop. Default: 12 000\n");
         content.append("xpReward: " + getXpReward() + "\n\n");
 
         // respawnTimer. Default: 21 600 (6 hours)
