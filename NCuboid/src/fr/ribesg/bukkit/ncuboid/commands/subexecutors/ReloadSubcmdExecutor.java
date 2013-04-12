@@ -9,7 +9,6 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Permissions;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
-import fr.ribesg.bukkit.ncuboid.lang.Messages;
 
 public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 
@@ -22,7 +21,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
     @Override
     public boolean exec() {
         if (getArgs().length != 1) {
-            getSender().sendMessage(Messages.MESSAGE_HEADER + USAGE);
+            getSender().sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
             return true;
         } else if (getSender().isOp() || getSender().hasPermission(Permissions.CMD_RELOAD)) {
             switch (getArgs()[0]) {
@@ -65,7 +64,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
                         return true;
                     }
                 default:
-                    getSender().sendMessage(Messages.MESSAGE_HEADER + USAGE);
+                    getSender().sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
                     return true;
             }
         } else {

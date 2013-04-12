@@ -34,7 +34,7 @@ public abstract class AbstractMessages {
     /**
      * Header of each messages sent to player
      */
-    public static String                        MESSAGE_HEADER;
+    @Getter public String                       messageHeader;
 
     /**
      * Charset used for reading/writing config file
@@ -50,7 +50,7 @@ public abstract class AbstractMessages {
      *            The plugin Node name
      */
     public AbstractMessages(final String nodeName) {
-        MESSAGE_HEADER = "§0[§c§lN§6" + nodeName + "§0] §f";
+        messageHeader = "§0[§c§lN§6" + nodeName + "§0] §f";
     }
 
     /**
@@ -149,12 +149,12 @@ public abstract class AbstractMessages {
             // Adding Header, colors
             final String[] resSplit = res.concat(LINE_SEPARATOR).split(LINE_SEPARATOR);
             for (int i = 0; i < resSplit.length; i++) {
-                resSplit[i] = MESSAGE_HEADER + ChatColor.translateAlternateColorCodes('&', resSplit[i]);
+                resSplit[i] = messageHeader + ChatColor.translateAlternateColorCodes('&', resSplit[i]);
             }
             return resSplit;
         } catch (final IllegalArgumentException e) {
             e.printStackTrace();
-            return new String[] { MESSAGE_HEADER + ChatColor.RED + "Something gone wrong, see console" };
+            return new String[] { messageHeader + ChatColor.RED + "Something gone wrong, see console" };
         }
     }
 

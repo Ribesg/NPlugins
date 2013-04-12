@@ -11,7 +11,6 @@ import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid.CuboidState;
 import fr.ribesg.bukkit.ncuboid.beans.RectCuboid;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
-import fr.ribesg.bukkit.ncuboid.lang.Messages;
 
 public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 
@@ -27,7 +26,7 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
             getPlugin().sendMessage(getSender(), MessageId.cmdOnlyAvailableForPlayers);
             return true;
         } else if (getArgs().length != 1) {
-            getSender().sendMessage(Messages.MESSAGE_HEADER + USAGE);
+            getSender().sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
             return true;
         } else if (getSender().isOp() || getSender().hasPermission(Permissions.CMD_CREATE)) {
             final PlayerCuboid c = getPlugin().getDb().getByName(getArgs()[0]);

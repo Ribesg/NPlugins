@@ -17,7 +17,7 @@ public class Messages extends AbstractMessages {
     /**
      */
     public Messages() {
-        super("NCuboid");
+        super("Cuboid");
     }
 
     /**

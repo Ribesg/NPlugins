@@ -9,7 +9,6 @@ import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Permissions;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
-import fr.ribesg.bukkit.ncuboid.lang.Messages;
 
 public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 
@@ -22,7 +21,7 @@ public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
     @Override
     public boolean exec() {
         if (getArgs().length != 1) {
-            getSender().sendMessage(Messages.MESSAGE_HEADER + USAGE);
+            getSender().sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
             return true;
         } else if (getSender().isOp() || getSender().hasPermission(Permissions.CMD_DELETE)) {
             final PlayerCuboid c = getPlugin().getDb().getByName(getArgs()[0]);
