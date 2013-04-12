@@ -1,61 +1,88 @@
 package fr.ribesg.bukkit.nenchantingegg;
 
+import java.io.IOException;
+
 import lombok.Getter;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginManager;
 
-import fr.ribesg.bukkit.ncore.NCore;
-import fr.ribesg.bukkit.nenchantingegg.api.NEnchantingEggAPI;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.nodes.enchantingegg.EnchantingEggNode;
+import fr.ribesg.bukkit.nenchantingegg.lang.Messages;
 
-public class NEnchantingEgg extends JavaPlugin {
+public class NEnchantingEgg extends EnchantingEggNode {
 
-    // Core plugin
-    public static final String NCORE           = "NCore";
-    @Getter public NCore       core;
-    public NEnchantingEggAPI   api;
+    // Configs
+    @Getter private Messages messages;
+    @Getter private Config   pluginConfig;
 
     // Useful Nodes
     // // None
 
-    // Set to true by afterEnable() call
-    // Prevent multiple calls to afterEnable
-    private boolean            loadingComplete = false;
-
     @Override
-    public void onEnable() {
-        if (linkCore()) {
-            afterEnable();
-        }
-    }
-
-    public void afterEnable() {
-        if (!loadingComplete) {
-            loadingComplete = true;
-            Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-
-                @Override
-                public void run() {
-                    // Interact with other Nodes here
-
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onDisable() {
-
-    }
-
-    public boolean linkCore() {
-        if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
+    public boolean onNodeEnable() {
+        // Messages first !
+        try {
+            if (!getDataFolder().isDirectory()) {
+                getDataFolder().mkdir();
+            }
+            messages = new Messages();
+            messages.loadMessages(this);
+        } catch (final IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            getLogger().severe("This error occured when NEnchantingEgg tried to load messages.yml");
             return false;
-        } else {
-            core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-            api = new NEnchantingEggAPI(this);
-            core.setEnchantingEggNode(api);
-            return true;
+        }
+
+        // Config
+        try {
+            pluginConfig = new Config(this);
+            pluginConfig.loadConfig(this);
+        } catch (final IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            getLogger().severe("This error occured when NEnchantingEgg tried to load config.yml");
+            return false;
+        }
+
+        // Listener
+        final PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(new NListener(this), this);
+
+        // Commands
+        //getCommand("theCommand").setExecutor(new NCommandExecutor(this));
+
+        return true;
+    }
+
+    @Override
+    public void onNodeDisable() {
+        try {
+            getPluginConfig().writeConfig(this);
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
+     */
+    @Override
+    protected void handleOtherNodes() {
+        // Nothing to do here for now
+    }
+
+    public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
+        final String[] m = messages.get(messageId, args);
+        to.sendMessage(m);
+    }
+
+    public void broadcastMessage(final MessageId messageId, final String... args) {
+        final String[] m = messages.get(messageId, args);
+        for (final String mes : m) {
+            getServer().broadcastMessage(mes);
         }
     }
 
