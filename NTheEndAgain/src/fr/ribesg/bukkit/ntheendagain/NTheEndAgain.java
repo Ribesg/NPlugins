@@ -64,8 +64,6 @@ public class NTheEndAgain extends TheEndAgainNode {
                 try {
                     handler.loadConfigs();
                     worldHandlers.put(Utils.toLowerCamelCase(w.getName()), handler);
-                    // Load&Create the chunk at (0,0) to be sure no EnderDragon is missed
-                    w.loadChunk(0, 0, true);
                     handler.init();
                 } catch (final IOException e) {
                     getLogger().severe("An error occured, stacktrace follows:");

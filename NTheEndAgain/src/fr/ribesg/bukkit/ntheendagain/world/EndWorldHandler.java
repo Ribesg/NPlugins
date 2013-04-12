@@ -83,7 +83,7 @@ public class EndWorldHandler {
             }
             final BukkitScheduler scheduler = plugin.getServer().getScheduler();
             final RespawnTask task = new RespawnTask(this);
-            scheduler.runTaskTimer(plugin, task, initialDelay, config.getRespawnTimer());
+            scheduler.runTaskTimer(plugin, task, initialDelay, config.getRespawnTimer() * 20);
         }
     }
 
@@ -105,7 +105,7 @@ public class EndWorldHandler {
     public int respawnDragons() {
         updateNumberOfAliveEDs();
         int respawned = 0;
-        for (int i = numberOfAliveEDs; i <= config.getNbEnderDragons(); i++) {
+        for (int i = numberOfAliveEDs; i < config.getNbEnderDragons(); i++) {
             respawnDragon();
             respawned++;
         }
@@ -148,9 +148,9 @@ public class EndWorldHandler {
     }
 
     private void respawnDragon() {
-        final int x = rand.nextInt(41) - 20; // [-20;20]
-        final int y = 70 + rand.nextInt(21); // [70;90]
-        final int z = rand.nextInt(41) - 20; // [-20;20]
+        final int x = rand.nextInt(81) - 40; // [-40;40]
+        final int y = 100 + rand.nextInt(21); // [100;120]
+        final int z = rand.nextInt(81) - 40; // [-40;40]
         final Location loc = new Location(endWorld, x, y, z);
         if (!loc.getChunk().isLoaded()) {
             loc.getChunk().load(true);
