@@ -59,7 +59,7 @@ public class NCuboid extends CuboidNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.0.6";
+        return "0.1.0";
     }
 
     /**
