@@ -130,7 +130,7 @@ public class Config extends AbstractConfig {
         }
 
         // lastTaskStartTime.
-        setLastTaskExecTime(config.getInt("lastTaskStartTime", 0));
+        setLastTaskExecTime(config.getLong("lastTaskExecTime", 0L));
         if (getLastTaskExecTime() < 0 || getLastTaskExecTime() > System.currentTimeMillis()) {
             setLastTaskExecTime(0);
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "lastTaskStartTime", "0");
@@ -227,7 +227,7 @@ public class Config extends AbstractConfig {
 
         // lastTaskStartTime. Default: 0
         content.append("# Used to allow task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");
-        content.append("lastTaskStartTime: " + getLastTaskExecTime() + "\n\n");
+        content.append("lastTaskExecTime: " + getLastTaskExecTime() + "\n\n");
 
         return content.toString();
     }

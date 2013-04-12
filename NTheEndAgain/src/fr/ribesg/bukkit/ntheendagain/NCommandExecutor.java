@@ -42,6 +42,7 @@ public class NCommandExecutor implements CommandExecutor {
                         }
                     case "respawnenderdragon":
                     case "respawned":
+                    case "respawn":
                         if (sender.hasPermission(Permissions.CMD_RESPAWN) || sender.hasPermission(Permissions.ADMIN)) {
                             return cmdRespawn(sender, Arrays.copyOfRange(args, 1, args.length));
                         } else {
@@ -50,6 +51,7 @@ public class NCommandExecutor implements CommandExecutor {
                         }
                     case "nbenderdragon":
                     case "nbed":
+                    case "nb":
                         if (sender.hasPermission(Permissions.CMD_NB) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN)) {
                             return cmdNb(sender, Arrays.copyOfRange(args, 1, args.length));
                         } else {
@@ -142,7 +144,7 @@ public class NCommandExecutor implements CommandExecutor {
             if (handler == null) {
                 plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             } else {
-                final Integer nb = handler.getNumberOfAliveEDs();
+                final Integer nb = handler.getNumberOfAliveEnderDragons();
                 plugin.sendMessage(sender, MessageId.theEndAgain_nbAlive, nb.toString(), handler.getEndWorld().getName());
             }
             return true;

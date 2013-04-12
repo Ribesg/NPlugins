@@ -59,7 +59,8 @@ public class NTheEndAgain extends TheEndAgainNode {
             if (w.getEnvironment() == Environment.THE_END) {
                 final EndWorldHandler handler = new EndWorldHandler(this, w);
                 try {
-                    handler.loadConfigs();
+                    handler.loadConfig();
+                    handler.loadChunks();
                     worldHandlers.put(Utils.toLowerCamelCase(w.getName()), handler);
                     handler.init();
                 } catch (final IOException e) {
@@ -87,6 +88,17 @@ public class NTheEndAgain extends TheEndAgainNode {
     @Override
     public void onNodeDisable() {
         for (final EndWorldHandler handler : worldHandlers.values()) {
+            try {
+                // Reload friendly lastExecTime storing in config file
+                final long lastExecTime = handler.getConfig().getLastTaskExecTime();
+                handler.loadConfig();
+                handler.getConfig().setLastTaskExecTime(lastExecTime);
+                handler.saveConfig();
+            } catch (final IOException e) {
+                getLogger().severe("An error occured, stacktrace follows:");
+                e.printStackTrace();
+                getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
+            }
             try {
                 handler.saveChunks();
             } catch (final IOException e) {

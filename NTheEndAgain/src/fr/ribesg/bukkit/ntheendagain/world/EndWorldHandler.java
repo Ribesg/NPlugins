@@ -2,16 +2,18 @@ package fr.ribesg.bukkit.ntheendagain.world;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.UUID;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -21,6 +23,7 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.tasks.RespawnTask;
+import fr.ribesg.bukkit.ntheendagain.tasks.UnexpectedDragonDeathHandlerTask;
 
 public class EndWorldHandler {
 
@@ -33,8 +36,9 @@ public class EndWorldHandler {
     @Getter private final EndChunks                            chunks;
     @Getter private final Config                               config;
     @Getter private final HashMap<UUID, HashMap<String, Long>> dragons;
+    @Getter private final HashSet<UUID>                        loadedDragons;
 
-    @Getter @Setter private int                                numberOfAliveEDs;
+    @Getter private int                                        numberOfAliveEnderDragons;
 
     public EndWorldHandler(final NTheEndAgain instance, final World world) {
         plugin = instance;
@@ -43,13 +47,21 @@ public class EndWorldHandler {
         chunks = new EndChunks(plugin);
         config = new Config(plugin, endWorld.getName());
         dragons = new HashMap<UUID, HashMap<String, Long>>();
+        loadedDragons = new HashSet<UUID>();
 
         // Config is not yet loaded here
     }
 
-    public void loadConfigs() throws IOException {
-        chunks.load(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
+    public void loadConfig() throws IOException {
         config.loadConfig(plugin, camelCaseWorldName + "Config.yml");
+    }
+
+    public void loadChunks() throws IOException {
+        chunks.load(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
+    }
+
+    public void saveConfig() throws IOException {
+        config.writeConfig(plugin, camelCaseWorldName + "Config.yml");
     }
 
     public void saveChunks() throws IOException {
@@ -59,18 +71,41 @@ public class EndWorldHandler {
     public void init() {
         // Config is now loaded
 
-        numberOfAliveEDs = 0;
+        numberOfAliveEnderDragons = 0;
 
-        for (final EnderDragon ed : endWorld.getEntitiesByClass(EnderDragon.class)) {
-            ed.setMaxHealth(config.getEnderDragonHealth());
-            ed.setHealth(ed.getMaxHealth());
-            dragons.put(ed.getUniqueId(), new HashMap<String, Long>());
-            numberOfAliveEDs++;
+        plugin.getLogger().info("Counting existing EDs in " + endWorld.getName() + "...");
+        for (final EndChunk c : getChunks()) {
+            if (endWorld.isChunkLoaded(c.getX(), c.getZ())) {
+                final Chunk chunk = endWorld.getChunkAt(c.getX(), c.getZ());
+                for (final Entity e : chunk.getEntities()) {
+                    if (e.getType() == EntityType.ENDER_DRAGON) {
+                        final EnderDragon ed = (EnderDragon) e;
+                        if (!getDragons().containsKey(ed.getUniqueId())) {
+                            ed.setMaxHealth(getConfig().getEnderDragonHealth());
+                            ed.setHealth(ed.getMaxHealth());
+                            getDragons().put(ed.getUniqueId(), new HashMap<String, Long>());
+                            getLoadedDragons().add(ed.getUniqueId());
+                            incrementDragonCount();
+                        }
+                    }
+                }
+            } else {
+                endWorld.loadChunk(c.getX(), c.getZ());
+                endWorld.unloadChunkRequest(c.getX(), c.getZ());
+            }
         }
+        plugin.getLogger().info("Done, " + numberOfAliveEnderDragons + " EnderDragon(s) found.");
 
         if (config.getRespawnOnBoot() == 1) {
+            if (getConfig().getRegenOnRespawn() == 1) {
+                regen();
+            }
             respawnDragons();
         }
+
+        final BukkitScheduler scheduler = plugin.getServer().getScheduler();
+        final UnexpectedDragonDeathHandlerTask deathTask = new UnexpectedDragonDeathHandlerTask(this);
+        scheduler.runTaskTimer(plugin, deathTask, 0L, 20L);
 
         if (config.getRespawnTimer() != 0) {
             final long t = config.getLastTaskExecTime();
@@ -81,10 +116,10 @@ public class EndWorldHandler {
                     initialDelay = 0;
                 }
             }
-            final BukkitScheduler scheduler = plugin.getServer().getScheduler();
             final RespawnTask task = new RespawnTask(this);
             scheduler.runTaskTimer(plugin, task, initialDelay, config.getRespawnTimer() * 20);
         }
+
     }
 
     public void playerHitED(final UUID enderDragonID, final String playerName, final long dmg) {
@@ -103,9 +138,8 @@ public class EndWorldHandler {
     }
 
     public int respawnDragons() {
-        updateNumberOfAliveEDs();
         int respawned = 0;
-        for (int i = numberOfAliveEDs; i < config.getNbEnderDragons(); i++) {
+        for (int i = getNumberOfAliveEnderDragons(); i < config.getNbEnderDragons(); i++) {
             respawnDragon();
             respawned++;
         }
@@ -139,12 +173,17 @@ public class EndWorldHandler {
                 // Not possible.
                 break;
         }
-        for (final EnderDragon e : endWorld.getEntitiesByClass(EnderDragon.class)) {
-            e.remove();
-        }
-        dragons.clear();
-        numberOfAliveEDs = 0;
         chunks.softRegen();
+    }
+
+    public void incrementDragonCount() {
+        numberOfAliveEnderDragons++;
+    }
+
+    public void decrementDragonCount() {
+        if (--numberOfAliveEnderDragons < 0) {
+            numberOfAliveEnderDragons = 0;
+        }
     }
 
     private void respawnDragon() {
@@ -156,9 +195,5 @@ public class EndWorldHandler {
             loc.getChunk().load(true);
         }
         endWorld.spawnEntity(loc, EntityType.ENDER_DRAGON);
-    }
-
-    private void updateNumberOfAliveEDs() {
-        numberOfAliveEDs = endWorld.getEntitiesByClass(EnderDragon.class).size();
     }
 }

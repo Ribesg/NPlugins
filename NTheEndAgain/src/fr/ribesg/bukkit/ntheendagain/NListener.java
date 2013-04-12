@@ -14,6 +14,7 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -27,7 +28,10 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import fr.ribesg.bukkit.ncore.Utils;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
@@ -41,9 +45,10 @@ public class NListener implements Listener {
      * Players that did less than threshold % of total damages
      * have no chance to receive the Egg with custom handling
      */
-    private final static float threshold = 0.15f;
+    private final static float  threshold = 0.15f;
+    private final static Random rand      = new Random();
 
-    private final NTheEndAgain plugin;
+    private final NTheEndAgain  plugin;
 
     public NListener(final NTheEndAgain instance) {
         plugin = instance;
@@ -129,6 +134,25 @@ public class NListener implements Listener {
             if (handler != null) {
                 event.setDamage(Math.round(event.getDamage() * handler.getConfig().getEnderDragonDamageMultiplier()));
             }
+
+            // Simulate ED pushing player
+            final Vector velocity = event.getDamager().getLocation().toVector();
+            velocity.subtract(event.getEntity().getLocation().toVector());
+            velocity.normalize().multiply(-1);
+            if (velocity.getY() < 0.05f) {
+                velocity.setY(0.05f);
+            }
+            if (rand.nextFloat() < 0.025f) {
+                velocity.setY(10);
+            }
+            velocity.normalize().multiply(1.75f);
+            Bukkit.getScheduler().runTask(plugin, new BukkitRunnable() {
+
+                @Override
+                public void run() {
+                    event.getEntity().setVelocity(velocity);
+                }
+            });
         }
     }
 
@@ -261,7 +285,8 @@ public class NListener implements Listener {
 
                 // Forget about this dragon
                 handler.getDragons().remove(event.getEntity().getUniqueId());
-                handler.setNumberOfAliveEDs(handler.getNumberOfAliveEDs() - 1);
+                handler.getLoadedDragons().remove(event.getEntity().getUniqueId());
+                handler.decrementDragonCount();
             }
         }
     }
@@ -278,8 +303,47 @@ public class NListener implements Listener {
                 if (endChunk == null) {
                     chunks.addChunk(chunk);
                 } else if (endChunk.hasToBeRegen()) {
+                    for (final Entity e : chunk.getEntities()) {
+                        if (e.getType() == EntityType.ENDER_DRAGON) {
+                            final EnderDragon ed = (EnderDragon) e;
+                            if (handler.getDragons().containsKey(ed.getUniqueId())) {
+                                handler.getDragons().remove(ed.getUniqueId());
+                                handler.getLoadedDragons().remove(ed.getUniqueId());
+                                handler.decrementDragonCount();
+                            }
+                        }
+                    }
                     event.getWorld().regenerateChunk(endChunk.getX(), endChunk.getZ());
                     endChunk.setToBeRegen(false);
+                } else {
+                    for (final Entity e : chunk.getEntities()) {
+                        if (e.getType() == EntityType.ENDER_DRAGON) {
+                            final EnderDragon ed = (EnderDragon) e;
+                            if (!handler.getDragons().containsKey(ed.getUniqueId())) {
+                                ed.setMaxHealth(handler.getConfig().getEnderDragonHealth());
+                                ed.setHealth(ed.getMaxHealth());
+                                handler.getDragons().put(ed.getUniqueId(), new HashMap<String, Long>());
+                                handler.getLoadedDragons().add(ed.getUniqueId());
+                                handler.incrementDragonCount();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onChunkUnload(final ChunkUnloadEvent event) {
+        if (event.getWorld().getEnvironment() == Environment.THE_END) {
+            final String worldName = event.getWorld().getName();
+            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(worldName));
+            if (handler != null) {
+                for (final Entity e : event.getChunk().getEntities()) {
+                    if (e.getType() == EntityType.ENDER_DRAGON) {
+                        final EnderDragon ed = (EnderDragon) e;
+                        handler.getLoadedDragons().remove(ed.getUniqueId());
+                    }
                 }
             }
         }
@@ -288,18 +352,20 @@ public class NListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEnderDragonSpawn(final CreatureSpawnEvent event) {
         if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-            if (event.getSpawnReason() != SpawnReason.CUSTOM && event.getSpawnReason() != SpawnReason.SPAWNER_EGG) {
-                // Prevent an additional ED to be spawned
+            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getLocation().getWorld().getName()));
+            if (handler == null) {
+                return;
+            } else if (handler.getNumberOfAliveEnderDragons() >= handler.getConfig().getNbEnderDragons()) {
                 event.setCancelled(true);
             } else {
-                final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getLocation().getWorld().getName()));
-                if (handler == null) {
-                    return;
+                if (event.getSpawnReason() != SpawnReason.CUSTOM && event.getSpawnReason() != SpawnReason.SPAWNER_EGG) {
+                    event.setCancelled(true);
                 } else {
                     handler.getDragons().put(event.getEntity().getUniqueId(), new HashMap<String, Long>());
-                    handler.setNumberOfAliveEDs(handler.getNumberOfAliveEDs() + 1);
+                    handler.getLoadedDragons().add(event.getEntity().getUniqueId());
                     event.getEntity().setMaxHealth(handler.getConfig().getEnderDragonHealth());
                     event.getEntity().setHealth(event.getEntity().getMaxHealth());
+                    handler.incrementDragonCount();
                 }
             }
         }

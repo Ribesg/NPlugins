@@ -75,7 +75,11 @@ public abstract class AbstractConfig {
     }
 
     public void writeConfig(final JavaPlugin plugin) throws IOException {
-        final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + "config.yml");
+        writeConfig(plugin, "config.yml");
+    }
+
+    public void writeConfig(final JavaPlugin plugin, final String fileName) throws IOException {
+        final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + fileName);
         writeConfig(path);
     }
 
