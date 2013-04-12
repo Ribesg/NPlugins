@@ -57,6 +57,11 @@ public class NCuboid extends CuboidNode {
     // Cuboids base
     @Getter private CuboidDB db;
 
+    @Override
+    protected String getMinCoreVersion() {
+        return "0.0.6";
+    }
+
     /**
      * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeEnable()
      */

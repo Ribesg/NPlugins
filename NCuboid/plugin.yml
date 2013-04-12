@@ -7,8 +7,7 @@ main: fr.ribesg.bukkit.ncuboid.NCuboid
 
 load: POSTWORLD
 
-depend: [NCore]
-softdepend: [NWorld]
+softdepend: [NCore,NWorld]
 
 commands:
     cuboid:

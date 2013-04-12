@@ -41,6 +41,11 @@ public class NWorld extends WorldNode {
     @Getter private HashMap<String, Location> spawnMap;
 
     @Override
+    protected String getMinCoreVersion() {
+        return "0.0.6";
+    }
+
+    @Override
     public boolean onNodeEnable() {
         // Messages first !
         try {

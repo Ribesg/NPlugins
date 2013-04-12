@@ -31,6 +31,11 @@ public class NTheEndAgain extends TheEndAgainNode {
     private HashMap<String, EndWorldHandler> worldHandlers;
 
     @Override
+    protected String getMinCoreVersion() {
+        return "0.0.9";
+    }
+
+    @Override
     public boolean onNodeEnable() {
         // ############################ Temporary check for alpha 0.0.9, will be removed
         if (!getCore().getDescription().getVersion().equals("0.0.9")) {

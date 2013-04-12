@@ -7,7 +7,7 @@ main: fr.ribesg.bukkit.ntalk.NTalk
 
 load: POSTWORLD
 
-depend: [NCore]
+softdepend: [NCore]
 
 commands:
   pm:

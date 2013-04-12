@@ -25,6 +25,11 @@ public class NTalk extends TalkNode {
     @Getter private Formater formater;
 
     @Override
+    protected String getMinCoreVersion() {
+        return "0.0.6";
+    }
+
+    @Override
     public boolean onNodeEnable() {
         // Messages first !
         try {
@@ -57,7 +62,7 @@ public class NTalk extends TalkNode {
         pm.registerEvents(new NListener(this), this);
 
         // Command
-        NCommandExecutor executor = new NCommandExecutor(this);
+        final NCommandExecutor executor = new NCommandExecutor(this);
         getCommand("pm").setExecutor(executor);
         getCommand("pr").setExecutor(executor);
         getCommand("nick").setExecutor(executor);

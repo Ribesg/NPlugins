@@ -7,7 +7,7 @@ main: fr.ribesg.bukkit.ntheendagain.NTheEndAgain
 
 load: POSTWORLD
 
-depend: [NCore]
+softdepend: [NCore]
 
 commands:
   end:

@@ -7,7 +7,7 @@ main: fr.ribesg.bukkit.nworld.NWorld
 
 load: POSTWORLD
 
-depend: [NCore]
+softdepend: [NCore]
 
 commands:
   nworld:

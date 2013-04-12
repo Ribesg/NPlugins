@@ -167,4 +167,36 @@ public class Utils {
         final String result = s.toString();
         return new StringBuilder(result.substring(0, 1).toLowerCase()).append(result.substring(1)).toString();
     }
+
+    /**
+     * @param nb
+     *            The wanted String size
+     * @return A String of size nb containing spaces
+     */
+    public static String spaces(final int nb) {
+        return multipleChars(nb, ' ');
+    }
+
+    private static String multipleChars(final int nb, final char c) {
+        final StringBuilder s = new StringBuilder(nb);
+        for (int i = 0; i < nb; i++) {
+            s.append(c);
+        }
+        return s.toString();
+    }
+
+    public static String[] frame(final String[] messages) {
+        final String[] result = new String[messages.length + 2];
+        int maxLength = 0;
+        for (final String s : messages) {
+            maxLength = Math.max(maxLength, s.length());
+        }
+        final int length = maxLength + 6;
+        result[0] = multipleChars(length, '#');
+        for (int i = 0; i < messages.length; i++) {
+            result[i + 1] = "## " + messages[i] + spaces(maxLength - messages[i].length()) + " ##";
+        }
+        result[messages.length] = result[0];
+        return result;
+    }
 }
