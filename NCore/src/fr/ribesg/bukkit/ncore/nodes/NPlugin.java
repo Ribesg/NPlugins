@@ -26,10 +26,11 @@ public abstract class NPlugin extends JavaPlugin {
     public void onEnable() {
         if (!checkCore()) {
             final String[] messages = new String[4];
-            messages[0] = "/!\\ This plugin requires NCore to work. /!\\";
-            messages[1] = "It is an additional Plugin you should put in you /plugins folder.";
-            messages[2] = "See " + NCORE_WEBSITE + " for more informations.";
-            messages[3] = "Disabling plugin...";
+            messages[0] = "This plugin requires NCore";
+            messages[1] = "It is an additional Plugin you";
+            messages[2] = "should put in you /plugins folder.";
+            messages[3] = "See " + NCORE_WEBSITE;
+            messages[4] = "Disabling plugin...";
 
             for (final String s : frame(messages)) {
                 getLogger().severe(s);
@@ -39,9 +40,10 @@ public abstract class NPlugin extends JavaPlugin {
         }
         else if (!checkCoreVersion()) {
             final String[] messages = new String[4];
-            messages[0] = "/!\\ This plugin requires NCore v" + getMinCoreVersion() + "to work. /!\\";
-            messages[1] = "NCore plugin was found but the current version (v" + getCoreVersion() + ") is too low.";
-            messages[2] = "See " + NCORE_WEBSITE + " for more informations.";
+            messages[0] = "This plugin requires NCore v" + getMinCoreVersion();
+            messages[1] = "NCore plugin was found but the";
+            messages[1] = "current version (v" + getCoreVersion() + ") is too low.";
+            messages[2] = "See " + NCORE_WEBSITE;
             messages[3] = "Disabling plugin...";
 
             for (final String s : frame(messages)) {
@@ -113,7 +115,7 @@ public abstract class NPlugin extends JavaPlugin {
     }
 
     private boolean checkCoreVersion() {
-        return getCoreVersion().compareTo(getMinCoreVersion()) > 0;
+        return getCoreVersion().compareTo(getMinCoreVersion()) >= 0;
     }
 
     /**

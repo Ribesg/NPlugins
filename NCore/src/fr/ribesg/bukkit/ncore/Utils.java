@@ -196,7 +196,7 @@ public class Utils {
         for (int i = 0; i < messages.length; i++) {
             result[i + 1] = "## " + messages[i] + spaces(maxLength - messages[i].length()) + " ##";
         }
-        result[messages.length] = result[0];
+        result[result.length - 1] = result[0];
         return result;
     }
 }
