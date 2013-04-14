@@ -6,7 +6,7 @@ import fr.ribesg.bukkit.ncore.AbstractConfig;
 
 public class Config extends AbstractConfig {
 
-    private final NEnchantingEgg plugin;
+    @SuppressWarnings("unused") private final NEnchantingEgg plugin;
 
     // @Getter @Setter(AccessLevel.PRIVATE) private int broadcastOnWorldCreate;
 

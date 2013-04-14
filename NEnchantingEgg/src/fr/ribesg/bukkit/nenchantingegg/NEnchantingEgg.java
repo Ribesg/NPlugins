@@ -13,15 +13,24 @@ import fr.ribesg.bukkit.nenchantingegg.lang.Messages;
 
 public class NEnchantingEgg extends EnchantingEggNode {
 
+    @Getter private static NEnchantingEgg instance;
+
     // Configs
-    @Getter private Messages messages;
-    @Getter private Config   pluginConfig;
+    @Getter private Messages              messages;
+    @Getter private Config                pluginConfig;
 
     // Useful Nodes
     // // None
 
     @Override
+    protected String getMinCoreVersion() {
+        return "0.1.0";
+    }
+
+    @Override
     public boolean onNodeEnable() {
+        instance = this;
+
         // Messages first !
         try {
             if (!getDataFolder().isDirectory()) {
@@ -64,6 +73,8 @@ public class NEnchantingEgg extends EnchantingEggNode {
         } catch (final IOException e) {
             e.printStackTrace();
         }
+
+        instance = null;
     }
 
     /**
