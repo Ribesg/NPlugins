@@ -88,8 +88,9 @@ public class NTheEndAgain extends TheEndAgainNode {
     @Override
     public void onNodeDisable() {
         for (final EndWorldHandler handler : worldHandlers.values()) {
+            handler.stop();
             try {
-                // Reload friendly lastExecTime storing in config file
+                // Reload-friendly lastExecTime storing in config file
                 final long lastExecTime = handler.getConfig().getLastTaskExecTime();
                 handler.loadConfig();
                 handler.getConfig().setLastTaskExecTime(lastExecTime);

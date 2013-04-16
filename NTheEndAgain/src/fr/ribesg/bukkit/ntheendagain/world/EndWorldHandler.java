@@ -97,9 +97,6 @@ public class EndWorldHandler {
         plugin.getLogger().info("Done, " + numberOfAliveEnderDragons + " EnderDragon(s) found.");
 
         if (config.getRespawnOnBoot() == 1) {
-            if (getConfig().getRegenOnRespawn() == 1) {
-                regen();
-            }
             respawnDragons();
         }
 
@@ -120,6 +117,12 @@ public class EndWorldHandler {
             scheduler.runTaskTimer(plugin, task, initialDelay, config.getRespawnTimer() * 20);
         }
 
+    }
+
+    public void stop() {
+        if (getConfig().getRespawnOnBoot() == 1 && getConfig().getRespawnTimer() == 0 && getConfig().getRegenOnRespawn() == 1) {
+            hardRegen();
+        }
     }
 
     public void playerHitED(final UUID enderDragonID, final String playerName, final long dmg) {
@@ -174,6 +177,16 @@ public class EndWorldHandler {
                 break;
         }
         chunks.softRegen();
+    }
+
+    private void hardRegen() {
+        plugin.getLogger().info("Regenerating End world \"" + endWorld.getName() + "\"...");
+        regen();
+        for (EndChunk c : chunks) {
+            endWorld.loadChunk(c.getX(), c.getZ());
+            endWorld.unloadChunkRequest(c.getX(), c.getZ());
+        }
+        plugin.getLogger().info("Done.");
     }
 
     public void incrementDragonCount() {
