@@ -133,26 +133,28 @@ public class NListener implements Listener {
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(endWorld.getName()));
             if (handler != null) {
                 event.setDamage(Math.round(event.getDamage() * handler.getConfig().getEnderDragonDamageMultiplier()));
-            }
 
-            // Simulate ED pushing player
-            final Vector velocity = event.getDamager().getLocation().toVector();
-            velocity.subtract(event.getEntity().getLocation().toVector());
-            velocity.normalize().multiply(-1);
-            if (velocity.getY() < 0.05f) {
-                velocity.setY(0.05f);
-            }
-            if (rand.nextFloat() < 0.025f) {
-                velocity.setY(10);
-            }
-            velocity.normalize().multiply(1.75f);
-            Bukkit.getScheduler().runTask(plugin, new BukkitRunnable() {
+                if (handler.getConfig().getCustomEdPushPlayer() == 1) {
+                    // Simulate ED pushing player
+                    final Vector velocity = event.getDamager().getLocation().toVector();
+                    velocity.subtract(event.getEntity().getLocation().toVector());
+                    velocity.normalize().multiply(-1);
+                    if (velocity.getY() < 0.05f) {
+                        velocity.setY(0.05f);
+                    }
+                    if (rand.nextFloat() < 0.025f) {
+                        velocity.setY(10);
+                    }
+                    velocity.normalize().multiply(1.75f);
+                    Bukkit.getScheduler().runTask(plugin, new BukkitRunnable() {
 
-                @Override
-                public void run() {
-                    event.getEntity().setVelocity(velocity);
+                        @Override
+                        public void run() {
+                            event.getEntity().setVelocity(velocity);
+                        }
+                    });
                 }
-            });
+            }
         }
     }
 

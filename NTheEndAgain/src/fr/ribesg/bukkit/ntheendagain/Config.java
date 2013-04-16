@@ -26,6 +26,7 @@ public class Config extends AbstractConfig {
     @Getter @Setter(AccessLevel.PRIVATE) private int   respawnOnBoot;
     @Getter @Setter(AccessLevel.PRIVATE) private int   regenOnRespawn;
     @Getter @Setter(AccessLevel.PRIVATE) private int   actionOnRegen;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   customEdPushPlayer;
     @Getter @Setter private long                       lastTaskExecTime;
 
     public Config(final NTheEndAgain instance, final String world) {
@@ -43,6 +44,7 @@ public class Config extends AbstractConfig {
         setRespawnOnBoot(1);
         setRegenOnRespawn(1);
         setActionOnRegen(0);
+        setCustomEdPushPlayer(1);
         setLastTaskExecTime(0);
     }
 
@@ -127,6 +129,13 @@ public class Config extends AbstractConfig {
         if (getActionOnRegen() < 0 || getActionOnRegen() > 1) {
             setActionOnRegen(0);
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "actionOnRegen", "0");
+        }
+
+        // customEdPushPlayer. Default: 1. Possible values: 0,1
+        setCustomEdPushPlayer(config.getInt("customEdPushPlayer", 0));
+        if (getCustomEdPushPlayer() < 0 || getCustomEdPushPlayer() > 1) {
+            setCustomEdPushPlayer(1);
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "customEdPushPlayer", "1");
         }
 
         // lastTaskStartTime.
@@ -225,6 +234,13 @@ public class Config extends AbstractConfig {
         content.append("#                   regen on chunk loading and mass join = mass load of chunks at the same time\n");
         content.append("#       1: Teleport them to the spawn point of the Main (= first) world.\n");
         content.append("actionOnRegen: " + getActionOnRegen() + "\n\n");
+
+        // customEdPushPlayer. Default: 1
+        content.append("# Do we 'simulate' the EnderDragon-Pushes-Player behaviour ? Default: 1\n");
+        content.append("# This feature apply a kind-of random velocity to a Player when it is damaged by an EnderDragon\n");
+        content.append("#       0: Disabled.\n");
+        content.append("#       1: Enabled.\n");
+        content.append("customEdPushPlayer: " + getCustomEdPushPlayer() + "\n\n");
 
         // lastTaskStartTime. Default: 0
         content.append("# Used to allow task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");
