@@ -227,7 +227,18 @@ public class Config extends AbstractConfig {
         content.append("#       0: Disabled.\n");
         content.append("#       1: Enabled. World will be regen, even if EnderDragons are still alive.\n");
         content.append("#       2: Enabled. World will be regen ONLY if there are NO EnderDragon alive.\n");
+        content.append("# Note: This regen method does not instantly regen the world. Chunks are regenerated at\n");
+        content.append("#       the moment there are loaded, so you may experience a tiny lag when joining the End.\n");
+        content.append("#       It's nothing compared to the 2-10 seconds freeze a HARD regen cause.\n");
         content.append("regenOnRespawn: " + getRegenOnRespawn() + "\n\n");
+
+        // Comment on Hard Reset
+        content.append("# Note: If you have\n");
+        content.append("# - respawnTimer set to 0\n");
+        content.append("# - respawnOnBoot set to 1\n");
+        content.append("# - regenOnRespawn set to 1\n");
+        content.append("# As the above values, the actual regeneration will be a HARD regen occuring at server stop\n");
+        content.append("# This mean there will be no lag when entering the End !\n");
 
         // actionOnRegen. Default: 0
         content.append("# What do we do to players in the End when we want to regen the world ? Default: 1\n");
