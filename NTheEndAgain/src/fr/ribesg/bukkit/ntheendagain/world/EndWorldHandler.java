@@ -16,6 +16,7 @@ import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import fr.ribesg.bukkit.ncore.Utils;
@@ -182,9 +183,11 @@ public class EndWorldHandler {
     private void hardRegen() {
         plugin.getLogger().info("Regenerating End world \"" + endWorld.getName() + "\"...");
         regen();
-        for (EndChunk c : chunks) {
-            endWorld.loadChunk(c.getX(), c.getZ());
-            endWorld.unloadChunkRequest(c.getX(), c.getZ());
+        for (final EndChunk c : chunks) {
+            if (c.hasToBeRegen()) {
+                endWorld.regenerateChunk(c.getX(), c.getZ());
+                c.setToBeRegen(false);
+            }
         }
         plugin.getLogger().info("Done.");
     }
@@ -207,6 +210,17 @@ public class EndWorldHandler {
         if (!loc.getChunk().isLoaded()) {
             loc.getChunk().load(true);
         }
-        endWorld.spawnEntity(loc, EntityType.ENDER_DRAGON);
+        final EndChunk chunk = getChunks().getChunk(endWorld.getName(), x, z);
+        if (chunk != null && chunk.hasToBeRegen()) {
+            endWorld.regenerateChunk(chunk.getX(), chunk.getZ());
+            chunk.setToBeRegen(false);
+        }
+        Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                endWorld.spawnEntity(loc, EntityType.ENDER_DRAGON);
+            }
+        }, 1);
     }
 }

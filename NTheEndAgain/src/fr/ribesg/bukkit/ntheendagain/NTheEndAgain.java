@@ -72,6 +72,8 @@ public class NTheEndAgain extends TheEndAgainNode {
             }
         }
 
+        getLogger().setFilter(new MovedTooQuicklyFilter(this));
+
         getCommand("end").setExecutor(new NCommandExecutor(this));
 
         return true;

@@ -132,7 +132,7 @@ public class Config extends AbstractConfig {
         }
 
         // customEdPushPlayer. Default: 1. Possible values: 0,1
-        setCustomEdPushPlayer(config.getInt("customEdPushPlayer", 0));
+        setCustomEdPushPlayer(config.getInt("customEdPushPlayer", 1));
         if (getCustomEdPushPlayer() < 0 || getCustomEdPushPlayer() > 1) {
             setCustomEdPushPlayer(1);
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "customEdPushPlayer", "1");
@@ -213,7 +213,7 @@ public class Config extends AbstractConfig {
         content.append("#      86400: 24 hours - 1 day\n");
         content.append("#     172800: 48 hours - 2 days\n");
         content.append("#     604800: 7 days\n");
-        content.append("# You can use any value you want, just be sure to convert it to seconds.");
+        content.append("# You can use any value you want, just be sure to convert it to seconds.\n");
         content.append("respawnTimer: " + getRespawnTimer() + "\n\n");
 
         // respawnOnBoot. Default: 1
@@ -257,7 +257,7 @@ public class Config extends AbstractConfig {
 
         // lastTaskStartTime. Default: 0
         content.append("# Used to allow task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");
-        content.append("lastTaskExecTime: " + getLastTaskExecTime() + "\n\n");
+        content.append("lastTaskExecTime: " + (getRespawnTimer() == 0 ? "0" : getLastTaskExecTime()) + "\n\n");
 
         return content.toString();
     }
