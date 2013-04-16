@@ -200,18 +200,20 @@ public class Config extends AbstractConfig {
         // respawnTimer. Default: 21 600 (6 hours)
         content.append("# The time between checks for respawning EnderDragons, in seconds. Default: 0 (Disabled)\n");
         content.append("# Here are some values:\n");
-        content.append("#           0: Disabled\n");
-        content.append("#       1 800: 30 minutes\n");
-        content.append("#       3 600: 1 hour\n");
-        content.append("#       7 200: 2 hours\n");
-        content.append("#      10 800: 3 hours\n");
-        content.append("#      14 400: 4 hours\n");
-        content.append("#      21 600: 6 hours\n");
-        content.append("#      28 800: 8 hours\n");
-        content.append("#      43 200: 12 hours\n");
-        content.append("#      86 400: 24 hours - 1 day\n");
-        content.append("#     172 800: 48 hours - 2 days\n");
-        content.append("#     604 800: 7 days\n");
+        content.append("#   Value   --   Description\n");
+        content.append("#          0: Disabled\n");
+        content.append("#       1800: 30 minutes\n");
+        content.append("#       3600: 1 hour\n");
+        content.append("#       7200: 2 hours\n");
+        content.append("#      10800: 3 hours\n");
+        content.append("#      14400: 4 hours\n");
+        content.append("#      21600: 6 hours\n");
+        content.append("#      28800: 8 hours\n");
+        content.append("#      43200: 12 hours\n");
+        content.append("#      86400: 24 hours - 1 day\n");
+        content.append("#     172800: 48 hours - 2 days\n");
+        content.append("#     604800: 7 days\n");
+        content.append("# You can use any value you want, just be sure to convert it to seconds.");
         content.append("respawnTimer: " + getRespawnTimer() + "\n\n");
 
         // respawnOnBoot. Default: 1
