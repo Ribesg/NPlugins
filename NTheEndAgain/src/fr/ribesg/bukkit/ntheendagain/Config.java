@@ -115,9 +115,9 @@ public class Config extends AbstractConfig {
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnOnBoot", "1");
         }
 
-        // regenOnRespawn. Default: 1. Possible values: 0,1
+        // regenOnRespawn. Default: 1. Possible values: 0,1,2
         setRegenOnRespawn(config.getInt("regenOnRespawn", 1));
-        if (getRegenOnRespawn() < 0 || getRegenOnRespawn() > 1) {
+        if (getRegenOnRespawn() < 0 || getRegenOnRespawn() > 2) {
             setRegenOnRespawn(1);
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "regenOnRespawn", "1");
         }
@@ -215,6 +215,7 @@ public class Config extends AbstractConfig {
         content.append("# Should we regen the End world before respawning Dragons ? Default: 1\n");
         content.append("#       0: Disabled.\n");
         content.append("#       1: Enabled. World will be regen, even if EnderDragons are still alive.\n");
+        content.append("#       2: Enabled. World will be regen ONLY if there are NO EnderDragon alive.\n");
         content.append("regenOnRespawn: " + getRegenOnRespawn() + "\n\n");
 
         // actionOnRegen. Default: 0

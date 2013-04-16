@@ -18,7 +18,8 @@ public class RespawnTask extends BukkitRunnable {
     @Override
     public void run() {
         handler.getConfig().setLastTaskExecTime(System.currentTimeMillis());
-        if (handler.getConfig().getRegenOnRespawn() == 1) {
+        int regenOnRespawn = handler.getConfig().getRegenOnRespawn();
+        if (regenOnRespawn == 1 || regenOnRespawn == 2 && handler.getNumberOfAliveEnderDragons() == 0) {
             handler.regen();
         }
         handler.respawnDragons();
