@@ -238,7 +238,7 @@ public class Config extends AbstractConfig {
         content.append("# - respawnOnBoot set to 1\n");
         content.append("# - regenOnRespawn set to 1\n");
         content.append("# As the above values, the actual regeneration will be a HARD regen occuring at server stop\n");
-        content.append("# This mean there will be no lag when entering the End !\n");
+        content.append("# This mean there will be no lag when entering the End !\n\n");
 
         // actionOnRegen. Default: 0
         content.append("# What do we do to players in the End when we want to regen the world ? Default: 1\n");
