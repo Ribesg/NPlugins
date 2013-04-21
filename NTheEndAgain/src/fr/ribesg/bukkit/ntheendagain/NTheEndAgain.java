@@ -32,7 +32,7 @@ public class NTheEndAgain extends TheEndAgainNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.1.0";
+        return "0.1.1";
     }
 
     @Override
@@ -72,7 +72,16 @@ public class NTheEndAgain extends TheEndAgainNode {
             }
         }
 
-        getLogger().setFilter(new MovedTooQuicklyFilter(this));
+        boolean filterActivated = false;
+        for (final EndWorldHandler handler : worldHandlers.values()) {
+            if (handler.getConfig().getHideMovedTooQuicklySpam() == 1) {
+                filterActivated = true;
+                break;
+            }
+        }
+        if (filterActivated) {
+            Bukkit.getLogger().setFilter(new MovedTooQuicklyFilter(this));
+        }
 
         getCommand("end").setExecutor(new NCommandExecutor(this));
 
@@ -95,7 +104,7 @@ public class NTheEndAgain extends TheEndAgainNode {
                 // Reload-friendly lastExecTime storing in config file
                 final long lastExecTime = handler.getConfig().getLastTaskExecTime();
                 handler.loadConfig();
-                handler.getConfig().setLastTaskExecTime(lastExecTime);
+                handler.getConfig().setLastTaskExecTime(handler.getConfig().getRespawnTimer() == 0 ? 0 : lastExecTime);
                 handler.saveConfig();
             } catch (final IOException e) {
                 getLogger().severe("An error occured, stacktrace follows:");

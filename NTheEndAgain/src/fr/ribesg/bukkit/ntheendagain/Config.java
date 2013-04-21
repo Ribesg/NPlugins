@@ -28,6 +28,7 @@ public class Config extends AbstractConfig {
     @Getter @Setter(AccessLevel.PRIVATE) private int   actionOnRegen;
     @Getter @Setter(AccessLevel.PRIVATE) private int   customEdPushPlayer;
     @Getter @Setter private long                       lastTaskExecTime;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   hideMovedTooQuicklySpam;
 
     public Config(final NTheEndAgain instance, final String world) {
         plugin = instance;
@@ -46,6 +47,7 @@ public class Config extends AbstractConfig {
         setActionOnRegen(0);
         setCustomEdPushPlayer(1);
         setLastTaskExecTime(0);
+        setHideMovedTooQuicklySpam(1);
     }
 
     /**
@@ -138,11 +140,21 @@ public class Config extends AbstractConfig {
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "customEdPushPlayer", "1");
         }
 
+        // hideMovedTooQuicklySpam. Default: 1. Possible values: 0,1
+        setHideMovedTooQuicklySpam(config.getInt("hideMovedTooQuicklySpam", 1));
+        if (getHideMovedTooQuicklySpam() < 0 || getHideMovedTooQuicklySpam() > 1) {
+            setHideMovedTooQuicklySpam(1);
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "hideMovedTooQuicklySpam", "1");
+        }
+
         // lastTaskStartTime.
         setLastTaskExecTime(config.getLong("lastTaskExecTime", 0L));
         if (getLastTaskExecTime() < 0 || getLastTaskExecTime() > System.currentTimeMillis()) {
             setLastTaskExecTime(0);
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "lastTaskStartTime", "0");
+        }
+        if (getRespawnTimer() == 0) {
+            setLastTaskExecTime(0);
         }
 
     }
@@ -213,17 +225,18 @@ public class Config extends AbstractConfig {
         content.append("#      86400: 24 hours - 1 day\n");
         content.append("#     172800: 48 hours - 2 days\n");
         content.append("#     604800: 7 days\n");
-        content.append("# You can use any value you want, just be sure to convert it to seconds.\n");
+        content.append("# You can use *any* positive value you want, just be sure to convert it to seconds.\n");
+        content.append("# Note: Use of very low values (less than 5 minutes - 300 seconds) is discouraged.\n");
         content.append("respawnTimer: " + getRespawnTimer() + "\n\n");
 
         // respawnOnBoot. Default: 1
-        content.append("# Should we respawn EnderDragons at server boot. Default: 1\n");
+        content.append("# Should we respawn EnderDragons at server boot? Default: 1\n");
         content.append("#       0: Disabled.\n");
         content.append("#       1: Enabled. There will be nbEnderDragons (" + getNbEnderDragons() + ") in this world after each reboot\n");
         content.append("respawnOnBoot: " + getRespawnOnBoot() + "\n\n");
 
         // regenOnRespawn. Default: 1
-        content.append("# Should we regen the End world before respawning Dragons ? Default: 1\n");
+        content.append("# Should we regen the End world before respawning Dragons? Default: 1\n");
         content.append("#       0: Disabled.\n");
         content.append("#       1: Enabled. World will be regen, even if EnderDragons are still alive.\n");
         content.append("#       2: Enabled. World will be regen ONLY if there are NO EnderDragon alive.\n");
@@ -238,10 +251,10 @@ public class Config extends AbstractConfig {
         content.append("# - respawnOnBoot set to 1\n");
         content.append("# - regenOnRespawn set to 1\n");
         content.append("# As the above values, the actual regeneration will be a HARD regen occuring at server stop\n");
-        content.append("# This mean there will be no lag when entering the End !\n\n");
+        content.append("# This mean there will be no/less lag when entering the End !\n\n");
 
         // actionOnRegen. Default: 0
-        content.append("# What do we do to players in the End when we want to regen the world ? Default: 1\n");
+        content.append("# What do we do to players in the End when we want to regen the world? Default: 1\n");
         content.append("#       0: Kick them. This way they can rejoin immediatly in the End\n");
         content.append("#          WARNING: Mass rejoin after mass kick in the End could cause lag because chunks are\n");
         content.append("#                   regen on chunk loading and mass join = mass load of chunks at the same time\n");
@@ -249,11 +262,18 @@ public class Config extends AbstractConfig {
         content.append("actionOnRegen: " + getActionOnRegen() + "\n\n");
 
         // customEdPushPlayer. Default: 1
-        content.append("# Do we 'simulate' the EnderDragon-Pushes-Player behaviour ? Default: 1\n");
+        content.append("# Do we 'simulate' the EnderDragon-Pushes-Player behaviour? Default: 1\n");
         content.append("# This feature apply a kind-of random velocity to a Player when it is damaged by an EnderDragon\n");
         content.append("#       0: Disabled.\n");
         content.append("#       1: Enabled.\n");
         content.append("customEdPushPlayer: " + getCustomEdPushPlayer() + "\n\n");
+
+        // hideMovedTooQuicklySpam. Default: 1
+        content.append("# Do we hide the 'Player Moved Too Quickly!' spam? Default: 1\n");
+        content.append("# /!\\ This feature is not compatible with any other plugin using Bukkit's Logger filters\n");
+        content.append("#       0: Disabled.\n");
+        content.append("#       1: Enabled.\n");
+        content.append("hideMovedTooQuicklySpam: " + getHideMovedTooQuicklySpam() + "\n\n");
 
         // lastTaskStartTime. Default: 0
         content.append("# Used to allow task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");

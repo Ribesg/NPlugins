@@ -4,6 +4,11 @@ import java.util.logging.Filter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
+import org.bukkit.entity.Player;
+
+import fr.ribesg.bukkit.ncore.Utils;
+import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+
 public class MovedTooQuicklyFilter implements Filter {
 
     private final NTheEndAgain plugin;
@@ -17,13 +22,11 @@ public class MovedTooQuicklyFilter implements Filter {
         if (record.getLevel() == Level.WARNING) {
             final String message = record.getMessage();
             final String[] split = message.split(" ");
-            for (final String s : split) {
-                System.out.println(s);
-            }
-            if (plugin.getServer().getPlayerExact(split[0]) != null) {
+            final Player p = plugin.getServer().getPlayerExact(split[0]);
+            if (p != null) {
                 if (split[1].equals("moved") && split[2].equals("too") && split[3].equals("quickly!")) {
-                    plugin.getLogger().severe("Log cancelled");
-                    return false;
+                    final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(p.getWorld().getName()));
+                    return handler != null && handler.getConfig().getHideMovedTooQuicklySpam() == 0;
                 }
             }
         }

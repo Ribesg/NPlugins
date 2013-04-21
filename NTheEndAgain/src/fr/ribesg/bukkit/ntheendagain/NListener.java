@@ -301,10 +301,8 @@ public class NListener implements Listener {
             if (handler != null) {
                 final EndChunks chunks = handler.getChunks();
                 final Chunk chunk = event.getChunk();
-                final EndChunk endChunk = chunks.getChunk(worldName, chunk.getX(), chunk.getZ());
-                if (endChunk == null) {
-                    chunks.addChunk(chunk);
-                } else if (endChunk.hasToBeRegen()) {
+                EndChunk endChunk = chunks.getChunk(worldName, chunk.getX(), chunk.getZ());
+                if (endChunk != null && endChunk.hasToBeRegen()) {
                     for (final Entity e : chunk.getEntities()) {
                         if (e.getType() == EntityType.ENDER_DRAGON) {
                             final EnderDragon ed = (EnderDragon) e;
@@ -315,9 +313,20 @@ public class NListener implements Listener {
                             }
                         }
                     }
-                    event.getWorld().regenerateChunk(endChunk.getX(), endChunk.getZ());
+                    final int x = endChunk.getX(), z = endChunk.getZ();
+                    event.getWorld().regenerateChunk(x, z);
                     endChunk.setToBeRegen(false);
+                    Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+
+                        @Override
+                        public void run() {
+                            event.getWorld().refreshChunk(x, z);
+                        }
+                    }, 100L);
                 } else {
+                    if (endChunk == null) {
+                        endChunk = chunks.addChunk(chunk);
+                    }
                     for (final Entity e : chunk.getEntities()) {
                         if (e.getType() == EntityType.ENDER_DRAGON) {
                             final EnderDragon ed = (EnderDragon) e;
@@ -362,7 +371,7 @@ public class NListener implements Listener {
             } else {
                 if (event.getSpawnReason() != SpawnReason.CUSTOM && event.getSpawnReason() != SpawnReason.SPAWNER_EGG) {
                     event.setCancelled(true);
-                } else {
+                } else if (!handler.getDragons().containsKey(event.getEntity().getUniqueId())) {
                     handler.getDragons().put(event.getEntity().getUniqueId(), new HashMap<String, Long>());
                     handler.getLoadedDragons().add(event.getEntity().getUniqueId());
                     event.getEntity().setMaxHealth(handler.getConfig().getEnderDragonHealth());

@@ -31,8 +31,10 @@ public class EndChunks implements Iterable<EndChunk> {
         chunks = new HashMap<ChunkCoord, EndChunk>();
     }
 
-    public void addChunk(final Chunk bukkitChunk) {
-        addChunk(new EndChunk(bukkitChunk));
+    public EndChunk addChunk(final Chunk bukkitChunk) {
+        EndChunk res = new EndChunk(bukkitChunk);
+        addChunk(res);
+        return res;
     }
 
     private void addChunk(final EndChunk endChunk) {
