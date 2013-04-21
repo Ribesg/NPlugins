@@ -11,6 +11,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
@@ -18,6 +20,8 @@ import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityInteractEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 
@@ -70,6 +74,26 @@ public class FarmFlagListener extends AbstractListener {
     public void onPlayerInteractEvent(final ExtendedPlayerInteractEvent ext) {
         final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
         if (event.getAction() == Action.PHYSICAL && event.hasBlock() && event.getClickedBlock().getType() == Material.SOIL) {
+            if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onEntityInteractEvent(final ExtendedEntityInteractEvent ext) {
+        final EntityInteractEvent event = (EntityInteractEvent) ext.getBaseEvent();
+        if (event.getBlock().getType() == Material.SOIL) {
+            if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
+        final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
+        if (animals.contains(event.getRightClicked())) {
             if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
                 event.setCancelled(true);
             }

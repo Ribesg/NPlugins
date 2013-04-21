@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -17,6 +18,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityInteractEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedHangingBreakEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerDropItemEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
@@ -83,6 +85,12 @@ public class EventExtensionListener extends AbstractListener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntityDamage(final EntityDamageEvent event) {
         Bukkit.getPluginManager().callEvent(new ExtendedEntityDamageEvent(getPlugin().getDb(), event));
+    }
+
+    // EntityInteractEvent
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onEntityInteract(final EntityInteractEvent event) {
+        Bukkit.getPluginManager().callEvent(new ExtendedEntityInteractEvent(getPlugin().getDb(), event));
     }
 
     // PlayerJoinEvent
