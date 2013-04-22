@@ -20,6 +20,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 import fr.ribesg.bukkit.ncore.Utils;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
@@ -40,6 +41,7 @@ public class EndWorldHandler {
     @Getter private final Config                       config;
     @Getter private final Map<UUID, Map<String, Long>> dragons;
     @Getter private final Set<UUID>                    loadedDragons;
+    @Getter private final Set<BukkitTask>              tasks;
 
     @Getter private int                                numberOfAliveEnderDragons;
 
@@ -51,6 +53,7 @@ public class EndWorldHandler {
         config = new Config(plugin, endWorld.getName());
         dragons = new HashMap<UUID, Map<String, Long>>();
         loadedDragons = new HashSet<UUID>();
+        tasks = new HashSet<BukkitTask>();
 
         // Config is not yet loaded here
     }
@@ -105,26 +108,51 @@ public class EndWorldHandler {
 
         final BukkitScheduler scheduler = plugin.getServer().getScheduler();
         final UnexpectedDragonDeathHandlerTask deathTask = new UnexpectedDragonDeathHandlerTask(this);
-        scheduler.runTaskTimer(plugin, deathTask, 0L, 20L);
+        tasks.add(scheduler.runTaskTimer(plugin, deathTask, 0L, 20L));
 
-        if (config.getRespawnTimer() != 0) {
+        if (config.getRespawnTimerMax() != 0) {
             final long t = config.getLastTaskExecTime();
             long initialDelay = 0;
             if (t != 0) {
-                initialDelay = config.getRespawnTimer() - (System.currentTimeMillis() - t);
+                initialDelay = config.getRespawnTimerMin() - (System.currentTimeMillis() - t);
                 if (initialDelay < 0) {
                     initialDelay = 0;
                 }
             }
+
+            int randomRespawnTimer = rand.nextInt(config.getRespawnTimerMax() - config.getRespawnTimerMin()) + config.getRespawnTimerMin();
             final RespawnTask task = new RespawnTask(this);
-            scheduler.runTaskTimer(plugin, task, initialDelay, config.getRespawnTimer() * 20);
+            tasks.add(scheduler.runTaskTimer(plugin, task, initialDelay, randomRespawnTimer * 20));
         }
 
     }
 
-    public void stop() {
-        if (getConfig().getRespawnOnBoot() == 1 && getConfig().getRespawnTimer() == 0 && getConfig().getRegenOnRespawn() == 1) {
+    public void unload() {
+        for (BukkitTask t : tasks) {
+            t.cancel();
+        }
+        tasks.clear();
+        if (getConfig().getRespawnOnBoot() == 1 && getConfig().getRespawnTimerMax() == 0 && getConfig().getRegenOnRespawn() == 1) {
             hardRegen();
+        }
+        try {
+            // Reload-friendly lastExecTime storing in config file
+            final long lastExecTime = getConfig().getLastTaskExecTime();
+            loadConfig();
+            getConfig().setLastTaskExecTime(getConfig().getRespawnTimerMax() == 0 ? 0 : lastExecTime);
+            saveConfig();
+        } catch (final IOException e) {
+            plugin.getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            plugin.getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
+        }
+        try {
+            saveChunks();
+        } catch (final IOException e) {
+            plugin.getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            plugin.getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
+            plugin.getLogger().severe("/!\\ THIS MEANS THAT PROTECTED CHUNKS COULD BE REGENERATED ON NEXT REGEN IN THIS WORLD /!\\");
         }
     }
 

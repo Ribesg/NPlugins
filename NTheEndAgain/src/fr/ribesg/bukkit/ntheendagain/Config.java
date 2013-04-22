@@ -22,7 +22,8 @@ public class Config extends AbstractConfig {
     @Getter @Setter(AccessLevel.PRIVATE) private int   dragonEggHandling;
     @Getter @Setter(AccessLevel.PRIVATE) private int   xpHandling;
     @Getter @Setter(AccessLevel.PRIVATE) private int   xpReward;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimer;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimerMin;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimerMax;
     @Getter @Setter(AccessLevel.PRIVATE) private int   respawnOnBoot;
     @Getter @Setter(AccessLevel.PRIVATE) private int   regenOnRespawn;
     @Getter @Setter(AccessLevel.PRIVATE) private int   actionOnRegen;
@@ -41,7 +42,8 @@ public class Config extends AbstractConfig {
         setDragonEggHandling(0);
         setXpHandling(0);
         setXpReward(12_000);
-        setRespawnTimer(0);
+        setRespawnTimerMin(0);
+        setRespawnTimerMax(0);
         setRespawnOnBoot(1);
         setRegenOnRespawn(1);
         setActionOnRegen(0);
@@ -105,11 +107,19 @@ public class Config extends AbstractConfig {
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "xpReward", "12 000");
         }
 
-        // respawnTimer. Default: 0. Possible values: positive or null integers
-        setRespawnTimer(config.getInt("respawnTimer", 0));
-        if (getRespawnTimer() < 0) {
-            setRespawnTimer(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnTimer", "0");
+        // respawnTimerMin & respawnTimerMax. Default: 0. Possible values: positive or null integers, respawnTimerMin <= respawnTimerMax
+        setRespawnTimerMin(config.getInt("respawnTimerMin", 0));
+        if (getRespawnTimerMin() < 0) {
+            setRespawnTimerMin(0);
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnTimerMin", "0");
+        }
+        setRespawnTimerMax(config.getInt("respawnTimerMax", getRespawnTimerMin()));
+        if (getRespawnTimerMax() < getRespawnTimerMin()) {
+            setRespawnTimerMax(getRespawnTimerMin());
+            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnTimerMax", Integer.toString(getRespawnTimerMin()));
+        }
+        if (getRespawnTimerMax() != 0 && getRespawnTimerMin() == 0) {
+            setRespawnTimerMin(1);
         }
 
         // respawnOnBoot. Default: 1. Possible values: 0,1
@@ -153,7 +163,7 @@ public class Config extends AbstractConfig {
             setLastTaskExecTime(0);
             plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "lastTaskStartTime", "0");
         }
-        if (getRespawnTimer() == 0) {
+        if (getRespawnTimerMax() == 0) {
             setLastTaskExecTime(0);
         }
 
@@ -211,6 +221,7 @@ public class Config extends AbstractConfig {
 
         // respawnTimer. Default: 21 600 (6 hours)
         content.append("# The time between checks for respawning EnderDragons, in seconds. Default: 0 (Disabled)\n");
+        content.append("#\n");
         content.append("# Here are some values:\n");
         content.append("#   Value   --   Description\n");
         content.append("#          0: Disabled\n");
@@ -225,9 +236,14 @@ public class Config extends AbstractConfig {
         content.append("#      86400: 24 hours - 1 day\n");
         content.append("#     172800: 48 hours - 2 days\n");
         content.append("#     604800: 7 days\n");
+        content.append("#\n");
         content.append("# You can use *any* positive value you want, just be sure to convert it to seconds.\n");
-        content.append("# Note: Use of very low values (less than 5 minutes - 300 seconds) is discouraged.\n");
-        content.append("respawnTimer: " + getRespawnTimer() + "\n\n");
+        content.append("# Note: Use of very low values (less than 300) is discouraged if you use regenOnRespawn=1 !\n");
+        content.append("#\n");
+        content.append("# The respawnTimer will be chosen randomly for each iteration:\n");
+        content.append("# respawnTimerMin <= randomRespawnTimer <= respawnTimerMax\n");
+        content.append("respawnTimerMin: " + getRespawnTimerMin() + "\n");
+        content.append("respawnTimerMax: " + getRespawnTimerMax() + "\n\n");
 
         // respawnOnBoot. Default: 1
         content.append("# Should we respawn EnderDragons at server boot? Default: 1\n");
@@ -277,7 +293,7 @@ public class Config extends AbstractConfig {
 
         // lastTaskStartTime. Default: 0
         content.append("# Used to allow task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");
-        content.append("lastTaskExecTime: " + (getRespawnTimer() == 0 ? "0" : getLastTaskExecTime()) + "\n\n");
+        content.append("lastTaskExecTime: " + (getRespawnTimerMax() == 0 ? "0" : getLastTaskExecTime()) + "\n\n");
 
         return content.toString();
     }

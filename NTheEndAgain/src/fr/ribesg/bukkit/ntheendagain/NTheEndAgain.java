@@ -21,14 +21,14 @@ import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 public class NTheEndAgain extends TheEndAgainNode {
 
     // Configs
-    @Getter private Messages                 messages;
-    @Getter private Config                   pluginConfig;
+    @Getter private Messages                         messages;
+    @Getter private Config                           pluginConfig;
 
     // Useful Nodes
     // // None
 
     // Actual plugin data
-    private HashMap<String, EndWorldHandler> worldHandlers;
+    @Getter private HashMap<String, EndWorldHandler> worldHandlers;
 
     @Override
     protected String getMinCoreVersion() {
@@ -72,16 +72,7 @@ public class NTheEndAgain extends TheEndAgainNode {
             }
         }
 
-        boolean filterActivated = false;
-        for (final EndWorldHandler handler : worldHandlers.values()) {
-            if (handler.getConfig().getHideMovedTooQuicklySpam() == 1) {
-                filterActivated = true;
-                break;
-            }
-        }
-        if (filterActivated) {
-            Bukkit.getLogger().setFilter(new MovedTooQuicklyFilter(this));
-        }
+        activateFilter();
 
         getCommand("end").setExecutor(new NCommandExecutor(this));
 
@@ -99,26 +90,7 @@ public class NTheEndAgain extends TheEndAgainNode {
     @Override
     public void onNodeDisable() {
         for (final EndWorldHandler handler : worldHandlers.values()) {
-            handler.stop();
-            try {
-                // Reload-friendly lastExecTime storing in config file
-                final long lastExecTime = handler.getConfig().getLastTaskExecTime();
-                handler.loadConfig();
-                handler.getConfig().setLastTaskExecTime(handler.getConfig().getRespawnTimer() == 0 ? 0 : lastExecTime);
-                handler.saveConfig();
-            } catch (final IOException e) {
-                getLogger().severe("An error occured, stacktrace follows:");
-                e.printStackTrace();
-                getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
-            }
-            try {
-                handler.saveChunks();
-            } catch (final IOException e) {
-                getLogger().severe("An error occured, stacktrace follows:");
-                e.printStackTrace();
-                getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
-                getLogger().severe("/!\\ THIS MEANS THAT PROTECTED CHUNKS COULD BE REGENERATED ON NEXT REGEN IN THIS WORLD /!\\");
-            }
+            handler.unload();
         }
     }
 
@@ -127,8 +99,7 @@ public class NTheEndAgain extends TheEndAgainNode {
     }
 
     /**
-     * @param lowerCamelCaseWorldName
-     *            Key
+     * @param lowerCamelCaseWorldName Key
      * @return Value
      */
     public EndWorldHandler getHandler(final String lowerCamelCaseWorldName) {
@@ -136,14 +107,28 @@ public class NTheEndAgain extends TheEndAgainNode {
     }
 
     /**
+     * Activate the "Moved too quickly!" messages filter if at least one
+     * End world require it
+     */
+    public void activateFilter() {
+        boolean filterActivated = false;
+        for (final EndWorldHandler handler : worldHandlers.values()) {
+            if (handler.getConfig().getHideMovedTooQuicklySpam() == 1) {
+                filterActivated = true;
+                break;
+            }
+        }
+        if (filterActivated) {
+            Bukkit.getLogger().setFilter(new MovedTooQuicklyFilter(this));
+        }
+    }
+
+    /**
      * Send a message with arguments TODO <b>This may be moved<b>
      * 
-     * @param to
-     *            Receiver
-     * @param messageId
-     *            The Message Id
-     * @param args
-     *            The arguments
+     * @param to Receiver
+     * @param messageId The Message Id
+     * @param args The arguments
      */
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
         final String[] m = messages.get(messageId, args);

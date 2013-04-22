@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.ntheendagain;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -29,6 +30,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -312,6 +315,7 @@ public class NListener implements Listener {
                                 handler.decrementDragonCount();
                             }
                         }
+                        e.remove();
                     }
                     final int x = endChunk.getX(), z = endChunk.getZ();
                     event.getWorld().regenerateChunk(x, z);
@@ -386,6 +390,35 @@ public class NListener implements Listener {
     public void onEnderDragonRegainHealth(final EntityRegainHealthEvent event) {
         if (event.getEntityType() == EntityType.ENDER_DRAGON) {
             // TODO Config thing for this
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onWorldLoad(WorldLoadEvent event) {
+        if (event.getWorld().getEnvironment() == Environment.THE_END) {
+            plugin.getLogger().info("Additional End world detected: handling " + event.getWorld().getName());
+            final EndWorldHandler handler = new EndWorldHandler(plugin, event.getWorld());
+            try {
+                handler.loadConfig();
+                handler.loadChunks();
+                plugin.getWorldHandlers().put(Utils.toLowerCamelCase(event.getWorld().getName()), handler);
+                handler.init();
+            } catch (final IOException e) {
+                plugin.getLogger().severe("An error occured, stacktrace follows:");
+                e.printStackTrace();
+                plugin.getLogger().severe("This error occured when NTheEndAgain tried to load " + e.getMessage() + ".yml");
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onWorldUnload(WorldUnloadEvent event) {
+        if (event.getWorld().getEnvironment() == Environment.THE_END) {
+            plugin.getLogger().info("Handling " + event.getWorld().getName() + " unload");
+            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getWorld().getName()));
+            if (handler != null) {
+                handler.unload();
+            }
         }
     }
 }
