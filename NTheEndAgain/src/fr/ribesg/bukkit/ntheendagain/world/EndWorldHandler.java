@@ -213,7 +213,7 @@ public class EndWorldHandler {
 
         final Chunk chunk = loc.getChunk();
         final EndChunk endChunk = chunks.getChunk(endWorld.getName(), chunk.getX(), chunk.getZ());
-        if (endChunk.hasToBeRegen()) {
+        if (endChunk != null && endChunk.hasToBeRegen()) {
             endWorld.regenerateChunk(chunk.getX(), chunk.getZ());
             endChunk.setToBeRegen(false);
         }
