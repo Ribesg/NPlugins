@@ -39,7 +39,7 @@ public class Messages extends AbstractMessages {
         newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null));
 
         // Command - END
-        newMessages.add(new Message(MessageId.theEndAgain_unkownSubCmd, "&cUnkown sub-command: %arg%", new String[] { "%arg%" }, null));
+        newMessages.add(new Message(MessageId.theEndAgain_unkownSubCmd, "&cUnknown sub-command: %arg%", new String[] { "%arg%" }, null));
         newMessages.add(new Message(MessageId.theEndAgain_unknownWorld, "&cUnknown world", null, null));
         newMessages.add(new Message(MessageId.theEndAgain_regenerating, "&aRegeneration of world %world% in progress", new String[] { "%world%" }, null));
         newMessages.add(new Message(MessageId.theEndAgain_respawned, "&a%nb% EnderDragons have been respawned in world %world%", new String[] { "%nb%", "%world%" }, null));
@@ -60,7 +60,7 @@ public class Messages extends AbstractMessages {
         newMessages.add(new Message(MessageId.theEndAgain_worldRegenerating, "&aEnd world regenerating", null, null));
         newMessages.add(new Message(MessageId.theEndAgain_receivedXP, "&aYou received %nb% XP points", new String[] { "%nb%" }, null));
         newMessages.add(new Message(MessageId.theEndAgain_receivedDragonEgg, "&aYou received a Dragon Egg !", null, null));
-        newMessages.add(new Message(MessageId.theEndAgain_droppedDragonEgg, "&aYou're inventory is full, dropped a DragonEgg !", null, null));
+        newMessages.add(new Message(MessageId.theEndAgain_droppedDragonEgg, "&aYour inventory is full, dropped a DragonEgg !", null, null));
 
         return newMessages;
     }
