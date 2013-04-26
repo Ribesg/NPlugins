@@ -155,10 +155,10 @@ public class Utils {
      *            "A RANDOM_string__wiTh_ strange  cASe"
      * @return "aRandomStringWithStrangeCase"
      */
-    public static String toLowerCamelCase(String originalString) {
-        originalString = originalString.replace('_', ' ');
+    public static String toLowerCamelCase(final String originalString) {
+        String workingString = originalString.replace('_', ' ');
         final StringBuilder s = new StringBuilder();
-        for (final String word : originalString.split(" ")) {
+        for (final String word : workingString.split(" ")) {
             if (word.length() > 0) {
                 s.append(word.substring(0, 1).toUpperCase());
                 s.append(word.substring(1).toLowerCase());
@@ -177,6 +177,11 @@ public class Utils {
         return multipleChars(nb, ' ');
     }
 
+    /**
+     * @param nb Returned String length
+     * @param c Character to fill the String with
+     * @return A String containing nb occurrences of c (and nothing else)
+     */
     private static String multipleChars(final int nb, final char c) {
         final StringBuilder s = new StringBuilder(nb);
         for (int i = 0; i < nb; i++) {
@@ -185,7 +190,12 @@ public class Utils {
         return s.toString();
     }
 
-    public static String[] frame(final String[] messages) {
+    /**
+     * Frames a text into a ## box
+     * @param messages Lines of the text
+     * @return New lines with additional ###
+     */
+    public static String[] frame(final String... messages) {
         final String[] result = new String[messages.length + 2];
         int maxLength = 0;
         for (final String s : messages) {

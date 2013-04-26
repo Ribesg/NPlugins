@@ -8,48 +8,118 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
 import fr.ribesg.bukkit.ncore.Utils;
-import fr.ribesg.bukkit.ncore.lang.MessageId;
 
-public class Config extends AbstractConfig {
+public class Config extends AbstractConfig<NTheEndAgain> {
 
-    private final NTheEndAgain                         plugin;
     private final String                               worldName;
 
-    @Getter @Setter(AccessLevel.PRIVATE) private int   nbEnderDragons;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   enderDragonHealth;
-    @Getter @Setter(AccessLevel.PRIVATE) private float enderDragonDamageMultiplier;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   portalHandling;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   dragonEggHandling;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   xpHandling;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   xpReward;
+    // General
+    private final static int                           DEFAULT_filterMovedTooQuicklySpam = 1;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   filterMovedTooQuicklySpam;
+
+    // EnderDragon
+
+    private final static int                           DEFAULT_edHealth                  = 200;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   edHealth;
+
+    private final static float                         DEFAULT_edDamageMultiplier        = 1.0f;
+    @Getter @Setter(AccessLevel.PRIVATE) private float edDamageMultiplier;
+
+    private final static int                           DEFAULT_edPushesPlayers           = 1;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   edPushesPlayers;
+
+    private final static int                           DEFAULT_edEggHandling             = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   edEggHandling;
+
+    private final static int                           DEFAULT_edExpHandling             = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   edExpHandling;
+
+    private final static int                           DEFAULT_edExpReward               = 12_000;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   edExpReward;
+
+    private final static int                           DEFAULT_edPortalSpawn             = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   edPortalSpawn;
+
+    // Regeneration
+    private final static int                           DEFAULT_regenType                 = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   regenType;
+    // 0 - No Regen
+    // 1 - Before respawn
+    // 2 - On server stop (on reboot)
+    // 3 - Periodic - From boot time
+    // 4 - Periodic - Persistent
+
+    private final static int                           DEFAULT_regenMethod               = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   regenMethod;
+    // 0 - Hard regen (Recommended option for regenType 2)
+    // 1 - Soft regen
+    // 2 - Crystals only
+
+    private final static int                           DEFAULT_regenTimer                = 86_400; // 24 hours
+    @Getter @Setter(AccessLevel.PRIVATE) private int   regenTimer;
+
+    private final static int                           DEFAULT_regenAction               = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   regenAction;
+
+    // Respawn
+
+    private final static int                           DEFAULT_respawnNumber             = 1;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnNumber;
+
+    private final static int                           DEFAULT_respawnType               = 0;
+    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnType;
+    // 0 - No respawn
+    // 1 - After 1 Dragon killed
+    // 2 - After all Dragons killed
+    // 3 - On server start (on reboot)
+    // 4 - Periodic with random time range - From boot time
+    // 5 - Periodic with random time range - Persistent
+
+    private final static int                           DEFAULT_respawnTimerMin           = 7_200;
     @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimerMin;
+
+    private final static int                           DEFAULT_respawnTimerMax           = 14_400;
     @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimerMax;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnOnBoot;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   regenOnRespawn;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   actionOnRegen;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   customEdPushPlayer;
-    @Getter @Setter private long                       lastTaskExecTime;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   hideMovedTooQuicklySpam;
+
+    // Data
+
+    private final static long                          DEFAULT_nextRegenTaskTime         = 0;
+    @Getter @Setter private long                       nextRegenTaskTime;
+
+    private final static long                          DEFAULT_nextRespawnTaskTime       = 0;
+    @Getter @Setter private long                       nextRespawnTaskTime;
 
     public Config(final NTheEndAgain instance, final String world) {
-        plugin = instance;
+        super(instance);
         worldName = world;
 
-        setNbEnderDragons(1);
-        setEnderDragonHealth(200);
-        setEnderDragonDamageMultiplier(1.0f);
-        setPortalHandling(0);
-        setDragonEggHandling(0);
-        setXpHandling(0);
-        setXpReward(12_000);
-        setRespawnTimerMin(0);
-        setRespawnTimerMax(0);
-        setRespawnOnBoot(1);
-        setRegenOnRespawn(1);
-        setActionOnRegen(0);
-        setCustomEdPushPlayer(1);
-        setLastTaskExecTime(0);
-        setHideMovedTooQuicklySpam(1);
+        // General
+        setFilterMovedTooQuicklySpam(DEFAULT_filterMovedTooQuicklySpam);
+
+        // EnderDragon
+        setEdHealth(DEFAULT_edHealth);
+        setEdDamageMultiplier(DEFAULT_edDamageMultiplier);
+        setEdPushesPlayers(DEFAULT_edPushesPlayers);
+        setEdEggHandling(DEFAULT_edEggHandling);
+        setEdExpHandling(DEFAULT_edExpHandling);
+        setEdExpReward(DEFAULT_edExpReward);
+        setEdPortalSpawn(DEFAULT_edPortalSpawn);
+
+        // Regeneration
+        setRegenType(DEFAULT_regenType);
+        setRegenTimer(DEFAULT_regenTimer);
+        setRegenMethod(DEFAULT_regenMethod);
+        setRegenAction(DEFAULT_regenAction);
+
+        // Respawn
+        setRespawnNumber(DEFAULT_respawnNumber);
+        setRespawnType(DEFAULT_respawnType);
+        setRespawnTimerMin(DEFAULT_respawnTimerMin);
+        setRespawnTimerMax(DEFAULT_respawnTimerMax);
+
+        // Data
+        setNextRegenTaskTime(DEFAULT_nextRegenTaskTime);
+        setNextRespawnTaskTime(DEFAULT_nextRespawnTaskTime);
     }
 
     /**
@@ -58,114 +128,29 @@ public class Config extends AbstractConfig {
     @Override
     protected void setValues(final YamlConfiguration config) {
 
-        // nbEnderDragons. Default: 1. Possible values: positive integers
-        setNbEnderDragons(config.getInt("nbEnderDragons", 1));
-        if (getNbEnderDragons() < 0) {
-            setNbEnderDragons(1);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "nbEnderDragons", "1");
+        String fileName = Utils.toLowerCamelCase(worldName) + "Config.yml";
+
+        // General
+        setFilterMovedTooQuicklySpam(config.getInt("filterMovedTooQuicklySpam", DEFAULT_filterMovedTooQuicklySpam));
+        if (getFilterMovedTooQuicklySpam() < 0 || getFilterMovedTooQuicklySpam() > 1) {
+            wrongValue(fileName, "filterMovedTooQuicklySpam", getFilterMovedTooQuicklySpam(), DEFAULT_filterMovedTooQuicklySpam);
+            setFilterMovedTooQuicklySpam(DEFAULT_filterMovedTooQuicklySpam);
         }
 
-        // enderDragonHealth. Default: 200. Possible values: positive integers
-        setEnderDragonHealth(config.getInt("enderDragonHealth", 200));
-        if (getEnderDragonHealth() < 0) {
-            setEnderDragonHealth(200);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "enderDragonHealth", "200");
+        // EnderDragon
+        setEdHealth(config.getInt("edHealth", DEFAULT_edHealth));
+        if (getEdHealth() < 1) {
+            wrongValue(fileName, "edHealth", getEdHealth(), DEFAULT_edHealth);
+            setEdHealth(DEFAULT_edHealth);
         }
 
-        // enderDragonDamageMultiplier. Default: 1.0. Possible values: positive floats
-        setEnderDragonDamageMultiplier((float) config.getDouble("enderDragonDamageMultiplier", 1.0f));
-        if (getEnderDragonDamageMultiplier() < 0.0) {
-            setEnderDragonDamageMultiplier(1.0f);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "enderDragonDamageMultiplier", "1.0");
+        setEdDamageMultiplier((float) config.getDouble("edDamageMultiplier", DEFAULT_edDamageMultiplier));
+        if (getEdDamageMultiplier() < 0) {
+            wrongValue(fileName, "edDamageMultiplier", getEdDamageMultiplier(), DEFAULT_edDamageMultiplier);
+            setEdDamageMultiplier(DEFAULT_edDamageMultiplier);
         }
-
-        // portalHandling. Default: 0. Possible values: 0,1,2
-        setPortalHandling(config.getInt("portalHandling", 0));
-        if (getPortalHandling() < 0 || getPortalHandling() > 2) {
-            setPortalHandling(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "portalHandling", "0");
-        }
-
-        // dragonEggHandling. Default: 0. Possible values: 0,1
-        setDragonEggHandling(config.getInt("dragonEggHandling", 0));
-        if (getDragonEggHandling() < 0 || getDragonEggHandling() > 1) {
-            setDragonEggHandling(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "dragonEggHandling", "0");
-        }
-
-        // xpHandling. Default: 0. Possible values: 0,1
-        setXpHandling(config.getInt("xpHandling", 0));
-        if (getXpHandling() < 0 || getXpHandling() > 1) {
-            setXpHandling(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "xpHandling", "0");
-        }
-
-        // xpReward. Default: 12 000. Possible values: positive or null integers
-        setXpReward(config.getInt("xpReward", 12_000));
-        if (getXpReward() < 0) {
-            setXpReward(12_000);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "xpReward", "12 000");
-        }
-
-        // respawnTimerMin & respawnTimerMax. Default: 0. Possible values: positive or null integers, respawnTimerMin <= respawnTimerMax
-        setRespawnTimerMin(config.getInt("respawnTimerMin", 0));
-        if (getRespawnTimerMin() < 0) {
-            setRespawnTimerMin(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnTimerMin", "0");
-        }
-        setRespawnTimerMax(config.getInt("respawnTimerMax", getRespawnTimerMin()));
-        if (getRespawnTimerMax() < getRespawnTimerMin()) {
-            setRespawnTimerMax(getRespawnTimerMin());
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnTimerMax", Integer.toString(getRespawnTimerMin()));
-        }
-        if (getRespawnTimerMax() != 0 && getRespawnTimerMin() == 0) {
-            setRespawnTimerMin(1);
-        }
-
-        // respawnOnBoot. Default: 1. Possible values: 0,1
-        setRespawnOnBoot(config.getInt("respawnOnBoot", 1));
-        if (getRespawnOnBoot() < 0 || getRespawnOnBoot() > 1) {
-            setRespawnOnBoot(1);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "respawnOnBoot", "1");
-        }
-
-        // regenOnRespawn. Default: 1. Possible values: 0,1,2
-        setRegenOnRespawn(config.getInt("regenOnRespawn", 1));
-        if (getRegenOnRespawn() < 0 || getRegenOnRespawn() > 2) {
-            setRegenOnRespawn(1);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "regenOnRespawn", "1");
-        }
-
-        // actionOnRegen. Default: 0. Possible values: 0,1
-        setActionOnRegen(config.getInt("actionOnRegen", 0));
-        if (getActionOnRegen() < 0 || getActionOnRegen() > 1) {
-            setActionOnRegen(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "actionOnRegen", "0");
-        }
-
-        // customEdPushPlayer. Default: 1. Possible values: 0,1
-        setCustomEdPushPlayer(config.getInt("customEdPushPlayer", 1));
-        if (getCustomEdPushPlayer() < 0 || getCustomEdPushPlayer() > 1) {
-            setCustomEdPushPlayer(1);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "customEdPushPlayer", "1");
-        }
-
-        // hideMovedTooQuicklySpam. Default: 1. Possible values: 0,1
-        setHideMovedTooQuicklySpam(config.getInt("hideMovedTooQuicklySpam", 1));
-        if (getHideMovedTooQuicklySpam() < 0 || getHideMovedTooQuicklySpam() > 1) {
-            setHideMovedTooQuicklySpam(1);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "hideMovedTooQuicklySpam", "1");
-        }
-
-        // lastTaskStartTime.
-        setLastTaskExecTime(config.getLong("lastTaskExecTime", 0L));
-        if (getLastTaskExecTime() < 0 || getLastTaskExecTime() > System.currentTimeMillis()) {
-            setLastTaskExecTime(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, Utils.toLowerCamelCase(worldName) + "Config.yml", "lastTaskStartTime", "0");
-        }
-        if (getRespawnTimerMax() == 0) {
-            setLastTaskExecTime(0);
-        }
+        
+        // TODO Finish Config refactor !
 
     }
 
@@ -176,55 +161,120 @@ public class Config extends AbstractConfig {
     protected String getConfigString() {
         final StringBuilder content = new StringBuilder();
 
-        // Header
-        content.append("################################################################################\n");
-        content.append("# Config file for NTheEndAgain plugin. If you don't understand something,      #\n");
-        content.append("# please ask on dev.bukkit.org or on forum post.                        Ribesg #\n");
-        content.append("################################################################################\n\n");
+        // ############
+        // ## HEADER ##
+        // ############
+
+        String[] headerLines = new String[3];
+        headerLines[0] = "Config file for NTheEndAgain plugin. If you don't understand something,";
+        headerLines[1] = "please ask on dev.bukkit.org or on forum post.";
+        headerLines[2] = "                                                          Ribesg";
+        for (String line : Utils.frame(headerLines)) {
+            content.append(line);
+        }
 
         content.append("# This config file is about the world \"" + worldName + "\"\n\n");
 
-        // nbEnderDragons. Default: 1
-        content.append("# The number of EnderDragons that will be at the same time in an End world. Default: 1\n");
-        content.append("nbEnderDragons: " + getNbEnderDragons() + "\n\n");
+        // #############
+        // ## GENERAL ##
+        // #############
 
-        // enderDragonHealth. Default: 200
-        content.append("# The health value EnderDragons will spawn with. Default: 200\n");
-        content.append("enderDragonHealth: " + getEnderDragonHealth() + "\n\n");
+        for (String line : Utils.frame("GENERAL CONFIGURATION")) {
+            content.append(line);
+            content.append('\n');
+        }
+        content.append('\n');
 
-        // enderDragonDamageMultiplier. Default: 1.0
-        content.append("# Scale damages done by EnderDragon. Default: 1.0\n");
-        content.append("enderDragonDamageMultiplier: " + getEnderDragonDamageMultiplier() + "\n\n");
+        // filterMovedTooQuicklySpam
+        content.append("# Do we hide the 'Player Moved Too Quickly!' spam? Default: " + DEFAULT_filterMovedTooQuicklySpam + "\n");
+        content.append("# /!\\ This feature is not compatible with any other plugin using Bukkit's Logger filters\n");
+        content.append("#       0: Disabled.\n");
+        content.append("#       1: Enabled.\n");
+        content.append("# Note: to completely disable the filter and allow compatibility with other plugins using it,\n");
+        content.append("#       please be sure to set it to 0 in EVERY End World config file.\n");
+        content.append("filterMovedTooQuicklySpam: " + getFilterMovedTooQuicklySpam() + "\n\n");
 
-        // portalHandling. Default: 0
-        content.append("# The way portal spawn will be handled. Default: 0\n");
-        content.append("# 	0: Disabled. Portal will spawn normally.\n");
-        content.append("# 	1: Egg. Portal will be removed but not the DragonEgg\n");
-        content.append("# 	2: Enabled. Portal will not spawn. No more cuted obsidian towers. No Egg if dragonEggHandling=0.\n");
-        content.append("portalHandling: " + getPortalHandling() + "\n\n");
+        // #################
+        // ## ENDERDRAGON ##
+        // #################
 
-        // dragonEggHandling. Default: 0
-        content.append("# The way the DragonEgg will spawn. Default: 0\n");
-        content.append("# 	0: Disabled. The egg will spawn normally if portalHandling is set to 0 or 1.\n");
-        content.append("# 	1: Enabled. The egg will be semi-randomly given to one of the best fighters.\n");
-        content.append("dragonEggHandling: " + getDragonEggHandling() + "\n\n");
+        content.append('\n');
+        for (String line : Utils.frame("ENDERDRAGON CONFIGURATION")) {
+            content.append(line);
+            content.append('\n');
+        }
+        content.append('\n');
 
-        // xpHandling. Default: 0
-        content.append("# The way the reward XP will be given to player. Default: 0\n");
-        content.append("# 	0: Disabled. XP orbs will spawn normally.\n");
-        content.append("# 	1: Enabled. XP will be splitted between fighters, more XP for better fighters.\n");
-        content.append("xpHandling: " + getXpHandling() + "\n\n");
+        // edHealth
+        content.append("# The health value EnderDragons will spawn with. Default: " + DEFAULT_edHealth + "\n");
+        content.append("edHealth: " + getEdHealth() + "\n\n");
 
-        // xpReward. Default: 12 000
-        content.append("# The value of the XP drop. Default: 12 000\n");
-        content.append("xpReward: " + getXpReward() + "\n\n");
+        // edDamageMultiplier
+        content.append("# Scale damages done by EnderDragon. Default: " + DEFAULT_edDamageMultiplier + "\n");
+        content.append("edDamageMultiplier: " + getEdDamageMultiplier() + "\n\n");
 
-        // respawnTimer. Default: 21 600 (6 hours)
-        content.append("# The time between checks for respawning EnderDragons, in seconds. Default: 0 (Disabled)\n");
+        // edPushesPlayers
+        content.append("# Do we 'simulate' the EnderDragon-Pushes-Player behaviour? Default: " + DEFAULT_edPushesPlayers + "\n");
+        content.append("# This feature apply a kind-of random velocity to a Player after it has been damaged by an EnderDragon\n");
+        content.append("#       0: Disabled.\n");
+        content.append("#       1: Enabled.\n");
+        content.append("edPushesPlayers: " + getEdPushesPlayers() + "\n\n");
+
+        // edEggHandling
+        content.append("# The way the DragonEgg will spawn. Default: " + DEFAULT_edEggHandling + "\n");
+        content.append("#       0: Disabled. The egg will spawn normally if portalHandling is set to 0 or 1.\n");
+        content.append("#       1: Enabled. The egg will be semi-randomly given to one of the best fighters.\n");
+        content.append("edEggHandling: " + getEdEggHandling() + "\n\n");
+
+        // edExpHandling
+        content.append("# The way the reward XP will be given to player. Default: " + DEFAULT_edExpHandling + "\n");
+        content.append("#       0: Disabled. XP orbs will spawn normally.\n");
+        content.append("#       1: Enabled. XP will be splitted between fighters, more XP for better fighters.\n");
+        content.append("edExpHandling: " + getEdExpHandling() + "\n\n");
+
+        // edExpReward
+        content.append("# The value of the XP drop. Default: " + DEFAULT_edExpReward + "\n");
+        content.append("edExpReward: " + getEdExpReward() + "\n\n");
+
+        // edPortalSpawn
+        content.append("# The way portal spawn will be handled. Default: " + DEFAULT_edPortalSpawn + "\n");
+        content.append("#       0: Disabled. Portal will spawn normally.\n");
+        content.append("#       1: Egg. Portal will be removed but not the DragonEgg\n");
+        content.append("#       2: Enabled. Portal will not spawn. No more cut obsidian towers. /!\\ No Egg if dragonEggHandling=0.\n");
+        content.append("edPortalSpawn: " + getEdPortalSpawn() + "\n\n");
+
+        // ##################
+        // ## REGENERATION ##
+        // ##################
+
+        content.append('\n');
+        for (String line : Utils.frame("REGENERATION CONFIGURATION")) {
+            content.append(line);
+            content.append('\n');
+        }
+        content.append('\n');
+
+        // regenType
+        content.append("# Select the regeneration type. Default: " + DEFAULT_regenType + "\n");
+        content.append("#       0: Disabled. No regeneration.\n");
+        content.append("#       1: Before EnderDragon respawn (only if no EnderDragon alive)\n");
+        content.append("#       2: On server stop. Use this with Hard Regen method.\n");
+        content.append("#       3: Periodic - From load time. Regen every <regenTimer> seconds after boot/load.\n");
+        content.append("#       4: Periodic - Persistent. Regen every <regenTimer> seconds, persistent through reboots/reloads\n");
+        content.append("regenType: " + getRegenType() + "\n\n");
+
+        // regenMethod
+        content.append("# Select your definition of \"regen\". Default: " + DEFAULT_regenMethod + "\n");
+        content.append("#       0: Hard Regen. Regen every chunks at once. Laggy. Not recommended without regenType=2");
+        content.append("#       1: Soft Regen. Regen chunks when they are loaded. A lot less laggy.");
+        content.append("#       2: Crystals only. Does not modify any block, only respawn the EnderCrystals.");
+        content.append("regenMethod: " + getRegenMethod() + "\n\n");
+
+        // regenTimer
+        content.append("# The time between each regen. Ignored if regenType is not Periodic. Default: " + DEFAULT_regenTimer + "\n");
         content.append("#\n");
-        content.append("# Here are some values:\n");
+        content.append("# Here are some example values:\n");
         content.append("#   Value   --   Description\n");
-        content.append("#          0: Disabled\n");
         content.append("#       1800: 30 minutes\n");
         content.append("#       3600: 1 hour\n");
         content.append("#       7200: 2 hours\n");
@@ -237,63 +287,83 @@ public class Config extends AbstractConfig {
         content.append("#     172800: 48 hours - 2 days\n");
         content.append("#     604800: 7 days\n");
         content.append("#\n");
-        content.append("# You can use *any* positive value you want, just be sure to convert it to seconds.\n");
-        content.append("# Note: Use of very low values (less than 300) is discouraged if you use regenOnRespawn=1 !\n");
+        content.append("# You can use *any* strictly positive value you want, just be sure to convert it to seconds.\n");
+        content.append("# Note: You should NOT use low value. Some hours of delay are recommended.\n");
+        content.append("regenTimer: " + getRegenTimer() + "\n\n");
+
+        // regenAction
+        content.append("# What do we do to players in the End when we want to regen the world? Default: " + DEFAULT_regenAction + "\n");
+        content.append("#       0: Kick them. This way they can rejoin immediatly in the End\n");
+        content.append("#          WARNING: Mass rejoin after mass kick in the End could cause lag if regenMethod=1\n");
+        content.append("#       1: Teleport them to the spawn point of the Main (= first) world.\n");
+        content.append("regenAction: " + getRegenAction() + "\n\n");
+
+        // #############
+        // ## RESPAWN ##
+        // #############
+
+        content.append('\n');
+        for (String line : Utils.frame("RESPAWN CONFIGURATION")) {
+            content.append(line);
+            content.append('\n');
+        }
+        content.append('\n');
+
+        // respawnNumber
+        content.append("# This is the amount of EnderDragons you want to be spawned. Default: " + DEFAULT_respawnNumber + "\n");
+        content.append("respawnNumber: " + getRespawnNumber() + "\n\n");
+
+        // respawnType
+        content.append("# Select when you want to respawn Dragons automagically. Default: " + DEFAULT_respawnType + "\n");
+        content.append("#       0: Disabled. No automatic respawn.\n");
+        content.append("#       1: After each Dragon's death. Not really good with regenType=1.\n");
+        content.append("#       2: After the last Dragon alive's death.\n");
+        content.append("#       3: On server start.\n");
+        content.append("#       4: Periodic - From load time. Respawn every X seconds after boot/load.\n");
+        content.append("#       5: Periodic - Persistent. Respawn every X seconds, persistent through reboots/reloads\n");
+        content.append("respawnType: " + getRespawnType() + "\n\n");
+
+        // respawnTimer
+        content.append("# The X value in the previous comments. Defaults: " + DEFAULT_respawnTimerMin + " < " + DEFAULT_respawnTimerMax + "\n");
+        content.append("# A value will be randomly chosen for each iteration. The chosen value vill be between min and max\n");
         content.append("#\n");
-        content.append("# The respawnTimer will be chosen randomly for each iteration:\n");
-        content.append("# respawnTimerMin <= randomRespawnTimer <= respawnTimerMax\n");
+        content.append("# Here are some example values (again!):\n");
+        content.append("#   Value   --   Description\n");
+        content.append("#       1800: 30 minutes\n");
+        content.append("#       3600: 1 hour\n");
+        content.append("#       7200: 2 hours\n");
+        content.append("#      10800: 3 hours\n");
+        content.append("#      14400: 4 hours\n");
+        content.append("#      21600: 6 hours\n");
+        content.append("#      28800: 8 hours\n");
+        content.append("#      43200: 12 hours\n");
+        content.append("#      86400: 24 hours - 1 day\n");
+        content.append("#     172800: 48 hours - 2 days\n");
+        content.append("#     604800: 7 days\n");
+        content.append("# You can use *any* strictly positive value you want, just be sure to convert it to seconds.\n");
+        content.append("# Note: You CAN use low value if regenType is not set to 1.\n");
+        content.append("#       But maybe you should consider using respawnType=1 or respawnType=2 instead of a low periodic.\n");
         content.append("respawnTimerMin: " + getRespawnTimerMin() + "\n");
         content.append("respawnTimerMax: " + getRespawnTimerMax() + "\n\n");
 
-        // respawnOnBoot. Default: 1
-        content.append("# Should we respawn EnderDragons at server boot? Default: 1\n");
-        content.append("#       0: Disabled.\n");
-        content.append("#       1: Enabled. There will be nbEnderDragons (" + getNbEnderDragons() + ") in this world after each reboot\n");
-        content.append("respawnOnBoot: " + getRespawnOnBoot() + "\n\n");
+        // ##########
+        // ## DATA ##
+        // ##########
 
-        // regenOnRespawn. Default: 1
-        content.append("# Should we regen the End world before respawning Dragons? Default: 1\n");
-        content.append("#       0: Disabled.\n");
-        content.append("#       1: Enabled. World will be regen, even if EnderDragons are still alive.\n");
-        content.append("#       2: Enabled. World will be regen ONLY if there are NO EnderDragon alive.\n");
-        content.append("# Note: This regen method does not instantly regen the world. Chunks are regenerated at\n");
-        content.append("#       the moment there are loaded, so you may experience a tiny lag when joining the End.\n");
-        content.append("#       It's nothing compared to the 2-10 seconds freeze a HARD regen cause.\n");
-        content.append("regenOnRespawn: " + getRegenOnRespawn() + "\n\n");
+        content.append('\n');
+        for (String line : Utils.frame("DATA - PLEASE DO NOT TOUCH !")) {
+            content.append(line);
+            content.append('\n');
+        }
+        content.append('\n');
 
-        // Comment on Hard Reset
-        content.append("# Note: If you have\n");
-        content.append("# - respawnTimer set to 0\n");
-        content.append("# - respawnOnBoot set to 1\n");
-        content.append("# - regenOnRespawn set to 1\n");
-        content.append("# As the above values, the actual regeneration will be a HARD regen occuring at server stop\n");
-        content.append("# This mean there will be no/less lag when entering the End !\n\n");
+        // nextRegenTaskTime
+        content.append("# Used to allow Regen task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");
+        content.append("nextRegenTaskTime: " + (getRegenTimer() == 0 ? "0" : getNextRegenTaskTime()) + "\n\n");
 
-        // actionOnRegen. Default: 0
-        content.append("# What do we do to players in the End when we want to regen the world? Default: 1\n");
-        content.append("#       0: Kick them. This way they can rejoin immediatly in the End\n");
-        content.append("#          WARNING: Mass rejoin after mass kick in the End could cause lag because chunks are\n");
-        content.append("#                   regen on chunk loading and mass join = mass load of chunks at the same time\n");
-        content.append("#       1: Teleport them to the spawn point of the Main (= first) world.\n");
-        content.append("actionOnRegen: " + getActionOnRegen() + "\n\n");
-
-        // customEdPushPlayer. Default: 1
-        content.append("# Do we 'simulate' the EnderDragon-Pushes-Player behaviour? Default: 1\n");
-        content.append("# This feature apply a kind-of random velocity to a Player when it is damaged by an EnderDragon\n");
-        content.append("#       0: Disabled.\n");
-        content.append("#       1: Enabled.\n");
-        content.append("customEdPushPlayer: " + getCustomEdPushPlayer() + "\n\n");
-
-        // hideMovedTooQuicklySpam. Default: 1
-        content.append("# Do we hide the 'Player Moved Too Quickly!' spam? Default: 1\n");
-        content.append("# /!\\ This feature is not compatible with any other plugin using Bukkit's Logger filters\n");
-        content.append("#       0: Disabled.\n");
-        content.append("#       1: Enabled.\n");
-        content.append("hideMovedTooQuicklySpam: " + getHideMovedTooQuicklySpam() + "\n\n");
-
-        // lastTaskStartTime. Default: 0
-        content.append("# Used to allow task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");
-        content.append("lastTaskExecTime: " + (getRespawnTimerMax() == 0 ? "0" : getLastTaskExecTime()) + "\n\n");
+        // nextRespawnTaskTime
+        content.append("# Used to allow Respawn task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");
+        content.append("nextRespawnTaskTime: " + (getRespawnTimerMax() == 0 ? "0" : getNextRespawnTaskTime()) + "\n\n");
 
         return content.toString();
     }
