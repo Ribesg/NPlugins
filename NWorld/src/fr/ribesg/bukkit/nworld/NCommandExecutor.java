@@ -274,6 +274,9 @@ public class NCommandExecutor implements CommandExecutor {
         }
         final Player player = (Player) sender;
         final Location loc = player.getLocation();
+        loc.setX(loc.getBlockX() + 0.5);
+        loc.setY(loc.getBlockY() + 0.5);
+        loc.setZ(loc.getBlockZ() + 0.5);
         player.getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         plugin.getSpawnMap().put(player.getWorld().getName().toLowerCase(), loc);
         plugin.sendMessage(player, MessageId.world_settingSpawnPoint, player.getWorld().getName());

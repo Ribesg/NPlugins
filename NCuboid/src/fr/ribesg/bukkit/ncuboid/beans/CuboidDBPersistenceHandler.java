@@ -22,7 +22,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.util.Vector;
 
-import fr.ribesg.bukkit.ncore.Utils;
+import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid.CuboidType;
 

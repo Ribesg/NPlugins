@@ -20,20 +20,17 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import fr.ribesg.bukkit.ncore.AbstractConfig;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 
-public class Config extends AbstractConfig {
+public class Config extends AbstractConfig<NWorld> {
 
     private final static String                      LEVEL1_SEPARATOR = ";;";
     private final static String                      LEVEL2_SEPARATOR = ";";
-
-    private final NWorld                             plugin;
 
     @Getter @Setter(AccessLevel.PRIVATE) private int broadcastOnWorldCreate;
     @Getter @Setter(AccessLevel.PRIVATE) private int broadcastOnWorldLoad;
     @Getter @Setter(AccessLevel.PRIVATE) private int broadcastOnWorldUnload;
 
     public Config(final NWorld instance) {
-        plugin = instance;
-
+        super(instance);
     }
 
     /**

@@ -67,7 +67,7 @@ public class NWorld extends WorldNode {
         // Config
         try {
             pluginConfig = new Config(this);
-            pluginConfig.loadConfig(this);
+            pluginConfig.loadConfig();
         } catch (final IOException e) {
             getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
@@ -84,7 +84,7 @@ public class NWorld extends WorldNode {
                 // Anti stuck in the wall
                 Location loc = w.getSpawnLocation();
                 loc.setX(loc.getBlockX() + 0.5);
-                loc.setY(loc.getBlockY() + 0.4);
+                loc.setY(loc.getBlockY() + 0.5);
                 loc.setZ(loc.getBlockZ() + 0.5);
                 while (loc.getBlock().getType() != Material.AIR || loc.getBlock().getRelative(BlockFace.UP).getType() != Material.AIR) {
                     loc.add(0, 1, 0);
@@ -120,7 +120,7 @@ public class NWorld extends WorldNode {
     @Override
     public void onNodeDisable() {
         try {
-            getPluginConfig().writeConfig(this);
+            getPluginConfig().writeConfig();
         } catch (final IOException e) {
             e.printStackTrace();
         }

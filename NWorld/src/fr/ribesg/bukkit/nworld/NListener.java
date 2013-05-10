@@ -35,7 +35,7 @@ public class NListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onWorldUnload(final WorldUnloadEvent event) {
         try {
-            plugin.getPluginConfig().writeConfig(plugin);
+            plugin.getPluginConfig().writeConfig();
         } catch (final IOException e) {
             // TODO
             e.printStackTrace();
