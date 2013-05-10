@@ -7,9 +7,9 @@ import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.block.BlockFace;
 
-import fr.ribesg.bukkit.nenchantingegg.altar.transitions.beans.BlockData;
-import fr.ribesg.bukkit.nenchantingegg.altar.transitions.beans.RelativeBlock;
-import fr.ribesg.bukkit.nenchantingegg.altar.transitions.beans.RelativeSkullBlock;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.BlockData;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeSkullBlock;
 
 /**
  * Represents the state of an Altar.
@@ -24,7 +24,7 @@ public enum AltarState {
     /**
      * The Altar will be in this state if:
      * - It has just been constructed
-     * - It was in LOCKED state and time passed from Night to Day (23999 -> 0)
+     * - It was in ACTIVE or LOCKED state and time passed from Night to Day (23999 -> 0)
      */
     INACTIVE,
 
@@ -42,16 +42,24 @@ public enum AltarState {
 
     /**
      * The Altar will be in this state if:
-     * - It was in EGG_PROVIDED state and an item was thrown in the Portal blocks
-     * Some seconds after the itemwas provided, an Item will be dropped on the center pillar.
+     * - It was in EGG_PROVIDED state and an enchanted item was thrown in the Portal blocks
+     * Some seconds after the item was provided, an Item will be dropped on the center pillar.
+     * Note that the Altar will be in IN_TRANSITION state until this item is dropped
      */
     ITEM_PROVIDED,
 
     /**
      * The Altar will be in this state if:
-     * - It was in ITEM_PROVIDED state and the item was dropped on the center pillar, and the Player picked it up.
+     * - It was in ITEM_PROVIDED state and the Player picked the item up.
      */
-    LOCKED;
+    LOCKED,
+
+    /**
+     * The Altar will be in this state if:
+     * - It is no longer in the state in which it was before and
+     * - It is not yet in the state in which it will be.
+     */
+    IN_TRANSITION;
 
     private static Set<RelativeBlock> inactiveStateBlocks;
 

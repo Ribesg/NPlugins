@@ -4,14 +4,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
 
-public class Config extends AbstractConfig {
-
-    @SuppressWarnings("unused") private final NEnchantingEgg plugin;
+public class Config extends AbstractConfig<NEnchantingEgg> {
 
     // @Getter @Setter(AccessLevel.PRIVATE) private int broadcastOnWorldCreate;
 
     public Config(final NEnchantingEgg instance) {
-        plugin = instance;
+        super(instance);
 
     }
 

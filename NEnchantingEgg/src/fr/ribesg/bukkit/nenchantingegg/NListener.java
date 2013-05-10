@@ -10,8 +10,12 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
+import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.AltarState;
-import fr.ribesg.bukkit.nenchantingegg.altar.transitions.beans.RelativeBlock;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.ActiveToEggProvidedTransition;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.InactiveToActiveTransition;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
 
 /**
  * TODO
@@ -27,20 +31,42 @@ public class NListener implements Listener {
     }
 
     // TODO Remove this
-    // DEBUG - This is a test handler, to check that AltarState.getInactiveStateBlocks() is ok
+    // DEBUG - This is a test handler
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteract(final PlayerInteractEvent event) {
         if (event.getPlayer().getItemInHand().getType() == Material.DRAGON_EGG) {
             final Location loc = event.getClickedBlock().getLocation();
-            for (final RelativeBlock r : AltarState.getInactiveStateBlocks()) {
-                final Block b = loc.clone().add(r.getRelativeLocation()).getBlock();
-                b.setType(r.getBlockMaterial());
-                b.setData(r.getBlockData());
-                if (r.needSpecialWork()) {
-                    r.doSpecialWork(b);
+            final ChunkCoord coord = new ChunkCoord(loc.getChunk());
+            Altar altar = plugin.getAltarMap().get(coord);
+            if (altar == null || !altar.getCenterLocation().equals(loc)) {
+                buildAltar(loc);
+                event.setCancelled(true);
+                altar = new Altar(loc);
+                for (final ChunkCoord c : altar.getChunks()) {
+                    plugin.getAltarMap().put(c, altar);
                 }
+            } else if (altar.getState() == AltarState.INACTIVE) {
+                InactiveToActiveTransition.getInstance().doTransition(altar);
+                event.setCancelled(true);
+            } else if (altar.getState() == AltarState.ACTIVE) {
+                ActiveToEggProvidedTransition.getInstance().doTransition(altar);
+                event.setCancelled(true);
+            } else {
+                buildAltar(loc);
+                altar.setState(AltarState.INACTIVE);
+                event.setCancelled(true);
             }
-            event.setCancelled(true);
+        }
+    }
+
+    private void buildAltar(final Location loc) {
+        for (final RelativeBlock r : AltarState.getInactiveStateBlocks()) {
+            final Block b = loc.clone().add(r.getRelativeLocation()).getBlock();
+            b.setType(r.getBlockMaterial());
+            b.setData(r.getBlockData());
+            if (r.needSpecialWork()) {
+                r.doSpecialWork(b);
+            }
         }
     }
 

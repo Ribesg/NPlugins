@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.nenchantingegg.altar.transitions.beans;
+package fr.ribesg.bukkit.nenchantingegg.altar.transition.bean;
 
 import org.bukkit.Material;
 import org.bukkit.SkullType;

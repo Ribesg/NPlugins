@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.nenchantingegg.altar.transitions.beans;
+package fr.ribesg.bukkit.nenchantingegg.altar.transition.bean;
 
 public interface BlockData {
 

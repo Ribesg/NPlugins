@@ -1,6 +1,8 @@
 package fr.ribesg.bukkit.nenchantingegg;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.Getter;
 
@@ -9,18 +11,23 @@ import org.bukkit.plugin.PluginManager;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.nodes.enchantingegg.EnchantingEggNode;
+import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
+import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.lang.Messages;
 
 public class NEnchantingEgg extends EnchantingEggNode {
 
-    @Getter private static NEnchantingEgg instance;
+    @Getter private static NEnchantingEgg  instance;
 
     // Configs
-    @Getter private Messages              messages;
-    @Getter private Config                pluginConfig;
+    @Getter private Messages               messages;
+    @Getter private Config                 pluginConfig;
 
     // Useful Nodes
     // // None
+
+    // Actual plugin data
+    @Getter private Map<ChunkCoord, Altar> altarMap;
 
     @Override
     protected String getMinCoreVersion() {
@@ -45,10 +52,12 @@ public class NEnchantingEgg extends EnchantingEggNode {
             return false;
         }
 
+        altarMap = new HashMap<ChunkCoord, Altar>();
+
         // Config
         try {
             pluginConfig = new Config(this);
-            pluginConfig.loadConfig(this);
+            pluginConfig.loadConfig();
         } catch (final IOException e) {
             getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
@@ -69,7 +78,7 @@ public class NEnchantingEgg extends EnchantingEggNode {
     @Override
     public void onNodeDisable() {
         try {
-            getPluginConfig().writeConfig(this);
+            getPluginConfig().writeConfig();
         } catch (final IOException e) {
             e.printStackTrace();
         }
