@@ -8,31 +8,34 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Logger;
+import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 
-import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
+import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
 
 public class EndChunks implements Iterable<EndChunk> {
 
     private final static Charset                CHARSET = StandardCharsets.UTF_8;
 
-    private final Logger                        log;
     private final HashMap<ChunkCoord, EndChunk> chunks;
 
-    public EndChunks(final NTheEndAgain plugin) {
-        log = plugin.getLogger();
+    public EndChunks() {
         chunks = new HashMap<ChunkCoord, EndChunk>();
     }
 
     public EndChunk addChunk(final Chunk bukkitChunk) {
-        EndChunk res = new EndChunk(bukkitChunk);
+        final EndChunk res = new EndChunk(bukkitChunk);
         addChunk(res);
         return res;
     }
@@ -51,6 +54,26 @@ public class EndChunks implements Iterable<EndChunk> {
         }
     }
 
+    public void crystalRegen() {
+        Chunk bukkitChunk;
+        for (final EndChunk c : chunks.values()) {
+            if (c.containsCrystal()) {
+                final World w = Bukkit.getWorld(c.getWorldName());
+                bukkitChunk = w.getChunkAt(c.getX(), c.getZ());
+                final Set<Location> locs = c.getCrystalLocations();
+                for (final Entity e : bukkitChunk.getEntities()) {
+                    if (e.getType() == EntityType.ENDER_CRYSTAL) {
+                        e.remove();
+                    }
+                }
+                for (final Location loc : locs) {
+                    w.spawnEntity(loc.clone().add(0, -1, 0), EntityType.ENDER_CRYSTAL);
+                    loc.getBlock().getRelative(BlockFace.DOWN).setType(Material.BEDROCK);
+                }
+            }
+        }
+    }
+
     public void load(final Path pathEndChunks) throws IOException {
         if (!Files.exists(pathEndChunks)) {
             return;
@@ -65,20 +88,10 @@ public class EndChunks implements Iterable<EndChunk> {
             } catch (final Exception e) {
                 e.printStackTrace();
             }
-            if (config.isList("chunks")) {
-                EndChunk ec;
-                for (final String s : config.getStringList("chunks")) {
-                    ec = EndChunk.fromString(s);
-                    if (ec == null) {
-                        log.warning("Error loading config: incorrect chunk format !");
-                        log.warning("Incorrect format: " + s);
-                    } else {
-                        this.addChunk(ec);
-                    }
-                }
-            } else {
-                log.severe("Error loading config: 'chunks' list not found");
-                throw new IOException("Error loading config");
+
+            for (final String chunkCoordString : config.getKeys(false)) {
+                final EndChunk ec = EndChunk.rebuild(config.getConfigurationSection(chunkCoordString));
+                addChunk(ec);
             }
         }
     }
@@ -89,11 +102,9 @@ public class EndChunks implements Iterable<EndChunk> {
         }
         try (BufferedWriter writer = Files.newBufferedWriter(pathEndChunks, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
             final YamlConfiguration config = new YamlConfiguration();
-            final List<String> endChunks = new ArrayList<String>();
-            for (final EndChunk ec : this) {
-                endChunks.add(ec.toString());
+            for (final EndChunk c : chunks.values()) {
+                c.store(config);
             }
-            config.set("chunks", endChunks);
             writer.write(config.saveToString());
         }
     }

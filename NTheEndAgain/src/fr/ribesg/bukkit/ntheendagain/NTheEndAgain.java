@@ -12,9 +12,9 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 
-import fr.ribesg.bukkit.ncore.Utils;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
+import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 
@@ -32,7 +32,7 @@ public class NTheEndAgain extends TheEndAgainNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.1.1";
+        return "0.2.0";
     }
 
     @Override
@@ -74,7 +74,7 @@ public class NTheEndAgain extends TheEndAgainNode {
 
         activateFilter();
 
-        getCommand("end").setExecutor(new NCommandExecutor(this));
+        getCommand("nend").setExecutor(new NCommandExecutor(this));
 
         return true;
     }
@@ -99,7 +99,8 @@ public class NTheEndAgain extends TheEndAgainNode {
     }
 
     /**
-     * @param lowerCamelCaseWorldName Key
+     * @param lowerCamelCaseWorldName
+     *            Key
      * @return Value
      */
     public EndWorldHandler getHandler(final String lowerCamelCaseWorldName) {
@@ -113,7 +114,7 @@ public class NTheEndAgain extends TheEndAgainNode {
     public void activateFilter() {
         boolean filterActivated = false;
         for (final EndWorldHandler handler : worldHandlers.values()) {
-            if (handler.getConfig().getHideMovedTooQuicklySpam() == 1) {
+            if (handler.getConfig().getFilterMovedTooQuicklySpam() == 1) {
                 filterActivated = true;
                 break;
             }
@@ -126,9 +127,12 @@ public class NTheEndAgain extends TheEndAgainNode {
     /**
      * Send a message with arguments TODO <b>This may be moved<b>
      * 
-     * @param to Receiver
-     * @param messageId The Message Id
-     * @param args The arguments
+     * @param to
+     *            Receiver
+     * @param messageId
+     *            The Message Id
+     * @param args
+     *            The arguments
      */
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
         final String[] m = messages.get(messageId, args);

@@ -22,10 +22,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
-import fr.ribesg.bukkit.ncore.Utils;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
+import fr.ribesg.bukkit.ntheendagain.tasks.RegenTask;
 import fr.ribesg.bukkit.ntheendagain.tasks.RespawnTask;
 import fr.ribesg.bukkit.ntheendagain.tasks.UnexpectedDragonDeathHandlerTask;
 
@@ -49,7 +50,7 @@ public class EndWorldHandler {
         plugin = instance;
         endWorld = world;
         camelCaseWorldName = Utils.toLowerCamelCase(endWorld.getName());
-        chunks = new EndChunks(plugin);
+        chunks = new EndChunks();
         config = new Config(plugin, endWorld.getName());
         dragons = new HashMap<UUID, Map<String, Long>>();
         loadedDragons = new HashSet<UUID>();
@@ -59,7 +60,7 @@ public class EndWorldHandler {
     }
 
     public void loadConfig() throws IOException {
-        config.loadConfig(plugin, camelCaseWorldName + "Config.yml");
+        config.loadConfig(camelCaseWorldName + "Config.yml");
     }
 
     public void loadChunks() throws IOException {
@@ -67,7 +68,7 @@ public class EndWorldHandler {
     }
 
     public void saveConfig() throws IOException {
-        config.writeConfig(plugin, camelCaseWorldName + "Config.yml");
+        config.writeConfig(camelCaseWorldName + "Config.yml");
     }
 
     public void saveChunks() throws IOException {
@@ -87,12 +88,14 @@ public class EndWorldHandler {
                     if (e.getType() == EntityType.ENDER_DRAGON) {
                         final EnderDragon ed = (EnderDragon) e;
                         if (!getDragons().containsKey(ed.getUniqueId())) {
-                            ed.setMaxHealth(getConfig().getEnderDragonHealth());
+                            ed.setMaxHealth(getConfig().getEdHealth());
                             ed.setHealth(ed.getMaxHealth());
                             getDragons().put(ed.getUniqueId(), new HashMap<String, Long>());
                             getLoadedDragons().add(ed.getUniqueId());
                             incrementDragonCount();
                         }
+                    } else if (e.getType() == EntityType.ENDER_CRYSTAL) {
+                        c.addCrystalLocation(e);
                     }
                 }
             } else {
@@ -102,7 +105,7 @@ public class EndWorldHandler {
         }
         plugin.getLogger().info("Done, " + numberOfAliveEnderDragons + " EnderDragon(s) found.");
 
-        if (config.getRespawnOnBoot() == 1) {
+        if (config.getRespawnType() == 3) {
             respawnDragons();
         }
 
@@ -110,36 +113,57 @@ public class EndWorldHandler {
         final UnexpectedDragonDeathHandlerTask deathTask = new UnexpectedDragonDeathHandlerTask(this);
         tasks.add(scheduler.runTaskTimer(plugin, deathTask, 0L, 20L));
 
-        if (config.getRespawnTimerMax() != 0) {
-            final long t = config.getLastTaskExecTime();
+        if (config.getRespawnTimerMax() != 0 && (config.getRespawnType() == 4 || config.getRespawnType() == 5)) {
+            final long t = config.getNextRespawnTaskTime();
             long initialDelay = 0;
             if (t != 0) {
-                initialDelay = config.getRespawnTimerMin() - (System.currentTimeMillis() - t);
-                if (initialDelay < 0) {
+                if (config.getRespawnType() == 4) {
                     initialDelay = 0;
+                } else {
+                    initialDelay = t - System.currentTimeMillis();
+                    if (initialDelay < 0) {
+                        initialDelay = 0;
+                    }
                 }
             }
-
-            int randomRespawnTimer = rand.nextInt(config.getRespawnTimerMax() - config.getRespawnTimerMin()) + config.getRespawnTimerMin();
             final RespawnTask task = new RespawnTask(this);
-            tasks.add(scheduler.runTaskTimer(plugin, task, initialDelay, randomRespawnTimer * 20));
+            tasks.add(scheduler.runTaskLater(plugin, task, initialDelay * 20));
+        }
+
+        if (config.getRegenTimer() != 0 && (config.getRegenType() == 2 || config.getRegenType() == 3)) {
+            final long t = config.getNextRegenTaskTime();
+            long initialDelay = 0;
+            if (t != 0) {
+                if (config.getRegenType() == 2) {
+                    initialDelay = 0;
+                } else {
+                    initialDelay = t - System.currentTimeMillis();
+                    if (initialDelay < 0) {
+                        initialDelay = 0;
+                    }
+                }
+            }
+            final RegenTask task = new RegenTask(this);
+            tasks.add(scheduler.runTaskLater(plugin, task, initialDelay * 20));
         }
 
     }
 
     public void unload() {
-        for (BukkitTask t : tasks) {
+        for (final BukkitTask t : tasks) {
             t.cancel();
         }
         tasks.clear();
-        if (getConfig().getRespawnOnBoot() == 1 && getConfig().getRespawnTimerMax() == 0 && getConfig().getRegenOnRespawn() == 1) {
+        if (config.getHardRegenOnStop() == 1) {
             hardRegen();
         }
         try {
             // Reload-friendly lastExecTime storing in config file
-            final long lastExecTime = getConfig().getLastTaskExecTime();
+            final long nextRegenExecTime = getConfig().getNextRegenTaskTime();
+            final long nextRespawnExecTime = getConfig().getNextRespawnTaskTime();
             loadConfig();
-            getConfig().setLastTaskExecTime(getConfig().getRespawnTimerMax() == 0 ? 0 : lastExecTime);
+            getConfig().setNextRegenTaskTime(getConfig().getRegenTimer() == 0 ? 0 : nextRegenExecTime);
+            getConfig().setNextRespawnTaskTime(getConfig().getRespawnTimerMax() == 0 ? 0 : nextRespawnExecTime);
             saveConfig();
         } catch (final IOException e) {
             plugin.getLogger().severe("An error occured, stacktrace follows:");
@@ -173,7 +197,7 @@ public class EndWorldHandler {
 
     public int respawnDragons() {
         int respawning = 0;
-        for (int i = getNumberOfAliveEnderDragons(); i < config.getNbEnderDragons(); i++) {
+        for (int i = getNumberOfAliveEnderDragons(); i < config.getRespawnNumber(); i++) {
             respawnDragon();
             respawning++;
         }
@@ -184,7 +208,11 @@ public class EndWorldHandler {
     }
 
     public void regen() {
-        switch (config.getActionOnRegen()) {
+        regen(config.getRegenMethod());
+    }
+
+    public void regen(final int type) {
+        switch (config.getRegenAction()) {
             case 0:
                 final String[] lines = plugin.getMessages().get(MessageId.theEndAgain_worldRegenerating);
                 final StringBuilder messageBuilder = new StringBuilder(lines[0]);
@@ -207,19 +235,40 @@ public class EndWorldHandler {
                 // Not possible.
                 break;
         }
-        chunks.softRegen();
+        switch (type) {
+            case 0:
+                hardRegen();
+                break;
+            case 1:
+                softRegen();
+                break;
+            case 2:
+                crystalRegen();
+                break;
+            default:
+                break;
+        }
     }
 
     private void hardRegen() {
         plugin.getLogger().info("Regenerating End world \"" + endWorld.getName() + "\"...");
-        regen();
+        regen(1);
         for (final EndChunk c : chunks) {
             if (c.hasToBeRegen()) {
+                c.cleanCrystalLocations();
                 endWorld.regenerateChunk(c.getX(), c.getZ());
                 c.setToBeRegen(false);
             }
         }
         plugin.getLogger().info("Done.");
+    }
+
+    private void softRegen() {
+        chunks.softRegen();
+    }
+
+    private void crystalRegen() {
+        chunks.crystalRegen();
     }
 
     public void incrementDragonCount() {

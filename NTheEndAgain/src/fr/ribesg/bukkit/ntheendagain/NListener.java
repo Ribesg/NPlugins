@@ -36,8 +36,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import fr.ribesg.bukkit.ncore.Utils;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
@@ -66,9 +66,9 @@ public class NListener implements Listener {
                 return;
             } else {
                 final Config config = handler.getConfig();
-                switch (config.getXpHandling()) {
+                switch (config.getEdExpHandling()) {
                     case 0:
-                        event.setDroppedExp(config.getXpReward());
+                        event.setDroppedExp(config.getEdExpReward());
                         break;
                     case 1:
                         event.setDroppedExp(0);
@@ -98,7 +98,7 @@ public class NListener implements Listener {
                         // Give exp to players
                         for (final Entry<String, Long> entry : dmgMap.entrySet()) {
                             final Player p = plugin.getServer().getPlayerExact(entry.getKey());
-                            final int reward = (int) (config.getXpReward() * entry.getValue() / totalDamages);
+                            final int reward = (int) (config.getEdExpReward() * entry.getValue() / totalDamages);
                             p.giveExp(reward);
                             plugin.sendMessage(p, MessageId.theEndAgain_receivedXP, Integer.toString(reward));
                         }
@@ -135,9 +135,9 @@ public class NListener implements Listener {
             final World endWorld = event.getEntity().getWorld();
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(endWorld.getName()));
             if (handler != null) {
-                event.setDamage(Math.round(event.getDamage() * handler.getConfig().getEnderDragonDamageMultiplier()));
+                event.setDamage(Math.round(event.getDamage() * handler.getConfig().getEdDamageMultiplier()));
 
-                if (handler.getConfig().getCustomEdPushPlayer() == 1) {
+                if (handler.getConfig().getEdPushesPlayers() == 1) {
                     // Simulate ED pushing player
                     final Vector velocity = event.getDamager().getLocation().toVector();
                     velocity.subtract(event.getEntity().getLocation().toVector());
@@ -167,8 +167,9 @@ public class NListener implements Listener {
             final World endWorld = event.getEntity().getWorld();
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(endWorld.getName()));
             if (handler != null) {
-                final int pH = handler.getConfig().getPortalHandling();
-                final int eH = handler.getConfig().getDragonEggHandling();
+                final Config config = handler.getConfig();
+                final int pH = config.getEdPortalSpawn();
+                final int eH = config.getEdEggHandling();
                 final Location deathLocation = event.getEntity().getLocation();
 
                 /* Explanation of algorithm (1a and 1b are likely to be the same loop)
@@ -292,6 +293,26 @@ public class NListener implements Listener {
                 handler.getDragons().remove(event.getEntity().getUniqueId());
                 handler.getLoadedDragons().remove(event.getEntity().getUniqueId());
                 handler.decrementDragonCount();
+
+                // Handle on-ED-death regen/respawn
+
+                boolean willRespawn = false;
+                if (config.getRespawnType() == 1) {
+                    willRespawn = true;
+                } else if (config.getRespawnType() == 2 && handler.getNumberOfAliveEnderDragons() == 0) {
+                    willRespawn = true;
+                }
+                if (willRespawn) {
+                    Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (config.getRegenType() == 1) {
+                                handler.regen();
+                            }
+                            handler.respawnDragons();
+                        }
+                    }, 20 * 30);
+                }
             }
         }
     }
@@ -335,12 +356,14 @@ public class NListener implements Listener {
                         if (e.getType() == EntityType.ENDER_DRAGON) {
                             final EnderDragon ed = (EnderDragon) e;
                             if (!handler.getDragons().containsKey(ed.getUniqueId())) {
-                                ed.setMaxHealth(handler.getConfig().getEnderDragonHealth());
+                                ed.setMaxHealth(handler.getConfig().getEdHealth());
                                 ed.setHealth(ed.getMaxHealth());
                                 handler.getDragons().put(ed.getUniqueId(), new HashMap<String, Long>());
                                 handler.getLoadedDragons().add(ed.getUniqueId());
                                 handler.incrementDragonCount();
                             }
+                        } else if (e.getType() == EntityType.ENDER_CRYSTAL) {
+                            endChunk.addCrystalLocation(e);
                         }
                     }
                 }
@@ -349,7 +372,7 @@ public class NListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onChunkUnload(final ChunkUnloadEvent event) {
+    public void onEndChunkUnload(final ChunkUnloadEvent event) {
         if (event.getWorld().getEnvironment() == Environment.THE_END) {
             final String worldName = event.getWorld().getName();
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(worldName));
@@ -370,7 +393,7 @@ public class NListener implements Listener {
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getLocation().getWorld().getName()));
             if (handler == null) {
                 return;
-            } else if (handler.getNumberOfAliveEnderDragons() >= handler.getConfig().getNbEnderDragons()) {
+            } else if (handler.getNumberOfAliveEnderDragons() >= handler.getConfig().getRespawnNumber()) {
                 event.setCancelled(true);
             } else {
                 if (event.getSpawnReason() != SpawnReason.CUSTOM && event.getSpawnReason() != SpawnReason.SPAWNER_EGG) {
@@ -378,7 +401,7 @@ public class NListener implements Listener {
                 } else if (!handler.getDragons().containsKey(event.getEntity().getUniqueId())) {
                     handler.getDragons().put(event.getEntity().getUniqueId(), new HashMap<String, Long>());
                     handler.getLoadedDragons().add(event.getEntity().getUniqueId());
-                    event.getEntity().setMaxHealth(handler.getConfig().getEnderDragonHealth());
+                    event.getEntity().setMaxHealth(handler.getConfig().getEdHealth());
                     event.getEntity().setHealth(event.getEntity().getMaxHealth());
                     handler.incrementDragonCount();
                 }
@@ -394,7 +417,7 @@ public class NListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onWorldLoad(WorldLoadEvent event) {
+    public void onWorldLoad(final WorldLoadEvent event) {
         if (event.getWorld().getEnvironment() == Environment.THE_END) {
             plugin.getLogger().info("Additional End world detected: handling " + event.getWorld().getName());
             final EndWorldHandler handler = new EndWorldHandler(plugin, event.getWorld());
@@ -412,7 +435,7 @@ public class NListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onWorldUnload(WorldUnloadEvent event) {
+    public void onWorldUnload(final WorldUnloadEvent event) {
         if (event.getWorld().getEnvironment() == Environment.THE_END) {
             plugin.getLogger().info("Handling " + event.getWorld().getName() + " unload");
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getWorld().getName()));

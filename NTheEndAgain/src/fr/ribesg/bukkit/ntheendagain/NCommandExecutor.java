@@ -2,13 +2,14 @@ package fr.ribesg.bukkit.ntheendagain;
 
 import java.util.Arrays;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.ribesg.bukkit.ncore.Utils;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
@@ -111,12 +112,22 @@ public class NCommandExecutor implements CommandExecutor {
 
     private boolean cmdRegen(final CommandSender sender, final String[] args) {
         try {
-            final EndWorldHandler handler = getWorldHandlerRelatedTo(sender, args);
-            if (handler == null) {
+            final String[] parsedArgs = parseArguments(sender, args);
+            if (parsedArgs == null) {
                 plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             } else {
-                plugin.sendMessage(sender, MessageId.theEndAgain_regenerating, handler.getEndWorld().getName());
-                handler.regen();
+                final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(parsedArgs[0]));
+                if (handler != null) {
+                    if (parsedArgs.length > 1 && parsedArgs[1].equalsIgnoreCase("hard")) {
+                        plugin.sendMessage(sender, MessageId.theEndAgain_regenerating, handler.getEndWorld().getName());
+                        handler.regen(0);
+                    } else {
+                        plugin.sendMessage(sender, MessageId.theEndAgain_regenerating, handler.getEndWorld().getName());
+                        handler.regen();
+                    }
+                } else {
+                    plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
+                }
             }
             return true;
         } catch (final Exception e) {
@@ -126,11 +137,16 @@ public class NCommandExecutor implements CommandExecutor {
 
     private boolean cmdRespawn(final CommandSender sender, final String[] args) {
         try {
-            final EndWorldHandler handler = getWorldHandlerRelatedTo(sender, args);
-            if (handler == null) {
+            final String[] parsedArgs = parseArguments(sender, args);
+            if (parsedArgs == null) {
                 plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             } else {
-                handler.respawnDragons();
+                final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(parsedArgs[0]));
+                if (handler != null) {
+                    handler.respawnDragons();
+                } else {
+                    plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
+                }
             }
             return true;
         } catch (final Exception e) {
@@ -140,12 +156,17 @@ public class NCommandExecutor implements CommandExecutor {
 
     private boolean cmdNb(final CommandSender sender, final String[] args) {
         try {
-            final EndWorldHandler handler = getWorldHandlerRelatedTo(sender, args);
-            if (handler == null) {
+            final String[] parsedArgs = parseArguments(sender, args);
+            if (parsedArgs == null) {
                 plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             } else {
-                final Integer nb = handler.getNumberOfAliveEnderDragons();
-                plugin.sendMessage(sender, MessageId.theEndAgain_nbAlive, nb.toString(), handler.getEndWorld().getName());
+                final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(parsedArgs[0]));
+                if (handler != null) {
+                    final Integer nb = handler.getNumberOfAliveEnderDragons();
+                    plugin.sendMessage(sender, MessageId.theEndAgain_nbAlive, nb.toString(), handler.getEndWorld().getName());
+                } else {
+                    plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
+                }
             }
             return true;
         } catch (final Exception e) {
@@ -227,23 +248,36 @@ public class NCommandExecutor implements CommandExecutor {
         }
     }
 
-    private EndWorldHandler getWorldHandlerRelatedTo(final CommandSender sender, final String[] args) throws Exception {
-        String lowerCamelCaseWorldName = null;
+    private String[] parseArguments(final CommandSender sender, final String[] args) throws Exception {
+        String worldName = null;
         if (args.length == 0) {
             if (!(sender instanceof Player)) {
                 plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
                 throw new Exception(); // We handle it locally so we don't care about having a special Exception name/message
             } else {
-                lowerCamelCaseWorldName = Utils.toLowerCamelCase(((Player) sender).getWorld().getName());
+                worldName = ((Player) sender).getWorld().getName();
+                return new String[] { worldName };
             }
         } else {
-            final StringBuilder s = new StringBuilder();
-            for (final String word : args) {
-                s.append(word);
-                s.append(' ');
+            String concatenation = args[0];
+            for (int i = 1; i < args.length; i++) {
+                concatenation += ' ' + args[i];
             }
-            lowerCamelCaseWorldName = Utils.toLowerCamelCase(s.toString());
+            int nbWords = args.length;
+            while (Bukkit.getWorld(concatenation) == null) {
+                if (nbWords == 1) {
+                    return null;
+                }
+                concatenation = concatenation.substring(0, 1 + args[--nbWords].length());
+            }
+            worldName = concatenation;
+            final String[] result = new String[args.length - nbWords + 1];
+            result[0] = worldName;
+            for (int i = 0; i < result.length - 1; i++) {
+                result[i + 1] = args[i + nbWords];
+            }
+            return result;
         }
-        return plugin.getHandler(lowerCamelCaseWorldName);
+
     }
 }

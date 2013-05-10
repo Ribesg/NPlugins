@@ -6,7 +6,7 @@ import java.util.logging.LogRecord;
 
 import org.bukkit.entity.Player;
 
-import fr.ribesg.bukkit.ncore.Utils;
+import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 
 public class MovedTooQuicklyFilter implements Filter {
@@ -24,9 +24,9 @@ public class MovedTooQuicklyFilter implements Filter {
             final String[] split = message.split(" ");
             final Player p = plugin.getServer().getPlayerExact(split[0]);
             if (p != null) {
-                if (split[1].equals("moved") && split[2].equals("too") && split[3].equals("quickly!")) {
+                if ("moved".equals(split[1]) && "too".equals(split[2]) && "quickly!".equals(split[3])) {
                     final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(p.getWorld().getName()));
-                    return handler != null && handler.getConfig().getHideMovedTooQuicklySpam() == 0;
+                    return handler == null || handler.getConfig().getFilterMovedTooQuicklySpam() == 0;
                 }
             }
         }
