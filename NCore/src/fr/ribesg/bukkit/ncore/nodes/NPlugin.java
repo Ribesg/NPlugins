@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncore.nodes;
 
-import static fr.ribesg.bukkit.ncore.Utils.frame;
+import static fr.ribesg.bukkit.ncore.utils.Utils.frame;
 import lombok.Getter;
 
 import org.bukkit.Bukkit;

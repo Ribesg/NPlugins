@@ -19,7 +19,8 @@ import fr.ribesg.bukkit.ncore.nodes.NPlugin;
  * Represents a config file
  * 
  * @author Ribesg
- * @param <T> The Node type
+ * @param <T>
+ *            The Node type
  */
 public abstract class AbstractConfig<T extends NPlugin> {
 
@@ -36,9 +37,10 @@ public abstract class AbstractConfig<T extends NPlugin> {
     /**
      * Constructor
      * 
-     * @param instance Linked plugin instance
+     * @param instance
+     *            Linked plugin instance
      */
-    public AbstractConfig(T instance) {
+    public AbstractConfig(final T instance) {
         plugin = instance;
     }
 
@@ -101,19 +103,27 @@ public abstract class AbstractConfig<T extends NPlugin> {
         }
     }
 
-    protected void wrongValue(String fileName, String key, Object incorrectValue, Object valueSet) {
-        StringBuilder message1 = new StringBuilder();
+    protected void wrongValue(final String fileName, final String key, final Object incorrectValue, final Object valueSet) {
+        final StringBuilder message1 = new StringBuilder();
         message1.append("Incorrect value '").append(incorrectValue.toString());
         message1.append("' found in config file ").append(fileName);
         message1.append(" for key '").append(key).append("'");
 
-        StringBuilder message2 = new StringBuilder();
+        final StringBuilder message2 = new StringBuilder();
         message2.append("The value of config key '").append(key);
         message2.append("' as been reset to '").append(valueSet.toString());
         message2.append("' in file ").append(fileName);
 
         plugin.getLogger().warning(message1.toString());
         plugin.getLogger().info(message2.toString());
+    }
+
+    public static boolean match(final long value, final long min, final long max) {
+        return min <= value && value <= max;
+    }
+
+    public static boolean match(final double value, final double min, final double max) {
+        return min <= value && value <= max;
     }
 
     /**
