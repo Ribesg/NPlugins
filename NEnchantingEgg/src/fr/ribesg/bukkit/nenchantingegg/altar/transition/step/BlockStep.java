@@ -1,9 +1,8 @@
 package fr.ribesg.bukkit.nenchantingegg.altar.transition.step;
 
-import org.bukkit.block.Block;
-
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
+import org.bukkit.block.Block;
 
 public class BlockStep extends Step {
 
@@ -19,8 +18,8 @@ public class BlockStep extends Step {
         final Block b = altar.getCenterLocation().clone().add(block.getRelativeLocation()).getBlock();
         b.setType(block.getBlockMaterial());
         b.setData(block.getBlockData());
-        if (block.needSpecialWork()) {
-            block.doSpecialWork(b);
+        if (block.needAdditionalData()) {
+            block.setAdditionalData(b);
         }
     }
 

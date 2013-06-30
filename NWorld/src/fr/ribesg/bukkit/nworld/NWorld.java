@@ -1,10 +1,8 @@
 package fr.ribesg.bukkit.nworld;
 
-import java.io.IOException;
-import java.util.HashMap;
-
-import lombok.Getter;
-
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.nodes.world.WorldNode;
+import fr.ribesg.bukkit.nworld.lang.Messages;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,20 +10,19 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.nodes.world.WorldNode;
-import fr.ribesg.bukkit.nworld.lang.Messages;
+import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * The main plugin class.
- * 
+ *
  * @author Ribesg
  */
 public class NWorld extends WorldNode {
 
     // Configs
-    @Getter private Messages                  messages;
-    @Getter private Config                    pluginConfig;
+    private Messages messages;
+    private Config   pluginConfig;
 
     // Useful Nodes
     // // None
@@ -33,12 +30,12 @@ public class NWorld extends WorldNode {
     /**
      * Map linking lowercased World Names as keys to a boolean saying if they are open to teleportation or not
      */
-    @Getter private HashMap<String, Boolean>  worldMap;
+    private HashMap<String, Boolean> worldMap;
 
     /**
      * Map linking lowercased World Names as keys to their spawn location, here uncluding Yaw and Pitch
      */
-    @Getter private HashMap<String, Location> spawnMap;
+    private HashMap<String, Location> spawnMap;
 
     @Override
     protected String getMinCoreVersion() {
@@ -107,12 +104,12 @@ public class NWorld extends WorldNode {
 
         // Listener
         final PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new NListener(this), this);
+        pm.registerEvents(new WorldListener(this), this);
 
         // Commands
-        getCommand("nworld").setExecutor(new NCommandExecutor(this));
-        getCommand("spawn").setExecutor(new NCommandExecutor(this));
-        getCommand("setspawn").setExecutor(new NCommandExecutor(this));
+        getCommand("nworld").setExecutor(new WorldCommandExecutor(this));
+        getCommand("spawn").setExecutor(new WorldCommandExecutor(this));
+        getCommand("setspawn").setExecutor(new WorldCommandExecutor(this));
 
         return true;
     }
@@ -144,5 +141,21 @@ public class NWorld extends WorldNode {
         for (final String mes : m) {
             getServer().broadcastMessage(mes);
         }
+    }
+
+    public Messages getMessages() {
+        return messages;
+    }
+
+    public Config getPluginConfig() {
+        return pluginConfig;
+    }
+
+    public HashMap<String, Boolean> getWorldMap() {
+        return worldMap;
+    }
+
+    public HashMap<String, Location> getSpawnMap() {
+        return spawnMap;
     }
 }

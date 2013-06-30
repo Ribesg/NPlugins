@@ -1,4 +1,2 @@
-Bukkit: 1.5.1-R0.1 (Beta)
-Dynmap-API: 1.6
-TagAPI: 2.2
-Lombok: 0.11.8
+Bukkit: 1.5.1-R1.0
+TagAPI: 2.3

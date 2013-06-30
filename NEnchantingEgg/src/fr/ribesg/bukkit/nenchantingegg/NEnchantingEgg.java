@@ -1,43 +1,49 @@
 package fr.ribesg.bukkit.nenchantingegg;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import lombok.Getter;
-
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.nodes.enchantingegg.EnchantingEggNode;
+import fr.ribesg.bukkit.nenchantingegg.altar.Altars;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.ActiveToEggProvidedTransition;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.EggProvidedToItemProvidedTransition;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.InactiveToActiveTransition;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.ItemProvidedToLockedTransition;
+import fr.ribesg.bukkit.nenchantingegg.lang.Messages;
+import fr.ribesg.bukkit.nenchantingegg.listener.BlockListener;
+import fr.ribesg.bukkit.nenchantingegg.listener.EnchantingEggListener;
+import fr.ribesg.bukkit.nenchantingegg.listener.ItemListener;
+import fr.ribesg.bukkit.nenchantingegg.listener.PlayerListener;
+import fr.ribesg.bukkit.nenchantingegg.task.TimeListenerTask;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.nodes.enchantingegg.EnchantingEggNode;
-import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
-import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
-import fr.ribesg.bukkit.nenchantingegg.lang.Messages;
+import java.io.IOException;
 
 public class NEnchantingEgg extends EnchantingEggNode {
 
-    @Getter private static NEnchantingEgg  instance;
-
     // Configs
-    @Getter private Messages               messages;
-    @Getter private Config                 pluginConfig;
+    private Messages messages;
+    private Config   pluginConfig;
 
     // Useful Nodes
     // // None
 
     // Actual plugin data
-    @Getter private Map<ChunkCoord, Altar> altarMap;
+    private Altars altars;
+
+    // Transitions
+    private InactiveToActiveTransition          inactiveToActiveTransition;
+    private ActiveToEggProvidedTransition       activeToEggProvidedTransition;
+    private EggProvidedToItemProvidedTransition eggProvidedToItemProvidedTransition;
+    private ItemProvidedToLockedTransition      itemProvidedToLockedTransition;
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.1.0";
+        return "0.2.0";
     }
 
     @Override
     public boolean onNodeEnable() {
-        instance = this;
-
         // Messages first !
         try {
             if (!getDataFolder().isDirectory()) {
@@ -52,7 +58,12 @@ public class NEnchantingEgg extends EnchantingEggNode {
             return false;
         }
 
-        altarMap = new HashMap<ChunkCoord, Altar>();
+        inactiveToActiveTransition = new InactiveToActiveTransition(this);
+        activeToEggProvidedTransition = new ActiveToEggProvidedTransition(this);
+        eggProvidedToItemProvidedTransition = new EggProvidedToItemProvidedTransition(this);
+        itemProvidedToLockedTransition = new ItemProvidedToLockedTransition(this);
+
+        altars = new Altars(this);
 
         // Config
         try {
@@ -67,10 +78,16 @@ public class NEnchantingEgg extends EnchantingEggNode {
 
         // Listener
         final PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new NListener(this), this);
+        pm.registerEvents(new EnchantingEggListener(this), this);
+        pm.registerEvents(new PlayerListener(this), this);
+        pm.registerEvents(new ItemListener(this), this);
+        pm.registerEvents(new BlockListener(this), this);
 
         // Commands
         //getCommand("theCommand").setExecutor(new NCommandExecutor(this));
+
+        // Tasks
+        Bukkit.getScheduler().runTaskTimer(this, new TimeListenerTask(this), 0, 20);
 
         return true;
     }
@@ -83,12 +100,12 @@ public class NEnchantingEgg extends EnchantingEggNode {
             e.printStackTrace();
         }
 
-        instance = null;
+        altars = null;
+
+        Bukkit.getScheduler().cancelTasks(this);
     }
 
-    /**
-     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
-     */
+    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // Nothing to do here for now
@@ -106,4 +123,31 @@ public class NEnchantingEgg extends EnchantingEggNode {
         }
     }
 
+    public ActiveToEggProvidedTransition getActiveToEggProvidedTransition() {
+        return activeToEggProvidedTransition;
+    }
+
+    public Altars getAltars() {
+        return altars;
+    }
+
+    public EggProvidedToItemProvidedTransition getEggProvidedToItemProvidedTransition() {
+        return eggProvidedToItemProvidedTransition;
+    }
+
+    public InactiveToActiveTransition getInactiveToActiveTransition() {
+        return inactiveToActiveTransition;
+    }
+
+    public ItemProvidedToLockedTransition getItemProvidedToLockedTransition() {
+        return itemProvidedToLockedTransition;
+    }
+
+    public Messages getMessages() {
+        return messages;
+    }
+
+    public Config getPluginConfig() {
+        return pluginConfig;
+    }
 }

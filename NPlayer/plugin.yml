@@ -1,0 +1,20 @@
+name: NPlayer
+version: 0.2.1
+description: Player plugin for N plugins suite
+author: Ribesg
+website: http://www.ribesg.fr
+main: fr.ribesg.bukkit.nplayer.NPlayer
+
+load: POSTWORLD
+
+softdepend: [NCore]
+
+commands:
+  login:
+    description: Login command
+  register:
+    description: Register command
+  logout:
+    description: Logout command
+  info:
+    description: Info command

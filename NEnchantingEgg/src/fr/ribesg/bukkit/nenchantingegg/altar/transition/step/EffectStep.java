@@ -1,9 +1,8 @@
 package fr.ribesg.bukkit.nenchantingegg.altar.transition.step;
 
-import org.bukkit.Location;
-
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeEffect;
+import org.bukkit.Location;
 
 public class EffectStep extends Step {
 

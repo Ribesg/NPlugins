@@ -1,20 +1,29 @@
 package fr.ribesg.bukkit.nenchantingegg.altar.transition.bean;
 
-import lombok.Getter;
-
 import org.bukkit.Sound;
 
-public class RelativeSound extends Relative {
+public class RelativeSound extends RelativeLocation {
 
-    @Getter private final Sound sound;
-    @Getter private final float volume;
-    @Getter private final float pitch;
+    private final Sound sound;
+    private final float volume;
+    private final float pitch;
 
-    public RelativeSound(final int x, final int y, final int z, final Sound sound, final float volume, final float pitch) {
+    public RelativeSound(final double x, final double y, final double z, final Sound sound, final float volume, final float pitch) {
         super(x, y, z);
         this.sound = sound;
         this.volume = volume;
         this.pitch = pitch;
     }
 
+    public float getPitch() {
+        return pitch;
+    }
+
+    public Sound getSound() {
+        return sound;
+    }
+
+    public float getVolume() {
+        return volume;
+    }
 }

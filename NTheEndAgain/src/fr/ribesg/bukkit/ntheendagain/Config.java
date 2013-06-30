@@ -1,81 +1,80 @@
 package fr.ribesg.bukkit.ntheendagain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import fr.ribesg.bukkit.ncore.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.Utils;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.util.Random;
 
 public class Config extends AbstractConfig<NTheEndAgain> {
 
-    private final String                               worldName;
+    private final static Random rand = new Random();
+
+    private final String worldName;
 
     // General
-    private final static int                           DEFAULT_filterMovedTooQuicklySpam = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   filterMovedTooQuicklySpam;
+    private final static int DEFAULT_filterMovedTooQuicklySpam = 0;
+    private int filterMovedTooQuicklySpam;
 
     // EnderDragon
-    private final static int                           DEFAULT_edHealth                  = 200;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   edHealth;
+    private final static int DEFAULT_edHealth = 200;
+    private int edHealth;
 
-    private final static float                         DEFAULT_edDamageMultiplier        = 1.0f;
-    @Getter @Setter(AccessLevel.PRIVATE) private float edDamageMultiplier;
+    private final static float DEFAULT_edDamageMultiplier = 1.0f;
+    private float edDamageMultiplier;
 
-    private final static int                           DEFAULT_edPushesPlayers           = 1;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   edPushesPlayers;
+    private final static int DEFAULT_edPushesPlayers = 1;
+    private int edPushesPlayers;
 
-    private final static int                           DEFAULT_edEggHandling             = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   edEggHandling;
+    private final static int DEFAULT_edEggHandling = 0;
+    private int edEggHandling;
 
-    private final static int                           DEFAULT_edExpHandling             = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   edExpHandling;
+    private final static int DEFAULT_edExpHandling = 0;
+    private int edExpHandling;
 
-    private final static int                           DEFAULT_edExpReward               = 12_000;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   edExpReward;
+    private final static int DEFAULT_edExpReward = 12_000;
+    private int edExpReward;
 
-    private final static int                           DEFAULT_edPortalSpawn             = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   edPortalSpawn;
+    private final static int DEFAULT_edPortalSpawn = 0;
+    private int edPortalSpawn;
 
     // Regeneration
-    private final static int                           DEFAULT_regenType                 = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   regenType;
+    private final static int DEFAULT_regenType = 0;
+    private int regenType;
 
-    private final static int                           DEFAULT_regenTimer                = 86_400; // 24 hours
-    @Getter @Setter(AccessLevel.PRIVATE) private int   regenTimer;
+    private final static int DEFAULT_regenTimer = 86_400; // 24 hours
+    private int regenTimer;
 
-    private final static int                           DEFAULT_regenMethod               = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   regenMethod;
+    private final static int DEFAULT_regenMethod = 0;
+    private int regenMethod;
 
-    private final static int                           DEFAULT_regenAction               = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   regenAction;
+    private final static int DEFAULT_regenAction = 0;
+    private int regenAction;
 
-    private final static int                           DEFAULT_hardRegenOnStop           = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   hardRegenOnStop;
+    private final static int DEFAULT_hardRegenOnStop = 0;
+    private int hardRegenOnStop;
 
     // Respawn
 
-    private final static int                           DEFAULT_respawnNumber             = 1;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnNumber;
+    private final static int DEFAULT_respawnNumber = 1;
+    private int respawnNumber;
 
-    private final static int                           DEFAULT_respawnType               = 0;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnType;
+    private final static int DEFAULT_respawnType = 0;
+    private int respawnType;
 
-    private final static int                           DEFAULT_respawnTimerMin           = 7_200;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimerMin;
+    private final static int DEFAULT_respawnTimerMin = 7_200;
+    private int respawnTimerMin;
 
-    private final static int                           DEFAULT_respawnTimerMax           = 14_400;
-    @Getter @Setter(AccessLevel.PRIVATE) private int   respawnTimerMax;
+    private final static int DEFAULT_respawnTimerMax = 14_400;
+    private int respawnTimerMax;
 
     // Data
 
-    private final static long                          DEFAULT_nextRegenTaskTime         = 0;
-    @Getter @Setter private long                       nextRegenTaskTime;
+    private final static long DEFAULT_nextRegenTaskTime = 0;
+    private long nextRegenTaskTime;
 
-    private final static long                          DEFAULT_nextRespawnTaskTime       = 0;
-    @Getter @Setter private long                       nextRespawnTaskTime;
+    private final static long DEFAULT_nextRespawnTaskTime = 0;
+    private long nextRespawnTaskTime;
 
     public Config(final NTheEndAgain instance, final String world) {
         super(instance);
@@ -437,8 +436,8 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         content.append("# Select when you want to respawn Dragons automagically. Default: " + DEFAULT_respawnType + "\n");
         content.append("#\n");
         content.append("#       0: Disabled. No automatic respawn.\n");
-        content.append("#       1: After each Dragon's death. Not really good with regenType=1.\n");
-        content.append("#       2: After the last Dragon alive's death.\n");
+        content.append("#       1: X seconds after each Dragon's death. Not really good with regenType=1.\n");
+        content.append("#       2: X seconds after the last Dragon alive's death.\n");
         content.append("#       3: On server start.\n");
         content.append("#       4: Periodic - From load time. Respawn every X seconds after boot/load.\n");
         content.append("#       5: Periodic - Persistent. Respawn every X seconds, persistent through reboots/reloads\n");
@@ -491,5 +490,165 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         content.append("nextRespawnTaskTime: " + (getRespawnTimerMax() == 0 ? "0" : getNextRespawnTaskTime()) + "\n\n");
 
         return content.toString();
+    }
+
+    public float getEdDamageMultiplier() {
+        return edDamageMultiplier;
+    }
+
+    private void setEdDamageMultiplier(float edDamageMultiplier) {
+        this.edDamageMultiplier = edDamageMultiplier;
+    }
+
+    public int getEdEggHandling() {
+        return edEggHandling;
+    }
+
+    private void setEdEggHandling(int edEggHandling) {
+        this.edEggHandling = edEggHandling;
+    }
+
+    public int getEdExpHandling() {
+        return edExpHandling;
+    }
+
+    private void setEdExpHandling(int edExpHandling) {
+        this.edExpHandling = edExpHandling;
+    }
+
+    public int getEdExpReward() {
+        return edExpReward;
+    }
+
+    private void setEdExpReward(int edExpReward) {
+        this.edExpReward = edExpReward;
+    }
+
+    public int getEdHealth() {
+        return edHealth;
+    }
+
+    private void setEdHealth(int edHealth) {
+        this.edHealth = edHealth;
+    }
+
+    public int getEdPortalSpawn() {
+        return edPortalSpawn;
+    }
+
+    private void setEdPortalSpawn(int edPortalSpawn) {
+        this.edPortalSpawn = edPortalSpawn;
+    }
+
+    public int getEdPushesPlayers() {
+        return edPushesPlayers;
+    }
+
+    private void setEdPushesPlayers(int edPushesPlayers) {
+        this.edPushesPlayers = edPushesPlayers;
+    }
+
+    public int getFilterMovedTooQuicklySpam() {
+        return filterMovedTooQuicklySpam;
+    }
+
+    private void setFilterMovedTooQuicklySpam(int filterMovedTooQuicklySpam) {
+        this.filterMovedTooQuicklySpam = filterMovedTooQuicklySpam;
+    }
+
+    public int getHardRegenOnStop() {
+        return hardRegenOnStop;
+    }
+
+    private void setHardRegenOnStop(int hardRegenOnStop) {
+        this.hardRegenOnStop = hardRegenOnStop;
+    }
+
+    public long getNextRegenTaskTime() {
+        return nextRegenTaskTime;
+    }
+
+    public void setNextRegenTaskTime(long nextRegenTaskTime) {
+        this.nextRegenTaskTime = nextRegenTaskTime;
+    }
+
+    public long getNextRespawnTaskTime() {
+        return nextRespawnTaskTime;
+    }
+
+    public void setNextRespawnTaskTime(long nextRespawnTaskTime) {
+        this.nextRespawnTaskTime = nextRespawnTaskTime;
+    }
+
+    public int getRegenAction() {
+        return regenAction;
+    }
+
+    private void setRegenAction(int regenAction) {
+        this.regenAction = regenAction;
+    }
+
+    public int getRegenMethod() {
+        return regenMethod;
+    }
+
+    private void setRegenMethod(int regenMethod) {
+        this.regenMethod = regenMethod;
+    }
+
+    public int getRegenTimer() {
+        return regenTimer;
+    }
+
+    private void setRegenTimer(int regenTimer) {
+        this.regenTimer = regenTimer;
+    }
+
+    public int getRegenType() {
+        return regenType;
+    }
+
+    private void setRegenType(int regenType) {
+        this.regenType = regenType;
+    }
+
+    public int getRespawnNumber() {
+        return respawnNumber;
+    }
+
+    private void setRespawnNumber(int respawnNumber) {
+        this.respawnNumber = respawnNumber;
+    }
+
+    public int getRespawnTimerMax() {
+        return respawnTimerMax;
+    }
+
+    private void setRespawnTimerMax(int respawnTimerMax) {
+        this.respawnTimerMax = respawnTimerMax;
+    }
+
+    public int getRespawnTimerMin() {
+        return respawnTimerMin;
+    }
+
+    private void setRespawnTimerMin(int respawnTimerMin) {
+        this.respawnTimerMin = respawnTimerMin;
+    }
+
+    public int getRandomRespawnTimer() {
+        return rand.nextInt(getRespawnTimerMax() - getRespawnTimerMin()) + getRespawnTimerMin();
+    }
+
+    public int getRespawnType() {
+        return respawnType;
+    }
+
+    private void setRespawnType(int respawnType) {
+        this.respawnType = respawnType;
+    }
+
+    public String getWorldName() {
+        return worldName;
     }
 }

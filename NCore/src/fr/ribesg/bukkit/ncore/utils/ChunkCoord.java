@@ -1,15 +1,13 @@
 package fr.ribesg.bukkit.ncore.utils;
 
-import lombok.Getter;
-
 import org.bukkit.Chunk;
 
 public class ChunkCoord {
 
-    private static final String  SEPARATOR = "##";
+    private static final String SEPARATOR = "##";
 
-    @Getter private final int    x, z;
-    @Getter private final String worldName;
+    private final int x, z;
+    private final String worldName;
 
     public ChunkCoord(final int x, final int z, final String worldName) {
         this.x = x;
@@ -33,11 +31,23 @@ public class ChunkCoord {
         return new ChunkCoord(Integer.parseInt(split[1]), Integer.parseInt(split[2]), split[0]);
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getZ() {
+        return z;
+    }
+
+    public String getWorldName() {
+        return worldName;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (worldName == null ? 0 : worldName.hashCode());
+        result = prime * result + (worldName == null ? 0 : worldName.toLowerCase().hashCode());
         result = prime * result + x;
         result = prime * result + z;
         return result;
@@ -65,7 +75,7 @@ public class ChunkCoord {
             if (other.worldName != null) {
                 return false;
             }
-        } else if (!worldName.equals(other.worldName)) {
+        } else if (!worldName.equalsIgnoreCase(other.worldName)) {
             return false;
         }
         return true;

@@ -1,7 +1,8 @@
 package fr.ribesg.bukkit.ntheendagain;
 
 public interface Permissions {
-    // Cuboid node permissions
+
+    // TheEndAgain node permissions
     public static final String ADMIN              = "ntheendagain.admin";
     public static final String USER               = "ntheendagain.user";
     public static final String CMD_HELP           = "ntheendagain.cmd.help";

@@ -1,11 +1,11 @@
 package fr.ribesg.bukkit.nenchantingegg.lang;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import fr.ribesg.bukkit.ncore.lang.AbstractMessages;
 import fr.ribesg.bukkit.ncore.lang.Message;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Messages extends AbstractMessages {
 
@@ -15,19 +15,17 @@ public class Messages extends AbstractMessages {
         super("EnchantingEgg");
     }
 
-    /**
-     * @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#createMessage()
-     */
+    /** @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#createMessage() */
     @Override
     protected Set<Message> createMessage() {
         final Set<Message> newMessages = new HashSet<Message>();
 
         // General plugin messages
-        newMessages.add(new Message(MessageId.incorrectValueInConfiguration, "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)", new String[] { "%filename%", "%value%", "%default%" }, null));
+        newMessages.add(new Message(MessageId.incorrectValueInConfiguration, "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)", new String[] {"%filename%", "%value%", "%default%"}, null));
 
         // General deny response
         newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null));
-        newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", new String[] { "%playerName%" }, null));
+        newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", new String[] {"%playerName%"}, null));
         newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null));
 
         // Command - RELOAD
@@ -37,9 +35,7 @@ public class Messages extends AbstractMessages {
         return newMessages;
     }
 
-    /**
-     * @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#getConfigString()
-     */
+    /** @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#getConfigString() */
     @Override
     protected String getConfigString() {
         final StringBuilder content = new StringBuilder();

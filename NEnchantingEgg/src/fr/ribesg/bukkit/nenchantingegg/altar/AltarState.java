@@ -1,29 +1,35 @@
 package fr.ribesg.bukkit.nenchantingegg.altar;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.BlockData;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeSkullBlock;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
 import org.bukkit.block.BlockFace;
 
-import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.BlockData;
-import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
-import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeSkullBlock;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents the state of an Altar.
  * An Altar can only go to the "Next step", maybe this would need some
  * emergency thing, for example if the Player disconnect.
  * The center of the Altar is the initial place of the center Quartz Pillar.
- * 
+ *
  * @author Ribesg
  */
 public enum AltarState {
 
     /**
      * The Altar will be in this state if:
-     * - It has just been constructed
+     * - It has just been constructed, detected by placing the With Skull
+     * - It has just been destroyed
+     */
+    INVALID,
+
+    /**
+     * The Altar will be in this state if:
+     * - It has just been validated
      * - It was in ACTIVE or LOCKED state and time passed from Night to Day (23999 -> 0)
      */
     INACTIVE,

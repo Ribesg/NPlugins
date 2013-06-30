@@ -1,17 +1,17 @@
 ﻿package fr.ribesg.bukkit.ntalk.format;
 
+import fr.ribesg.bukkit.ntalk.Config;
+import fr.ribesg.bukkit.ntalk.NTalk;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.ribesg.bukkit.ntalk.Config;
-import fr.ribesg.bukkit.ntalk.NTalk;
-
 public class Formater {
+
     private static final String BUKKIT_PLAYERNAME = "%1$s";
     private static final String BUKKIT_MESSAGE    = "%2$s";
 
-    private final Config        cfg;
+    private final Config cfg;
 
     public Formater(final NTalk instance) {
         cfg = instance.getPluginConfig();

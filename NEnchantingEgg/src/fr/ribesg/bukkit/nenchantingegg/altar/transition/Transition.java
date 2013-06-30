@@ -1,5 +1,13 @@
 package fr.ribesg.bukkit.nenchantingegg.altar.transition;
 
+import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
+import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
+import fr.ribesg.bukkit.nenchantingegg.altar.AltarState;
+import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.Step;
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -7,24 +15,18 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import fr.ribesg.bukkit.ncore.utils.Utils;
-import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
-import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
-import fr.ribesg.bukkit.nenchantingegg.altar.AltarState;
-import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.Step;
-
 public abstract class Transition {
 
-    protected AltarState                  fromState;
-    protected AltarState                  toState;
+    protected final NEnchantingEgg plugin;
+
+    protected AltarState fromState;
+    protected AltarState toState;
 
     private final Map<Integer, Set<Step>> stepsPerDelay;
     private final int                     maxDelay;
 
-    protected Transition() {
+    protected Transition(NEnchantingEgg plugin) {
+        this.plugin = plugin;
         final Set<Step> steps = createSteps();
 
         stepsPerDelay = new HashMap<Integer, Set<Step>>();
@@ -50,9 +52,12 @@ public abstract class Transition {
     }
 
     public void doTransition(final Altar altar) {
-        final NEnchantingEgg plugin = NEnchantingEgg.getInstance();
+        doTransition(altar, false);
+    }
+
+    public void doTransition(final Altar altar, final boolean force) {
         if (plugin != null) {
-            if (altar.getState() != fromState) {
+            if (!force && altar.getState() != fromState) {
                 // TODO Exception ?
                 final Logger log = plugin.getLogger();
                 log.severe("Unable to do Transition !");
@@ -61,6 +66,7 @@ public abstract class Transition {
                 log.severe("Transition to state " + toState.toString() + " failed because the Altar was not in state " + fromState.toString());
                 log.severe("Try to rebuild the Altar?");
             } else {
+                altar.setPreviousState(altar.getState());
                 altar.setState(AltarState.IN_TRANSITION);
                 for (final Entry<Integer, Set<Step>> e : stepsPerDelay.entrySet()) {
                     Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
@@ -71,15 +77,18 @@ public abstract class Transition {
                                 step.doStep(altar);
                             }
                         }
-                    }, e.getKey());
+                    }, e.getKey()
+                                                      );
                 }
                 Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
 
                     @Override
                     public void run() {
                         altar.setState(toState);
+                        afterTransition(altar);
                     }
-                }, maxDelay);
+                }, maxDelay + 1
+                                                  );
             }
         }
     }
@@ -87,4 +96,7 @@ public abstract class Transition {
     protected abstract Set<Step> createSteps();
 
     protected abstract void setFromToStates();
+
+    protected void afterTransition(final Altar altar) {
+    }
 }

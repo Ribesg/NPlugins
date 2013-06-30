@@ -1,38 +1,35 @@
 package fr.ribesg.bukkit.ntheendagain;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-
-import lombok.Getter;
-
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.World.Environment;
-import org.bukkit.command.CommandSender;
-
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
+import org.bukkit.command.CommandSender;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
 
 public class NTheEndAgain extends TheEndAgainNode {
 
     // Configs
-    @Getter private Messages                         messages;
-    @Getter private Config                           pluginConfig;
+    private Messages messages;
+    private Config   pluginConfig;
 
     // Useful Nodes
     // // None
 
     // Actual plugin data
-    @Getter private HashMap<String, EndWorldHandler> worldHandlers;
+    private HashMap<String, EndWorldHandler> worldHandlers;
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.2.0";
+        return "0.2.1";
     }
 
     @Override
@@ -51,7 +48,7 @@ public class NTheEndAgain extends TheEndAgainNode {
             return false;
         }
 
-        getServer().getPluginManager().registerEvents(new NListener(this), this);
+        getServer().getPluginManager().registerEvents(new TheEndAgainListener(this), this);
 
         // Load End worlds configs and chunks data
         worldHandlers = new HashMap<String, EndWorldHandler>();
@@ -74,14 +71,12 @@ public class NTheEndAgain extends TheEndAgainNode {
 
         activateFilter();
 
-        getCommand("nend").setExecutor(new NCommandExecutor(this));
+        getCommand("nend").setExecutor(new TheEndAgainCommandExecutor(this));
 
         return true;
     }
 
-    /**
-     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
-     */
+    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // Nothing to do here for now
@@ -99,8 +94,8 @@ public class NTheEndAgain extends TheEndAgainNode {
     }
 
     /**
-     * @param lowerCamelCaseWorldName
-     *            Key
+     * @param lowerCamelCaseWorldName Key
+     *
      * @return Value
      */
     public EndWorldHandler getHandler(final String lowerCamelCaseWorldName) {
@@ -126,13 +121,10 @@ public class NTheEndAgain extends TheEndAgainNode {
 
     /**
      * Send a message with arguments TODO <b>This may be moved<b>
-     * 
-     * @param to
-     *            Receiver
-     * @param messageId
-     *            The Message Id
-     * @param args
-     *            The arguments
+     *
+     * @param to        Receiver
+     * @param messageId The Message Id
+     * @param args      The arguments
      */
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
         final String[] m = messages.get(messageId, args);
@@ -146,4 +138,15 @@ public class NTheEndAgain extends TheEndAgainNode {
         }
     }
 
+    public Messages getMessages() {
+        return messages;
+    }
+
+    public Config getPluginConfig() {
+        return pluginConfig;
+    }
+
+    public HashMap<String, EndWorldHandler> getWorldHandlers() {
+        return worldHandlers;
+    }
 }

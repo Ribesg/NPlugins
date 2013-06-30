@@ -1,17 +1,18 @@
 package fr.ribesg.bukkit.ncore.nodes;
 
-import static fr.ribesg.bukkit.ncore.utils.Utils.frame;
-import lombok.Getter;
-
+import fr.ribesg.bukkit.ncore.NCore;
+import fr.ribesg.bukkit.ncore.metrics.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.ribesg.bukkit.ncore.NCore;
+import java.io.IOException;
+
+import static fr.ribesg.bukkit.ncore.utils.Utils.frame;
 
 /**
  * This class represents a plugin node of the N plugin suite
- * 
+ *
  * @author Ribesg
  */
 public abstract class NPlugin extends JavaPlugin {
@@ -19,12 +20,16 @@ public abstract class NPlugin extends JavaPlugin {
     private static final String NCORE         = "NCore";
     private static final String NCORE_WEBSITE = "http://www.ribesg.fr/bukkit/NPlugins";
 
-    @Getter private NCore       core;
-    private boolean             enabled       = false;
+    private Metrics metrics;
+
+    private NCore core;
+    private boolean enabled = false;
+
+    private boolean isReload = false;
 
     @Override
     public void onEnable() {
-        if (!checkCore()) {
+        if (isCoreMissing()) {
             final String[] messages = new String[4];
             messages[0] = "This plugin requires NCore";
             messages[1] = "It is an additional Plugin you";
@@ -37,8 +42,7 @@ public abstract class NPlugin extends JavaPlugin {
             }
 
             getPluginLoader().disablePlugin(this);
-        }
-        else if (!checkCoreVersion()) {
+        } else if (badCoreVersion()) {
             final String[] messages = new String[4];
             messages[0] = "This plugin requires NCore v" + getMinCoreVersion();
             messages[1] = "NCore plugin was found but the";
@@ -51,28 +55,34 @@ public abstract class NPlugin extends JavaPlugin {
             }
 
             getPluginLoader().disablePlugin(this);
-        }
-        else if (onNodeEnable()) {
-            enabled = true;
-            afterEnable();
         } else {
-            getLogger().severe("Disabling plugin...");
-            getPluginLoader().disablePlugin(this);
+            try {
+                metrics = new Metrics(this);
+                metrics.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (onNodeEnable()) {
+                enabled = true;
+                afterEnable();
+            } else {
+                getLogger().severe("Disabling plugin...");
+                getPluginLoader().disablePlugin(this);
+            }
         }
     }
 
     /**
      * Replace the normal {@link org.bukkit.plugin.java.JavaPlugin#onEnable()} method in a normal plugin.
-     * 
+     *
      * @return If we should disable the plugin immediatly because we got a problem
      */
     protected abstract boolean onNodeEnable();
 
-    /**
-     * Call {@link #handleOtherNodes()} after plugin initialization tick.
-     */
+    /** Call {@link #handleOtherNodes()} after plugin initialization tick. */
     private void afterEnable() {
         new BukkitRunnable() {
+
             @Override
             public void run() {
                 handleOtherNodes();
@@ -91,6 +101,7 @@ public abstract class NPlugin extends JavaPlugin {
         if (enabled) {
             onNodeDisable();
         }
+        isReload = true; // Will stay set to true if this is a reload
     }
 
     /**
@@ -101,21 +112,21 @@ public abstract class NPlugin extends JavaPlugin {
 
     /**
      * Check if the Core exists, if yes, connect to it.
-     * 
+     *
      * @return If the Core was found
      */
-    private boolean checkCore() {
+    private boolean isCoreMissing() {
         if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
-            return false;
+            return true;
         } else {
             core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
             linkCore();
-            return true;
+            return false;
         }
     }
 
-    private boolean checkCoreVersion() {
-        return getCoreVersion().compareTo(getMinCoreVersion()) >= 0;
+    private boolean badCoreVersion() {
+        return getCoreVersion().compareTo(getMinCoreVersion()) < 0;
     }
 
     /**
@@ -130,4 +141,15 @@ public abstract class NPlugin extends JavaPlugin {
         return getCore().getDescription().getVersion();
     }
 
+    protected NCore getCore() {
+        return core;
+    }
+
+    protected boolean isReload() {
+        return isReload;
+    }
+
+    protected Metrics getMetrics() {
+        return metrics;
+    }
 }

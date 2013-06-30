@@ -1,21 +1,19 @@
 package fr.ribesg.bukkit.nenchantingegg.altar.transition.bean;
 
-import lombok.Getter;
-
 import org.bukkit.Effect;
 
-public class RelativeEffect extends Relative {
+public class RelativeEffect extends RelativeLocation {
 
-    @Getter private final Effect effect;
-    @Getter private final int    effectData;
-    private boolean              hasRadius;
-    @Getter private int          radius;
+    private final Effect  effect;
+    private final int     effectData;
+    private       boolean hasRadius;
+    private       int     radius;
 
-    public RelativeEffect(final int x, final int y, final int z, final Effect effect) {
+    public RelativeEffect(final double x, final double y, final double z, final Effect effect) {
         this(x, y, z, effect, (byte) 0);
     }
 
-    public RelativeEffect(final int x, final int y, final int z, final Effect effect, final int effectData) {
+    public RelativeEffect(final double x, final double y, final double z, final Effect effect, final int effectData) {
         super(x, y, z);
         this.effect = effect;
         this.effectData = effectData;
@@ -29,7 +27,19 @@ public class RelativeEffect extends Relative {
         return this; // Chain call
     }
 
+    public Effect getEffect() {
+        return effect;
+    }
+
+    public int getEffectData() {
+        return effectData;
+    }
+
     public boolean hasRadius() {
         return hasRadius;
+    }
+
+    public int getRadius() {
+        return radius;
     }
 }

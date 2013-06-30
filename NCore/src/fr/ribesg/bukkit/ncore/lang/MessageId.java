@@ -1,8 +1,6 @@
 package fr.ribesg.bukkit.ncore.lang;
 
-/**
- * @author Ribesg
- */
+/** @author Ribesg */
 public enum MessageId {
 
     // ######################### //
@@ -112,5 +110,20 @@ public enum MessageId {
     talk_youDeNickNamed,
     talk_youWereNickNamed,
     talk_youWereDeNickNamed,
+
+    // ##################### //
+    // ## NPlayer related ## //
+    // ##################### //
+
+    player_welcomeToTheServer,
+    player_registerFirst,
+    player_loginFirst,
+    player_welcomeBack,
+    player_wrongPassword,
+    player_passwordChanged,
+    player_alreadyRegistered,
+    player_autoLogoutEnabled,
+    player_autoLogoutDisabled,
+    player_loggedOut,
 
 }

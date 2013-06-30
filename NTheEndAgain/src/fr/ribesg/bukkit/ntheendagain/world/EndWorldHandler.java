@@ -1,15 +1,12 @@
 package fr.ribesg.bukkit.ntheendagain.world;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
-
-import lombok.Getter;
-
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ntheendagain.Config;
+import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
+import fr.ribesg.bukkit.ntheendagain.tasks.RegenTask;
+import fr.ribesg.bukkit.ntheendagain.tasks.RespawnTask;
+import fr.ribesg.bukkit.ntheendagain.tasks.UnexpectedDragonDeathHandlerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -22,29 +19,29 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.Utils;
-import fr.ribesg.bukkit.ntheendagain.Config;
-import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
-import fr.ribesg.bukkit.ntheendagain.tasks.RegenTask;
-import fr.ribesg.bukkit.ntheendagain.tasks.RespawnTask;
-import fr.ribesg.bukkit.ntheendagain.tasks.UnexpectedDragonDeathHandlerTask;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 
 public class EndWorldHandler {
 
-    private final static Random                        rand = new Random();
+    private final static Random rand = new Random();
 
-    private final String                               camelCaseWorldName;
+    private final String camelCaseWorldName;
 
-    @Getter private final NTheEndAgain                 plugin;
-    @Getter private final World                        endWorld;
-    @Getter private final EndChunks                    chunks;
-    @Getter private final Config                       config;
-    @Getter private final Map<UUID, Map<String, Long>> dragons;
-    @Getter private final Set<UUID>                    loadedDragons;
-    @Getter private final Set<BukkitTask>              tasks;
+    private final NTheEndAgain                 plugin;
+    private final World                        endWorld;
+    private final EndChunks                    chunks;
+    private final Config                       config;
+    private final Map<UUID, Map<String, Long>> dragons;
+    private final Set<UUID>                    loadedDragons;
+    private final Set<BukkitTask>              tasks;
 
-    @Getter private int                                numberOfAliveEnderDragons;
+    private int numberOfAliveEnderDragons;
 
     public EndWorldHandler(final NTheEndAgain instance, final World world) {
         plugin = instance;
@@ -235,19 +232,26 @@ public class EndWorldHandler {
                 // Not possible.
                 break;
         }
-        switch (type) {
-            case 0:
-                hardRegen();
-                break;
-            case 1:
-                softRegen();
-                break;
-            case 2:
-                crystalRegen();
-                break;
-            default:
-                break;
-        }
+        Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                switch (type) {
+                    case 0:
+                        hardRegen();
+                        break;
+                    case 1:
+                        softRegen();
+                        break;
+                    case 2:
+                        crystalRegen();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, 5
+                                          );
     }
 
     private void hardRegen() {
@@ -301,6 +305,39 @@ public class EndWorldHandler {
             public void run() {
                 endWorld.spawnEntity(loc, EntityType.ENDER_DRAGON);
             }
-        }, 2L);
+        }, 2L
+                                          );
+    }
+
+    public EndChunks getChunks() {
+        return chunks;
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    public Map<UUID, Map<String, Long>> getDragons() {
+        return dragons;
+    }
+
+    public World getEndWorld() {
+        return endWorld;
+    }
+
+    public Set<UUID> getLoadedDragons() {
+        return loadedDragons;
+    }
+
+    public int getNumberOfAliveEnderDragons() {
+        return numberOfAliveEnderDragons;
+    }
+
+    public NTheEndAgain getPlugin() {
+        return plugin;
+    }
+
+    public Set<BukkitTask> getTasks() {
+        return tasks;
     }
 }

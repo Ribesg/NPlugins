@@ -1,7 +1,8 @@
 package fr.ribesg.bukkit.nworld;
 
 public interface Permissions {
-    // Talk node permissions
+
+    // World node permissions
     public static final String ADMIN               = "nworld.admin";
     public static final String USER                = "nworld.user";
     public static final String CMD_WORLD           = "nworld.cmd.world";

@@ -1,30 +1,29 @@
 package fr.ribesg.bukkit.ntheendagain;
 
-import java.util.Arrays;
-
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
+import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
+import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.Utils;
-import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
-import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import java.util.Arrays;
 
-public class NCommandExecutor implements CommandExecutor {
+public class TheEndAgainCommandExecutor implements CommandExecutor {
 
     private final NTheEndAgain plugin;
 
-    public NCommandExecutor(final NTheEndAgain instance) {
+    public TheEndAgainCommandExecutor(final NTheEndAgain instance) {
         plugin = instance;
     }
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-        if (commandLabel.equalsIgnoreCase("end")) {
+        if (command.getName().equalsIgnoreCase("nend")) {
             if (args.length == 0 || args.length == 1 && (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("h"))) {
                 if (sender.hasPermission(Permissions.CMD_HELP) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN)) {
                     return cmdHelp(sender);
@@ -256,9 +255,11 @@ public class NCommandExecutor implements CommandExecutor {
                 throw new Exception(); // We handle it locally so we don't care about having a special Exception name/message
             } else {
                 worldName = ((Player) sender).getWorld().getName();
-                return new String[] { worldName };
+                return new String[] {worldName};
             }
         } else {
+            // Find a world name in the arguments
+            boolean worldFound = true;
             String concatenation = args[0];
             for (int i = 1; i < args.length; i++) {
                 concatenation += ' ' + args[i];
@@ -266,17 +267,29 @@ public class NCommandExecutor implements CommandExecutor {
             int nbWords = args.length;
             while (Bukkit.getWorld(concatenation) == null) {
                 if (nbWords == 1) {
-                    return null;
+                    worldFound = false;
+                    break;
                 }
                 concatenation = concatenation.substring(0, 1 + args[--nbWords].length());
             }
-            worldName = concatenation;
-            final String[] result = new String[args.length - nbWords + 1];
-            result[0] = worldName;
-            for (int i = 0; i < result.length - 1; i++) {
-                result[i + 1] = args[i + nbWords];
+            if (worldFound) {
+                worldName = concatenation;
+                final String[] result = new String[args.length - nbWords + 1];
+                result[0] = worldName;
+                System.arraycopy(args, nbWords, result, 1, args.length - nbWords + 1);
+                return result;
+            } else {
+                if (!(sender instanceof Player)) {
+                    plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
+                    throw new Exception(); // We handle it locally so we don't care about having a special Exception name/message
+                } else {
+                    worldName = ((Player) sender).getWorld().getName();
+                    final String[] result = new String[1 + args.length];
+                    result[0] = worldName;
+                    System.arraycopy(args, 0, result, 1, args.length);
+                    return result;
+                }
             }
-            return result;
         }
 
     }

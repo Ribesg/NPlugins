@@ -1,44 +1,37 @@
 package fr.ribesg.bukkit.ntalk;
 
+import fr.ribesg.bukkit.ncore.AbstractConfig;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ntalk.format.Format;
+import fr.ribesg.bukkit.ntalk.format.Format.FormatType;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+public class Config extends AbstractConfig<NTalk> {
 
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
+    private static final String defaultTemplate   = "&f<[prefix][name][suffix]&f> [message]";
+    private static final String defaultPmTemplate = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> [message]";
 
-import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ntalk.format.Format;
-import fr.ribesg.bukkit.ntalk.format.Format.FormatType;
-
-public class Config extends AbstractConfig {
-
-    private final NTalk                                              plugin;
-
-    private static final String                                      defaultTemplate   = "&f<[prefix][name][suffix]&f> [message]";
-    private static final String                                      defaultPmTemplate = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> [message]";
-
-    @Getter @Setter(AccessLevel.PRIVATE) private String              template;
-    @Getter @Setter(AccessLevel.PRIVATE) private String              pmTemplate;
-    @Getter @Setter(AccessLevel.PRIVATE) private Format              defaultFormat;
-    @Getter @Setter(AccessLevel.PRIVATE) private String              opGroup;
+    private String template;
+    private String pmTemplate;
+    private Format defaultFormat;
+    private String opGroup;
 
     // PlayerName;Format
-    @Getter @Setter(AccessLevel.PRIVATE) private Map<String, Format> playerFormats;
-    @Getter @Setter(AccessLevel.PRIVATE) private Map<String, String> playerNicknames;
+    private Map<String, Format> playerFormats;
+    private Map<String, String> playerNicknames;
 
     // GroupName;Format
-    @Getter @Setter(AccessLevel.PRIVATE) private Map<String, Format> groupFormats;
+    private Map<String, Format> groupFormats;
 
     public Config(final NTalk instance) {
-        plugin = instance;
+        super(instance);
 
         setTemplate(defaultTemplate);
         setPmTemplate(defaultPmTemplate);
@@ -212,5 +205,61 @@ public class Config extends AbstractConfig {
         content.append("\n");
 
         return content.toString();
+    }
+
+    public Map<String, Format> getGroupFormats() {
+        return groupFormats;
+    }
+
+    public void setGroupFormats(Map<String, Format> groupFormats) {
+        this.groupFormats = groupFormats;
+    }
+
+    public String getOpGroup() {
+        return opGroup;
+    }
+
+    public void setOpGroup(String opGroup) {
+        this.opGroup = opGroup;
+    }
+
+    public Map<String, Format> getPlayerFormats() {
+        return playerFormats;
+    }
+
+    public void setPlayerFormats(Map<String, Format> playerFormats) {
+        this.playerFormats = playerFormats;
+    }
+
+    public Map<String, String> getPlayerNicknames() {
+        return playerNicknames;
+    }
+
+    public void setPlayerNicknames(Map<String, String> playerNicknames) {
+        this.playerNicknames = playerNicknames;
+    }
+
+    public String getPmTemplate() {
+        return pmTemplate;
+    }
+
+    public void setPmTemplate(String pmTemplate) {
+        this.pmTemplate = pmTemplate;
+    }
+
+    public String getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(String template) {
+        this.template = template;
+    }
+
+    public Format getDefaultFormat() {
+        return defaultFormat;
+    }
+
+    public void setDefaultFormat(Format defaultFormat) {
+        this.defaultFormat = defaultFormat;
     }
 }

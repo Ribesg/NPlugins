@@ -1,12 +1,10 @@
 package fr.ribesg.bukkit.ntheendagain;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.TreeMap;
-
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
+import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
+import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -36,13 +34,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.Utils;
-import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
-import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.TreeMap;
 
-public class NListener implements Listener {
+public class TheEndAgainListener implements Listener {
 
     /**
      * Players that did less than threshold % of total damages
@@ -51,9 +50,9 @@ public class NListener implements Listener {
     private final static float  threshold = 0.15f;
     private final static Random rand      = new Random();
 
-    private final NTheEndAgain  plugin;
+    private final NTheEndAgain plugin;
 
-    public NListener(final NTheEndAgain instance) {
+    public TheEndAgainListener(final NTheEndAgain instance) {
         plugin = instance;
     }
 
@@ -74,7 +73,7 @@ public class NListener implements Listener {
                         event.setDroppedExp(0);
                         HashMap<String, Long> dmgMap = null;
                         try {
-                            dmgMap = new HashMap<String, Long>(handler.getDragons().get(event.getEntity().getUniqueId()));
+                            dmgMap = new HashMap<>(handler.getDragons().get(event.getEntity().getUniqueId()));
                         } catch (final NullPointerException e) {
                             return;
                         }
@@ -155,7 +154,8 @@ public class NListener implements Listener {
                         public void run() {
                             event.getEntity().setVelocity(velocity);
                         }
-                    });
+                    }
+                                                 );
                 }
             }
         }
@@ -227,7 +227,7 @@ public class NListener implements Listener {
 
                 if (customEggHandling) {
                     // % of total damages done to the ED ; Player name
-                    TreeMap<Float, String> ratioMap = new TreeMap<Float, String>();
+                    TreeMap<Float, String> ratioMap = new TreeMap<>();
                     long totalDamages = 0;
                     for (final Entry<String, Long> e : handler.getDragons().get(event.getEntity().getUniqueId()).entrySet()) {
                         totalDamages += e.getValue();
@@ -252,7 +252,7 @@ public class NListener implements Listener {
                         remainingRatioTotal += f;
                     }
                     if (remainingRatioTotal != 1) {
-                        final TreeMap<Float, String> newRatioMap = new TreeMap<Float, String>();
+                        final TreeMap<Float, String> newRatioMap = new TreeMap<>();
                         for (final Entry<Float, String> e : ratioMap.entrySet()) {
                             newRatioMap.put(e.getKey() * 1 / remainingRatioTotal, e.getValue());
                         }
@@ -304,6 +304,7 @@ public class NListener implements Listener {
                 }
                 if (willRespawn) {
                     Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+
                         @Override
                         public void run() {
                             if (config.getRegenType() == 1) {
@@ -311,7 +312,8 @@ public class NListener implements Listener {
                             }
                             handler.respawnDragons();
                         }
-                    }, 20 * 30);
+                    }, 20 * config.getRandomRespawnTimer()
+                                                      );
                 }
             }
         }
@@ -347,7 +349,8 @@ public class NListener implements Listener {
                         public void run() {
                             event.getWorld().refreshChunk(x, z);
                         }
-                    }, 100L);
+                    }, 100L
+                                                      );
                 } else {
                     if (endChunk == null) {
                         endChunk = chunks.addChunk(chunk);

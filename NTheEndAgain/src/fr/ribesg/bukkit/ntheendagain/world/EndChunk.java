@@ -1,12 +1,7 @@
 package fr.ribesg.bukkit.ntheendagain.world;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import lombok.Getter;
-
+import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
+import fr.ribesg.bukkit.ncore.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -15,16 +10,18 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
-import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
-import fr.ribesg.bukkit.ncore.utils.Utils;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class EndChunk {
 
-    @Getter private final ChunkCoord coords;
-    private boolean                  hasToBeRegen;
-    private boolean                  isProtected;
-    private boolean                  containsCrystal;
-    private Set<Location>            crystals;
+    private final ChunkCoord    coords;
+    private       boolean       hasToBeRegen;
+    private       boolean       isProtected;
+    private       boolean       containsCrystal;
+    private       Set<Location> crystals;
 
     public EndChunk(final int x, final int z, final String world) {
         coords = new ChunkCoord(x, z, world);
@@ -146,6 +143,10 @@ public class EndChunk {
             chunk.crystals = crystals;
         }
         return chunk;
+    }
+
+    public ChunkCoord getCoords() {
+        return coords;
     }
 
     @Override

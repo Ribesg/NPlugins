@@ -1,12 +1,6 @@
 package fr.ribesg.bukkit.nenchantingegg.altar.transition;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.bukkit.Effect;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-
+import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.AltarState;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeEffect;
@@ -15,16 +9,17 @@ import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.BlockStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.EffectStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.SoundStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.Step;
+import org.bukkit.Effect;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class InactiveToActiveTransition extends Transition {
 
-    private static InactiveToActiveTransition instance;
-
-    public static InactiveToActiveTransition getInstance() {
-        if (instance == null) {
-            instance = new InactiveToActiveTransition();
-        }
-        return instance;
+    public InactiveToActiveTransition(NEnchantingEgg plugin) {
+        super(plugin);
     }
 
     @Override
@@ -39,6 +34,7 @@ public class InactiveToActiveTransition extends Transition {
         final Set<Step> steps = new HashSet<Step>(); // Result
 
         final int t = 10; // Time between block changes
+
         final Effect effectSound = Effect.BLAZE_SHOOT;
         final Effect effectGraphic = Effect.ENDER_SIGNAL;
 

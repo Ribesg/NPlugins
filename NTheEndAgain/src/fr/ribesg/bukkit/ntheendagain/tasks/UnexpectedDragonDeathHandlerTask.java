@@ -1,13 +1,12 @@
 package fr.ribesg.bukkit.ntheendagain.tasks;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.UUID;
-
+import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.UUID;
 
 public class UnexpectedDragonDeathHandlerTask extends BukkitRunnable {
 

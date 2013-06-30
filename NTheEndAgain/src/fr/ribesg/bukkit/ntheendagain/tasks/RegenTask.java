@@ -1,10 +1,9 @@
 package fr.ribesg.bukkit.ntheendagain.tasks;
 
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author Ribesg

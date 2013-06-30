@@ -7,7 +7,7 @@ import org.bukkit.util.Vector;
 
 /**
  * Some simple methods that could be used in every plugin
- * 
+ *
  * @author Ribesg
  */
 public class Utils {
@@ -16,8 +16,8 @@ public class Utils {
     private final static String SEPARATOR_CHAR_STRING = Character.toString(SEPARATOR_CHAR);
 
     /**
-     * @param loc
-     *            a Location
+     * @param loc a Location
+     *
      * @return A human-readable String representation of this Location
      */
     public static String toString(final Location loc) {
@@ -30,13 +30,13 @@ public class Utils {
         s.append(loc.getY());
         s.append(SEPARATOR_CHAR);
         s.append(loc.getZ());
-        s.append('>').toString();
+        s.append('>');
         return s.toString();
     }
 
     /**
-     * @param loc
-     *            a Location
+     * @param loc a Location
+     *
      * @return A human-readable String representation of this Location, including Yaw and Pitch
      */
     public static String toStringPlus(final Location loc) {
@@ -53,13 +53,13 @@ public class Utils {
         s.append(loc.getYaw());
         s.append(SEPARATOR_CHAR);
         s.append(loc.getPitch());
-        s.append('>').toString();
+        s.append('>');
         return s.toString();
     }
 
     /**
-     * @param string
-     *            A String representing a location, returned by {@link #toString(Location)} or {@link #toStringPlus(Location)}
+     * @param string A String representing a location, returned by {@link #toString(Location)} or {@link #toStringPlus(Location)}
+     *
      * @return The actual Location or null if the string was malformed
      */
     public static Location toLocation(final String string) {
@@ -77,8 +77,7 @@ public class Utils {
                     final Double x = Double.parseDouble(split[1]);
                     final Double y = Double.parseDouble(split[2]);
                     final Double z = Double.parseDouble(split[3]);
-                    final Location loc = new Location(world, x, y, z);
-                    return loc;
+                    return new Location(world, x, y, z);
                 } catch (final NumberFormatException e) {
                     return null;
                 }
@@ -95,8 +94,7 @@ public class Utils {
                     final Double z = Double.parseDouble(split[3]);
                     final Float yaw = Float.parseFloat(split[4]);
                     final Float pitch = Float.parseFloat(split[5]);
-                    final Location loc = new Location(world, x, y, z, yaw, pitch);
-                    return loc;
+                    return new Location(world, x, y, z, yaw, pitch);
                 } catch (final NumberFormatException e) {
                     return null;
                 }
@@ -107,8 +105,8 @@ public class Utils {
     }
 
     /**
-     * @param vect
-     *            a Vector
+     * @param vect a Vector
+     *
      * @return A human-readable String representation of this Vector
      */
     public static String toString(final Vector vect) {
@@ -119,13 +117,13 @@ public class Utils {
         s.append(vect.getY());
         s.append(SEPARATOR_CHAR);
         s.append(vect.getZ());
-        s.append('>').toString();
+        s.append('>');
         return s.toString();
     }
 
     /**
-     * @param string
-     *            A String representing a vector, returned by {@link #toString(Vector)}
+     * @param string A String representing a vector, returned by {@link #toString(Vector)}
+     *
      * @return The actual Vector or null if the string was malformed
      */
     public static Vector toVector(final String string) {
@@ -138,8 +136,7 @@ public class Utils {
                 final Double x = Double.parseDouble(split[0]);
                 final Double y = Double.parseDouble(split[1]);
                 final Double z = Double.parseDouble(split[2]);
-                final Vector vect = new Vector(x, y, z);
-                return vect;
+                return new Vector(x, y, z);
             } catch (final NumberFormatException e) {
                 return null;
             }
@@ -150,9 +147,9 @@ public class Utils {
 
     /**
      * Self Explanatory
-     * 
-     * @param originalString
-     *            "A RANDOM_string__wiTh_ strange  cASe"
+     *
+     * @param originalString "A RANDOM_string__wiTh_ strange  cASe"
+     *
      * @return "aRandomStringWithStrangeCase"
      */
     public static String toLowerCamelCase(final String originalString) {
@@ -165,23 +162,22 @@ public class Utils {
             }
         }
         final String result = s.toString();
-        return new StringBuilder(result.substring(0, 1).toLowerCase()).append(result.substring(1)).toString();
+        return result.substring(0, 1).toLowerCase() + result.substring(1);
     }
 
     /**
-     * @param nb
-     *            The wanted String size
+     * @param nb The wanted String size
+     *
      * @return A String of size nb containing spaces
      */
-    public static String spaces(final int nb) {
+    private static String spaces(final int nb) {
         return multipleChars(nb, ' ');
     }
 
     /**
-     * @param nb
-     *            Returned String length
-     * @param c
-     *            Character to fill the String with
+     * @param nb Returned String length
+     * @param c  Character to fill the String with
+     *
      * @return A String containing nb occurrences of c (and nothing else)
      */
     private static String multipleChars(final int nb, final char c) {
@@ -194,9 +190,9 @@ public class Utils {
 
     /**
      * Frames a text into a ## box
-     * 
-     * @param messages
-     *            Lines of the text
+     *
+     * @param messages Lines of the text
+     *
      * @return New lines with additional ###
      */
     public static String[] frame(final String... messages) {
@@ -214,7 +210,30 @@ public class Utils {
         return result;
     }
 
-    public static boolean isDay(final long minecraftTime) {
-        return 0 <= minecraftTime && minecraftTime <= 18_000;
+    public static String ipToString(String string) {
+        string = string.replace('.', '-');
+        return string;
+    }
+
+    public static String stringToIp(String string) {
+        string = string.replace('-', '.');
+        return string;
+    }
+
+    public static String joinStrings(String... strings) {
+        return joinStrings(" ", strings);
+    }
+
+    public static String joinStrings(String joinString, String... strings) {
+        if (strings.length == 0) {
+            return "";
+        } else {
+            StringBuilder builder = new StringBuilder(strings[0]);
+            for (int i = 1; i < strings.length; i++) {
+                builder.append(joinString);
+                builder.append(strings[i]);
+            }
+            return builder.toString();
+        }
     }
 }

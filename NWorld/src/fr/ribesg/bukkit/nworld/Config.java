@@ -1,5 +1,12 @@
 package fr.ribesg.bukkit.nworld;
 
+import fr.ribesg.bukkit.ncore.AbstractConfig;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.nio.file.Files;
@@ -8,26 +15,14 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map.Entry;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.lang.MessageId;
-
 public class Config extends AbstractConfig<NWorld> {
 
-    private final static String                      LEVEL1_SEPARATOR = ";;";
-    private final static String                      LEVEL2_SEPARATOR = ";";
+    private final static String LEVEL1_SEPARATOR = ";;";
+    private final static String LEVEL2_SEPARATOR = ";";
 
-    @Getter @Setter(AccessLevel.PRIVATE) private int broadcastOnWorldCreate;
-    @Getter @Setter(AccessLevel.PRIVATE) private int broadcastOnWorldLoad;
-    @Getter @Setter(AccessLevel.PRIVATE) private int broadcastOnWorldUnload;
+    private int broadcastOnWorldCreate;
+    private int broadcastOnWorldLoad;
+    private int broadcastOnWorldUnload;
 
     public Config(final NWorld instance) {
         super(instance);
@@ -134,15 +129,13 @@ public class Config extends AbstractConfig<NWorld> {
 
     Location buildLocation(final World world, final String string) {
         final String[] location = string.split(LEVEL2_SEPARATOR);
-        Location loc = null;
         try {
             final double x = Integer.parseInt(location[0]) + 0.5;
             final double y = Integer.parseInt(location[1]) + 0.25;
             final double z = Integer.parseInt(location[2]) + 0.5;
             final double yaw = Float.parseFloat(location[3]);
             final double pitch = Float.parseFloat(location[4]);
-            loc = new Location(world, x, y, z, (float) yaw, (float) pitch);
-            return loc;
+            return new Location(world, x, y, z, (float) yaw, (float) pitch);
         } catch (final Exception e) {
             plugin.getLogger().severe("Unable to load spawnpoint of world " + world.getName());
             return null;
@@ -182,5 +175,29 @@ public class Config extends AbstractConfig<NWorld> {
             plugin.getWorldMap().put(world.getName(), false);
             plugin.getSpawnMap().put(world.getName(), world.getSpawnLocation());
         }
+    }
+
+    public int getBroadcastOnWorldCreate() {
+        return broadcastOnWorldCreate;
+    }
+
+    private void setBroadcastOnWorldCreate(int broadcastOnWorldCreate) {
+        this.broadcastOnWorldCreate = broadcastOnWorldCreate;
+    }
+
+    public int getBroadcastOnWorldLoad() {
+        return broadcastOnWorldLoad;
+    }
+
+    private void setBroadcastOnWorldLoad(int broadcastOnWorldLoad) {
+        this.broadcastOnWorldLoad = broadcastOnWorldLoad;
+    }
+
+    public int getBroadcastOnWorldUnload() {
+        return broadcastOnWorldUnload;
+    }
+
+    private void setBroadcastOnWorldUnload(int broadcastOnWorldUnload) {
+        this.broadcastOnWorldUnload = broadcastOnWorldUnload;
     }
 }

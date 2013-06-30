@@ -1,12 +1,11 @@
 package fr.ribesg.bukkit.ntheendagain.tasks;
 
-import java.util.Random;
-
+import fr.ribesg.bukkit.ntheendagain.Config;
+import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.ribesg.bukkit.ntheendagain.Config;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import java.util.Random;
 
 /**
  * @author Ribesg
@@ -29,7 +28,7 @@ public class RespawnTask extends BukkitRunnable {
 
         final Config config = handler.getConfig();
         final Random rand = new Random();
-        final int randomRespawnTimer = rand.nextInt(config.getRespawnTimerMax() - config.getRespawnTimerMin()) + config.getRespawnTimerMin();
+        final int randomRespawnTimer = config.getRandomRespawnTimer();
         Bukkit.getScheduler().runTaskLater(handler.getPlugin(), this, randomRespawnTimer * 20);
         handler.getConfig().setNextRespawnTaskTime(System.currentTimeMillis() + randomRespawnTimer);
     }

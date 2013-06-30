@@ -1,5 +1,17 @@
 package fr.ribesg.bukkit.ntheendagain.world;
 
+import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -12,21 +24,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-
-import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
-
 public class EndChunks implements Iterable<EndChunk> {
 
-    private final static Charset                CHARSET = StandardCharsets.UTF_8;
+    private final static Charset CHARSET = StandardCharsets.UTF_8;
 
     private final HashMap<ChunkCoord, EndChunk> chunks;
 
@@ -90,8 +90,11 @@ public class EndChunks implements Iterable<EndChunk> {
             }
 
             for (final String chunkCoordString : config.getKeys(false)) {
-                final EndChunk ec = EndChunk.rebuild(config.getConfigurationSection(chunkCoordString));
-                addChunk(ec);
+                final ConfigurationSection sec = config.getConfigurationSection(chunkCoordString);
+                if (sec != null) {
+                    final EndChunk ec = EndChunk.rebuild(sec);
+                    addChunk(ec);
+                }
             }
         }
     }

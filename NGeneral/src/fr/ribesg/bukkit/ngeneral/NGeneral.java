@@ -12,7 +12,7 @@ public class NGeneral extends JavaPlugin {
 
     // Core plugin related
     public static final String NCORE           = "NCore";
-    @Getter public NCore       core;
+     public NCore       core;
     public NGeneralAPI         api;
 
     // Useful Nodes

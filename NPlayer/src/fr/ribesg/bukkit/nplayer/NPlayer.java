@@ -1,69 +1,133 @@
 package fr.ribesg.bukkit.nplayer;
 
-import lombok.Getter;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.nodes.player.PlayerNode;
+import fr.ribesg.bukkit.nplayer.lang.Messages;
+import fr.ribesg.bukkit.nplayer.user.LoggedOutUserHandler;
+import fr.ribesg.bukkit.nplayer.user.UserDB;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.plugin.PluginManager;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
+import java.io.IOException;
 
-import fr.ribesg.bukkit.ncore.NCore;
-import fr.ribesg.bukkit.ncore.nodes.cuboid.CuboidNode;
-import fr.ribesg.bukkit.nplayer.api.NPlayerAPI;
+public class NPlayer extends PlayerNode {
 
-public class NPlayer extends JavaPlugin {
-
-    // Core plugin related
-    public static final String NCORE           = "NCore";
-    @Getter public NCore       core;
-    public NPlayerAPI          api;
+    // Configs
+    private Messages messages;
+    private Config   pluginConfig;
 
     // Useful Nodes
-    public static final String NCUBOID         = "NCuboid";
-    @Getter public CuboidNode  cuboidNode;
+    // // None
 
-    // Set to true by afterEnable() call
-    // Prevent multiple calls to afterEnable
-    private boolean            loadingComplete = false;
+    // Plugin Data
+    private UserDB               userDb;
+    private LoggedOutUserHandler loggedOutUserHandler;
 
     @Override
-    public void onEnable() {
-        if (linkCore()) {
-            afterEnable();
-        }
-    }
-
-    public void afterEnable() {
-        if (!loadingComplete) {
-            loadingComplete = true;
-            Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-
-                @Override
-                public void run() {
-                    // Interact with other Nodes here
-                    if (!Bukkit.getPluginManager().isPluginEnabled(NCUBOID)) {
-                        // TODO
-                    } else {
-                        cuboidNode = (CuboidNode) Bukkit.getPluginManager().getPlugin(NCUBOID);
-                        // TODO
-                    }
-                }
-            });
-        }
+    protected String getMinCoreVersion() {
+        return "0.2.1";
     }
 
     @Override
-    public void onDisable() {
-
-    }
-
-    public boolean linkCore() {
-        if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
+    public boolean onNodeEnable() {
+        // Messages first !
+        try {
+            if (!getDataFolder().isDirectory()) {
+                getDataFolder().mkdir();
+            }
+            messages = new Messages();
+            messages.loadMessages(this);
+        } catch (final IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            getLogger().severe("This error occured when NPlayer tried to load messages.yml");
             return false;
-        } else {
-            core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-            api = new NPlayerAPI(this);
-            core.setPunisherNode(api);
-            return true;
+        }
+
+        // Config
+        try {
+            pluginConfig = new Config(this);
+            pluginConfig.loadConfig();
+        } catch (final IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            getLogger().severe("This error occured when NPlayer tried to load config.yml");
+            return false;
+        }
+
+        // Commands
+        PlayerCommandExecutor executor = new PlayerCommandExecutor(this);
+        getCommand("login").setExecutor(executor);
+        getCommand("register").setExecutor(executor);
+        getCommand("logout").setExecutor(executor);
+        getCommand("info").setExecutor(executor);
+
+        loggedOutUserHandler = new LoggedOutUserHandler(this);
+
+        // Listener
+        final PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(loggedOutUserHandler, this);
+        pm.registerEvents(executor, this);
+
+        userDb = new UserDB(this);
+        try {
+            userDb.loadConfig();
+        } catch (IOException | InvalidConfigurationException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            getLogger().severe("This error occured when NPlayer tried to load userDB.yml");
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onNodeDisable() {
+        try {
+            getPluginConfig().writeConfig();
+        } catch (final IOException e) {
+            e.printStackTrace();
         }
     }
 
+    @Override
+    protected void linkCore() {
+        getCore().setPlayerNode(this);
+    }
+
+    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
+    @Override
+    protected void handleOtherNodes() {
+        // Nothing to do here for now
+    }
+
+    public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
+        final String[] m = messages.get(messageId, args);
+        to.sendMessage(m);
+    }
+
+    public void broadcastMessage(final MessageId messageId, final String... args) {
+        final String[] m = messages.get(messageId, args);
+        for (final String mes : m) {
+            getServer().broadcastMessage(mes);
+        }
+    }
+
+    public Messages getMessages() {
+        return messages;
+    }
+
+    public Config getPluginConfig() {
+        return pluginConfig;
+    }
+
+    public UserDB getUserDb() {
+        return userDb;
+    }
+
+    public LoggedOutUserHandler getLoggedOutUserHandler() {
+        return loggedOutUserHandler;
+    }
 }

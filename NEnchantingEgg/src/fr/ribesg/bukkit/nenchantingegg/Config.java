@@ -1,8 +1,7 @@
 package fr.ribesg.bukkit.nenchantingegg;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import fr.ribesg.bukkit.ncore.AbstractConfig;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NEnchantingEgg> {
 
@@ -13,9 +12,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 
     }
 
-    /**
-     * @see AbstractConfig#setValues(YamlConfiguration)
-     */
+    /** @see AbstractConfig#setValues(YamlConfiguration) */
     @Override
     protected void setValues(final YamlConfiguration config) {
 
@@ -28,9 +25,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
         // }
     }
 
-    /**
-     * @see AbstractConfig#getConfigString()
-     */
+    /** @see AbstractConfig#getConfigString() */
     @Override
     protected String getConfigString() {
         final StringBuilder content = new StringBuilder();
