@@ -56,6 +56,22 @@ public class Messages extends AbstractMessages {
         newMessages.add(new Message(MessageId.player_autoLogoutEnabled, "&aYou enabled auto-logout!", null, null));
         newMessages.add(new Message(MessageId.player_autoLogoutDisabled, "&aYou disabled auto-logout!", null, null));
         newMessages.add(new Message(MessageId.player_loggedOut, "&aYou're now logged out!", null, null));
+        newMessages.add(new Message(MessageId.player_unknownUser,
+                                    "&cUnknown player name: %playerName%",
+                                    new String[] {"%playerName%"},
+                                    null));
+        newMessages.add(new Message(MessageId.player_userHasNoHome,
+                                    "&cPlayer has no home: %playerName%",
+                                    new String[] {"%playerName%"},
+                                    null));
+        newMessages.add(new Message(MessageId.player_teleportingToUserHome,
+                                    "&aTeleporting to the home of %playerName%...",
+                                    new String[] {"%playerName%"},
+                                    null));
+        newMessages.add(new Message(MessageId.player_youHaveNoHome, "&cYou have no home !", null, null));
+        newMessages.add(new Message(MessageId.player_teleportingToYourHome, "&aTeleporting to your home...", null, null));
+        newMessages.add(new Message(MessageId.player_userHomeSet, "&aHome of %playerName% set !", new String[] {"%playerName%"}, null));
+        newMessages.add(new Message(MessageId.player_yourHomeSet, "&aHome set !", null, null));
 
         return newMessages;
     }

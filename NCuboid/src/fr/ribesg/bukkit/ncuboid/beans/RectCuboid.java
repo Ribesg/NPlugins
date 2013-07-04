@@ -1,17 +1,15 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class RectCuboid extends PlayerCuboid {
-    @Getter @Setter private Location minCorner, maxCorner;
-    @Getter @Setter private int      minX, maxX, minY, maxY, minZ, maxZ;
+
+    private Location minCorner, maxCorner;
+    private int minX, maxX, minY, maxY, minZ, maxZ;
 
     // Create a new Rectangular Cuboid
     public RectCuboid(final String cuboidName, final String ownerName, final World world, final Location minCorner) {
@@ -108,5 +106,69 @@ public class RectCuboid extends PlayerCuboid {
     @Override
     public String getSizeString() {
         return maxX - minX + 1 + "x" + (maxY - minY + 1) + "x" + (maxZ - minZ + 1);
+    }
+
+    public Location getMaxCorner() {
+        return maxCorner;
+    }
+
+    public void setMaxCorner(Location maxCorner) {
+        this.maxCorner = maxCorner;
+    }
+
+    public int getMaxX() {
+        return maxX;
+    }
+
+    public void setMaxX(int maxX) {
+        this.maxX = maxX;
+    }
+
+    public int getMaxY() {
+        return maxY;
+    }
+
+    public void setMaxY(int maxY) {
+        this.maxY = maxY;
+    }
+
+    public int getMaxZ() {
+        return maxZ;
+    }
+
+    public void setMaxZ(int maxZ) {
+        this.maxZ = maxZ;
+    }
+
+    public Location getMinCorner() {
+        return minCorner;
+    }
+
+    public void setMinCorner(Location minCorner) {
+        this.minCorner = minCorner;
+    }
+
+    public int getMinX() {
+        return minX;
+    }
+
+    public void setMinX(int minX) {
+        this.minX = minX;
+    }
+
+    public int getMinY() {
+        return minY;
+    }
+
+    public void setMinY(int minY) {
+        this.minY = minY;
+    }
+
+    public int getMinZ() {
+        return minZ;
+    }
+
+    public void setMinZ(int minZ) {
+        this.minZ = minZ;
     }
 }

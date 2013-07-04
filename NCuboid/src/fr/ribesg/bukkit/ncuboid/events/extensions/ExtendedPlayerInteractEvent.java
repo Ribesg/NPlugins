@@ -1,19 +1,16 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import java.util.Set;
-
-import lombok.Getter;
-
-import org.bukkit.event.player.PlayerInteractEvent;
-
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+
+import java.util.Set;
 
 public class ExtendedPlayerInteractEvent extends AbstractExtendedEvent {
 
-    @Getter private final GeneralCuboid      cuboid;
-    @Getter private final Set<GeneralCuboid> cuboids;
+    private final GeneralCuboid      cuboid;
+    private final Set<GeneralCuboid> cuboids;
 
     // Called only if event.hasBlock()
     public ExtendedPlayerInteractEvent(final CuboidDB db, final PlayerInteractEvent event) {
@@ -27,4 +24,11 @@ public class ExtendedPlayerInteractEvent extends AbstractExtendedEvent {
         }
     }
 
+    public GeneralCuboid getCuboid() {
+        return cuboid;
+    }
+
+    public Set<GeneralCuboid> getCuboids() {
+        return cuboids;
+    }
 }

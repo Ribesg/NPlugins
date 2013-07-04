@@ -1,18 +1,15 @@
 package fr.ribesg.bukkit.ncuboid.commands;
 
-import java.util.Arrays;
-
-import lombok.Getter;
-
+import fr.ribesg.bukkit.ncuboid.NCuboid;
 import org.bukkit.command.CommandSender;
 
-import fr.ribesg.bukkit.ncuboid.NCuboid;
+import java.util.Arrays;
 
 public abstract class AbstractSubcmdExecutor {
 
-    @Getter private final NCuboid       plugin;
-    @Getter private final CommandSender sender;
-    @Getter private final String[]      args;
+    private final NCuboid       plugin;
+    private final CommandSender sender;
+    private final String[]      args;
 
     public AbstractSubcmdExecutor(final NCuboid instance, final CommandSender sender, final String[] superCommandArgs) {
         plugin = instance;
@@ -21,4 +18,16 @@ public abstract class AbstractSubcmdExecutor {
     }
 
     public abstract boolean exec();
+
+    public String[] getArgs() {
+        return args;
+    }
+
+    public NCuboid getPlugin() {
+        return plugin;
+    }
+
+    public CommandSender getSender() {
+        return sender;
+    }
 }

@@ -1,16 +1,13 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 
 public class ChunkKey {
 
-    @Getter @Setter private int   x, z;
-    @Getter @Setter private World world;
+    private int   x, z;
+    private World world;
 
     public ChunkKey(final World world, final int x, final int z) {
         setX(x);
@@ -33,6 +30,30 @@ public class ChunkKey {
 
     public Chunk getBukkitChunk() {
         return getWorld().getChunkAt(getX(), getZ());
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getZ() {
+        return z;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
     }
 
     @Override

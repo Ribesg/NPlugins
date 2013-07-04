@@ -11,9 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author ribes
- */
+/** @author ribes */
 public class TalkCommandExecutor implements CommandExecutor {
 
     private final static String CONSOLE_NAME = Bukkit.getConsoleSender().getName();
@@ -29,21 +27,21 @@ public class TalkCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         if (command.getName().equalsIgnoreCase("pm")) {
-            if (sender.hasPermission(Permissions.CMD_PM) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN) || sender.isOp()) {
+            if (Perms.hasPrivateMessage(sender)) {
                 return cmdPrivateMessage(sender, args);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
             }
         } else if (command.getName().equalsIgnoreCase("pr")) {
-            if (sender.hasPermission(Permissions.CMD_PR) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN) || sender.isOp()) {
+            if (Perms.hasPrivateResponse(sender)) {
                 return cmdPrivateResponse(sender, args);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
             }
         } else if (command.getName().equalsIgnoreCase("nick")) {
-            if (sender.hasPermission(Permissions.CMD_NICK) || sender.hasPermission(Permissions.ADMIN) || sender.isOp()) {
+            if (Perms.hasNick(sender)) {
                 return cmdNick(sender, args);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -60,6 +58,7 @@ public class TalkCommandExecutor implements CommandExecutor {
         } else {
             final String[] targetsName = args[0].split(",");
             final HashSet<CommandSender> targets = new HashSet<CommandSender>();
+            final HashSet<CommandSender> spies = new HashSet<CommandSender>();
             for (final String target : targetsName) {
                 final Player p = plugin.getServer().getPlayer(target);
                 if (p != null) {
@@ -70,6 +69,12 @@ public class TalkCommandExecutor implements CommandExecutor {
                     plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, target);
                 }
             }
+            for (Player p : plugin.getServer().getOnlinePlayers()) {
+                if (Perms.hasSpy(p)) {
+                    spies.add(p);
+                }
+            }
+            spies.add(plugin.getServer().getConsoleSender());
             if (targets.size() == 0) {
                 return true;
             }
@@ -79,7 +84,7 @@ public class TalkCommandExecutor implements CommandExecutor {
                 messageBuilder.append(' ').append(args[i]);
             }
 
-            sendMessages(sender, targets, messageBuilder.toString());
+            sendMessages(sender, targets, spies, messageBuilder.toString());
             return true;
         }
     }
@@ -100,7 +105,13 @@ public class TalkCommandExecutor implements CommandExecutor {
                 for (int i = 1; i < args.length; i++) {
                     messageBuilder.append(' ').append(args[i]);
                 }
-                sendMessage(sender, target, messageBuilder.toString());
+                String formattedMessage = sendMessage(sender, target, messageBuilder.toString());
+                for (Player p : plugin.getServer().getOnlinePlayers()) {
+                    if (Perms.hasSpy(p) && p != target && p != sender) {
+                        p.sendMessage(formattedMessage);
+                    }
+                }
+                plugin.getServer().getConsoleSender().sendMessage(formattedMessage);
                 return true;
             } else {
                 plugin.sendMessage(sender, MessageId.talk_nobodyToRespond);
@@ -135,16 +146,25 @@ public class TalkCommandExecutor implements CommandExecutor {
         }
     }
 
-    private void sendMessages(final CommandSender from, final Set<CommandSender> toSet, final String message) {
+    private void sendMessages(final CommandSender from,
+                              final Set<CommandSender> toSet,
+                              final Set<CommandSender> spySet,
+                              final String message) {
         for (final CommandSender to : toSet) {
-            sendMessage(from, to, message);
+            String formattedMessage = sendMessage(from, to, message);
+            for (CommandSender spy : spySet) {
+                if (spy != from && spy != to) {
+                    spy.sendMessage(formattedMessage);
+                }
+            }
         }
     }
 
-    private void sendMessage(final CommandSender from, final CommandSender to, final String message) {
+    private String sendMessage(final CommandSender from, final CommandSender to, final String message) {
         final String formattedMessage = plugin.getFormater().parsePM(from, to, message);
         from.sendMessage(formattedMessage);
         to.sendMessage(formattedMessage);
         lastReceivedPmMap.put(to.getName(), from.getName());
+        return formattedMessage;
     }
 }

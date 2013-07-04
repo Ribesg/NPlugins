@@ -40,6 +40,9 @@ public class Utils {
      * @return A human-readable String representation of this Location, including Yaw and Pitch
      */
     public static String toStringPlus(final Location loc) {
+        if (loc == null) {
+            return "null";
+        }
         final StringBuilder s = new StringBuilder();
         s.append('<');
         s.append(loc.getWorld().getName());
@@ -63,6 +66,9 @@ public class Utils {
      * @return The actual Location or null if the string was malformed
      */
     public static Location toLocation(final String string) {
+        if (string == null || "null".equals(string)) {
+            return null;
+        }
         if (string.length() < 2) {
             return null;
         }
@@ -110,6 +116,9 @@ public class Utils {
      * @return A human-readable String representation of this Vector
      */
     public static String toString(final Vector vect) {
+        if (vect == null) {
+            return "null";
+        }
         final StringBuilder s = new StringBuilder();
         s.append('<');
         s.append(vect.getX());
@@ -127,6 +136,9 @@ public class Utils {
      * @return The actual Vector or null if the string was malformed
      */
     public static Vector toVector(final String string) {
+        if (string == null || "null".equals(string)) {
+            return null;
+        }
         if (string.length() < 2) {
             return null;
         }

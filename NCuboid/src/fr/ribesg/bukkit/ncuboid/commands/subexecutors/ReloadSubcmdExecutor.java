@@ -1,14 +1,13 @@
 package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 
-import java.io.IOException;
-
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.Perms;
+import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.Permissions;
-import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
+import java.io.IOException;
 
 public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 
@@ -23,7 +22,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
         if (getArgs().length != 1) {
             getSender().sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
             return true;
-        } else if (getSender().isOp() || getSender().hasPermission(Permissions.CMD_RELOAD)) {
+        } else if (Perms.hasReload(getSender())) {
             switch (getArgs()[0]) {
                 case "cuboids":
                 case "cuboid":
@@ -41,7 +40,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
                 case "config":
                 case "conf":
                     try {
-                        getPlugin().getPluginConfig().loadConfig(getPlugin());
+                        getPlugin().getPluginConfig().loadConfig();
                         getPlugin().sendMessage(getSender(), MessageId.cmdReloadConfig);
                         return true;
                     } catch (final IOException e) {

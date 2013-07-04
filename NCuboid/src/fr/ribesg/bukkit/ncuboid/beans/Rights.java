@@ -1,20 +1,19 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
+import fr.ribesg.bukkit.ncuboid.Perms;
+import org.bukkit.entity.Player;
+
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.Getter;
-
-import org.bukkit.entity.Player;
-
-import fr.ribesg.bukkit.ncuboid.Permissions;
-
 public class Rights {
-    @Getter private Set<String> allowedPlayers;
-    @Getter private Set<String> allowedGroups;
-    @Getter private Set<String> disallowedCommands;
 
-    public Rights() {}
+    private Set<String> allowedPlayers;
+    private Set<String> allowedGroups;
+    private Set<String> disallowedCommands;
+
+    public Rights() {
+    }
 
     public Rights(final Set<String> allowedPlayers, final Set<String> allowedGroups, final Set<String> disallowedCommands) {
         this.allowedPlayers = allowedPlayers;
@@ -23,7 +22,7 @@ public class Rights {
     }
 
     public boolean isAllowedPlayer(final Player p) {
-        if (p.isOp() || p.hasPermission(Permissions.ADMIN) || isAllowedPlayerName(p.getName())) {
+        if (Perms.isAdmin(p) || isAllowedPlayerName(p.getName())) {
             return true;
         } else if (allowedGroups != null) {
             for (final String groupName : allowedGroups) {
@@ -84,5 +83,17 @@ public class Rights {
             disallowedCommands = new HashSet<String>();
         }
         disallowedCommands.add(command.toLowerCase());
+    }
+
+    public Set<String> getAllowedGroups() {
+        return allowedGroups;
+    }
+
+    public Set<String> getAllowedPlayers() {
+        return allowedPlayers;
+    }
+
+    public Set<String> getDisallowedCommands() {
+        return disallowedCommands;
     }
 }

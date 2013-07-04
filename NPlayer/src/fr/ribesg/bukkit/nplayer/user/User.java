@@ -1,4 +1,6 @@
 package fr.ribesg.bukkit.nplayer.user;
+import org.bukkit.Location;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,8 @@ public class User {
     private final Date firstJoin;
     private       Date lastSeen;
 
+    private Location home;
+
     private boolean loggedIn;
     private boolean autoLogout;
 
@@ -29,7 +33,8 @@ public class User {
         this.firstJoin = firstJoin;
         this.lastSeen = firstJoin;
         this.loggedIn = false;
-        this.autoLogout = false;
+        this.autoLogout = true;
+        this.home = null;
     }
 
     public User(LoggedOutUserHandler handler,
@@ -39,7 +44,8 @@ public class User {
                 Date lastSeen,
                 String passwordHash,
                 String userName,
-                boolean autoLogout) {
+                boolean autoLogout,
+                Location home) {
         this.handler = handler;
         this.lastIp = lastIp;
         this.firstJoin = firstJoin;
@@ -49,6 +55,7 @@ public class User {
         this.passwordHash = passwordHash;
         this.userName = userName;
         this.autoLogout = autoLogout;
+        this.home = home;
     }
 
     public String getLastIp() {
@@ -109,5 +116,13 @@ public class User {
 
     public void setAutoLogout(boolean autoLogout) {
         this.autoLogout = autoLogout;
+    }
+
+    public Location getHome() {
+        return home;
+    }
+
+    public void setHome(Location home) {
+        this.home = home;
     }
 }

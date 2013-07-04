@@ -23,7 +23,7 @@ public class NTalk extends TalkNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.1.0";
+        return "0.2.1";
     }
 
     @Override

@@ -1,14 +1,13 @@
 package fr.ribesg.bukkit.ncuboid.commands;
 
+import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.Perms;
+import fr.ribesg.bukkit.ncuboid.commands.subexecutors.CreateSubcmdExecutor;
+import fr.ribesg.bukkit.ncuboid.commands.subexecutors.ReloadSubcmdExecutor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
-import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.Permissions;
-import fr.ribesg.bukkit.ncuboid.commands.subexecutors.CreateSubcmdExecutor;
-import fr.ribesg.bukkit.ncuboid.commands.subexecutors.ReloadSubcmdExecutor;
 
 public class MainCommandExecutor implements CommandExecutor {
 
@@ -21,7 +20,7 @@ public class MainCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(final CommandSender sender, final Command cmd, final String cmdLabel, final String[] args) {
         if (cmd.getName().equals("cuboid")) {
-            if (!sender.isOp() && !sender.hasPermission(Permissions.CMD_GENERAL)) {
+            if (!Perms.hasGeneral(sender)) {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
             } else {

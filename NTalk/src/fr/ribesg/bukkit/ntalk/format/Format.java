@@ -1,4 +1,4 @@
-﻿package fr.ribesg.bukkit.ntalk.format;
+package fr.ribesg.bukkit.ntalk.format;
 
 public class Format {
 

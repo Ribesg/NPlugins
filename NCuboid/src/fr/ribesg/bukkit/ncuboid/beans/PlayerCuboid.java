@@ -1,36 +1,33 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
-import java.util.Set;
-
-import lombok.Getter;
-import lombok.Setter;
-
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.Set;
 
 public abstract class PlayerCuboid extends GeneralCuboid {
 
     public static enum CuboidState {
-        NORMAL, // Normal Cuboid
-        TMPSTATE1, // First point selected
+        NORMAL,
+        // Normal Cuboid
+        TMPSTATE1,
+        // First point selected
         TMPSTATE2 // All points selected, waiting for "/cuboid create" command
     }
 
     // Identification / informations related
-    @Getter @Setter private String        cuboidName;
-    @Getter @Setter private String        ownerName;
-    @Getter @Setter private CuboidState   state;
-    @Getter @Setter private long          totalSize;
-    @Getter @Setter private String        welcomeMessage;
-    @Getter @Setter private String        farewellMessage;
-    @Getter @Setter private Set<ChunkKey> chunks;
+    private String        cuboidName;
+    private String        ownerName;
+    private CuboidState   state;
+    private long          totalSize;
+    private String        welcomeMessage;
+    private String        farewellMessage;
+    private Set<ChunkKey> chunks;
 
     // Create a new Cuboid, when user select points etc
-    public PlayerCuboid(
-                        final String cuboidName,
-                        final String ownerName,
-                        final World world,
-                        final CuboidType type) {
+    public PlayerCuboid(final String cuboidName, final String ownerName, final World world, final CuboidType type) {
         super(world, type);
         setCuboidName(cuboidName);
         setOwnerName(ownerName);
@@ -40,8 +37,7 @@ public abstract class PlayerCuboid extends GeneralCuboid {
     }
 
     // Create a Cuboid from a save
-    public PlayerCuboid(
-                        final String cuboidName,
+    public PlayerCuboid(final String cuboidName,
                         final String ownerName,
                         final World world,
                         final CuboidState state,
@@ -84,4 +80,68 @@ public abstract class PlayerCuboid extends GeneralCuboid {
     }
 
     public abstract String getSizeString();
+
+    public boolean isOwner(CommandSender sender) {
+        return sender instanceof Player ? isOwner(sender.getName()) : false;
+    }
+
+    public boolean isOwner(String playerName) {
+        return this.ownerName.equals(playerName);
+    }
+
+    public Set<ChunkKey> getChunks() {
+        return chunks;
+    }
+
+    public void setChunks(Set<ChunkKey> chunks) {
+        this.chunks = chunks;
+    }
+
+    public String getCuboidName() {
+        return cuboidName;
+    }
+
+    public void setCuboidName(String cuboidName) {
+        this.cuboidName = cuboidName;
+    }
+
+    public String getFarewellMessage() {
+        return farewellMessage;
+    }
+
+    public void setFarewellMessage(String farewellMessage) {
+        this.farewellMessage = farewellMessage;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    public CuboidState getState() {
+        return state;
+    }
+
+    public void setState(CuboidState state) {
+        this.state = state;
+    }
+
+    public long getTotalSize() {
+        return totalSize;
+    }
+
+    public void setTotalSize(long totalSize) {
+        this.totalSize = totalSize;
+    }
+
+    public String getWelcomeMessage() {
+        return welcomeMessage;
+    }
+
+    public void setWelcomeMessage(String welcomeMessage) {
+        this.welcomeMessage = welcomeMessage;
+    }
 }

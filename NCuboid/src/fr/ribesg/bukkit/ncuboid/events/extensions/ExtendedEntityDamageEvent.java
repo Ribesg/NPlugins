@@ -1,27 +1,24 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import java.util.Set;
-
-import lombok.Getter;
-
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
-import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
+import java.util.Set;
 
 public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 
-    @Getter private final Set<GeneralCuboid> entityCuboids;
-    @Getter private Set<GeneralCuboid>       damagerCuboids;
-    @Getter private final GeneralCuboid      entityCuboid;
-    @Getter private GeneralCuboid            damagerCuboid;
+    private final Set<GeneralCuboid> entityCuboids;
+    private       Set<GeneralCuboid> damagerCuboids;
+    private final GeneralCuboid      entityCuboid;
+    private       GeneralCuboid      damagerCuboid;
 
-    @Getter private boolean                  damagerProjectile = false;
-    @Getter private Entity                   shooter;
+    private boolean damagerProjectile = false;
+    private Entity shooter;
 
     public ExtendedEntityDamageEvent(final CuboidDB db, final EntityDamageEvent event) {
         super(event);
@@ -39,4 +36,27 @@ public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
         }
     }
 
+    public GeneralCuboid getDamagerCuboid() {
+        return damagerCuboid;
+    }
+
+    public Set<GeneralCuboid> getDamagerCuboids() {
+        return damagerCuboids;
+    }
+
+    public boolean isDamagerProjectile() {
+        return damagerProjectile;
+    }
+
+    public GeneralCuboid getEntityCuboid() {
+        return entityCuboid;
+    }
+
+    public Set<GeneralCuboid> getEntityCuboids() {
+        return entityCuboids;
+    }
+
+    public Entity getShooter() {
+        return shooter;
+    }
 }

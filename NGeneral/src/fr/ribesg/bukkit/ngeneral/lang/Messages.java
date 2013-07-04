@@ -11,8 +11,6 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.Getter;
-
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 

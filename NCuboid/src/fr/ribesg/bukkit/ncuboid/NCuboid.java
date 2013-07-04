@@ -1,14 +1,5 @@
 package fr.ribesg.bukkit.ncuboid;
 
-import java.io.IOException;
-
-import lombok.Getter;
-
-import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.plugin.PluginManager;
-
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.nodes.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
@@ -19,26 +10,13 @@ import fr.ribesg.bukkit.ncuboid.lang.Messages;
 import fr.ribesg.bukkit.ncuboid.listeners.EventExtensionListener;
 import fr.ribesg.bukkit.ncuboid.listeners.PlayerStickListener;
 import fr.ribesg.bukkit.ncuboid.listeners.WorldLoadingListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.BoosterFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.BuildFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.ChatFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.ChestFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.ClosedFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.CreativeFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.DropFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.EndermanGriefFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.ExplosionFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.FarmFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.FireFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.GodFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.InvisibleFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.MobFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.PVPFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.PassFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.SnowFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.TeleportFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.UseFlagListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.WarpgateFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.*;
+import org.bukkit.World;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.plugin.PluginManager;
+
+import java.io.IOException;
 
 /**
  * TODO
@@ -48,18 +26,18 @@ import fr.ribesg.bukkit.ncuboid.listeners.flag.WarpgateFlagListener;
 public class NCuboid extends CuboidNode {
 
     // Configs
-    @Getter private Messages messages;
-    @Getter private Config   pluginConfig;
+    private Messages messages;
+    private Config   pluginConfig;
 
     // Useful Nodes
     // // None
 
     // Cuboids base
-    @Getter private CuboidDB db;
+    private CuboidDB db;
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.1.1";
+        return "0.2.1";
     }
 
     /**
@@ -83,8 +61,8 @@ public class NCuboid extends CuboidNode {
 
         // Config
         try {
-            pluginConfig = new Config();
-            pluginConfig.loadConfig(this);
+            pluginConfig = new Config(this);
+            pluginConfig.loadConfig();
         } catch (final IOException e) {
             getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
@@ -180,5 +158,17 @@ public class NCuboid extends CuboidNode {
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
         final String[] m = messages.get(messageId, args);
         to.sendMessage(m);
+    }
+
+    public CuboidDB getDb() {
+        return db;
+    }
+
+    public Messages getMessages() {
+        return messages;
+    }
+
+    public Config getPluginConfig() {
+        return pluginConfig;
     }
 }

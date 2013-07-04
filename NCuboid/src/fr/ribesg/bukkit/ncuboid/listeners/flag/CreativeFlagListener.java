@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
+import fr.ribesg.bukkit.ncuboid.Perms;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,7 +10,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.Permissions;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerDropItemEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
@@ -66,7 +66,7 @@ public class CreativeFlagListener extends AbstractListener {
                 case MINECART_CHEST:
                 case MINECART_FURNACE:
                 case MINECART_HOPPER:
-                    event.setCancelled(!p.isOp() && !p.hasPermission(Permissions.ADMIN));
+                    event.setCancelled(!Perms.isAdmin(p));
                     break;
                 default:
                     break;

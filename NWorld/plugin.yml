@@ -1,5 +1,5 @@
 name: NWorld
-version: 0.1.0
+version: 0.1.1
 description: World handling plugin for N plugins suite
 author: Ribesg
 website: http://www.ribesg.fr/
@@ -12,7 +12,7 @@ softdepend: [NCore]
 commands:
   nworld:
     description: Main command
-    aliases: [nw]
+    aliases: [nw,world]
     usage: |
       /<command> [worldName]
       /<command> create <worldName> [seed]

@@ -1,23 +1,19 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import java.util.Set;
-
-import lombok.Getter;
-import lombok.Setter;
-
-import org.bukkit.event.player.PlayerMoveEvent;
-
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+
+import java.util.Set;
 
 public class ExtendedPlayerMoveEvent extends AbstractExtendedEvent {
 
-    @Getter private final GeneralCuboid      fromCuboid;
-    @Getter private final Set<GeneralCuboid> fromCuboids;
-    @Getter private final GeneralCuboid      toCuboid;
-    @Getter private final Set<GeneralCuboid> toCuboids;
-    @Setter private boolean                  customCancelled;
+    private final GeneralCuboid      fromCuboid;
+    private final Set<GeneralCuboid> fromCuboids;
+    private final GeneralCuboid      toCuboid;
+    private final Set<GeneralCuboid> toCuboids;
+    private       boolean            customCancelled;
 
     public ExtendedPlayerMoveEvent(final CuboidDB db, final PlayerMoveEvent event) {
         super(event);
@@ -32,4 +28,23 @@ public class ExtendedPlayerMoveEvent extends AbstractExtendedEvent {
         return customCancelled;
     }
 
+    public void setCustomCancelled(boolean customCancelled) {
+        this.customCancelled = customCancelled;
+    }
+
+    public GeneralCuboid getFromCuboid() {
+        return fromCuboid;
+    }
+
+    public Set<GeneralCuboid> getFromCuboids() {
+        return fromCuboids;
+    }
+
+    public GeneralCuboid getToCuboid() {
+        return toCuboid;
+    }
+
+    public Set<GeneralCuboid> getToCuboids() {
+        return toCuboids;
+    }
 }

@@ -25,7 +25,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         if (command.getName().equalsIgnoreCase("nend")) {
             if (args.length == 0 || args.length == 1 && (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("h"))) {
-                if (sender.hasPermission(Permissions.CMD_HELP) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN)) {
+                if (Perms.hasHelp(sender)) {
                     return cmdHelp(sender);
                 } else {
                     plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -34,7 +34,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
             } else {
                 switch (args[0].toLowerCase()) {
                     case "regen":
-                        if (sender.hasPermission(Permissions.CMD_REGEN) || sender.hasPermission(Permissions.ADMIN)) {
+                        if (Perms.hasRegen(sender)) {
                             return cmdRegen(sender, Arrays.copyOfRange(args, 1, args.length));
                         } else {
                             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -43,7 +43,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
                     case "respawnenderdragon":
                     case "respawned":
                     case "respawn":
-                        if (sender.hasPermission(Permissions.CMD_RESPAWN) || sender.hasPermission(Permissions.ADMIN)) {
+                        if (Perms.hasRespawn(sender)) {
                             return cmdRespawn(sender, Arrays.copyOfRange(args, 1, args.length));
                         } else {
                             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -52,7 +52,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
                     case "nbenderdragon":
                     case "nbed":
                     case "nb":
-                        if (sender.hasPermission(Permissions.CMD_NB) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN)) {
+                        if (Perms.hasNb(sender)) {
                             return cmdNb(sender, Arrays.copyOfRange(args, 1, args.length));
                         } else {
                             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -65,7 +65,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
                             switch (args[1]) {
                                 case "info":
                                 case "i":
-                                    if (sender.hasPermission(Permissions.CMD_CHUNKINFO) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN)) {
+                                    if (Perms.hasChunkInfo(sender)) {
                                         return cmdChunkInfo(sender);
                                     } else {
                                         plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -73,7 +73,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
                                     }
                                 case "protect":
                                 case "p":
-                                    if (sender.hasPermission(Permissions.CMD_CHUNKPROTECT) || sender.hasPermission(Permissions.ADMIN)) {
+                                    if (Perms.hasChunkProtect(sender)) {
                                         return cmdChunkProtect(sender);
                                     } else {
                                         plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -81,7 +81,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
                                     }
                                 case "unprotect":
                                 case "up":
-                                    if (sender.hasPermission(Permissions.CMD_CHUNKUNPROTECT) || sender.hasPermission(Permissions.ADMIN)) {
+                                    if (Perms.hasChunkUnprotect(sender)) {
                                         return cmdChunkUnprotect(sender);
                                     } else {
                                         plugin.sendMessage(sender, MessageId.noPermissionForCommand);

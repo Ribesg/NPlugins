@@ -1,6 +1,7 @@
 package fr.ribesg.bukkit.nworld;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -9,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,9 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-/**
- * @author Ribesg
- */
+/** @author Ribesg */
 public class WorldCommandExecutor implements CommandExecutor {
 
     private final NWorld plugin;
@@ -32,21 +32,21 @@ public class WorldCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         if (command.getName().equalsIgnoreCase("nworld")) {
-            if (sender.hasPermission(Permissions.CMD_WORLD) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN) || sender.isOp()) {
+            if (Perms.hasWorld(sender)) {
                 return cmdWorld(sender, args);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
             }
         } else if (command.getName().equalsIgnoreCase("spawn")) {
-            if (sender.hasPermission(Permissions.CMD_SPAWN) || sender.hasPermission(Permissions.USER) || sender.hasPermission(Permissions.ADMIN) || sender.isOp()) {
+            if (Perms.hasSpawn(sender)) {
                 return cmdSpawn(sender);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
             }
         } else if (command.getName().equalsIgnoreCase("setspawn")) {
-            if (sender.hasPermission(Permissions.CMD_SETSPAWN) || sender.hasPermission(Permissions.ADMIN) || sender.isOp()) {
+            if (Perms.hasSetSpawn(sender)) {
                 return cmdSetSpawn(sender);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -100,9 +100,17 @@ public class WorldCommandExecutor implements CommandExecutor {
         final Player player = (Player) sender;
         final String worldName = givenWorldName.toLowerCase();
         if (plugin.getWorldMap().containsKey(worldName)) {
-            if (plugin.getWorldMap().get(worldName) || player.hasPermission(Permissions.CMD_WORLD_WARP_ALL)) {
+            if (plugin.getWorldMap().get(worldName) || Perms.hasWorldWarpAll(player)) {
                 final World world = plugin.getServer().getWorld(worldName);
-                player.teleport(plugin.getSpawnMap().get(worldName));
+                final Location dest = plugin.getSpawnMap().get(worldName);
+                dest.getChunk().load(true);
+                Bukkit.getScheduler().runTask(plugin, new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.teleport(dest);
+                    }
+                });
                 plugin.sendMessage(sender, MessageId.world_teleportedTo, world.getName());
                 return true;
             } else {
@@ -116,7 +124,7 @@ public class WorldCommandExecutor implements CommandExecutor {
     }
 
     private boolean subCmdWorldCreate(final CommandSender sender, final String[] args) {
-        if (!sender.hasPermission(Permissions.CMD_WORLD_CREATE) && !sender.hasPermission(Permissions.ADMIN) && !sender.isOp()) {
+        if (!Perms.hasWorldCreate(sender)) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
@@ -152,7 +160,7 @@ public class WorldCommandExecutor implements CommandExecutor {
     }
 
     private boolean subCmdWorldLoad(final CommandSender sender, final String[] args) {
-        if (!sender.hasPermission(Permissions.CMD_WORLD_LOAD) && !sender.hasPermission(Permissions.ADMIN) && !sender.isOp()) {
+        if (!Perms.hasWorldLoad(sender)) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
@@ -180,7 +188,7 @@ public class WorldCommandExecutor implements CommandExecutor {
     }
 
     private boolean subCmdWorldUnload(final CommandSender sender, final String[] args) {
-        if (!sender.hasPermission(Permissions.CMD_WORLD_UNLOAD) && !sender.hasPermission(Permissions.ADMIN) && !sender.isOp()) {
+        if (!Perms.hasWorldUnload(sender)) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
@@ -208,7 +216,7 @@ public class WorldCommandExecutor implements CommandExecutor {
     }
 
     private boolean subCmdWorldWarpAllow(final CommandSender sender, final String[] args) {
-        if (!sender.hasPermission(Permissions.CMD_WORLD_WARP_EDIT) && !sender.hasPermission(Permissions.ADMIN) && !sender.isOp()) {
+        if (!Perms.hasWorldWarpEdit(sender)) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
@@ -232,7 +240,7 @@ public class WorldCommandExecutor implements CommandExecutor {
     }
 
     private boolean subCmdWorldWarpDeny(final CommandSender sender, final String[] args) {
-        if (!sender.hasPermission(Permissions.CMD_WORLD_WARP_EDIT) && !sender.hasPermission(Permissions.ADMIN) && !sender.isOp()) {
+        if (!Perms.hasWorldWarpEdit(sender)) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
@@ -293,6 +301,7 @@ public class WorldCommandExecutor implements CommandExecutor {
      * Output= {arg1} ; {arg2 arg3 arg4} ; {arg5}
      *
      * @param args Original arguments
+     *
      * @return The new arguments array
      */
     private String[] parseArgs(final String[] args) {
@@ -332,6 +341,7 @@ public class WorldCommandExecutor implements CommandExecutor {
      * Check if a given world is loaded, not case sensitive.
      *
      * @param worldName The world name given by the sender
+     *
      * @return The correct name of the world if it is loaded, null otherwise
      */
     private String isLoaded(final String worldName) {
@@ -347,7 +357,9 @@ public class WorldCommandExecutor implements CommandExecutor {
      * Check if a given unloaded world exists in world folder, not case sensitive.
      *
      * @param worldName The world name given by the sender
+     *
      * @return The correct name of the world if it exists, null otherwise
+     *
      * @throws IOException If it was unable to iterate over the Worlds folder
      */
     private String exists(final String worldName) throws IOException {
@@ -370,6 +382,7 @@ public class WorldCommandExecutor implements CommandExecutor {
      * Returns the real world name of the given world
      *
      * @param worldName The world name given by the sender
+     *
      * @return The correct name of the world if it is loaded or exists, null otherwise
      */
     private String getRealWorldName(final String worldName) {

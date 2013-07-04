@@ -1,30 +1,30 @@
 package fr.ribesg.bukkit.ncuboid;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
+import fr.ribesg.bukkit.ncore.AbstractConfig;
+import fr.ribesg.bukkit.ncore.nodes.NPlugin;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import fr.ribesg.bukkit.ncore.AbstractConfig;
-
 /**
  * The config for the NCuboid node
- * 
+ *
  * @author Ribesg
  */
 public class Config extends AbstractConfig {
 
-    @Getter @Setter(AccessLevel.PRIVATE) private static Material selectionItemMaterial;
+    private static Material selectionItemMaterial;
 
-    public Config() {
+    /**
+     * Constructor
+     *
+     * @param instance Linked plugin instance
+     */
+    public Config(NPlugin instance) {
+        super(instance);
         setSelectionItemMaterial(Material.STICK);
     }
 
-    /**
-     * @see AbstractConfig#setValues(YamlConfiguration)
-     */
+    /** @see AbstractConfig#setValues(YamlConfiguration) */
     @Override
     protected void setValues(final YamlConfiguration config) {
 
@@ -33,9 +33,7 @@ public class Config extends AbstractConfig {
         setSelectionItemMaterial(m == null ? Material.STICK : m);
     }
 
-    /**
-     * @see AbstractConfig#getConfigString()
-     */
+    /** @see AbstractConfig#getConfigString() */
     @Override
     protected String getConfigString() {
         final StringBuilder content = new StringBuilder();
@@ -51,5 +49,13 @@ public class Config extends AbstractConfig {
         content.append("selectionItemMaterial: " + getSelectionItemMaterial().getId() + "\n\n");
 
         return content.toString();
+    }
+
+    public static Material getSelectionItemMaterial() {
+        return selectionItemMaterial;
+    }
+
+    private static void setSelectionItemMaterial(Material selectionItemMaterial) {
+        Config.selectionItemMaterial = selectionItemMaterial;
     }
 }

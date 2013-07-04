@@ -1,8 +1,11 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.Perms;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerJoinEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
+import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,12 +14,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.Permissions;
-import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerJoinEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
-import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+import java.util.HashSet;
+import java.util.Set;
 
 public class InvisibleFlagListener extends AbstractListener {
 
@@ -72,7 +71,7 @@ public class InvisibleFlagListener extends AbstractListener {
 
     private void hideToAll(final Player p) {
         for (final Player other : Bukkit.getOnlinePlayers()) {
-            if (!other.equals(p) && !other.hasPermission(Permissions.SEE_INVISIBLE_CUBOID)) {
+            if (!other.equals(p) && !Perms.hasSeeInvisibleCuboid(other)) {
                 other.showPlayer(p);
             }
         }

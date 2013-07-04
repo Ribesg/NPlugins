@@ -2,14 +2,16 @@ package fr.ribesg.bukkit.nplayer.user;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
@@ -64,31 +66,14 @@ public class LoggedOutUserHandler implements Listener {
     public void lockPlayer(String userName) {
         Player player = plugin.getServer().getPlayerExact(userName);
         if (player != null) {
-            int id = Material.WOOL.getId();
-            byte b = 0;
-            player.sendBlockChange(player.getLocation().add(0, -1, 0), id, b);
-            player.sendBlockChange(player.getEyeLocation().add(0, 1, 0), id, b);
-            player.sendBlockChange(player.getEyeLocation().add(1, 0, 0), id, b);
-            player.sendBlockChange(player.getEyeLocation().add(0, 0, -1), id, b);
-            player.sendBlockChange(player.getEyeLocation().add(0, 0, 1), id, b);
-            player.sendBlockChange(player.getEyeLocation().add(-1, 0, 0), id, b);
-            player.sendBlockChange(player.getLocation().add(1, 0, 0), id, b);
-            player.sendBlockChange(player.getLocation().add(0, 0, -1), id, b);
-            player.sendBlockChange(player.getLocation().add(0, 0, 1), id, b);
-            player.sendBlockChange(player.getLocation().add(-1, 0, 0), id, b);
+            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(1337, 42));
         }
     }
 
     public void unlockPlayer(String userName) {
         Player player = plugin.getServer().getPlayerExact(userName);
         if (player != null) {
-            int locX = player.getLocation().getBlockX() / 16;
-            int locZ = player.getLocation().getBlockZ() / 16;
-            for (int x = -1; x <= 1; x += 2) {
-                for (int z = -1; z <= 1; z += 2) {
-                    player.getWorld().refreshChunk(locX + x, locZ + z);
-                }
-            }
+            player.removePotionEffect(PotionEffectType.BLINDNESS);
         }
     }
 
@@ -97,7 +82,9 @@ public class LoggedOutUserHandler implements Listener {
         String userName = event.getPlayer().getName();
         notifyConnect(userName);
         User user = plugin.getUserDb().get(userName);
-        if (user != null && user.getLastIp().equals(event.getPlayer().getAddress().getAddress().getHostAddress())) {
+        if (user != null &&
+            user.getLastIp().equals(event.getPlayer().getAddress().getAddress().getHostAddress()) &&
+            !user.hasAutoLogout()) {
             user.setLoggedIn(true);
             notifyLogin(user);
         }
@@ -109,6 +96,7 @@ public class LoggedOutUserHandler implements Listener {
         User user = plugin.getUserDb().get(userName);
         if (user != null && user.hasAutoLogout()) {
             user.setLoggedIn(false);
+            notifyLogout(user);
         }
         notifyDisconnect(userName);
     }
@@ -212,6 +200,13 @@ public class LoggedOutUserHandler implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerEditBook(PlayerEditBookEvent event) {
         if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onPlayerDamage(EntityDamageEvent event) {
+        if (event.getEntityType() == EntityType.PLAYER && loggedOutPlayers.containsKey(((Player) event.getEntity()).getName())) {
             event.setCancelled(true);
         }
     }

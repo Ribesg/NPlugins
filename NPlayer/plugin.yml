@@ -18,3 +18,7 @@ commands:
     description: Logout command
   info:
     description: Info command
+  home:
+    description: Home command
+  sethome:
+    description: SetHome command

@@ -61,7 +61,9 @@ public class NPlayer extends PlayerNode {
         getCommand("login").setExecutor(executor);
         getCommand("register").setExecutor(executor);
         getCommand("logout").setExecutor(executor);
-        getCommand("info").setExecutor(executor);
+        //getCommand("info").setExecutor(executor);
+        getCommand("home").setExecutor(executor);
+        getCommand("sethome").setExecutor(executor);
 
         loggedOutUserHandler = new LoggedOutUserHandler(this);
 
@@ -89,6 +91,13 @@ public class NPlayer extends PlayerNode {
             getPluginConfig().writeConfig();
         } catch (final IOException e) {
             e.printStackTrace();
+        }
+        try {
+            userDb.saveConfig();
+        } catch (IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            getLogger().severe("This error occured when NPlayer tried to save userDB.yml");
         }
     }
 

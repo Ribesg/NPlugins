@@ -3,6 +3,7 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.nplayer.security.Security;
 import fr.ribesg.bukkit.nplayer.user.User;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +55,35 @@ public class PlayerCommandExecutor implements CommandExecutor, Listener {
             case ":logn":
             case ":logi":
                 // Typo on /login command, do not output the password in console or ingame
+                event.setCancelled(true);
+                break;
+            case "/register":
+                event.setCancelled(true);
+                if (Perms.hasRegister(event.getPlayer())) {
+                    registerCommand(event.getPlayer(), event.getMessage().substring(9).trim().split(" "));
+                } else {
+                    plugin.sendMessage(event.getPlayer(), MessageId.noPermissionForCommand);
+                }
+                break;
+            case "register":
+            case "/egister":
+            case "/rgister":
+            case "/reister":
+            case "/regster":
+            case "/regiter":
+            case "/regiser":
+            case "/registr":
+            case "/registe":
+            case ":register":
+            case ":egister":
+            case ":rgister":
+            case ":reister":
+            case ":regster":
+            case ":regiter":
+            case ":regiser":
+            case ":registr":
+            case ":registe":
+                // Typo on /register command, do not output the password in console or ingame
                 event.setCancelled(true);
                 break;
             default:
@@ -104,6 +135,30 @@ public class PlayerCommandExecutor implements CommandExecutor, Listener {
                     return infoCommand(sender, args);
                 } else {
                     plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+                    return true;
+                }
+            case "home":
+                if (sender instanceof Player) {
+                    if (Perms.hasHome(sender)) {
+                        return homeCommand((Player) sender, args);
+                    } else {
+                        plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+                        return true;
+                    }
+                } else {
+                    plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+                    return true;
+                }
+            case "sethome":
+                if (sender instanceof Player) {
+                    if (Perms.hasSetHome(sender)) {
+                        return setHomeCommand((Player) sender, args);
+                    } else {
+                        plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+                        return true;
+                    }
+                } else {
+                    plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
                     return true;
                 }
         }
@@ -171,6 +226,7 @@ public class PlayerCommandExecutor implements CommandExecutor, Listener {
                 }
             } else if (args.length == 2) {
                 if (args[0].equals("autologout") || args[0].equals("auto")) {
+                    autoLogout = true;
                     if (args[1].equals("enable")) {
                         enable = true;
                     } else if (args[1].equals("disable")) {
@@ -181,7 +237,7 @@ public class PlayerCommandExecutor implements CommandExecutor, Listener {
         }
         if (autoLogout) {
             if (toggle) {
-                user.setAutoLogout(user.hasAutoLogout());
+                user.setAutoLogout(!user.hasAutoLogout());
             } else if (enable) {
                 user.setAutoLogout(true);
             } else if (disable) {
@@ -202,7 +258,104 @@ public class PlayerCommandExecutor implements CommandExecutor, Listener {
 
     private boolean infoCommand(CommandSender sender, String[] args) {
         boolean isAdmin = Perms.hasInfoAdmin(sender);
+        sender.sendMessage("/info command STILL TODO");
         return false; // TODO
+    }
+
+    private boolean homeCommand(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+            return true;
+        }
+        final Player player = (Player) sender;
+        if (args.length > 0) {
+            String userName = args[0];
+            Player p = plugin.getServer().getPlayer(userName);
+            if (p != null) {
+                userName = p.getName();
+            }
+            User user = plugin.getUserDb().get(userName);
+            if (user == null) {
+                plugin.sendMessage(player, MessageId.player_unknownUser, userName);
+                return true;
+            }
+            final Location dest = user.getHome();
+            if (dest == null) {
+                plugin.sendMessage(player, MessageId.player_userHasNoHome, userName);
+                return true;
+            } else {
+                plugin.sendMessage(player, MessageId.player_teleportingToUserHome, userName);
+                dest.getChunk().load(true);
+                plugin.getServer().getScheduler().runTask(plugin, new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.teleport(dest);
+                    }
+                });
+                return true;
+            }
+        } else {
+            User user = plugin.getUserDb().get(player.getName());
+            if (user == null) {
+                plugin.getLogger()
+                      .severe("Unknown error while executing command /home : user does not exists but still managed to use " +
+                              "the command.");
+                player.sendMessage("§cUnkown error, see console.");
+                return true;
+            }
+            final Location dest = user.getHome();
+            if (dest == null) {
+                plugin.sendMessage(player, MessageId.player_youHaveNoHome);
+                return true;
+            } else {
+                plugin.sendMessage(player, MessageId.player_teleportingToYourHome);
+                dest.getChunk().load(true);
+                plugin.getServer().getScheduler().runTask(plugin, new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.teleport(dest);
+                    }
+                });
+                return true;
+            }
+        }
+    }
+
+    private boolean setHomeCommand(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+            return true;
+        }
+        Player player = (Player) sender;
+        if (args.length > 0) {
+            String userName = args[0];
+            Player p = plugin.getServer().getPlayer(userName);
+            if (p != null) {
+                userName = p.getName();
+            }
+            User user = plugin.getUserDb().get(userName);
+            if (user == null) {
+                plugin.sendMessage(player, MessageId.player_unknownUser, userName);
+                return true;
+            }
+            user.setHome(player.getLocation());
+            plugin.sendMessage(player, MessageId.player_userHomeSet, userName);
+            return true;
+        } else {
+            User user = plugin.getUserDb().get(player.getName());
+            if (user == null) {
+                plugin.getLogger()
+                      .severe("Unknown error while executing command /home : user does not exists but still managed to use " +
+                              "the command.");
+                player.sendMessage("§cUnkown error, see console.");
+                return true;
+            }
+            user.setHome(player.getLocation());
+            plugin.sendMessage(player, MessageId.player_yourHomeSet);
+            return true;
+        }
     }
 
     private void loginAttempt(String userName) {
@@ -225,6 +378,7 @@ public class PlayerCommandExecutor implements CommandExecutor, Listener {
                 default:
                     break;
             }
+            loginAttempts.put(userName, plugin.getPluginConfig().getMaximumLoginAttempts() - 1);
         }
     }
 }

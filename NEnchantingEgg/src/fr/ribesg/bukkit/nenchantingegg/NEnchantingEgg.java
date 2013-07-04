@@ -39,7 +39,7 @@ public class NEnchantingEgg extends EnchantingEggNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.2.0";
+        return "0.2.1";
     }
 
     @Override

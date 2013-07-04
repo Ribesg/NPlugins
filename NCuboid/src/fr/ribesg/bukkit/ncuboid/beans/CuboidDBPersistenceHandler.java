@@ -1,5 +1,16 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
+import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid.CuboidType;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.util.Vector;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -14,22 +25,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.util.Vector;
-
-import fr.ribesg.bukkit.ncore.utils.Utils;
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid.CuboidType;
-
 public class CuboidDBPersistenceHandler {
 
-    public static final Charset CHARSET     = StandardCharsets.UTF_8;
-    private final static String DB_FILENAME = "cuboidDB.yml";
+    public static final  Charset CHARSET     = StandardCharsets.UTF_8;
+    private final static String  DB_FILENAME = "cuboidDB.yml";
 
     public static CuboidDB loadDB(final NCuboid plugin) throws IOException, InvalidConfigurationException {
         final CuboidDB db = new CuboidDB(plugin);
@@ -195,7 +194,10 @@ public class CuboidDBPersistenceHandler {
         }
 
         final String configString = config.saveToString();
-        try (BufferedWriter writer = Files.newBufferedWriter(cuboidDBConfigFile, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(cuboidDBConfigFile,
+                                                             CHARSET,
+                                                             StandardOpenOption.TRUNCATE_EXISTING,
+                                                             StandardOpenOption.WRITE)) {
             writer.write(configString);
         }
     }

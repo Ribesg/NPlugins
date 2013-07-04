@@ -1,7 +1,5 @@
 package fr.ribesg.bukkit.ncuboid.events;
 
-import lombok.Getter;
-
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -20,9 +18,13 @@ public abstract class AbstractExtendedEvent extends Event {
     }
 
     // Actual Event Extension
-    @Getter private final Event baseEvent;
+    private final Event baseEvent;
 
     public AbstractExtendedEvent(final Event event) {
         baseEvent = event;
+    }
+
+    public Event getBaseEvent() {
+        return baseEvent;
     }
 }

@@ -125,5 +125,12 @@ public enum MessageId {
     player_autoLogoutEnabled,
     player_autoLogoutDisabled,
     player_loggedOut,
+    player_unknownUser,
+    player_userHasNoHome,
+    player_teleportingToUserHome,
+    player_youHaveNoHome,
+    player_teleportingToYourHome,
+    player_userHomeSet,
+    player_yourHomeSet,
 
 }

@@ -1,4 +1,4 @@
-﻿package fr.ribesg.bukkit.ntalk.format;
+package fr.ribesg.bukkit.ntalk.format;
 
 import fr.ribesg.bukkit.ntalk.Config;
 import fr.ribesg.bukkit.ntalk.NTalk;
