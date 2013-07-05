@@ -139,7 +139,6 @@ public class LoggedOutUserHandler implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
-        System.out.print(event.getMessage());
         if (loggedOutPlayers.containsKey(event.getPlayer().getName()) &&
             !event.getMessage().startsWith("/login") &&
             !event.getMessage().startsWith("/register")) {
