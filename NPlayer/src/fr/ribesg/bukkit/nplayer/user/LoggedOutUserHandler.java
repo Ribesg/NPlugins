@@ -143,7 +143,6 @@ public class LoggedOutUserHandler implements Listener {
             !event.getMessage().startsWith("/login") &&
             !event.getMessage().startsWith("/register")) {
             event.setCancelled(true);
-            System.out.println(" Cancelled");
         }
     }
 
