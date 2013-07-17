@@ -4,9 +4,9 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
-import fr.ribesg.bukkit.ntheendagain.tasks.RegenTask;
-import fr.ribesg.bukkit.ntheendagain.tasks.RespawnTask;
-import fr.ribesg.bukkit.ntheendagain.tasks.UnexpectedDragonDeathHandlerTask;
+import fr.ribesg.bukkit.ntheendagain.task.RegenTask;
+import fr.ribesg.bukkit.ntheendagain.task.RespawnTask;
+import fr.ribesg.bukkit.ntheendagain.task.UnexpectedDragonDeathHandlerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -49,9 +49,9 @@ public class EndWorldHandler {
         camelCaseWorldName = Utils.toLowerCamelCase(endWorld.getName());
         chunks = new EndChunks();
         config = new Config(plugin, endWorld.getName());
-        dragons = new HashMap<UUID, Map<String, Long>>();
-        loadedDragons = new HashSet<UUID>();
-        tasks = new HashSet<BukkitTask>();
+        dragons = new HashMap<>();
+        loadedDragons = new HashSet<>();
+        tasks = new HashSet<>();
 
         // Config is not yet loaded here
     }
@@ -204,11 +204,7 @@ public class EndWorldHandler {
         return respawning;
     }
 
-    public void regen() {
-        regen(config.getRegenMethod());
-    }
-
-    public void regen(final int type) {
+    public void kickPlayers() {
         switch (config.getRegenAction()) {
             case 0:
                 final String[] lines = plugin.getMessages().get(MessageId.theEndAgain_worldRegenerating);
@@ -232,6 +228,14 @@ public class EndWorldHandler {
                 // Not possible.
                 break;
         }
+    }
+
+    public void regen() {
+        regen(config.getRegenMethod());
+    }
+
+    public void regen(final int type) {
+        kickPlayers();
         Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
 
             @Override
@@ -250,13 +254,13 @@ public class EndWorldHandler {
                         break;
                 }
             }
-        }, 5
-                                          );
+        }, 5);
     }
 
     private void hardRegen() {
         plugin.getLogger().info("Regenerating End world \"" + endWorld.getName() + "\"...");
-        regen(1);
+        kickPlayers();
+        softRegen();
         for (final EndChunk c : chunks) {
             if (c.hasToBeRegen()) {
                 c.cleanCrystalLocations();
@@ -280,8 +284,8 @@ public class EndWorldHandler {
     }
 
     public void decrementDragonCount() {
-        if (--numberOfAliveEnderDragons < 0) {
-            numberOfAliveEnderDragons = 0;
+        if (numberOfAliveEnderDragons > 0) {
+            numberOfAliveEnderDragons--;
         }
     }
 
@@ -305,8 +309,7 @@ public class EndWorldHandler {
             public void run() {
                 endWorld.spawnEntity(loc, EntityType.ENDER_DRAGON);
             }
-        }, 2L
-                                          );
+        }, 2L);
     }
 
     public EndChunks getChunks() {

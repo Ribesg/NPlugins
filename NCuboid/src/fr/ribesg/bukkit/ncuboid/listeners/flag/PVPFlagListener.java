@@ -1,5 +1,11 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPotionSplashEvent;
+import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
@@ -7,13 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
-
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPotionSplashEvent;
-import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 
 public class PVPFlagListener extends AbstractListener {
 
@@ -25,8 +24,11 @@ public class PVPFlagListener extends AbstractListener {
     public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
         if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
             final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
-            if (event.getEntityType() == EntityType.PLAYER && (event.getDamager().getType() == EntityType.PLAYER || ext.isDamagerProjectile() && ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER)) {
-                if (ext.getEntityCuboid() != null && ext.getEntityCuboid().getFlag(Flag.PVP) || ext.getDamagerCuboid() != null && ext.getDamagerCuboid().getFlag(Flag.PVP)) {
+            if (event.getEntityType() == EntityType.PLAYER &&
+                (event.getDamager().getType() == EntityType.PLAYER ||
+                 ext.isDamagerProjectile() && ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER)) {
+                if (ext.getEntityCuboid() != null && ext.getEntityCuboid().getFlag(Flag.PVP) ||
+                    ext.getDamagerCuboid() != null && ext.getDamagerCuboid().getFlag(Flag.PVP)) {
                     event.setCancelled(true);
                 }
             }

@@ -81,8 +81,7 @@ public class PlayerListener implements Listener {
                             }
                         }
                     }
-                }
-                                             );
+                });
                 break;
             default:
                 coord = new ChunkCoord(event.getBlockPlaced().getLocation().getChunk());

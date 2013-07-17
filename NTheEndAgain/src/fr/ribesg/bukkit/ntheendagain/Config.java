@@ -110,9 +110,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         setNextRespawnTaskTime(DEFAULT_nextRespawnTaskTime);
     }
 
-    /**
-     * @see AbstractConfig#setValues(YamlConfiguration)
-     */
+    /** @see AbstractConfig#setValues(YamlConfiguration) */
     @Override
     protected void setValues(final YamlConfiguration config) {
 
@@ -244,9 +242,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         }
     }
 
-    /**
-     * @see AbstractConfig#getConfigString()
-     */
+    /** @see AbstractConfig#getConfigString() */
     @Override
     protected String getConfigString() {
         final StringBuilder content = new StringBuilder();
@@ -376,7 +372,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         content.append("regenMethod: " + getRegenMethod() + "\n\n");
 
         // regenTimer
-        content.append("# The time between each regen. Ignored if regenType is not Periodic (2 or 3). Default: " + DEFAULT_regenTimer + "\n");
+        content.append("# The time between each regen. Ignored if regenType is not Periodic (2 or 3). Default: " +
+                       DEFAULT_regenTimer +
+                       "\n");
         content.append("#\n");
         content.append("# Here are some example values:\n");
         content.append("#   Value   --   Description\n");
@@ -445,7 +443,11 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         content.append("respawnType: " + getRespawnType() + "\n\n");
 
         // respawnTimer
-        content.append("# The X value in the previous comments. Defaults: " + DEFAULT_respawnTimerMin + " < " + DEFAULT_respawnTimerMax + "\n");
+        content.append("# The X value in the previous comments. Defaults: " +
+                       DEFAULT_respawnTimerMin +
+                       " < " +
+                       DEFAULT_respawnTimerMax +
+                       "\n");
         content.append("# A value will be randomly chosen for each iteration. The chosen value vill be between min and max\n");
         content.append("#\n");
         content.append("# Here are some example values (again!):\n");

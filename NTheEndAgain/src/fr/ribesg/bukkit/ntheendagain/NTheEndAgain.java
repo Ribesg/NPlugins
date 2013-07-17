@@ -4,6 +4,7 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages;
+import fr.ribesg.bukkit.ntheendagain.listener.EnderDragonListener;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -48,7 +49,7 @@ public class NTheEndAgain extends TheEndAgainNode {
             return false;
         }
 
-        getServer().getPluginManager().registerEvents(new TheEndAgainListener(this), this);
+        getServer().getPluginManager().registerEvents(new EnderDragonListener(this), this);
 
         // Load End worlds configs and chunks data
         worldHandlers = new HashMap<String, EndWorldHandler>();

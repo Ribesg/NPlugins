@@ -1,14 +1,18 @@
 package fr.ribesg.bukkit.ndodgeball.lang;
 
+import fr.ribesg.bukkit.ndodgeball.lang.Messages.MessageId;
 import lombok.Getter;
 
-import fr.ribesg.bukkit.ndodgeball.lang.Messages.MessageId;
-
 public class Message {
-    @Getter private final MessageId id;
-    @Getter private final String    defaultMessage;
-    @Getter private final String    configMessage;
-    @Getter private final String[]  awaitedArgs;
+
+    @Getter
+    private final MessageId id;
+    @Getter
+    private final String    defaultMessage;
+    @Getter
+    private final String    configMessage;
+    @Getter
+    private final String[]  awaitedArgs;
 
     public Message(final MessageId id, final String defaultMessage, final String[] awaitedArgs) {
         this.id = id;

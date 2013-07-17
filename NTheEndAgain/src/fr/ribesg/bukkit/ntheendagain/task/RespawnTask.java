@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.ntheendagain.tasks;
+package fr.ribesg.bukkit.ntheendagain.task;
 
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
@@ -7,9 +7,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
-/**
- * @author Ribesg
- */
+/** @author Ribesg */
 public class RespawnTask extends BukkitRunnable {
 
     private final EndWorldHandler handler;

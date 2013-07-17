@@ -1,5 +1,11 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
+import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -7,13 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
-
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
-import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 
 public class ExplosionFlagListener extends AbstractListener {
 
@@ -41,7 +40,8 @@ public class ExplosionFlagListener extends AbstractListener {
     public void onEntityDamage(final ExtendedEntityDamageEvent ext) {
         final EntityDamageEvent event = (EntityDamageEvent) ext.getBaseEvent();
         if (event.getEntityType() == EntityType.DROPPED_ITEM && event.getCause() == DamageCause.ENTITY_EXPLOSION) {
-            if (ext.getEntityCuboid() != null && ext.getEntityCuboid().getFlag(Flag.EXPLOSION_ITEM) || ext.getDamagerCuboid() != null && ext.getDamagerCuboid().getFlag(Flag.EXPLOSION_ITEM)) {
+            if (ext.getEntityCuboid() != null && ext.getEntityCuboid().getFlag(Flag.EXPLOSION_ITEM) ||
+                ext.getDamagerCuboid() != null && ext.getDamagerCuboid().getFlag(Flag.EXPLOSION_ITEM)) {
                 event.setCancelled(true);
             }
         }

@@ -36,7 +36,9 @@ public class Formater {
             }
         }
         String prefixedString = new String(cfg.getTemplate());
-        final String playerName = cfg.getPlayerNicknames().containsKey(player.getName()) ? cfg.getPlayerNicknames().get(player.getName()) : BUKKIT_PLAYERNAME;
+        final String playerName = cfg.getPlayerNicknames().containsKey(player.getName())
+                                  ? cfg.getPlayerNicknames().get(player.getName())
+                                  : BUKKIT_PLAYERNAME;
         prefixedString = prefixedString.replaceAll("\\Q[prefix]\\E", format.getPrefix());
         prefixedString = prefixedString.replace("[name]", playerName);
         prefixedString = prefixedString.replaceAll("\\Q[suffix]\\E", format.getSuffix());
@@ -68,7 +70,9 @@ public class Formater {
                     }
                 }
             }
-            final String fromName = cfg.getPlayerNicknames().containsKey(from.getName()) ? cfg.getPlayerNicknames().get(from.getName()) : from.getName();
+            final String fromName = cfg.getPlayerNicknames().containsKey(from.getName())
+                                    ? cfg.getPlayerNicknames().get(from.getName())
+                                    : from.getName();
             prefixedString = prefixedString.replaceAll("\\Q[prefixFrom]\\E", formatFrom.getPrefix());
             prefixedString = prefixedString.replace("[nameFrom]", fromName);
             prefixedString = prefixedString.replaceAll("\\Q[suffixFrom]\\E", formatFrom.getSuffix());
@@ -94,7 +98,9 @@ public class Formater {
                     }
                 }
             }
-            final String toName = cfg.getPlayerNicknames().containsKey(to.getName()) ? cfg.getPlayerNicknames().get(to.getName()) : to.getName();
+            final String toName = cfg.getPlayerNicknames().containsKey(to.getName())
+                                  ? cfg.getPlayerNicknames().get(to.getName())
+                                  : to.getName();
             prefixedString = prefixedString.replaceAll("\\Q[prefixTo]\\E", formatTo.getPrefix());
             prefixedString = prefixedString.replace("[nameTo]", toName);
             prefixedString = prefixedString.replaceAll("\\Q[suffixTo]\\E", formatTo.getSuffix());

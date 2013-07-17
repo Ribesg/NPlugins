@@ -6,7 +6,7 @@ import org.bukkit.World;
 
 public class ChunkKey {
 
-    private int   x, z;
+    private int x, z;
     private World world;
 
     public ChunkKey(final World world, final int x, final int z) {

@@ -28,9 +28,7 @@ public class Config extends AbstractConfig<NWorld> {
         super(instance);
     }
 
-    /**
-     * @see AbstractConfig#setValues(YamlConfiguration)
-     */
+    /** @see AbstractConfig#setValues(YamlConfiguration) */
     @Override
     protected void setValues(final YamlConfiguration config) {
 
@@ -39,7 +37,11 @@ public class Config extends AbstractConfig<NWorld> {
         setBroadcastOnWorldCreate(config.getInt("broadcastOnWorldCreate", 0));
         if (getBroadcastOnWorldCreate() < 0 || getBroadcastOnWorldCreate() > 1) {
             setBroadcastOnWorldCreate(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, "config.yml", "broadcastOnWorldCreate", "0");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(),
+                               MessageId.incorrectValueInConfiguration,
+                               "config.yml",
+                               "broadcastOnWorldCreate",
+                               "0");
         }
 
         // broadcastOnWorldLoad. Default: 0.
@@ -47,7 +49,11 @@ public class Config extends AbstractConfig<NWorld> {
         setBroadcastOnWorldLoad(config.getInt("broadcastOnWorldLoad", 0));
         if (getBroadcastOnWorldLoad() < 0 || getBroadcastOnWorldLoad() > 1) {
             setBroadcastOnWorldLoad(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, "config.yml", "broadcastOnWorldLoad", "0");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(),
+                               MessageId.incorrectValueInConfiguration,
+                               "config.yml",
+                               "broadcastOnWorldLoad",
+                               "0");
         }
 
         // broadcastOnWorldUnload. Default: 0.
@@ -55,7 +61,11 @@ public class Config extends AbstractConfig<NWorld> {
         setBroadcastOnWorldUnload(config.getInt("broadcastOnWorldUnload", 0));
         if (getBroadcastOnWorldUnload() < 0 || getBroadcastOnWorldUnload() > 1) {
             setBroadcastOnWorldUnload(0);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, "config.yml", "broadcastOnWorldUnload", "0");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(),
+                               MessageId.incorrectValueInConfiguration,
+                               "config.yml",
+                               "broadcastOnWorldUnload",
+                               "0");
         }
 
         // Load known worlds list
@@ -74,9 +84,7 @@ public class Config extends AbstractConfig<NWorld> {
         }
     }
 
-    /**
-     * @see AbstractConfig#getConfigString()
-     */
+    /** @see AbstractConfig#getConfigString() */
     @Override
     protected String getConfigString() {
         final StringBuilder content = new StringBuilder();

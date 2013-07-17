@@ -196,7 +196,10 @@ public class EggProvidedToItemProvidedTransition extends Transition {
         // ##########################################
 
         // Central Pillar
-        steps.add(new FallingBlockStep(6 * t, new RelativeBlock(0, 1, 0, Material.QUARTZ_BLOCK, BlockData.QUARTZ_PILLAR_VERTICAL), -1, 0.4));
+        steps.add(new FallingBlockStep(6 * t,
+                                       new RelativeBlock(0, 1, 0, Material.QUARTZ_BLOCK, BlockData.QUARTZ_PILLAR_VERTICAL),
+                                       -1,
+                                       0.4));
         steps.add(new BlockStep(6 * t, new RelativeBlock(0, 0, 0, Material.QUARTZ_BLOCK, BlockData.QUARTZ_PILLAR_VERTICAL)));
         // ##########################################
 

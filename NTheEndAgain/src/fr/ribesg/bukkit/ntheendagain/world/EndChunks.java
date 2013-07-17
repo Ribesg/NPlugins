@@ -103,7 +103,10 @@ public class EndChunks implements Iterable<EndChunk> {
         if (!Files.exists(pathEndChunks)) {
             Files.createFile(pathEndChunks);
         }
-        try (BufferedWriter writer = Files.newBufferedWriter(pathEndChunks, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(pathEndChunks,
+                                                             CHARSET,
+                                                             StandardOpenOption.TRUNCATE_EXISTING,
+                                                             StandardOpenOption.WRITE)) {
             final YamlConfiguration config = new YamlConfiguration();
             for (final EndChunk c : chunks.values()) {
                 c.store(config);

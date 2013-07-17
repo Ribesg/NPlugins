@@ -17,11 +17,7 @@ public class WorldCuboid extends GeneralCuboid {
         setIntFlagAtt(FlagAtt.EXPLOSION_BLOCK_DROP, 100);
     }
 
-    public WorldCuboid(final World world,
-                       final Rights rights,
-                       final int priority,
-                       final Flags flags,
-                       final FlagAttributes flagAtts) {
+    public WorldCuboid(final World world, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
         super(world, CuboidType.WORLD, rights, priority, flags, flagAtts);
     }
 

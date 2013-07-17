@@ -63,7 +63,10 @@ public abstract class Transition {
                 log.severe("Unable to do Transition !");
                 log.severe("Altar Location: " + Utils.toString(altar.getCenterLocation()));
                 log.severe("Altar state: " + altar.getState().toString());
-                log.severe("Transition to state " + toState.toString() + " failed because the Altar was not in state " + fromState.toString());
+                log.severe("Transition to state " +
+                           toState.toString() +
+                           " failed because the Altar was not in state " +
+                           fromState.toString());
                 log.severe("Try to rebuild the Altar?");
             } else {
                 altar.setPreviousState(altar.getState());
@@ -77,8 +80,7 @@ public abstract class Transition {
                                 step.doStep(altar);
                             }
                         }
-                    }, e.getKey()
-                                                      );
+                    }, e.getKey());
                 }
                 Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
 
@@ -87,8 +89,7 @@ public abstract class Transition {
                         altar.setState(toState);
                         afterTransition(altar);
                     }
-                }, maxDelay + 1
-                                                  );
+                }, maxDelay + 1);
             }
         }
     }

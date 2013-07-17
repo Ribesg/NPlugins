@@ -76,9 +76,7 @@ public class NTalk extends TalkNode {
         }
     }
 
-    /**
-     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
-     */
+    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // Nothing to do here for now

@@ -1,8 +1,11 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerJoinEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
+import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,12 +15,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerJoinEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
-import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GodFlagListener extends AbstractListener {
 

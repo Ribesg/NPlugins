@@ -1,6 +1,13 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
+import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerDropItemEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
+import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -8,14 +15,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerDropItemEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
-import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 
 public class CreativeFlagListener extends AbstractListener {
 

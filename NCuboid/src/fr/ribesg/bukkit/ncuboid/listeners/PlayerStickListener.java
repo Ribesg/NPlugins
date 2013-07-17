@@ -1,17 +1,5 @@
 package fr.ribesg.bukkit.ncuboid.listeners;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
@@ -22,6 +10,17 @@ import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid.CuboidState;
 import fr.ribesg.bukkit.ncuboid.beans.RectCuboid;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Set;
 
 public class PlayerStickListener extends AbstractListener {
 
@@ -41,11 +40,18 @@ public class PlayerStickListener extends AbstractListener {
                     final RectCuboid selection = (RectCuboid) getPlugin().getDb().getTmp(p.getName());
                     final Location clickedBlockLocation = event.getClickedBlock().getLocation();
                     if (selection == null) {
-                        getPlugin().getDb().addTmp(new RectCuboid("tmp" + p.getName(), p.getName(), clickedBlockLocation.getWorld(), clickedBlockLocation));
+                        getPlugin().getDb()
+                                .addTmp(new RectCuboid("tmp" + p.getName(),
+                                                       p.getName(),
+                                                       clickedBlockLocation.getWorld(),
+                                                       clickedBlockLocation));
                         getPlugin().sendMessage(p, MessageId.cuboid_firstPointSelected, Utils.toString(clickedBlockLocation));
                     } else if (selection.getState() == CuboidState.TMPSTATE1) {
                         selection.secondPoint(clickedBlockLocation);
-                        getPlugin().sendMessage(p, MessageId.cuboid_secondPointSelected, Utils.toString(clickedBlockLocation), selection.getSizeString());
+                        getPlugin().sendMessage(p,
+                                                MessageId.cuboid_secondPointSelected,
+                                                Utils.toString(clickedBlockLocation),
+                                                selection.getSizeString());
                     } else if (selection.getState() == CuboidState.TMPSTATE2) {
                         if (selection.contains(clickedBlockLocation)) {
                             getPlugin().sendMessage(p, MessageId.cuboid_blockInSelection);
@@ -56,7 +62,9 @@ public class PlayerStickListener extends AbstractListener {
                 } else { // Action.LEFT_CLICK_BLOCK
                     // Info tool
                     final Set<GeneralCuboid> cuboids = ext.getCuboids();
-                    if (cuboids == null || cuboids.size() == 0 || cuboids.size() == 1 && cuboids.iterator().next().getType() == CuboidType.WORLD) {
+                    if (cuboids == null ||
+                        cuboids.size() == 0 ||
+                        cuboids.size() == 1 && cuboids.iterator().next().getType() == CuboidType.WORLD) {
                         getPlugin().sendMessage(p, MessageId.cuboid_blockNotProtected);
                     } else {
                         int size = cuboids.size();
@@ -84,7 +92,10 @@ public class PlayerStickListener extends AbstractListener {
                                 }
                             }
                             Arrays.sort(strings);
-                            getPlugin().sendMessage(p, MessageId.cuboid_blockProtectedMultipleCuboids, String.valueOf(strings.length), Messages.merge(strings));
+                            getPlugin().sendMessage(p,
+                                                    MessageId.cuboid_blockProtectedMultipleCuboids,
+                                                    String.valueOf(strings.length),
+                                                    Messages.merge(strings));
                         }
                     }
                 }

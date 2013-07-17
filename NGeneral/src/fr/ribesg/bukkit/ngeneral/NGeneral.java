@@ -1,62 +1,31 @@
 package fr.ribesg.bukkit.ngeneral;
 
-import lombok.Getter;
+import fr.ribesg.bukkit.ncore.nodes.general.GeneralNode;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import fr.ribesg.bukkit.ncore.NCore;
-import fr.ribesg.bukkit.ngeneral.api.NGeneralAPI;
-
-public class NGeneral extends JavaPlugin {
-
-    // Core plugin related
-    public static final String NCORE           = "NCore";
-     public NCore       core;
-    public NGeneralAPI         api;
-
-    // Useful Nodes
-    // // None
-
-    // Set to true by afterEnable() call
-    // Prevent multiple calls to afterEnable
-    private boolean            loadingComplete = false;
+public class NGeneral extends GeneralNode {
 
     @Override
-    public void onEnable() {
-        if (linkCore()) {
-            afterEnable();
-        }
-    }
-
-    public void afterEnable() {
-        if (!loadingComplete) {
-            loadingComplete = true;
-            Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-
-                @Override
-                public void run() {
-                    // Interact with other Nodes here
-
-                }
-            });
-        }
+    protected String getMinCoreVersion() {
+        return "0.2.1";
     }
 
     @Override
-    public void onDisable() {
-
+    protected boolean onNodeEnable() {
+        return false;  // TODO Implement method
     }
 
-    public boolean linkCore() {
-        if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
-            return false;
-        } else {
-            core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-            api = new NGeneralAPI(this);
-            core.setGeneralNode(api);
-            return true;
-        }
+    @Override
+    protected void onNodeDisable() {
+        // TODO Implement method
     }
 
+    @Override
+    protected void handleOtherNodes() {
+        // NOP
+    }
+
+    @Override
+    protected void linkCore() {
+        getCore().setGeneralNode(this);
+    }
 }

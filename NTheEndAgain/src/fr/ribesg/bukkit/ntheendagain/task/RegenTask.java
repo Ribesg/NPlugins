@@ -1,13 +1,11 @@
-package fr.ribesg.bukkit.ntheendagain.tasks;
+package fr.ribesg.bukkit.ntheendagain.task;
 
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
-/**
- * @author Ribesg
- */
+/** @author Ribesg */
 public class RegenTask extends BukkitRunnable {
 
     private final EndWorldHandler handler;

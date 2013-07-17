@@ -1,8 +1,13 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityInteractEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
+import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -16,14 +21,8 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityInteractEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
-import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FarmFlagListener extends AbstractListener {
 
@@ -59,12 +58,16 @@ public class FarmFlagListener extends AbstractListener {
             Player p;
             if (event.getDamager().getType() == EntityType.PLAYER) {
                 p = (Player) event.getDamager();
-            } else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER) {
+            } else if (event.getDamager() instanceof Projectile &&
+                       ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER) {
                 p = (Player) ((Projectile) event.getDamager()).getShooter();
             } else {
                 return;
             }
-            if (getAnimals().contains(event.getEntityType()) && ext.getEntityCuboid() != null && ext.getEntityCuboid().getFlag(Flag.FARM) && !ext.getEntityCuboid().isAllowedPlayer(p)) {
+            if (getAnimals().contains(event.getEntityType()) &&
+                ext.getEntityCuboid() != null &&
+                ext.getEntityCuboid().getFlag(Flag.FARM) &&
+                !ext.getEntityCuboid().isAllowedPlayer(p)) {
                 event.setCancelled(true);
             }
         }

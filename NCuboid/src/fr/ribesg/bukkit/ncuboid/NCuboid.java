@@ -20,7 +20,7 @@ import java.io.IOException;
 
 /**
  * TODO
- * 
+ *
  * @author Ribesg
  */
 public class NCuboid extends CuboidNode {
@@ -40,9 +40,7 @@ public class NCuboid extends CuboidNode {
         return "0.2.1";
     }
 
-    /**
-     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeEnable()
-     */
+    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeEnable() */
     @Override
     protected boolean onNodeEnable() {
         // Messages first !
@@ -116,9 +114,7 @@ public class NCuboid extends CuboidNode {
         return true;
     }
 
-    /**
-     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
-     */
+    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // See if there are new worlds
@@ -129,9 +125,7 @@ public class NCuboid extends CuboidNode {
         }
     }
 
-    /**
-     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeDisable()
-     */
+    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeDisable() */
     @Override
     protected void onNodeDisable() {
         try {
@@ -147,13 +141,10 @@ public class NCuboid extends CuboidNode {
     /**
      * Send a message with arguments
      * TODO <b>This may be moved<b>
-     * 
-     * @param to
-     *            Receiver
-     * @param messageId
-     *            The Message Id
-     * @param args
-     *            The arguments
+     *
+     * @param to        Receiver
+     * @param messageId The Message Id
+     * @param args      The arguments
      */
     public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
         final String[] m = messages.get(messageId, args);

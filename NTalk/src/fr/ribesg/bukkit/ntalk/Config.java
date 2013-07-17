@@ -16,7 +16,8 @@ import java.util.Set;
 public class Config extends AbstractConfig<NTalk> {
 
     private static final String defaultTemplate   = "&f<[prefix][name][suffix]&f> [message]";
-    private static final String defaultPmTemplate = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> [message]";
+    private static final String defaultPmTemplate = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> " +
+                                                    "[message]";
 
     private String template;
     private String pmTemplate;
@@ -51,9 +52,7 @@ public class Config extends AbstractConfig<NTalk> {
 
     }
 
-    /**
-     * @see AbstractConfig#setValues(YamlConfiguration)
-     */
+    /** @see AbstractConfig#setValues(YamlConfiguration) */
     @Override
     protected void setValues(final YamlConfiguration config) {
 
@@ -66,7 +65,11 @@ public class Config extends AbstractConfig<NTalk> {
         setTemplate(config.getString("template", defaultTemplate));
         if (!getTemplate().contains("[name]") || !getTemplate().contains("[message]")) {
             setTemplate(defaultTemplate);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, "config.yml", "template", defaultTemplate);
+            plugin.sendMessage(plugin.getServer().getConsoleSender(),
+                               MessageId.incorrectValueInConfiguration,
+                               "config.yml",
+                               "template",
+                               defaultTemplate);
         }
 
         // pmTemplate. Default: "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> [message]".
@@ -74,7 +77,11 @@ public class Config extends AbstractConfig<NTalk> {
         setPmTemplate(config.getString("pmTemplate", defaultPmTemplate));
         if (!getPmTemplate().contains("[nameFrom]") || !getPmTemplate().contains("[nameTo]") || !getPmTemplate().contains("[message]")) {
             setPmTemplate(defaultPmTemplate);
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, "config.yml", "pmTemplate", defaultPmTemplate);
+            plugin.sendMessage(plugin.getServer().getConsoleSender(),
+                               MessageId.incorrectValueInConfiguration,
+                               "config.yml",
+                               "pmTemplate",
+                               defaultPmTemplate);
         }
 
         // opGroup. Default: "admin".
@@ -111,7 +118,11 @@ public class Config extends AbstractConfig<NTalk> {
                 final String nickName = playerFormat.getString("nick", "NONICK");
                 final String suffix = playerFormat.getString("suffix", "NOSUFFIX");
                 if (!prefix.equals("NOPREFIX") || !suffix.equals("NOSUFFIX")) {
-                    getPlayerFormats().put(playerName, new Format(FormatType.PLAYER, playerName, prefix.equals("NOPREFIX") ? "" : prefix, suffix.equals("NOSUFFIX") ? "" : suffix));
+                    getPlayerFormats().put(playerName,
+                                           new Format(FormatType.PLAYER,
+                                                      playerName,
+                                                      prefix.equals("NOPREFIX") ? "" : prefix,
+                                                      suffix.equals("NOSUFFIX") ? "" : suffix));
                 }
                 if (!nickName.equals("NONICK")) {
                     getPlayerNicknames().put(playerName, nickName);
@@ -126,13 +137,15 @@ public class Config extends AbstractConfig<NTalk> {
                 getGroupFormats().put("admin", new Format(FormatType.GROUP, "admin", "&c[Admin]&f", ""));
             }
             setOpGroup("admin");
-            plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, "config.yml", "opGroup", "admin");
+            plugin.sendMessage(plugin.getServer().getConsoleSender(),
+                               MessageId.incorrectValueInConfiguration,
+                               "config.yml",
+                               "opGroup",
+                               "admin");
         }
     }
 
-    /**
-     * @see AbstractConfig#getConfigString()
-     */
+    /** @see AbstractConfig#getConfigString() */
     @Override
     protected String getConfigString() {
         final StringBuilder content = new StringBuilder();

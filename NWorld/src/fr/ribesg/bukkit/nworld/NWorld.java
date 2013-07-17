@@ -27,14 +27,10 @@ public class NWorld extends WorldNode {
     // Useful Nodes
     // // None
 
-    /**
-     * Map linking lowercased World Names as keys to a boolean saying if they are open to teleportation or not
-     */
+    /** Map linking lowercased World Names as keys to a boolean saying if they are open to teleportation or not */
     private HashMap<String, Boolean> worldMap;
 
-    /**
-     * Map linking lowercased World Names as keys to their spawn location, here uncluding Yaw and Pitch
-     */
+    /** Map linking lowercased World Names as keys to their spawn location, here uncluding Yaw and Pitch */
     private HashMap<String, Location> spawnMap;
 
     @Override
@@ -123,9 +119,7 @@ public class NWorld extends WorldNode {
         }
     }
 
-    /**
-     * @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes()
-     */
+    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // Nothing to do here for now

@@ -1,5 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.listeners;
 
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.events.extensions.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -14,18 +16,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityInteractEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedHangingBreakEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerDropItemEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerJoinEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerTeleportEvent;
 
 public class EventExtensionListener extends AbstractListener {
 
@@ -46,7 +36,10 @@ public class EventExtensionListener extends AbstractListener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerTeleport(final PlayerTeleportEvent event) {
         final Location from = event.getFrom(), to = event.getTo();
-        if (from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ() || !from.getWorld().getName().equals(to.getWorld().getName())) {
+        if (from.getBlockX() != to.getBlockX() ||
+            from.getBlockY() != to.getBlockY() ||
+            from.getBlockZ() != to.getBlockZ() ||
+            !from.getWorld().getName().equals(to.getWorld().getName())) {
             Bukkit.getPluginManager().callEvent(new ExtendedPlayerTeleportEvent(getPlugin().getDb(), event));
         }
     }

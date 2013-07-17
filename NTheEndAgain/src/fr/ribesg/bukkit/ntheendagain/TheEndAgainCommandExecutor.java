@@ -187,10 +187,14 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
                 return true;
             } else {
                 final EndChunks chunks = handler.getChunks();
-                final EndChunk chunk = chunks.getChunk(worldName, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
+                final EndChunk chunk = chunks.getChunk(worldName,
+                                                       player.getLocation().getChunk().getX(),
+                                                       player.getLocation().getChunk().getZ());
                 final Integer x = chunk.getX();
                 final Integer z = chunk.getZ();
-                final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkInfo : MessageId.theEndAgain_unprotectedChunkInfo;
+                final MessageId id = chunk.isProtected()
+                                     ? MessageId.theEndAgain_protectedChunkInfo
+                                     : MessageId.theEndAgain_unprotectedChunkInfo;
                 plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
                 return true;
             }
@@ -211,10 +215,14 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
                 return true;
             } else {
                 final EndChunks chunks = handler.getChunks();
-                final EndChunk chunk = chunks.getChunk(worldName, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
+                final EndChunk chunk = chunks.getChunk(worldName,
+                                                       player.getLocation().getChunk().getX(),
+                                                       player.getLocation().getChunk().getZ());
                 final Integer x = chunk.getX();
                 final Integer z = chunk.getZ();
-                final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkProtect : MessageId.theEndAgain_unprotectedChunkProtect;
+                final MessageId id = chunk.isProtected()
+                                     ? MessageId.theEndAgain_protectedChunkProtect
+                                     : MessageId.theEndAgain_unprotectedChunkProtect;
                 plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
                 chunk.setProtected(true);
                 return true;
@@ -236,10 +244,14 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
                 return true;
             } else {
                 final EndChunks chunks = handler.getChunks();
-                final EndChunk chunk = chunks.getChunk(worldName, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
+                final EndChunk chunk = chunks.getChunk(worldName,
+                                                       player.getLocation().getChunk().getX(),
+                                                       player.getLocation().getChunk().getZ());
                 final Integer x = chunk.getX();
                 final Integer z = chunk.getZ();
-                final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkUnprotect : MessageId.theEndAgain_unprotectedChunkUnprotect;
+                final MessageId id = chunk.isProtected()
+                                     ? MessageId.theEndAgain_protectedChunkUnprotect
+                                     : MessageId.theEndAgain_unprotectedChunkUnprotect;
                 plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
                 chunk.setProtected(true);
                 return true;

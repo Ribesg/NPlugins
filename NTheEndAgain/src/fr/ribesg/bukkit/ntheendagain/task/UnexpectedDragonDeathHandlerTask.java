@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.ntheendagain.tasks;
+package fr.ribesg.bukkit.ntheendagain.task;
 
 import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 import org.bukkit.entity.EnderDragon;

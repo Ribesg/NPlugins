@@ -1,28 +1,28 @@
 package fr.ribesg.bukkit.ndodgeball;
 
-import lombok.Getter;
-
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.nodes.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ndodgeball.api.NDodgeBallAPI;
+import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class NDodgeBall extends JavaPlugin {
 
     // Core plugin
-    public static final String NCORE           = "NCore";
-    @Getter public NCore       core;
-    public NDodgeBallAPI       api;
+    public static final String NCORE = "NCore";
+    @Getter
+    public NCore         core;
+    public NDodgeBallAPI api;
 
     // Useful Nodes
-    public static final String NCUBOID         = "NCuboid";
-    @Getter public CuboidNode  cuboidNode;
+    public static final String NCUBOID = "NCuboid";
+    @Getter
+    public CuboidNode cuboidNode;
 
     // Set to true by afterEnable() call
     // Prevent multiple calls to afterEnable
-    private boolean            loadingComplete = false;
+    private boolean loadingComplete = false;
 
     @Override
     public void onEnable() {

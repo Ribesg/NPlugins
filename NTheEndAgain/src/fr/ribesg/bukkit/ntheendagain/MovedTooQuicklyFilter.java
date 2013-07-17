@@ -1,13 +1,12 @@
 package fr.ribesg.bukkit.ntheendagain;
 
+import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import org.bukkit.entity.Player;
+
 import java.util.logging.Filter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
-
-import org.bukkit.entity.Player;
-
-import fr.ribesg.bukkit.ncore.utils.Utils;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 
 public class MovedTooQuicklyFilter implements Filter {
 

@@ -1,5 +1,9 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import org.bukkit.Location;
+import org.bukkit.World;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -7,20 +11,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.bukkit.Location;
-import org.bukkit.World;
-
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-
 public class CuboidDB {
 
-    @SuppressWarnings("unused") private final NCuboid plugin;
+    @SuppressWarnings("unused")
+    private final NCuboid plugin;
 
-    private final Map<String, PlayerCuboid>           byName;    // CuboidName ; Cuboid
-    private final Map<String, Set<PlayerCuboid>>      byOwner;   // OwnerName ; Cuboids of this owner
-    private final Map<String, PlayerCuboid>           tmpCuboids; // OwnerName ; Temporary Cuboid (Owner's Selection)
-    private final Map<ChunkKey, Set<PlayerCuboid>>    byChunks;  // Chunk ; Cuboids in this chunk
-    private final Map<String, WorldCuboid>            byWorld;   // WorldName ; Cuboid
+    private final Map<String, PlayerCuboid>        byName;    // CuboidName ; Cuboid
+    private final Map<String, Set<PlayerCuboid>>   byOwner;   // OwnerName ; Cuboids of this owner
+    private final Map<String, PlayerCuboid>        tmpCuboids; // OwnerName ; Temporary Cuboid (Owner's Selection)
+    private final Map<ChunkKey, Set<PlayerCuboid>> byChunks;  // Chunk ; Cuboids in this chunk
+    private final Map<String, WorldCuboid>         byWorld;   // WorldName ; Cuboid
 
     public CuboidDB(final NCuboid instance) {
         byName = new HashMap<String, PlayerCuboid>();
@@ -141,14 +141,14 @@ public class CuboidDB {
                     final GeneralCuboid c1 = it.next();
                     final GeneralCuboid c2 = it.next();
                     switch (Integer.compare(c1.getPriority(), c2.getPriority())) {
-                    // Check priority
+                        // Check priority
                         case -1:
                             return c2;
                         case 1:
                             return c1;
                         case 0:
                             switch (Long.compare(c1.getTotalSize(), c2.getTotalSize())) {
-                            // Check size
+                                // Check size
                                 case -1:
                                     return c2;
                                 case 1:

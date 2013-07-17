@@ -21,11 +21,17 @@ public class Messages extends AbstractMessages {
         final Set<Message> newMessages = new HashSet<Message>();
 
         // General plugin messages
-        newMessages.add(new Message(MessageId.incorrectValueInConfiguration, "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)", new String[] {"%filename%", "%value%", "%default%"}, null));
+        newMessages.add(new Message(MessageId.incorrectValueInConfiguration,
+                                    "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)",
+                                    new String[] {"%filename%", "%value%", "%default%"},
+                                    null));
 
         // General deny response
         newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null));
-        newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", new String[] {"%playerName%"}, null));
+        newMessages.add(new Message(MessageId.noPlayerFoundForGivenName,
+                                    "&cNo online player found for input %playerName%",
+                                    new String[] {"%playerName%"},
+                                    null));
         newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null));
 
         // Command - RELOAD
@@ -46,7 +52,10 @@ public class Messages extends AbstractMessages {
         for (final Message m : getMessagesMap().values()) {
             content.append("# Default value    : " + m.getDefaultMessage() + '\n');
             content.append("# Awaited arguments: " + m.getAwaitedArgsString() + '\n');
-            content.append(m.getId().name() + ": \"" + (m.getConfigMessage() != null ? m.getConfigMessage() : m.getDefaultMessage()) + "\"\n\n");
+            content.append(m.getId().name() +
+                           ": \"" +
+                           (m.getConfigMessage() != null ? m.getConfigMessage() : m.getDefaultMessage()) +
+                           "\"\n\n");
         }
         return content.toString();
     }

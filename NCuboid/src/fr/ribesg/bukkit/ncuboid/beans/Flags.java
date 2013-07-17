@@ -3,6 +3,7 @@ package fr.ribesg.bukkit.ncuboid.beans;
 import java.util.EnumMap;
 
 public class Flags {
+
     private final EnumMap<Flag, Boolean> flags;
 
     public Flags() {

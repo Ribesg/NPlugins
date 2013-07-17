@@ -1,0 +1,130 @@
+package fr.ribesg.bukkit.ntheendagain.listener;
+import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
+import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
+import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
+import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.World;
+import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashMap;
+
+/**
+ * Handles Chunk Load and Unload events
+ *
+ * @author Ribesg
+ */
+public class ChunkListener implements Listener {
+
+    private final NTheEndAgain plugin;
+
+    public ChunkListener(final NTheEndAgain instance) {
+        plugin = instance;
+    }
+
+    /**
+     * Handles Chunk regen at load, with still-alive EnderDragons consideration,
+     * and EnderDragon spawn / load on Chunk Load.
+     *
+     * @param event a Chunk Load Event
+     */
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onEndChunkLoad(final ChunkLoadEvent event) {
+        if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
+            final String worldName = event.getWorld().getName();
+            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(worldName));
+            if (handler != null) {
+                final EndChunks chunks = handler.getChunks();
+                final Chunk chunk = event.getChunk();
+                EndChunk endChunk = chunks.getChunk(worldName, chunk.getX(), chunk.getZ());
+
+                /*
+                 * Chunk has to be regen
+                 *   - Forget every dragons in it
+                 *   - Regenerate the chunk
+                 *   - Schedule a refresh
+                 */
+                if (endChunk != null && endChunk.hasToBeRegen()) {
+                    for (final Entity e : chunk.getEntities()) {
+                        if (e.getType() == EntityType.ENDER_DRAGON) {
+                            final EnderDragon ed = (EnderDragon) e;
+                            if (handler.getDragons().containsKey(ed.getUniqueId())) {
+                                handler.getDragons().remove(ed.getUniqueId());
+                                handler.getLoadedDragons().remove(ed.getUniqueId());
+                                handler.decrementDragonCount();
+                            }
+                        }
+                        e.remove();
+                    }
+                    final int x = endChunk.getX(), z = endChunk.getZ();
+                    event.getWorld().regenerateChunk(x, z);
+                    endChunk.setToBeRegen(false);
+                    Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+
+                        @Override
+                        public void run() {
+                            event.getWorld().refreshChunk(x, z);
+                        }
+                    }, 100L);
+                }
+
+                /*
+                 * Chunk does not need to be regen
+                 *   - Check if we knew this chunk, if not, now we do
+                 *   - Check for new EnderDragons
+                 *   - Re-add known Dragons to Loaded set
+                 */
+                else {
+                    if (endChunk == null) {
+                        endChunk = chunks.addChunk(chunk);
+                    }
+                    for (final Entity e : chunk.getEntities()) {
+                        if (e.getType() == EntityType.ENDER_DRAGON) {
+                            final EnderDragon ed = (EnderDragon) e;
+                            if (!handler.getDragons().containsKey(ed.getUniqueId())) {
+                                ed.setMaxHealth(handler.getConfig().getEdHealth());
+                                ed.setHealth(ed.getMaxHealth());
+                                handler.getDragons().put(ed.getUniqueId(), new HashMap<String, Long>());
+                                handler.incrementDragonCount();
+                            }
+                            handler.getLoadedDragons().add(ed.getUniqueId());
+                        } else if (e.getType() == EntityType.ENDER_CRYSTAL) {
+                            endChunk.addCrystalLocation(e);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Remove the unloaded EnderDragons from the loaded set
+     *
+     * @param event a Chunk Unload Event
+     */
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onEndChunkUnload(final ChunkUnloadEvent event) {
+        if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
+            final String worldName = event.getWorld().getName();
+            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(worldName));
+            if (handler != null) {
+                for (final Entity e : event.getChunk().getEntities()) {
+                    if (e.getType() == EntityType.ENDER_DRAGON) {
+                        final EnderDragon ed = (EnderDragon) e;
+                        handler.getLoadedDragons().remove(ed.getUniqueId());
+                    }
+                }
+            }
+        }
+    }
+}

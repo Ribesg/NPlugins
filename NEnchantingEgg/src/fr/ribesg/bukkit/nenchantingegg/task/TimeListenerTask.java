@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This tasks listen to time changes and notices Altars
+ * This task listen to time changes and notices Altars
  * Should be run Sync with a low delay
  */
 public class TimeListenerTask extends BukkitRunnable {

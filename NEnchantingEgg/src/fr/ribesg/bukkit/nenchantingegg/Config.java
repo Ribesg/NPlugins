@@ -21,7 +21,8 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
         // setBroadcastOnWorldCreate(config.getInt("broadcastOnWorldCreate", 0));
         // if (getBroadcastOnWorldCreate() < 0 || getBroadcastOnWorldCreate() > 1) {
         //     setBroadcastOnWorldCreate(0);
-        //     plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, "config.yml", "broadcastOnWorldCreate", "0");
+        //     plugin.sendMessage(plugin.getServer().getConsoleSender(), MessageId.incorrectValueInConfiguration, "config.yml",
+        // "broadcastOnWorldCreate", "0");
         // }
     }
 

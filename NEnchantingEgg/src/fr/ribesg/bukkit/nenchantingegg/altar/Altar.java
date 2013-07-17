@@ -99,7 +99,8 @@ public class Altar {
         // First check: if all blocks are here
         for (final RelativeBlock rb : AltarState.getInactiveStateBlocks()) {
             final Location rbLoc = rb.getLocation(centerLocation);
-            if ((rbLoc.getBlock().getType() != rb.getBlockMaterial() || rbLoc.getBlock().getData() != rb.getBlockData()) && rb.getBlockMaterial() != Material.SKULL) {
+            if ((rbLoc.getBlock().getType() != rb.getBlockMaterial() || rbLoc.getBlock().getData() != rb.getBlockData()) &&
+                rb.getBlockMaterial() != Material.SKULL) {
                 return false;
             }
         }
@@ -111,7 +112,8 @@ public class Altar {
         final int cZ = centerLocation.getBlockZ();
         for (int x = -MAX_RADIUS; x <= MAX_RADIUS; x++) {
             for (int z = -MAX_RADIUS; z <= MAX_RADIUS; z++) {
-                if (isAltarXZ(x, z) && centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z) != getHighestAltarBlock(x, z, false) + cY) {
+                if (isAltarXZ(x, z) &&
+                    centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z) != getHighestAltarBlock(x, z, false) + cY) {
                     System.out.println("Found:   " + centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z));
                     System.out.println("Awaited: " + (getHighestAltarBlock(x, z, false) + cY));
                     System.out.println("At: " + x + ";" + z + " (" + (cX + x) + ";" + (cZ + z) + ")");
@@ -194,7 +196,9 @@ public class Altar {
      */
     public boolean isAltarXYZ(final int x, final int y, final int z) {
         for (final RelativeBlock rb : AltarState.getInactiveStateBlocks()) {
-            if (rb.getRelativeLocation().getBlockX() == x && rb.getRelativeLocation().getBlockY() == y && rb.getRelativeLocation().getBlockZ() == z) {
+            if (rb.getRelativeLocation().getBlockX() == x &&
+                rb.getRelativeLocation().getBlockY() == y &&
+                rb.getRelativeLocation().getBlockZ() == z) {
                 return true;
             }
         }
@@ -219,7 +223,8 @@ public class Altar {
         } else if (x == -2 && z == 0) {
             return skullPlaced ? 2 : 1;
         } else if (state == AltarState.EGG_PROVIDED || state == AltarState.ITEM_PROVIDED ||
-                   state == AltarState.IN_TRANSITION && (previousState == AltarState.EGG_PROVIDED || previousState == AltarState.ITEM_PROVIDED)) {
+                   state == AltarState.IN_TRANSITION &&
+                   (previousState == AltarState.EGG_PROVIDED || previousState == AltarState.ITEM_PROVIDED)) {
             return 1;
         } else {
             return 0;

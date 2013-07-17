@@ -1,8 +1,11 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPotionSplashEvent;
+import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
@@ -12,12 +15,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPotionSplashEvent;
-import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MobFlagListener extends AbstractListener {
 
@@ -64,8 +63,10 @@ public class MobFlagListener extends AbstractListener {
     public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
         if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
             final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
-            if (getMobs().contains(event.getDamager()) || ext.isDamagerProjectile() && getMobs().contains(((Projectile) event.getDamager()).getShooter().getType())) {
-                if (ext.getEntityCuboid() != null && ext.getEntityCuboid().getFlag(Flag.MOB) || ext.getDamagerCuboid() != null && ext.getDamagerCuboid().getFlag(Flag.MOB)) {
+            if (getMobs().contains(event.getDamager()) ||
+                ext.isDamagerProjectile() && getMobs().contains(((Projectile) event.getDamager()).getShooter().getType())) {
+                if (ext.getEntityCuboid() != null && ext.getEntityCuboid().getFlag(Flag.MOB) ||
+                    ext.getDamagerCuboid() != null && ext.getDamagerCuboid().getFlag(Flag.MOB)) {
                     event.setCancelled(true);
                 }
             }

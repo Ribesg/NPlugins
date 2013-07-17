@@ -71,7 +71,11 @@ public abstract class AbstractMessages {
                 try {
                     final MessageId id = MessageId.valueOf(idString);
                     final Message def = messagesMap.get(id);
-                    messagesMap.put(id, new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), cMessages.getString(idString, def.getDefaultMessage())));
+                    messagesMap.put(id,
+                                    new Message(id,
+                                                def.getDefaultMessage(),
+                                                def.getAwaitedArgs(),
+                                                cMessages.getString(idString, def.getDefaultMessage())));
                 } catch (final IllegalArgumentException e) {
                     e.printStackTrace();
                 }
@@ -105,7 +109,12 @@ public abstract class AbstractMessages {
     }
 
     private void writeMessages(final Path path, final boolean overwrite) throws IOException {
-        try (BufferedWriter writer = Files.newBufferedWriter(path, CHARSET, overwrite ? StandardOpenOption.TRUNCATE_EXISTING : StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(path,
+                                                             CHARSET,
+                                                             overwrite
+                                                             ? StandardOpenOption.TRUNCATE_EXISTING
+                                                             : StandardOpenOption.CREATE_NEW,
+                                                             StandardOpenOption.WRITE)) {
             writer.write(getConfigString());
         }
     }
@@ -123,7 +132,11 @@ public abstract class AbstractMessages {
         try {
             final Message m = getMessagesMap().get(id);
             if (args != null && args.length != m.getAwaitedArgsNb() || args == null && m.getAwaitedArgsNb() > 0) {
-                throw new IllegalArgumentException("Call to Messages.get(id,args...) with wrong number of args : " + (args == null ? 0 : args.length) + " (awaited : " + m.getAwaitedArgsNb() + ")");
+                throw new IllegalArgumentException("Call to Messages.get(id,args...) with wrong number of args : " +
+                                                   (args == null ? 0 : args.length) +
+                                                   " (awaited : " +
+                                                   m.getAwaitedArgsNb() +
+                                                   ")");
             }
             String res = m.getConfigMessage() == null ? m.getDefaultMessage() : m.getConfigMessage();
             // Replacing args by there values

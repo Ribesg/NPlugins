@@ -1,8 +1,10 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
+import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -10,11 +12,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
-import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UseFlagListener extends AbstractListener {
 
@@ -71,7 +70,10 @@ public class UseFlagListener extends AbstractListener {
     public void onPlayerInteract(final ExtendedPlayerInteractEvent ext) {
         final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
         if (event.hasBlock()) {
-            if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.USE) && !ext.getCuboid().isAllowedPlayer(event.getPlayer()) && getDenyUseMaterials().contains(event.getClickedBlock().getType())) {
+            if (ext.getCuboid() != null &&
+                ext.getCuboid().getFlag(Flag.USE) &&
+                !ext.getCuboid().isAllowedPlayer(event.getPlayer()) &&
+                getDenyUseMaterials().contains(event.getClickedBlock().getType())) {
                 event.setCancelled(true);
             }
         }
@@ -80,7 +82,10 @@ public class UseFlagListener extends AbstractListener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
         final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
-        if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.USE) && !ext.getCuboid().isAllowedPlayer(event.getPlayer()) && getDenyUseEntity().contains(event.getRightClicked().getType())) {
+        if (ext.getCuboid() != null &&
+            ext.getCuboid().getFlag(Flag.USE) &&
+            !ext.getCuboid().isAllowedPlayer(event.getPlayer()) &&
+            getDenyUseEntity().contains(event.getRightClicked().getType())) {
             event.setCancelled(true);
         }
     }

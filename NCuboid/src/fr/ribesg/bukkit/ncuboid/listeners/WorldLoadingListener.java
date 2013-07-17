@@ -1,11 +1,10 @@
 package fr.ribesg.bukkit.ncuboid.listeners;
 
+import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.WorldCuboid;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.WorldLoadEvent;
-
-import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.WorldCuboid;
 
 public class WorldLoadingListener extends AbstractListener {
 
