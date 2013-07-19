@@ -113,11 +113,11 @@ public abstract class AbstractConfig<T extends NPlugin> {
         plugin.getLogger().info(message2.toString());
     }
 
-    public static boolean match(final long value, final long min, final long max) {
+    protected boolean match(final long value, final long min, final long max) {
         return min <= value && value <= max;
     }
 
-    public static boolean match(final double value, final double min, final double max) {
+    protected boolean match(final double value, final double min, final double max) {
         return min <= value && value <= max;
     }
 

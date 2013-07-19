@@ -2,13 +2,12 @@ package fr.ribesg.bukkit.ncore.nodes;
 
 import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.metrics.Metrics;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
-
-import static fr.ribesg.bukkit.ncore.utils.Utils.frame;
 
 /**
  * This class represents a plugin node of the N plugin suite
@@ -18,39 +17,39 @@ import static fr.ribesg.bukkit.ncore.utils.Utils.frame;
 public abstract class NPlugin extends JavaPlugin {
 
     private static final String NCORE         = "NCore";
-    private static final String NCORE_WEBSITE = "http://www.ribesg.fr/bukkit/NPlugins";
+    private static final String NCORE_WEBSITE = "http://www.ribesg.fr/";
 
     private Metrics metrics;
 
     private NCore core;
     private boolean enabled = false;
 
-    private boolean isReload = false;
-
     @Override
     public void onEnable() {
+        FrameBuilder frame;
         if (isCoreMissing()) {
-            final String[] messages = new String[4];
-            messages[0] = "This plugin requires NCore";
-            messages[1] = "It is an additional Plugin you";
-            messages[2] = "should put in you /plugins folder.";
-            messages[3] = "See " + NCORE_WEBSITE;
-            messages[4] = "Disabling plugin...";
+            frame = new FrameBuilder();
+            frame.addLine("This plugin requires NCore", FrameBuilder.Option.CENTER);
+            frame.addLine("It is an additional Plugin you");
+            frame.addLine("should put in you /plugins folder.");
+            frame.addLine("See " + NCORE_WEBSITE);
+            frame.addLine("Disabling plugin...");
 
-            for (final String s : frame(messages)) {
+            for (final String s : frame.build()) {
                 getLogger().severe(s);
             }
 
             getPluginLoader().disablePlugin(this);
         } else if (badCoreVersion()) {
-            final String[] messages = new String[4];
-            messages[0] = "This plugin requires NCore v" + getMinCoreVersion();
-            messages[1] = "NCore plugin was found but the";
-            messages[1] = "current version (v" + getCoreVersion() + ") is too low.";
-            messages[2] = "See " + NCORE_WEBSITE;
-            messages[3] = "Disabling plugin...";
 
-            for (final String s : frame(messages)) {
+            frame = new FrameBuilder();
+            frame.addLine("This plugin requires NCore v" + getMinCoreVersion(), FrameBuilder.Option.CENTER);
+            frame.addLine("NCore plugin was found but the");
+            frame.addLine("current version (v" + getCoreVersion() + ") is too low.");
+            frame.addLine("See " + NCORE_WEBSITE);
+            frame.addLine("Disabling plugin...");
+
+            for (final String s : frame.build()) {
                 getLogger().severe(s);
             }
 
@@ -101,7 +100,6 @@ public abstract class NPlugin extends JavaPlugin {
         if (enabled) {
             onNodeDisable();
         }
-        isReload = true; // Will stay set to true if this is a reload
     }
 
     /**
@@ -143,10 +141,6 @@ public abstract class NPlugin extends JavaPlugin {
 
     protected NCore getCore() {
         return core;
-    }
-
-    protected boolean isReload() {
-        return isReload;
     }
 
     protected Metrics getMetrics() {

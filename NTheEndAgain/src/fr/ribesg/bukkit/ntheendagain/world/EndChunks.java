@@ -30,12 +30,15 @@ public class EndChunks implements Iterable<EndChunk> {
 
     private final HashMap<ChunkCoord, EndChunk> chunks;
 
+    private int totalSavedDragons;
+
     public EndChunks() {
-        chunks = new HashMap<ChunkCoord, EndChunk>();
+        chunks = new HashMap<>();
+        totalSavedDragons = 0;
     }
 
     public EndChunk addChunk(final Chunk bukkitChunk) {
-        final EndChunk res = new EndChunk(bukkitChunk);
+        final EndChunk res = new EndChunk(this, bukkitChunk);
         addChunk(res);
         return res;
     }
@@ -46,6 +49,10 @@ public class EndChunks implements Iterable<EndChunk> {
 
     public EndChunk getChunk(final String world, final int x, final int z) {
         return chunks.get(new ChunkCoord(x, z, world));
+    }
+
+    public EndChunk getChunk(Chunk bukkitChunk) {
+        return chunks.get(new ChunkCoord(bukkitChunk));
     }
 
     public void softRegen() {
@@ -75,14 +82,12 @@ public class EndChunks implements Iterable<EndChunk> {
     }
 
     public void load(final Path pathEndChunks) throws IOException {
-        if (!Files.exists(pathEndChunks)) {
-            return;
-        } else {
+        if (Files.exists(pathEndChunks)) {
             final YamlConfiguration config = new YamlConfiguration();
             try (BufferedReader reader = Files.newBufferedReader(pathEndChunks, CHARSET)) {
                 final StringBuilder s = new StringBuilder();
                 while (reader.ready()) {
-                    s.append(reader.readLine() + '\n');
+                    s.append(reader.readLine()).append('\n');
                 }
                 config.loadFromString(s.toString());
             } catch (final Exception e) {
@@ -92,7 +97,7 @@ public class EndChunks implements Iterable<EndChunk> {
             for (final String chunkCoordString : config.getKeys(false)) {
                 final ConfigurationSection sec = config.getConfigurationSection(chunkCoordString);
                 if (sec != null) {
-                    final EndChunk ec = EndChunk.rebuild(sec);
+                    final EndChunk ec = EndChunk.rebuild(this, sec);
                     addChunk(ec);
                 }
             }
@@ -118,5 +123,17 @@ public class EndChunks implements Iterable<EndChunk> {
     @Override
     public Iterator<EndChunk> iterator() {
         return chunks.values().iterator();
+    }
+
+    public int getTotalSavedDragons() {
+        return totalSavedDragons;
+    }
+
+    /*package*/ void incrementTotalSavedDragons() {
+        totalSavedDragons++;
+    }
+
+    /*package*/ void decrementTotalSavedDragons(int quantity) {
+        totalSavedDragons -= quantity;
     }
 }

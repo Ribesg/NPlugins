@@ -1,8 +1,11 @@
 package fr.ribesg.bukkit.ntheendagain.task;
 
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EnderDragon;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -16,9 +19,17 @@ public class UnexpectedDragonDeathHandlerTask extends BukkitRunnable {
         this.handler = handler;
     }
 
+    /**
+     * Schedule this task
+     *
+     * @param plugin the plugin to attach the task
+     */
+    public BukkitTask schedule(JavaPlugin plugin) {
+        return Bukkit.getScheduler().runTaskTimer(plugin, this, 0L, 20L);
+    }
+
     @Override
     public void run() {
-
         boolean found = false;
 
         final Iterator<UUID> it = handler.getLoadedDragons().iterator();
@@ -35,7 +46,6 @@ public class UnexpectedDragonDeathHandlerTask extends BukkitRunnable {
                 // This EnderDragon was deleted some other way than after his death, forget about him
                 handler.getDragons().remove(id);
                 it.remove();
-                handler.decrementDragonCount();
             }
             found = false;
         }

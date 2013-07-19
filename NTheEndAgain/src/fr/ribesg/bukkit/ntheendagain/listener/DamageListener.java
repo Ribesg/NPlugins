@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ntheendagain.listener;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.EnderDragon;

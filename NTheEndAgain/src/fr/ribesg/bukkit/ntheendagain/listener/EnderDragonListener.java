@@ -4,7 +4,7 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -22,7 +22,6 @@ import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,7 +40,8 @@ public class EnderDragonListener implements Listener {
      * Players that did less than threshold % of total damages
      * have no chance to receive the Egg with custom handling
      */
-    private final static float threshold = 0.15f;
+    private static final float  threshold = 0.15f;
+    private static final Random rand      = new Random();
 
     private final NTheEndAgain plugin;
 
@@ -59,9 +59,7 @@ public class EnderDragonListener implements Listener {
         if (event.getEntityType() == EntityType.ENDER_DRAGON) {
             final World endWorld = event.getEntity().getWorld();
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(endWorld.getName()));
-            if (handler == null) {
-                return;
-            } else {
+            if (handler != null) {
                 final Config config = handler.getConfig();
                 switch (config.getEdExpHandling()) {
                     case 0:
@@ -268,7 +266,6 @@ public class EnderDragonListener implements Listener {
                 // Forget about this dragon
                 handler.getDragons().remove(event.getEntity().getUniqueId());
                 handler.getLoadedDragons().remove(event.getEntity().getUniqueId());
-                handler.decrementDragonCount();
 
                 // Handle on-ED-death regen/respawn
                 boolean willRespawn = false;
@@ -278,16 +275,7 @@ public class EnderDragonListener implements Listener {
                     willRespawn = true;
                 }
                 if (willRespawn) {
-                    Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
-
-                        @Override
-                        public void run() {
-                            if (config.getRegenType() == 1) {
-                                handler.regen();
-                            }
-                            handler.respawnDragons();
-                        }
-                    }, 20 * config.getRandomRespawnTimer());
+                    handler.getRespawnHandler().respawnLater();
                 }
             }
         }
@@ -304,35 +292,45 @@ public class EnderDragonListener implements Listener {
     public void onEnderDragonSpawn(final CreatureSpawnEvent event) {
         if (event.getEntityType() == EntityType.ENDER_DRAGON) {
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getLocation().getWorld().getName()));
-            if (handler == null) {
-                return;
-            } else if (handler.getNumberOfAliveEnderDragons() >= handler.getConfig().getRespawnNumber()) {
-                event.setCancelled(true);
-            } else {
-                if (event.getSpawnReason() != SpawnReason.CUSTOM && event.getSpawnReason() != SpawnReason.SPAWNER_EGG) {
+            if (handler != null) {
+                if (handler.getNumberOfAliveEnderDragons() >= handler.getConfig().getRespawnNumber()) {
                     event.setCancelled(true);
                 } else {
-                    if (!handler.getDragons().containsKey(event.getEntity().getUniqueId())) {
-                        handler.getDragons().put(event.getEntity().getUniqueId(), new HashMap<String, Long>());
-                        event.getEntity().setMaxHealth(handler.getConfig().getEdHealth());
-                        event.getEntity().setHealth(event.getEntity().getMaxHealth());
-                        handler.incrementDragonCount();
+                    if (event.getSpawnReason() != SpawnReason.CUSTOM && event.getSpawnReason() != SpawnReason.SPAWNER_EGG) {
+                        event.setCancelled(true);
+                    } else {
+                        if (!handler.getDragons().containsKey(event.getEntity().getUniqueId())) {
+                            handler.getDragons().put(event.getEntity().getUniqueId(), new HashMap<String, Long>());
+                            event.getEntity().setMaxHealth(handler.getConfig().getEdHealth());
+                            event.getEntity().setHealth(event.getEntity().getMaxHealth());
+                        }
+                        handler.getLoadedDragons().add(event.getEntity().getUniqueId());
                     }
-                    handler.getLoadedDragons().add(event.getEntity().getUniqueId());
                 }
             }
         }
     }
 
     /**
-     * TODO Will handle EnderDragon regen
+     * Handle EnderDragon regen
      *
      * @param event an EntityRegainHealthEvent
      */
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEnderDragonRegainHealth(final EntityRegainHealthEvent event) {
-        if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-            // TODO Config thing for this
+        if (event.getEntityType() == EntityType.ENDER_DRAGON &&
+            event.getRegainReason() == EntityRegainHealthEvent.RegainReason.ENDER_CRYSTAL) {
+            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getEntity().getLocation().getWorld().getName()));
+            if (handler != null) {
+                float rate = handler.getConfig().getEcHealthRegainRate();
+                if (rate < 1.0) {
+                    if (rand.nextFloat() >= rate) {
+                        event.setCancelled(true);
+                    }
+                } else if (rate > 1.0) {
+                    event.setAmount((int) (rate * event.getAmount()));
+                }
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ntalk.format.Format;
 import fr.ribesg.bukkit.ntalk.format.Format.FormatType;
 import org.bukkit.configuration.ConfigurationSection;
@@ -149,12 +150,16 @@ public class Config extends AbstractConfig<NTalk> {
     @Override
     protected String getConfigString() {
         final StringBuilder content = new StringBuilder();
+        FrameBuilder frame;
 
         // Header
-        content.append("################################################################################\n");
-        content.append("# Config file for NTalk plugin. If you don't understand something, please ask  #\n");
-        content.append("# on dev.bukkit.org or on forum post.                                   Ribesg #\n");
-        content.append("################################################################################\n\n");
+        frame = new FrameBuilder();
+        frame.addLine("Config file for NTalk plugin", FrameBuilder.Option.CENTER);
+        frame.addLine("If you don't understand something, please ask on dev.bukkit.org");
+        frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
+        for (final String line : frame.build()) {
+            content.append(line + '\n');
+        }
 
         // template for chat messages
         content.append("# The template used to parse chat messages\n");

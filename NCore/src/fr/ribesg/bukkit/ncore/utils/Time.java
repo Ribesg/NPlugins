@@ -11,4 +11,8 @@ public enum Time {
     public static boolean isNightTime(final long time) {
         return time >= 12000 && time <= 24000;
     }
+
+    public static Time get(final long time) {
+        return isDayTime(time) ? DAY : NIGHT;
+    }
 }

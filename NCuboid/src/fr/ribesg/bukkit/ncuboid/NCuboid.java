@@ -37,7 +37,7 @@ public class NCuboid extends CuboidNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.2.1";
+        return "0.3.0";
     }
 
     /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeEnable() */

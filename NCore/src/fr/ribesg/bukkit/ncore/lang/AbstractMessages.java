@@ -177,15 +177,7 @@ public abstract class AbstractMessages {
         return messageHeader;
     }
 
-    public void setMessageHeader(String messageHeader) {
-        this.messageHeader = messageHeader;
-    }
-
     public EnumMap<MessageId, Message> getMessagesMap() {
         return messagesMap;
-    }
-
-    public void setMessagesMap(EnumMap<MessageId, Message> messagesMap) {
-        this.messagesMap = messagesMap;
     }
 }

@@ -2,9 +2,9 @@ package fr.ribesg.bukkit.ntheendagain;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -105,72 +105,63 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 
     private boolean cmdHelp(final CommandSender sender) {
         // TODO We will create some kind of great Help thing later for the whole NPlugins suite
+        //      Or maybe we will just use the Bukkit /help command...
         sender.sendMessage("Available subcommands: help, regen, respawn, nb, chunk info, chunk protect, chunk unprotect");
         return true;
     }
 
     private boolean cmdRegen(final CommandSender sender, final String[] args) {
-        try {
-            final String[] parsedArgs = parseArguments(sender, args);
-            if (parsedArgs == null) {
-                plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
-            } else {
-                final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(parsedArgs[0]));
-                if (handler != null) {
-                    if (parsedArgs.length > 1 && parsedArgs[1].equalsIgnoreCase("hard")) {
-                        plugin.sendMessage(sender, MessageId.theEndAgain_regenerating, handler.getEndWorld().getName());
-                        handler.regen(0);
-                    } else {
-                        plugin.sendMessage(sender, MessageId.theEndAgain_regenerating, handler.getEndWorld().getName());
-                        handler.regen();
-                    }
+        final String[] parsedArgs = parseArguments(sender, args);
+        if (parsedArgs == null) {
+            // The sender already received a message
+            return true;
+        } else {
+            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(parsedArgs[0]));
+            if (handler != null) {
+                plugin.sendMessage(sender, MessageId.theEndAgain_regenerating, handler.getEndWorld().getName());
+                if (parsedArgs.length > 1 && parsedArgs[1].equalsIgnoreCase("hard")) {
+                    handler.getRegenHandler().regen(0);
                 } else {
-                    plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
+                    handler.getRegenHandler().regen();
                 }
+            } else {
+                plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             }
-            return true;
-        } catch (final Exception e) {
-            return true;
         }
+        return true;
     }
 
     private boolean cmdRespawn(final CommandSender sender, final String[] args) {
-        try {
-            final String[] parsedArgs = parseArguments(sender, args);
-            if (parsedArgs == null) {
-                plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
+        final String[] parsedArgs = parseArguments(sender, args);
+        if (parsedArgs == null) {
+            // The sender already received a message
+            return true;
+        } else {
+            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(parsedArgs[0]));
+            if (handler != null) {
+                handler.getRespawnHandler().respawn();
             } else {
-                final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(parsedArgs[0]));
-                if (handler != null) {
-                    handler.respawnDragons();
-                } else {
-                    plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
-                }
+                plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             }
-            return true;
-        } catch (final Exception e) {
-            return true;
         }
+        return true;
     }
 
     private boolean cmdNb(final CommandSender sender, final String[] args) {
-        try {
-            final String[] parsedArgs = parseArguments(sender, args);
-            if (parsedArgs == null) {
-                plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
+        final String[] parsedArgs = parseArguments(sender, args);
+        if (parsedArgs == null) {
+            // The sender already received a message
+            return true;
+        } else {
+            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(parsedArgs[0]));
+            if (handler != null) {
+                final Integer nb = handler.getNumberOfAliveEnderDragons();
+                plugin.sendMessage(sender, MessageId.theEndAgain_nbAlive, nb.toString(), handler.getEndWorld().getName());
             } else {
-                final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(parsedArgs[0]));
-                if (handler != null) {
-                    final Integer nb = handler.getNumberOfAliveEnderDragons();
-                    plugin.sendMessage(sender, MessageId.theEndAgain_nbAlive, nb.toString(), handler.getEndWorld().getName());
-                } else {
-                    plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
-                }
+                plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
             }
-            return true;
-        } catch (final Exception e) {
-            return true;
         }
+        return true;
     }
 
     private boolean cmdChunkInfo(final CommandSender sender) {
@@ -259,12 +250,24 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
         }
     }
 
-    private String[] parseArguments(final CommandSender sender, final String[] args) throws Exception {
+    /**
+     * - Check that a console sender provided a world name
+     * - Automagically add the Player's world name if he "forgot" it as argument
+     * - Allow world names with spaces
+     * - Keep non-world args
+     *
+     * @param sender the sender of the command
+     * @param args   the arguments used by the sender
+     *
+     * @return a new args String[] containing the new arguments, or null if the
+     *         sender did not provide a World (as a ConsoleSender)
+     */
+    private String[] parseArguments(final CommandSender sender, final String[] args) {
         String worldName = null;
         if (args.length == 0) {
             if (!(sender instanceof Player)) {
                 plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
-                throw new Exception(); // We handle it locally so we don't care about having a special Exception name/message
+                return null;
             } else {
                 worldName = ((Player) sender).getWorld().getName();
                 return new String[] {worldName};
@@ -288,17 +291,21 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
                 worldName = concatenation;
                 final String[] result = new String[args.length - nbWords + 1];
                 result[0] = worldName;
-                System.arraycopy(args, nbWords, result, 1, args.length - nbWords + 1);
+                if (args.length - nbWords != 0) {
+                    System.arraycopy(args, nbWords, result, 1, args.length - nbWords + 1);
+                }
                 return result;
             } else {
                 if (!(sender instanceof Player)) {
                     plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
-                    throw new Exception(); // We handle it locally so we don't care about having a special Exception name/message
+                    return null;
                 } else {
                     worldName = ((Player) sender).getWorld().getName();
                     final String[] result = new String[1 + args.length];
                     result[0] = worldName;
-                    System.arraycopy(args, 0, result, 1, args.length);
+                    if (args.length - nbWords != 0) {
+                        System.arraycopy(args, 0, result, 1, args.length);
+                    }
                     return result;
                 }
             }

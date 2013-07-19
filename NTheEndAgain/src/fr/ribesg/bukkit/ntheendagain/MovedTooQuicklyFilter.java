@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ntheendagain;
 
 import fr.ribesg.bukkit.ncore.utils.Utils;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Filter;

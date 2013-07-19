@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ntheendagain.listener;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,7 +37,7 @@ public class WorldListener implements Listener {
             try {
                 handler.loadConfig();
                 handler.loadChunks();
-                plugin.getWorldHandlers().put(Utils.toLowerCamelCase(event.getWorld().getName()), handler);
+                plugin.getWorldHandlers().put(handler.getCamelCaseWorldName(), handler);
                 handler.init();
             } catch (final IOException e) {
                 plugin.getLogger().severe("An error occured, stacktrace follows:");
@@ -58,7 +58,7 @@ public class WorldListener implements Listener {
             plugin.getLogger().info("Handling " + event.getWorld().getName() + " unload");
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getWorld().getName()));
             if (handler != null) {
-                handler.unload();
+                handler.unload(false);
             }
         }
     }

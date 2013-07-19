@@ -1,6 +1,7 @@
 package fr.ribesg.bukkit.ntheendagain;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -37,6 +38,10 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 
     private final static int DEFAULT_edPortalSpawn = 0;
     private int edPortalSpawn;
+
+    // EnderCrystals
+    private final static float DEFAULT_ecHealthRegainRate = 1.0f;
+    private float ecHealthRegainRate;
 
     // Regeneration
     private final static int DEFAULT_regenType = 0;
@@ -91,6 +96,8 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         setEdExpHandling(DEFAULT_edExpHandling);
         setEdExpReward(DEFAULT_edExpReward);
         setEdPortalSpawn(DEFAULT_edPortalSpawn);
+
+        // EnderCrystals
 
         // Regeneration
         setRegenType(DEFAULT_regenType);
@@ -164,6 +171,14 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         if (!match(getEdPortalSpawn(), 0, 2)) {
             wrongValue(fileName, "edPortalSpawn", getEdPortalSpawn(), DEFAULT_edPortalSpawn);
             setEdPortalSpawn(DEFAULT_edPortalSpawn);
+        }
+
+        // EnderCrystals
+
+        setEcHealthRegainRate((float) config.getDouble("ecHealthRegainRate", DEFAULT_ecHealthRegainRate));
+        if (!match(getEcHealthRegainRate(), 0f, Float.MAX_VALUE)) {
+            wrongValue(fileName, "ecHealthRegainRate", getEcHealthRegainRate(), DEFAULT_ecHealthRegainRate);
+            setEcHealthRegainRate(DEFAULT_ecHealthRegainRate);
         }
 
         // Regeneration
@@ -246,15 +261,17 @@ public class Config extends AbstractConfig<NTheEndAgain> {
     @Override
     protected String getConfigString() {
         final StringBuilder content = new StringBuilder();
+        FrameBuilder frame;
 
         // ############
         // ## HEADER ##
         // ############
 
-        final String[] headerLines = new String[2];
-        headerLines[0] = "Config file for NTheEndAgain plugin. If you don't understand something,";
-        headerLines[1] = "please ask on dev.bukkit.org or on forum post.             Ribesg";
-        for (final String line : Utils.frame(headerLines)) {
+        frame = new FrameBuilder();
+        frame.addLine("Config file for NTheEndAgain plugin", FrameBuilder.Option.CENTER);
+        frame.addLine("If you don't understand something, please ask on dev.bukkit.org");
+        frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
+        for (final String line : frame.build()) {
             content.append(line + '\n');
         }
 
@@ -264,7 +281,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         // ## GENERAL ##
         // #############
 
-        for (final String line : Utils.frame("GENERAL CONFIGURATION")) {
+        frame = new FrameBuilder();
+        frame.addLine("GENERAL CONFIGURATION", FrameBuilder.Option.CENTER);
+        for (final String line : frame.build()) {
             content.append(line);
             content.append('\n');
         }
@@ -286,8 +305,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         // ## ENDERDRAGON ##
         // #################
 
-        content.append('\n');
-        for (final String line : Utils.frame("ENDERDRAGON CONFIGURATION")) {
+        frame = new FrameBuilder();
+        frame.addLine("ENDERDRAGON CONFIGURATION", FrameBuilder.Option.CENTER);
+        for (final String line : frame.build()) {
             content.append(line);
             content.append('\n');
         }
@@ -339,12 +359,35 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         content.append("#\n");
         content.append("edPortalSpawn: " + getEdPortalSpawn() + "\n\n");
 
+        // ###################
+        // ## ENDERCRYSTALS ##
+        // ###################
+
+        frame = new FrameBuilder();
+        frame.addLine("ENDERCRYSTALS CONFIGURATION", FrameBuilder.Option.CENTER);
+        for (final String line : frame.build()) {
+            content.append(line);
+            content.append('\n');
+        }
+        content.append('\n');
+
+        // ecHealthRegainRate
+        content.append("# Change EnderCrystals behaviour relative to the EnderDragon. Default: " + DEFAULT_ecHealthRegainRate + "\n");
+        content.append("# One important thing to understand is that Health is integer (for now).\n");
+        content.append("#\n");
+        content.append("#       < 1.0: Acts as a \"chance that the Dragon will regain 1 HP\" each tick\n");
+        content.append("#       = 1.0: Vanilla. EnderDragon gain 1 HP per tick.\n");
+        content.append("#       > 1.0: EnderDragon gain x HP per tick, so please set it to an integer value like 2 or more.\n");
+        content.append("#\n");
+        content.append("ecHealthRegainRate: " + getEcHealthRegainRate() + "\n\n");
+
         // ##################
         // ## REGENERATION ##
         // ##################
 
-        content.append('\n');
-        for (final String line : Utils.frame("REGENERATION CONFIGURATION")) {
+        frame = new FrameBuilder();
+        frame.addLine("REGENERATION CONFIGURATION", FrameBuilder.Option.CENTER);
+        for (final String line : frame.build()) {
             content.append(line);
             content.append('\n');
         }
@@ -419,8 +462,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         // ## RESPAWN ##
         // #############
 
-        content.append('\n');
-        for (final String line : Utils.frame("RESPAWN CONFIGURATION")) {
+        frame = new FrameBuilder();
+        frame.addLine("RESPAWN CONFIGURATION", FrameBuilder.Option.CENTER);
+        for (final String line : frame.build()) {
             content.append(line);
             content.append('\n');
         }
@@ -476,8 +520,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         // ## DATA ##
         // ##########
 
-        content.append('\n');
-        for (final String line : Utils.frame("DATA - PLEASE DO NOT TOUCH !")) {
+        frame = new FrameBuilder();
+        frame.addLine("DATA - PLEASE DO NOT TOUCH!", FrameBuilder.Option.CENTER);
+        for (final String line : frame.build()) {
             content.append(line);
             content.append('\n');
         }
@@ -493,6 +538,18 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 
         return content.toString();
     }
+
+    // General
+
+    public int getFilterMovedTooQuicklySpam() {
+        return filterMovedTooQuicklySpam;
+    }
+
+    private void setFilterMovedTooQuicklySpam(int filterMovedTooQuicklySpam) {
+        this.filterMovedTooQuicklySpam = filterMovedTooQuicklySpam;
+    }
+
+    // EnderDragons
 
     public float getEdDamageMultiplier() {
         return edDamageMultiplier;
@@ -550,13 +607,17 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         this.edPushesPlayers = edPushesPlayers;
     }
 
-    public int getFilterMovedTooQuicklySpam() {
-        return filterMovedTooQuicklySpam;
+    // EnderCrystals
+
+    public float getEcHealthRegainRate() {
+        return ecHealthRegainRate;
     }
 
-    private void setFilterMovedTooQuicklySpam(int filterMovedTooQuicklySpam) {
-        this.filterMovedTooQuicklySpam = filterMovedTooQuicklySpam;
+    public void setEcHealthRegainRate(float ecHealthRegainRate) {
+        this.ecHealthRegainRate = ecHealthRegainRate;
     }
+
+    // Regeneration
 
     public int getHardRegenOnStop() {
         return hardRegenOnStop;
@@ -564,22 +625,6 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 
     private void setHardRegenOnStop(int hardRegenOnStop) {
         this.hardRegenOnStop = hardRegenOnStop;
-    }
-
-    public long getNextRegenTaskTime() {
-        return nextRegenTaskTime;
-    }
-
-    public void setNextRegenTaskTime(long nextRegenTaskTime) {
-        this.nextRegenTaskTime = nextRegenTaskTime;
-    }
-
-    public long getNextRespawnTaskTime() {
-        return nextRespawnTaskTime;
-    }
-
-    public void setNextRespawnTaskTime(long nextRespawnTaskTime) {
-        this.nextRespawnTaskTime = nextRespawnTaskTime;
     }
 
     public int getRegenAction() {
@@ -613,6 +658,8 @@ public class Config extends AbstractConfig<NTheEndAgain> {
     private void setRegenType(int regenType) {
         this.regenType = regenType;
     }
+
+    // Respawn
 
     public int getRespawnNumber() {
         return respawnNumber;
@@ -649,6 +696,26 @@ public class Config extends AbstractConfig<NTheEndAgain> {
     private void setRespawnType(int respawnType) {
         this.respawnType = respawnType;
     }
+
+    // Data
+
+    public long getNextRegenTaskTime() {
+        return nextRegenTaskTime;
+    }
+
+    public void setNextRegenTaskTime(long nextRegenTaskTime) {
+        this.nextRegenTaskTime = nextRegenTaskTime;
+    }
+
+    public long getNextRespawnTaskTime() {
+        return nextRespawnTaskTime;
+    }
+
+    public void setNextRespawnTaskTime(long nextRespawnTaskTime) {
+        this.nextRespawnTaskTime = nextRespawnTaskTime;
+    }
+
+    // Others
 
     public String getWorldName() {
         return worldName;

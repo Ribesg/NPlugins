@@ -6,7 +6,7 @@ public class NGeneral extends GeneralNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.2.1";
+        return "0.3.0";
     }
 
     @Override

@@ -1,25 +1,25 @@
 package fr.ribesg.bukkit.ntheendagain.task;
 
-import fr.ribesg.bukkit.ntheendagain.Config;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
+import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 
 /** @author Ribesg */
-public class RegenTask extends BukkitRunnable {
-
-    private final EndWorldHandler handler;
+public class RegenTask extends RandomRepeatingTask {
 
     public RegenTask(final EndWorldHandler handler) {
-        this.handler = handler;
+        super(handler);
     }
 
     @Override
-    public void run() {
-        handler.regen();
+    public void exec() {
+        worldHandler.getRegenHandler().regen();
+    }
 
-        final Config config = handler.getConfig();
-        Bukkit.getScheduler().runTaskLater(handler.getPlugin(), this, config.getRegenTimer() * 20);
-        handler.getConfig().setNextRegenTaskTime(System.currentTimeMillis() + config.getRegenTimer());
+    @Override
+    protected long getInitialDelay() {
+        long nextRegenTaskTime = worldHandler.getConfig().getNextRegenTaskTime();
+        if (worldHandler.getConfig().getRegenType() == 2) {
+            nextRegenTaskTime = 0;
+        }
+        return buildInitialDelay(nextRegenTaskTime);
     }
 }

@@ -1,9 +1,9 @@
 package fr.ribesg.bukkit.ntheendagain.listener;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
+import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -61,11 +61,11 @@ public class ChunkListener implements Listener {
                             if (handler.getDragons().containsKey(ed.getUniqueId())) {
                                 handler.getDragons().remove(ed.getUniqueId());
                                 handler.getLoadedDragons().remove(ed.getUniqueId());
-                                handler.decrementDragonCount();
                             }
                         }
                         e.remove();
                     }
+                    endChunk.cleanCrystalLocations();
                     final int x = endChunk.getX(), z = endChunk.getZ();
                     event.getWorld().regenerateChunk(x, z);
                     endChunk.setToBeRegen(false);
@@ -95,7 +95,6 @@ public class ChunkListener implements Listener {
                                 ed.setMaxHealth(handler.getConfig().getEdHealth());
                                 ed.setHealth(ed.getMaxHealth());
                                 handler.getDragons().put(ed.getUniqueId(), new HashMap<String, Long>());
-                                handler.incrementDragonCount();
                             }
                             handler.getLoadedDragons().add(ed.getUniqueId());
                         } else if (e.getType() == EntityType.ENDER_CRYSTAL) {
@@ -103,6 +102,7 @@ public class ChunkListener implements Listener {
                         }
                     }
                 }
+                endChunk.resetSavedDragons();
             }
         }
     }
@@ -118,10 +118,15 @@ public class ChunkListener implements Listener {
             final String worldName = event.getWorld().getName();
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(worldName));
             if (handler != null) {
+                EndChunk chunk = handler.getChunks().getChunk(event.getChunk());
+                if (chunk == null) {
+                    chunk = handler.getChunks().addChunk(event.getChunk());
+                }
                 for (final Entity e : event.getChunk().getEntities()) {
                     if (e.getType() == EntityType.ENDER_DRAGON) {
                         final EnderDragon ed = (EnderDragon) e;
                         handler.getLoadedDragons().remove(ed.getUniqueId());
+                        chunk.incrementSavedDragons();
                     }
                 }
             }

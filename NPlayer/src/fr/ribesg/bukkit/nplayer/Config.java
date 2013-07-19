@@ -2,6 +2,7 @@ package fr.ribesg.bukkit.nplayer;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NPlayer> {
@@ -12,6 +13,9 @@ public class Config extends AbstractConfig<NPlayer> {
 
     public Config(final NPlayer instance) {
         super(instance);
+        setMaximumLoginAttempts(3);
+        setTooManyAttemptsPunishment(1);
+        setTooManyAttemptsPunishmentDuration(300);
     }
 
     /** @see fr.ribesg.bukkit.ncore.AbstractConfig#setValues(org.bukkit.configuration.file.YamlConfiguration) */
@@ -32,7 +36,7 @@ public class Config extends AbstractConfig<NPlayer> {
 
         // tooManyAttemptsPunishment. Default: 1.
         // Possible values: 0, 1, 2
-        setTooManyAttemptsPunishment(config.getInt("tooManyAttemptsPunishment", 3));
+        setTooManyAttemptsPunishment(config.getInt("tooManyAttemptsPunishment", 1));
         if (getTooManyAttemptsPunishment() < 0 || getTooManyAttemptsPunishment() > 2) {
             setTooManyAttemptsPunishment(1);
             plugin.sendMessage(plugin.getServer().getConsoleSender(),
@@ -59,12 +63,16 @@ public class Config extends AbstractConfig<NPlayer> {
     @Override
     protected String getConfigString() {
         final StringBuilder content = new StringBuilder();
+        FrameBuilder frame;
 
         // Header
-        content.append("################################################################################\n");
-        content.append("# Config file for NPlayer plugin. If you don't understand something, please    #\n");
-        content.append("# ask on dev.bukkit.org or on forum post.                               Ribesg #\n");
-        content.append("################################################################################\n\n");
+        frame = new FrameBuilder();
+        frame.addLine("Config file for NPlayer plugin", FrameBuilder.Option.CENTER);
+        frame.addLine("If you don't understand something, please ask on dev.bukkit.org");
+        frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
+        for (final String line : frame.build()) {
+            content.append(line + '\n');
+        }
 
         // Maximum Login attempts
         content.append("# Maximum login attempts before punishment. Possible values: Positive integers\n");

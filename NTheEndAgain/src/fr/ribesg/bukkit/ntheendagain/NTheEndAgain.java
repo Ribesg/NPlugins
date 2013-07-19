@@ -2,10 +2,12 @@ package fr.ribesg.bukkit.ntheendagain;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
-import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages;
+import fr.ribesg.bukkit.ntheendagain.listener.ChunkListener;
+import fr.ribesg.bukkit.ntheendagain.listener.DamageListener;
 import fr.ribesg.bukkit.ntheendagain.listener.EnderDragonListener;
-import fr.ribesg.bukkit.ntheendagain.world.EndWorldHandler;
+import fr.ribesg.bukkit.ntheendagain.listener.WorldListener;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
@@ -20,7 +22,6 @@ public class NTheEndAgain extends TheEndAgainNode {
 
     // Configs
     private Messages messages;
-    private Config   pluginConfig;
 
     // Useful Nodes
     // // None
@@ -30,7 +31,7 @@ public class NTheEndAgain extends TheEndAgainNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.2.1";
+        return "0.3.0";
     }
 
     @Override
@@ -49,22 +50,17 @@ public class NTheEndAgain extends TheEndAgainNode {
             return false;
         }
 
+        getServer().getPluginManager().registerEvents(new WorldListener(this), this);
+        getServer().getPluginManager().registerEvents(new ChunkListener(this), this);
         getServer().getPluginManager().registerEvents(new EnderDragonListener(this), this);
+        getServer().getPluginManager().registerEvents(new DamageListener(this), this);
 
         // Load End worlds configs and chunks data
-        worldHandlers = new HashMap<String, EndWorldHandler>();
+        worldHandlers = new HashMap<>();
         for (final World w : Bukkit.getWorlds()) {
             if (w.getEnvironment() == Environment.THE_END) {
-                final EndWorldHandler handler = new EndWorldHandler(this, w);
-                try {
-                    handler.loadConfig();
-                    handler.loadChunks();
-                    worldHandlers.put(Utils.toLowerCamelCase(w.getName()), handler);
-                    handler.init();
-                } catch (final IOException e) {
-                    getLogger().severe("An error occured, stacktrace follows:");
-                    e.printStackTrace();
-                    getLogger().severe("This error occured when NTheEndAgain tried to load " + e.getMessage() + ".yml");
+                boolean res = loadWorld(w);
+                if (!res) {
                     return false;
                 }
             }
@@ -86,12 +82,28 @@ public class NTheEndAgain extends TheEndAgainNode {
     @Override
     public void onNodeDisable() {
         for (final EndWorldHandler handler : worldHandlers.values()) {
-            handler.unload();
+            handler.unload(true);
         }
     }
 
     public Path getConfigFilePath(final String fileName) {
         return Paths.get(getDataFolder().getPath(), fileName + ".yml");
+    }
+
+    public boolean loadWorld(World endWorld) {
+        final EndWorldHandler handler = new EndWorldHandler(this, endWorld);
+        try {
+            handler.loadConfig();
+            handler.loadChunks();
+            worldHandlers.put(handler.getCamelCaseWorldName(), handler);
+            handler.init();
+            return true;
+        } catch (final IOException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            getLogger().severe("This error occured when NTheEndAgain tried to load " + e.getMessage() + ".yml");
+            return false;
+        }
     }
 
     /**
@@ -141,10 +153,6 @@ public class NTheEndAgain extends TheEndAgainNode {
 
     public Messages getMessages() {
         return messages;
-    }
-
-    public Config getPluginConfig() {
-        return pluginConfig;
     }
 
     public HashMap<String, EndWorldHandler> getWorldHandlers() {

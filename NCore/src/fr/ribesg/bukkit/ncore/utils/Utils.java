@@ -177,61 +177,6 @@ public class Utils {
         return result.substring(0, 1).toLowerCase() + result.substring(1);
     }
 
-    /**
-     * @param nb The wanted String size
-     *
-     * @return A String of size nb containing spaces
-     */
-    private static String spaces(final int nb) {
-        return multipleChars(nb, ' ');
-    }
-
-    /**
-     * @param nb Returned String length
-     * @param c  Character to fill the String with
-     *
-     * @return A String containing nb occurrences of c (and nothing else)
-     */
-    private static String multipleChars(final int nb, final char c) {
-        final StringBuilder s = new StringBuilder(nb);
-        for (int i = 0; i < nb; i++) {
-            s.append(c);
-        }
-        return s.toString();
-    }
-
-    /**
-     * Frames a text into a ## box
-     *
-     * @param messages Lines of the text
-     *
-     * @return New lines with additional ###
-     */
-    public static String[] frame(final String... messages) {
-        final String[] result = new String[messages.length + 2];
-        int maxLength = 0;
-        for (final String s : messages) {
-            maxLength = Math.max(maxLength, s.length());
-        }
-        final int length = maxLength + 6;
-        result[0] = multipleChars(length, '#');
-        for (int i = 0; i < messages.length; i++) {
-            result[i + 1] = "## " + messages[i] + spaces(maxLength - messages[i].length()) + " ##";
-        }
-        result[result.length - 1] = result[0];
-        return result;
-    }
-
-    public static String ipToString(String string) {
-        string = string.replace('.', '-');
-        return string;
-    }
-
-    public static String stringToIp(String string) {
-        string = string.replace('-', '.');
-        return string;
-    }
-
     public static String joinStrings(String... strings) {
         return joinStrings(" ", strings);
     }
