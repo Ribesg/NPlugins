@@ -44,7 +44,7 @@ public class RegenHandler {
                         break;
                 }
             }
-        }, 5);
+        }, EndWorldHandler.KICK_TO_REGEN_DELAY);
     }
 
     /*package*/ void regenThenRespawn() {
@@ -55,7 +55,7 @@ public class RegenHandler {
             public void run() {
                 worldHandler.getRespawnHandler().respawnNoRegen();
             }
-        }, EndWorldHandler.REGEN_THEN_RESPAWN_DELAY);
+        }, EndWorldHandler.REGEN_TO_RESPAWN_DELAY);
     }
 
     private void hardRegen() {

@@ -24,7 +24,8 @@ import java.util.UUID;
 
 public class EndWorldHandler {
 
-    static final long REGEN_THEN_RESPAWN_DELAY = 2L;
+    static final long KICK_TO_REGEN_DELAY    = 2L;
+    static final long REGEN_TO_RESPAWN_DELAY = KICK_TO_REGEN_DELAY + 8L;
 
     private final String camelCaseWorldName;
 
@@ -51,7 +52,7 @@ public class EndWorldHandler {
         plugin = instance;
         endWorld = world;
         camelCaseWorldName = Utils.toLowerCamelCase(endWorld.getName());
-        chunks = new EndChunks();
+        chunks = new EndChunks(world.getName());
         config = new Config(plugin, endWorld.getName());
         dragons = new HashMap<>();
         loadedDragons = new HashSet<>();

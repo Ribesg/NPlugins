@@ -26,6 +26,10 @@ public class EndChunk {
     private       Set<Location> crystals;
     private       int           savedDragons;
 
+    public EndChunk(final EndChunks container, ChunkCoord coords) {
+        this(container, coords.getX(), coords.getZ(), coords.getWorldName());
+    }
+
     public EndChunk(final EndChunks container, final int x, final int z, final String world) {
         this.container = container;
         coords = new ChunkCoord(x, z, world);

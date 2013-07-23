@@ -37,16 +37,16 @@ public class NCore extends JavaPlugin {
     public void onEnable() {
         try {
             metrics = new Metrics(this);
-            Bukkit.getScheduler().runTaskLaterAsynchronously(this, new BukkitRunnable() {
-
-                @Override
-                public void run() {
-                    enableMetrics();
-                }
-            }, 5 * 20L /* ~5 seconds */);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Bukkit.getScheduler().runTaskLaterAsynchronously(this, new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                afterNodesLoad();
+            }
+        }, 5 * 20L /* ~5 seconds */);
     }
 
     @Override
@@ -54,82 +54,111 @@ public class NCore extends JavaPlugin {
         // Nothing yet
     }
 
-    private void enableMetrics() {
+    private void afterNodesLoad() {
+        boolean noNodeFound = true;
         Metrics.Graph nodesUsedGraph = metrics.createGraph("Nodes used");
 
         /* Cuboid Node */
-        nodesUsedGraph.addPlotter(new Metrics.Plotter("Cuboid") {
+        if (cuboidNode != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter("Cuboid") {
 
-            @Override
-            public int getValue() {
-                return cuboidNode == null ? 0 : 1;
-            }
-        });
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
         /* DodgeBall Node */
-        nodesUsedGraph.addPlotter(new Metrics.Plotter("DodgeBall") {
+        if (dodgeBallNode != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter("DodgeBall") {
 
-            @Override
-            public int getValue() {
-                return dodgeBallNode == null ? 0 : 1;
-            }
-        });
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
         /* EnchantingEgg Node */
-        nodesUsedGraph.addPlotter(new Metrics.Plotter("EnchantingEgg") {
+        if (enchantingEggNode != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter("EnchantingEgg") {
 
-            @Override
-            public int getValue() {
-                return enchantingEggNode == null ? 0 : 1;
-            }
-        });
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
         /* General Node */
-        nodesUsedGraph.addPlotter(new Metrics.Plotter("General") {
+        if (generalNode != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter("General") {
 
-            @Override
-            public int getValue() {
-                return generalNode == null ? 0 : 1;
-            }
-        });
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
         /* Player Node */
-        nodesUsedGraph.addPlotter(new Metrics.Plotter("Player") {
+        if (playerNode != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter("Player") {
 
-            @Override
-            public int getValue() {
-                return playerNode == null ? 0 : 1;
-            }
-        });
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
         /* Talk Node */
-        nodesUsedGraph.addPlotter(new Metrics.Plotter("Talk") {
+        if (talkNode != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter("Talk") {
 
-            @Override
-            public int getValue() {
-                return talkNode == null ? 0 : 1;
-            }
-        });
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
         /* TheEndAgain Node */
-        nodesUsedGraph.addPlotter(new Metrics.Plotter("TheEndAgain") {
+        if (theEndAgainNode != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter("TheEndAgain") {
 
-            @Override
-            public int getValue() {
-                return theEndAgainNode == null ? 0 : 1;
-            }
-        });
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
         /* World Node */
-        nodesUsedGraph.addPlotter(new Metrics.Plotter("World") {
+        if (worldNode != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter("World") {
 
-            @Override
-            public int getValue() {
-                return worldNode == null ? 0 : 1;
-            }
-        });
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
         metrics.start();
+
+        if (noNodeFound) {
+            // TODO
+        }
     }
 
     public TalkNode getTalkNode() {

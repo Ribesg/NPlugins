@@ -52,7 +52,7 @@ public class RespawnHandler {
             respawnDragon();
             respawning++;
         }
-        if (respawning >= 1) {
+        if (respawning > 0) {
             worldHandler.getPlugin()
                         .broadcastMessage(MessageId.theEndAgain_respawned,
                                           Integer.toString(respawning),
@@ -82,7 +82,7 @@ public class RespawnHandler {
             public void run() {
                 world.spawnEntity(loc, EntityType.ENDER_DRAGON);
             }
-        }, EndWorldHandler.REGEN_THEN_RESPAWN_DELAY);
+        }, EndWorldHandler.REGEN_TO_RESPAWN_DELAY);
     }
 
 }

@@ -28,13 +28,16 @@ public class EndChunks implements Iterable<EndChunk> {
 
     private final static Charset CHARSET = StandardCharsets.UTF_8;
 
+    private final String worldName;
+
     private final HashMap<ChunkCoord, EndChunk> chunks;
 
     private int totalSavedDragons;
 
-    public EndChunks() {
+    public EndChunks(String worldName) {
         chunks = new HashMap<>();
         totalSavedDragons = 0;
+        this.worldName = worldName;
     }
 
     public EndChunk addChunk(final Chunk bukkitChunk) {
@@ -44,15 +47,34 @@ public class EndChunks implements Iterable<EndChunk> {
     }
 
     private void addChunk(final EndChunk endChunk) {
+        checkWorld(endChunk.getWorldName());
         chunks.put(endChunk.getCoords(), endChunk);
     }
 
     public EndChunk getChunk(final String world, final int x, final int z) {
-        return chunks.get(new ChunkCoord(x, z, world));
+        checkWorld(world);
+        return get(new ChunkCoord(x, z, world));
     }
 
     public EndChunk getChunk(Chunk bukkitChunk) {
-        return chunks.get(new ChunkCoord(bukkitChunk));
+        checkWorld(bukkitChunk.getWorld().getName());
+        return get(new ChunkCoord(bukkitChunk));
+    }
+
+    private EndChunk get(ChunkCoord coord) {
+        EndChunk res = chunks.get(coord);
+        if (res == null) {
+            res = new EndChunk(this, coord);
+            chunks.put(res.getCoords(), res);
+        }
+        return res;
+    }
+
+    private void checkWorld(String worldName) {
+        if (!worldName.equals(this.worldName)) {
+            throw new IllegalArgumentException("Wrong world, this EndChunks object handles world \"" + this.worldName + "\", " +
+                                               "not world \"" + worldName + "\"");
+        }
     }
 
     public void softRegen() {
