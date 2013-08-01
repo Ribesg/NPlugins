@@ -1,14 +1,14 @@
 package fr.ribesg.bukkit.ncore;
 
 import fr.ribesg.bukkit.ncore.metrics.Metrics;
-import fr.ribesg.bukkit.ncore.nodes.cuboid.CuboidNode;
-import fr.ribesg.bukkit.ncore.nodes.dodgeball.DodgeBallNode;
-import fr.ribesg.bukkit.ncore.nodes.enchantingegg.EnchantingEggNode;
-import fr.ribesg.bukkit.ncore.nodes.general.GeneralNode;
-import fr.ribesg.bukkit.ncore.nodes.player.PlayerNode;
-import fr.ribesg.bukkit.ncore.nodes.talk.TalkNode;
-import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
-import fr.ribesg.bukkit.ncore.nodes.world.WorldNode;
+import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
+import fr.ribesg.bukkit.ncore.node.dodgeball.DodgeBallNode;
+import fr.ribesg.bukkit.ncore.node.enchantingegg.EnchantingEggNode;
+import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
+import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
+import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
+import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
+import fr.ribesg.bukkit.ncore.node.world.WorldNode;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;

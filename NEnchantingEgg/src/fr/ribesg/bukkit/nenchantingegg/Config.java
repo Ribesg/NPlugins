@@ -13,9 +13,9 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 
     }
 
-    /** @see AbstractConfig#setValues(YamlConfiguration) */
+    /** @see AbstractConfig#handleValues(YamlConfiguration) */
     @Override
-    protected void setValues(final YamlConfiguration config) {
+    protected void handleValues(final YamlConfiguration config) {
 
         // // broadcastOnWorldCreate. Default: 0.
         // // Possible values: 0,1

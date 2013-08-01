@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.nodes.cuboid.CuboidNode;
+import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.beans.WorldCuboid;
@@ -37,10 +37,10 @@ public class NCuboid extends CuboidNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.3.0";
+        return "0.3.2";
     }
 
-    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeEnable() */
+    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeEnable() */
     @Override
     protected boolean onNodeEnable() {
         // Messages first !
@@ -61,7 +61,7 @@ public class NCuboid extends CuboidNode {
         try {
             pluginConfig = new Config(this);
             pluginConfig.loadConfig();
-        } catch (final IOException e) {
+        } catch (final IOException | InvalidConfigurationException e) {
             getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
             getLogger().severe("This error occured when NCuboid tried to load config.yml");
@@ -71,12 +71,11 @@ public class NCuboid extends CuboidNode {
         // Create the CuboidDB
         try {
             db = CuboidDBPersistenceHandler.loadDB(this);
-        } catch (final IOException e) {
-            // TODO
+        } catch (final IOException | InvalidConfigurationException e) {
+            getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
-        } catch (final InvalidConfigurationException e) {
-            // TODO
-            e.printStackTrace();
+            getLogger().severe("This error occured when NCuboid tried to load cuboidDB.yml");
+            return false;
         }
 
         // Listeners
@@ -114,18 +113,18 @@ public class NCuboid extends CuboidNode {
         return true;
     }
 
-    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
+    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // See if there are new worlds
         for (final World world : getServer().getWorlds()) {
             if (db.getByWorld(world) == null) {
-                db.addByWorld(new WorldCuboid(world));
+                db.addByWorld(new WorldCuboid(world.getName()));
             }
         }
     }
 
-    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#onNodeDisable() */
+    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeDisable() */
     @Override
     protected void onNodeDisable() {
         try {

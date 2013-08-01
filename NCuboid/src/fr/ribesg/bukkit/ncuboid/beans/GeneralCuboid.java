@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
+import fr.ribesg.bukkit.ncore.utils.NLocation;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -18,7 +18,7 @@ public abstract class GeneralCuboid extends Cuboid {
     }
 
     // Identification / informations related
-    private World      world;
+    private String     worldName;
     private CuboidType type;
 
     // Protection related
@@ -30,8 +30,8 @@ public abstract class GeneralCuboid extends Cuboid {
     private final FlagAttributes flagAtts;
 
     // Create a new Cuboid, when user select points etc
-    public GeneralCuboid(final World world, final CuboidType type) {
-        setWorld(world);
+    public GeneralCuboid(final String worldName, final CuboidType type) {
+        setWorldName(worldName);
         setType(type);
         rights = new Rights();
         setPriority(0);
@@ -39,13 +39,13 @@ public abstract class GeneralCuboid extends Cuboid {
         flagAtts = new FlagAttributes();
     }
 
-    public GeneralCuboid(final World world,
+    public GeneralCuboid(final String worldName,
                          final CuboidType type,
                          final Rights rights,
                          final int priority,
                          final Flags flags,
                          final FlagAttributes flagAtts) {
-        setWorld(world);
+        setWorldName(worldName);
         setType(type);
         this.rights = rights;
         setPriority(priority);
@@ -54,7 +54,11 @@ public abstract class GeneralCuboid extends Cuboid {
     }
 
     // Location check
-    public abstract boolean contains(final Location loc);
+    public boolean contains(final Location loc) {
+        return contains(new NLocation(loc));
+    }
+
+    public abstract boolean contains(final NLocation loc);
 
     public abstract String getCuboidName();
 
@@ -80,12 +84,12 @@ public abstract class GeneralCuboid extends Cuboid {
         this.type = type;
     }
 
-    public World getWorld() {
-        return world;
+    public String getWorldName() {
+        return worldName;
     }
 
-    public void setWorld(World world) {
-        this.world = world;
+    public void setWorldName(String worldName) {
+        this.worldName = worldName;
     }
 
     public boolean getFlag(Flag f) {

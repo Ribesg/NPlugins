@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ntheendagain;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.nodes.theendagain.TheEndAgainNode;
+import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages;
 import fr.ribesg.bukkit.ntheendagain.listener.ChunkListener;
@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -31,7 +32,7 @@ public class NTheEndAgain extends TheEndAgainNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.3.0";
+        return "0.3.2";
     }
 
     @Override
@@ -50,30 +51,44 @@ public class NTheEndAgain extends TheEndAgainNode {
             return false;
         }
 
+        // Load End worlds configs and chunks data
+        worldHandlers = new HashMap<>();
+        boolean res = true;
+        for (final World w : Bukkit.getWorlds()) {
+            if (w.getEnvironment() == Environment.THE_END) {
+                try {
+                    res = loadWorld(w);
+                    if (!res) {
+                        break;
+                    }
+                } catch (InvalidConfigurationException e) {
+                    getLogger().severe("An error occured, stacktrace follows:");
+                    e.printStackTrace();
+                    getLogger().severe("This error occured when NTheEndAgain tried to load \"" + w.getName() + "\"'s config file.");
+                    break;
+                }
+            }
+        }
+        if (!res) {
+            for (EndWorldHandler handler : worldHandlers.values()) {
+                handler.cancelTasks();
+            }
+            return false;
+        }
+
+        activateFilter();
+
         getServer().getPluginManager().registerEvents(new WorldListener(this), this);
         getServer().getPluginManager().registerEvents(new ChunkListener(this), this);
         getServer().getPluginManager().registerEvents(new EnderDragonListener(this), this);
         getServer().getPluginManager().registerEvents(new DamageListener(this), this);
-
-        // Load End worlds configs and chunks data
-        worldHandlers = new HashMap<>();
-        for (final World w : Bukkit.getWorlds()) {
-            if (w.getEnvironment() == Environment.THE_END) {
-                boolean res = loadWorld(w);
-                if (!res) {
-                    return false;
-                }
-            }
-        }
-
-        activateFilter();
 
         getCommand("nend").setExecutor(new TheEndAgainCommandExecutor(this));
 
         return true;
     }
 
-    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
+    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // Nothing to do here for now
@@ -82,7 +97,13 @@ public class NTheEndAgain extends TheEndAgainNode {
     @Override
     public void onNodeDisable() {
         for (final EndWorldHandler handler : worldHandlers.values()) {
-            handler.unload(true);
+            try {
+                handler.unload(true);
+            } catch (InvalidConfigurationException e) {
+                getLogger().severe("Unable to disable \"" + handler.getEndWorld().getName() + "\"'s world handler. Server should be " +
+                                   "stopped now (Were you reloading?)");
+                e.printStackTrace();
+            }
         }
     }
 
@@ -90,7 +111,7 @@ public class NTheEndAgain extends TheEndAgainNode {
         return Paths.get(getDataFolder().getPath(), fileName + ".yml");
     }
 
-    public boolean loadWorld(World endWorld) {
+    public boolean loadWorld(World endWorld) throws InvalidConfigurationException {
         final EndWorldHandler handler = new EndWorldHandler(this, endWorld);
         try {
             handler.loadConfig();

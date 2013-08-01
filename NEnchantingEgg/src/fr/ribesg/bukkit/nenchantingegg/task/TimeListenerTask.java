@@ -20,7 +20,7 @@ public class TimeListenerTask extends BukkitRunnable {
 
     public TimeListenerTask(final NEnchantingEgg instance) {
         plugin = instance;
-        previousTimeMap = new HashMap<String, Long>();
+        previousTimeMap = new HashMap<>();
         for (final World w : Bukkit.getWorlds()) {
             previousTimeMap.put(w.getName(), w.getTime());
         }
@@ -30,11 +30,13 @@ public class TimeListenerTask extends BukkitRunnable {
     public void run() {
         for (final World w : Bukkit.getWorlds()) {
             final long actualTime = w.getTime();
-            final long previousTime = previousTimeMap.get(w.getName());
-            if (Time.isDayTime(previousTime) && Time.isNightTime(actualTime)) {
-                plugin.getAltars().timeChange(w.getName(), Time.DAY, Time.NIGHT);
-            } else if (Time.isNightTime(previousTime) && Time.isDayTime(actualTime)) {
-                plugin.getAltars().timeChange(w.getName(), Time.NIGHT, Time.DAY);
+            final Long previousTime = previousTimeMap.get(w.getName());
+            if (previousTime != null) {
+                if (Time.isDayTime(previousTime) && Time.isNightTime(actualTime)) {
+                    plugin.getAltars().timeChange(w.getName(), Time.DAY, Time.NIGHT);
+                } else if (Time.isNightTime(previousTime) && Time.isDayTime(actualTime)) {
+                    plugin.getAltars().timeChange(w.getName(), Time.NIGHT, Time.DAY);
+                }
             }
             previousTimeMap.put(w.getName(), actualTime);
         }

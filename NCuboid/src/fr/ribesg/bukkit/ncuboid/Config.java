@@ -1,7 +1,6 @@
 package fr.ribesg.bukkit.ncuboid;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.nodes.NPlugin;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
  *
  * @author Ribesg
  */
-public class Config extends AbstractConfig {
+public class Config extends AbstractConfig<NCuboid> {
 
     private static Material selectionItemMaterial;
 
@@ -20,14 +19,14 @@ public class Config extends AbstractConfig {
      *
      * @param instance Linked plugin instance
      */
-    public Config(NPlugin instance) {
+    public Config(NCuboid instance) {
         super(instance);
         setSelectionItemMaterial(Material.STICK);
     }
 
-    /** @see AbstractConfig#setValues(YamlConfiguration) */
+    /** @see AbstractConfig#handleValues(YamlConfiguration) */
     @Override
-    protected void setValues(final YamlConfiguration config) {
+    protected void handleValues(final YamlConfiguration config) {
 
         // selectionItemMaterial. Default : Stick/280
         final Material m = Material.getMaterial(config.getInt("selectionItemMaterial", 280));

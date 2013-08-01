@@ -1,6 +1,6 @@
-package fr.ribesg.bukkit.ncore.nodes.talk;
+package fr.ribesg.bukkit.ncore.node.talk;
 
-import fr.ribesg.bukkit.ncore.nodes.NPlugin;
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 
 /**
  * Represents the NTalk plugin
@@ -9,7 +9,7 @@ import fr.ribesg.bukkit.ncore.nodes.NPlugin;
  */
 public abstract class TalkNode extends NPlugin {
 
-    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore() */
+    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
     @Override
     protected void linkCore() {
         getCore().setTalkNode(this);

@@ -1,6 +1,6 @@
-package fr.ribesg.bukkit.ncore.nodes.player;
+package fr.ribesg.bukkit.ncore.node.player;
 
-import fr.ribesg.bukkit.ncore.nodes.NPlugin;
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 
 /**
  * Represents the NPlayer plugin

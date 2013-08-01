@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.nplayer;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.nodes.player.PlayerNode;
+import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
 import fr.ribesg.bukkit.nplayer.lang.Messages;
 import fr.ribesg.bukkit.nplayer.user.LoggedOutUserHandler;
 import fr.ribesg.bukkit.nplayer.user.UserDB;
@@ -26,7 +26,7 @@ public class NPlayer extends PlayerNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.3.0";
+        return "0.3.2";
     }
 
     @Override
@@ -49,7 +49,7 @@ public class NPlayer extends PlayerNode {
         try {
             pluginConfig = new Config(this);
             pluginConfig.loadConfig();
-        } catch (final IOException e) {
+        } catch (final IOException | InvalidConfigurationException e) {
             getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
             getLogger().severe("This error occured when NPlayer tried to load config.yml");
@@ -106,7 +106,7 @@ public class NPlayer extends PlayerNode {
         getCore().setPlayerNode(this);
     }
 
-    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
+    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // Nothing to do here for now

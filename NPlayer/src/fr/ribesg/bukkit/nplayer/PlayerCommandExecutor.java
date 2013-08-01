@@ -176,6 +176,7 @@ public class PlayerCommandExecutor implements CommandExecutor, Listener {
             if (isCorrect) {
                 plugin.sendMessage(player, MessageId.player_welcomeBack);
                 user.setLoggedIn(true);
+                user.newIp(player.getAddress().getAddress().getHostAddress());
                 return true;
             } else {
                 plugin.sendMessage(player, MessageId.player_wrongPassword);
@@ -262,12 +263,7 @@ public class PlayerCommandExecutor implements CommandExecutor, Listener {
         return false; // TODO
     }
 
-    private boolean homeCommand(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player)) {
-            plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-            return true;
-        }
-        final Player player = (Player) sender;
+    private boolean homeCommand(final Player player, String[] args) {
         if (args.length > 0) {
             String userName = args[0];
             Player p = plugin.getServer().getPlayer(userName);
@@ -301,7 +297,7 @@ public class PlayerCommandExecutor implements CommandExecutor, Listener {
                 plugin.getLogger()
                       .severe("Unknown error while executing command /home : user does not exists but still managed to use " +
                               "the command.");
-                player.sendMessage("§cUnkown error, see console.");
+                player.sendMessage("§cUnknown error, see console.");
                 return true;
             }
             final Location dest = user.getHome();
@@ -323,12 +319,7 @@ public class PlayerCommandExecutor implements CommandExecutor, Listener {
         }
     }
 
-    private boolean setHomeCommand(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player)) {
-            plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-            return true;
-        }
-        Player player = (Player) sender;
+    private boolean setHomeCommand(final Player player, String[] args) {
         if (args.length > 0) {
             String userName = args[0];
             Player p = plugin.getServer().getPlayer(userName);

@@ -1,5 +1,5 @@
 name: NWorld
-version: 0.3.0
+version: 0.3.2
 description: World handling plugin for N plugins suite
 author: Ribesg
 website: http://www.ribesg.fr/
@@ -15,8 +15,9 @@ commands:
     aliases: [nw,world]
     usage: |
       /<command> [worldName]
-      /<command> create <worldName> [seed]
-      /<command> load|unload|allowWarp|denyWarp <worldName>
+      /<command> create <worldName> [seed] [requiredPermission] [hidden]
+      /<command> load|unload <worldName>
+      /<command> setHidden|setPerm|setNether|setEnd <worldName> <value>
   spawn:
     description: Spawn command
     usage: |
@@ -25,3 +26,17 @@ commands:
     description: Set the spawn
     usage: |
       /<command>
+  warp:
+    description: Warp to a point
+    usage: |
+      /<command> [warpName]
+      /<command> <setHidden|setPerm> <warpName> <value>
+  setwarp:
+    description: Place / Move a Warp
+    usage: |
+      /<command> <warpName> -- Move a Warp
+      /<command> <warpName> [requiredPermission] [hidden] -- Place a Warp
+  delwarp:
+    description: Remove a Warp
+    usage: |
+      /<command> <warpName>

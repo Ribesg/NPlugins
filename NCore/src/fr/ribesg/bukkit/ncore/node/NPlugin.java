@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.ncore.nodes;
+package fr.ribesg.bukkit.ncore.node;
 
 import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.metrics.Metrics;
@@ -61,10 +61,13 @@ public abstract class NPlugin extends JavaPlugin {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (onNodeEnable()) {
+
+            boolean activationResult = onNodeEnable();
+            if (activationResult) {
                 enabled = true;
                 afterEnable();
             } else {
+                // TODO Emergency mode
                 getLogger().severe("Disabling plugin...");
                 getPluginLoader().disablePlugin(this);
             }

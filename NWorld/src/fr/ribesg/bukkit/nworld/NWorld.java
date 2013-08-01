@@ -1,17 +1,23 @@
 package fr.ribesg.bukkit.nworld;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.nodes.world.WorldNode;
+import fr.ribesg.bukkit.ncore.node.world.WorldNode;
+import fr.ribesg.bukkit.ncore.utils.NLocation;
+import fr.ribesg.bukkit.nworld.config.Config;
 import fr.ribesg.bukkit.nworld.lang.Messages;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import fr.ribesg.bukkit.nworld.warp.Warps;
+import fr.ribesg.bukkit.nworld.world.AdditionalWorld;
+import fr.ribesg.bukkit.nworld.world.GeneralWorld.WorldType;
+import fr.ribesg.bukkit.nworld.world.StockWorld;
+import fr.ribesg.bukkit.nworld.world.Worlds;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.block.BlockFace;
+import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * The main plugin class.
@@ -27,15 +33,13 @@ public class NWorld extends WorldNode {
     // Useful Nodes
     // // None
 
-    /** Map linking lowercased World Names as keys to a boolean saying if they are open to teleportation or not */
-    private HashMap<String, Boolean> worldMap;
-
-    /** Map linking lowercased World Names as keys to their spawn location, here uncluding Yaw and Pitch */
-    private HashMap<String, Location> spawnMap;
+    // Actual plugin data
+    Worlds worlds;
+    Warps  warps;
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.3.0";
+        return "0.3.2";
     }
 
     @Override
@@ -43,7 +47,11 @@ public class NWorld extends WorldNode {
         // Messages first !
         try {
             if (!getDataFolder().isDirectory()) {
-                getDataFolder().mkdir();
+                boolean res = getDataFolder().mkdir();
+                if (!res) {
+                    getLogger().severe("Unable to create subfolder in /plugins/");
+                    return false;
+                }
             }
             messages = new Messages();
             messages.loadMessages(this);
@@ -54,47 +62,92 @@ public class NWorld extends WorldNode {
             return false;
         }
 
-        worldMap = new HashMap<String, Boolean>();
-        spawnMap = new HashMap<String, Location>();
+        worlds = new Worlds();
+        warps = new Warps();
 
         // Config
         try {
             pluginConfig = new Config(this);
             pluginConfig.loadConfig();
-        } catch (final IOException e) {
+        } catch (final IOException | InvalidConfigurationException e) {
             getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
             getLogger().severe("This error occured when NWorld tried to load config.yml");
             return false;
         }
 
-        for (final World w : getServer().getWorlds()) {
-            if (!worldMap.containsKey(w.getName())) {
-                worldMap.put(w.getName(), false);
+        worlds = pluginConfig.getWorlds();
+        warps = pluginConfig.getWarps();
+
+        // This loop will detect newly created worlds
+        // - Default main World, at first plugin start
+        // - Nether & End when activated
+        for (World w : Bukkit.getWorlds()) {
+            warps.worldEnabled(w.getName());
+            if (!worlds.containsKey(w.getName())) {
+                StockWorld world = new StockWorld(this,
+                                                  w.getName(),
+                                                  new NLocation(w.getSpawnLocation()),
+                                                  pluginConfig.getDefaultRequiredPermission(),
+                                                  true,
+                                                  false);
+                switch (w.getEnvironment()) {
+                    case NORMAL:
+                        world.setType(WorldType.STOCK);
+                        break;
+                    case NETHER:
+                        world.setType(WorldType.STOCK_NETHER);
+                        break;
+                    case THE_END:
+                        world.setType(WorldType.STOCK_END);
+                        break;
+                }
+                worlds.put(w.getName(), world);
             }
-            if (!spawnMap.containsKey(w.getName())) {
+        }
 
-                // Anti stuck in the wall
-                Location loc = w.getSpawnLocation();
-                loc.setX(loc.getBlockX() + 0.5);
-                loc.setY(loc.getBlockY() + 0.5);
-                loc.setZ(loc.getBlockZ() + 0.5);
-                while (loc.getBlock().getType() != Material.AIR || loc.getBlock().getRelative(BlockFace.UP).getType() != Material.AIR) {
-                    loc.add(0, 1, 0);
+        // This loop will create/load additional worlds
+        for (AdditionalWorld w : worlds.getAdditional().values()) {
+            if (w.isEnabled()) {
+                // Create (Load) the world
+                WorldCreator creator = new WorldCreator(w.getWorldName());
+                creator.environment(World.Environment.NORMAL);
+                creator.seed(w.getSeed());
+                World world = Bukkit.createWorld(creator);
+
+                // Re-set spawn location
+                NLocation loc = w.getSpawnLocation();
+                world.setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+
+                // Check if some warps should be enabled
+                warps.worldEnabled(w.getWorldName());
+
+                // Load Nether if needed
+                if (w.hasNether()) {
+                    String netherName = w.getWorldName() + "_nether";
+
+                    // Create (Load) the world
+                    WorldCreator netherCreator = new WorldCreator(netherName);
+                    netherCreator.environment(World.Environment.NETHER);
+                    netherCreator.seed(w.getSeed());
+                    Bukkit.createWorld(netherCreator);
+
+                    // Check if some warps should be enabled
+                    warps.worldEnabled(netherName);
                 }
+                // Load End if needed
+                if (w.hasEnd()) {
+                    String endName = w.getWorldName() + "_the_end";
 
-                // Anti burn in lava for the Nether (TODO Make this deactivable ?)
-                final Location loc2 = loc.clone();
-                while (loc2.getBlock().getType() == Material.AIR) {
-                    loc2.add(0, -1, 0);
+                    // Create (Load) the world
+                    WorldCreator endCreator = new WorldCreator(endName);
+                    endCreator.environment(World.Environment.THE_END);
+                    endCreator.seed(w.getSeed());
+                    Bukkit.createWorld(endCreator);
+
+                    // Check if some warps should be enabled
+                    warps.worldEnabled(endName);
                 }
-                if (loc2.getBlock().getType() == Material.STATIONARY_LAVA || loc2.getBlock().getType() == Material.LAVA) {
-                    loc2.getBlock().setType(Material.COBBLESTONE);
-                }
-
-                loc = loc2.clone().add(0, 1, 0);
-
-                spawnMap.put(w.getName(), loc);
             }
         }
 
@@ -103,9 +156,12 @@ public class NWorld extends WorldNode {
         pm.registerEvents(new WorldListener(this), this);
 
         // Commands
-        getCommand("nworld").setExecutor(new WorldCommandExecutor(this));
-        getCommand("spawn").setExecutor(new WorldCommandExecutor(this));
-        getCommand("setspawn").setExecutor(new WorldCommandExecutor(this));
+        WorldCommandExecutor executor = new WorldCommandExecutor(this);
+        getCommand("nworld").setExecutor(executor);
+        getCommand("spawn").setExecutor(executor);
+        getCommand("setspawn").setExecutor(executor);
+        getCommand("warp").setExecutor(executor);
+        getCommand("setwarp").setExecutor(executor);
 
         return true;
     }
@@ -119,7 +175,7 @@ public class NWorld extends WorldNode {
         }
     }
 
-    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
+    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // Nothing to do here for now
@@ -145,11 +201,19 @@ public class NWorld extends WorldNode {
         return pluginConfig;
     }
 
-    public HashMap<String, Boolean> getWorldMap() {
-        return worldMap;
+    private boolean isMainWorld(World world) {
+        return world != null && isMainWorld(world.getName());
     }
 
-    public HashMap<String, Location> getSpawnMap() {
-        return spawnMap;
+    private boolean isMainWorld(String worldName) {
+        return Bukkit.getWorlds().get(0).getName().equals(worldName);
+    }
+
+    public Warps getWarps() {
+        return warps;
+    }
+
+    public Worlds getWorlds() {
+        return worlds;
     }
 }

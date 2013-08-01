@@ -1,6 +1,12 @@
 package fr.ribesg.bukkit.nworld;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.NLocation;
+import fr.ribesg.bukkit.ncore.utils.WorldUtils;
+import fr.ribesg.bukkit.nworld.warp.Warp;
+import fr.ribesg.bukkit.nworld.world.AdditionalSubWorld;
+import fr.ribesg.bukkit.nworld.world.AdditionalWorld;
+import fr.ribesg.bukkit.nworld.world.GeneralWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -11,13 +17,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.ChatPaginator;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 /** @author Ribesg */
@@ -31,23 +33,37 @@ public class WorldCommandExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-        if (command.getName().equalsIgnoreCase("nworld")) {
+        if (command.getName().equals("nworld")) {
             if (Perms.hasWorld(sender)) {
                 return cmdWorld(sender, args);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
             }
-        } else if (command.getName().equalsIgnoreCase("spawn")) {
+        } else if (command.getName().equals("spawn")) {
             if (Perms.hasSpawn(sender)) {
                 return cmdSpawn(sender);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
             }
-        } else if (command.getName().equalsIgnoreCase("setspawn")) {
+        } else if (command.getName().equals("setspawn")) {
             if (Perms.hasSetSpawn(sender)) {
                 return cmdSetSpawn(sender);
+            } else {
+                plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+                return true;
+            }
+        } else if (command.getName().equals("warp")) {
+            if (Perms.hasWarp(sender)) {
+                return cmdWarp(sender, args);
+            } else {
+                plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+                return true;
+            }
+        } else if (command.getName().equals("setwarp")) {
+            if (Perms.hasSetWarp(sender)) {
+                return cmdSetWarp(sender, args);
             } else {
                 plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
@@ -58,13 +74,18 @@ public class WorldCommandExecutor implements CommandExecutor {
     }
 
     private boolean cmdWorld(final CommandSender sender, String[] args) {
-        args = parseArgs(args);
         if (args.length == 0) {
             // Lists available worlds
             plugin.sendMessage(sender, MessageId.world_availableWorlds);
-            for (final String worldName : plugin.getWorldMap().keySet()) {
-                final boolean isTeleportationAllowed = plugin.getWorldMap().get(worldName);
-                sender.sendMessage(ChatColor.BLACK + "- " + (isTeleportationAllowed ? ChatColor.GREEN : ChatColor.RED) + worldName);
+            for (final GeneralWorld world : plugin.getWorlds()) {
+                if (world.isEnabled()) {
+                    boolean hasPermission = Perms.hasRequiredPermission(sender, world.getRequiredPermission());
+                    if (hasPermission) {
+                        sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + world.getWorldName());
+                    } else if (!world.isHidden()) {
+                        sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.RED + world.getWorldName());
+                    }
+                }
             }
             return true;
         } else if (args.length == 1) {
@@ -80,12 +101,18 @@ public class WorldCommandExecutor implements CommandExecutor {
                     return subCmdWorldLoad(sender, args);
                 case "unload":
                     return subCmdWorldUnload(sender, args);
-                case "allow":
-                case "allowwarp":
-                    return subCmdWorldWarpAllow(sender, args);
-                case "deny":
-                case "denywarp":
-                    return subCmdWorldWarpDeny(sender, args);
+                case "hidden":
+                case "sethidden":
+                    return subCmdWorldSetHidden(sender, args);
+                case "perm":
+                case "setperm":
+                    return subCmdWorldSetPerm(sender, args);
+                case "nether":
+                case "setnether":
+                    return subCmdWorldSetNether(sender, args);
+                case "end":
+                case "setend":
+                    return subCmdWorldSetEnd(sender, args);
                 default:
                     return false;
             }
@@ -99,22 +126,25 @@ public class WorldCommandExecutor implements CommandExecutor {
         }
         final Player player = (Player) sender;
         final String worldName = givenWorldName.toLowerCase();
-        if (plugin.getWorldMap().containsKey(worldName)) {
-            if (plugin.getWorldMap().get(worldName) || Perms.hasWorldWarpAll(player)) {
-                final World world = plugin.getServer().getWorld(worldName);
-                final Location dest = plugin.getSpawnMap().get(worldName);
-                dest.getChunk().load(true);
-                Bukkit.getScheduler().runTask(plugin, new BukkitRunnable() {
+        GeneralWorld world = plugin.getWorlds().get(worldName);
+        if (world != null && world.isEnabled()) {
+            if (Perms.hasRequiredPermission(player, world.getRequiredPermission()) || Perms.hasWorldWarpAll(player)) {
+                final Location loc = world.getSpawnLocation().toBukkitLocation();
+                loc.getChunk().load();
+                Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
 
                     @Override
                     public void run() {
-                        player.teleport(dest);
+                        player.teleport(loc);
                     }
-                });
-                plugin.sendMessage(sender, MessageId.world_teleportedTo, world.getName());
+                }, 1L);
+                plugin.sendMessage(sender, MessageId.world_teleportedToWorld, world.getWorldName());
+                return true;
+            } else if (!world.isHidden()) {
+                plugin.sendMessage(player, MessageId.world_warpToThisWorldDisallowed, plugin.getServer().getWorld(worldName).getName());
                 return true;
             } else {
-                plugin.sendMessage(player, MessageId.world_warpToThisWorldDisallowed, plugin.getServer().getWorld(worldName).getName());
+                plugin.sendMessage(player, MessageId.world_unknownWorld, givenWorldName);
                 return true;
             }
         } else {
@@ -128,11 +158,12 @@ public class WorldCommandExecutor implements CommandExecutor {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
-        final String realWorldName = getRealWorldName(args[0]);
+        final String realWorldName = WorldUtils.getRealWorldName(args[0]);
         if (realWorldName != null) {
             plugin.sendMessage(sender, MessageId.world_alreadyExists, realWorldName);
             return true;
         } else {
+            String worldName = args[0];
             long seed = new Random().nextLong();
             if (args.length > 1) {
                 try {
@@ -141,20 +172,38 @@ public class WorldCommandExecutor implements CommandExecutor {
                     seed = args[1].hashCode();
                 }
             }
-            final WorldCreator newWorld = new WorldCreator(args[0]);
-            newWorld.seed(seed);
+
+            String requiredPermission = plugin.getPluginConfig().getDefaultRequiredPermission();
+            if (args.length > 2) {
+                requiredPermission = args[2];
+            }
+
+            boolean hidden = plugin.getPluginConfig().isDefaultHidden();
+            if (args.length > 3) {
+                if (args[3].equalsIgnoreCase("true")) {
+                    hidden = true;
+                } else if (args[3].equalsIgnoreCase("false")) {
+                    hidden = false;
+                }
+            }
+            AdditionalWorld nWorld = new AdditionalWorld(plugin, worldName, seed, null, requiredPermission, true, hidden, false, false);
+
             if (plugin.getPluginConfig().getBroadcastOnWorldCreate() == 1) {
                 plugin.broadcastMessage(MessageId.world_creatingWorldMayBeLaggy);
             } else {
                 plugin.sendMessage(sender, MessageId.world_creatingWorldMayBeLaggy);
             }
-            final World createdWorld = plugin.getServer().createWorld(newWorld);
+
+            nWorld.create();
+
             if (plugin.getPluginConfig().getBroadcastOnWorldCreate() == 1) {
                 plugin.broadcastMessage(MessageId.world_created);
             } else {
                 plugin.sendMessage(sender, MessageId.world_created);
             }
-            plugin.getWorldMap().put(createdWorld.getName().toLowerCase(), false);
+
+            plugin.getWorlds().put(nWorld.getWorldName(), nWorld);
+
             return true;
         }
     }
@@ -164,7 +213,7 @@ public class WorldCommandExecutor implements CommandExecutor {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
-        final String realWorldName = getRealWorldName(args[0]);
+        final String realWorldName = WorldUtils.getRealWorldName(args[0]);
         if (realWorldName == null) {
             plugin.sendMessage(sender, MessageId.world_unknownWorld, args[0]);
             return true;
@@ -172,17 +221,76 @@ public class WorldCommandExecutor implements CommandExecutor {
             plugin.sendMessage(sender, MessageId.world_alreadyLoaded, realWorldName);
             return true;
         } else {
+            boolean wasKnown = true;
+            AdditionalWorld world = plugin.getWorlds().getAdditional().get(realWorldName);
+
+            // Main world & messages
             if (plugin.getPluginConfig().getBroadcastOnWorldLoad() == 1) {
                 plugin.broadcastMessage(MessageId.world_loadingWorldMayBeLaggy);
             } else {
                 plugin.sendMessage(sender, MessageId.world_loadingWorldMayBeLaggy);
             }
-            plugin.getServer().createWorld(new WorldCreator(realWorldName));
+
+            if (world == null) { // Load a never-loaded world
+                wasKnown = false;
+                World newLoaded = new WorldCreator(realWorldName).createWorld();
+                long seed = newLoaded.getSeed();
+                NLocation spawn = new NLocation(newLoaded.getSpawnLocation());
+                String requiredPermission = plugin.getPluginConfig().getDefaultRequiredPermission();
+                boolean hidden = plugin.getPluginConfig().isDefaultHidden();
+                world = new AdditionalWorld(plugin, realWorldName, seed, spawn, requiredPermission, true, hidden, false, false);
+                plugin.getWorlds().put(realWorldName, world);
+            } else {
+                world.load();
+            }
+            plugin.getWarps().worldEnabled(world.getWorldName());
             if (plugin.getPluginConfig().getBroadcastOnWorldLoad() == 1) {
                 plugin.broadcastMessage(MessageId.world_loaded);
             } else {
                 plugin.sendMessage(sender, MessageId.world_loaded);
             }
+            if (!wasKnown) {
+                // TODO What if it's a single player adventure world with Nether etc
+                return true;
+            }
+
+            // Nether world & messages
+            if (world.hasNether()) {
+                if (plugin.getPluginConfig().getBroadcastOnWorldLoad() == 1) {
+                    plugin.broadcastMessage(MessageId.world_loadingWorldMayBeLaggy);
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_loadingWorldMayBeLaggy);
+                }
+
+                world.getNetherWorld().load();
+                plugin.getWarps().worldEnabled(world.getNetherWorld().getWorldName());
+
+                if (plugin.getPluginConfig().getBroadcastOnWorldLoad() == 1) {
+                    plugin.broadcastMessage(MessageId.world_loaded);
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_loaded);
+                }
+            }
+
+            // End world & messages
+            if (world.hasEnd()) {
+                if (plugin.getPluginConfig().getBroadcastOnWorldLoad() == 1) {
+                    plugin.broadcastMessage(MessageId.world_loadingWorldMayBeLaggy);
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_loadingWorldMayBeLaggy);
+                }
+
+                world.getEndWorld().load();
+                plugin.getWarps().worldEnabled(world.getEndWorld().getWorldName());
+
+                if (plugin.getPluginConfig().getBroadcastOnWorldLoad() == 1) {
+                    plugin.broadcastMessage(MessageId.world_loaded);
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_loaded);
+                }
+            }
+
+            world.setEnabled(true);
             return true;
         }
     }
@@ -192,7 +300,7 @@ public class WorldCommandExecutor implements CommandExecutor {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
-        final String realWorldName = getRealWorldName(args[0]);
+        final String realWorldName = WorldUtils.getRealWorldName(args[0]);
         if (realWorldName == null) {
             plugin.sendMessage(sender, MessageId.world_unknownWorld, args[0]);
             return true;
@@ -200,66 +308,205 @@ public class WorldCommandExecutor implements CommandExecutor {
             plugin.sendMessage(sender, MessageId.world_notLoaded, realWorldName);
             return true;
         } else {
+            AdditionalWorld world = plugin.getWorlds().getAdditional().get(realWorldName);
+            if (world == null) {
+                plugin.sendMessage(sender, MessageId.world_unknownWorld, args[0]);
+                return true;
+            }
+
             if (plugin.getPluginConfig().getBroadcastOnWorldUnload() == 1) {
                 plugin.broadcastMessage(MessageId.world_unloadingWorldMayBeLaggy);
             } else {
                 plugin.sendMessage(sender, MessageId.world_unloadingWorldMayBeLaggy);
             }
-            plugin.getServer().unloadWorld(realWorldName, true);
+
+            world.unload();
+            plugin.getWarps().worldDisabled(world.getWorldName());
+
             if (plugin.getPluginConfig().getBroadcastOnWorldUnload() == 1) {
                 plugin.broadcastMessage(MessageId.world_unloaded);
             } else {
                 plugin.sendMessage(sender, MessageId.world_unloaded);
             }
+
+            if (world.hasNether()) {
+                if (plugin.getPluginConfig().getBroadcastOnWorldUnload() == 1) {
+                    plugin.broadcastMessage(MessageId.world_unloadingWorldMayBeLaggy);
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_unloadingWorldMayBeLaggy);
+                }
+
+                world.getNetherWorld().unload();
+                plugin.getWarps().worldDisabled(world.getNetherWorld().getWorldName());
+
+                if (plugin.getPluginConfig().getBroadcastOnWorldUnload() == 1) {
+                    plugin.broadcastMessage(MessageId.world_unloaded);
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_unloaded);
+                }
+            }
+
+            if (world.hasEnd()) {
+                if (plugin.getPluginConfig().getBroadcastOnWorldUnload() == 1) {
+                    plugin.broadcastMessage(MessageId.world_unloadingWorldMayBeLaggy);
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_unloadingWorldMayBeLaggy);
+                }
+
+                world.getEndWorld().unload();
+                plugin.getWarps().worldDisabled(world.getEndWorld().getWorldName());
+
+                if (plugin.getPluginConfig().getBroadcastOnWorldUnload() == 1) {
+                    plugin.broadcastMessage(MessageId.world_unloaded);
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_unloaded);
+                }
+            }
+
+            world.setEnabled(false);
             return true;
         }
     }
 
-    private boolean subCmdWorldWarpAllow(final CommandSender sender, final String[] args) {
-        if (!Perms.hasWorldWarpEdit(sender)) {
+    private boolean subCmdWorldSetHidden(final CommandSender sender, final String[] args) {
+        if (!Perms.hasWorldSetHidden(sender)) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
-        final String realWorldName = getRealWorldName(args[0]);
-        if (realWorldName == null) {
-            plugin.sendMessage(sender, MessageId.world_unknownWorld, args[0]);
-            return true;
-        } else if (plugin.getServer().getWorld(realWorldName) == null) {
-            plugin.sendMessage(sender, MessageId.world_notLoaded, realWorldName);
+        if (args.length != 2) {
+            return false;
+        }
+        String worldName = args[0];
+        boolean hidden = Boolean.parseBoolean(args[1]);
+        final Player player = (Player) sender;
+        GeneralWorld world = plugin.getWorlds().get(worldName);
+        if (world != null) {
+            world.setHidden(hidden);
+            if (hidden) {
+                plugin.sendMessage(sender, MessageId.world_worldHiddenTrue, worldName);
+            } else {
+                plugin.sendMessage(sender, MessageId.world_worldHiddenFalse, worldName);
+            }
             return true;
         } else {
-            if (plugin.getWorldMap().get(realWorldName.toLowerCase())) {
-                plugin.sendMessage(sender, MessageId.world_alreadyAllowed, realWorldName);
-                return true;
-            } else {
-                plugin.getWorldMap().put(realWorldName.toLowerCase(), true);
-                plugin.sendMessage(sender, MessageId.world_allowedWarp, realWorldName);
-                return true;
-            }
+            plugin.sendMessage(player, MessageId.world_unknownWorld, worldName);
+            return true;
         }
     }
 
-    private boolean subCmdWorldWarpDeny(final CommandSender sender, final String[] args) {
-        if (!Perms.hasWorldWarpEdit(sender)) {
+    private boolean subCmdWorldSetPerm(final CommandSender sender, final String[] args) {
+        if (!Perms.hasWorldSetPerm(sender)) {
             plugin.sendMessage(sender, MessageId.noPermissionForCommand);
             return true;
         }
-        final String realWorldName = getRealWorldName(args[0]);
-        if (realWorldName == null) {
-            plugin.sendMessage(sender, MessageId.world_unknownWorld, args[0]);
-            return true;
-        } else if (plugin.getServer().getWorld(realWorldName) == null) {
-            plugin.sendMessage(sender, MessageId.world_notLoaded, realWorldName);
+        if (args.length != 2) {
+            return false;
+        }
+        String worldName = args[0];
+        String permission = args[1];
+        if (plugin.getPluginConfig().getPermissionShortcuts().containsKey(permission.toLowerCase())) {
+            permission = plugin.getPluginConfig().getPermissionShortcuts().get(permission.toLowerCase());
+        }
+        final Player player = (Player) sender;
+        GeneralWorld world = plugin.getWorlds().get(worldName);
+        if (world != null) {
+            world.setRequiredPermission(permission);
+            plugin.sendMessage(sender, MessageId.world_changedWorldRequiredPermission, worldName, permission);
             return true;
         } else {
-            if (plugin.getWorldMap().get(realWorldName.toLowerCase())) {
-                plugin.getWorldMap().put(realWorldName.toLowerCase(), false);
-                plugin.sendMessage(sender, MessageId.world_disallowedWarp, realWorldName);
-                return true;
+            plugin.sendMessage(player, MessageId.world_unknownWorld, worldName);
+            return true;
+        }
+    }
+
+    private boolean subCmdWorldSetNether(final CommandSender sender, final String[] args) {
+        if (!Perms.hasWorldSetNether(sender)) {
+            plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+            return true;
+        }
+        if (args.length != 2) {
+            return false;
+        }
+        String worldName = args[0];
+        boolean value = Boolean.parseBoolean(args[1]);
+        AdditionalWorld world = plugin.getWorlds().getAdditional().get(worldName);
+        if (world != null) {
+            if (world.hasNether()) {
+                if (value) {
+                    plugin.sendMessage(sender, MessageId.world_worldNetherAlreadyEnabled, worldName);
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_worldNetherDisabled, worldName);
+                    world.setNether(false);
+                    Bukkit.unloadWorld(worldName, true);
+                }
             } else {
-                plugin.sendMessage(sender, MessageId.world_alreadyDisallowed, realWorldName);
-                return true;
+                if (value) {
+                    plugin.sendMessage(sender, MessageId.world_worldNetherEnabled, worldName);
+                    world.setNether(true);
+                    AdditionalSubWorld nether = world.getNetherWorld();
+                    if (nether == null) {
+                        nether = new AdditionalSubWorld(plugin,
+                                                        world,
+                                                        null /* Will be affected by load() */,
+                                                        plugin.getPluginConfig().getDefaultRequiredPermission(),
+                                                        true,
+                                                        plugin.getPluginConfig().isDefaultHidden(),
+                                                        World.Environment.NETHER);
+                    }
+                    nether.load();
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_worldNetherAlreadyDisabled, worldName);
+                }
             }
+            return true;
+        } else {
+            plugin.sendMessage(sender, MessageId.world_unknownWorld, worldName);
+            return true;
+        }
+    }
+
+    private boolean subCmdWorldSetEnd(final CommandSender sender, final String[] args) {
+        if (!Perms.hasWorldSetEnd(sender)) {
+            plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+            return true;
+        }
+        if (args.length != 2) {
+            return false;
+        }
+        String worldName = args[0];
+        boolean value = Boolean.parseBoolean(args[1]);
+        AdditionalWorld world = plugin.getWorlds().getAdditional().get(worldName);
+        if (world != null) {
+            if (world.hasEnd()) {
+                if (value) {
+                    plugin.sendMessage(sender, MessageId.world_worldEndAlreadyEnabled, worldName);
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_worldEndDisabled, worldName);
+                    world.setEnd(false);
+                }
+            } else {
+                if (value) {
+                    plugin.sendMessage(sender, MessageId.world_worldEndEnabled, worldName);
+                    world.setEnd(true);
+                    AdditionalSubWorld end = world.getEndWorld();
+                    if (end == null) {
+                        end = new AdditionalSubWorld(plugin,
+                                                     world,
+                                                     null /* Will be affected by load() */,
+                                                     plugin.getPluginConfig().getDefaultRequiredPermission(),
+                                                     true,
+                                                     plugin.getPluginConfig().isDefaultHidden(),
+                                                     World.Environment.THE_END);
+                    }
+                    end.load();
+                } else {
+                    plugin.sendMessage(sender, MessageId.world_worldEndAlreadyDisabled, worldName);
+                }
+            }
+            return true;
+        } else {
+            plugin.sendMessage(sender, MessageId.world_unknownWorld, worldName);
+            return true;
         }
     }
 
@@ -269,7 +516,15 @@ public class WorldCommandExecutor implements CommandExecutor {
             return true;
         }
         final Player player = (Player) sender;
-        player.teleport(plugin.getSpawnMap().get(player.getWorld().getName().toLowerCase()));
+        int spawnBehaviour = plugin.getPluginConfig().getSpawnCommandBehaviour();
+        String worldName = null;
+        if (spawnBehaviour == 0) {
+            worldName = player.getWorld().getName();
+        } else {
+            worldName = Bukkit.getWorlds().get(0).getName();
+        }
+        GeneralWorld world = plugin.getWorlds().get(worldName);
+        player.teleport(world.getSpawnLocation().toBukkitLocation());
         plugin.sendMessage(player, MessageId.world_teleportingToSpawn);
         return true;
     }
@@ -280,120 +535,199 @@ public class WorldCommandExecutor implements CommandExecutor {
             return true;
         }
         final Player player = (Player) sender;
-        final Location loc = player.getLocation();
-        loc.setX(loc.getBlockX() + 0.5);
-        loc.setY(loc.getBlockY() + 0.5);
-        loc.setZ(loc.getBlockZ() + 0.5);
-        player.getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-        plugin.getSpawnMap().put(player.getWorld().getName().toLowerCase(), loc);
+        GeneralWorld world = plugin.getWorlds().get(player.getWorld().getName());
+        world.setSpawnLocation(player.getLocation());
         plugin.sendMessage(player, MessageId.world_settingSpawnPoint, player.getWorld().getName());
         return true;
     }
 
-    // ############### //
-    // ## Utilities ## //
-    // ############### //
-
-    /**
-     * Parses an argument array to support spaces between "" or ''
-     * Example:
-     * Input= {arg1} ; {"arg2} ; {arg3} ; {arg4"} ; {arg5}
-     * Output= {arg1} ; {arg2 arg3 arg4} ; {arg5}
-     *
-     * @param args Original arguments
-     *
-     * @return The new arguments array
-     */
-    private String[] parseArgs(final String[] args) {
-        if (args == null || args.length == 0 || args.length == 1) {
-            return args;
-        } else {
-            final List<String> newArgs = new ArrayList<String>();
-            for (int i = 0; i < args.length; i++) {
-                String arg = args[i];
-                if (arg.startsWith("\"") || arg.startsWith("'")) {
-                    final StringBuilder newArg = new StringBuilder(arg.substring(1));
-                    final String endChar = Character.toString(arg.charAt(0));
-                    while (!arg.endsWith(endChar)) {
-                        i++;
-                        if (i == args.length) {
-                            throw new IllegalArgumentException();
-                        }
-                        arg = args[i];
-                        newArg.append(' ');
-                        newArg.append(arg);
+    private boolean cmdWarp(final CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            // Lists available warps
+            plugin.sendMessage(sender, MessageId.world_availableWarps);
+            StringBuilder builder = new StringBuilder();
+            for (final Warp warp : plugin.getWarps()) {
+                if (warp.isEnabled()) {
+                    boolean hasPermission = Perms.hasRequiredPermission(sender, warp.getRequiredPermission()) || Perms.hasWarpAll(sender);
+                    if (hasPermission) {
+                        builder.append(ChatColor.GRAY + ", " + ChatColor.GREEN + warp.getName());
+                    } else if (!warp.isHidden()) {
+                        builder.append(ChatColor.GRAY + ", " + ChatColor.RED + warp.getName());
                     }
-                    newArgs.add(newArg.substring(0, newArg.length() - 1));
-                } else {
-                    newArgs.add(arg);
                 }
             }
-
-            final String[] result = new String[newArgs.size()];
-            for (int i = 0; i < newArgs.size(); i++) {
-                result[i] = newArgs.get(i);
+            if (builder.length() == 0) {
+                sender.sendMessage(ChatColor.RED + "No warps");
+            } else {
+                String warps = builder.toString().substring((ChatColor.GRAY + ", ").length());
+                String[] messages = ChatPaginator.wordWrap(warps, ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH);
+                for (String message : messages) {
+                    sender.sendMessage(message);
+                }
             }
-            return result;
+            return true;
+        } else if (args.length == 1) {
+            // Warp to warp location
+            return subCmdWarp(sender, args[0]);
+        } else { // Handle subcommands
+            final String subCmd = args[0].toLowerCase();
+            args = Arrays.copyOfRange(args, 1, args.length);
+            switch (subCmd) {
+                case "hidden":
+                case "sethidden":
+                    return subCmdWarpSetHidden(sender, args);
+                case "perm":
+                case "setperm":
+                    return subCmdWarpSetPerm(sender, args);
+                default:
+                    return false;
+            }
         }
     }
 
-    /**
-     * Check if a given world is loaded, not case sensitive.
-     *
-     * @param worldName The world name given by the sender
-     *
-     * @return The correct name of the world if it is loaded, null otherwise
-     */
-    private String isLoaded(final String worldName) {
-        final World world = plugin.getServer().getWorld(worldName);
-        if (world != null) {
-            return world.getName();
+    private boolean subCmdWarp(final CommandSender sender, final String givenWarpName) {
+        if (!(sender instanceof Player)) {
+            plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+            return true;
+        }
+        final Player player = (Player) sender;
+        final String warpName = givenWarpName.toLowerCase();
+        Warp warp = plugin.getWarps().get(warpName);
+        if (warp != null) {
+            System.out.println(player.getName() + " wants to warp to " + warp.getName() + " we will check if he has the " +
+                               "requiredPermission " + warp.getRequiredPermission());
+            if (Perms.hasRequiredPermission(player, warp.getRequiredPermission()) || Perms.hasWarpAll(player)) {
+                final Location loc = warp.getLocation().toBukkitLocation();
+                loc.getChunk().load();
+                Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.teleport(loc);
+                    }
+                }, 1L);
+                plugin.sendMessage(sender, MessageId.world_teleportedToWarp, warp.getName());
+                return true;
+            } else if (!warp.isHidden()) {
+                plugin.sendMessage(player, MessageId.world_warpToThisWarpDisallowed, warp.getName());
+                return true;
+            } else {
+                plugin.sendMessage(player, MessageId.world_unknownWarp, givenWarpName);
+                return true;
+            }
         } else {
-            return null;
+            plugin.sendMessage(player, MessageId.world_unknownWarp, givenWarpName);
+            return true;
         }
     }
 
-    /**
-     * Check if a given unloaded world exists in world folder, not case sensitive.
-     *
-     * @param worldName The world name given by the sender
-     *
-     * @return The correct name of the world if it exists, null otherwise
-     *
-     * @throws IOException If it was unable to iterate over the Worlds folder
-     */
-    private String exists(final String worldName) throws IOException {
-        try {
-            final Path worldFolderPath = plugin.getServer().getWorldContainer().toPath();
-            for (final Path p : Files.newDirectoryStream(worldFolderPath)) {
-                if (p.getFileName().toString().equalsIgnoreCase(worldName)) {
-                    return p.getFileName().toString();
-                }
-            }
-        } catch (final IOException e) {
-            plugin.getLogger().severe("Unable to iterate over Worlds");
-            e.printStackTrace();
-            throw e;
+    private boolean subCmdWarpSetHidden(final CommandSender sender, final String[] args) {
+        if (!Perms.hasWarpSetHidden(sender)) {
+            plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+            return true;
         }
-        return null;
+        if (args.length != 2) {
+            return false;
+        }
+        String warpName = args[0];
+        boolean hidden = Boolean.parseBoolean(args[1]);
+        final Player player = (Player) sender;
+        Warp warp = plugin.getWarps().get(warpName);
+        if (warp != null) {
+            warp.setHidden(hidden);
+            if (hidden) {
+                plugin.sendMessage(sender, MessageId.world_warpHiddenTrue, warpName);
+            } else {
+                plugin.sendMessage(sender, MessageId.world_warpHiddenFalse, warpName);
+            }
+            return true;
+        } else {
+            plugin.sendMessage(player, MessageId.world_unknownWarp, warpName);
+            return true;
+        }
     }
 
-    /**
-     * Returns the real world name of the given world
-     *
-     * @param worldName The world name given by the sender
-     *
-     * @return The correct name of the world if it is loaded or exists, null otherwise
-     */
-    private String getRealWorldName(final String worldName) {
-        try {
-            String res = isLoaded(worldName);
-            if (res == null) {
-                res = exists(worldName);
-            }
-            return res;
-        } catch (final IOException e) {
-            return null;
+    private boolean subCmdWarpSetPerm(final CommandSender sender, final String[] args) {
+        if (!Perms.hasWarpSetPerm(sender)) {
+            plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+            return true;
         }
+        if (args.length != 2) {
+            return false;
+        }
+        String warpName = args[0];
+        String permission = args[1];
+        if (plugin.getPluginConfig().getPermissionShortcuts().containsKey(permission.toLowerCase())) {
+            permission = plugin.getPluginConfig().getPermissionShortcuts().get(permission.toLowerCase());
+        }
+        final Player player = (Player) sender;
+        Warp warp = plugin.getWarps().get(warpName);
+        if (warp != null) {
+            warp.setRequiredPermission(permission);
+            plugin.sendMessage(sender, MessageId.world_changedWarpRequiredPermission, warpName, permission);
+            return true;
+        } else {
+            plugin.sendMessage(player, MessageId.world_unknownWarp, warpName);
+            return true;
+        }
+    }
+
+    private boolean cmdSetWarp(final CommandSender sender, String[] args) {
+        if (!(sender instanceof Player)) {
+            plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+            return true;
+        }
+        if (args.length < 1) {
+            return false;
+        }
+        final Player player = (Player) sender;
+        String warpName = args[0];
+        boolean requiredPermissionProvided = false;
+        String requiredPermission = plugin.getPluginConfig().getDefaultRequiredPermission();
+        boolean hiddenProvided = false;
+        boolean hidden = plugin.getPluginConfig().isDefaultHidden();
+        if (args.length > 1) {
+            requiredPermission = args[1];
+            requiredPermissionProvided = true;
+        }
+        if (args.length > 2) {
+            hidden = Boolean.parseBoolean(args[2]);
+            hiddenProvided = true;
+        }
+
+        if (plugin.getWarps().containsKey(warpName)) {
+            Warp warp = plugin.getWarps().get(warpName);
+            warp.setLocation(player.getLocation());
+            if (requiredPermissionProvided) {
+                warp.setRequiredPermission(requiredPermission);
+            }
+            if (hiddenProvided) {
+                warp.setHidden(hiddenProvided);
+            }
+        } else {
+            Warp warp = new Warp(warpName, new NLocation(player.getLocation()), true, requiredPermission, hidden);
+            plugin.getWarps().put(warpName, warp);
+        }
+        plugin.sendMessage(player, MessageId.world_settingWarpPoint, warpName);
+        return true;
+    }
+
+    private boolean cmdDelWarp(CommandSender sender, String[] args) {
+        if (!Perms.hasDelWarp(sender)) {
+            plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+            return true;
+        }
+        if (args.length < 1) {
+            return false;
+        }
+        String warpName = args[0];
+        Warp warp = plugin.getWarps().get(warpName);
+        if (warp == null) {
+            plugin.sendMessage(sender, MessageId.world_unknownWarp, warpName);
+        } else {
+            plugin.getWarps().remove(warp.getName());
+            plugin.sendMessage(sender, MessageId.world_warpRemoved, warpName);
+        }
+        return true;
     }
 }

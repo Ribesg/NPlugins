@@ -1,20 +1,21 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
+import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
+import fr.ribesg.bukkit.ncore.utils.NLocation;
 import org.bukkit.Location;
-import org.bukkit.World;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class RectCuboid extends PlayerCuboid {
 
-    private Location minCorner, maxCorner;
+    private NLocation minCorner, maxCorner;
     private int minX, maxX, minY, maxY, minZ, maxZ;
 
     // Create a new Rectangular Cuboid
-    public RectCuboid(final String cuboidName, final String ownerName, final World world, final Location minCorner) {
+    public RectCuboid(final String cuboidName, final String ownerName, final String worldName, final NLocation minCorner) {
 
-        super(cuboidName, ownerName, world, CuboidType.RECT);
+        super(cuboidName, ownerName, worldName, CuboidType.RECT);
 
         setMinCorner(minCorner);
         setChunks(null);
@@ -23,22 +24,22 @@ public class RectCuboid extends PlayerCuboid {
     // Create a Rectangular Cuboid from a save
     public RectCuboid(final String cuboidName,
                       final String ownerName,
-                      final World world,
+                      final String worldName,
                       final CuboidState state,
                       final long totalSize,
                       final String welcomeMessage,
                       final String farewellMessage,
-                      final Set<ChunkKey> chunks,
+                      final Set<ChunkCoord> chunks,
                       final Rights rights,
                       final int priority,
                       final Flags flags,
                       final FlagAttributes flagAtts,
-                      final Location minCorner,
-                      final Location maxCorner) {
+                      final NLocation minCorner,
+                      final NLocation maxCorner) {
 
         super(cuboidName,
               ownerName,
-              world,
+              worldName,
               state,
               totalSize,
               welcomeMessage,
@@ -62,15 +63,15 @@ public class RectCuboid extends PlayerCuboid {
 
     // The player select the second corner
     public void secondPoint(final Location secondPoint) {
-        if (secondPoint.getWorld().getName().equals(getWorld().getName())) {
+        if (secondPoint.getWorld().getName().equals(getWorldName())) {
             setMinX(getMinCorner().getBlockX() < secondPoint.getBlockX() ? getMinCorner().getBlockX() : secondPoint.getBlockX());
             setMinY(getMinCorner().getBlockY() < secondPoint.getBlockY() ? getMinCorner().getBlockY() : secondPoint.getBlockY());
             setMinZ(getMinCorner().getBlockZ() < secondPoint.getBlockZ() ? getMinCorner().getBlockZ() : secondPoint.getBlockZ());
             setMaxX(getMinX() == secondPoint.getBlockX() ? getMinCorner().getBlockX() : secondPoint.getBlockX());
             setMaxY(getMinY() == secondPoint.getBlockY() ? getMinCorner().getBlockY() : secondPoint.getBlockY());
             setMaxZ(getMinZ() == secondPoint.getBlockZ() ? getMinCorner().getBlockZ() : secondPoint.getBlockZ());
-            setMinCorner(new Location(getWorld(), getMinX(), getMinY(), getMinZ()));
-            setMaxCorner(new Location(getWorld(), getMaxX(), getMaxY(), getMaxZ()));
+            setMinCorner(new NLocation(getWorldName(), getMinX(), getMinY(), getMinZ()));
+            setMaxCorner(new NLocation(getWorldName(), getMaxX(), getMaxY(), getMaxZ()));
             setState(CuboidState.TMPSTATE2);
         }
     }
@@ -83,13 +84,13 @@ public class RectCuboid extends PlayerCuboid {
     }
 
     // Should only be used when the cuboid is not in the byChunks map
-    public Set<ChunkKey> computeChunks() {
-        final Set<ChunkKey> chunks = new HashSet<ChunkKey>();
-        final ChunkKey cMin = new ChunkKey(getMinCorner());
-        final ChunkKey cMax = new ChunkKey(getMaxCorner());
+    public Set<ChunkCoord> computeChunks() {
+        final Set<ChunkCoord> chunks = new HashSet<ChunkCoord>();
+        final ChunkCoord cMin = new ChunkCoord(getMinCorner());
+        final ChunkCoord cMax = new ChunkCoord(getMaxCorner());
         for (int x = cMin.getX(); x <= cMax.getX(); x++) {
             for (int z = cMin.getZ(); z <= cMax.getZ(); z++) {
-                final ChunkKey newChunk = new ChunkKey(cMin.getWorld(), x, z);
+                final ChunkCoord newChunk = new ChunkCoord(x, z, cMin.getWorldName());
                 chunks.add(newChunk);
             }
         }
@@ -108,11 +109,11 @@ public class RectCuboid extends PlayerCuboid {
         return maxX - minX + 1 + "x" + (maxY - minY + 1) + "x" + (maxZ - minZ + 1);
     }
 
-    public Location getMaxCorner() {
+    public NLocation getMaxCorner() {
         return maxCorner;
     }
 
-    public void setMaxCorner(Location maxCorner) {
+    public void setMaxCorner(NLocation maxCorner) {
         this.maxCorner = maxCorner;
     }
 
@@ -140,11 +141,11 @@ public class RectCuboid extends PlayerCuboid {
         this.maxZ = maxZ;
     }
 
-    public Location getMinCorner() {
+    public NLocation getMinCorner() {
         return minCorner;
     }
 
-    public void setMinCorner(Location minCorner) {
+    public void setMinCorner(NLocation minCorner) {
         this.minCorner = minCorner;
     }
 

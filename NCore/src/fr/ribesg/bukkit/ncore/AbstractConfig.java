@@ -1,6 +1,7 @@
 package fr.ribesg.bukkit.ncore;
 
-import fr.ribesg.bukkit.ncore.nodes.NPlugin;
+import fr.ribesg.bukkit.ncore.node.NPlugin;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.BufferedReader;
@@ -43,7 +44,7 @@ public abstract class AbstractConfig<T extends NPlugin> {
      *
      * @throws IOException If there is an error reading / writing file
      */
-    public void loadConfig() throws IOException {
+    public void loadConfig() throws IOException, InvalidConfigurationException {
         loadConfig("config.yml");
     }
 
@@ -56,7 +57,7 @@ public abstract class AbstractConfig<T extends NPlugin> {
      *
      * @throws IOException If there is an error reading / writing file
      */
-    public void loadConfig(final String fileName) throws IOException {
+    public void loadConfig(final String fileName) throws IOException, InvalidConfigurationException {
         final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + fileName);
         if (!Files.exists(path)) {
             Files.createFile(path);
@@ -69,11 +70,9 @@ public abstract class AbstractConfig<T extends NPlugin> {
                     s.append(reader.readLine()).append('\n');
                 }
                 config.loadFromString(s.toString());
-            } catch (final Exception e) {
-                e.printStackTrace();
             }
 
-            setValues(config);
+            handleValues(config);
 
             // Rewrite the config to "clean" it
             writeConfig(path);
@@ -122,11 +121,11 @@ public abstract class AbstractConfig<T extends NPlugin> {
     }
 
     /**
-     * Set the values in the config to there current values
+     * Read the values in the YamlConfiguration instance and handles them correctly (Ex: saves them to Config class fields)
      *
      * @param config The config where to set values
      */
-    protected abstract void setValues(final YamlConfiguration config);
+    protected abstract void handleValues(final YamlConfiguration config) throws InvalidConfigurationException;
 
     /** @return the String to be written to file */
     protected abstract String getConfigString();

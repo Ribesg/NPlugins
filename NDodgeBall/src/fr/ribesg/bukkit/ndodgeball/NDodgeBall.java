@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ndodgeball;
 
 import fr.ribesg.bukkit.ncore.NCore;
-import fr.ribesg.bukkit.ncore.nodes.cuboid.CuboidNode;
+import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ndodgeball.api.NDodgeBallAPI;
 import lombok.Getter;
 import org.bukkit.Bukkit;

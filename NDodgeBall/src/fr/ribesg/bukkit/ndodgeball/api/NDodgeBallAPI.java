@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ndodgeball.api;
 
-import fr.ribesg.bukkit.ncore.nodes.dodgeball.DodgeBallNode;
+import fr.ribesg.bukkit.ncore.node.dodgeball.DodgeBallNode;
 import fr.ribesg.bukkit.ndodgeball.NDodgeBall;
 
 public class NDodgeBallAPI extends DodgeBallNode {

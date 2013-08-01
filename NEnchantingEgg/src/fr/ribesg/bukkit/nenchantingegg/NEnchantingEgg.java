@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.nenchantingegg;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.nodes.enchantingegg.EnchantingEggNode;
+import fr.ribesg.bukkit.ncore.node.enchantingegg.EnchantingEggNode;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altars;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.ActiveToEggProvidedTransition;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.EggProvidedToItemProvidedTransition;
@@ -15,6 +15,7 @@ import fr.ribesg.bukkit.nenchantingegg.listener.PlayerListener;
 import fr.ribesg.bukkit.nenchantingegg.task.TimeListenerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class NEnchantingEgg extends EnchantingEggNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.3.0";
+        return "0.3.2";
     }
 
     @Override
@@ -69,7 +70,7 @@ public class NEnchantingEgg extends EnchantingEggNode {
         try {
             pluginConfig = new Config(this);
             pluginConfig.loadConfig();
-        } catch (final IOException e) {
+        } catch (final IOException | InvalidConfigurationException e) {
             getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
             getLogger().severe("This error occured when NEnchantingEgg tried to load config.yml");
@@ -105,7 +106,7 @@ public class NEnchantingEgg extends EnchantingEggNode {
         Bukkit.getScheduler().cancelTasks(this);
     }
 
-    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
+    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // Nothing to do here for now

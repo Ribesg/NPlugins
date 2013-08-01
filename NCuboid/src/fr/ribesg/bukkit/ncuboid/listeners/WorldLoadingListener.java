@@ -16,7 +16,7 @@ public class WorldLoadingListener extends AbstractListener {
     public void onWorldLoad(final WorldLoadEvent event) {
         if (getPlugin().getDb().getByWorld(event.getWorld()) == null) {
             // Obviously true here, we should change this when we change World to String (worldName)
-            getPlugin().getDb().addByWorld(new WorldCuboid(event.getWorld()));
+            getPlugin().getDb().addByWorld(new WorldCuboid(event.getWorld().getName()));
         }
     }
 

@@ -1,5 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
+import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
+import fr.ribesg.bukkit.ncore.utils.NLocation;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -16,18 +18,18 @@ public class CuboidDB {
     @SuppressWarnings("unused")
     private final NCuboid plugin;
 
-    private final Map<String, PlayerCuboid>        byName;    // CuboidName ; Cuboid
-    private final Map<String, Set<PlayerCuboid>>   byOwner;   // OwnerName ; Cuboids of this owner
-    private final Map<String, PlayerCuboid>        tmpCuboids; // OwnerName ; Temporary Cuboid (Owner's Selection)
-    private final Map<ChunkKey, Set<PlayerCuboid>> byChunks;  // Chunk ; Cuboids in this chunk
-    private final Map<String, WorldCuboid>         byWorld;   // WorldName ; Cuboid
+    private final Map<String, PlayerCuboid>          byName;    // CuboidName ; Cuboid
+    private final Map<String, Set<PlayerCuboid>>     byOwner;   // OwnerName ; Cuboids of this owner
+    private final Map<String, PlayerCuboid>          tmpCuboids; // OwnerName ; Temporary Cuboid (Owner's Selection)
+    private final Map<ChunkCoord, Set<PlayerCuboid>> byChunks;  // Chunk ; Cuboids in this chunk
+    private final Map<String, WorldCuboid>           byWorld;   // WorldName ; Cuboid
 
     public CuboidDB(final NCuboid instance) {
-        byName = new HashMap<String, PlayerCuboid>();
-        byOwner = new HashMap<String, Set<PlayerCuboid>>();
-        tmpCuboids = new HashMap<String, PlayerCuboid>();
-        byChunks = new HashMap<ChunkKey, Set<PlayerCuboid>>();
-        byWorld = new HashMap<String, WorldCuboid>();
+        byName = new HashMap<>();
+        byOwner = new HashMap<>();
+        tmpCuboids = new HashMap<>();
+        byChunks = new HashMap<>();
+        byWorld = new HashMap<>();
         plugin = instance;
     }
 
@@ -45,7 +47,7 @@ public class CuboidDB {
         if (byOwner.containsKey(cuboid.getOwnerName())) {
             byOwner.get(cuboid.getOwnerName()).add(cuboid);
         } else {
-            final Set<PlayerCuboid> newSet = new HashSet<PlayerCuboid>();
+            final Set<PlayerCuboid> newSet = new HashSet<>();
             newSet.add(cuboid);
             byOwner.put(cuboid.getOwnerName(), newSet);
         }
@@ -56,11 +58,11 @@ public class CuboidDB {
     }
 
     public void addByChunks(final PlayerCuboid cuboid) {
-        for (final ChunkKey k : cuboid.getChunks()) {
+        for (final ChunkCoord k : cuboid.getChunks()) {
             if (byChunks.containsKey(k)) {
                 byChunks.get(k).add(cuboid);
             } else {
-                final Set<PlayerCuboid> newSet = new HashSet<PlayerCuboid>();
+                final Set<PlayerCuboid> newSet = new HashSet<>();
                 newSet.add(cuboid);
                 byChunks.put(k, newSet);
             }
@@ -68,7 +70,7 @@ public class CuboidDB {
     }
 
     public void addByWorld(final WorldCuboid c) {
-        byWorld.put(c.getWorld().getName(), c);
+        byWorld.put(c.getWorldName(), c);
     }
 
     public void del(final PlayerCuboid cuboid) {
@@ -103,7 +105,7 @@ public class CuboidDB {
     }
 
     public void delByChunks(final PlayerCuboid cuboid) {
-        for (final ChunkKey k : cuboid.getChunks()) {
+        for (final ChunkCoord k : cuboid.getChunks()) {
             if (byChunks.containsKey(k)) {
                 final Set<PlayerCuboid> set = byChunks.get(k);
                 if (set.contains(cuboid)) {
@@ -164,7 +166,7 @@ public class CuboidDB {
                     }
                 default: // Let's compare them all in O(n) time
                     final int maxPriority = 0; // "current" max priority in cuboids Set
-                    final TreeMap<Long, GeneralCuboid> sizeMap = new TreeMap<Long, GeneralCuboid>(); // TotalSize ; Cuboid
+                    final TreeMap<Long, GeneralCuboid> sizeMap = new TreeMap<>(); // TotalSize ; Cuboid
                     for (final GeneralCuboid c : cuboids) {
                         if (c.getPriority() > maxPriority) {
                             // Higher priority spotted, all previous cuboids are less interesting
@@ -181,10 +183,14 @@ public class CuboidDB {
     }
 
     public Set<GeneralCuboid> getAllByLoc(final Location loc) {
-        final ChunkKey k = new ChunkKey(loc);
-        final Set<GeneralCuboid> cuboids = new HashSet<GeneralCuboid>();
-        if (byWorld.containsKey(loc.getWorld().getName())) {
-            cuboids.add(byWorld.get(loc.getWorld().getName()));
+        return getAllByLoc(new NLocation(loc));
+    }
+
+    public Set<GeneralCuboid> getAllByLoc(final NLocation loc) {
+        final ChunkCoord k = new ChunkCoord(loc);
+        final Set<GeneralCuboid> cuboids = new HashSet<>();
+        if (byWorld.containsKey(loc.getWorldName())) {
+            cuboids.add(byWorld.get(loc.getWorldName()));
         }
         if (!byChunks.containsKey(k)) {
             return cuboids.isEmpty() ? null : cuboids;

@@ -3,6 +3,7 @@ import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -39,10 +40,9 @@ public class WorldListener implements Listener {
                 handler.loadChunks();
                 plugin.getWorldHandlers().put(handler.getCamelCaseWorldName(), handler);
                 handler.init();
-            } catch (final IOException e) {
+            } catch (final IOException | InvalidConfigurationException e) {
                 plugin.getLogger().severe("An error occured, stacktrace follows:");
                 e.printStackTrace();
-                plugin.getLogger().severe("This error occured when NTheEndAgain tried to load " + e.getMessage() + ".yml");
             }
         }
     }
@@ -58,7 +58,12 @@ public class WorldListener implements Listener {
             plugin.getLogger().info("Handling " + event.getWorld().getName() + " unload");
             final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getWorld().getName()));
             if (handler != null) {
-                handler.unload(false);
+                try {
+                    handler.unload(false);
+                } catch (final InvalidConfigurationException e) {
+                    plugin.getLogger().severe("An error occured, stacktrace follows:");
+                    e.printStackTrace();
+                }
             }
         }
     }

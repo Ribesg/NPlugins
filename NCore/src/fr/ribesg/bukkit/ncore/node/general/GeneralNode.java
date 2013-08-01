@@ -1,6 +1,6 @@
-package fr.ribesg.bukkit.ncore.nodes.general;
+package fr.ribesg.bukkit.ncore.node.general;
 
-import fr.ribesg.bukkit.ncore.nodes.NPlugin;
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 
 /**
  * Represents the NGeneral plugin

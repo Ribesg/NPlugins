@@ -18,9 +18,9 @@ public class Config extends AbstractConfig<NPlayer> {
         setTooManyAttemptsPunishmentDuration(300);
     }
 
-    /** @see fr.ribesg.bukkit.ncore.AbstractConfig#setValues(org.bukkit.configuration.file.YamlConfiguration) */
+    /** @see fr.ribesg.bukkit.ncore.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
     @Override
-    protected void setValues(final YamlConfiguration config) {
+    protected void handleValues(final YamlConfiguration config) {
 
         // maximumLoginAttempts. Default: 3.
         // Possible values: positive integers

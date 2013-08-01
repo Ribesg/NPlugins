@@ -10,6 +10,7 @@ import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -63,7 +64,7 @@ public class EndWorldHandler {
         // Config is not yet loaded here
     }
 
-    public void loadConfig() throws IOException {
+    public void loadConfig() throws IOException, InvalidConfigurationException {
         config.loadConfig(camelCaseWorldName + "Config.yml");
     }
 
@@ -114,13 +115,10 @@ public class EndWorldHandler {
      * - Make scheduled tasks persistent
      * - Save configs
      */
-    public void unload(boolean pluginDisabled) {
-        for (final BukkitTask t : tasks) {
-            t.cancel();
-        }
-        tasks.clear();
+    public void unload(boolean pluginDisabled) throws InvalidConfigurationException {
+        cancelTasks();
         if (pluginDisabled && config.getHardRegenOnStop() == 1) {
-            getRegenHandler().regen();
+            getRegenHandler().hardRegenOnStop();
         }
         try {
             // Reload-friendly lastExecTime storing in config file
@@ -143,6 +141,13 @@ public class EndWorldHandler {
             plugin.getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
             plugin.getLogger().severe("/!\\ THIS MEANS THAT PROTECTED CHUNKS COULD BE REGENERATED ON NEXT REGEN IN THIS WORLD /!\\");
         }
+    }
+
+    public void cancelTasks() {
+        for (final BukkitTask t : tasks) {
+            t.cancel();
+        }
+        tasks.clear();
     }
 
     /**

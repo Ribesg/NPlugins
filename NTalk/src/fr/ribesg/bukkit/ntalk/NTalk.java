@@ -1,10 +1,11 @@
 package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.nodes.talk.TalkNode;
+import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
 import fr.ribesg.bukkit.ntalk.format.Formater;
 import fr.ribesg.bukkit.ntalk.lang.Messages;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class NTalk extends TalkNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.3.0";
+        return "0.3.2";
     }
 
     @Override
@@ -46,7 +47,7 @@ public class NTalk extends TalkNode {
         try {
             pluginConfig = new Config(this);
             pluginConfig.loadConfig();
-        } catch (final IOException e) {
+        } catch (final IOException | InvalidConfigurationException e) {
             getLogger().severe("An error occured, stacktrace follows:");
             e.printStackTrace();
             getLogger().severe("This error occured when NTalk tried to load config.yml");
@@ -76,7 +77,7 @@ public class NTalk extends TalkNode {
         }
     }
 
-    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#handleOtherNodes() */
+    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
     @Override
     protected void handleOtherNodes() {
         // Nothing to do here for now

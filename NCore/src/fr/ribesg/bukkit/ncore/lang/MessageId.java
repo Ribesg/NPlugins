@@ -74,7 +74,7 @@ public enum MessageId {
     // #################### //
 
     world_availableWorlds,
-    world_teleportedTo,
+    world_teleportedToWorld,
 
     world_unknownWorld,
     world_notLoaded,
@@ -92,13 +92,46 @@ public enum MessageId {
     world_unloadingWorldMayBeLaggy,
     world_unloaded,
 
-    world_alreadyAllowed,
-    world_allowedWarp,
-    world_alreadyDisallowed,
-    world_disallowedWarp,
+    world_worldHiddenTrue,
+    world_worldHiddenFalse,
+
+    world_changedWorldRequiredPermission,
+
+    world_worldNetherEnabled,
+    world_worldNetherDisabled,
+    world_worldNetherAlreadyEnabled,
+    world_worldNetherAlreadyDisabled,
+
+    world_worldEndEnabled,
+    world_worldEndDisabled,
+    world_worldEndAlreadyEnabled,
+    world_worldEndAlreadyDisabled,
+
+    world_alreadyAllowedWorldWarp,
+    world_allowedWorldWarp,
+    world_alreadyDisallowedWorldWarp,
+    world_disallowedWorldWarp,
 
     world_teleportingToSpawn,
     world_settingSpawnPoint,
+
+    world_teleportedToWarp,
+
+    world_availableWarps,
+
+    world_warpToThisWarpDisallowed,
+
+    world_unknownWarp,
+
+    world_warpHiddenTrue,
+    world_warpHiddenFalse,
+
+    world_changedWarpRequiredPermission,
+
+    world_settingWarpPoint,
+    world_warpRemoved,
+
+    world_teleportedBecauseOfWorldUnload,
 
     // ################### //
     // ## NTalk related ## //

@@ -1,6 +1,6 @@
-package fr.ribesg.bukkit.ncore.nodes.dodgeball;
+package fr.ribesg.bukkit.ncore.node.dodgeball;
 
-import fr.ribesg.bukkit.ncore.nodes.NPlugin;
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 
 /**
  * Represents the NDodgeBall plugin

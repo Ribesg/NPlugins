@@ -21,6 +21,12 @@ public class ChunkCoord {
         worldName = bukkitChunk.getWorld().getName();
     }
 
+    public ChunkCoord(final NLocation loc) {
+        x = loc.getBlockX() >> 4;
+        z = loc.getBlockZ() >> 4;
+        worldName = loc.getWorldName();
+    }
+
     @Override
     public String toString() {
         return worldName + SEPARATOR + x + SEPARATOR + z;

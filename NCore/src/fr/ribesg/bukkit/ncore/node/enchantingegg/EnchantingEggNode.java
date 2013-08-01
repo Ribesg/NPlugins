@@ -1,6 +1,6 @@
-package fr.ribesg.bukkit.ncore.nodes.enchantingegg;
+package fr.ribesg.bukkit.ncore.node.enchantingegg;
 
-import fr.ribesg.bukkit.ncore.nodes.NPlugin;
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 
 /**
  * Represents the NEnchantingEgg plugin
@@ -9,7 +9,7 @@ import fr.ribesg.bukkit.ncore.nodes.NPlugin;
  */
 public abstract class EnchantingEggNode extends NPlugin {
 
-    /** @see fr.ribesg.bukkit.ncore.nodes.NPlugin#linkCore() */
+    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
     @Override
     protected void linkCore() {
         getCore().setEnchantingEggNode(this);

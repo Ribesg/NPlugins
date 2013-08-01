@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ngeneral;
 
-import fr.ribesg.bukkit.ncore.nodes.general.GeneralNode;
+import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
 
 public class NGeneral extends GeneralNode {
 

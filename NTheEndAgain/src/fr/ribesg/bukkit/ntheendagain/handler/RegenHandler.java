@@ -47,6 +47,10 @@ public class RegenHandler {
         }, EndWorldHandler.KICK_TO_REGEN_DELAY);
     }
 
+    public void hardRegenOnStop() {
+        hardRegen();
+    }
+
     /*package*/ void regenThenRespawn() {
         regen();
         Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), new BukkitRunnable() {

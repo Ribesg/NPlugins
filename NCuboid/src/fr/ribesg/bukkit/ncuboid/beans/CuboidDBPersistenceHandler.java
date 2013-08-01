@@ -3,9 +3,7 @@ package fr.ribesg.bukkit.ncuboid.beans;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid.CuboidType;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -78,19 +76,13 @@ public class CuboidDBPersistenceHandler {
     private static WorldCuboid readWorldCuboid(final ConfigurationSection parent, final String name) {
         final ConfigurationSection worldSection = parent.getConfigurationSection(name);
 
-        final World world = Bukkit.getWorld(name);
-        if (world == null) {
-            // TODO Use Strings instead of World object, find a way to not lose cuboids on non loaded worlds
-            return null;
-        }
-
         final int priority = worldSection.getInt("priority", 0);
 
         final Flags flags = readFlags(worldSection);
         final FlagAttributes attributes = readFlagAttributes(worldSection);
         final Rights rights = readRights(worldSection);
 
-        return new WorldCuboid(world, rights, priority, flags, attributes);
+        return new WorldCuboid(name, rights, priority, flags, attributes);
     }
 
     private static PlayerCuboid readPlayerCuboid(final ConfigurationSection sec, final String name) {
@@ -203,7 +195,7 @@ public class CuboidDBPersistenceHandler {
     }
 
     private static void writeWorldCuboid(final ConfigurationSection parent, final WorldCuboid cuboid) {
-        final ConfigurationSection sec = parent.createSection(cuboid.getWorld().getName());
+        final ConfigurationSection sec = parent.createSection(cuboid.getWorldName());
         sec.set("priority", cuboid.getPriority());
         writeFlags(sec, cuboid);
         writeFlagAtts(sec, cuboid);

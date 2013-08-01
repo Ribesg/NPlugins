@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
-import org.bukkit.Location;
-import org.bukkit.World;
+import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
+import fr.ribesg.bukkit.ncore.utils.NLocation;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,17 +18,17 @@ public abstract class PlayerCuboid extends GeneralCuboid {
     }
 
     // Identification / informations related
-    private String        cuboidName;
-    private String        ownerName;
-    private CuboidState   state;
-    private long          totalSize;
-    private String        welcomeMessage;
-    private String        farewellMessage;
-    private Set<ChunkKey> chunks;
+    private String          cuboidName;
+    private String          ownerName;
+    private CuboidState     state;
+    private long            totalSize;
+    private String          welcomeMessage;
+    private String          farewellMessage;
+    private Set<ChunkCoord> chunks;
 
     // Create a new Cuboid, when user select points etc
-    public PlayerCuboid(final String cuboidName, final String ownerName, final World world, final CuboidType type) {
-        super(world, type);
+    public PlayerCuboid(final String cuboidName, final String ownerName, final String worldName, final CuboidType type) {
+        super(worldName, type);
         setCuboidName(cuboidName);
         setOwnerName(ownerName);
         setState(CuboidState.TMPSTATE1);
@@ -39,19 +39,19 @@ public abstract class PlayerCuboid extends GeneralCuboid {
     // Create a Cuboid from a save
     public PlayerCuboid(final String cuboidName,
                         final String ownerName,
-                        final World world,
+                        final String worldName,
                         final CuboidState state,
                         final long totalSize,
                         final String welcomeMessage,
                         final String farewellMessage,
-                        final Set<ChunkKey> chunks,
+                        final Set<ChunkCoord> chunks,
                         final CuboidType type,
                         final Rights rights,
                         final int priority,
                         final Flags flags,
                         final FlagAttributes flagAtts) {
 
-        super(world, type, rights, priority, flags, flagAtts);
+        super(worldName, type, rights, priority, flags, flagAtts);
         setCuboidName(cuboidName);
         setOwnerName(ownerName);
         setState(state);
@@ -68,8 +68,8 @@ public abstract class PlayerCuboid extends GeneralCuboid {
 
     // Location check
     @Override
-    public boolean contains(final Location loc) {
-        return loc.getWorld().getName().equals(getWorld().getName()) && contains(loc.getX(), loc.getY(), loc.getZ());
+    public boolean contains(final NLocation loc) {
+        return loc.getWorldName().equals(getWorldName()) && contains(loc.getX(), loc.getY(), loc.getZ());
     }
 
     public abstract boolean contains(final double x, final double y, final double z);
@@ -82,18 +82,18 @@ public abstract class PlayerCuboid extends GeneralCuboid {
     public abstract String getSizeString();
 
     public boolean isOwner(CommandSender sender) {
-        return sender instanceof Player ? isOwner(sender.getName()) : false;
+        return sender instanceof Player && isOwner(sender.getName());
     }
 
     public boolean isOwner(String playerName) {
         return this.ownerName.equals(playerName);
     }
 
-    public Set<ChunkKey> getChunks() {
+    public Set<ChunkCoord> getChunks() {
         return chunks;
     }
 
-    public void setChunks(Set<ChunkKey> chunks) {
+    public void setChunks(Set<ChunkCoord> chunks) {
         this.chunks = chunks;
     }
 

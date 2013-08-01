@@ -6,6 +6,7 @@ import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
 
@@ -43,7 +44,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
                         getPlugin().getPluginConfig().loadConfig();
                         getPlugin().sendMessage(getSender(), MessageId.cmdReloadConfig);
                         return true;
-                    } catch (final IOException e) {
+                    } catch (final IOException | InvalidConfigurationException e) {
                         getPlugin().getLogger().severe("An error occured, stacktrace follows:");
                         e.printStackTrace();
                         getPlugin().getLogger().severe("This error occured when NCuboid tried to reload config.yml");
