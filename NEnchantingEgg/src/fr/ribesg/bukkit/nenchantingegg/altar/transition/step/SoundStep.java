@@ -15,7 +15,7 @@ public class SoundStep extends Step {
 
     @Override
     public void doStep(final Altar altar) {
-        final Location loc = altar.getCenterLocation().clone().add(sound.getRelativeLocation());
+        final Location loc = altar.getCenterLocation().toBukkitLocation().add(sound.getRelativeLocation());
         loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(), sound.getPitch());
     }
 }

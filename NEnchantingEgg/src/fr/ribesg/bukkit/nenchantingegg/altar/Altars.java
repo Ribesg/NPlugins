@@ -1,6 +1,7 @@
 package fr.ribesg.bukkit.nenchantingegg.altar;
 
 import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
+import fr.ribesg.bukkit.ncore.utils.NLocation;
 import fr.ribesg.bukkit.ncore.utils.Time;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import org.bukkit.Location;
@@ -25,12 +26,27 @@ public class Altars {
         perChunk = new HashMap<>();
     }
 
+    public void onEnable() {
+        for (Altar altar : getAltars()) {
+            altar.setState(AltarState.INACTIVE);
+        }
+    }
+
+    public void onDisable() {
+        for (Altar altar : getAltars()) {
+            altar.hardResetToInactive();
+        }
+    }
+
+    public Set<Altar> getAltars() {
+        return new HashSet<>(perChunk.values());
+    }
+
     public boolean canAdd(final Altar altar, final double minDistance) {
-        final Location l = altar.getCenterLocation();
-        final World w = l.getWorld();
-        if (perWorld.containsKey(w.getName())) {
+        final NLocation l = altar.getCenterLocation();
+        if (perWorld.containsKey(l.getWorldName())) {
             final double minDistanceSquared = minDistance * minDistance;
-            final Set<Altar> set = perWorld.get(w);
+            final Set<Altar> set = perWorld.get(l.getWorldName());
             for (final Altar other : set) {
                 if (l.distanceSquared(other.getCenterLocation()) < minDistanceSquared) {
                     return false;
@@ -74,24 +90,22 @@ public class Altars {
     }
 
     public void timeChange(final String worldName, final Time fromTime, final Time toTime) {
-        System.out.println("Time change");
         if (perWorld.containsKey(worldName)) {
-            System.out.println("\tWorld contains Altars");
             int i = 0;
             if (fromTime == Time.DAY && toTime == Time.NIGHT) {
                 for (final Altar a : perWorld.get(worldName)) {
-                    System.out.println("\t\tAltar " + ++i);
                     if (a.getState() == AltarState.INACTIVE) {
-                        System.out.println("\t\t\tTransition");
                         plugin.getInactiveToActiveTransition().doTransition(a);
                     }
                 }
             } else if (fromTime == Time.NIGHT && toTime == Time.DAY) {
                 for (final Altar a : perWorld.get(worldName)) {
-                    System.out.println("\t\tAltar " + ++i);
                     if (a.getState() == AltarState.ACTIVE) {
-                        System.out.println("\t\t\tTransition");
-                        plugin.getItemProvidedToLockedTransition().doTransition(a, true);
+                        a.hardResetToInactive();
+                        Location loc = a.getCenterLocation().toBukkitLocation();
+                        if (loc != null) {
+                            loc.getWorld().createExplosion(loc, 0f, false);
+                        }
                     } else if (a.getState() == AltarState.LOCKED) {
                         a.setState(AltarState.INACTIVE);
                     }

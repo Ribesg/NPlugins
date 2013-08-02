@@ -166,4 +166,16 @@ public enum MessageId {
     player_userHomeSet,
     player_yourHomeSet,
 
+    // ############################ //
+    // ## NENchantingEgg related ## //
+    // ############################ //
+
+    egg_altarCreated,
+    egg_altarDestroyed,
+    egg_altarProtectedSkullAtNight,
+    egg_altarProtectedBlock,
+    egg_cantPlaceOnAltar,
+    egg_altarTooClose,
+    egg_altarEggProvided,
+
 }

@@ -15,7 +15,7 @@ public class ExplosionStep extends Step {
 
     @Override
     public void doStep(final Altar altar) {
-        final Location centerLocation = altar.getCenterLocation();
+        final Location centerLocation = altar.getCenterLocation().toBukkitLocation();
         final double x = centerLocation.getX() + loc.getRelativeLocation().getX();
         final double y = centerLocation.getY() + loc.getRelativeLocation().getY();
         final double z = centerLocation.getZ() + loc.getRelativeLocation().getZ();

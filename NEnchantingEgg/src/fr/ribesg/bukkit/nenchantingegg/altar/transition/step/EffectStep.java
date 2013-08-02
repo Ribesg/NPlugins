@@ -15,7 +15,7 @@ public class EffectStep extends Step {
 
     @Override
     public void doStep(final Altar altar) {
-        final Location loc = altar.getCenterLocation().clone().add(effect.getRelativeLocation());
+        final Location loc = altar.getCenterLocation().toBukkitLocation().add(effect.getRelativeLocation());
         if (effect.hasRadius()) {
             loc.getWorld().playEffect(loc, effect.getEffect(), effect.getEffectData(), effect.getRadius());
         } else {

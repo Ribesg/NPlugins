@@ -18,7 +18,7 @@ public class FireworkStep extends Step {
 
     @Override
     public void doStep(final Altar altar) {
-        final Location loc = altar.getCenterLocation().clone().add(firework.getRelativeLocation());
+        final Location loc = altar.getCenterLocation().toBukkitLocation().add(firework.getRelativeLocation());
         final Firework f = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
         if (f != null) {
             if (firework.hasVelocity()) {

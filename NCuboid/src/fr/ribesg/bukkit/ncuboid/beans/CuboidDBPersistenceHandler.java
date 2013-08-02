@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
+import fr.ribesg.bukkit.ncore.utils.NLocation;
 import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid.CuboidType;
@@ -114,7 +115,7 @@ public class CuboidDBPersistenceHandler {
                         attributes.setIntFlagAtt(f, theInteger);
                     }
                 } else if (FlagAtt.isLocFlagAtt(f)) {
-                    final Location theLocation = Utils.toLocation(flagAttributesSection.getString(f.toString(), ""));
+                    final Location theLocation = NLocation.toLocation(flagAttributesSection.getString(f.toString(), ""));
                     if (theLocation != null) {
                         attributes.setLocFlagAtt(f, theLocation);
                     }
@@ -247,7 +248,7 @@ public class CuboidDBPersistenceHandler {
                 final Location theLocation = cuboid.getLocFlagAtt(f);
                 if (theLocation != null) {
                     used = true;
-                    sec.set(f.toString(), Utils.toStringPlus(theLocation));
+                    sec.set(f.toString(), NLocation.toStringPlus(theLocation));
                 }
             } else if (FlagAtt.isVectFlagAtt(f)) {
                 final Vector theVector = cuboid.getVectFlagAtt(f);

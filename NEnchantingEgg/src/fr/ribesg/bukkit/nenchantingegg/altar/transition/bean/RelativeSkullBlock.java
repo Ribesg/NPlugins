@@ -12,7 +12,7 @@ public class RelativeSkullBlock extends RelativeBlock {
     private final BlockFace rotation;
 
     public RelativeSkullBlock(final double x, final double y, final double z, final SkullType type, final BlockFace rotation) {
-        super(x, y, z, Material.SKULL, (byte) 1);
+        super(x, y, z, Material.SKULL, BlockData.SKULL_FLOOR);
         this.type = type;
         this.rotation = rotation;
     }

@@ -77,7 +77,7 @@ public abstract class AbstractMessages {
                                                 def.getAwaitedArgs(),
                                                 cMessages.getString(idString, def.getDefaultMessage())));
                 } catch (final IllegalArgumentException e) {
-                    e.printStackTrace();
+                    plugin.getLogger().warning(idString + " is not / no longer used, removing it from messages config file.");
                 }
             }
             overwriteConfig(path);

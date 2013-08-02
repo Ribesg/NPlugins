@@ -2,7 +2,6 @@ package fr.ribesg.bukkit.ncuboid.listeners;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.NLocation;
-import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid.CuboidType;
@@ -46,12 +45,12 @@ public class PlayerStickListener extends AbstractListener {
                                                        p.getName(),
                                                        clickedBlockLocation.getWorld().getName(),
                                                        new NLocation(clickedBlockLocation)));
-                        getPlugin().sendMessage(p, MessageId.cuboid_firstPointSelected, Utils.toString(clickedBlockLocation));
+                        getPlugin().sendMessage(p, MessageId.cuboid_firstPointSelected, NLocation.toString(clickedBlockLocation));
                     } else if (selection.getState() == CuboidState.TMPSTATE1) {
                         selection.secondPoint(clickedBlockLocation);
                         getPlugin().sendMessage(p,
                                                 MessageId.cuboid_secondPointSelected,
-                                                Utils.toString(clickedBlockLocation),
+                                                NLocation.toString(clickedBlockLocation),
                                                 selection.getSizeString());
                     } else if (selection.getState() == CuboidState.TMPSTATE2) {
                         if (selection.contains(clickedBlockLocation)) {

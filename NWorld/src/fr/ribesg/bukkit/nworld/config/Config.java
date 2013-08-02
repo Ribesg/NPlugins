@@ -633,7 +633,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
             content.append("      z: " + w.getSpawnLocation().getZ() + "\n");
             content.append("      yaw: " + w.getSpawnLocation().getYaw() + "\n");
             content.append("      pitch: " + w.getSpawnLocation().getPitch() + "\n");
-            content.append("    requiredPermission: " + w.getRequiredPermission() + "\n");
+            content.append("    requiredPermission: \"" + w.getRequiredPermission() + "\"\n");
             content.append("    hidden: " + w.isHidden() + "\n");
         }
         content.append("\n");

@@ -1,12 +1,13 @@
 package fr.ribesg.bukkit.nenchantingegg.altar;
 
 import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
+import fr.ribesg.bukkit.ncore.utils.NLocation;
 import fr.ribesg.bukkit.ncore.utils.Time;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
-import fr.ribesg.bukkit.nenchantingegg.listener.ItemListener;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -22,7 +23,7 @@ public class Altar {
 
     private final NEnchantingEgg plugin;
 
-    private final Location        centerLocation;
+    private final NLocation       centerLocation;
     private final Set<ChunkCoord> chunks;
 
     private AltarState previousState; // Valid only if state == AltarState.IN_TRANSITION
@@ -31,22 +32,22 @@ public class Altar {
     private String      playerName;
     private ItemBuilder builder;
 
-    public Altar(NEnchantingEgg plugin, final Location loc) {
+    public Altar(NEnchantingEgg plugin, final NLocation loc) {
         this.plugin = plugin;
 
-        centerLocation = loc.getBlock().getLocation();
+        centerLocation = loc.getBlockLocation();
 
         playerName = null;
         builder = null;
 
-        chunks = new HashSet<ChunkCoord>();
+        chunks = new HashSet<>();
 
         final int bX = loc.getBlockX();
         final int bZ = loc.getBlockZ();
 
         for (int x = (int) Math.floor((bX - MAX_RADIUS) / 16.0); x <= Math.floor((bX + MAX_RADIUS) / 16.0); x++) {
             for (int z = (int) Math.floor((bZ - MAX_RADIUS) / 16.0); z <= Math.floor((bZ + MAX_RADIUS) / 16.0); z++) {
-                chunks.add(new ChunkCoord(x, z, loc.getWorld().getName()));
+                chunks.add(new ChunkCoord(x, z, loc.getWorldName()));
             }
         }
 
@@ -58,7 +59,7 @@ public class Altar {
             state = AltarState.INACTIVE;
         } else {
             if (newState == AltarState.EGG_PROVIDED) {
-                builder = new ItemBuilder(this, playerName);
+                builder = new ItemBuilder(this);
             }
             state = newState;
         }
@@ -69,16 +70,30 @@ public class Altar {
         plugin.getAltars().remove(this);
     }
 
+    /** This is called on server stops, prevents Altars from being save with an invalid state */
+    public void hardResetToInactive() {
+        this.state = AltarState.INACTIVE;
+        Location loc = getCenterLocation().toBukkitLocation();
+        for (final RelativeBlock r : AltarState.getInactiveStateBlocks()) {
+            final Block b = loc.clone().add(r.getRelativeLocation()).getBlock();
+            b.setType(r.getBlockMaterial());
+            b.setData(r.getBlockData());
+            if (r.needAdditionalData()) {
+                r.setAdditionalData(b);
+            }
+        }
+    }
+
     public void buildItem(final ItemStack is) {
         if (state != AltarState.ITEM_PROVIDED) {
             throw new IllegalStateException();
         } else {
-            final Location itemDropLocation = centerLocation.clone().add(0.5, 3, 0.5);
+            final Location itemDropLocation = centerLocation.toBukkitLocation().clone().add(0.5, 3, 0.5);
             final Item i = itemDropLocation.getWorld().dropItem(itemDropLocation, is);
             if (i != null) {
                 i.setPickupDelay(80);
                 i.setVelocity(new Vector(0, -0.25, 0));
-                ItemListener.getInstance().getItemMap().put(i, playerName);
+                plugin.getItemListener().getItemMap().put(i, playerName);
             } else {
                 plugin.getLogger().severe("Unable to spawn the Item!");
             }
@@ -91,14 +106,12 @@ public class Altar {
      * - All awaited blocks are correctly placed
      * - There is nothing over the altar, i.e. every top block of every x/z coordinates where there is an altar block is an altar block.
      *
-     * @param loc The location of the last block placed : the Wither Skull
-     *
      * @return If the altar that may have been constructed at this location is valid
      */
     public boolean isInactiveAltarValid() {
         // First check: if all blocks are here
         for (final RelativeBlock rb : AltarState.getInactiveStateBlocks()) {
-            final Location rbLoc = rb.getLocation(centerLocation);
+            final Location rbLoc = rb.getLocation(centerLocation.toBukkitLocation());
             if ((rbLoc.getBlock().getType() != rb.getBlockMaterial() || rbLoc.getBlock().getData() != rb.getBlockData()) &&
                 rb.getBlockMaterial() != Material.SKULL) {
                 return false;
@@ -114,9 +127,11 @@ public class Altar {
             for (int z = -MAX_RADIUS; z <= MAX_RADIUS; z++) {
                 if (isAltarXZ(x, z) &&
                     centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z) != getHighestAltarBlock(x, z, false) + cY) {
-                    System.out.println("Found:   " + centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z));
-                    System.out.println("Awaited: " + (getHighestAltarBlock(x, z, false) + cY));
-                    System.out.println("At: " + x + ";" + z + " (" + (cX + x) + ";" + (cZ + z) + ")");
+                    /** Debug
+                     System.out.println("Found:   " + centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z));
+                     System.out.println("Awaited: " + (getHighestAltarBlock(x, z, false) + cY));
+                     System.out.println("At: " + x + ";" + z + " (" + (cX + x) + ";" + (cZ + z) + ")");
+                     */
                     return false;
                 }
             }
@@ -236,15 +251,15 @@ public class Altar {
      *
      * @return The location of the center of an altar having this skull as a valid block
      */
-    public static Location getCenterFromSkullLocation(final Location skullLocation) {
-        return skullLocation.clone().add(2, -2, 0);
+    public static NLocation getCenterFromSkullLocation(final Location skullLocation) {
+        return new NLocation(skullLocation.clone().add(2, -2, 0));
     }
 
     public ItemBuilder getBuilder() {
         return builder;
     }
 
-    public Location getCenterLocation() {
+    public NLocation getCenterLocation() {
         return centerLocation;
     }
 

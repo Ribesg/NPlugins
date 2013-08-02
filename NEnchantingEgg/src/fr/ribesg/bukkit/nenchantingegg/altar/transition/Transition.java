@@ -1,6 +1,5 @@
 package fr.ribesg.bukkit.nenchantingegg.altar.transition;
 
-import fr.ribesg.bukkit.ncore.utils.Utils;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.AltarState;
@@ -61,7 +60,7 @@ public abstract class Transition {
                 // TODO Exception ?
                 final Logger log = plugin.getLogger();
                 log.severe("Unable to do Transition !");
-                log.severe("Altar Location: " + Utils.toString(altar.getCenterLocation()));
+                log.severe("Altar Location: " + altar.getCenterLocation().toString());
                 log.severe("Altar state: " + altar.getState().toString());
                 log.severe("Transition to state " +
                            toState.toString() +

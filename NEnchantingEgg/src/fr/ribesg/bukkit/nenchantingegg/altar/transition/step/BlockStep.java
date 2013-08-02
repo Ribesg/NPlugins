@@ -15,7 +15,7 @@ public class BlockStep extends Step {
 
     @Override
     public void doStep(final Altar altar) {
-        final Block b = altar.getCenterLocation().clone().add(block.getRelativeLocation()).getBlock();
+        final Block b = altar.getCenterLocation().toBukkitLocation().add(block.getRelativeLocation()).getBlock();
         b.setType(block.getBlockMaterial());
         b.setData(block.getBlockData());
         if (block.needAdditionalData()) {

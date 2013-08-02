@@ -13,6 +13,8 @@ import java.util.Set;
 
 public class ItemBuilder {
 
+    private static final boolean ITEMBUILDER_DEBUG = false;
+
     private static Random       rand              = new Random();
     private static Set<Integer> possibleMainItems = null;
 
@@ -39,29 +41,24 @@ public class ItemBuilder {
         return possibleMainItems;
     }
 
-    // Boost multiplied by COEF%
-    private static final float COEF = 150;
-
     private final NEnchantingEgg plugin;
 
     private       ItemStack       mainItem;
     private final List<ItemStack> items;
     private final Altar           altar;
 
-    public ItemBuilder(final Altar altar, final String playerName) {
+    public ItemBuilder(final Altar altar) {
         this.altar = altar;
         this.plugin = altar.getPlugin();
-        items = new ArrayList<ItemStack>();
+        items = new ArrayList<>();
     }
 
     public void addItem(final ItemStack is) {
         if (getPossibleMainItems().contains(is.getTypeId()) && is.getEnchantments().size() != 0) {
-            System.out.println("Main item");
             mainItem = is;
             plugin.getEggProvidedToItemProvidedTransition().doTransition(altar);
         } else {
             items.add(is);
-            System.out.println("Not main item");
         }
     }
 
@@ -82,7 +79,10 @@ public class ItemBuilder {
     private void repair() {
         final int id = mainItem.getTypeId();
         final short maxDurability = Material.getMaterial(id).getMaxDurability();
-        System.out.println("MaxDurability=" + maxDurability);
+
+        if (ITEMBUILDER_DEBUG) {
+            System.out.println("MaxDurability=" + maxDurability);
+        }
 
         // Get the total durability points sacrificed, in %
         double repairCount = 0;
@@ -95,29 +95,46 @@ public class ItemBuilder {
                 it.remove();
             }
         }
-        System.out.println("RepairCount=" + repairCount);
+
+        if (ITEMBUILDER_DEBUG) {
+            System.out.println("RepairCount=" + repairCount);
+        }
 
         // Get the number of enchantment levels
         int totalEnchantmentLevel = 0;
         for (final Integer i : mainItem.getEnchantments().values()) {
             totalEnchantmentLevel += i;
         }
-        System.out.println("TotalEnchantmentLevel=" + totalEnchantmentLevel);
+
+        if (ITEMBUILDER_DEBUG) {
+            System.out.println("TotalEnchantmentLevel=" + totalEnchantmentLevel);
+        }
 
         // Compute base durability boost
-        double boost = COEF / 100.0 * repairCount / totalEnchantmentLevel;
-        System.out.println("Boost=" + boost);
+        double coef = plugin.getPluginConfig().getRepairBoostMultiplier();
+        double boost = coef * repairCount / totalEnchantmentLevel;
+
+        if (ITEMBUILDER_DEBUG) {
+            System.out.println("Boost=" + boost);
+        }
 
         // Add some randomness: boost = 80%*boost + [0-40%]*boost; => boost = [80-120%]*boost;
         boost = boost - 0.2 * boost + rand.nextFloat() * 0.4 * boost;
-        System.out.println("Boost=" + boost + " (Random)");
+
+        if (ITEMBUILDER_DEBUG) {
+            System.out.println("Boost=" + boost + " (Random)");
+        }
 
         // Apply durability
         double finalDurability = mainItem.getDurability() - boost * maxDurability;
         if (finalDurability < 0) {
             finalDurability = 0;
         }
-        System.out.println("FinalDurability=" + finalDurability);
+
+        if (ITEMBUILDER_DEBUG) {
+            System.out.println("FinalDurability=" + finalDurability);
+        }
+
         mainItem.setDurability((short) finalDurability);
     }
 }

@@ -24,7 +24,8 @@ public class BlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onEntityExplode(final EntityExplodeEvent event) {
-        final Set<Chunk> chunks = new HashSet<Chunk>();
+        // Get the chunks considered in this event
+        final Set<Chunk> chunks = new HashSet<>();
         Chunk c;
         for (final Block b : event.blockList()) {
             c = b.getLocation().getChunk();
@@ -33,7 +34,8 @@ public class BlockListener implements Listener {
             }
         }
 
-        final Set<Altar> altars = new HashSet<Altar>();
+        // Get the altars considered from the chunks
+        final Set<Altar> altars = new HashSet<>();
         ChunkCoord coord;
         Altar altar;
         for (final Chunk chunk : chunks) {
@@ -44,6 +46,7 @@ public class BlockListener implements Listener {
             }
         }
 
+        // Remove blocks that are part of an altar
         final Iterator<Block> it = event.blockList().iterator();
         Block b;
         while (it.hasNext()) {
@@ -53,6 +56,7 @@ public class BlockListener implements Listener {
                                  b.getY() - a.getCenterLocation().getBlockY(),
                                  b.getZ() - a.getCenterLocation().getBlockZ())) {
                     it.remove();
+                    break;
                 }
             }
         }

@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ntheendagain.world;
 
 import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
-import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ncore.utils.NLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -142,7 +142,7 @@ public class EndChunk {
         final List<String> locations = new ArrayList<>();
         if (crystals != null) {
             for (final Location loc : crystals) {
-                locations.add(Utils.toString(loc));
+                locations.add(NLocation.toString(loc));
             }
             chunkSection.set("crystals", locations);
         }
@@ -164,7 +164,7 @@ public class EndChunk {
             final List<String> locations = chunkSection.getStringList("crystals");
             final Set<Location> crystals = new HashSet<>();
             for (final String loc : locations) {
-                crystals.add(Utils.toLocation(loc));
+                crystals.add(NLocation.toLocation(loc));
             }
             chunk.crystals = crystals;
         }

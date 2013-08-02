@@ -20,8 +20,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class EndChunks implements Iterable<EndChunk> {
@@ -147,6 +149,12 @@ public class EndChunks implements Iterable<EndChunk> {
         return chunks.values().iterator();
     }
 
+    public List<EndChunk> getSafeChunksList() {
+        List<EndChunk> result = new ArrayList<>();
+        result.addAll(chunks.values());
+        return result;
+    }
+
     public int getTotalSavedDragons() {
         return totalSavedDragons;
     }
@@ -157,5 +165,8 @@ public class EndChunks implements Iterable<EndChunk> {
 
     /*package*/ void decrementTotalSavedDragons(int quantity) {
         totalSavedDragons -= quantity;
+        if (totalSavedDragons < 0) {
+            totalSavedDragons = 0;
+        }
     }
 }

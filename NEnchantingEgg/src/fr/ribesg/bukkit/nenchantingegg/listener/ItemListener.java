@@ -18,33 +18,20 @@ import java.util.Map;
 
 public class ItemListener implements Listener {
 
-    private static ItemListener instance;
-
-    public static ItemListener getInstance() {
-        return instance;
-    }
-
-    public static void destroy() {
-        instance = null;
-    }
-
     private final NEnchantingEgg    plugin;
     private final Map<Item, String> itemMap;
 
     public ItemListener(final NEnchantingEgg instance) {
         plugin = instance;
-        ItemListener.instance = this;
-        itemMap = new HashMap<Item, String>();
+        itemMap = new HashMap<>();
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onItemPortal(final EntityPortalEvent event) {
         if (event.getEntityType() == EntityType.DROPPED_ITEM) {
-            System.out.println("Item in portal");
             final Location loc = event.getEntity().getLocation();
             final Altar altar = plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
             if (altar != null && altar.getState() == AltarState.EGG_PROVIDED && event.getEntity().isValid()) {
-                System.out.println("\tOK");
                 altar.getBuilder().addItem(((Item) event.getEntity()).getItemStack());
                 event.setCancelled(true);
                 event.getEntity().remove();

@@ -38,6 +38,15 @@ public class Messages extends AbstractMessages {
         newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null));
         newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null));
 
+        // Altars
+        newMessages.add(new Message(MessageId.egg_altarCreated, "&6You feel strange... Dark powers...", null, null));
+        newMessages.add(new Message(MessageId.egg_altarDestroyed, "&aThis area seems to be purified", null, null));
+        newMessages.add(new Message(MessageId.egg_altarProtectedSkullAtNight, "&cI am too powerful for you...", null, null));
+        newMessages.add(new Message(MessageId.egg_altarProtectedBlock, "&cDo not play with fire...", null, null));
+        newMessages.add(new Message(MessageId.egg_cantPlaceOnAltar, "&cAre you trying to provoke me?", null, null));
+        newMessages.add(new Message(MessageId.egg_altarTooClose, "&cSomething already drain the dark powers of this area...", null, null));
+        newMessages.add(new Message(MessageId.egg_altarEggProvided, "&6Aaaah... Power!", null, null));
+
         return newMessages;
     }
 

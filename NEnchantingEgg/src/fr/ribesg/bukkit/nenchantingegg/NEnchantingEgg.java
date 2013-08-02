@@ -9,7 +9,6 @@ import fr.ribesg.bukkit.nenchantingegg.altar.transition.InactiveToActiveTransiti
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.ItemProvidedToLockedTransition;
 import fr.ribesg.bukkit.nenchantingegg.lang.Messages;
 import fr.ribesg.bukkit.nenchantingegg.listener.BlockListener;
-import fr.ribesg.bukkit.nenchantingegg.listener.EnchantingEggListener;
 import fr.ribesg.bukkit.nenchantingegg.listener.ItemListener;
 import fr.ribesg.bukkit.nenchantingegg.listener.PlayerListener;
 import fr.ribesg.bukkit.nenchantingegg.task.TimeListenerTask;
@@ -37,6 +36,11 @@ public class NEnchantingEgg extends EnchantingEggNode {
     private ActiveToEggProvidedTransition       activeToEggProvidedTransition;
     private EggProvidedToItemProvidedTransition eggProvidedToItemProvidedTransition;
     private ItemProvidedToLockedTransition      itemProvidedToLockedTransition;
+
+    // Listeners
+    private BlockListener  blockListener;
+    private ItemListener   itemListener;
+    private PlayerListener playerListener;
 
     @Override
     protected String getMinCoreVersion() {
@@ -77,12 +81,16 @@ public class NEnchantingEgg extends EnchantingEggNode {
             return false;
         }
 
+        altars.onEnable();
+
         // Listener
         final PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new EnchantingEggListener(this), this);
-        pm.registerEvents(new PlayerListener(this), this);
-        pm.registerEvents(new ItemListener(this), this);
-        pm.registerEvents(new BlockListener(this), this);
+        blockListener = new BlockListener(this);
+        itemListener = new ItemListener(this);
+        playerListener = new PlayerListener(this);
+        pm.registerEvents(blockListener, this);
+        pm.registerEvents(itemListener, this);
+        pm.registerEvents(playerListener, this);
 
         // Commands
         //getCommand("theCommand").setExecutor(new NCommandExecutor(this));
@@ -100,6 +108,8 @@ public class NEnchantingEgg extends EnchantingEggNode {
         } catch (final IOException e) {
             e.printStackTrace();
         }
+
+        altars.onDisable();
 
         altars = null;
 
@@ -142,6 +152,18 @@ public class NEnchantingEgg extends EnchantingEggNode {
 
     public ItemProvidedToLockedTransition getItemProvidedToLockedTransition() {
         return itemProvidedToLockedTransition;
+    }
+
+    public BlockListener getBlockListener() {
+        return blockListener;
+    }
+
+    public ItemListener getItemListener() {
+        return itemListener;
+    }
+
+    public PlayerListener getPlayerListener() {
+        return playerListener;
     }
 
     public Messages getMessages() {

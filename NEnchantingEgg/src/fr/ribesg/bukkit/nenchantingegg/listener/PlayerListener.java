@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.nenchantingegg.listener;
 
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
 import fr.ribesg.bukkit.ncore.utils.Time;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
@@ -42,10 +43,10 @@ public class PlayerListener implements Listener {
                 if (altar != null) {
                     if (altar.getState() == AltarState.ACTIVE && altar.isEggPosition(loc)) {
                         plugin.getActiveToEggProvidedTransition().doTransition(altar);
+                        plugin.sendMessage(event.getPlayer(), MessageId.egg_altarEggProvided);
                         altar.setPlayerName(event.getPlayer().getName());
                     } else if (altar.preventsBlockPlacement(event)) {
-                        // TODO Send message? Damage player? Do something?
-                        event.getPlayer().sendMessage("§cDEBUG: §aYou can't place a block on an Altar");
+                        plugin.sendMessage(event.getPlayer(), MessageId.egg_cantPlaceOnAltar);
                         event.setCancelled(true);
                     }
                 }
@@ -60,9 +61,12 @@ public class PlayerListener implements Listener {
                         if (skullState.getSkullType() == SkullType.WITHER) {
                             // Create the altar, then check if it's valid
                             final Altar altar = new Altar(plugin, Altar.getCenterFromSkullLocation(loc));
-                            if (altar.isInactiveAltarValid()) {
+                            boolean minimumDistanceCheck = plugin.getAltars()
+                                                                 .canAdd(altar,
+                                                                         plugin.getPluginConfig().getMinimumDistanceBetweenTwoAltars());
+                            if (altar.isInactiveAltarValid() && minimumDistanceCheck) {
                                 if (player.isOnline()) {
-                                    player.sendMessage("§cDEBUG: §aYou created an Altar");
+                                    plugin.sendMessage(player, MessageId.egg_altarCreated);
                                 }
                                 altar.setState(AltarState.INACTIVE);
                                 plugin.getAltars().add(altar);
@@ -70,14 +74,14 @@ public class PlayerListener implements Listener {
                                     plugin.getInactiveToActiveTransition().doTransition(altar);
                                 }
                             } else {
-                                altar.destroy();
-                                // TODO: Message? Maybe a different message if there are missing block
-                                //       than if there are blocks on top of the altar.
-                                //       Also: be sure not to send a message for every Wither block placed
-                                //             Maybe a minimum amount of corresponding blocks?
-                                if (player.isOnline()) {
-                                    event.getPlayer().sendMessage("§cDEBUG: §aNo Altar Found / Missing Blocks");
+                                if (!minimumDistanceCheck) {
+                                    if (player.isOnline()) {
+                                        plugin.sendMessage(player, MessageId.egg_altarTooClose);
+                                    }
+                                } else {
+                                    // TODO: Don't know if we should do something
                                 }
+                                altar.destroy();
                             }
                         }
                     }
@@ -88,8 +92,7 @@ public class PlayerListener implements Listener {
                 altar = plugin.getAltars().get(coord);
                 if (altar != null) {
                     if (altar.preventsBlockPlacement(event)) {
-                        // TODO Send message? Damage player? Do something?
-                        event.getPlayer().sendMessage("§cDEBUG: §aYou can't place a block on an Altar");
+                        plugin.sendMessage(event.getPlayer(), MessageId.egg_cantPlaceOnAltar);
                         event.setCancelled(true);
                     }
                 }
@@ -110,18 +113,17 @@ public class PlayerListener implements Listener {
                 case SKULL: // Destroying an Altar by destroying the Wither skull
                     if (altar.isSkullPosition(loc)) {
                         if (altar.getState() == AltarState.INACTIVE) {
-                            event.getPlayer().sendMessage("§cDEBUG: §aYou broke an Altar");
+                            plugin.sendMessage(event.getPlayer(), MessageId.egg_altarDestroyed);
                             altar.destroy();
                         } else {
-                            event.getPlayer().sendMessage("§cDEBUG: §aYou can't break an activated Altar");
+                            plugin.sendMessage(event.getPlayer(), MessageId.egg_altarProtectedSkullAtNight);
                             event.setCancelled(true);
                         }
                         break;
                     } // else enter default section
                 default:
                     if (altar.preventsBlockDestruction(event)) {
-                        // TODO Send message? Damage player? Do something?
-                        event.getPlayer().sendMessage("§cDEBUG: §aYou can't break a block part of an Altar");
+                        plugin.sendMessage(event.getPlayer(), MessageId.egg_altarProtectedBlock);
                         event.setCancelled(true);
                     }
                     break;
@@ -136,7 +138,7 @@ public class PlayerListener implements Listener {
         final ChunkCoord coord = new ChunkCoord(from.getChunk());
         final Altar altar = plugin.getAltars().get(coord);
         if (altar != null) {
-            final Location teleportLocation = altar.getCenterLocation().clone().add(2.5, 1, 0.5);
+            final Location teleportLocation = altar.getCenterLocation().clone().toBukkitLocation().add(2.5, 1, 0.5);
             teleportLocation.setPitch(6f);
             teleportLocation.setYaw(90f);
             event.getPlayer().teleport(teleportLocation);

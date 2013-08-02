@@ -35,7 +35,7 @@ public class FallingBlockStep extends Step {
 
     @Override
     public void doStep(final Altar altar) {
-        final Location locBlock = altar.getCenterLocation().clone().add(block.getRelativeLocation());
+        final Location locBlock = altar.getCenterLocation().toBukkitLocation().add(block.getRelativeLocation());
         locBlock.getBlock().setType(Material.AIR);
         locBlock.getWorld().playEffect(locBlock, Effect.MOBSPAWNER_FLAMES, (byte) 4);
         locBlock.getWorld().playSound(locBlock, Sound.IRONGOLEM_THROW, 1.0f, 1.0f);

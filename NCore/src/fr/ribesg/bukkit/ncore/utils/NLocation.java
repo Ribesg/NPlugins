@@ -69,6 +69,10 @@ public class NLocation {
         return worldName;
     }
 
+    public World getWorld() {
+        return Bukkit.getWorld(getWorldName());
+    }
+
     public void setWorldName(String worldName) {
         this.worldName = worldName;
     }
@@ -115,5 +119,197 @@ public class NLocation {
 
     public void setZ(double z) {
         this.z = z;
+    }
+
+    public NLocation getBlockLocation() {
+        int x = getBlockX();
+        int y = getBlockY();
+        int z = getBlockZ();
+        return new NLocation(getWorldName(), x, y, z);
+    }
+
+    public NLocation clone() {
+        return new NLocation(getWorldName(), getX(), getY(), getZ(), getYaw(), getPitch());
+    }
+
+    public String toString() {
+        final StringBuilder s = new StringBuilder();
+        s.append('<');
+        s.append(getWorldName());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(getX());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(getY());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(getZ());
+        s.append('>');
+        return s.toString();
+    }
+
+    /**
+     * @param loc a Location
+     *
+     * @return A human-readable String representation of this Location
+     */
+
+    public static String toString(final Location loc) {
+        final StringBuilder s = new StringBuilder();
+        s.append('<');
+        s.append(loc.getWorld().getName());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(loc.getX());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(loc.getY());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(loc.getZ());
+        s.append('>');
+        return s.toString();
+    }
+
+    public String toStringPlus() {
+        final StringBuilder s = new StringBuilder();
+        s.append('<');
+        s.append(getWorldName());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(getX());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(getY());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(getZ());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(getYaw());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(getPitch());
+        s.append('>');
+        return s.toString();
+    }
+
+    /**
+     * @param loc a Location
+     *
+     * @return A human-readable String representation of this Location, including Yaw and Pitch
+     */
+    public static String toStringPlus(final Location loc) {
+        if (loc == null) {
+            return "null";
+        }
+        final StringBuilder s = new StringBuilder();
+        s.append('<');
+        s.append(loc.getWorld().getName());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(loc.getX());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(loc.getY());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(loc.getZ());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(loc.getYaw());
+        s.append(Utils.SEPARATOR_CHAR);
+        s.append(loc.getPitch());
+        s.append('>');
+        return s.toString();
+    }
+
+    /**
+     * @param string A String representing a location, returned by {@link #toString(Location)} or {@link #toStringPlus(Location)}
+     *
+     * @return The actual Location or null if the string was malformed
+     */
+    public static Location toLocation(final String string) {
+        if (string == null || "null".equals(string)) {
+            return null;
+        }
+        if (string.length() < 2) {
+            return null;
+        }
+        final String[] split = string.substring(1, string.length() - 1).split(Utils.SEPARATOR_CHAR_STRING);
+        if (split.length == 4) {
+            final String worldName = split[0];
+            final World world = Bukkit.getWorld(worldName);
+            if (world == null) {
+                return null;
+            } else {
+                try {
+                    final Double x = Double.parseDouble(split[1]);
+                    final Double y = Double.parseDouble(split[2]);
+                    final Double z = Double.parseDouble(split[3]);
+                    return new Location(world, x, y, z);
+                } catch (final NumberFormatException e) {
+                    return null;
+                }
+            }
+        } else if (split.length == 6) {
+            final String worldName = split[0];
+            final World world = Bukkit.getWorld(worldName);
+            if (world == null) {
+                return null;
+            } else {
+                try {
+                    final Double x = Double.parseDouble(split[1]);
+                    final Double y = Double.parseDouble(split[2]);
+                    final Double z = Double.parseDouble(split[3]);
+                    final Float yaw = Float.parseFloat(split[4]);
+                    final Float pitch = Float.parseFloat(split[5]);
+                    return new Location(world, x, y, z, yaw, pitch);
+                } catch (final NumberFormatException e) {
+                    return null;
+                }
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param string A String representing a location, returned by {@link #toString(Location)} or {@link #toStringPlus(Location)}
+     *
+     * @return The actual NLocation or null if the string was malformed
+     */
+    public static NLocation toNLocation(final String string) {
+        if (string == null || "null".equals(string)) {
+            return null;
+        }
+        if (string.length() < 2) {
+            return null;
+        }
+        final String[] split = string.substring(1, string.length() - 1).split(Utils.SEPARATOR_CHAR_STRING);
+        if (split.length == 4) {
+            final String worldName = split[0];
+            try {
+                final Double x = Double.parseDouble(split[1]);
+                final Double y = Double.parseDouble(split[2]);
+                final Double z = Double.parseDouble(split[3]);
+                return new NLocation(worldName, x, y, z);
+            } catch (final NumberFormatException e) {
+                return null;
+            }
+        } else if (split.length == 6) {
+            final String worldName = split[0];
+            try {
+                final Double x = Double.parseDouble(split[1]);
+                final Double y = Double.parseDouble(split[2]);
+                final Double z = Double.parseDouble(split[3]);
+                final Float yaw = Float.parseFloat(split[4]);
+                final Float pitch = Float.parseFloat(split[5]);
+                return new NLocation(worldName, x, y, z, yaw, pitch);
+            } catch (final NumberFormatException e) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public double distance(NLocation o) {
+        return Math.sqrt(distanceSquared(o));
+    }
+
+    public double distanceSquared(NLocation o) {
+        if (o == null) {
+            throw new IllegalArgumentException("Cannot measure distance to a null location");
+        } else if (!o.getWorldName().equals(getWorldName())) {
+            throw new IllegalArgumentException("Cannot measure distance between " + getWorldName() + " and " + o.getWorldName());
+        }
+        return Math.pow(x - o.x, 2) + Math.pow(y - o.y, 2) + Math.pow(z - o.z, 2);
     }
 }

@@ -1,8 +1,5 @@
 package fr.ribesg.bukkit.ncore.utils;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.util.Vector;
 
 /**
@@ -12,103 +9,8 @@ import org.bukkit.util.Vector;
  */
 public class Utils {
 
-    private final static char   SEPARATOR_CHAR        = ';';
-    private final static String SEPARATOR_CHAR_STRING = Character.toString(SEPARATOR_CHAR);
-
-    /**
-     * @param loc a Location
-     *
-     * @return A human-readable String representation of this Location
-     */
-    public static String toString(final Location loc) {
-        final StringBuilder s = new StringBuilder();
-        s.append('<');
-        s.append(loc.getWorld().getName());
-        s.append(SEPARATOR_CHAR);
-        s.append(loc.getX());
-        s.append(SEPARATOR_CHAR);
-        s.append(loc.getY());
-        s.append(SEPARATOR_CHAR);
-        s.append(loc.getZ());
-        s.append('>');
-        return s.toString();
-    }
-
-    /**
-     * @param loc a Location
-     *
-     * @return A human-readable String representation of this Location, including Yaw and Pitch
-     */
-    public static String toStringPlus(final Location loc) {
-        if (loc == null) {
-            return "null";
-        }
-        final StringBuilder s = new StringBuilder();
-        s.append('<');
-        s.append(loc.getWorld().getName());
-        s.append(SEPARATOR_CHAR);
-        s.append(loc.getX());
-        s.append(SEPARATOR_CHAR);
-        s.append(loc.getY());
-        s.append(SEPARATOR_CHAR);
-        s.append(loc.getZ());
-        s.append(SEPARATOR_CHAR);
-        s.append(loc.getYaw());
-        s.append(SEPARATOR_CHAR);
-        s.append(loc.getPitch());
-        s.append('>');
-        return s.toString();
-    }
-
-    /**
-     * @param string A String representing a location, returned by {@link #toString(Location)} or {@link #toStringPlus(Location)}
-     *
-     * @return The actual Location or null if the string was malformed
-     */
-    public static Location toLocation(final String string) {
-        if (string == null || "null".equals(string)) {
-            return null;
-        }
-        if (string.length() < 2) {
-            return null;
-        }
-        final String[] split = string.substring(1, string.length() - 1).split(SEPARATOR_CHAR_STRING);
-        if (split.length == 4) {
-            final String worldName = split[0];
-            final World world = Bukkit.getWorld(worldName);
-            if (world == null) {
-                return null;
-            } else {
-                try {
-                    final Double x = Double.parseDouble(split[1]);
-                    final Double y = Double.parseDouble(split[2]);
-                    final Double z = Double.parseDouble(split[3]);
-                    return new Location(world, x, y, z);
-                } catch (final NumberFormatException e) {
-                    return null;
-                }
-            }
-        } else if (split.length == 6) {
-            final String worldName = split[0];
-            final World world = Bukkit.getWorld(worldName);
-            if (world == null) {
-                return null;
-            } else {
-                try {
-                    final Double x = Double.parseDouble(split[1]);
-                    final Double y = Double.parseDouble(split[2]);
-                    final Double z = Double.parseDouble(split[3]);
-                    final Float yaw = Float.parseFloat(split[4]);
-                    final Float pitch = Float.parseFloat(split[5]);
-                    return new Location(world, x, y, z, yaw, pitch);
-                } catch (final NumberFormatException e) {
-                    return null;
-                }
-            }
-        } else {
-            return null;
-        }
-    }
+    static final char   SEPARATOR_CHAR        = ';';
+    static final String SEPARATOR_CHAR_STRING = Character.toString(SEPARATOR_CHAR);
 
     /**
      * @param vect a Vector

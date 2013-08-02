@@ -157,7 +157,7 @@ public class EndWorldHandler {
      */
     private void countEntities() {
         plugin.getLogger().info("Counting existing EDs in " + endWorld.getName() + "...");
-        for (final EndChunk c : getChunks()) {
+        for (final EndChunk c : getChunks().getSafeChunksList()) {
             if (endWorld.isChunkLoaded(c.getX(), c.getZ())) {
                 final Chunk chunk = endWorld.getChunkAt(c.getX(), c.getZ());
                 for (final Entity e : chunk.getEntities()) {

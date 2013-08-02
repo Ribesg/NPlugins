@@ -4,12 +4,15 @@ public enum Time {
     DAY,
     NIGHT;
 
+    private static final int EVENING = 13500;
+    private static final int MORNING = 22500;
+
     public static boolean isDayTime(final long time) {
-        return time >= 0 && time <= 12000;
+        return time > MORNING || time <= EVENING;
     }
 
     public static boolean isNightTime(final long time) {
-        return time >= 12000 && time <= 24000;
+        return !isDayTime(time);
     }
 
     public static Time get(final long time) {
