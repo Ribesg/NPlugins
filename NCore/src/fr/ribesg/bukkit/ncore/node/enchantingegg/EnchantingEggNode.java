@@ -9,9 +9,9 @@ import fr.ribesg.bukkit.ncore.node.NPlugin;
  */
 public abstract class EnchantingEggNode extends NPlugin {
 
-    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-    @Override
-    protected void linkCore() {
-        getCore().setEnchantingEggNode(this);
-    }
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
+	@Override
+	protected void linkCore() {
+		getCore().setEnchantingEggNode(this);
+	}
 }

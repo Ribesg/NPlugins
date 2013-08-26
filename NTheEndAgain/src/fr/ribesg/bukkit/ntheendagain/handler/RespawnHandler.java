@@ -14,75 +14,79 @@ import java.util.Random;
 /** @author Ribesg */
 public class RespawnHandler {
 
-    private static final Random rand = new Random();
+	private static final Random rand = new Random();
 
-    private final EndWorldHandler worldHandler;
+	private final EndWorldHandler worldHandler;
 
-    public RespawnHandler(EndWorldHandler worldHandler) {
-        this.worldHandler = worldHandler;
-    }
+	public RespawnHandler(EndWorldHandler worldHandler) {
+		this.worldHandler = worldHandler;
+	}
 
-    public void respawn() {
-        if (worldHandler.getConfig().getRegenType() == 1) {
-            worldHandler.getRegenHandler().regenThenRespawn();
-        } else {
-            respawnDragons();
-        }
-    }
+	public void respawn() {
+		if (worldHandler.getConfig().getRegenType() == 1) {
+			worldHandler.getRegenHandler().regenThenRespawn();
+		} else {
+			respawnDragons();
+		}
+	}
 
-    public void respawnLater() {
-        Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), new BukkitRunnable() {
+	public void respawnLater() {
+		Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), new BukkitRunnable() {
 
-            @Override
-            public void run() {
-                respawn();
-            }
-        }, worldHandler.getConfig().getRandomRespawnTimer() * 20L);
-    }
+			@Override
+			public void run() {
+				respawn();
+			}
+		}, worldHandler.getConfig().getRandomRespawnTimer() * 20L);
+	}
 
-    /*package*/ void respawnNoRegen() {
-        respawnDragons();
-    }
+	/*package*/ void respawnNoRegen() {
+		respawnDragons();
+	}
 
-    private void respawnDragons() {
-        final int nbAlive = worldHandler.getNumberOfAliveEnderDragons();
-        final int respawnNumber = worldHandler.getConfig().getRespawnNumber();
-        int respawning = 0;
-        for (int i = nbAlive; i < respawnNumber; i++) {
-            respawnDragon();
-            respawning++;
-        }
-        if (respawning > 0) {
-            worldHandler.getPlugin()
-                        .broadcastMessage(MessageId.theEndAgain_respawned,
-                                          Integer.toString(respawning),
-                                          worldHandler.getEndWorld().getName());
-        }
-    }
+	private void respawnDragons() {
+		final int nbAlive = worldHandler.getNumberOfAliveEnderDragons();
+		final int respawnNumber = worldHandler.getConfig().getRespawnNumber();
+		int respawning = 0;
+		for (int i = nbAlive; i < respawnNumber; i++) {
+			respawnDragon();
+			respawning++;
+		}
+		if (respawning > 0) {
+			worldHandler.getPlugin()
+			            .broadcastMessage(MessageId.theEndAgain_respawned,
+			                              Integer.toString(respawning),
+			                              worldHandler.getEndWorld().getName());
+		}
+	}
 
-    private void respawnDragon() {
-        final World world = worldHandler.getEndWorld();
-        final EndChunks chunks = worldHandler.getChunks();
-        // Create a random location near the center
-        final int x = rand.nextInt(81) - 40; // [-40;40]
-        final int y = 100 + rand.nextInt(21); // [100;120]
-        final int z = rand.nextInt(81) - 40; // [-40;40]
-        final Location loc = new Location(world, x, y, z);
+	private void respawnDragon() {
+		final World world = worldHandler.getEndWorld();
+		final EndChunks chunks = worldHandler.getChunks();
+		// Create a random location near the center
+		final int x = rand.nextInt(81) - 40; // [-40;40]
+		final int y = 100 + rand.nextInt(21); // [100;120]
+		final int z = rand.nextInt(81) - 40; // [-40;40]
+		final Location loc = new Location(world, x, y, z);
 
-        final Chunk chunk = loc.getChunk();
-        final EndChunk endChunk = chunks.getChunk(world.getName(), chunk.getX(), chunk.getZ());
-        if (endChunk != null && endChunk.hasToBeRegen()) {
-            world.regenerateChunk(chunk.getX(), chunk.getZ());
-            endChunk.setToBeRegen(false);
-        }
+		for (int a = (x >> 4) - 1; a < (x >> 4) + 1; a++) {
+			for (int b = (z >> 4) - 1; b < (z >> 4) + 1; b++) {
+				final Chunk chunk = world.getChunkAt(a, b);
+				final EndChunk endChunk = chunks.getChunk(world.getName(), chunk.getX(), chunk.getZ());
+				if (endChunk != null && endChunk.hasToBeRegen()) {
+					world.regenerateChunk(chunk.getX(), chunk.getZ());
+					endChunk.setToBeRegen(false);
+				}
+			}
+		}
 
-        Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), new BukkitRunnable() {
+		Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), new BukkitRunnable() {
 
-            @Override
-            public void run() {
-                world.spawnEntity(loc, EntityType.ENDER_DRAGON);
-            }
-        }, EndWorldHandler.REGEN_TO_RESPAWN_DELAY);
-    }
+			@Override
+			public void run() {
+				world.spawnEntity(loc, EntityType.ENDER_DRAGON);
+			}
+		}, EndWorldHandler.REGEN_TO_RESPAWN_DELAY);
+	}
 
 }

@@ -9,42 +9,42 @@ import java.util.Set;
 
 public class ExtendedPlayerMoveEvent extends AbstractExtendedEvent {
 
-    private final GeneralCuboid      fromCuboid;
-    private final Set<GeneralCuboid> fromCuboids;
-    private final GeneralCuboid      toCuboid;
-    private final Set<GeneralCuboid> toCuboids;
-    private       boolean            customCancelled;
+	private final GeneralCuboid      fromCuboid;
+	private final Set<GeneralCuboid> fromCuboids;
+	private final GeneralCuboid      toCuboid;
+	private final Set<GeneralCuboid> toCuboids;
+	private       boolean            customCancelled;
 
-    public ExtendedPlayerMoveEvent(final CuboidDB db, final PlayerMoveEvent event) {
-        super(event);
-        fromCuboids = db.getAllByLoc(event.getFrom());
-        fromCuboid = db.getPrior(fromCuboids);
-        toCuboids = db.getAllByLoc(event.getTo());
-        toCuboid = db.getPrior(toCuboids);
-        customCancelled = false;
-    }
+	public ExtendedPlayerMoveEvent(final CuboidDB db, final PlayerMoveEvent event) {
+		super(event);
+		fromCuboids = db.getAllByLoc(event.getFrom());
+		fromCuboid = db.getPrior(fromCuboids);
+		toCuboids = db.getAllByLoc(event.getTo());
+		toCuboid = db.getPrior(toCuboids);
+		customCancelled = false;
+	}
 
-    public boolean isCustomCancelled() {
-        return customCancelled;
-    }
+	public boolean isCustomCancelled() {
+		return customCancelled;
+	}
 
-    public void setCustomCancelled(boolean customCancelled) {
-        this.customCancelled = customCancelled;
-    }
+	public void setCustomCancelled(boolean customCancelled) {
+		this.customCancelled = customCancelled;
+	}
 
-    public GeneralCuboid getFromCuboid() {
-        return fromCuboid;
-    }
+	public GeneralCuboid getFromCuboid() {
+		return fromCuboid;
+	}
 
-    public Set<GeneralCuboid> getFromCuboids() {
-        return fromCuboids;
-    }
+	public Set<GeneralCuboid> getFromCuboids() {
+		return fromCuboids;
+	}
 
-    public GeneralCuboid getToCuboid() {
-        return toCuboid;
-    }
+	public GeneralCuboid getToCuboid() {
+		return toCuboid;
+	}
 
-    public Set<GeneralCuboid> getToCuboids() {
-        return toCuboids;
-    }
+	public Set<GeneralCuboid> getToCuboids() {
+		return toCuboids;
+	}
 }

@@ -1,2 +1,2 @@
-Bukkit: 1.5.1-R1.0
-TagAPI: 2.3
+Bukkit: 1.6.2-R0.1
+TagAPI: 2.5

@@ -5,9 +5,9 @@ import org.bukkit.event.Listener;
 /** @author Ribesg */
 public class EmergencyListener implements Listener {
 
-    private NPlugin plugin;
+	private NPlugin plugin;
 
-    public EmergencyListener(NPlugin instance) {
-        this.plugin = instance;
-    }
+	public EmergencyListener(NPlugin instance) {
+		this.plugin = instance;
+	}
 }

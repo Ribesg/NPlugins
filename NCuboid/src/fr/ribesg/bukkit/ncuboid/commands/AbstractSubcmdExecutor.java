@@ -7,27 +7,27 @@ import java.util.Arrays;
 
 public abstract class AbstractSubcmdExecutor {
 
-    private final NCuboid       plugin;
-    private final CommandSender sender;
-    private final String[]      args;
+	private final NCuboid       plugin;
+	private final CommandSender sender;
+	private final String[]      args;
 
-    public AbstractSubcmdExecutor(final NCuboid instance, final CommandSender sender, final String[] superCommandArgs) {
-        plugin = instance;
-        this.sender = sender;
-        args = Arrays.copyOfRange(superCommandArgs, 1, superCommandArgs.length);
-    }
+	public AbstractSubcmdExecutor(final NCuboid instance, final CommandSender sender, final String[] superCommandArgs) {
+		plugin = instance;
+		this.sender = sender;
+		args = Arrays.copyOfRange(superCommandArgs, 1, superCommandArgs.length);
+	}
 
-    public abstract boolean exec();
+	public abstract boolean exec();
 
-    public String[] getArgs() {
-        return args;
-    }
+	public String[] getArgs() {
+		return args;
+	}
 
-    public NCuboid getPlugin() {
-        return plugin;
-    }
+	public NCuboid getPlugin() {
+		return plugin;
+	}
 
-    public CommandSender getSender() {
-        return sender;
-    }
+	public CommandSender getSender() {
+		return sender;
+	}
 }

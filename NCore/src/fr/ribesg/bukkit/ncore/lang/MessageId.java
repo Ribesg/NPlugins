@@ -3,179 +3,214 @@ package fr.ribesg.bukkit.ncore.lang;
 /** @author Ribesg */
 public enum MessageId {
 
-    // ######################### //
-    // ## Not plugin-specific ## //
-    // ######################### //
+	// ######################### //
+	// ## Not plugin-specific ## //
+	// ######################### //
 
-    noPermissionForCommand,
-    noPlayerFoundForGivenName,
+	noPermissionForCommand,
+	noPlayerFoundForGivenName,
 
-    cmdOnlyAvailableForPlayers,
+	cmdOnlyAvailableForPlayers,
 
-    cmdReloadConfig,
-    cmdReloadMessages,
+	cmdReloadConfig,
+	cmdReloadMessages,
 
-    incorrectValueInConfiguration,
+	incorrectValueInConfiguration,
 
-    // ##################### //
-    // ## NCuboid related ## //
-    // ##################### //
+	// ##################### //
+	// ## NCuboid related ## //
+	// ##################### //
 
-    cuboid_actionCancelledByCuboid,
+	cuboid_actionCancelledByCuboid,
 
-    cuboid_blockInSelection,
-    cuboid_blockNotInSelection,
-    cuboid_blockNotProtected,
-    cuboid_blockProtectedMultipleCuboids,
-    cuboid_blockProtectedOneCuboid,
-    cuboid_firstPointSelected,
-    cuboid_noSelection,
-    cuboid_secondPointSelected,
-    cuboid_selectionReset,
+	cuboid_blockInSelection,
+	cuboid_blockNotInSelection,
+	cuboid_blockNotProtected,
+	cuboid_blockProtectedMultipleCuboids,
+	cuboid_blockProtectedOneCuboid,
+	cuboid_firstPointSelected,
+	cuboid_noSelection,
+	cuboid_secondPointSelected,
+	cuboid_selectionReset,
 
-    cuboid_cmdReloadCuboids,
+	cuboid_cmdReloadCuboids,
 
-    cuboid_cmdCreateAlreadyExists,
-    cuboid_cmdCreateCreated,
-    cuboid_cmdCreateNoValidSelection,
+	cuboid_cmdCreateAlreadyExists,
+	cuboid_cmdCreateCreated,
+	cuboid_cmdCreateNoValidSelection,
 
-    cuboid_cmdDeleteDoesNotExist,
-    cuboid_cmdDeleteDeleted,
-    cuboid_cmdDeleteNoPermission,
+	cuboid_cmdDeleteDoesNotExist,
+	cuboid_cmdDeleteDeleted,
+	cuboid_cmdDeleteNoPermission,
 
-    // ########################## //
-    // ## NTheEndAgain related ## //
-    // ########################## //
+	// ########################## //
+	// ## NTheEndAgain related ## //
+	// ########################## //
 
-    theEndAgain_unkownSubCmd,
+	theEndAgain_unkownSubCmd,
 
-    theEndAgain_unknownWorld,
-    theEndAgain_regenerating,
-    theEndAgain_respawned,
-    theEndAgain_nbAlive,
-    theEndAgain_notInAnEndWorld,
-    theEndAgain_missingWorldArg,
+	theEndAgain_unknownWorld,
+	theEndAgain_regenerating,
+	theEndAgain_respawned,
+	theEndAgain_nbAlive,
+	theEndAgain_notInAnEndWorld,
+	theEndAgain_missingWorldArg,
 
-    theEndAgain_protectedChunkInfo,
-    theEndAgain_protectedChunkProtect,
-    theEndAgain_protectedChunkUnprotect,
-    theEndAgain_unprotectedChunkInfo,
-    theEndAgain_unprotectedChunkProtect,
-    theEndAgain_unprotectedChunkUnprotect,
+	theEndAgain_protectedChunkInfo,
+	theEndAgain_protectedChunkProtect,
+	theEndAgain_protectedChunkUnprotect,
+	theEndAgain_unprotectedChunkInfo,
+	theEndAgain_unprotectedChunkProtect,
+	theEndAgain_unprotectedChunkUnprotect,
 
-    theEndAgain_worldRegenerating,
+	theEndAgain_worldRegenerating,
 
-    theEndAgain_receivedXP,
-    theEndAgain_receivedDragonEgg,
-    theEndAgain_droppedDragonEgg,
+	theEndAgain_receivedXP,
+	theEndAgain_receivedDragonEgg,
+	theEndAgain_droppedDragonEgg,
 
-    // #################### //
-    // ## NWorld related ## //
-    // #################### //
+	// #################### //
+	// ## NWorld related ## //
+	// #################### //
 
-    world_availableWorlds,
-    world_teleportedToWorld,
+	world_availableWorlds,
+	world_teleportedToWorld,
 
-    world_unknownWorld,
-    world_notLoaded,
-    world_warpToThisWorldDisallowed,
+	world_unknownWorld,
+	world_notLoaded,
+	world_warpToThisWorldDisallowed,
 
-    world_alreadyExists,
-    world_alreadyLoaded,
+	world_alreadyExists,
+	world_alreadyLoaded,
 
-    world_creatingWorldMayBeLaggy,
-    world_created,
+	world_creatingWorldMayBeLaggy,
+	world_created,
 
-    world_loadingWorldMayBeLaggy,
-    world_loaded,
+	world_loadingWorldMayBeLaggy,
+	world_loaded,
 
-    world_unloadingWorldMayBeLaggy,
-    world_unloaded,
+	world_unloadingWorldMayBeLaggy,
+	world_unloaded,
 
-    world_worldHiddenTrue,
-    world_worldHiddenFalse,
+	world_worldHiddenTrue,
+	world_worldHiddenFalse,
 
-    world_changedWorldRequiredPermission,
+	world_changedWorldRequiredPermission,
 
-    world_worldNetherEnabled,
-    world_worldNetherDisabled,
-    world_worldNetherAlreadyEnabled,
-    world_worldNetherAlreadyDisabled,
+	world_worldNetherEnabled,
+	world_worldNetherDisabled,
+	world_worldNetherAlreadyEnabled,
+	world_worldNetherAlreadyDisabled,
 
-    world_worldEndEnabled,
-    world_worldEndDisabled,
-    world_worldEndAlreadyEnabled,
-    world_worldEndAlreadyDisabled,
+	world_worldEndEnabled,
+	world_worldEndDisabled,
+	world_worldEndAlreadyEnabled,
+	world_worldEndAlreadyDisabled,
 
-    world_alreadyAllowedWorldWarp,
-    world_allowedWorldWarp,
-    world_alreadyDisallowedWorldWarp,
-    world_disallowedWorldWarp,
+	world_alreadyAllowedWorldWarp,
+	world_allowedWorldWarp,
+	world_alreadyDisallowedWorldWarp,
+	world_disallowedWorldWarp,
 
-    world_teleportingToSpawn,
-    world_settingSpawnPoint,
+	world_teleportingToSpawn,
+	world_settingSpawnPoint,
 
-    world_teleportedToWarp,
+	world_teleportedToWarp,
 
-    world_availableWarps,
+	world_availableWarps,
 
-    world_warpToThisWarpDisallowed,
+	world_warpToThisWarpDisallowed,
 
-    world_unknownWarp,
+	world_unknownWarp,
 
-    world_warpHiddenTrue,
-    world_warpHiddenFalse,
+	world_warpHiddenTrue,
+	world_warpHiddenFalse,
 
-    world_changedWarpRequiredPermission,
+	world_changedWarpRequiredPermission,
 
-    world_settingWarpPoint,
-    world_warpRemoved,
+	world_settingWarpPoint,
+	world_warpRemoved,
 
-    world_teleportedBecauseOfWorldUnload,
+	world_teleportedBecauseOfWorldUnload,
 
-    // ################### //
-    // ## NTalk related ## //
-    // ################### //
+	// ################### //
+	// ## NTalk related ## //
+	// ################### //
 
-    talk_nobodyToRespond,
+	talk_nobodyToRespond,
 
-    talk_youNickNamed,
-    talk_youDeNickNamed,
-    talk_youWereNickNamed,
-    talk_youWereDeNickNamed,
+	talk_youNickNamed,
+	talk_youDeNickNamed,
+	talk_youWereNickNamed,
+	talk_youWereDeNickNamed,
 
-    // ##################### //
-    // ## NPlayer related ## //
-    // ##################### //
+	// ##################### //
+	// ## NPlayer related ## //
+	// ##################### //
 
-    player_welcomeToTheServer,
-    player_registerFirst,
-    player_loginFirst,
-    player_welcomeBack,
-    player_wrongPassword,
-    player_passwordChanged,
-    player_alreadyRegistered,
-    player_autoLogoutEnabled,
-    player_autoLogoutDisabled,
-    player_loggedOut,
-    player_unknownUser,
-    player_userHasNoHome,
-    player_teleportingToUserHome,
-    player_youHaveNoHome,
-    player_teleportingToYourHome,
-    player_userHomeSet,
-    player_yourHomeSet,
+	player_welcomeToTheServer,
+	player_registerFirst,
+	player_loginFirst,
+	player_welcomeBack,
+	player_wrongPassword,
+	player_passwordChanged,
+	player_alreadyRegistered,
+	player_autoLogoutEnabled,
+	player_autoLogoutDisabled,
+	player_loggedOut,
+	player_unknownUser,
+	player_userHasNoHome,
+	player_teleportingToUserHome,
+	player_youHaveNoHome,
+	player_teleportingToYourHome,
+	player_userHomeSet,
+	player_yourHomeSet,
 
-    // ############################ //
-    // ## NENchantingEgg related ## //
-    // ############################ //
+	// ############################ //
+	// ## NEnchantingEgg related ## //
+	// ############################ //
 
-    egg_altarCreated,
-    egg_altarDestroyed,
-    egg_altarProtectedSkullAtNight,
-    egg_altarProtectedBlock,
-    egg_cantPlaceOnAltar,
-    egg_altarTooClose,
-    egg_altarEggProvided,
+	egg_altarCreated,
+	egg_altarDestroyed,
+	egg_altarProtectedSkullAtNight,
+	egg_altarProtectedBlock,
+	egg_cantPlaceOnAltar,
+	egg_altarTooClose,
+	egg_altarEggProvided,
+
+	// ###################### //
+	// ## NGeneral related ## //
+	// ###################### //
+
+	general_god_enabled,
+	general_god_disabled,
+	general_god_enabledBy,
+	general_god_disabledBy,
+	general_god_enabledFor,
+	general_god_disabledFor,
+
+	general_fly_enabled,
+	general_fly_disabled,
+	general_fly_enabledBy,
+	general_fly_disabledBy,
+	general_fly_enabledFor,
+	general_fly_disabledFor,
+
+	general_flyspeed_set,
+	general_flyspeed_reset,
+	general_flyspeed_setFor,
+	general_flyspeed_setBy,
+
+	general_afk_nowAfk,
+	general_afk_noLongerAfk,
+	general_afk_nowAfkBroadcast,
+	general_afk_noLongerAfkBroadcast,
+	general_afk_nowAfkBroadcastReason,
+	general_afk_noLongerAfkBroadcastReason,
+
+	general_signcolors_permissionDenied,
+
+	general_protectionsign_accessDenied,
+	general_protectionsign_breakDenied,
 
 }

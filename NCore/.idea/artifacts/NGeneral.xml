@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="NGeneral">
+    <output-path>$PROJECT_DIR$/../out/</output-path>
+    <root id="archive" name="NGeneral.jar">
+      <element id="module-output" name="NGeneral" />
+      <element id="file-copy" path="$PROJECT_DIR$/../NGeneral/plugin.yml" />
+    </root>
+  </artifact>
+</component>

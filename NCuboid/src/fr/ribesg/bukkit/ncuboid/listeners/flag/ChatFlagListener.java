@@ -10,15 +10,15 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatFlagListener extends AbstractListener {
 
-    public ChatFlagListener(final NCuboid instance) {
-        super(instance);
-    }
+	public ChatFlagListener(final NCuboid instance) {
+		super(instance);
+	}
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerChat(final AsyncPlayerChatEvent event) {
-        final GeneralCuboid c = getPlugin().getDb().getPriorByLoc(event.getPlayer().getLocation());
-        if (c.getFlag(Flag.CHAT) && !c.isAllowedPlayer(event.getPlayer())) {
-            event.setCancelled(true);
-        }
-    }
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerChat(final AsyncPlayerChatEvent event) {
+		final GeneralCuboid c = getPlugin().getDb().getPriorByLoc(event.getPlayer().getLocation());
+		if (c.getFlag(Flag.CHAT) && !c.isAllowedPlayer(event.getPlayer())) {
+			event.setCancelled(true);
+		}
+	}
 }

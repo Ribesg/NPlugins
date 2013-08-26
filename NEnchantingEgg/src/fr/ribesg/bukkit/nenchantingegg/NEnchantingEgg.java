@@ -21,156 +21,156 @@ import java.io.IOException;
 
 public class NEnchantingEgg extends EnchantingEggNode {
 
-    // Configs
-    private Messages messages;
-    private Config   pluginConfig;
+	// Configs
+	private Messages messages;
+	private Config   pluginConfig;
 
-    // Useful Nodes
-    // // None
+	// Useful Nodes
+	// // None
 
-    // Actual plugin data
-    private Altars altars;
+	// Actual plugin data
+	private Altars altars;
 
-    // Transitions
-    private InactiveToActiveTransition          inactiveToActiveTransition;
-    private ActiveToEggProvidedTransition       activeToEggProvidedTransition;
-    private EggProvidedToItemProvidedTransition eggProvidedToItemProvidedTransition;
-    private ItemProvidedToLockedTransition      itemProvidedToLockedTransition;
+	// Transitions
+	private InactiveToActiveTransition          inactiveToActiveTransition;
+	private ActiveToEggProvidedTransition       activeToEggProvidedTransition;
+	private EggProvidedToItemProvidedTransition eggProvidedToItemProvidedTransition;
+	private ItemProvidedToLockedTransition      itemProvidedToLockedTransition;
 
-    // Listeners
-    private BlockListener  blockListener;
-    private ItemListener   itemListener;
-    private PlayerListener playerListener;
+	// Listeners
+	private BlockListener  blockListener;
+	private ItemListener   itemListener;
+	private PlayerListener playerListener;
 
-    @Override
-    protected String getMinCoreVersion() {
-        return "0.3.2";
-    }
+	@Override
+	protected String getMinCoreVersion() {
+		return "0.3.3";
+	}
 
-    @Override
-    public boolean onNodeEnable() {
-        // Messages first !
-        try {
-            if (!getDataFolder().isDirectory()) {
-                getDataFolder().mkdir();
-            }
-            messages = new Messages();
-            messages.loadMessages(this);
-        } catch (final IOException e) {
-            getLogger().severe("An error occured, stacktrace follows:");
-            e.printStackTrace();
-            getLogger().severe("This error occured when NEnchantingEgg tried to load messages.yml");
-            return false;
-        }
+	@Override
+	public boolean onNodeEnable() {
+		// Messages first !
+		try {
+			if (!getDataFolder().isDirectory()) {
+				getDataFolder().mkdir();
+			}
+			messages = new Messages();
+			messages.loadMessages(this);
+		} catch (final IOException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NEnchantingEgg tried to load messages.yml");
+			return false;
+		}
 
-        inactiveToActiveTransition = new InactiveToActiveTransition(this);
-        activeToEggProvidedTransition = new ActiveToEggProvidedTransition(this);
-        eggProvidedToItemProvidedTransition = new EggProvidedToItemProvidedTransition(this);
-        itemProvidedToLockedTransition = new ItemProvidedToLockedTransition(this);
+		inactiveToActiveTransition = new InactiveToActiveTransition(this);
+		activeToEggProvidedTransition = new ActiveToEggProvidedTransition(this);
+		eggProvidedToItemProvidedTransition = new EggProvidedToItemProvidedTransition(this);
+		itemProvidedToLockedTransition = new ItemProvidedToLockedTransition(this);
 
-        altars = new Altars(this);
+		altars = new Altars(this);
 
-        // Config
-        try {
-            pluginConfig = new Config(this);
-            pluginConfig.loadConfig();
-        } catch (final IOException | InvalidConfigurationException e) {
-            getLogger().severe("An error occured, stacktrace follows:");
-            e.printStackTrace();
-            getLogger().severe("This error occured when NEnchantingEgg tried to load config.yml");
-            return false;
-        }
+		// Config
+		try {
+			pluginConfig = new Config(this);
+			pluginConfig.loadConfig();
+		} catch (final IOException | InvalidConfigurationException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NEnchantingEgg tried to load config.yml");
+			return false;
+		}
 
-        altars.onEnable();
+		altars.onEnable();
 
-        // Listener
-        final PluginManager pm = getServer().getPluginManager();
-        blockListener = new BlockListener(this);
-        itemListener = new ItemListener(this);
-        playerListener = new PlayerListener(this);
-        pm.registerEvents(blockListener, this);
-        pm.registerEvents(itemListener, this);
-        pm.registerEvents(playerListener, this);
+		// Listener
+		final PluginManager pm = getServer().getPluginManager();
+		blockListener = new BlockListener(this);
+		itemListener = new ItemListener(this);
+		playerListener = new PlayerListener(this);
+		pm.registerEvents(blockListener, this);
+		pm.registerEvents(itemListener, this);
+		pm.registerEvents(playerListener, this);
 
-        // Commands
-        //getCommand("theCommand").setExecutor(new NCommandExecutor(this));
+		// Commands
+		//getCommand("theCommand").setExecutor(new NCommandExecutor(this));
 
-        // Tasks
-        Bukkit.getScheduler().runTaskTimer(this, new TimeListenerTask(this), 0, 20);
+		// Tasks
+		Bukkit.getScheduler().runTaskTimer(this, new TimeListenerTask(this), 0, 20);
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public void onNodeDisable() {
-        try {
-            getPluginConfig().writeConfig();
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
+	@Override
+	public void onNodeDisable() {
+		try {
+			getPluginConfig().writeConfig();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
 
-        altars.onDisable();
+		altars.onDisable();
 
-        altars = null;
+		altars = null;
 
-        Bukkit.getScheduler().cancelTasks(this);
-    }
+		Bukkit.getScheduler().cancelTasks(this);
+	}
 
-    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
-    @Override
-    protected void handleOtherNodes() {
-        // Nothing to do here for now
-    }
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	@Override
+	protected void handleOtherNodes() {
+		// Nothing to do here for now
+	}
 
-    public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-        final String[] m = messages.get(messageId, args);
-        to.sendMessage(m);
-    }
+	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
+		final String[] m = messages.get(messageId, args);
+		to.sendMessage(m);
+	}
 
-    public void broadcastMessage(final MessageId messageId, final String... args) {
-        final String[] m = messages.get(messageId, args);
-        for (final String mes : m) {
-            getServer().broadcastMessage(mes);
-        }
-    }
+	public void broadcastMessage(final MessageId messageId, final String... args) {
+		final String[] m = messages.get(messageId, args);
+		for (final String mes : m) {
+			getServer().broadcastMessage(mes);
+		}
+	}
 
-    public ActiveToEggProvidedTransition getActiveToEggProvidedTransition() {
-        return activeToEggProvidedTransition;
-    }
+	public ActiveToEggProvidedTransition getActiveToEggProvidedTransition() {
+		return activeToEggProvidedTransition;
+	}
 
-    public Altars getAltars() {
-        return altars;
-    }
+	public Altars getAltars() {
+		return altars;
+	}
 
-    public EggProvidedToItemProvidedTransition getEggProvidedToItemProvidedTransition() {
-        return eggProvidedToItemProvidedTransition;
-    }
+	public EggProvidedToItemProvidedTransition getEggProvidedToItemProvidedTransition() {
+		return eggProvidedToItemProvidedTransition;
+	}
 
-    public InactiveToActiveTransition getInactiveToActiveTransition() {
-        return inactiveToActiveTransition;
-    }
+	public InactiveToActiveTransition getInactiveToActiveTransition() {
+		return inactiveToActiveTransition;
+	}
 
-    public ItemProvidedToLockedTransition getItemProvidedToLockedTransition() {
-        return itemProvidedToLockedTransition;
-    }
+	public ItemProvidedToLockedTransition getItemProvidedToLockedTransition() {
+		return itemProvidedToLockedTransition;
+	}
 
-    public BlockListener getBlockListener() {
-        return blockListener;
-    }
+	public BlockListener getBlockListener() {
+		return blockListener;
+	}
 
-    public ItemListener getItemListener() {
-        return itemListener;
-    }
+	public ItemListener getItemListener() {
+		return itemListener;
+	}
 
-    public PlayerListener getPlayerListener() {
-        return playerListener;
-    }
+	public PlayerListener getPlayerListener() {
+		return playerListener;
+	}
 
-    public Messages getMessages() {
-        return messages;
-    }
+	public Messages getMessages() {
+		return messages;
+	}
 
-    public Config getPluginConfig() {
-        return pluginConfig;
-    }
+	public Config getPluginConfig() {
+		return pluginConfig;
+	}
 }

@@ -12,51 +12,51 @@ import java.util.Set;
 
 public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 
-    private final Set<GeneralCuboid> entityCuboids;
-    private       Set<GeneralCuboid> damagerCuboids;
-    private final GeneralCuboid      entityCuboid;
-    private       GeneralCuboid      damagerCuboid;
+	private final Set<GeneralCuboid> entityCuboids;
+	private       Set<GeneralCuboid> damagerCuboids;
+	private final GeneralCuboid      entityCuboid;
+	private       GeneralCuboid      damagerCuboid;
 
-    private boolean damagerProjectile = false;
-    private Entity shooter;
+	private boolean damagerProjectile = false;
+	private Entity shooter;
 
-    public ExtendedEntityDamageEvent(final CuboidDB db, final EntityDamageEvent event) {
-        super(event);
-        entityCuboids = db.getAllByLoc(event.getEntity().getLocation());
-        entityCuboid = db.getPrior(entityCuboids);
-        if (event instanceof EntityDamageByEntityEvent) {
-            Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
-            if (damager instanceof Projectile) {
-                damager = ((Projectile) damager).getShooter();
-                damagerProjectile = true;
-                shooter = damager;
-            }
-            damagerCuboids = db.getAllByLoc(damager.getLocation());
-            damagerCuboid = db.getPrior(damagerCuboids);
-        }
-    }
+	public ExtendedEntityDamageEvent(final CuboidDB db, final EntityDamageEvent event) {
+		super(event);
+		entityCuboids = db.getAllByLoc(event.getEntity().getLocation());
+		entityCuboid = db.getPrior(entityCuboids);
+		if (event instanceof EntityDamageByEntityEvent) {
+			Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+			if (damager instanceof Projectile) {
+				damager = ((Projectile) damager).getShooter();
+				damagerProjectile = true;
+				shooter = damager;
+			}
+			damagerCuboids = db.getAllByLoc(damager.getLocation());
+			damagerCuboid = db.getPrior(damagerCuboids);
+		}
+	}
 
-    public GeneralCuboid getDamagerCuboid() {
-        return damagerCuboid;
-    }
+	public GeneralCuboid getDamagerCuboid() {
+		return damagerCuboid;
+	}
 
-    public Set<GeneralCuboid> getDamagerCuboids() {
-        return damagerCuboids;
-    }
+	public Set<GeneralCuboid> getDamagerCuboids() {
+		return damagerCuboids;
+	}
 
-    public boolean isDamagerProjectile() {
-        return damagerProjectile;
-    }
+	public boolean isDamagerProjectile() {
+		return damagerProjectile;
+	}
 
-    public GeneralCuboid getEntityCuboid() {
-        return entityCuboid;
-    }
+	public GeneralCuboid getEntityCuboid() {
+		return entityCuboid;
+	}
 
-    public Set<GeneralCuboid> getEntityCuboids() {
-        return entityCuboids;
-    }
+	public Set<GeneralCuboid> getEntityCuboids() {
+		return entityCuboids;
+	}
 
-    public Entity getShooter() {
-        return shooter;
-    }
+	public Entity getShooter() {
+		return shooter;
+	}
 }

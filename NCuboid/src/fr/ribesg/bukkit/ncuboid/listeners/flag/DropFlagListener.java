@@ -10,15 +10,15 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class DropFlagListener extends AbstractListener {
 
-    public DropFlagListener(final NCuboid instance) {
-        super(instance);
-    }
+	public DropFlagListener(final NCuboid instance) {
+		super(instance);
+	}
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerDropItem(final ExtendedPlayerDropItemEvent ext) {
-        final PlayerDropItemEvent event = (PlayerDropItemEvent) ext.getBaseEvent();
-        if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.DROP) && !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
-            event.setCancelled(true);
-        }
-    }
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerDropItem(final ExtendedPlayerDropItemEvent ext) {
+		final PlayerDropItemEvent event = (PlayerDropItemEvent) ext.getBaseEvent();
+		if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.DROP) && !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
+			event.setCancelled(true);
+		}
+	}
 }

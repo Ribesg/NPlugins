@@ -13,130 +13,130 @@ import java.io.IOException;
 
 public class NPlayer extends PlayerNode {
 
-    // Configs
-    private Messages messages;
-    private Config   pluginConfig;
+	// Configs
+	private Messages messages;
+	private Config   pluginConfig;
 
-    // Useful Nodes
-    // // None
+	// Useful Nodes
+	// // None
 
-    // Plugin Data
-    private UserDB               userDb;
-    private LoggedOutUserHandler loggedOutUserHandler;
+	// Plugin Data
+	private UserDB               userDb;
+	private LoggedOutUserHandler loggedOutUserHandler;
 
-    @Override
-    protected String getMinCoreVersion() {
-        return "0.3.2";
-    }
+	@Override
+	protected String getMinCoreVersion() {
+		return "0.3.2";
+	}
 
-    @Override
-    public boolean onNodeEnable() {
-        // Messages first !
-        try {
-            if (!getDataFolder().isDirectory()) {
-                getDataFolder().mkdir();
-            }
-            messages = new Messages();
-            messages.loadMessages(this);
-        } catch (final IOException e) {
-            getLogger().severe("An error occured, stacktrace follows:");
-            e.printStackTrace();
-            getLogger().severe("This error occured when NPlayer tried to load messages.yml");
-            return false;
-        }
+	@Override
+	public boolean onNodeEnable() {
+		// Messages first !
+		try {
+			if (!getDataFolder().isDirectory()) {
+				getDataFolder().mkdir();
+			}
+			messages = new Messages();
+			messages.loadMessages(this);
+		} catch (final IOException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NPlayer tried to load messages.yml");
+			return false;
+		}
 
-        // Config
-        try {
-            pluginConfig = new Config(this);
-            pluginConfig.loadConfig();
-        } catch (final IOException | InvalidConfigurationException e) {
-            getLogger().severe("An error occured, stacktrace follows:");
-            e.printStackTrace();
-            getLogger().severe("This error occured when NPlayer tried to load config.yml");
-            return false;
-        }
+		// Config
+		try {
+			pluginConfig = new Config(this);
+			pluginConfig.loadConfig();
+		} catch (final IOException | InvalidConfigurationException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NPlayer tried to load config.yml");
+			return false;
+		}
 
-        // Commands
-        PlayerCommandExecutor executor = new PlayerCommandExecutor(this);
-        getCommand("login").setExecutor(executor);
-        getCommand("register").setExecutor(executor);
-        getCommand("logout").setExecutor(executor);
-        //getCommand("info").setExecutor(executor);
-        getCommand("home").setExecutor(executor);
-        getCommand("sethome").setExecutor(executor);
+		// Commands
+		PlayerCommandHandler executor = new PlayerCommandHandler(this);
+		getCommand("login").setExecutor(executor);
+		getCommand("register").setExecutor(executor);
+		getCommand("logout").setExecutor(executor);
+		//getCommand("info").setExecutor(executor);
+		getCommand("home").setExecutor(executor);
+		getCommand("sethome").setExecutor(executor);
 
-        loggedOutUserHandler = new LoggedOutUserHandler(this);
+		loggedOutUserHandler = new LoggedOutUserHandler(this);
 
-        // Listener
-        final PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(loggedOutUserHandler, this);
-        pm.registerEvents(executor, this);
+		// Listener
+		final PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(loggedOutUserHandler, this);
+		pm.registerEvents(executor, this);
 
-        userDb = new UserDB(this);
-        try {
-            userDb.loadConfig();
-        } catch (IOException | InvalidConfigurationException e) {
-            getLogger().severe("An error occured, stacktrace follows:");
-            e.printStackTrace();
-            getLogger().severe("This error occured when NPlayer tried to load userDB.yml");
-            return false;
-        }
+		userDb = new UserDB(this);
+		try {
+			userDb.loadConfig();
+		} catch (IOException | InvalidConfigurationException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NPlayer tried to load userDB.yml");
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public void onNodeDisable() {
-        try {
-            getPluginConfig().writeConfig();
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            userDb.saveConfig();
-        } catch (IOException e) {
-            getLogger().severe("An error occured, stacktrace follows:");
-            e.printStackTrace();
-            getLogger().severe("This error occured when NPlayer tried to save userDB.yml");
-        }
-    }
+	@Override
+	public void onNodeDisable() {
+		try {
+			getPluginConfig().writeConfig();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			userDb.saveConfig();
+		} catch (IOException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NPlayer tried to save userDB.yml");
+		}
+	}
 
-    @Override
-    protected void linkCore() {
-        getCore().setPlayerNode(this);
-    }
+	@Override
+	protected void linkCore() {
+		getCore().setPlayerNode(this);
+	}
 
-    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
-    @Override
-    protected void handleOtherNodes() {
-        // Nothing to do here for now
-    }
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	@Override
+	protected void handleOtherNodes() {
+		// Nothing to do here for now
+	}
 
-    public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-        final String[] m = messages.get(messageId, args);
-        to.sendMessage(m);
-    }
+	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
+		final String[] m = messages.get(messageId, args);
+		to.sendMessage(m);
+	}
 
-    public void broadcastMessage(final MessageId messageId, final String... args) {
-        final String[] m = messages.get(messageId, args);
-        for (final String mes : m) {
-            getServer().broadcastMessage(mes);
-        }
-    }
+	public void broadcastMessage(final MessageId messageId, final String... args) {
+		final String[] m = messages.get(messageId, args);
+		for (final String mes : m) {
+			getServer().broadcastMessage(mes);
+		}
+	}
 
-    public Messages getMessages() {
-        return messages;
-    }
+	public Messages getMessages() {
+		return messages;
+	}
 
-    public Config getPluginConfig() {
-        return pluginConfig;
-    }
+	public Config getPluginConfig() {
+		return pluginConfig;
+	}
 
-    public UserDB getUserDb() {
-        return userDb;
-    }
+	public UserDB getUserDb() {
+		return userDb;
+	}
 
-    public LoggedOutUserHandler getLoggedOutUserHandler() {
-        return loggedOutUserHandler;
-    }
+	public LoggedOutUserHandler getLoggedOutUserHandler() {
+		return loggedOutUserHandler;
+	}
 }

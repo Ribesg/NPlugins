@@ -1,5 +1,5 @@
 name: NCuboid
-version: 0.3.2
+version: 0.3.3
 description: Cuboid plugin for N plugin suite
 author: Ribesg
 website: http://www.ribesg.fr
@@ -7,7 +7,8 @@ main: fr.ribesg.bukkit.ncuboid.NCuboid
 
 load: POSTWORLD
 
-softdepend: [NCore,NWorld]
+depend: [NCore]
+softdepend: [NWorld]
 
 commands:
     cuboid:

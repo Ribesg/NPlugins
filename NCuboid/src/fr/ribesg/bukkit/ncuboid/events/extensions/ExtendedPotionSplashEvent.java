@@ -16,51 +16,51 @@ import java.util.Set;
 
 public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
 
-    private static Set<PotionEffectType> negativeEffects;
+	private static Set<PotionEffectType> negativeEffects;
 
-    private static Set<PotionEffectType> getNegativeEffects() {
-        if (negativeEffects == null) {
-            negativeEffects = new HashSet<PotionEffectType>();
-            negativeEffects.add(PotionEffectType.BLINDNESS);
-            negativeEffects.add(PotionEffectType.CONFUSION);
-            negativeEffects.add(PotionEffectType.HARM);
-            negativeEffects.add(PotionEffectType.HUNGER);
-            negativeEffects.add(PotionEffectType.POISON);
-            negativeEffects.add(PotionEffectType.SLOW);
-            negativeEffects.add(PotionEffectType.SLOW_DIGGING);
-            negativeEffects.add(PotionEffectType.WEAKNESS);
-            negativeEffects.add(PotionEffectType.WITHER);
-        }
-        return negativeEffects;
-    }
+	private static Set<PotionEffectType> getNegativeEffects() {
+		if (negativeEffects == null) {
+			negativeEffects = new HashSet<PotionEffectType>();
+			negativeEffects.add(PotionEffectType.BLINDNESS);
+			negativeEffects.add(PotionEffectType.CONFUSION);
+			negativeEffects.add(PotionEffectType.HARM);
+			negativeEffects.add(PotionEffectType.HUNGER);
+			negativeEffects.add(PotionEffectType.POISON);
+			negativeEffects.add(PotionEffectType.SLOW);
+			negativeEffects.add(PotionEffectType.SLOW_DIGGING);
+			negativeEffects.add(PotionEffectType.WEAKNESS);
+			negativeEffects.add(PotionEffectType.WITHER);
+		}
+		return negativeEffects;
+	}
 
-    private final Map<LivingEntity, GeneralCuboid> entityCuboidsMap;
-    private boolean hasNegativeEffect = false;
+	private final Map<LivingEntity, GeneralCuboid> entityCuboidsMap;
+	private boolean hasNegativeEffect = false;
 
-    public ExtendedPotionSplashEvent(final CuboidDB db, final PotionSplashEvent event) {
-        super(event);
-        final ThrownPotion potion = event.getPotion();
-        for (final PotionEffect e : potion.getEffects()) {
-            if (getNegativeEffects().contains(e.getType())) {
-                hasNegativeEffect = true;
-                break;
-            }
-        }
-        entityCuboidsMap = new HashMap<LivingEntity, GeneralCuboid>();
-        for (final LivingEntity e : event.getAffectedEntities()) {
-            final GeneralCuboid cuboid = db.getPriorByLoc(e.getLocation());
-            if (cuboid != null) {
-                entityCuboidsMap.put(e, cuboid);
-            }
-        }
+	public ExtendedPotionSplashEvent(final CuboidDB db, final PotionSplashEvent event) {
+		super(event);
+		final ThrownPotion potion = event.getPotion();
+		for (final PotionEffect e : potion.getEffects()) {
+			if (getNegativeEffects().contains(e.getType())) {
+				hasNegativeEffect = true;
+				break;
+			}
+		}
+		entityCuboidsMap = new HashMap<LivingEntity, GeneralCuboid>();
+		for (final LivingEntity e : event.getAffectedEntities()) {
+			final GeneralCuboid cuboid = db.getPriorByLoc(e.getLocation());
+			if (cuboid != null) {
+				entityCuboidsMap.put(e, cuboid);
+			}
+		}
 
-    }
+	}
 
-    public boolean hasNegativeEffect() {
-        return hasNegativeEffect;
-    }
+	public boolean hasNegativeEffect() {
+		return hasNegativeEffect;
+	}
 
-    public Map<LivingEntity, GeneralCuboid> getEntityCuboidsMap() {
-        return entityCuboidsMap;
-    }
+	public Map<LivingEntity, GeneralCuboid> getEntityCuboidsMap() {
+		return entityCuboidsMap;
+	}
 }

@@ -9,10 +9,10 @@ import fr.ribesg.bukkit.ncore.node.NPlugin;
  */
 public abstract class TheEndAgainNode extends NPlugin {
 
-    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-    @Override
-    protected void linkCore() {
-        getCore().setTheEndAgainNode(this);
-    }
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
+	@Override
+	protected void linkCore() {
+		getCore().setTheEndAgainNode(this);
+	}
 
 }

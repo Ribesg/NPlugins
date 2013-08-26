@@ -17,191 +17,191 @@ import java.util.Set;
 
 public class EndChunk {
 
-    private final EndChunks container;
+	private final EndChunks container;
 
-    private final ChunkCoord    coords;
-    private       boolean       hasToBeRegen;
-    private       boolean       isProtected;
-    private       boolean       containsCrystal;
-    private       Set<Location> crystals;
-    private       int           savedDragons;
+	private final ChunkCoord    coords;
+	private       boolean       hasToBeRegen;
+	private       boolean       isProtected;
+	private       boolean       containsCrystal;
+	private       Set<Location> crystals;
+	private       int           savedDragons;
 
-    public EndChunk(final EndChunks container, ChunkCoord coords) {
-        this(container, coords.getX(), coords.getZ(), coords.getWorldName());
-    }
+	public EndChunk(final EndChunks container, ChunkCoord coords) {
+		this(container, coords.getX(), coords.getZ(), coords.getWorldName());
+	}
 
-    public EndChunk(final EndChunks container, final int x, final int z, final String world) {
-        this.container = container;
-        coords = new ChunkCoord(x, z, world);
-        hasToBeRegen = false;
-        isProtected = false;
-        containsCrystal = false;
-        crystals = null;
-        savedDragons = 0;
-    }
+	public EndChunk(final EndChunks container, final int x, final int z, final String world) {
+		this.container = container;
+		coords = new ChunkCoord(x, z, world);
+		hasToBeRegen = false;
+		isProtected = false;
+		containsCrystal = false;
+		crystals = null;
+		savedDragons = 0;
+	}
 
-    public EndChunk(final EndChunks container, final Chunk bukkitChunk) {
-        this.container = container;
-        coords = new ChunkCoord(bukkitChunk);
-        hasToBeRegen = false;
-        isProtected = false;
-        containsCrystal = false;
-        searchCrystals(bukkitChunk);
-        savedDragons = 0;
-    }
+	public EndChunk(final EndChunks container, final Chunk bukkitChunk) {
+		this.container = container;
+		coords = new ChunkCoord(bukkitChunk);
+		hasToBeRegen = false;
+		isProtected = false;
+		containsCrystal = false;
+		searchCrystals(bukkitChunk);
+		savedDragons = 0;
+	}
 
-    public boolean hasToBeRegen() {
-        return !isProtected && hasToBeRegen;
-    }
+	public boolean hasToBeRegen() {
+		return !isProtected && hasToBeRegen;
+	}
 
-    public void setToBeRegen(final boolean value) {
-        hasToBeRegen = !isProtected && value;
-    }
+	public void setToBeRegen(final boolean value) {
+		hasToBeRegen = !isProtected && value;
+	}
 
-    public boolean isProtected() {
-        return isProtected;
-    }
+	public boolean isProtected() {
+		return isProtected;
+	}
 
-    public void setProtected(final boolean value) {
-        isProtected = value;
-    }
+	public void setProtected(final boolean value) {
+		isProtected = value;
+	}
 
-    public boolean containsCrystal() {
-        return containsCrystal;
-    }
+	public boolean containsCrystal() {
+		return containsCrystal;
+	}
 
-    public void setContainsCrystal(final boolean value) {
-        containsCrystal = value;
-    }
+	public void setContainsCrystal(final boolean value) {
+		containsCrystal = value;
+	}
 
-    public int getX() {
-        return coords.getX();
-    }
+	public int getX() {
+		return coords.getX();
+	}
 
-    public int getZ() {
-        return coords.getZ();
-    }
+	public int getZ() {
+		return coords.getZ();
+	}
 
-    public String getWorldName() {
-        return coords.getWorldName();
-    }
+	public String getWorldName() {
+		return coords.getWorldName();
+	}
 
-    public void addCrystalLocation(final Entity e) {
-        if (crystals == null) {
-            crystals = new HashSet<>();
-        }
-        crystals.add(e.getLocation());
-        containsCrystal = true;
-    }
+	public void addCrystalLocation(final Entity e) {
+		if (crystals == null) {
+			crystals = new HashSet<>();
+		}
+		crystals.add(e.getLocation());
+		containsCrystal = true;
+	}
 
-    public void cleanCrystalLocations() {
-        crystals = null;
-        containsCrystal = false;
-    }
+	public void cleanCrystalLocations() {
+		crystals = null;
+		containsCrystal = false;
+	}
 
-    public void searchCrystals() {
-        final World w = Bukkit.getWorld(getWorldName());
-        if (w != null) {
-            final Chunk c = w.getChunkAt(getX(), getZ());
-            searchCrystals(c);
-        }
-    }
+	public void searchCrystals() {
+		final World w = Bukkit.getWorld(getWorldName());
+		if (w != null) {
+			final Chunk c = w.getChunkAt(getX(), getZ());
+			searchCrystals(c);
+		}
+	}
 
-    public void searchCrystals(final Chunk bukkitChunk) {
-        cleanCrystalLocations();
-        for (final Entity e : bukkitChunk.getEntities()) {
-            if (e.getType() == EntityType.ENDER_CRYSTAL) {
-                addCrystalLocation(e);
-            }
-        }
-    }
+	public void searchCrystals(final Chunk bukkitChunk) {
+		cleanCrystalLocations();
+		for (final Entity e : bukkitChunk.getEntities()) {
+			if (e.getType() == EntityType.ENDER_CRYSTAL) {
+				addCrystalLocation(e);
+			}
+		}
+	}
 
-    public Set<Location> getCrystalLocations() {
-        return crystals;
-    }
+	public Set<Location> getCrystalLocations() {
+		return crystals;
+	}
 
-    public int getSavedDragons() {
-        return savedDragons;
-    }
+	public int getSavedDragons() {
+		return savedDragons;
+	}
 
-    public void incrementSavedDragons() {
-        savedDragons++;
-        container.incrementTotalSavedDragons();
-    }
+	public void incrementSavedDragons() {
+		savedDragons++;
+		container.incrementTotalSavedDragons();
+	}
 
-    public void resetSavedDragons() {
-        container.decrementTotalSavedDragons(savedDragons);
-        savedDragons = 0;
-    }
+	public void resetSavedDragons() {
+		container.decrementTotalSavedDragons(savedDragons);
+		savedDragons = 0;
+	}
 
-    public void store(final ConfigurationSection parent) {
-        final ConfigurationSection chunkSection = parent.createSection(coords.toString());
-        chunkSection.set("hasToBeRegen", hasToBeRegen());
-        chunkSection.set("isProtected", isProtected());
-        chunkSection.set("containsCrystal", containsCrystal());
-        final List<String> locations = new ArrayList<>();
-        if (crystals != null) {
-            for (final Location loc : crystals) {
-                locations.add(NLocation.toString(loc));
-            }
-            chunkSection.set("crystals", locations);
-        }
-        chunkSection.set("savedDragons", getSavedDragons());
-    }
+	public void store(final ConfigurationSection parent) {
+		final ConfigurationSection chunkSection = parent.createSection(coords.toString());
+		chunkSection.set("hasToBeRegen", hasToBeRegen());
+		chunkSection.set("isProtected", isProtected());
+		chunkSection.set("containsCrystal", containsCrystal());
+		final List<String> locations = new ArrayList<>();
+		if (crystals != null) {
+			for (final Location loc : crystals) {
+				locations.add(NLocation.toString(loc));
+			}
+			chunkSection.set("crystals", locations);
+		}
+		chunkSection.set("savedDragons", getSavedDragons());
+	}
 
-    public static EndChunk rebuild(final EndChunks container, final ConfigurationSection chunkSection) {
-        final String chunkCoordString = chunkSection.getName();
-        final ChunkCoord coords = ChunkCoord.fromString(chunkCoordString);
-        final boolean hasToBeRegen = chunkSection.getBoolean("hasToBeRegen", false);
-        final boolean isProtected = chunkSection.getBoolean("isProtected", false);
-        final boolean containsCrystal = chunkSection.getBoolean("containsCrystal", false);
-        final EndChunk chunk = new EndChunk(container, coords.getX(), coords.getZ(), coords.getWorldName());
-        chunk.setProtected(isProtected);
-        chunk.setToBeRegen(hasToBeRegen);
-        chunk.setContainsCrystal(containsCrystal);
+	public static EndChunk rebuild(final EndChunks container, final ConfigurationSection chunkSection) {
+		final String chunkCoordString = chunkSection.getName();
+		final ChunkCoord coords = ChunkCoord.fromString(chunkCoordString);
+		final boolean hasToBeRegen = chunkSection.getBoolean("hasToBeRegen", false);
+		final boolean isProtected = chunkSection.getBoolean("isProtected", false);
+		final boolean containsCrystal = chunkSection.getBoolean("containsCrystal", false);
+		final EndChunk chunk = new EndChunk(container, coords.getX(), coords.getZ(), coords.getWorldName());
+		chunk.setProtected(isProtected);
+		chunk.setToBeRegen(hasToBeRegen);
+		chunk.setContainsCrystal(containsCrystal);
 
-        if (containsCrystal) {
-            final List<String> locations = chunkSection.getStringList("crystals");
-            final Set<Location> crystals = new HashSet<>();
-            for (final String loc : locations) {
-                crystals.add(NLocation.toLocation(loc));
-            }
-            chunk.crystals = crystals;
-        }
+		if (containsCrystal) {
+			final List<String> locations = chunkSection.getStringList("crystals");
+			final Set<Location> crystals = new HashSet<>();
+			for (final String loc : locations) {
+				crystals.add(NLocation.toLocation(loc));
+			}
+			chunk.crystals = crystals;
+		}
 
-        final int savedDragons = chunkSection.getInt("savedDragons", 0);
-        chunk.savedDragons = savedDragons;
-        return chunk;
-    }
+		final int savedDragons = chunkSection.getInt("savedDragons", 0);
+		chunk.savedDragons = savedDragons;
+		return chunk;
+	}
 
-    public ChunkCoord getCoords() {
-        return coords;
-    }
+	public ChunkCoord getCoords() {
+		return coords;
+	}
 
-    @Override
-    public int hashCode() {
-        return coords.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return coords.hashCode();
+	}
 
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final EndChunk other = (EndChunk) obj;
-        if (coords == null) {
-            if (other.coords != null) {
-                return false;
-            }
-        } else if (!coords.equals(other.coords)) {
-            return false;
-        }
-        return true;
-    }
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final EndChunk other = (EndChunk) obj;
+		if (coords == null) {
+			if (other.coords != null) {
+				return false;
+			}
+		} else if (!coords.equals(other.coords)) {
+			return false;
+		}
+		return true;
+	}
 }

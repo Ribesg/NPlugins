@@ -1,5 +1,5 @@
 name: NEnchantingEgg
-version: 0.3.2
+version: 0.3.3
 description: EnchantingEgg plugin for N plugin suite
 author: Ribesg
 website: http://www.ribesg.fr
@@ -7,4 +7,4 @@ main: fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg
 
 load: POSTWORLD
 
-softdepend: [NCore]
+depend: [NCore]

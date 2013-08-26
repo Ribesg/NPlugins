@@ -1,5 +1,5 @@
 name: NWorld
-version: 0.3.2
+version: 0.3.3
 description: World handling plugin for N plugins suite
 author: Ribesg
 website: http://www.ribesg.fr/
@@ -7,7 +7,7 @@ main: fr.ribesg.bukkit.nworld.NWorld
 
 load: POSTWORLD
 
-softdepend: [NCore]
+depend: [NCore]
 
 commands:
   nworld:
@@ -15,7 +15,7 @@ commands:
     aliases: [nw,world]
     usage: |
       /<command> [worldName]
-      /<command> create <worldName> [seed] [requiredPermission] [hidden]
+      /<command> create <worldName> [seed] [requiredPermission] [hidden] [type]
       /<command> load|unload <worldName>
       /<command> setHidden|setPerm|setNether|setEnd <worldName> <value>
   spawn:

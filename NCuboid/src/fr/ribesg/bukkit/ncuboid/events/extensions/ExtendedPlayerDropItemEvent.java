@@ -7,14 +7,14 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class ExtendedPlayerDropItemEvent extends AbstractExtendedEvent {
 
-    private GeneralCuboid cuboid;
+	private GeneralCuboid cuboid;
 
-    public ExtendedPlayerDropItemEvent(final CuboidDB db, final PlayerDropItemEvent event) {
-        super(event);
-        cuboid = db.getPriorByLoc(event.getPlayer().getLocation());
-    }
+	public ExtendedPlayerDropItemEvent(final CuboidDB db, final PlayerDropItemEvent event) {
+		super(event);
+		cuboid = db.getPriorByLoc(event.getPlayer().getLocation());
+	}
 
-    public GeneralCuboid getCuboid() {
-        return cuboid;
-    }
+	public GeneralCuboid getCuboid() {
+		return cuboid;
+	}
 }

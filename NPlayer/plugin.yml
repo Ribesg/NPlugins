@@ -7,7 +7,7 @@ main: fr.ribesg.bukkit.nplayer.NPlayer
 
 load: POSTWORLD
 
-softdepend: [NCore]
+depend: [NCore]
 
 commands:
   login:
@@ -22,3 +22,11 @@ commands:
     description: Home command
   sethome:
     description: SetHome command
+  ban:
+    description: Ban command
+  jail:
+    description: Jail command
+  mute:
+    description: Mute command
+  kick:
+    description: Kick command

@@ -9,20 +9,20 @@ import java.util.Set;
 
 public class ExtendedPlayerJoinEvent extends AbstractExtendedEvent {
 
-    private final GeneralCuboid      cuboid;
-    private final Set<GeneralCuboid> cuboids;
+	private final GeneralCuboid      cuboid;
+	private final Set<GeneralCuboid> cuboids;
 
-    public ExtendedPlayerJoinEvent(final CuboidDB db, final PlayerJoinEvent event) {
-        super(event);
-        cuboids = db.getAllByLoc(event.getPlayer().getLocation());
-        cuboid = db.getPrior(cuboids);
-    }
+	public ExtendedPlayerJoinEvent(final CuboidDB db, final PlayerJoinEvent event) {
+		super(event);
+		cuboids = db.getAllByLoc(event.getPlayer().getLocation());
+		cuboid = db.getPrior(cuboids);
+	}
 
-    public GeneralCuboid getCuboid() {
-        return cuboid;
-    }
+	public GeneralCuboid getCuboid() {
+		return cuboid;
+	}
 
-    public Set<GeneralCuboid> getCuboids() {
-        return cuboids;
-    }
+	public Set<GeneralCuboid> getCuboids() {
+		return cuboids;
+	}
 }

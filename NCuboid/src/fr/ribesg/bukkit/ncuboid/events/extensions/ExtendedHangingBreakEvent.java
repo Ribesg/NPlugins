@@ -9,20 +9,20 @@ import java.util.Set;
 
 public class ExtendedHangingBreakEvent extends AbstractExtendedEvent {
 
-    private final GeneralCuboid      cuboid;
-    private final Set<GeneralCuboid> cuboids;
+	private final GeneralCuboid      cuboid;
+	private final Set<GeneralCuboid> cuboids;
 
-    public ExtendedHangingBreakEvent(final CuboidDB db, final HangingBreakEvent event) {
-        super(event);
-        cuboids = db.getAllByLoc(event.getEntity().getLocation());
-        cuboid = db.getPrior(cuboids);
-    }
+	public ExtendedHangingBreakEvent(final CuboidDB db, final HangingBreakEvent event) {
+		super(event);
+		cuboids = db.getAllByLoc(event.getEntity().getLocation());
+		cuboid = db.getPrior(cuboids);
+	}
 
-    public GeneralCuboid getCuboid() {
-        return cuboid;
-    }
+	public GeneralCuboid getCuboid() {
+		return cuboid;
+	}
 
-    public Set<GeneralCuboid> getCuboids() {
-        return cuboids;
-    }
+	public Set<GeneralCuboid> getCuboids() {
+		return cuboids;
+	}
 }

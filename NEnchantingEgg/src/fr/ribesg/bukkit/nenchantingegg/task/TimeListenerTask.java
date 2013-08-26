@@ -15,30 +15,30 @@ import java.util.Map;
  */
 public class TimeListenerTask extends BukkitRunnable {
 
-    private final NEnchantingEgg    plugin;
-    private final Map<String, Long> previousTimeMap;
+	private final NEnchantingEgg    plugin;
+	private final Map<String, Long> previousTimeMap;
 
-    public TimeListenerTask(final NEnchantingEgg instance) {
-        plugin = instance;
-        previousTimeMap = new HashMap<>();
-        for (final World w : Bukkit.getWorlds()) {
-            previousTimeMap.put(w.getName(), w.getTime());
-        }
-    }
+	public TimeListenerTask(final NEnchantingEgg instance) {
+		plugin = instance;
+		previousTimeMap = new HashMap<>();
+		for (final World w : Bukkit.getWorlds()) {
+			previousTimeMap.put(w.getName(), w.getTime());
+		}
+	}
 
-    @Override
-    public void run() {
-        for (final World w : Bukkit.getWorlds()) {
-            final long actualTime = w.getTime();
-            final Long previousTime = previousTimeMap.get(w.getName());
-            if (previousTime != null) {
-                if (Time.isDayTime(previousTime) && Time.isNightTime(actualTime)) {
-                    plugin.getAltars().timeChange(w.getName(), Time.DAY, Time.NIGHT);
-                } else if (Time.isNightTime(previousTime) && Time.isDayTime(actualTime)) {
-                    plugin.getAltars().timeChange(w.getName(), Time.NIGHT, Time.DAY);
-                }
-            }
-            previousTimeMap.put(w.getName(), actualTime);
-        }
-    }
+	@Override
+	public void run() {
+		for (final World w : Bukkit.getWorlds()) {
+			final long actualTime = w.getTime();
+			final Long previousTime = previousTimeMap.get(w.getName());
+			if (previousTime != null) {
+				if (Time.isDayTime(previousTime) && Time.isNightTime(actualTime)) {
+					plugin.getAltars().timeChange(w.getName(), Time.DAY, Time.NIGHT);
+				} else if (Time.isNightTime(previousTime) && Time.isDayTime(actualTime)) {
+					plugin.getAltars().timeChange(w.getName(), Time.NIGHT, Time.DAY);
+				}
+			}
+			previousTimeMap.put(w.getName(), actualTime);
+		}
+	}
 }

@@ -12,91 +12,91 @@ import java.io.IOException;
 
 public class NTalk extends TalkNode {
 
-    // Configs
-    private Messages messages;
-    private Config   pluginConfig;
+	// Configs
+	private Messages messages;
+	private Config   pluginConfig;
 
-    // Useful Nodes
-    // // None
+	// Useful Nodes
+	// // None
 
-    // Formater
-    private Formater formater;
+	// Formater
+	private Formater formater;
 
-    @Override
-    protected String getMinCoreVersion() {
-        return "0.3.2";
-    }
+	@Override
+	protected String getMinCoreVersion() {
+		return "0.3.3";
+	}
 
-    @Override
-    public boolean onNodeEnable() {
-        // Messages first !
-        try {
-            if (!getDataFolder().isDirectory()) {
-                getDataFolder().mkdir();
-            }
-            messages = new Messages();
-            messages.loadMessages(this);
-        } catch (final IOException e) {
-            getLogger().severe("An error occured, stacktrace follows:");
-            e.printStackTrace();
-            getLogger().severe("This error occured when NTalk tried to load messages.yml");
-            return false;
-        }
+	@Override
+	public boolean onNodeEnable() {
+		// Messages first !
+		try {
+			if (!getDataFolder().isDirectory()) {
+				getDataFolder().mkdir();
+			}
+			messages = new Messages();
+			messages.loadMessages(this);
+		} catch (final IOException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NTalk tried to load messages.yml");
+			return false;
+		}
 
-        // Config
-        try {
-            pluginConfig = new Config(this);
-            pluginConfig.loadConfig();
-        } catch (final IOException | InvalidConfigurationException e) {
-            getLogger().severe("An error occured, stacktrace follows:");
-            e.printStackTrace();
-            getLogger().severe("This error occured when NTalk tried to load config.yml");
-            return false;
-        }
-        formater = new Formater(this);
+		// Config
+		try {
+			pluginConfig = new Config(this);
+			pluginConfig.loadConfig();
+		} catch (final IOException | InvalidConfigurationException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NTalk tried to load config.yml");
+			return false;
+		}
+		formater = new Formater(this);
 
-        // Listeners
-        final PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new TalkListener(this), this);
+		// Listeners
+		final PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(new TalkListener(this), this);
 
-        // Command
-        final TalkCommandExecutor executor = new TalkCommandExecutor(this);
-        getCommand("pm").setExecutor(executor);
-        getCommand("pr").setExecutor(executor);
-        getCommand("nick").setExecutor(executor);
+		// Command
+		final TalkCommandExecutor executor = new TalkCommandExecutor(this);
+		getCommand("pm").setExecutor(executor);
+		getCommand("pr").setExecutor(executor);
+		getCommand("nick").setExecutor(executor);
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public void onNodeDisable() {
-        try {
-            getPluginConfig().writeConfig();
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
-    }
+	@Override
+	public void onNodeDisable() {
+		try {
+			getPluginConfig().writeConfig();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
-    @Override
-    protected void handleOtherNodes() {
-        // Nothing to do here for now
-    }
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	@Override
+	protected void handleOtherNodes() {
+		// Nothing to do here for now
+	}
 
-    public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-        final String[] m = messages.get(messageId, args);
-        to.sendMessage(m);
-    }
+	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
+		final String[] m = messages.get(messageId, args);
+		to.sendMessage(m);
+	}
 
-    public Formater getFormater() {
-        return formater;
-    }
+	public Formater getFormater() {
+		return formater;
+	}
 
-    public Messages getMessages() {
-        return messages;
-    }
+	public Messages getMessages() {
+		return messages;
+	}
 
-    public Config getPluginConfig() {
-        return pluginConfig;
-    }
+	public Config getPluginConfig() {
+		return pluginConfig;
+	}
 }

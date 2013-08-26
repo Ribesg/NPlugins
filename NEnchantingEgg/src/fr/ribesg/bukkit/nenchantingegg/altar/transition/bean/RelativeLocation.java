@@ -5,17 +5,17 @@ import org.bukkit.util.Vector;
 
 public class RelativeLocation {
 
-    private final Vector relativeLocation;
+	private final Vector relativeLocation;
 
-    public RelativeLocation(final double x, final double y, final double z) {
-        relativeLocation = new Vector(x, y, z);
-    }
+	public RelativeLocation(final double x, final double y, final double z) {
+		relativeLocation = new Vector(x, y, z);
+	}
 
-    public Location getLocation(final Location origin) {
-        return origin.clone().add(relativeLocation);
-    }
+	public Location getLocation(final Location origin) {
+		return origin.clone().add(relativeLocation);
+	}
 
-    public Vector getRelativeLocation() {
-        return relativeLocation;
-    }
+	public Vector getRelativeLocation() {
+		return relativeLocation;
+	}
 }

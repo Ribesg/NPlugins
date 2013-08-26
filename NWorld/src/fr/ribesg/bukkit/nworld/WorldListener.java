@@ -9,11 +9,11 @@ import org.bukkit.event.Listener;
  */
 public class WorldListener implements Listener {
 
-    private final NWorld plugin;
+	private final NWorld plugin;
 
-    public WorldListener(final NWorld instance) {
-        plugin = instance;
-    }
+	public WorldListener(final NWorld instance) {
+		plugin = instance;
+	}
 
-    // TODO
+	// TODO
 }

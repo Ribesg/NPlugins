@@ -26,88 +26,89 @@ import java.util.Set;
 
 public class FarmFlagListener extends AbstractListener {
 
-    private static Set<EntityType> animals;
+	private static Set<EntityType> animals;
 
-    private static Set<EntityType> getAnimals() {
-        if (animals == null) {
-            animals = new HashSet<EntityType>();
-            animals.add(EntityType.BAT);
-            animals.add(EntityType.CHICKEN);
-            animals.add(EntityType.COW);
-            animals.add(EntityType.IRON_GOLEM);
-            animals.add(EntityType.MUSHROOM_COW);
-            animals.add(EntityType.OCELOT);
-            animals.add(EntityType.PIG);
-            animals.add(EntityType.SHEEP);
-            animals.add(EntityType.SNOWMAN);
-            animals.add(EntityType.SQUID);
-            animals.add(EntityType.VILLAGER);
-            animals.add(EntityType.WOLF);
-        }
-        return animals;
-    }
+	private static Set<EntityType> getAnimals() {
+		if (animals == null) {
+			animals = new HashSet<>();
+			animals.add(EntityType.BAT);
+			animals.add(EntityType.CHICKEN);
+			animals.add(EntityType.COW);
+			animals.add(EntityType.HORSE);
+			animals.add(EntityType.IRON_GOLEM);
+			animals.add(EntityType.MUSHROOM_COW);
+			animals.add(EntityType.OCELOT);
+			animals.add(EntityType.PIG);
+			animals.add(EntityType.SHEEP);
+			animals.add(EntityType.SNOWMAN);
+			animals.add(EntityType.SQUID);
+			animals.add(EntityType.VILLAGER);
+			animals.add(EntityType.WOLF);
+		}
+		return animals;
+	}
 
-    public FarmFlagListener(final NCuboid instance) {
-        super(instance);
-    }
+	public FarmFlagListener(final NCuboid instance) {
+		super(instance);
+	}
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
-        if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
-            final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
-            Player p;
-            if (event.getDamager().getType() == EntityType.PLAYER) {
-                p = (Player) event.getDamager();
-            } else if (event.getDamager() instanceof Projectile &&
-                       ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER) {
-                p = (Player) ((Projectile) event.getDamager()).getShooter();
-            } else {
-                return;
-            }
-            if (getAnimals().contains(event.getEntityType()) &&
-                ext.getEntityCuboid() != null &&
-                ext.getEntityCuboid().getFlag(Flag.FARM) &&
-                !ext.getEntityCuboid().isAllowedPlayer(p)) {
-                event.setCancelled(true);
-            }
-        }
-    }
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
+		if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
+			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
+			Player p;
+			if (event.getDamager().getType() == EntityType.PLAYER) {
+				p = (Player) event.getDamager();
+			} else if (event.getDamager() instanceof Projectile &&
+			           ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER) {
+				p = (Player) ((Projectile) event.getDamager()).getShooter();
+			} else {
+				return;
+			}
+			if (getAnimals().contains(event.getEntityType()) &&
+			    ext.getEntityCuboid() != null &&
+			    ext.getEntityCuboid().getFlag(Flag.FARM) &&
+			    !ext.getEntityCuboid().isAllowedPlayer(p)) {
+				event.setCancelled(true);
+			}
+		}
+	}
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerInteractEvent(final ExtendedPlayerInteractEvent ext) {
-        final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
-        if (event.getAction() == Action.PHYSICAL && event.hasBlock() && event.getClickedBlock().getType() == Material.SOIL) {
-            if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
-                event.setCancelled(true);
-            }
-        }
-    }
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerInteractEvent(final ExtendedPlayerInteractEvent ext) {
+		final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
+		if (event.getAction() == Action.PHYSICAL && event.hasBlock() && event.getClickedBlock().getType() == Material.SOIL) {
+			if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
+				event.setCancelled(true);
+			}
+		}
+	}
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onEntityInteractEvent(final ExtendedEntityInteractEvent ext) {
-        final EntityInteractEvent event = (EntityInteractEvent) ext.getBaseEvent();
-        if (event.getBlock().getType() == Material.SOIL) {
-            if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
-                event.setCancelled(true);
-            }
-        }
-    }
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityInteractEvent(final ExtendedEntityInteractEvent ext) {
+		final EntityInteractEvent event = (EntityInteractEvent) ext.getBaseEvent();
+		if (event.getBlock().getType() == Material.SOIL) {
+			if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
+				event.setCancelled(true);
+			}
+		}
+	}
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
-        final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
-        if (animals.contains(event.getRightClicked())) {
-            if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
-                event.setCancelled(true);
-            }
-        }
-    }
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
+		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
+		if (getAnimals().contains(event.getRightClicked().getType())) {
+			if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
+				event.setCancelled(true);
+			}
+		}
+	}
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerShearEntity(final PlayerShearEntityEvent event) {
-        final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getEntity().getLocation());
-        if (cuboid != null && cuboid.getFlag(Flag.FARM) && !cuboid.isAllowedPlayer(event.getPlayer())) {
-            event.setCancelled(true);
-        }
-    }
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerShearEntity(final PlayerShearEntityEvent event) {
+		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getEntity().getLocation());
+		if (cuboid != null && cuboid.getFlag(Flag.FARM) && !cuboid.isAllowedPlayer(event.getPlayer())) {
+			event.setCancelled(true);
+		}
+	}
 }

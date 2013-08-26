@@ -8,16 +8,16 @@ import org.bukkit.event.world.WorldLoadEvent;
 
 public class WorldLoadingListener extends AbstractListener {
 
-    public WorldLoadingListener(final NCuboid instance) {
-        super(instance);
-    }
+	public WorldLoadingListener(final NCuboid instance) {
+		super(instance);
+	}
 
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onWorldLoad(final WorldLoadEvent event) {
-        if (getPlugin().getDb().getByWorld(event.getWorld()) == null) {
-            // Obviously true here, we should change this when we change World to String (worldName)
-            getPlugin().getDb().addByWorld(new WorldCuboid(event.getWorld().getName()));
-        }
-    }
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onWorldLoad(final WorldLoadEvent event) {
+		if (getPlugin().getDb().getByWorld(event.getWorld()) == null) {
+			// Obviously true here, we should change this when we change World to String (worldName)
+			getPlugin().getDb().addByWorld(new WorldCuboid(event.getWorld().getName()));
+		}
+	}
 
 }

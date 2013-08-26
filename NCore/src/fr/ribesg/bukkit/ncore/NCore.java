@@ -22,206 +22,206 @@ import java.io.IOException;
  */
 public class NCore extends JavaPlugin {
 
-    private Metrics metrics;
+	private Metrics metrics;
 
-    private CuboidNode        cuboidNode;
-    private DodgeBallNode     dodgeBallNode;
-    private EnchantingEggNode enchantingEggNode;
-    private GeneralNode       generalNode;
-    private PlayerNode        playerNode;
-    private TalkNode          talkNode;
-    private TheEndAgainNode   theEndAgainNode;
-    private WorldNode         worldNode;
+	private CuboidNode        cuboidNode;
+	private DodgeBallNode     dodgeBallNode;
+	private EnchantingEggNode enchantingEggNode;
+	private GeneralNode       generalNode;
+	private PlayerNode        playerNode;
+	private TalkNode          talkNode;
+	private TheEndAgainNode   theEndAgainNode;
+	private WorldNode         worldNode;
 
-    @Override
-    public void onEnable() {
-        try {
-            metrics = new Metrics(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Bukkit.getScheduler().runTaskLaterAsynchronously(this, new BukkitRunnable() {
+	@Override
+	public void onEnable() {
+		try {
+			metrics = new Metrics(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Bukkit.getScheduler().runTaskLaterAsynchronously(this, new BukkitRunnable() {
 
-            @Override
-            public void run() {
-                afterNodesLoad();
-            }
-        }, 5 * 20L /* ~5 seconds */);
-    }
+			@Override
+			public void run() {
+				afterNodesLoad();
+			}
+		}, 5 * 20L /* ~5 seconds */);
+	}
 
-    @Override
-    public void onDisable() {
-        // Nothing yet
-    }
+	@Override
+	public void onDisable() {
+		// Nothing yet
+	}
 
-    private void afterNodesLoad() {
-        boolean noNodeFound = true;
-        Metrics.Graph nodesUsedGraph = metrics.createGraph("Nodes used");
+	private void afterNodesLoad() {
+		boolean noNodeFound = true;
+		Metrics.Graph nodesUsedGraph = metrics.createGraph("Nodes used");
 
         /* Cuboid Node */
-        if (cuboidNode != null) {
-            nodesUsedGraph.addPlotter(new Metrics.Plotter("Cuboid") {
+		if (cuboidNode != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter("Cuboid") {
 
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-            noNodeFound = false;
-        }
+				@Override
+				public int getValue() {
+					return 1;
+				}
+			});
+			noNodeFound = false;
+		}
 
         /* DodgeBall Node */
-        if (dodgeBallNode != null) {
-            nodesUsedGraph.addPlotter(new Metrics.Plotter("DodgeBall") {
+		if (dodgeBallNode != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter("DodgeBall") {
 
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-            noNodeFound = false;
-        }
+				@Override
+				public int getValue() {
+					return 1;
+				}
+			});
+			noNodeFound = false;
+		}
 
         /* EnchantingEgg Node */
-        if (enchantingEggNode != null) {
-            nodesUsedGraph.addPlotter(new Metrics.Plotter("EnchantingEgg") {
+		if (enchantingEggNode != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter("EnchantingEgg") {
 
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-            noNodeFound = false;
-        }
+				@Override
+				public int getValue() {
+					return 1;
+				}
+			});
+			noNodeFound = false;
+		}
 
         /* General Node */
-        if (generalNode != null) {
-            nodesUsedGraph.addPlotter(new Metrics.Plotter("General") {
+		if (generalNode != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter("General") {
 
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-            noNodeFound = false;
-        }
+				@Override
+				public int getValue() {
+					return 1;
+				}
+			});
+			noNodeFound = false;
+		}
 
         /* Player Node */
-        if (playerNode != null) {
-            nodesUsedGraph.addPlotter(new Metrics.Plotter("Player") {
+		if (playerNode != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter("Player") {
 
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-            noNodeFound = false;
-        }
+				@Override
+				public int getValue() {
+					return 1;
+				}
+			});
+			noNodeFound = false;
+		}
 
         /* Talk Node */
-        if (talkNode != null) {
-            nodesUsedGraph.addPlotter(new Metrics.Plotter("Talk") {
+		if (talkNode != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter("Talk") {
 
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-            noNodeFound = false;
-        }
+				@Override
+				public int getValue() {
+					return 1;
+				}
+			});
+			noNodeFound = false;
+		}
 
         /* TheEndAgain Node */
-        if (theEndAgainNode != null) {
-            nodesUsedGraph.addPlotter(new Metrics.Plotter("TheEndAgain") {
+		if (theEndAgainNode != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter("TheEndAgain") {
 
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-            noNodeFound = false;
-        }
+				@Override
+				public int getValue() {
+					return 1;
+				}
+			});
+			noNodeFound = false;
+		}
 
         /* World Node */
-        if (worldNode != null) {
-            nodesUsedGraph.addPlotter(new Metrics.Plotter("World") {
+		if (worldNode != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter("World") {
 
-                @Override
-                public int getValue() {
-                    return 1;
-                }
-            });
-            noNodeFound = false;
-        }
+				@Override
+				public int getValue() {
+					return 1;
+				}
+			});
+			noNodeFound = false;
+		}
 
-        metrics.start();
+		metrics.start();
 
-        if (noNodeFound) {
-            // TODO
-        }
-    }
+		if (noNodeFound) {
+			// TODO
+		}
+	}
 
-    public TalkNode getTalkNode() {
-        return talkNode;
-    }
+	public TalkNode getTalkNode() {
+		return talkNode;
+	}
 
-    public void setTalkNode(TalkNode talkNode) {
-        this.talkNode = talkNode;
-    }
+	public void setTalkNode(TalkNode talkNode) {
+		this.talkNode = talkNode;
+	}
 
-    public CuboidNode getCuboidNode() {
-        return cuboidNode;
-    }
+	public CuboidNode getCuboidNode() {
+		return cuboidNode;
+	}
 
-    public void setCuboidNode(CuboidNode cuboidNode) {
-        this.cuboidNode = cuboidNode;
-    }
+	public void setCuboidNode(CuboidNode cuboidNode) {
+		this.cuboidNode = cuboidNode;
+	}
 
-    public DodgeBallNode getDodgeBallNode() {
-        return dodgeBallNode;
-    }
+	public DodgeBallNode getDodgeBallNode() {
+		return dodgeBallNode;
+	}
 
-    public void setDodgeBallNode(DodgeBallNode dodgeBallNode) {
-        this.dodgeBallNode = dodgeBallNode;
-    }
+	public void setDodgeBallNode(DodgeBallNode dodgeBallNode) {
+		this.dodgeBallNode = dodgeBallNode;
+	}
 
-    public EnchantingEggNode getEnchantingEggNode() {
-        return enchantingEggNode;
-    }
+	public EnchantingEggNode getEnchantingEggNode() {
+		return enchantingEggNode;
+	}
 
-    public void setEnchantingEggNode(EnchantingEggNode enchantingEggNode) {
-        this.enchantingEggNode = enchantingEggNode;
-    }
+	public void setEnchantingEggNode(EnchantingEggNode enchantingEggNode) {
+		this.enchantingEggNode = enchantingEggNode;
+	}
 
-    public GeneralNode getGeneralNode() {
-        return generalNode;
-    }
+	public GeneralNode getGeneralNode() {
+		return generalNode;
+	}
 
-    public void setGeneralNode(GeneralNode generalNode) {
-        this.generalNode = generalNode;
-    }
+	public void setGeneralNode(GeneralNode generalNode) {
+		this.generalNode = generalNode;
+	}
 
-    public PlayerNode getPlayerNode() {
-        return playerNode;
-    }
+	public PlayerNode getPlayerNode() {
+		return playerNode;
+	}
 
-    public void setPlayerNode(PlayerNode playerNode) {
-        this.playerNode = playerNode;
-    }
+	public void setPlayerNode(PlayerNode playerNode) {
+		this.playerNode = playerNode;
+	}
 
-    public TheEndAgainNode getTheEndAgainNode() {
-        return theEndAgainNode;
-    }
+	public TheEndAgainNode getTheEndAgainNode() {
+		return theEndAgainNode;
+	}
 
-    public void setTheEndAgainNode(TheEndAgainNode theEndAgainNode) {
-        this.theEndAgainNode = theEndAgainNode;
-    }
+	public void setTheEndAgainNode(TheEndAgainNode theEndAgainNode) {
+		this.theEndAgainNode = theEndAgainNode;
+	}
 
-    public WorldNode getWorldNode() {
-        return worldNode;
-    }
+	public WorldNode getWorldNode() {
+		return worldNode;
+	}
 
-    public void setWorldNode(WorldNode worldNode) {
-        this.worldNode = worldNode;
-    }
+	public void setWorldNode(WorldNode worldNode) {
+		this.worldNode = worldNode;
+	}
 }

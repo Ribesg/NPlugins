@@ -9,20 +9,20 @@ import java.util.Set;
 
 public class ExtendedEntityInteractEvent extends AbstractExtendedEvent {
 
-    private final GeneralCuboid      cuboid;
-    private final Set<GeneralCuboid> cuboids;
+	private final GeneralCuboid      cuboid;
+	private final Set<GeneralCuboid> cuboids;
 
-    public ExtendedEntityInteractEvent(final CuboidDB db, final EntityInteractEvent event) {
-        super(event);
-        cuboids = db.getAllByLoc(event.getBlock().getLocation());
-        cuboid = db.getPrior(cuboids);
-    }
+	public ExtendedEntityInteractEvent(final CuboidDB db, final EntityInteractEvent event) {
+		super(event);
+		cuboids = db.getAllByLoc(event.getBlock().getLocation());
+		cuboid = db.getPrior(cuboids);
+	}
 
-    public GeneralCuboid getCuboid() {
-        return cuboid;
-    }
+	public GeneralCuboid getCuboid() {
+		return cuboid;
+	}
 
-    public Set<GeneralCuboid> getCuboids() {
-        return cuboids;
-    }
+	public Set<GeneralCuboid> getCuboids() {
+		return cuboids;
+	}
 }

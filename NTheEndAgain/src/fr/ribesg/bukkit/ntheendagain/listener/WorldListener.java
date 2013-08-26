@@ -19,52 +19,52 @@ import java.io.IOException;
  */
 public class WorldListener implements Listener {
 
-    private final NTheEndAgain plugin;
+	private final NTheEndAgain plugin;
 
-    public WorldListener(final NTheEndAgain instance) {
-        plugin = instance;
-    }
+	public WorldListener(final NTheEndAgain instance) {
+		plugin = instance;
+	}
 
-    /**
-     * Creates an EndWorldHandler if the loaded world is an End world
-     *
-     * @param event a World Load Event
-     */
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onWorldLoad(final WorldLoadEvent event) {
-        if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
-            plugin.getLogger().info("Additional End world detected: handling " + event.getWorld().getName());
-            final EndWorldHandler handler = new EndWorldHandler(plugin, event.getWorld());
-            try {
-                handler.loadConfig();
-                handler.loadChunks();
-                plugin.getWorldHandlers().put(handler.getCamelCaseWorldName(), handler);
-                handler.init();
-            } catch (final IOException | InvalidConfigurationException e) {
-                plugin.getLogger().severe("An error occured, stacktrace follows:");
-                e.printStackTrace();
-            }
-        }
-    }
+	/**
+	 * Creates an EndWorldHandler if the loaded world is an End world
+	 *
+	 * @param event a World Load Event
+	 */
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onWorldLoad(final WorldLoadEvent event) {
+		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
+			plugin.getLogger().info("Additional End world detected: handling " + event.getWorld().getName());
+			final EndWorldHandler handler = new EndWorldHandler(plugin, event.getWorld());
+			try {
+				handler.loadConfig();
+				handler.loadChunks();
+				plugin.getWorldHandlers().put(handler.getCamelCaseWorldName(), handler);
+				handler.init();
+			} catch (final IOException | InvalidConfigurationException e) {
+				plugin.getLogger().severe("An error occured, stacktrace follows:");
+				e.printStackTrace();
+			}
+		}
+	}
 
-    /**
-     * Creates an EndWorldHandler if the loaded world is an End world
-     *
-     * @param event a World Unload Event
-     */
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onWorldUnload(final WorldUnloadEvent event) {
-        if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
-            plugin.getLogger().info("Handling " + event.getWorld().getName() + " unload");
-            final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getWorld().getName()));
-            if (handler != null) {
-                try {
-                    handler.unload(false);
-                } catch (final InvalidConfigurationException e) {
-                    plugin.getLogger().severe("An error occured, stacktrace follows:");
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+	/**
+	 * Creates an EndWorldHandler if the loaded world is an End world
+	 *
+	 * @param event a World Unload Event
+	 */
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onWorldUnload(final WorldUnloadEvent event) {
+		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
+			plugin.getLogger().info("Handling " + event.getWorld().getName() + " unload");
+			final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(event.getWorld().getName()));
+			if (handler != null) {
+				try {
+					handler.unload(false);
+				} catch (final InvalidConfigurationException e) {
+					plugin.getLogger().severe("An error occured, stacktrace follows:");
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

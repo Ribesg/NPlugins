@@ -1,0 +1,29 @@
+name: NGeneral
+version: 0.3.3
+description: General commands
+author: Ribesg
+website: http://www.ribesg.fr/
+main: fr.ribesg.bukkit.ngeneral.NGeneral
+
+load: POSTWORLD
+
+depend: [NCore]
+
+commands:
+  god:
+    description: GodMode Command
+    usage: |
+      /<command> [enable|disable] [playerName[,...]]
+  fly:
+    description: FlyMode Command
+    usage: |
+      /<command> [enable|disable] [playerName[,...]]
+  flyspeed:
+    description: FlyMode Command
+    aliases: [flys]
+    usage: |
+      /<command> <-1...1>|<reset> [playerName[,...]]
+  afk:
+    description: Afk Command
+    usage: |
+      /<command> [Reason]

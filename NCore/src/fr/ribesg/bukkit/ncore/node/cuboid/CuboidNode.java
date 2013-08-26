@@ -9,9 +9,9 @@ import fr.ribesg.bukkit.ncore.node.NPlugin;
  */
 public abstract class CuboidNode extends NPlugin {
 
-    /** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-    @Override
-    protected void linkCore() {
-        getCore().setCuboidNode(this);
-    }
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
+	@Override
+	protected void linkCore() {
+		getCore().setCuboidNode(this);
+	}
 }
