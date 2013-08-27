@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
-import fr.ribesg.bukkit.ncore.utils.NLocation;
-import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ncore.common.NLocation;
+import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid.CuboidType;
 import org.bukkit.Location;
@@ -120,7 +120,7 @@ public class CuboidDBPersistenceHandler {
 						attributes.setLocFlagAtt(f, theLocation);
 					}
 				} else if (FlagAtt.isVectFlagAtt(f)) {
-					final Vector theVector = Utils.toVector(flagAttributesSection.getString(f.toString(), ""));
+					final Vector theVector = StringUtils.toVector(flagAttributesSection.getString(f.toString(), ""));
 					if (theVector != null) {
 						attributes.setVectFlagAtt(f, theVector);
 					}
@@ -254,7 +254,7 @@ public class CuboidDBPersistenceHandler {
 				final Vector theVector = cuboid.getVectFlagAtt(f);
 				if (theVector != null) {
 					used = true;
-					sec.set(f.toString(), Utils.toString(theVector));
+					sec.set(f.toString(), StringUtils.toString(theVector));
 				}
 			} else {
 				// Hello, future

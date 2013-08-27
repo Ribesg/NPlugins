@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ntheendagain.task;
 
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.common.FrameBuilder;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EnderDragon;

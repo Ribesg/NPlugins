@@ -1,5 +1,5 @@
 package fr.ribesg.bukkit.nplayer.user;
-import fr.ribesg.bukkit.ncore.utils.NLocation;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -81,7 +81,7 @@ public class UserDB {
 			userSection.set("firstJoin", user.getFirstJoin().getTime());
 			userSection.set("lastSeen", user.getLastSeen().getTime());
 			userSection.set("autoLogout", user.hasAutoLogout());
-			userSection.set("home", user.getHome() != null ? user.getHome().toString() : "null");
+			userSection.set("home", user.getHome() != null ? new NLocation(user.getHome()).toString() : "null");
 		}
 		config.save(filePath.toFile());
 	}

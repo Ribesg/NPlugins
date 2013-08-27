@@ -1,5 +1,5 @@
 package fr.ribesg.bukkit.nworld.world;
-import fr.ribesg.bukkit.ncore.utils.NLocation;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nworld.NWorld;
 import org.bukkit.World.Environment;
 

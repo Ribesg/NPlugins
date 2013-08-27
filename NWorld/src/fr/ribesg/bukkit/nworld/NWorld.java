@@ -1,8 +1,8 @@
 package fr.ribesg.bukkit.nworld;
 
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.world.WorldNode;
-import fr.ribesg.bukkit.ncore.utils.NLocation;
 import fr.ribesg.bukkit.nworld.config.Config;
 import fr.ribesg.bukkit.nworld.lang.Messages;
 import fr.ribesg.bukkit.nworld.warp.Warps;

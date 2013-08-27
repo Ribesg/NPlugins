@@ -3,13 +3,13 @@ public class Jail extends Punishment {
 
 	private final String jailPointName;
 
-	public Jail(String punished, String reason, String jailPointName) {
-		super(punished, PunishmentType.JAIL, reason);
+	public Jail(String jailed, String reason, String jailPointName) {
+		super(jailed, PunishmentType.JAIL, reason);
 		this.jailPointName = jailPointName;
 	}
 
-	public Jail(String punished, String reason, String jailPointName, long endDate) {
-		super(punished, PunishmentType.JAIL, reason, endDate);
+	public Jail(String jailed, String reason, String jailPointName, long endDate) {
+		super(jailed, PunishmentType.JAIL, reason, endDate);
 		this.jailPointName = jailPointName;
 	}
 

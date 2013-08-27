@@ -1,8 +1,8 @@
 package fr.ribesg.bukkit.ntheendagain;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
-import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ncore.common.FrameBuilder;
+import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.Random;
@@ -121,7 +121,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 
-		final String fileName = Utils.toLowerCamelCase(worldName) + "Config.yml";
+		final String fileName = StringUtils.toLowerCamelCase(worldName) + "Config.yml";
 
 		// General
 		setFilterMovedTooQuicklySpam(config.getInt("filterMovedTooQuicklySpam", DEFAULT_filterMovedTooQuicklySpam));

@@ -1,8 +1,8 @@
 package fr.ribesg.bukkit.ncore.node;
 
 import fr.ribesg.bukkit.ncore.NCore;
+import fr.ribesg.bukkit.ncore.common.FrameBuilder;
 import fr.ribesg.bukkit.ncore.metrics.Metrics;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;

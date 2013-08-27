@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ntheendagain.world;
 
-import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
-import fr.ribesg.bukkit.ncore.utils.NLocation;
+import fr.ribesg.bukkit.ncore.common.ChunkCoord;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;

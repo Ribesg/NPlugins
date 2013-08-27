@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.nplayer.punishment;
 import fr.ribesg.bukkit.nplayer.NPlayer;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -8,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,9 +37,13 @@ public class PunishmentDB {
 		if (!Files.exists(filePath)) {
 			Files.createFile(filePath);
 		}
-		YamlConfiguration config = new YamlConfiguration();
+		final YamlConfiguration config = new YamlConfiguration();
 
-		// TODO
+		long l = 0;
+		final ConfigurationSection permSection = config.createSection("permanent");
+		for (Punishment p : getAllPunishmentsFromMap(getPermPunishments())) {
+			final ConfigurationSection pSection = permSection.createSection("perm" + ++l);
+		}
 
 		config.save(filePath.toFile());
 	}
@@ -59,6 +65,14 @@ public class PunishmentDB {
 
 	public Map<String, Set<Punishment>> getPermPunishments() {
 		return permPunishments;
+	}
+
+	private static Set<Punishment> getAllPunishmentsFromMap(Map<String, Set<Punishment>> map) {
+		final Set<Punishment> result = new HashSet<>(map.size());
+		for (Set<Punishment> set : map.values()) {
+			result.addAll(set);
+		}
+		return result;
 	}
 
 	public Map<String, Set<Punishment>> getTempPunishments() {

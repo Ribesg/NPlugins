@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.common.FrameBuilder;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 

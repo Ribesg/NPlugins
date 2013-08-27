@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
-import fr.ribesg.bukkit.ncore.utils.NLocation;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;

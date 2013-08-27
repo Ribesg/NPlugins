@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ntheendagain;
 
-import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import org.bukkit.entity.Player;
 
@@ -24,7 +24,7 @@ public class MovedTooQuicklyFilter implements Filter {
 			final Player p = plugin.getServer().getPlayerExact(split[0]);
 			if (p != null) {
 				if ("moved".equals(split[1]) && "too".equals(split[2]) && "quickly!".equals(split[3])) {
-					final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(p.getWorld().getName()));
+					final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(p.getWorld().getName()));
 					return handler == null || handler.getConfig().getFilterMovedTooQuicklySpam() == 0;
 				}
 			}

@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.common;
 
 import org.bukkit.Chunk;
 

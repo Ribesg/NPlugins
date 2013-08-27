@@ -2,15 +2,18 @@ package fr.ribesg.bukkit.ncore.utils;
 
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Some simple methods that could be used in every plugin
  *
  * @author Ribesg
  */
-public class Utils {
+public class StringUtils {
 
-	static final char   SEPARATOR_CHAR        = ';';
-	static final String SEPARATOR_CHAR_STRING = Character.toString(SEPARATOR_CHAR);
+	private static final char   SEPARATOR_CHAR        = ';';
+	private static final String SEPARATOR_CHAR_STRING = Character.toString(SEPARATOR_CHAR);
 
 	/**
 	 * @param vect a Vector
@@ -94,5 +97,47 @@ public class Utils {
 			}
 			return builder.toString();
 		}
+	}
+
+	/**
+	 * Parses an original args array provided to a CommandExecutor to support quotes.
+	 * If the parameter array is malformed, then this method returns the parameter array as-is.
+	 *
+	 * @param args The original args array. Ex: ['A', '"B', 'C', 'D"', 'E']
+	 *
+	 * @return The resulting args array, if valid. Ex: ['A', 'B C D', 'E']
+	 */
+	public static String[] parseArgumentsWithQuotes(String[] args) {
+		final List<String> resultList = new ArrayList<>();
+		boolean building = false;
+		StringBuilder builder = new StringBuilder();
+		for (String arg : args) {
+			if (arg.startsWith("\"")) {
+				if (building || arg.length() < 2 || arg.endsWith("\"") && arg.length() == 2) {
+					return args;
+				} else if (!arg.endsWith("\"")) {
+					building = true;
+					builder.append(arg.substring(1));
+				} else {
+					builder.append(arg.substring(1, arg.length() - 1));
+				}
+			} else if (building) {
+				if (!arg.endsWith("\"")) {
+					builder.append(' ' + arg);
+				} else if (arg.length() < 2) {
+					return args;
+				} else {
+					building = false;
+					resultList.add(builder.append(' ' + arg.substring(0, arg.length() - 1)).toString());
+					builder = new StringBuilder();
+				}
+			} else {
+				resultList.add(arg);
+			}
+		}
+		if (building) {
+			return args;
+		}
+		return (String[]) resultList.toArray();
 	}
 }

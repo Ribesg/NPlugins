@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.nworld.world;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.NLocation;
 import fr.ribesg.bukkit.ncore.utils.WorldUtils;
 import fr.ribesg.bukkit.nworld.NWorld;
 import org.bukkit.Bukkit;
@@ -76,7 +76,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		} catch (IOException e) {
 			return null;
 		}
-		WorldCreator creator = new WorldCreator(getWorldName());
+		final WorldCreator creator = new WorldCreator(getWorldName());
 		creator.seed(getSeed());
 		creator.type(type);
 		switch (getType()) {
@@ -95,7 +95,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 			default:
 				throw new IllegalStateException("Incorrect world type: " + getType());
 		}
-		World result = creator.createWorld();
+		final World result = creator.createWorld();
 		setSpawnLocation(result.getSpawnLocation());
 		return result;
 	}
@@ -114,12 +114,12 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		} catch (IOException e) {
 			return null;
 		}
-		WorldCreator creator = new WorldCreator(getWorldName());
-		this.setEnabled(true);
-		World result = creator.createWorld();
+		final WorldCreator creator = new WorldCreator(getWorldName());
+		final World result = creator.createWorld();
 		if (getSpawnLocation() == null) {
 			setSpawnLocation(result.getSpawnLocation());
 		}
+		this.setEnabled(true);
 		return result;
 	}
 
@@ -129,7 +129,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		}
 
 		// Teleport players to another world
-		Location spawn = plugin.getWorlds().get(Bukkit.getWorlds().get(0).getName()).getSpawnLocation().toBukkitLocation();
+		final Location spawn = plugin.getWorlds().get(Bukkit.getWorlds().get(0).getName()).getSpawnLocation().toBukkitLocation();
 		for (Player p : Bukkit.getWorld(getWorldName()).getPlayers()) {
 			plugin.sendMessage(p, MessageId.world_teleportedBecauseOfWorldUnload);
 			p.teleport(spawn);

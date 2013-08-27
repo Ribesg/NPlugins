@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
-import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
-import fr.ribesg.bukkit.ncore.utils.NLocation;
+import fr.ribesg.bukkit.ncore.common.ChunkCoord;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -10,10 +10,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class CuboidDB {
+public class CuboidDB implements Iterable<GeneralCuboid> {
 
 	@SuppressWarnings("unused")
 	private final NCuboid plugin;
@@ -228,5 +229,35 @@ public class CuboidDB {
 
 	public Iterator<WorldCuboid> worldCuboidIterator() {
 		return byWorld.values().iterator();
+	}
+
+	@Override
+	public Iterator<GeneralCuboid> iterator() {
+		return new Iterator<GeneralCuboid>() {
+
+			final Iterator<PlayerCuboid> playerCuboidIterator = CuboidDB.this.playerCuboidIterator();
+			final Iterator<WorldCuboid> worldCuboidIterator = CuboidDB.this.worldCuboidIterator();
+
+			@Override
+			public boolean hasNext() {
+				return playerCuboidIterator.hasNext() || worldCuboidIterator.hasNext();
+			}
+
+			@Override
+			public GeneralCuboid next() {
+				if (playerCuboidIterator.hasNext()) {
+					return playerCuboidIterator.next();
+				} else if (worldCuboidIterator.hasNext()) {
+					return worldCuboidIterator.next();
+				} else {
+					throw new NoSuchElementException();
+				}
+			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
 	}
 }

@@ -8,6 +8,7 @@ main: fr.ribesg.bukkit.nplayer.NPlayer
 load: POSTWORLD
 
 depend: [NCore]
+softdepend: [NWorld]
 
 commands:
   login:

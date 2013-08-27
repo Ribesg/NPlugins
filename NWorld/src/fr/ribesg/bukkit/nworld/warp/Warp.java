@@ -1,5 +1,5 @@
 package fr.ribesg.bukkit.nworld.warp;
-import fr.ribesg.bukkit.ncore.utils.NLocation;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import org.bukkit.Location;
 
 /** @author Ribesg */

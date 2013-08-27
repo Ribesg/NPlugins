@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
-import fr.ribesg.bukkit.ncore.utils.NLocation;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 
 // This is a really different Cuboid type.
 public class WorldCuboid extends GeneralCuboid {

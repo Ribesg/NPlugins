@@ -1,5 +1,5 @@
 package fr.ribesg.bukkit.ntheendagain.listener;
-import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
@@ -42,7 +42,7 @@ public class ChunkListener implements Listener {
 	public void onEndChunkLoad(final ChunkLoadEvent event) {
 		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
 			final String worldName = event.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(worldName));
 			if (handler != null) {
 				final EndChunks chunks = handler.getChunks();
 				final Chunk chunk = event.getChunk();
@@ -94,7 +94,7 @@ public class ChunkListener implements Listener {
 							if (!handler.getDragons().containsKey(ed.getUniqueId())) {
 								ed.setMaxHealth(handler.getConfig().getEdHealth());
 								ed.setHealth(ed.getMaxHealth());
-								handler.getDragons().put(ed.getUniqueId(), new HashMap<String, Long>());
+								handler.getDragons().put(ed.getUniqueId(), new HashMap<String, Double>());
 							}
 							handler.getLoadedDragons().add(ed.getUniqueId());
 						} else if (e.getType() == EntityType.ENDER_CRYSTAL) {
@@ -116,7 +116,7 @@ public class ChunkListener implements Listener {
 	public void onEndChunkUnload(final ChunkUnloadEvent event) {
 		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
 			final String worldName = event.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(Utils.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(worldName));
 			if (handler != null) {
 				EndChunk chunk = handler.getChunks().getChunk(event.getChunk());
 				if (chunk == null) {

@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.common;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;

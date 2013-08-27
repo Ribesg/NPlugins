@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.nworld;
 
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.NLocation;
 import fr.ribesg.bukkit.ncore.utils.WorldUtils;
 import fr.ribesg.bukkit.nworld.warp.Warp;
 import fr.ribesg.bukkit.nworld.world.AdditionalSubWorld;
@@ -21,7 +21,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.ChatPaginator;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /** @author Ribesg */
 public class WorldCommandExecutor implements CommandExecutor {
@@ -164,7 +166,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			plugin.sendMessage(sender, MessageId.world_alreadyExists, realWorldName);
 			return true;
 		} else {
-			String worldName = args[0];
+			final String worldName = args[0];
 			long seed = new Random().nextLong();
 			if (args.length > 1) {
 				try {
@@ -180,22 +182,28 @@ public class WorldCommandExecutor implements CommandExecutor {
 			}
 
 			boolean hidden = plugin.getPluginConfig().isDefaultHidden();
+			WorldType type = null;
+
 			if (args.length > 3) {
-				if (args[3].equalsIgnoreCase("true")) {
+				final Set<String> additionalArguments = new HashSet<>();
+				for (int i = 3; i < args.length; i++) {
+					additionalArguments.add(args[i].toLowerCase());
+				}
+
+				if (additionalArguments.contains("public")) {
 					hidden = true;
-				} else if (args[3].equalsIgnoreCase("false")) {
+				} else if (additionalArguments.contains("private")) {
 					hidden = false;
 				}
-			}
-			AdditionalWorld nWorld = new AdditionalWorld(plugin, worldName, seed, null, requiredPermission, true, hidden, false, false);
 
-			WorldType type = null;
-			if (args.length > 4) {
-				type = WorldType.getByName(args[4]);
-				if (type == null) {
-					type = WorldType.NORMAL;
+				if (additionalArguments.contains("flat")) {
+					type = WorldType.FLAT;
+				} else if (additionalArguments.contains("large") || additionalArguments.contains("large_biome")) {
+					type = WorldType.LARGE_BIOMES;
 				}
 			}
+
+			AdditionalWorld nWorld = new AdditionalWorld(plugin, worldName, seed, null, requiredPermission, true, hidden, false, false);
 
 			if (plugin.getPluginConfig().getBroadcastOnWorldCreate() == 1) {
 				plugin.broadcastMessage(MessageId.world_creatingWorldMayBeLaggy);

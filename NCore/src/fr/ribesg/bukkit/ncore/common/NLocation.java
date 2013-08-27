@@ -1,14 +1,21 @@
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
+
+import java.util.logging.Logger;
 
 /**
  * It's more or less like OfflinePlayer for Player
  * It's a Location with the World's name instead of a World Object.
  */
 public class NLocation {
+
+	private static final Logger LOG = Logger.getLogger(NLocation.class.getName());
+
+	private static final char   SEPARATOR_CHAR        = ';';
+	private static final String SEPARATOR_CHAR_STRING = Character.toString(SEPARATOR_CHAR);
 
 	private String worldName;
 	private double x;
@@ -136,11 +143,11 @@ public class NLocation {
 		final StringBuilder s = new StringBuilder();
 		s.append('<');
 		s.append(getWorldName());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(getX());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(getY());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(getZ());
 		s.append('>');
 		return s.toString();
@@ -156,11 +163,11 @@ public class NLocation {
 		final StringBuilder s = new StringBuilder();
 		s.append('<');
 		s.append(loc.getWorld().getName());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(loc.getX());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(loc.getY());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(loc.getZ());
 		s.append('>');
 		return s.toString();
@@ -170,15 +177,15 @@ public class NLocation {
 		final StringBuilder s = new StringBuilder();
 		s.append('<');
 		s.append(getWorldName());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(getX());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(getY());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(getZ());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(getYaw());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(getPitch());
 		s.append('>');
 		return s.toString();
@@ -196,15 +203,15 @@ public class NLocation {
 		final StringBuilder s = new StringBuilder();
 		s.append('<');
 		s.append(loc.getWorld().getName());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(loc.getX());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(loc.getY());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(loc.getZ());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(loc.getYaw());
-		s.append(Utils.SEPARATOR_CHAR);
+		s.append(SEPARATOR_CHAR);
 		s.append(loc.getPitch());
 		s.append('>');
 		return s.toString();
@@ -222,11 +229,13 @@ public class NLocation {
 		if (string.length() < 2) {
 			return null;
 		}
-		final String[] split = string.substring(1, string.length() - 1).split(Utils.SEPARATOR_CHAR_STRING);
+		final String[] split = string.substring(1, string.length() - 1).split(SEPARATOR_CHAR_STRING);
 		if (split.length == 4) {
 			final String worldName = split[0];
 			final World world = Bukkit.getWorld(worldName);
 			if (world == null) {
+				LOG.warning("Unable to convert the provided String to Location, world '" + worldName + "' not found");
+				LOG.warning("String was: " + string);
 				return null;
 			} else {
 				try {
@@ -235,6 +244,8 @@ public class NLocation {
 					final Double z = Double.parseDouble(split[3]);
 					return new Location(world, x, y, z);
 				} catch (final NumberFormatException e) {
+					LOG.warning("Unable to convert the provided String to Location, caught NumberFormatException while parsing x,y,z");
+					LOG.warning("String was: " + string);
 					return null;
 				}
 			}
@@ -252,6 +263,9 @@ public class NLocation {
 					final Float pitch = Float.parseFloat(split[5]);
 					return new Location(world, x, y, z, yaw, pitch);
 				} catch (final NumberFormatException e) {
+					LOG.warning("Unable to convert the provided String to Location, " +
+					            "caught NumberFormatException while parsing x,y,z,yaw,pitch");
+					LOG.warning("String was: " + string);
 					return null;
 				}
 			}
@@ -272,7 +286,7 @@ public class NLocation {
 		if (string.length() < 2) {
 			return null;
 		}
-		final String[] split = string.substring(1, string.length() - 1).split(Utils.SEPARATOR_CHAR_STRING);
+		final String[] split = string.substring(1, string.length() - 1).split(SEPARATOR_CHAR_STRING);
 		if (split.length == 4) {
 			final String worldName = split[0];
 			try {
@@ -281,6 +295,8 @@ public class NLocation {
 				final Double z = Double.parseDouble(split[3]);
 				return new NLocation(worldName, x, y, z);
 			} catch (final NumberFormatException e) {
+				LOG.warning("Unable to convert the provided String to NLocation, caught NumberFormatException while parsing x,y,z");
+				LOG.warning("String was: " + string);
 				return null;
 			}
 		} else if (split.length == 6) {
@@ -293,6 +309,9 @@ public class NLocation {
 				final Float pitch = Float.parseFloat(split[5]);
 				return new NLocation(worldName, x, y, z, yaw, pitch);
 			} catch (final NumberFormatException e) {
+				LOG.warning("Unable to convert the provided String to NLocation, " +
+				            "caught NumberFormatException while parsing x,y,z,yaw,pitch");
+				LOG.warning("String was: " + string);
 				return null;
 			}
 		} else {

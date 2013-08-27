@@ -118,7 +118,7 @@ public class FlyModeCommandExecutor implements CommandExecutor {
 			if (p == null) {
 				feature.getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 			} else {
-				boolean actualValue = value == null ? feature.hasFlyMode(p.getName()) : value;
+				boolean actualValue = value == null ? !feature.hasFlyMode(p.getName()) : value;
 				feature.setFlyMode(p, actualValue);
 				if (actualValue) {
 					feature.getPlugin().sendMessage(sender, MessageId.general_fly_enabledFor, p.getName());

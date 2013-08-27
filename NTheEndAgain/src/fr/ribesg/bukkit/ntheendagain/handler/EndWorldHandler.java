@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ntheendagain.handler;
 
-import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.task.RegenTask;
@@ -30,15 +30,15 @@ public class EndWorldHandler {
 
 	private final String camelCaseWorldName;
 
-	private final NTheEndAgain                 plugin;
-	private final World                        endWorld;
-	private final EndChunks                    chunks;
-	private final Config                       config;
-	private final Map<UUID, Map<String, Long>> dragons;
-	private final Set<UUID>                    loadedDragons;
-	private final Set<BukkitTask>              tasks;
-	private final RespawnHandler               respawnHandler;
-	private final RegenHandler                 regenHandler;
+	private final NTheEndAgain                   plugin;
+	private final World                          endWorld;
+	private final EndChunks                      chunks;
+	private final Config                         config;
+	private final Map<UUID, Map<String, Double>> dragons;
+	private final Set<UUID>                      loadedDragons;
+	private final Set<BukkitTask>                tasks;
+	private final RespawnHandler                 respawnHandler;
+	private final RegenHandler                   regenHandler;
 
 	/**
 	 * Class constructor
@@ -52,7 +52,7 @@ public class EndWorldHandler {
 	public EndWorldHandler(final NTheEndAgain instance, final World world) {
 		plugin = instance;
 		endWorld = world;
-		camelCaseWorldName = Utils.toLowerCamelCase(endWorld.getName());
+		camelCaseWorldName = StringUtils.toLowerCamelCase(endWorld.getName());
 		chunks = new EndChunks(world.getName());
 		config = new Config(plugin, endWorld.getName());
 		dragons = new HashMap<>();
@@ -166,7 +166,7 @@ public class EndWorldHandler {
 						if (!getDragons().containsKey(ed.getUniqueId())) {
 							ed.setMaxHealth(getConfig().getEdHealth());
 							ed.setHealth(ed.getMaxHealth());
-							getDragons().put(ed.getUniqueId(), new HashMap<String, Long>());
+							getDragons().put(ed.getUniqueId(), new HashMap<String, Double>());
 							getLoadedDragons().add(ed.getUniqueId());
 						}
 					} else if (e.getType() == EntityType.ENDER_CRYSTAL) {
@@ -189,10 +189,10 @@ public class EndWorldHandler {
 	 * @param playerName    the Player's name
 	 * @param dmg           the amount of damages done
 	 */
-	public void playerHitED(final UUID enderDragonID, final String playerName, final long dmg) {
-		Map<String, Long> dragonMap;
+	public void playerHitED(final UUID enderDragonID, final String playerName, final double dmg) {
+		Map<String, Double> dragonMap;
 		if (!dragons.containsKey(enderDragonID)) {
-			dragonMap = new HashMap<String, Long>();
+			dragonMap = new HashMap<>();
 			dragons.put(enderDragonID, dragonMap);
 		} else {
 			dragonMap = dragons.get(enderDragonID);
@@ -212,7 +212,7 @@ public class EndWorldHandler {
 		return config;
 	}
 
-	public Map<UUID, Map<String, Long>> getDragons() {
+	public Map<UUID, Map<String, Double>> getDragons() {
 		return dragons;
 	}
 

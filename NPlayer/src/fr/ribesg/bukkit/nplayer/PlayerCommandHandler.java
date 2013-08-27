@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.nplayer;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.Utils;
+import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.nplayer.security.Security;
 import fr.ribesg.bukkit.nplayer.user.User;
 import org.bukkit.Location;
@@ -171,7 +171,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			plugin.sendMessage(player, MessageId.player_registerFirst);
 			return true;
 		} else {
-			String password = Utils.joinStrings(args);
+			String password = StringUtils.joinStrings(args);
 			boolean isCorrect = Security.isUserPassword(password, user);
 			if (isCorrect) {
 				plugin.sendMessage(player, MessageId.player_welcomeBack);
@@ -187,7 +187,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 	private boolean registerCommand(Player player, String[] args) {
 		User user = plugin.getUserDb().get(player.getName());
-		String password = Utils.joinStrings(args);
+		String password = StringUtils.joinStrings(args);
 		if (user == null) {
 			user = plugin.getUserDb().newUser(player.getName(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
 			user.setLoggedIn(true);

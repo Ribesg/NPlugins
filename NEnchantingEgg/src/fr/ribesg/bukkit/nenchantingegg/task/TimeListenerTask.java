@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.nenchantingegg.task;
 
-import fr.ribesg.bukkit.ncore.utils.Time;
+import fr.ribesg.bukkit.ncore.common.Time;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import org.bukkit.Bukkit;
 import org.bukkit.World;

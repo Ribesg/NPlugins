@@ -6,6 +6,7 @@ import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.beans.WorldCuboid;
 import fr.ribesg.bukkit.ncuboid.commands.MainCommandExecutor;
+import fr.ribesg.bukkit.ncuboid.jail.JailHandler;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
 import fr.ribesg.bukkit.ncuboid.listeners.EventExtensionListener;
 import fr.ribesg.bukkit.ncuboid.listeners.PlayerStickListener;
@@ -17,6 +18,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * TODO
@@ -34,6 +36,9 @@ public class NCuboid extends CuboidNode {
 
 	// Cuboids base
 	private CuboidDB db;
+
+	// Jail handling
+	private JailHandler jailHandler;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -77,6 +82,10 @@ public class NCuboid extends CuboidNode {
 			getLogger().severe("This error occured when NCuboid tried to load cuboidDB.yml");
 			return false;
 		}
+
+		// Handle jail system
+		jailHandler = new JailHandler(this);
+		jailHandler.load();
 
 		// Listeners
 		final PluginManager pm = getServer().getPluginManager();
@@ -134,7 +143,7 @@ public class NCuboid extends CuboidNode {
 			e.printStackTrace();
 		}
 
-		// TODO Save CuboidDB, do other things eventually (stop tasks etc)
+		jailHandler.save();
 	}
 
 	/**
@@ -160,5 +169,27 @@ public class NCuboid extends CuboidNode {
 
 	public Config getPluginConfig() {
 		return pluginConfig;
+	}
+
+	// API for other nodes
+
+	@Override
+	public boolean isJailed(String playerName) {
+		return jailHandler.isJailed(playerName);
+	}
+
+	@Override
+	public boolean jail(String playerName, String jailName) {
+		return jailHandler.jail(playerName, jailName);
+	}
+
+	@Override
+	public boolean unJail(String playerName) {
+		return jailHandler.unJail(playerName);
+	}
+
+	@Override
+	public List<String> getJailList() {
+		return jailHandler.getJailList();
 	}
 }

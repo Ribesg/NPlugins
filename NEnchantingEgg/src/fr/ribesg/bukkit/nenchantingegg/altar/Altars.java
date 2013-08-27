@@ -1,8 +1,8 @@
 package fr.ribesg.bukkit.nenchantingegg.altar;
 
-import fr.ribesg.bukkit.ncore.utils.ChunkCoord;
-import fr.ribesg.bukkit.ncore.utils.NLocation;
-import fr.ribesg.bukkit.ncore.utils.Time;
+import fr.ribesg.bukkit.ncore.common.ChunkCoord;
+import fr.ribesg.bukkit.ncore.common.NLocation;
+import fr.ribesg.bukkit.ncore.common.Time;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import org.bukkit.Location;
 import org.bukkit.World;
