@@ -236,7 +236,7 @@ public class ProtectionSignListener implements Listener {
 			List<String[]> signLines;
 			if (blockId == CHEST_ID || blockId == TRAPPED_CHEST_ID) {
 				signLines = SignUtils.getSignsForChest(b);
-			} else if (protectedMaterials.contains(blockId)) {
+			} else if (getProtectedMaterials().contains(blockId)) {
 				signLines = SignUtils.getSignsForBlock(b);
 			} else {
 				return true;

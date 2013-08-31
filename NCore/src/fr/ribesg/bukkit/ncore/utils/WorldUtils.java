@@ -16,12 +16,15 @@ public class WorldUtils {
 	 * @return The correct name of the world if it is loaded, null otherwise
 	 */
 	public static String isLoaded(final String worldName) {
-		final World world = Bukkit.getWorld(worldName);
-		if (world != null) {
-			return world.getName();
-		} else {
-			return null;
+		if (Bukkit.getWorld(worldName) != null) {
+			return worldName;
 		}
+		for (final World world : Bukkit.getWorlds()) {
+			if (world.getName().equalsIgnoreCase(worldName)) {
+				return world.getName();
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -58,12 +61,13 @@ public class WorldUtils {
 	 */
 	public static String getRealWorldName(final String worldName) {
 		try {
-			String res = isLoaded(worldName);
+			final String res = isLoaded(worldName);
 			if (res == null) {
-				res = exists(worldName);
+				return exists(worldName);
 			}
 			return res;
 		} catch (final IOException e) {
+			// Already outputed a message and printed a Stacktrace
 			return null;
 		}
 	}

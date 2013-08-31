@@ -22,4 +22,9 @@ public class RegenTask extends RandomRepeatingTask {
 		}
 		return buildInitialDelay(nextRegenTaskTime);
 	}
+
+	@Override
+	protected long getDelay() {
+		return worldHandler.getConfig().getRegenTimer();
+	}
 }

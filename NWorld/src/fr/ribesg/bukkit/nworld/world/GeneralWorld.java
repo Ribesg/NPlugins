@@ -21,7 +21,29 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		ADDITIONAL,
 		ADDITIONAL_SUB_NETHER,
 		ADDITIONAL_SUB_END,
-		UNKNOWN,
+		UNKNOWN;
+
+		public static boolean isStock(final GeneralWorld world) {
+			switch (world.getType()) {
+				case STOCK:
+				case STOCK_NETHER:
+				case STOCK_END:
+					return true;
+				default:
+					return false;
+			}
+		}
+
+		public static boolean isAdditional(final GeneralWorld world) {
+			switch (world.getType()) {
+				case ADDITIONAL:
+				case ADDITIONAL_SUB_NETHER:
+				case ADDITIONAL_SUB_END:
+					return true;
+				default:
+					return false;
+			}
+		}
 	}
 
 	protected final NWorld plugin;

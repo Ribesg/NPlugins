@@ -34,8 +34,8 @@ public class NWorld extends WorldNode {
 	// // None
 
 	// Actual plugin data
-	Worlds worlds;
-	Warps  warps;
+	private Worlds worlds;
+	private Warps  warps;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -153,7 +153,7 @@ public class NWorld extends WorldNode {
 
 		// Listener
 		final PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new WorldListener(this), this);
+		pm.registerEvents(new NListener(this), this);
 
 		// Commands
 		WorldCommandExecutor executor = new WorldCommandExecutor(this);

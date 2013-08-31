@@ -25,75 +25,79 @@ public class Perms {
 	private static final String CMD_SETWARP         = "nworld.cmd.setwarp";
 	private static final String CMD_DELWARP         = "nworld.cmd.delwarp";
 
+	public static boolean hasAdmin(CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(ADMIN);
+	}
+
 	public static boolean hasWorld(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WORLD) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WORLD) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasWorldWarpAll(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WORLD_WARP_ALL) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WORLD_WARP_ALL);
 	}
 
 	public static boolean hasWorldCreate(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WORLD_CREATE) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WORLD_CREATE);
 	}
 
 	public static boolean hasWorldLoad(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WORLD_LOAD) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WORLD_LOAD);
 	}
 
 	public static boolean hasWorldUnload(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WORLD_UNLOAD) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WORLD_UNLOAD);
 	}
 
 	public static boolean hasWorldSetHidden(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WORLD_SETHIDDEN) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WORLD_SETHIDDEN);
 	}
 
 	public static boolean hasWorldSetPerm(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WORLD_SETPERM) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WORLD_SETPERM);
 	}
 
 	public static boolean hasWorldSetNether(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WORLD_SETNETHER) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WORLD_SETNETHER);
 	}
 
 	public static boolean hasWorldSetEnd(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WORLD_SETEND) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WORLD_SETEND);
 	}
 
 	public static boolean hasSpawn(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_SPAWN) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_SPAWN) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasSetSpawn(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_SETSPAWN) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_SETSPAWN);
 	}
 
 	public static boolean hasRequiredPermission(CommandSender sender, String requiredPermission) {
-		return sender.isOp() || sender.hasPermission(requiredPermission) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(requiredPermission);
 	}
 
 	public static boolean hasWarp(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WARP) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WARP) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasWarpAll(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WARP_ALL) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WARP_ALL);
 	}
 
 	public static boolean hasWarpSetHidden(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WARP_SETHIDDEN) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WARP_SETHIDDEN);
 	}
 
 	public static boolean hasWarpSetPerm(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_WARP_SETPERM) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_WARP_SETPERM);
 	}
 
 	public static boolean hasSetWarp(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_SETWARP) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_SETWARP);
 	}
 
 	public static boolean hasDelWarp(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_DELWARP) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender) || sender.hasPermission(CMD_DELWARP);
 	}
 }

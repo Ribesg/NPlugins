@@ -2,10 +2,10 @@ package fr.ribesg.bukkit.ntheendagain;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.utils.WorldUtils;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -111,7 +111,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 	}
 
 	private boolean cmdRegen(final CommandSender sender, final String[] args) {
-		final String[] parsedArgs = parseArguments(sender, args);
+		final String[] parsedArgs = checkWorldArgument(sender, args);
 		if (parsedArgs == null) {
 			// The sender already received a message
 			return true;
@@ -132,7 +132,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 	}
 
 	private boolean cmdRespawn(final CommandSender sender, final String[] args) {
-		final String[] parsedArgs = parseArguments(sender, args);
+		final String[] parsedArgs = checkWorldArgument(sender, args);
 		if (parsedArgs == null) {
 			// The sender already received a message
 			return true;
@@ -148,7 +148,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 	}
 
 	private boolean cmdNb(final CommandSender sender, final String[] args) {
-		final String[] parsedArgs = parseArguments(sender, args);
+		final String[] parsedArgs = checkWorldArgument(sender, args);
 		if (parsedArgs == null) {
 			// The sender already received a message
 			return true;
@@ -251,10 +251,9 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 	}
 
 	/**
-	 * - Check that a console sender provided a world name
-	 * - Automagically add the Player's world name if he "forgot" it as argument
-	 * - Allow world names with spaces
-	 * - Keep non-world args
+	 * - Checks that a console sender provided a world name
+	 * - Automagically adds the Player's world name if he "forgot" it as argument
+	 * - Keeps non-world args
 	 *
 	 * @param sender the sender of the command
 	 * @param args   the arguments used by the sender
@@ -262,54 +261,30 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 	 * @return a new args String[] containing the new arguments, or null if the
 	 *         sender did not provide a World (as a ConsoleSender)
 	 */
-	private String[] parseArguments(final CommandSender sender, final String[] args) {
-		String worldName = null;
-		if (args.length == 0) {
-			if (!(sender instanceof Player)) {
-				plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
-				return null;
-			} else {
-				worldName = ((Player) sender).getWorld().getName();
-				return new String[] {worldName};
-			}
-		} else {
-			// Find a world name in the arguments
-			boolean worldFound = true;
-			String concatenation = args[0];
-			for (int i = 1; i < args.length; i++) {
-				concatenation += ' ' + args[i];
-			}
-			int nbWords = args.length;
-			while (Bukkit.getWorld(concatenation) == null) {
-				if (nbWords == 1) {
-					worldFound = false;
-					break;
-				}
-				concatenation = concatenation.substring(0, 1 + args[--nbWords].length());
-			}
-			if (worldFound) {
-				worldName = concatenation;
-				final String[] result = new String[args.length - nbWords + 1];
-				result[0] = worldName;
-				if (args.length - nbWords != 0) {
-					System.arraycopy(args, nbWords, result, 1, args.length - nbWords + 1);
-				}
-				return result;
-			} else {
-				if (!(sender instanceof Player)) {
-					plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
-					return null;
-				} else {
-					worldName = ((Player) sender).getWorld().getName();
-					final String[] result = new String[1 + args.length];
-					result[0] = worldName;
-					if (args.length - nbWords != 0) {
-						System.arraycopy(args, 0, result, 1, args.length);
-					}
-					return result;
-				}
-			}
+	private String[] checkWorldArgument(final CommandSender sender, final String[] args) {
+		String[] result;
+
+		final boolean senderIsAPlayer = sender instanceof Player;
+		if (args.length == 0 && !senderIsAPlayer) {
+			plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
+			return null;
 		}
 
+		final String supposedWorldName = args[0];
+		final String realWorldName = WorldUtils.getRealWorldName(supposedWorldName);
+		if (realWorldName == null) { // No world argument provided, use Player's world
+			if (senderIsAPlayer) {
+				result = new String[args.length + 1];
+				result[0] = ((Player) sender).getWorld().getName();
+				System.arraycopy(args, 0, result, 1, args.length);
+			} else {
+				plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
+				return null;
+			}
+		} else {
+			result = args;
+		}
+
+		return result;
 	}
 }

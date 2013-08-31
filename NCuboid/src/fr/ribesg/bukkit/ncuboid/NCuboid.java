@@ -85,7 +85,7 @@ public class NCuboid extends CuboidNode {
 
 		// Handle jail system
 		jailHandler = new JailHandler(this);
-		jailHandler.load();
+		jailHandler.loadJails();
 
 		// Listeners
 		final PluginManager pm = getServer().getPluginManager();
@@ -142,8 +142,6 @@ public class NCuboid extends CuboidNode {
 			// TODOs
 			e.printStackTrace();
 		}
-
-		jailHandler.save();
 	}
 
 	/**

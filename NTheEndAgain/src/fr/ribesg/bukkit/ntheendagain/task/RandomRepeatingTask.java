@@ -26,7 +26,7 @@ public abstract class RandomRepeatingTask extends BukkitRunnable {
 	@Override
 	public void run() {
 		exec();
-		long delay = getRandomDelay();
+		long delay = getDelay();
 		Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), this, delay * 20);
 		worldHandler.getConfig().setNextRespawnTaskTime(System.nanoTime() + delay * 1_000_000_000);
 	}
@@ -60,7 +60,5 @@ public abstract class RandomRepeatingTask extends BukkitRunnable {
 	}
 
 	/** @return a Random value between the minimum and maximum delay set in config */
-	private long getRandomDelay() {
-		return worldHandler.getConfig().getRandomRespawnTimer();
-	}
+	protected abstract long getDelay();
 }

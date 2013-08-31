@@ -2,6 +2,7 @@ package fr.ribesg.bukkit.nworld;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.ArgumentParser;
 import fr.ribesg.bukkit.ncore.utils.WorldUtils;
 import fr.ribesg.bukkit.nworld.warp.Warp;
 import fr.ribesg.bukkit.nworld.world.AdditionalSubWorld;
@@ -77,45 +78,48 @@ public class WorldCommandExecutor implements CommandExecutor {
 	}
 
 	private boolean cmdWorld(final CommandSender sender, String[] args) {
-		if (args.length == 0) {
+		String[] parsedArgs = ArgumentParser.joinArgsWithQuotes(args);
+		if (parsedArgs.length == 0) {
 			// Lists available worlds
 			plugin.sendMessage(sender, MessageId.world_availableWorlds);
 			for (final GeneralWorld world : plugin.getWorlds()) {
+				boolean hasPermission = Perms.hasRequiredPermission(sender, world.getRequiredPermission());
 				if (world.isEnabled()) {
-					boolean hasPermission = Perms.hasRequiredPermission(sender, world.getRequiredPermission());
 					if (hasPermission) {
 						sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + world.getWorldName());
 					} else if (!world.isHidden()) {
 						sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.RED + world.getWorldName());
 					}
+				} else if (Perms.hasAdmin(sender)) {
+					sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.BLACK + world.getWorldName());
 				}
 			}
 			return true;
-		} else if (args.length == 1) {
+		} else if (parsedArgs.length == 1) {
 			// Warp to world
-			return subCmdWorldWarp(sender, args[0]);
+			return subCmdWorldWarp(sender, parsedArgs[0]);
 		} else { // Handle subcommands
-			final String subCmd = args[0].toLowerCase();
-			args = Arrays.copyOfRange(args, 1, args.length);
+			final String subCmd = parsedArgs[0].toLowerCase();
+			parsedArgs = Arrays.copyOfRange(parsedArgs, 1, parsedArgs.length);
 			switch (subCmd) {
 				case "create":
-					return subCmdWorldCreate(sender, args);
+					return subCmdWorldCreate(sender, parsedArgs);
 				case "load":
-					return subCmdWorldLoad(sender, args);
+					return subCmdWorldLoad(sender, parsedArgs);
 				case "unload":
-					return subCmdWorldUnload(sender, args);
+					return subCmdWorldUnload(sender, parsedArgs);
 				case "hidden":
 				case "sethidden":
-					return subCmdWorldSetHidden(sender, args);
+					return subCmdWorldSetHidden(sender, parsedArgs);
 				case "perm":
 				case "setperm":
-					return subCmdWorldSetPerm(sender, args);
+					return subCmdWorldSetPerm(sender, parsedArgs);
 				case "nether":
 				case "setnether":
-					return subCmdWorldSetNether(sender, args);
+					return subCmdWorldSetNether(sender, parsedArgs);
 				case "end":
 				case "setend":
-					return subCmdWorldSetEnd(sender, args);
+					return subCmdWorldSetEnd(sender, parsedArgs);
 				default:
 					return false;
 			}
@@ -129,7 +133,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 		}
 		final Player player = (Player) sender;
 		final String worldName = givenWorldName.toLowerCase();
-		GeneralWorld world = plugin.getWorlds().get(worldName);
+		final GeneralWorld world = plugin.getWorlds().get(worldName);
 		if (world != null && world.isEnabled()) {
 			if (Perms.hasRequiredPermission(player, world.getRequiredPermission()) || Perms.hasWorldWarpAll(player)) {
 				final Location loc = world.getSpawnLocation().toBukkitLocation();
@@ -250,11 +254,11 @@ public class WorldCommandExecutor implements CommandExecutor {
 
 			if (world == null) { // Load a never-loaded world
 				wasKnown = false;
-				World newLoaded = new WorldCreator(realWorldName).createWorld();
+				final World newLoaded = new WorldCreator(realWorldName).createWorld();
 				long seed = newLoaded.getSeed();
-				NLocation spawn = new NLocation(newLoaded.getSpawnLocation());
-				String requiredPermission = plugin.getPluginConfig().getDefaultRequiredPermission();
-				boolean hidden = plugin.getPluginConfig().isDefaultHidden();
+				final NLocation spawn = new NLocation(newLoaded.getSpawnLocation());
+				final String requiredPermission = plugin.getPluginConfig().getDefaultRequiredPermission();
+				final boolean hidden = plugin.getPluginConfig().isDefaultHidden();
 				world = new AdditionalWorld(plugin, realWorldName, seed, spawn, requiredPermission, true, hidden, false, false);
 				plugin.getWorlds().put(realWorldName, world);
 			} else {
@@ -325,7 +329,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			plugin.sendMessage(sender, MessageId.world_notLoaded, realWorldName);
 			return true;
 		} else {
-			AdditionalWorld world = plugin.getWorlds().getAdditional().get(realWorldName);
+			final AdditionalWorld world = plugin.getWorlds().getAdditional().get(realWorldName);
 			if (world == null) {
 				plugin.sendMessage(sender, MessageId.world_unknownWorld, args[0]);
 				return true;

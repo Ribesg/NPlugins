@@ -22,4 +22,9 @@ public class RespawnTask extends RandomRepeatingTask {
 		}
 		return buildInitialDelay(nextRespawnTaskTime);
 	}
+
+	@Override
+	protected long getDelay() {
+		return worldHandler.getConfig().getRandomRespawnTimer();
+	}
 }

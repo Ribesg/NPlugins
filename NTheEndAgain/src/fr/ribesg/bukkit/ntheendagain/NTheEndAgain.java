@@ -32,7 +32,7 @@ public class NTheEndAgain extends TheEndAgainNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.3.2";
+		return "0.3.3";
 	}
 
 	@Override
