@@ -109,10 +109,10 @@ public class Whirlpool {
 			}
 			final long v9 = v8 ^ v1;
 		/*
-	     * build the circulant table C[0][x] = S[x].[1, 1, 4, 1, 8, 5, 2, 9]:
+		 * build the circulant table C[0][x] = S[x].[1, 1, 4, 1, 8, 5, 2, 9]:
          */
 			Whirlpool.C[0][x] = v1 << 56 | v1 << 48 | v4 << 40 | v1 << 32 | v8 << 24 | v5 << 16 | v2 << 8 | v9;
-        /*
+	    /*
          * build the remaining circulant tables C[t][x] = C[0][x] rotr t
          */
 			for (int t = 1; t < 8; t++) {
