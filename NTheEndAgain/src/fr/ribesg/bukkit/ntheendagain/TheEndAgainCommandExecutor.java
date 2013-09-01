@@ -265,24 +265,30 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		String[] result;
 
 		final boolean senderIsAPlayer = sender instanceof Player;
-		if (args.length == 0 && !senderIsAPlayer) {
-			plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
-			return null;
-		}
-
-		final String supposedWorldName = args[0];
-		final String realWorldName = WorldUtils.getRealWorldName(supposedWorldName);
-		if (realWorldName == null) { // No world argument provided, use Player's world
-			if (senderIsAPlayer) {
+		if (args.length == 0) {
+			if (!senderIsAPlayer) {
+				plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
+				return null;
+			} else {
 				result = new String[args.length + 1];
 				result[0] = ((Player) sender).getWorld().getName();
 				System.arraycopy(args, 0, result, 1, args.length);
-			} else {
-				plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
-				return null;
 			}
 		} else {
-			result = args;
+			final String supposedWorldName = args[0];
+			final String realWorldName = WorldUtils.getRealWorldName(supposedWorldName);
+			if (realWorldName == null) { // No world argument provided, use Player's world
+				if (senderIsAPlayer) {
+					result = new String[args.length + 1];
+					result[0] = ((Player) sender).getWorld().getName();
+					System.arraycopy(args, 0, result, 1, args.length);
+				} else {
+					plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
+					return null;
+				}
+			} else {
+				result = args;
+			}
 		}
 
 		return result;
