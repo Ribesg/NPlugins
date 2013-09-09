@@ -11,6 +11,8 @@ public enum MessageId {
 	noPlayerFoundForGivenName,
 
 	cmdOnlyAvailableForPlayers,
+	missingWorldArg,
+	unknownWorld,
 
 	cmdReloadConfig,
 	cmdReloadMessages,
@@ -49,12 +51,10 @@ public enum MessageId {
 
 	theEndAgain_unkownSubCmd,
 
-	theEndAgain_unknownWorld,
 	theEndAgain_regenerating,
 	theEndAgain_respawned,
 	theEndAgain_nbAlive,
 	theEndAgain_notInAnEndWorld,
-	theEndAgain_missingWorldArg,
 
 	theEndAgain_protectedChunkInfo,
 	theEndAgain_protectedChunkProtect,
@@ -76,7 +76,6 @@ public enum MessageId {
 	world_availableWorlds,
 	world_teleportedToWorld,
 
-	world_unknownWorld,
 	world_notLoaded,
 	world_warpToThisWorldDisallowed,
 
@@ -166,6 +165,47 @@ public enum MessageId {
 	player_userHomeSet,
 	player_yourHomeSet,
 
+	player_kickMessage,
+	player_broadcastedKickMessage,
+
+	player_noPermissionForPermanent,
+
+	player_kickPermBanned,
+	player_permBannedBroadcast,
+	player_kickTempBanned,
+	player_tempBannedBroadcast,
+
+	player_unknownIp,
+	player_kickPermIpBanned,
+	player_permIpBannedBroadcast,
+	player_kickTempIpBanned,
+	player_tempIpBannedBroadcast,
+
+	player_permMuted,
+	player_permMutedBroadcast,
+	player_tempMuted,
+	player_tempMutedBroadcast,
+
+	player_unBannedBroadcast,
+	player_notBanned,
+	player_unBannedIpBroadcast,
+	player_notBannedIp,
+	player_unMutedBroadcast,
+	player_notMuted,
+
+	player_deniedPermBanned,
+	player_deniedTempBanned,
+	player_deniedPermIpBanned,
+	player_deniedTempIpBanned,
+	player_deniedPermMuted,
+	player_deniedTempMuted,
+
+	player_alreadyBanned,
+	player_alreadyBannedIp,
+	player_alreadyMuted,
+
+	player_standardKickMessage,
+
 	// ############################ //
 	// ## NEnchantingEgg related ## //
 	// ############################ //
@@ -196,17 +236,23 @@ public enum MessageId {
 	general_fly_enabledFor,
 	general_fly_disabledFor,
 
-	general_flyspeed_set,
-	general_flyspeed_reset,
-	general_flyspeed_setFor,
-	general_flyspeed_setBy,
+	general_flySpeed_set,
+	general_flySpeed_reset,
+	general_flySpeed_setFor,
+	general_flySpeed_setBy,
 
-	general_afk_nowAfk,
-	general_afk_noLongerAfk,
+	general_walkSpeed_set,
+	general_walkSpeed_reset,
+	general_walkSpeed_setFor,
+	general_walkSpeed_setBy,
+
 	general_afk_nowAfkBroadcast,
 	general_afk_noLongerAfkBroadcast,
 	general_afk_nowAfkBroadcastReason,
 	general_afk_noLongerAfkBroadcastReason,
+
+	general_timeSet,
+	general_weatherSet,
 
 	general_signcolors_permissionDenied,
 

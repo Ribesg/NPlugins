@@ -1,5 +1,5 @@
 name: NGeneral
-version: 0.3.3
+version: 0.4.0
 description: General commands
 author: Ribesg
 website: http://www.ribesg.fr/
@@ -19,11 +19,24 @@ commands:
     usage: |
       /<command> [enable|disable] [playerName[,...]]
   flyspeed:
-    description: FlyMode Command
+    description: Fly Speed Command
     aliases: [flys]
+    usage: |
+      /<command> <-1...1>|<reset> [playerName[,...]]
+  walkspeed:
+    description: Walk Speed Command
+    aliases: [walks]
     usage: |
       /<command> <-1...1>|<reset> [playerName[,...]]
   afk:
     description: Afk Command
     usage: |
       /<command> [Reason]
+  time:
+    description: Time Command
+    usage: |
+      /<command> <"day"|"night"|value> [world]
+  weather:
+    description: Weather Command
+    usage: |
+      /<command> <"clear"|"rain"|"thunder"> [duration] [world]

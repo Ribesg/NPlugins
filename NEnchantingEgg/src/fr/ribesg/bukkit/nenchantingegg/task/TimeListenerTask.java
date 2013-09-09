@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.nenchantingegg.task;
 
-import fr.ribesg.bukkit.ncore.common.Time;
+import fr.ribesg.bukkit.ncore.common.MinecraftTime;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -32,10 +32,10 @@ public class TimeListenerTask extends BukkitRunnable {
 			final long actualTime = w.getTime();
 			final Long previousTime = previousTimeMap.get(w.getName());
 			if (previousTime != null) {
-				if (Time.isDayTime(previousTime) && Time.isNightTime(actualTime)) {
-					plugin.getAltars().timeChange(w.getName(), Time.DAY, Time.NIGHT);
-				} else if (Time.isNightTime(previousTime) && Time.isDayTime(actualTime)) {
-					plugin.getAltars().timeChange(w.getName(), Time.NIGHT, Time.DAY);
+				if (MinecraftTime.isDayTime(previousTime) && MinecraftTime.isNightTime(actualTime)) {
+					plugin.getAltars().timeChange(w.getName(), MinecraftTime.DAY, MinecraftTime.NIGHT);
+				} else if (MinecraftTime.isNightTime(previousTime) && MinecraftTime.isDayTime(actualTime)) {
+					plugin.getAltars().timeChange(w.getName(), MinecraftTime.NIGHT, MinecraftTime.DAY);
 				}
 			}
 			previousTimeMap.put(w.getName(), actualTime);

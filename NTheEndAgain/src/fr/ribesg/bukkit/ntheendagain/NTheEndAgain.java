@@ -1,6 +1,5 @@
 package fr.ribesg.bukkit.ntheendagain;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages;
@@ -11,7 +10,6 @@ import fr.ribesg.bukkit.ntheendagain.listener.WorldListener;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
@@ -32,7 +30,7 @@ public class NTheEndAgain extends TheEndAgainNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.3.3";
+		return "0.4.0";
 	}
 
 	@Override
@@ -153,25 +151,7 @@ public class NTheEndAgain extends TheEndAgainNode {
 		}
 	}
 
-	/**
-	 * Send a message with arguments TODO <b>This may be moved<b>
-	 *
-	 * @param to        Receiver
-	 * @param messageId The Message Id
-	 * @param args      The arguments
-	 */
-	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		to.sendMessage(m);
-	}
-
-	public void broadcastMessage(final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		for (final String mes : m) {
-			getServer().broadcastMessage(mes);
-		}
-	}
-
+	@Override
 	public Messages getMessages() {
 		return messages;
 	}

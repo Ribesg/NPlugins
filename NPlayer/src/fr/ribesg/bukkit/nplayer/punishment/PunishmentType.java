@@ -3,6 +3,5 @@ public enum PunishmentType {
 	IPBAN,
 	BAN,
 	MUTE,
-	KICK,
 	JAIL,
 }

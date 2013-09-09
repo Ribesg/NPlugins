@@ -1,11 +1,11 @@
 package fr.ribesg.bukkit.nplayer;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
 import fr.ribesg.bukkit.nplayer.lang.Messages;
+import fr.ribesg.bukkit.nplayer.punishment.PunishmentDb;
+import fr.ribesg.bukkit.nplayer.punishment.PunishmentListener;
 import fr.ribesg.bukkit.nplayer.user.LoggedOutUserHandler;
-import fr.ribesg.bukkit.nplayer.user.UserDB;
-import org.bukkit.command.CommandSender;
+import fr.ribesg.bukkit.nplayer.user.UserDb;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
@@ -21,12 +21,13 @@ public class NPlayer extends PlayerNode {
 	// // None
 
 	// Plugin Data
-	private UserDB               userDb;
+	private UserDb               userDb;
 	private LoggedOutUserHandler loggedOutUserHandler;
+	private PunishmentDb         punishmentDb;
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.3.2";
+		return "0.4.0";
 	}
 
 	@Override
@@ -56,23 +57,9 @@ public class NPlayer extends PlayerNode {
 			return false;
 		}
 
-		// Commands
-		PlayerCommandHandler executor = new PlayerCommandHandler(this);
-		getCommand("login").setExecutor(executor);
-		getCommand("register").setExecutor(executor);
-		getCommand("logout").setExecutor(executor);
-		//getCommand("info").setExecutor(executor);
-		getCommand("home").setExecutor(executor);
-		getCommand("sethome").setExecutor(executor);
-
 		loggedOutUserHandler = new LoggedOutUserHandler(this);
 
-		// Listener
-		final PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(loggedOutUserHandler, this);
-		pm.registerEvents(executor, this);
-
-		userDb = new UserDB(this);
+		userDb = new UserDb(this);
 		try {
 			userDb.loadConfig();
 		} catch (IOException | InvalidConfigurationException e) {
@@ -81,6 +68,45 @@ public class NPlayer extends PlayerNode {
 			getLogger().severe("This error occured when NPlayer tried to load userDB.yml");
 			return false;
 		}
+
+		punishmentDb = new PunishmentDb(this);
+		try {
+			punishmentDb.loadConfig();
+		} catch (IOException | InvalidConfigurationException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NPlayer tried to load punishmentDB.yml");
+			return false;
+		}
+
+		// Listener
+		final PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(loggedOutUserHandler, this);
+		pm.registerEvents(new PunishmentListener(this), this);
+
+		// Commands
+
+		final PlayerCommandHandler playerCommandHandler = new PlayerCommandHandler(this);
+		getCommand("login").setExecutor(playerCommandHandler);
+		getCommand("register").setExecutor(playerCommandHandler);
+		getCommand("logout").setExecutor(playerCommandHandler);
+		// TODO getCommand("info").setExecutor(playerCommandHandler);
+		getCommand("home").setExecutor(playerCommandHandler);
+		getCommand("sethome").setExecutor(playerCommandHandler);
+
+		final PunishmentCommandHandler punishmentCommandHandler = new PunishmentCommandHandler(this);
+		getCommand("ban").setExecutor(punishmentCommandHandler);
+		getCommand("banip").setExecutor(punishmentCommandHandler);
+		getCommand("mute").setExecutor(punishmentCommandHandler);
+		getCommand("jail").setExecutor(punishmentCommandHandler);
+		getCommand("unban").setExecutor(punishmentCommandHandler);
+		getCommand("unbanip").setExecutor(punishmentCommandHandler);
+		getCommand("unmute").setExecutor(punishmentCommandHandler);
+		getCommand("unjail").setExecutor(punishmentCommandHandler);
+		getCommand("kick").setExecutor(punishmentCommandHandler);
+
+		// CommandHandler's Listeners
+		pm.registerEvents(playerCommandHandler, this);
 
 		return true;
 	}
@@ -99,6 +125,13 @@ public class NPlayer extends PlayerNode {
 			e.printStackTrace();
 			getLogger().severe("This error occured when NPlayer tried to save userDB.yml");
 		}
+		try {
+			punishmentDb.saveConfig();
+		} catch (IOException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NPlayer tried to save punishmentDB.yml");
+		}
 	}
 
 	@Override
@@ -112,18 +145,7 @@ public class NPlayer extends PlayerNode {
 		// Nothing to do here for now
 	}
 
-	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		to.sendMessage(m);
-	}
-
-	public void broadcastMessage(final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		for (final String mes : m) {
-			getServer().broadcastMessage(mes);
-		}
-	}
-
+	@Override
 	public Messages getMessages() {
 		return messages;
 	}
@@ -132,11 +154,15 @@ public class NPlayer extends PlayerNode {
 		return pluginConfig;
 	}
 
-	public UserDB getUserDb() {
+	public UserDb getUserDb() {
 		return userDb;
 	}
 
 	public LoggedOutUserHandler getLoggedOutUserHandler() {
 		return loggedOutUserHandler;
+	}
+
+	public PunishmentDb getPunishmentDb() {
+		return punishmentDb;
 	}
 }

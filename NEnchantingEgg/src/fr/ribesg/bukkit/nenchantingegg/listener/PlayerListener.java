@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.nenchantingegg.listener;
 
 import fr.ribesg.bukkit.ncore.common.ChunkCoord;
-import fr.ribesg.bukkit.ncore.common.Time;
+import fr.ribesg.bukkit.ncore.common.MinecraftTime;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
@@ -70,7 +70,7 @@ public class PlayerListener implements Listener {
 								}
 								altar.setState(AltarState.INACTIVE);
 								plugin.getAltars().add(altar);
-								if (Time.isNightTime(loc.getWorld().getTime())) {
+								if (MinecraftTime.isNightTime(loc.getWorld().getTime())) {
 									plugin.getInactiveToActiveTransition().doTransition(altar);
 								}
 							} else {

@@ -17,12 +17,19 @@ public abstract class Punishment {
 		this.reason = reason;
 	}
 
-	public boolean hasEndDate() {
-		return endDate > 0;
+	public boolean isPermanent() {
+		return endDate < 0;
 	}
 
 	public long getEndDate() {
 		return endDate;
+	}
+
+	public boolean isStillActive() {
+		if (isPermanent()) {
+			throw new UnsupportedOperationException();
+		}
+		return getEndDate() > System.currentTimeMillis();
 	}
 
 	public PunishmentType getType() {

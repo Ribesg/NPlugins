@@ -98,7 +98,7 @@ public class FarmFlagListener extends AbstractListener {
 	public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
 		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
 		if (getAnimals().contains(event.getRightClicked().getType())) {
-			if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM)) {
+			if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.FARM) && !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
 				event.setCancelled(true);
 			}
 		}

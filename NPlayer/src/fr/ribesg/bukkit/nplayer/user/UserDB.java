@@ -16,13 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UserDB {
+public class UserDb {
 
 	private final NPlayer                 plugin;
 	private final Map<String, User>       usersPerName;
 	private final Map<String, List<User>> usersPerIp;
 
-	public UserDB(NPlayer plugin) {
+	public UserDb(NPlayer plugin) {
 		this.plugin = plugin;
 		this.usersPerName = new HashMap<>();
 		this.usersPerIp = new HashMap<>();
@@ -30,6 +30,10 @@ public class UserDB {
 
 	public boolean isUserKnown(String userName) {
 		return usersPerName.containsKey(userName);
+	}
+
+	public boolean isIpKnown(String ip) {
+		return usersPerIp.containsKey(ip);
 	}
 
 	public User get(String userName) {

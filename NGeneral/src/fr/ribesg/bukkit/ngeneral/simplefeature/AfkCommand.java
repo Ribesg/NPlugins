@@ -2,7 +2,6 @@ package fr.ribesg.bukkit.ngeneral.simplefeature;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,12 +37,11 @@ public class AfkCommand implements CommandExecutor {
 				}
 				if (player.getPlayerListName().startsWith(AFK_PREFIX)) {
 					player.setPlayerListName(player.getName());
-					plugin.sendMessage(player, MessageId.general_afk_noLongerAfk);
 					if (plugin.getPluginConfig().hasBroadCastOnAfk()) {
 						if (reason.length() > 0) {
-							sendMessageToAllBut(player, MessageId.general_afk_noLongerAfkBroadcastReason, player.getName(), reason);
+							plugin.broadcastMessage(MessageId.general_afk_noLongerAfkBroadcastReason, player.getName(), reason);
 						} else {
-							sendMessageToAllBut(player, MessageId.general_afk_noLongerAfkBroadcast, player.getName());
+							plugin.broadcastMessage(MessageId.general_afk_noLongerAfkBroadcast, player.getName());
 						}
 					}
 				} else {
@@ -52,12 +50,11 @@ public class AfkCommand implements CommandExecutor {
 						newPlayerListName = newPlayerListName.substring(0, 16);
 					}
 					player.setPlayerListName(newPlayerListName);
-					plugin.sendMessage(player, MessageId.general_afk_nowAfk);
 					if (plugin.getPluginConfig().hasBroadCastOnAfk()) {
 						if (reason.length() > 0) {
-							sendMessageToAllBut(player, MessageId.general_afk_nowAfkBroadcastReason, player.getName(), reason);
+							plugin.broadcastMessage(MessageId.general_afk_nowAfkBroadcastReason, player.getName(), reason);
 						} else {
-							sendMessageToAllBut(player, MessageId.general_afk_nowAfkBroadcast, player.getName());
+							plugin.broadcastMessage(MessageId.general_afk_nowAfkBroadcast, player.getName());
 						}
 					}
 				}
@@ -65,21 +62,6 @@ public class AfkCommand implements CommandExecutor {
 			return true;
 		} else {
 			return false;
-		}
-	}
-
-	/**
-	 * Broadcasts a message to all players but the one passed as argument
-	 *
-	 * @param player The player that should not receive the message
-	 * @param id     The message ID
-	 * @param args   The arguments to the message
-	 */
-	private void sendMessageToAllBut(Player player, MessageId id, String... args) {
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (!p.equals(player)) {
-				plugin.sendMessage(p, id, args);
-			}
 		}
 	}
 

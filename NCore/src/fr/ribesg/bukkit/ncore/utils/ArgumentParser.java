@@ -205,7 +205,7 @@ public class ArgumentParser {
 	 * Called once we checked all args.
 	 */
 	private void dealWithAnyUnclosedQuotes() {
-		if (!fallBackBuffer.isEmpty()) {
+		if (quoteState != QuoteState.NO_QUOTES && !fallBackBuffer.isEmpty()) {
 			parsedArgs.addAll(fallBackBuffer);
 		}
 	}

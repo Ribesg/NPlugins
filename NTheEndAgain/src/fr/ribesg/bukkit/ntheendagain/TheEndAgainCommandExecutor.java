@@ -125,7 +125,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 					handler.getRegenHandler().regen();
 				}
 			} else {
-				plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
+				plugin.sendMessage(sender, MessageId.unknownWorld);
 			}
 		}
 		return true;
@@ -141,7 +141,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 			if (handler != null) {
 				handler.getRespawnHandler().respawn();
 			} else {
-				plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
+				plugin.sendMessage(sender, MessageId.unknownWorld);
 			}
 		}
 		return true;
@@ -158,7 +158,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 				final Integer nb = handler.getNumberOfAliveEnderDragons();
 				plugin.sendMessage(sender, MessageId.theEndAgain_nbAlive, nb.toString(), handler.getEndWorld().getName());
 			} else {
-				plugin.sendMessage(sender, MessageId.theEndAgain_unknownWorld);
+				plugin.sendMessage(sender, MessageId.unknownWorld);
 			}
 		}
 		return true;
@@ -267,7 +267,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		final boolean senderIsAPlayer = sender instanceof Player;
 		if (args.length == 0) {
 			if (!senderIsAPlayer) {
-				plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
+				plugin.sendMessage(sender, MessageId.missingWorldArg);
 				return null;
 			} else {
 				result = new String[args.length + 1];
@@ -283,7 +283,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 					result[0] = ((Player) sender).getWorld().getName();
 					System.arraycopy(args, 0, result, 1, args.length);
 				} else {
-					plugin.sendMessage(sender, MessageId.theEndAgain_missingWorldArg);
+					plugin.sendMessage(sender, MessageId.missingWorldArg);
 					return null;
 				}
 			} else {

@@ -130,9 +130,14 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 
 		Map<String, GeneralWorld> worldsMap = new HashMap<>();
 		if (config.isConfigurationSection("stockWorlds")) {
-			ConfigurationSection stockWorldsSection = config.getConfigurationSection("stockWorlds");
+			final ConfigurationSection stockWorldsSection = config.getConfigurationSection("stockWorlds");
 			for (String worldName : stockWorldsSection.getKeys(false)) {
-				ConfigurationSection worldSection = stockWorldsSection.getConfigurationSection(worldName);
+				final ConfigurationSection worldSection = stockWorldsSection.getConfigurationSection(worldName);
+				final GeneralWorld.WorldType type = worldName.endsWith("_the_end")
+				                                    ? GeneralWorld.WorldType.STOCK_END
+				                                    : worldName.endsWith("_nether")
+				                                      ? GeneralWorld.WorldType.STOCK_NETHER
+				                                      : GeneralWorld.WorldType.STOCK;
 				boolean malformedWorldSection = false;
 				NLocation spawnLocation = null;
 				String requiredPermission = null;
@@ -142,7 +147,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 					malformedWorldSection = true;
 					log.severe("Missing or invalid configuration value: stockWorlds." + worldName + ".spawnLocation");
 				} else {
-					ConfigurationSection spawnSection = worldSection.getConfigurationSection("spawnLocation");
+					final ConfigurationSection spawnSection = worldSection.getConfigurationSection("spawnLocation");
 					if (!spawnSection.isDouble("x")) {
 						malformedWorldSection = true;
 						log.severe("Missing or invalid configuration value: stockWorlds." + worldName + ".spawnLocation.x");
@@ -159,11 +164,11 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 						malformedWorldSection = true;
 						log.severe("Missing or invalid configuration value: stockWorlds." + worldName + ".spawnLocation.pitch");
 					} else {
-						double x = spawnSection.getDouble("x");
-						double y = spawnSection.getDouble("y");
-						double z = spawnSection.getDouble("z");
-						float yaw = (float) spawnSection.getDouble("yaw");
-						float pitch = (float) spawnSection.getDouble("pitch");
+						final double x = spawnSection.getDouble("x");
+						final double y = spawnSection.getDouble("y");
+						final double z = spawnSection.getDouble("z");
+						final float yaw = (float) spawnSection.getDouble("yaw");
+						final float pitch = (float) spawnSection.getDouble("pitch");
 						spawnLocation = new NLocation(worldName, x, y, z, yaw, pitch);
 					}
 				}
@@ -180,7 +185,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 					hidden = worldSection.getBoolean("hidden");
 				}
 				if (!malformedWorldSection) {
-					worldsMap.put(worldName, new StockWorld(plugin, worldName, spawnLocation, requiredPermission, enabled, hidden));
+					worldsMap.put(worldName, new StockWorld(plugin, worldName, type, spawnLocation, requiredPermission, enabled, hidden));
 				} else {
 					throw new InvalidConfigurationException("Malformed Configuration - Stopping everything");
 				}
@@ -277,6 +282,9 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 					hasNether = worldSection.getBoolean("hasNether");
 				}
 				if (!worldSection.isConfigurationSection("netherWorld")) {
+					malformedWorldSection = true;
+					log.severe("Missing or invalid configuration section: additionalWorlds." + worldName + ".netherWorld");
+				} else {
 					ConfigurationSection netherSection = worldSection.getConfigurationSection("netherWorld");
 					if (!netherSection.isConfigurationSection("spawnLocation")) {
 						malformedWorldSection = true;
@@ -345,6 +353,9 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 					hasEnd = worldSection.getBoolean("hasEnd");
 				}
 				if (!worldSection.isConfigurationSection("endWorld")) {
+					malformedWorldSection = true;
+					log.severe("Missing or invalid configuration section: additionalWorlds." + worldName + ".endWorld");
+				} else {
 					ConfigurationSection endSection = worldSection.getConfigurationSection("endWorld");
 					if (!endSection.isConfigurationSection("spawnLocation")) {
 						malformedWorldSection = true;

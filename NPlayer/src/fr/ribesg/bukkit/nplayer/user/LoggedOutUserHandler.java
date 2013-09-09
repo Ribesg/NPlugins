@@ -66,7 +66,7 @@ public class LoggedOutUserHandler implements Listener {
 	public void lockPlayer(String userName) {
 		Player player = plugin.getServer().getPlayerExact(userName);
 		if (player != null) {
-			player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(1337, 42));
+			player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(1337, 42)); // TODO Think about values
 		}
 	}
 
@@ -77,7 +77,7 @@ public class LoggedOutUserHandler implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		String userName = event.getPlayer().getName();
 		notifyConnect(userName);

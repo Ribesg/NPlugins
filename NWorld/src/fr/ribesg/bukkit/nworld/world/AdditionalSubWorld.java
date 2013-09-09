@@ -21,9 +21,11 @@ public class AdditionalSubWorld extends GeneralWorld {
 		if (type == Environment.NETHER) {
 			worldName += "_nether";
 			setType(WorldType.ADDITIONAL_SUB_NETHER);
+			parentWorld.setNetherWorld(this);
 		} else if (type == Environment.THE_END) {
 			worldName += "_the_end";
 			setType(WorldType.ADDITIONAL_SUB_END);
+			parentWorld.setEndWorld(this);
 		} else {
 			throw new IllegalArgumentException("Invalid sub-world type: " + type.toString());
 		}
@@ -43,5 +45,9 @@ public class AdditionalSubWorld extends GeneralWorld {
 
 	public boolean isMalformed() {
 		return false;
+	}
+
+	public AdditionalWorld getParentWorld() {
+		return parentWorld;
 	}
 }

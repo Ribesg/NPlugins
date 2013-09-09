@@ -1,7 +1,9 @@
 package fr.ribesg.bukkit.ncore.lang;
 
+import fr.ribesg.bukkit.ncore.common.FrameBuilder;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,6 +30,8 @@ public abstract class AbstractMessages {
 	/** Separator used in config to define if you want to send multiple messages to player */
 	public static final String LINE_SEPARATOR = "%%";
 
+	private String nodeName;
+
 	/** Header of each messages sent to player */
 	private String messageHeader;
 
@@ -42,7 +46,8 @@ public abstract class AbstractMessages {
 	 * @param nodeName The plugin Node name
 	 */
 	public AbstractMessages(final String nodeName) {
-		messageHeader = "§0[§c§lN§6" + nodeName + "§0] §f";
+		this.nodeName = nodeName;
+		this.messageHeader = "§0[§c§lN§6" + nodeName + "§0] §f";
 	}
 
 	/**
@@ -58,25 +63,33 @@ public abstract class AbstractMessages {
 		if (!Files.exists(path)) {
 			newMessages(path);
 		} else {
-			final YamlConfiguration cMessages = new YamlConfiguration();
+			final YamlConfiguration messagesConfig = new YamlConfiguration();
 			try (BufferedReader reader = Files.newBufferedReader(path, CHARSET)) {
 				final StringBuilder s = new StringBuilder();
 				while (reader.ready()) {
 					s.append(reader.readLine()).append('\n');
 				}
-				cMessages.loadFromString(s.toString());
+				messagesConfig.loadFromString(s.toString());
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
-			for (final String idString : cMessages.getKeys(false)) {
+			for (final String idString : messagesConfig.getKeys(false)) {
 				try {
 					final MessageId id = MessageId.valueOf(idString);
 					final Message def = messagesMap.get(id);
-					messagesMap.put(id,
-					                new Message(id,
-					                            def.getDefaultMessage(),
-					                            def.getAwaitedArgs(),
-					                            cMessages.getString(idString, def.getDefaultMessage())));
+					String value;
+					boolean useHeader;
+					if (!messagesConfig.isConfigurationSection(idString)) {
+						// Pre 0.4.0
+						value = messagesConfig.getString(idString, def.getDefaultMessage());
+						useHeader = true;
+					} else {
+						// 0.4.0 and post 0.4.0
+						final ConfigurationSection section = messagesConfig.getConfigurationSection(idString);
+						value = section.getString("value", def.getDefaultMessage());
+						useHeader = section.getBoolean("useHeader", true);
+					}
+					messagesMap.put(id, new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), value, useHeader));
 				} catch (final IllegalArgumentException e) {
 					plugin.getLogger().warning(idString + " is not / no longer used, removing it from messages config file.");
 				}
@@ -121,7 +134,28 @@ public abstract class AbstractMessages {
 	}
 
 	/** @return the String that will be written in config file */
-	protected abstract String getConfigString();
+	private String getConfigString() {
+		final StringBuilder content = new StringBuilder();
+
+		final FrameBuilder frame = new FrameBuilder();
+		frame.addLine("List of N" + nodeName + " messages. You're free to change text/colors/language here.");
+		frame.addLine("Supports both '§' and '&' characters for colors.");
+		frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
+		for (String line : frame.build()) {
+			content.append(line).append('\n');
+		}
+		content.append('\n');
+
+		for (final Message m : getMessagesMap().values()) {
+			content.append("# Default value    : " + m.getDefaultMessage() + '\n');
+			content.append("# Default useHeader: " + m.useHeader() + '\n');
+			content.append("# Awaited arguments: " + m.getAwaitedArgsString() + '\n');
+			content.append(m.getId().name() + ":\n");
+			content.append("  value: \"" + (m.getConfigMessage() != null ? m.getConfigMessage() : m.getDefaultMessage()) + "\"\n");
+			content.append("  useHeader: " + m.useHeader() + "\n\n");
+		}
+		return content.toString();
+	}
 
 	/**
 	 * @param id   The Id of the message we want
@@ -140,6 +174,12 @@ public abstract class AbstractMessages {
 				                                   ")");
 			}
 			String res = m.getConfigMessage() == null ? m.getDefaultMessage() : m.getConfigMessage();
+
+			// Handle empty-string as "do not send anything"
+			if (res.isEmpty()) {
+				return new String[0];
+			}
+
 			// Replacing args by there values
 			for (int i = 0; i < m.getAwaitedArgsNb(); i++) {
 				res = res.replace(m.getAwaitedArgs()[i], args[i]);
@@ -147,7 +187,7 @@ public abstract class AbstractMessages {
 			// Adding Header, colors
 			final String[] resSplit = res.concat(LINE_SEPARATOR).split(LINE_SEPARATOR);
 			for (int i = 0; i < resSplit.length; i++) {
-				resSplit[i] = messageHeader + ColorUtils.colorize(resSplit[i]);
+				resSplit[i] = (m.useHeader() ? messageHeader : "") + ColorUtils.colorize(resSplit[i]);
 			}
 			return resSplit;
 		} catch (final IllegalArgumentException e) {

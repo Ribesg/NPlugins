@@ -160,6 +160,9 @@ public class NLocation {
 	 */
 
 	public static String toString(final Location loc) {
+		if (loc == null) {
+			return "null";
+		}
 		final StringBuilder s = new StringBuilder();
 		s.append('<');
 		s.append(loc.getWorld().getName());

@@ -1,10 +1,8 @@
 package fr.ribesg.bukkit.ntalk;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
 import fr.ribesg.bukkit.ntalk.format.Formater;
 import fr.ribesg.bukkit.ntalk.lang.Messages;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
@@ -24,7 +22,7 @@ public class NTalk extends TalkNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.3.3";
+		return "0.4.0";
 	}
 
 	@Override
@@ -83,15 +81,11 @@ public class NTalk extends TalkNode {
 		// Nothing to do here for now
 	}
 
-	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		to.sendMessage(m);
-	}
-
 	public Formater getFormater() {
 		return formater;
 	}
 
+	@Override
 	public Messages getMessages() {
 		return messages;
 	}

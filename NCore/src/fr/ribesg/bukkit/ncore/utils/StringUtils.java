@@ -3,6 +3,7 @@ package fr.ribesg.bukkit.ncore.utils;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -80,6 +81,22 @@ public class StringUtils {
 		}
 		final String result = s.toString();
 		return result.substring(0, 1).toLowerCase() + result.substring(1);
+	}
+
+	public static String joinStrings(String[] array, int start) {
+		return joinStrings(array, start, array.length);
+	}
+
+	public static String joinStrings(String[] array, int start, int end) {
+		return joinStrings(" ", array, start, end);
+	}
+
+	public static String joinStrings(String joinString, String[] array, int start) {
+		return joinStrings(joinString, array, start, array.length);
+	}
+
+	public static String joinStrings(String joinString, String[] array, int start, int end) {
+		return joinStrings(joinString, Arrays.copyOfRange(array, start, end));
 	}
 
 	public static String joinStrings(String... strings) {

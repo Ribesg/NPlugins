@@ -29,124 +29,156 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.incorrectValueInConfiguration,
 		                            "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)",
 		                            new String[] {"%filename%", "%value%", "%default%"},
-		                            null));
+		                            null,
+		                            true));
 
 		// General deny response
-		newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null));
+		newMessages.add(new Message(MessageId.noPermissionForCommand,
+		                            "&cYou do not have the permission to use that command",
+		                            null,
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName,
 		                            "&cNo online player found for input %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
-		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null));
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null, true));
+		newMessages.add(new Message(MessageId.missingWorldArg, "&cNon-player user should provide a world name", null, null, true));
+		newMessages.add(new Message(MessageId.unknownWorld, "&cUnknown world '%world%'", new String[] {"%world%"}, null, true));
 
 		// Command - RELOAD
-		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null));
-		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null));
+		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null, true));
+		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null, true));
 
 		// Command - GOD
-		newMessages.add(new Message(MessageId.general_god_enabled, "&aGod Mode enabled", null, null));
-		newMessages.add(new Message(MessageId.general_god_disabled, "&aGod Mode disabled", null, null));
+		newMessages.add(new Message(MessageId.general_god_enabled, "&aGod Mode enabled", null, null, true));
+		newMessages.add(new Message(MessageId.general_god_disabled, "&aGod Mode disabled", null, null, true));
 		newMessages.add(new Message(MessageId.general_god_enabledFor,
 		                            "&aGod Mode enabled for %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.general_god_disabledFor,
 		                            "&aGod Mode disabled for %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.general_god_enabledBy,
 		                            "&aGod Mode enabled by %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.general_god_disabledBy,
 		                            "&aGod Mode disabled by %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            true));
 
 		// Command - FLY
-		newMessages.add(new Message(MessageId.general_fly_enabled, "&aFly Mode enabled", null, null));
-		newMessages.add(new Message(MessageId.general_fly_disabled, "&aFly Mode disabled", null, null));
+		newMessages.add(new Message(MessageId.general_fly_enabled, "&aFly Mode enabled", null, null, true));
+		newMessages.add(new Message(MessageId.general_fly_disabled, "&aFly Mode disabled", null, null, true));
 		newMessages.add(new Message(MessageId.general_fly_enabledFor,
 		                            "&aFly Mode enabled for %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.general_fly_disabledFor,
 		                            "&aFly Mode disabled for %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.general_fly_enabledBy,
 		                            "&aFly Mode enabled by %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.general_fly_disabledBy,
 		                            "&aFly Mode disabled by %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            true));
 
 		// Command - FLYSPEED
-		newMessages.add(new Message(MessageId.general_flyspeed_set, "&aFly Speed set to %value%", new String[] {"%value%"}, null));
-		newMessages.add(new Message(MessageId.general_flyspeed_reset, "&aFly Speed reset", null, null));
-		newMessages.add(new Message(MessageId.general_flyspeed_setFor,
+		newMessages.add(new Message(MessageId.general_flySpeed_set, "&aFly Speed set to %value%", new String[] {"%value%"}, null, true));
+		newMessages.add(new Message(MessageId.general_flySpeed_reset, "&aFly Speed reset", null, null, true));
+		newMessages.add(new Message(MessageId.general_flySpeed_setFor,
 		                            "&aFly Speed set to %value% for %playerName%",
 		                            new String[] {"%value%", "%playerName%"},
-		                            null));
-		newMessages.add(new Message(MessageId.general_flyspeed_setBy,
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_flySpeed_setBy,
 		                            "&aFly Speed set to %value% by %playerName%",
 		                            new String[] {"%value%", "%playerName%"},
-		                            null));
+		                            null,
+		                            true));
+
+		// Command - WALKSPEED
+		newMessages.add(new Message(MessageId.general_walkSpeed_set, "&aWalk Speed set to %value%", new String[] {"%value%"}, null, true));
+		newMessages.add(new Message(MessageId.general_walkSpeed_reset, "&aWalk Speed reset", null, null, true));
+		newMessages.add(new Message(MessageId.general_walkSpeed_setFor,
+		                            "&aWalk Speed set to %value% for %playerName%",
+		                            new String[] {"%value%", "%playerName%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_walkSpeed_setBy,
+		                            "&aWalk Speed set to %value% by %playerName%",
+		                            new String[] {"%value%", "%playerName%"},
+		                            null,
+		                            true));
 
 		// Command - AFK
-		newMessages.add(new Message(MessageId.general_afk_nowAfk, "&aYou are now AFK", null, null));
-		newMessages.add(new Message(MessageId.general_afk_noLongerAfk, "&aYou are no longer AFK", null, null));
 		newMessages.add(new Message(MessageId.general_afk_nowAfkBroadcast,
-		                            "&a%playerName% is now AFK",
+		                            "&e%playerName% is now AFK",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            false));
 		newMessages.add(new Message(MessageId.general_afk_noLongerAfkBroadcast,
-		                            "&a%playerName% is no longer AFK",
+		                            "&e%playerName% is no longer AFK",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            false));
 		newMessages.add(new Message(MessageId.general_afk_nowAfkBroadcastReason,
-		                            "&a%playerName% is now AFK (%reason%)",
+		                            "&e%playerName% is now AFK (%reason%)",
 		                            new String[] {"%playerName%", "%reason%"},
-		                            null));
+		                            null,
+		                            false));
 		newMessages.add(new Message(MessageId.general_afk_noLongerAfkBroadcastReason,
-		                            "&a%playerName% is no longer AFK (%reason%)",
+		                            "&e%playerName% is no longer AFK (%reason%)",
 		                            new String[] {"%playerName%", "%reason%"},
-		                            null));
+		                            null,
+		                            false));
+
+		// Command - TIME
+		newMessages.add(new Message(MessageId.general_timeSet,
+		                            "&aTime set to %value% in world %world% by %changer%",
+		                            new String[] {"%value%", "%world%", "%changer%"},
+		                            null,
+		                            true));
+
+		// Command - WEATHER
+		newMessages.add(new Message(MessageId.general_weatherSet,
+		                            "&aWeather changed to %value% in world %world% by %changer% for %duration% seconds",
+		                            new String[] {"%value%", "%world%", "%changer%", "%duration%"},
+		                            null,
+		                            true));
 
 		// Feature - SIGN COLORS
 		newMessages.add(new Message(MessageId.general_signcolors_permissionDenied,
 		                            "&cYou do not have the permission to use colors on signs",
 		                            null,
-		                            null));
+		                            null,
+		                            true));
 
 		// Feature - PROTECTION SIGNS
-		newMessages.add(new Message(MessageId.general_protectionsign_accessDenied, "&cAccess denied by a Private sign.", null, null));
+		newMessages.add(new Message(MessageId.general_protectionsign_accessDenied, "&cAccess denied by a Private sign.", null, null, true));
 		newMessages.add(new Message(MessageId.general_protectionsign_breakDenied,
 		                            "&cThis bloc is protected by a Private sign.",
 		                            null,
-		                            null));
+		                            null,
+		                            true));
 
 		return newMessages;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#getConfigString() */
-	@Override
-	protected String getConfigString() {
-		final StringBuilder content = new StringBuilder();
-		content.append("###################################################################################\n");
-		content.append("# List of NGeneral messages. You're free to change text/colors/language here.     #\n");
-		content.append("# Supports both '§' and '&' characters for colors.                         Ribesg #\n");
-		content.append("###################################################################################\n\n");
-		for (final Message m : getMessagesMap().values()) {
-			content.append("# Default value    : " + m.getDefaultMessage() + '\n');
-			content.append("# Awaited arguments: " + m.getAwaitedArgsString() + '\n');
-			content.append(m.getId().name() +
-			               ": \"" +
-			               (m.getConfigMessage() != null ? m.getConfigMessage() : m.getDefaultMessage()) +
-			               "\"\n\n");
-		}
-		return content.toString();
-	}
 }

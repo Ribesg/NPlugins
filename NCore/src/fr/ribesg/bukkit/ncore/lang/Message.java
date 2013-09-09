@@ -11,6 +11,7 @@ public class Message {
 	private final String    defaultMessage;
 	private final String    configMessage;
 	private final String[]  awaitedArgs;
+	private final boolean   useHeader;
 
 	/**
 	 * @param id             The Message Id
@@ -21,7 +22,8 @@ public class Message {
 		this.id = id;
 		this.defaultMessage = defaultMessage;
 		this.awaitedArgs = awaitedArgs;
-		configMessage = null;
+		this.configMessage = null;
+		this.useHeader = true;
 	}
 
 	/**
@@ -29,12 +31,18 @@ public class Message {
 	 * @param defaultMessage The default Message (in English)
 	 * @param awaitedArgs    The awaited arguments used while parsing the message
 	 * @param configMessage  The Message found in the configuration file
+	 * @param useHeader      Defines if we should prepend the header or not
 	 */
-	public Message(final MessageId id, final String defaultMessage, final String[] awaitedArgs, final String configMessage) {
+	public Message(final MessageId id,
+	               final String defaultMessage,
+	               final String[] awaitedArgs,
+	               final String configMessage,
+	               final boolean useHeader) {
 		this.id = id;
 		this.defaultMessage = defaultMessage;
 		this.awaitedArgs = awaitedArgs;
 		this.configMessage = configMessage;
+		this.useHeader = useHeader;
 	}
 
 	/** @return a String representation of what arguments were awaited */
@@ -61,19 +69,23 @@ public class Message {
 	}
 
 	public MessageId getId() {
-		return id;
+		return this.id;
 	}
 
 	public String getDefaultMessage() {
-		return defaultMessage;
+		return this.defaultMessage;
 	}
 
 	public String getConfigMessage() {
-		return configMessage;
+		return this.configMessage;
 	}
 
 	public String[] getAwaitedArgs() {
-		return awaitedArgs;
+		return this.awaitedArgs;
+	}
+
+	public boolean useHeader() {
+		return this.useHeader;
 	}
 
 	@Override

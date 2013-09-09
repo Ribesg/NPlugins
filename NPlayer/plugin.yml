@@ -1,5 +1,5 @@
 name: NPlayer
-version: 0.3.2
+version: 0.4.0
 description: Player plugin for N plugins suite
 author: Ribesg
 website: http://www.ribesg.fr
@@ -13,21 +13,61 @@ softdepend: [NWorld]
 commands:
   login:
     description: Login command
+    usage: |
+      /<command> <password>
   register:
     description: Register command
+    usage: |
+      /<command> <password>
   logout:
     description: Logout command
+    usage: |
+      /<command> [autologout|auto [enable|disable]]
   info:
     description: Info command
+    usage: |
+      /<command> <playerName>
   home:
     description: Home command
+    usage: |
+      /<command> [playerName]
   sethome:
     description: SetHome command
+    usage: |
+      /<command> [playerName]
   ban:
     description: Ban command
+    usage: |
+      /<command> <playerName> [duration] <reason>
+  banip:
+    description: Banip command
+    usage: |
+      /<command> <ip|playerName> [duration] <reason>
   jail:
     description: Jail command
+    usage: |
+      /<command> <playerName> [duration] <jailPointName> <reason>
   mute:
     description: Mute command
+    usage: |
+      /<command> <playerName> [duration] <reason>
+  unban:
+    description: Unban command
+    usage: |
+      /<command> <playerName>
+  unbanip:
+    description: Unbanip command
+    usage: |
+      /<command> <ip>
+  unjail:
+    description: Unjail command
+    usage: |
+      /<command> <playerName>
+  unmute:
+    description: Unmute command
+    usage: |
+      /<command> <playerName>
   kick:
     description: Kick command
+    usage: |
+      /<command> <playerName> <reason>

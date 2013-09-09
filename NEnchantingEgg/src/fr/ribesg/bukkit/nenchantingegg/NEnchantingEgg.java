@@ -1,6 +1,5 @@
 package fr.ribesg.bukkit.nenchantingegg;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.enchantingegg.EnchantingEggNode;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altars;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.ActiveToEggProvidedTransition;
@@ -13,7 +12,6 @@ import fr.ribesg.bukkit.nenchantingegg.listener.ItemListener;
 import fr.ribesg.bukkit.nenchantingegg.listener.PlayerListener;
 import fr.ribesg.bukkit.nenchantingegg.task.TimeListenerTask;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
@@ -44,7 +42,7 @@ public class NEnchantingEgg extends EnchantingEggNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.3.3";
+		return "0.4.0";
 	}
 
 	@Override
@@ -122,18 +120,6 @@ public class NEnchantingEgg extends EnchantingEggNode {
 		// Nothing to do here for now
 	}
 
-	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		to.sendMessage(m);
-	}
-
-	public void broadcastMessage(final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		for (final String mes : m) {
-			getServer().broadcastMessage(mes);
-		}
-	}
-
 	public ActiveToEggProvidedTransition getActiveToEggProvidedTransition() {
 		return activeToEggProvidedTransition;
 	}
@@ -166,6 +152,7 @@ public class NEnchantingEgg extends EnchantingEggNode {
 		return playerListener;
 	}
 
+	@Override
 	public Messages getMessages() {
 		return messages;
 	}

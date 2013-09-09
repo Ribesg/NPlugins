@@ -8,11 +8,13 @@ public class StockWorld extends GeneralWorld {
 
 	public StockWorld(NWorld instance,
 	                  String worldName,
+	                  WorldType type,
 	                  NLocation spawnLocation,
 	                  String requiredPermission,
 	                  boolean enabled,
 	                  boolean hidden) {
 		super(instance, worldName, spawnLocation, requiredPermission, enabled, hidden);
+		setType(type);
 	}
 
 	@Override

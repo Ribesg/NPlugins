@@ -2,8 +2,12 @@ package fr.ribesg.bukkit.ncore.node;
 
 import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.common.FrameBuilder;
+import fr.ribesg.bukkit.ncore.lang.AbstractMessages;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.metrics.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -129,6 +133,31 @@ public abstract class NPlugin extends JavaPlugin {
 	private boolean badCoreVersion() {
 		return getCoreVersion().compareTo(getMinCoreVersion()) < 0;
 	}
+
+	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
+		final String[] m = getMessages().get(messageId, args);
+		to.sendMessage(m);
+	}
+
+	public void broadcastMessage(final MessageId messageId, final String... args) {
+		final String[] m = getMessages().get(messageId, args);
+		for (final String mes : m) {
+			getServer().broadcastMessage(mes);
+		}
+	}
+
+	public void broadcastExcluding(final Player player, final MessageId messageId, final String... args) {
+		final String[] m = getMessages().get(messageId, args);
+		for (final Player p : Bukkit.getOnlinePlayers()) {
+			if (p != player) {
+				for (final String mes : m) {
+					getServer().broadcastMessage(mes);
+				}
+			}
+		}
+	}
+
+	public abstract AbstractMessages getMessages();
 
 	/**
 	 * Call the Core's Setter for this Node type

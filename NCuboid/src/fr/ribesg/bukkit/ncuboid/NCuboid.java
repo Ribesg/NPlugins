@@ -1,6 +1,5 @@
 package fr.ribesg.bukkit.ncuboid;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
@@ -13,7 +12,6 @@ import fr.ribesg.bukkit.ncuboid.listeners.PlayerStickListener;
 import fr.ribesg.bukkit.ncuboid.listeners.WorldLoadingListener;
 import fr.ribesg.bukkit.ncuboid.listeners.flag.*;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
@@ -42,7 +40,7 @@ public class NCuboid extends CuboidNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.3.3";
+		return "0.4.0";
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeEnable() */
@@ -144,23 +142,11 @@ public class NCuboid extends CuboidNode {
 		}
 	}
 
-	/**
-	 * Send a message with arguments
-	 * TODO <b>This may be moved<b>
-	 *
-	 * @param to        Receiver
-	 * @param messageId The Message Id
-	 * @param args      The arguments
-	 */
-	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		to.sendMessage(m);
-	}
-
 	public CuboidDB getDb() {
 		return db;
 	}
 
+	@Override
 	public Messages getMessages() {
 		return messages;
 	}

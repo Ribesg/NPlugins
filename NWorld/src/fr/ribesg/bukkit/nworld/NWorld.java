@@ -1,7 +1,6 @@
 package fr.ribesg.bukkit.nworld;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.world.WorldNode;
 import fr.ribesg.bukkit.nworld.config.Config;
 import fr.ribesg.bukkit.nworld.lang.Messages;
@@ -13,7 +12,6 @@ import fr.ribesg.bukkit.nworld.world.Worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
@@ -39,7 +37,7 @@ public class NWorld extends WorldNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.3.3";
+		return "0.4.0";
 	}
 
 	@Override
@@ -156,7 +154,7 @@ public class NWorld extends WorldNode {
 		pm.registerEvents(new NListener(this), this);
 
 		// Commands
-		WorldCommandExecutor executor = new WorldCommandExecutor(this);
+		final WorldCommandExecutor executor = new WorldCommandExecutor(this);
 		getCommand("nworld").setExecutor(executor);
 		getCommand("spawn").setExecutor(executor);
 		getCommand("setspawn").setExecutor(executor);
@@ -181,18 +179,7 @@ public class NWorld extends WorldNode {
 		// Nothing to do here for now
 	}
 
-	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		to.sendMessage(m);
-	}
-
-	public void broadcastMessage(final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		for (final String mes : m) {
-			getServer().broadcastMessage(mes);
-		}
-	}
-
+	@Override
 	public Messages getMessages() {
 		return messages;
 	}

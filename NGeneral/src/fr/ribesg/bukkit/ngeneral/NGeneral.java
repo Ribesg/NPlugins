@@ -1,6 +1,5 @@
 package fr.ribesg.bukkit.ngeneral;
 
-import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
 import fr.ribesg.bukkit.ngeneral.config.Config;
 import fr.ribesg.bukkit.ngeneral.config.DbConfig;
@@ -10,7 +9,9 @@ import fr.ribesg.bukkit.ngeneral.feature.protectionsign.ProtectionSignFeature;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
 import fr.ribesg.bukkit.ngeneral.simplefeature.AfkCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.FlySpeedCommand;
-import org.bukkit.command.CommandSender;
+import fr.ribesg.bukkit.ngeneral.simplefeature.TimeCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.WalkSpeedCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.WeatherCommand;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
@@ -28,12 +29,15 @@ public class NGeneral extends GeneralNode {
 	private ProtectionSignFeature protectionSign;
 
 	// Simple commands
-	private FlySpeedCommand flySpeedCommand;
-	private AfkCommand      afkCommand;
+	private FlySpeedCommand  flySpeedCommand;
+	private WalkSpeedCommand walkSpeedCommand;
+	private AfkCommand       afkCommand;
+	private TimeCommand      timeCommand;
+	private WeatherCommand   weatherCommand;
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.3.3";
+		return "0.4.0";
 	}
 
 	@Override
@@ -102,7 +106,10 @@ public class NGeneral extends GeneralNode {
 
 		// Simple commands - Self-registered
 		flySpeedCommand = new FlySpeedCommand(this);
+		walkSpeedCommand = new WalkSpeedCommand(this);
 		afkCommand = new AfkCommand(this);
+		timeCommand = new TimeCommand(this);
+		weatherCommand = new WeatherCommand(this);
 
 		return true;
 	}
@@ -131,18 +138,7 @@ public class NGeneral extends GeneralNode {
 		getCore().setGeneralNode(this);
 	}
 
-	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		to.sendMessage(m);
-	}
-
-	public void broadcastMessage(final MessageId messageId, final String... args) {
-		final String[] m = messages.get(messageId, args);
-		for (final String mes : m) {
-			getServer().broadcastMessage(mes);
-		}
-	}
-
+	@Override
 	public Messages getMessages() {
 		return messages;
 	}

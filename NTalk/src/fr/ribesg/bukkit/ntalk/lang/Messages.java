@@ -29,58 +29,49 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.incorrectValueInConfiguration,
 		                            "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)",
 		                            new String[] {"%filename%", "%value%", "%default%"},
-		                            null));
+		                            null,
+		                            true));
 
 		// General deny response
-		newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null));
+		newMessages.add(new Message(MessageId.noPermissionForCommand,
+		                            "&cYou do not have the permission to use that command",
+		                            null,
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName,
 		                            "&cNo online player found for input %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
-		newMessages.add(new Message(MessageId.talk_nobodyToRespond, "&cYou have nobody to respond to", null, null));
-		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null));
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.talk_nobodyToRespond, "&cYou have nobody to respond to", null, null, true));
+		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null, true));
 
 		// Command - RELOAD
-		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null));
-		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null));
+		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null, true));
+		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null, true));
 
 		// Command - NICK
 		newMessages.add(new Message(MessageId.talk_youNickNamed,
 		                            "&aYou renamed %realName% %nickName%",
 		                            new String[] {"%realName%", "%nickName%"},
-		                            null));
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.talk_youDeNickNamed,
 		                            "&aYou reseted the name of %realName%",
 		                            new String[] {"%realName%"},
-		                            null));
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.talk_youWereNickNamed,
 		                            "&aYou were renamed %nickName% by %playerName%",
 		                            new String[] {"%nickName%", "%playerName%"},
-		                            null));
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.talk_youWereDeNickNamed,
 		                            "&aYour name was reseted by %playerName%",
 		                            new String[] {"%playerName%"},
-		                            null));
+		                            null,
+		                            true));
 
 		return newMessages;
-	}
-
-	/** @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#getConfigString() */
-	@Override
-	protected String getConfigString() {
-		final StringBuilder content = new StringBuilder();
-		content.append("###################################################################################\n");
-		content.append("# List of NTalk messages. You're free to change text/colors/language here.        #\n");
-		content.append("# Supports both '§' and '&' characters for colors.                         Ribesg #\n");
-		content.append("###################################################################################\n\n");
-		for (final Message m : getMessagesMap().values()) {
-			content.append("# Default value    : " + m.getDefaultMessage() + '\n');
-			content.append("# Awaited arguments: " + m.getAwaitedArgsString() + '\n');
-			content.append(m.getId().name() +
-			               ": \"" +
-			               (m.getConfigMessage() != null ? m.getConfigMessage() : m.getDefaultMessage()) +
-			               "\"\n\n");
-		}
-		return content.toString();
 	}
 }

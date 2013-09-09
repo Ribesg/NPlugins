@@ -22,8 +22,8 @@ public class Worlds implements Iterable<GeneralWorld> {
 	public SortedMap<String, StockWorld> getStock() {
 		SortedMap<String, StockWorld> result = new TreeMap<>();
 		for (GeneralWorld world : this) {
-			if (world.getType() == WorldType.STOCK || world.getType() == WorldType.STOCK_NETHER || world.getType() == WorldType.STOCK_END) {
-				result.put(world.getWorldName().toLowerCase(), (StockWorld) world);
+			if (WorldType.isStock(world)) {
+				result.put(world.getWorldName(), (StockWorld) world);
 			}
 		}
 		return result;
@@ -33,7 +33,7 @@ public class Worlds implements Iterable<GeneralWorld> {
 		SortedMap<String, AdditionalWorld> result = new TreeMap<>();
 		for (GeneralWorld world : this) {
 			if (world.getType() == WorldType.ADDITIONAL) {
-				result.put(world.getWorldName().toLowerCase(), (AdditionalWorld) world);
+				result.put(world.getWorldName(), (AdditionalWorld) world);
 			}
 		}
 		return result;
@@ -43,7 +43,7 @@ public class Worlds implements Iterable<GeneralWorld> {
 		SortedMap<String, AdditionalSubWorld> result = new TreeMap<>();
 		for (GeneralWorld world : this) {
 			if (world.getType() == WorldType.ADDITIONAL_SUB_NETHER || world.getType() == WorldType.ADDITIONAL_SUB_END) {
-				result.put(world.getWorldName().toLowerCase(), (AdditionalSubWorld) world);
+				result.put(world.getWorldName(), (AdditionalSubWorld) world);
 			}
 		}
 		return result;
@@ -62,7 +62,7 @@ public class Worlds implements Iterable<GeneralWorld> {
 	}
 
 	public boolean containsKey(String key) {
-		return worlds.containsKey(key.toLowerCase());
+		return worlds.containsKey(key);
 	}
 
 	public boolean containsValue(GeneralWorld value) {
@@ -70,11 +70,11 @@ public class Worlds implements Iterable<GeneralWorld> {
 	}
 
 	public GeneralWorld get(String key) {
-		return worlds.get(key.toLowerCase());
+		return worlds.get(key);
 	}
 
 	public GeneralWorld put(String key, GeneralWorld value) {
-		return worlds.put(key.toLowerCase(), value);
+		return worlds.put(key, value);
 	}
 
 	public void putAll(Map<? extends String, ? extends GeneralWorld> m) {
@@ -82,7 +82,7 @@ public class Worlds implements Iterable<GeneralWorld> {
 	}
 
 	public GeneralWorld remove(String key) {
-		return worlds.remove(key.toLowerCase());
+		return worlds.remove(key);
 	}
 
 	public void clear() {

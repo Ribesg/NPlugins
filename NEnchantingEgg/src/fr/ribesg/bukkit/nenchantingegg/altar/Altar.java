@@ -1,8 +1,8 @@
 package fr.ribesg.bukkit.nenchantingegg.altar;
 
 import fr.ribesg.bukkit.ncore.common.ChunkCoord;
+import fr.ribesg.bukkit.ncore.common.MinecraftTime;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.common.Time;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
 import fr.ribesg.bukkit.nenchantingegg.item.ItemBuilder;
@@ -56,7 +56,7 @@ public class Altar {
 	}
 
 	public void setState(final AltarState newState) {
-		if (newState == AltarState.LOCKED && Time.isDayTime(centerLocation.getWorld().getTime())) {
+		if (newState == AltarState.LOCKED && MinecraftTime.isDayTime(centerLocation.getWorld().getTime())) {
 			state = AltarState.INACTIVE;
 		} else {
 			if (newState == AltarState.EGG_PROVIDED) {

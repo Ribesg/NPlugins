@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 
@@ -158,9 +159,29 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		}
 
 		// Unload the world
-		Bukkit.unloadWorld(getWorldName(), true);
+		Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				Bukkit.unloadWorld(getWorldName(), true);
+			}
+		}, 1L);
 
 		this.setEnabled(false);
+	}
+
+	public boolean exists() {
+		try {
+			return WorldUtils.exists(getWorldName()) != null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/** @return Null if the world doesn't exist / isn't loaded */
+	public World getBukkitWorld() {
+		return Bukkit.getWorld(getWorldName());
 	}
 
 	public abstract long getSeed();

@@ -1,8 +1,8 @@
 package fr.ribesg.bukkit.nenchantingegg.altar;
 
 import fr.ribesg.bukkit.ncore.common.ChunkCoord;
+import fr.ribesg.bukkit.ncore.common.MinecraftTime;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.common.Time;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -89,16 +89,16 @@ public class Altars {
 		return perChunk.get(coord);
 	}
 
-	public void timeChange(final String worldName, final Time fromTime, final Time toTime) {
+	public void timeChange(final String worldName, final MinecraftTime fromMinecraftTime, final MinecraftTime toMinecraftTime) {
 		if (perWorld.containsKey(worldName)) {
 			int i = 0;
-			if (fromTime == Time.DAY && toTime == Time.NIGHT) {
+			if (fromMinecraftTime == MinecraftTime.DAY && toMinecraftTime == MinecraftTime.NIGHT) {
 				for (final Altar a : perWorld.get(worldName)) {
 					if (a.getState() == AltarState.INACTIVE) {
 						plugin.getInactiveToActiveTransition().doTransition(a);
 					}
 				}
-			} else if (fromTime == Time.NIGHT && toTime == Time.DAY) {
+			} else if (fromMinecraftTime == MinecraftTime.NIGHT && toMinecraftTime == MinecraftTime.DAY) {
 				for (final Altar a : perWorld.get(worldName)) {
 					if (a.getState() == AltarState.ACTIVE) {
 						a.hardResetToInactive();

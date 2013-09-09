@@ -14,7 +14,11 @@ public class Perms {
 	private static final String CMD_FLY_OTHERS        = "ngeneral.cmd.fly.others";
 	private static final String CMD_FLYSPEED          = "ngeneral.cmd.flyspeed";
 	private static final String CMD_FLYSPEED_OTHERS   = "ngeneral.cmd.flyspeed.others";
+	private static final String CMD_WALKSPEED         = "ngeneral.cmd.walkspeed";
+	private static final String CMD_WALKSPEED_OTHERS  = "ngeneral.cmd.walkspeed.others";
 	private static final String CMD_AFK               = "ngeneral.cmd.afk";
+	private static final String CMD_TIME              = "ngeneral.cmd.time";
+	private static final String CMD_WEATHER           = "ngeneral.cmd.weather";
 	private static final String PROTECTIONSIGN        = "ngeneral.protectionsign";
 	private static final String PROTECTIONSIGN_BYPASS = "ngeneral.protectionsign.bypass";
 	private static final String PROTECTIONSIGN_BREAK  = "ngeneral.protectionsign.break";
@@ -44,8 +48,24 @@ public class Perms {
 		return sender.isOp() || sender.hasPermission(CMD_FLYSPEED_OTHERS) || sender.hasPermission(ADMIN);
 	}
 
+	public static boolean hasWalkSpeed(CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_WALKSPEED) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasWalkSpeedOthers(CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_WALKSPEED_OTHERS) || sender.hasPermission(ADMIN);
+	}
+
 	public static boolean hasAfk(CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_AFK) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasTime(CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_TIME) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasWeather(CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_WEATHER) || sender.hasPermission(ADMIN);
 	}
 
 	public static boolean hasProtectionSign(Player player) {
