@@ -16,79 +16,109 @@ public class ItemBuilder {
 
 	private static final boolean ITEMBUILDER_DEBUG = false;
 
-	private static Random       rand              = new Random();
-	private static Set<Integer> possibleMainItems = null;
+	private static Random        rand              = new Random();
+	private static Set<Material> possibleMainItems = null;
 
-	private static Set<Integer> getPossibleMainItems() {
+	private static Set<Material> getPossibleMainItems() {
 		if (possibleMainItems == null) {
 			possibleMainItems = new HashSet<>();
-			for (int i = 256; i <= 258; i++) {
-				possibleMainItems.add(i);
-			}
-			possibleMainItems.add(261);
-			for (int i = 267; i <= 279; i++) {
-				possibleMainItems.add(i);
-			}
-			for (int i = 283; i <= 286; i++) {
-				possibleMainItems.add(i);
-			}
-			for (int i = 290; i <= 294; i++) {
-				possibleMainItems.add(i);
-			}
-			for (int i = 298; i <= 317; i++) {
-				possibleMainItems.add(i);
-			}
+			possibleMainItems.add(Material.IRON_SPADE);
+			possibleMainItems.add(Material.IRON_PICKAXE);
+			possibleMainItems.add(Material.IRON_AXE);
+			possibleMainItems.add(Material.BOW);
+			possibleMainItems.add(Material.IRON_SWORD);
+			possibleMainItems.add(Material.WOOD_SWORD);
+			possibleMainItems.add(Material.WOOD_SPADE);
+			possibleMainItems.add(Material.WOOD_PICKAXE);
+			possibleMainItems.add(Material.WOOD_AXE);
+			possibleMainItems.add(Material.STONE_SWORD);
+			possibleMainItems.add(Material.STONE_SPADE);
+			possibleMainItems.add(Material.STONE_PICKAXE);
+			possibleMainItems.add(Material.STONE_AXE);
+			possibleMainItems.add(Material.DIAMOND_SWORD);
+			possibleMainItems.add(Material.DIAMOND_SPADE);
+			possibleMainItems.add(Material.DIAMOND_PICKAXE);
+			possibleMainItems.add(Material.DIAMOND_AXE);
+			possibleMainItems.add(Material.GOLD_SWORD);
+			possibleMainItems.add(Material.GOLD_SPADE);
+			possibleMainItems.add(Material.GOLD_PICKAXE);
+			possibleMainItems.add(Material.GOLD_AXE);
+			possibleMainItems.add(Material.WOOD_HOE);
+			possibleMainItems.add(Material.STONE_HOE);
+			possibleMainItems.add(Material.IRON_HOE);
+			possibleMainItems.add(Material.DIAMOND_HOE);
+			possibleMainItems.add(Material.GOLD_HOE);
+			possibleMainItems.add(Material.LEATHER_HELMET);
+			possibleMainItems.add(Material.LEATHER_CHESTPLATE);
+			possibleMainItems.add(Material.LEATHER_LEGGINGS);
+			possibleMainItems.add(Material.LEATHER_BOOTS);
+			possibleMainItems.add(Material.CHAINMAIL_HELMET);
+			possibleMainItems.add(Material.CHAINMAIL_CHESTPLATE);
+			possibleMainItems.add(Material.CHAINMAIL_LEGGINGS);
+			possibleMainItems.add(Material.CHAINMAIL_BOOTS);
+			possibleMainItems.add(Material.IRON_HELMET);
+			possibleMainItems.add(Material.IRON_CHESTPLATE);
+			possibleMainItems.add(Material.IRON_LEGGINGS);
+			possibleMainItems.add(Material.IRON_BOOTS);
+			possibleMainItems.add(Material.DIAMOND_HELMET);
+			possibleMainItems.add(Material.DIAMOND_CHESTPLATE);
+			possibleMainItems.add(Material.DIAMOND_LEGGINGS);
+			possibleMainItems.add(Material.DIAMOND_BOOTS);
+			possibleMainItems.add(Material.GOLD_HELMET);
+			possibleMainItems.add(Material.GOLD_CHESTPLATE);
+			possibleMainItems.add(Material.GOLD_LEGGINGS);
+			possibleMainItems.add(Material.GOLD_BOOTS);
 		}
 		return possibleMainItems;
 	}
 
-	private int getBaseRessourceAmount(int id) {
-		switch (id) {
-			case 299:
-			case 303:
-			case 307:
-			case 311:
-			case 315:
+	private int getBaseRessourceAmount(Material material) {
+		switch (material) {
+			case LEATHER_CHESTPLATE:
+			case CHAINMAIL_CHESTPLATE:
+			case IRON_CHESTPLATE:
+			case DIAMOND_CHESTPLATE:
+			case GOLD_CHESTPLATE:
 				return 8;
-			case 300:
-			case 304:
-			case 308:
-			case 312:
-			case 316:
+			case LEATHER_LEGGINGS:
+			case CHAINMAIL_LEGGINGS:
+			case IRON_LEGGINGS:
+			case DIAMOND_LEGGINGS:
+			case GOLD_LEGGINGS:
 				return 7;
-			case 298:
-			case 302:
-			case 306:
-			case 310:
-			case 314:
+			case LEATHER_HELMET:
+			case CHAINMAIL_HELMET:
+			case IRON_HELMET:
+			case DIAMOND_HELMET:
+			case GOLD_HELMET:
 				return 5;
-			case 301:
-			case 305:
-			case 309:
-			case 313:
-			case 317:
+			case LEATHER_BOOTS:
+			case CHAINMAIL_BOOTS:
+			case IRON_BOOTS:
+			case DIAMOND_BOOTS:
+			case GOLD_BOOTS:
 				return 4;
-			case 257:
-			case 258:
-			case 270:
-			case 271:
-			case 274:
-			case 275:
-			case 278:
-			case 279:
-			case 285:
-			case 286:
+			case IRON_PICKAXE:
+			case IRON_AXE:
+			case WOOD_PICKAXE:
+			case WOOD_AXE:
+			case STONE_PICKAXE:
+			case STONE_AXE:
+			case DIAMOND_PICKAXE:
+			case DIAMOND_AXE:
+			case GOLD_PICKAXE:
+			case GOLD_AXE:
 				return 3;
-			case 267:
-			case 268:
-			case 272:
-			case 276:
-			case 283:
-			case 290:
-			case 291:
-			case 292:
-			case 293:
-			case 294:
+			case IRON_SWORD:
+			case WOOD_SWORD:
+			case STONE_SWORD:
+			case DIAMOND_SWORD:
+			case GOLD_SWORD:
+			case WOOD_HOE:
+			case STONE_HOE:
+			case IRON_HOE:
+			case DIAMOND_HOE:
+			case GOLD_HOE:
 				return 2;
 			default:
 				return 1;
@@ -131,8 +161,8 @@ public class ItemBuilder {
 	}
 
 	private void repair() {
-		final int id = mainItem.getTypeId();
-		final short maxDurability = Material.getMaterial(id).getMaxDurability();
+		final Material mat = mainItem.getType();
+		final short maxDurability = mat.getMaxDurability();
 
 		if (ITEMBUILDER_DEBUG) {
 			System.out.println("MaxDurability=" + maxDurability);
@@ -144,7 +174,7 @@ public class ItemBuilder {
 		ItemStack is;
 		while (it.hasNext()) {
 			is = it.next();
-			if (is.getTypeId() == id) {
+			if (is.getType() == mat) {
 				repairCount += is.getAmount() * ((maxDurability - is.getDurability()) / (double) maxDurability);
 				it.remove();
 			}
@@ -158,7 +188,7 @@ public class ItemBuilder {
 			System.out.println("Applying item cost boost...");
 		}
 
-		repairCount *= getBaseRessourceAmount(id);
+		repairCount *= getBaseRessourceAmount(mat);
 
 		if (ITEMBUILDER_DEBUG) {
 			System.out.println("RepairCount=" + repairCount);
