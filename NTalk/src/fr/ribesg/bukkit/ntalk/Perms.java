@@ -1,6 +1,8 @@
 package fr.ribesg.bukkit.ntalk;
 
+import fr.ribesg.bukkit.ncore.common.AsyncPermAccessor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class Perms {
 
@@ -8,23 +10,46 @@ public class Perms {
 	private static final String ADMIN    = "ntalk.admin";
 	private static final String USER     = "ntalk.user";
 	private static final String SPY      = "ntalk.spy";
+	private static final String COLOR    = "ntalk.color";
 	private static final String CMD_PM   = "ntalk.cmd.pm";
 	private static final String CMD_PR   = "ntalk.cmd.pr";
 	private static final String CMD_NICK = "ntalk.cmd.nick";
 
+	public static boolean hasAdmin(CommandSender sender, boolean async) {
+		if (async) {
+			if (!(sender instanceof Player)) {
+				throw new UnsupportedOperationException();
+			}
+			return AsyncPermAccessor.isOp(sender.getName()) || AsyncPermAccessor.has(sender.getName(), ADMIN);
+		} else {
+			return sender.isOp() || sender.hasPermission(ADMIN);
+		}
+	}
+
 	public static boolean hasPrivateMessage(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_PM) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender, false) || sender.hasPermission(CMD_PM) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasPrivateResponse(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_PR) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender, false) || sender.hasPermission(CMD_PR) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasNick(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_NICK) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender, false) || sender.hasPermission(CMD_NICK);
 	}
 
 	public static boolean hasSpy(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(SPY) || sender.hasPermission(ADMIN);
+		return hasAdmin(sender, false) || sender.hasPermission(SPY);
+	}
+
+	public static boolean hasColor(CommandSender sender, boolean async) {
+		if (async) {
+			if (!(sender instanceof Player)) {
+				throw new UnsupportedOperationException();
+			}
+			return hasAdmin(sender, true) || AsyncPermAccessor.has(sender.getName(), COLOR);
+		} else {
+			return hasAdmin(sender, false) || sender.hasPermission(COLOR);
+		}
 	}
 }

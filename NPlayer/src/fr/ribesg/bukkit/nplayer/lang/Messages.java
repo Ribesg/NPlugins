@@ -248,6 +248,37 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            false));
 
+		// Login
+		newMessages.add(new Message(MessageId.player_loginAttemptsKickMessage,
+		                            "&cYou have been kicked: Too many login attempts",
+		                            null,
+		                            null,
+		                            false));
+		newMessages.add(new Message(MessageId.player_loginAttemptsBroadcastedKickMessage,
+		                            "&e%userName% has been kicked (Too many login attempts)",
+		                            new String[] {"%userName%"},
+		                            null,
+		                            false));
+		newMessages.add(new Message(MessageId.player_loginAttemptsTempBanMessage,
+		                            "&cYou have been banned for %duration%: Too many login attempts",
+		                            new String[] {"%duration%"},
+		                            null,
+		                            false));
+		newMessages.add(new Message(MessageId.player_loginAttemptsBroadcastedTempBanMessage,
+		                            "&e%userName% has been banned for %duration% (Too many login attempts)",
+		                            new String[] {"%userName%", "%duration%"},
+		                            null,
+		                            false));
+		newMessages.add(new Message(MessageId.player_loginAttemptsPermBanMessage,
+		                            "&cYou have been permanently banned : Too many login attempts",
+		                            new String[] {"%duration%"},
+		                            null,
+		                            false));
+		newMessages.add(new Message(MessageId.player_loginAttemptsBroadcastedPermBanMessage,
+		                            "&e%userName% has been permanently banned (Too many login attempts)",
+		                            new String[] {"%userName%", "%duration%"},
+		                            null,
+		                            false));
 		return newMessages;
 	}
 }

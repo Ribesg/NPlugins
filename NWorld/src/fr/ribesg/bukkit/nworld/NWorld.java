@@ -83,23 +83,25 @@ public class NWorld extends WorldNode {
 		for (World w : Bukkit.getWorlds()) {
 			warps.worldEnabled(w.getName());
 			if (!worlds.containsKey(w.getName())) {
-				StockWorld world = new StockWorld(this,
-				                                  w.getName(),
-				                                  new NLocation(w.getSpawnLocation()),
-				                                  pluginConfig.getDefaultRequiredPermission(),
-				                                  true,
-				                                  false);
+				WorldType type = null;
 				switch (w.getEnvironment()) {
 					case NORMAL:
-						world.setType(WorldType.STOCK);
+						type = WorldType.STOCK;
 						break;
 					case NETHER:
-						world.setType(WorldType.STOCK_NETHER);
+						type = WorldType.STOCK_NETHER;
 						break;
 					case THE_END:
-						world.setType(WorldType.STOCK_END);
+						type = WorldType.STOCK_END;
 						break;
 				}
+				final StockWorld world = new StockWorld(this,
+				                                        w.getName(),
+				                                        type,
+				                                        new NLocation(w.getSpawnLocation()),
+				                                        pluginConfig.getDefaultRequiredPermission(),
+				                                        true,
+				                                        false);
 				worlds.put(w.getName(), world);
 			}
 		}

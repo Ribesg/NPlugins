@@ -3,6 +3,7 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.nplayer.security.Security;
 import fr.ribesg.bukkit.nplayer.user.User;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -265,12 +266,16 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 	private boolean homeCommand(final Player player, String[] args) {
 		if (args.length > 0) {
+			if (!Perms.hasHomeOthers(player)) {
+				plugin.sendMessage(player, MessageId.noPermissionForCommand);
+				return true;
+			}
 			String userName = args[0];
-			Player p = plugin.getServer().getPlayer(userName);
+			final Player p = plugin.getServer().getPlayer(userName);
 			if (p != null) {
 				userName = p.getName();
 			}
-			User user = plugin.getUserDb().get(userName);
+			final User user = plugin.getUserDb().get(userName);
 			if (user == null) {
 				plugin.sendMessage(player, MessageId.player_unknownUser, userName);
 				return true;
@@ -292,7 +297,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				return true;
 			}
 		} else {
-			User user = plugin.getUserDb().get(player.getName());
+			final User user = plugin.getUserDb().get(player.getName());
 			if (user == null) {
 				plugin.getLogger()
 				      .severe("Unknown error while executing command /home : user does not exists but still managed to use " +
@@ -321,12 +326,16 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 	private boolean setHomeCommand(final Player player, String[] args) {
 		if (args.length > 0) {
+			if (!Perms.hasSetHomeOthers(player)) {
+				plugin.sendMessage(player, MessageId.noPermissionForCommand);
+				return true;
+			}
 			String userName = args[0];
-			Player p = plugin.getServer().getPlayer(userName);
+			final Player p = plugin.getServer().getPlayer(userName);
 			if (p != null) {
 				userName = p.getName();
 			}
-			User user = plugin.getUserDb().get(userName);
+			final User user = plugin.getUserDb().get(userName);
 			if (user == null) {
 				plugin.sendMessage(player, MessageId.player_unknownUser, userName);
 				return true;
@@ -335,12 +344,12 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			plugin.sendMessage(player, MessageId.player_userHomeSet, userName);
 			return true;
 		} else {
-			User user = plugin.getUserDb().get(player.getName());
+			final User user = plugin.getUserDb().get(player.getName());
 			if (user == null) {
 				plugin.getLogger()
 				      .severe("Unknown error while executing command /home : user does not exists but still managed to use " +
 				              "the command.");
-				player.sendMessage("§cUnkown error, see console.");
+				player.sendMessage("§cUnknown error, see console.");
 				return true;
 			}
 			user.setHome(player.getLocation());
@@ -356,20 +365,34 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		}
 		nb++;
 		if (nb > plugin.getPluginConfig().getMaximumLoginAttempts()) {
+			final Player target = Bukkit.getPlayerExact(userName);
 			switch (plugin.getPluginConfig().getTooManyAttemptsPunishment()) {
 				case 0:
-					// TODO
+					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsKickMessage)[0]);
+					plugin.getPunishmentDb()
+					      .getLeaveMessages()
+					      .put(target.getName(),
+					           plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedKickMessage, userName)[0]);
 					break;
 				case 1:
-					// TODO
+					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsTempBanMessage)[0]);
+					plugin.getPunishmentDb()
+					      .getLeaveMessages()
+					      .put(target.getName(),
+					           plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName)[0]);
 					break;
 				case 2:
-					// TODO
+					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsPermBanMessage)[0]);
+					plugin.getPunishmentDb()
+					      .getLeaveMessages()
+					      .put(target.getName(),
+					           plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedPermBanMessage, userName)[0]);
 					break;
 				default:
 					break;
 			}
 			loginAttempts.put(userName, plugin.getPluginConfig().getMaximumLoginAttempts() - 1);
 		}
+		loginAttempts.put(userName, nb);
 	}
 }

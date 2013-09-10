@@ -8,12 +8,14 @@ import fr.ribesg.bukkit.ntheendagain.task.RespawnTask;
 import fr.ribesg.bukkit.ntheendagain.task.UnexpectedDragonDeathHandlerTask;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.IOException;
@@ -78,6 +80,16 @@ public class EndWorldHandler {
 
 	public void saveChunks() throws IOException {
 		chunks.write(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
+	}
+
+	public void initLater() {
+		Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				init();
+			}
+		}, 1L);
 	}
 
 	/**

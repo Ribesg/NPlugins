@@ -69,6 +69,8 @@ public class RespawnHandler {
 		final int z = rand.nextInt(81) - 40; // [-40;40]
 		final Location loc = new Location(world, x, y, z);
 
+		boolean regenerated = false;
+
 		for (int a = (x >> 4) - 1; a < (x >> 4) + 1; a++) {
 			for (int b = (z >> 4) - 1; b < (z >> 4) + 1; b++) {
 				final Chunk chunk = world.getChunkAt(a, b);
@@ -76,17 +78,21 @@ public class RespawnHandler {
 				if (endChunk != null && endChunk.hasToBeRegen()) {
 					world.regenerateChunk(chunk.getX(), chunk.getZ());
 					endChunk.setToBeRegen(false);
+					regenerated = true;
 				}
 			}
 		}
+		if (regenerated) {
+			Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), new BukkitRunnable() {
 
-		Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), new BukkitRunnable() {
-
-			@Override
-			public void run() {
-				world.spawnEntity(loc, EntityType.ENDER_DRAGON);
-			}
-		}, EndWorldHandler.REGEN_TO_RESPAWN_DELAY);
+				@Override
+				public void run() {
+					world.spawnEntity(loc, EntityType.ENDER_DRAGON);
+				}
+			}, EndWorldHandler.REGEN_TO_RESPAWN_DELAY);
+		} else {
+			world.spawnEntity(loc, EntityType.ENDER_DRAGON);
+		}
 	}
 
 }

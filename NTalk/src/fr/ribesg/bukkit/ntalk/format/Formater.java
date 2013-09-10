@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.ntalk.format;
 
+import fr.ribesg.bukkit.ncore.common.AsyncPermAccessor;
 import fr.ribesg.bukkit.ntalk.Config;
 import fr.ribesg.bukkit.ntalk.NTalk;
 import org.bukkit.ChatColor;
@@ -17,11 +18,11 @@ public class Formater {
 		cfg = instance.getPluginConfig();
 	}
 
-	public String getFormat(final Player player) {
+	public String getFormat(final Player player, final boolean async) {
 		Format format = cfg.getDefaultFormat();
 		if (cfg.getPlayerFormats().containsKey(player.getName())) {
 			format = cfg.getPlayerFormats().get(player.getName());
-		} else if (player.isOp()) {
+		} else if (async ? AsyncPermAccessor.isOp(player.getName()) : player.isOp()) {
 			if (cfg.getGroupFormats().containsKey(cfg.getOpGroup())) {
 				format = cfg.getGroupFormats().get(cfg.getOpGroup());
 			} else {
@@ -29,13 +30,13 @@ public class Formater {
 			}
 		} else {
 			for (final String groupName : cfg.getGroupFormats().keySet()) {
-				if (player.hasPermission("group." + groupName)) {
+				if (async ? AsyncPermAccessor.has(player.getName(), "group." + groupName) : player.hasPermission("group." + groupName)) {
 					format = cfg.getGroupFormats().get(groupName);
 					break;
 				}
 			}
 		}
-		String prefixedString = new String(cfg.getTemplate());
+		String prefixedString = cfg.getTemplate();
 		final String playerName = cfg.getPlayerNicknames().containsKey(player.getName())
 		                          ? cfg.getPlayerNicknames().get(player.getName())
 		                          : BUKKIT_PLAYERNAME;
@@ -48,7 +49,7 @@ public class Formater {
 
 	public String parsePM(final CommandSender from, final CommandSender to, final String message) {
 		Format formatFrom = cfg.getDefaultFormat(), formatTo = cfg.getDefaultFormat();
-		String prefixedString = new String(cfg.getPmTemplate()); // The final String
+		String prefixedString = cfg.getPmTemplate(); // The final String
 		if (!(from instanceof Player)) {
 			prefixedString = prefixedString.replaceAll("\\Q[prefixFrom]\\E", "");
 			prefixedString = prefixedString.replace("[nameFrom]", "&cCONSOLE");

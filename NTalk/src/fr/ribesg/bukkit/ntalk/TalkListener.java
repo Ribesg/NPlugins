@@ -32,8 +32,10 @@ public class TalkListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerChatLast(final AsyncPlayerChatEvent event) {
-		event.setFormat(plugin.getFormater().getFormat(event.getPlayer()));
-		event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage())); // Reformat the message
+		event.setFormat(plugin.getFormater().getFormat(event.getPlayer(), true));
+		if (Perms.hasColor(event.getPlayer(), true)) {
+			event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage())); // Reformat the message
+		}
 	}
 
 	public NTalk getPlugin() {

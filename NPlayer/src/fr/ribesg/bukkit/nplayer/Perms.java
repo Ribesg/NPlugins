@@ -15,6 +15,7 @@ public class Perms {
 	private static final String CMD_HOME            = "nplayer.cmd.home";
 	private static final String CMD_HOME_OTHERS     = "nplayer.cmd.home.others";
 	private static final String CMD_SETHOME         = "nplayer.cmd.sethome";
+	private static final String CMD_SETHOME_OTHERS  = "nplayer.cmd.sethome.others";
 	private static final String CMD_BAN             = "nplayer.cmd.ban";
 	private static final String CMD_BAN_PERMANENT   = "nplayer.cmd.ban.permanent";
 	private static final String CMD_UNBAN           = "nplayer.cmd.unban";
@@ -59,6 +60,10 @@ public class Perms {
 
 	public static boolean hasSetHome(CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_SETHOME) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasSetHomeOthers(CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_SETHOME_OTHERS) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
 	public static boolean hasBan(CommandSender sender) {

@@ -120,6 +120,7 @@ public abstract class NPlugin extends JavaPlugin {
 	 *
 	 * @return If the Core was found
 	 */
+
 	private boolean isCoreMissing() {
 		if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
 			return true;

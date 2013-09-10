@@ -115,7 +115,7 @@ public class NTheEndAgain extends TheEndAgainNode {
 			handler.loadConfig();
 			handler.loadChunks();
 			worldHandlers.put(handler.getCamelCaseWorldName(), handler);
-			handler.init();
+			handler.initLater();
 			return true;
 		} catch (final IOException e) {
 			getLogger().severe("An error occured, stacktrace follows:");

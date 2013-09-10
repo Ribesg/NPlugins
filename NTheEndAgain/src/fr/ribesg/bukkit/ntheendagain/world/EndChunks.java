@@ -149,6 +149,10 @@ public class EndChunks implements Iterable<EndChunk> {
 		return chunks.values().iterator();
 	}
 
+	public int size() {
+		return chunks.size();
+	}
+
 	public List<EndChunk> getSafeChunksList() {
 		List<EndChunk> result = new ArrayList<>();
 		result.addAll(chunks.values());

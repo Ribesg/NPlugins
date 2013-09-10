@@ -206,6 +206,13 @@ public enum MessageId {
 
 	player_standardKickMessage,
 
+	player_loginAttemptsKickMessage,
+	player_loginAttemptsBroadcastedKickMessage,
+	player_loginAttemptsTempBanMessage,
+	player_loginAttemptsBroadcastedTempBanMessage,
+	player_loginAttemptsPermBanMessage,
+	player_loginAttemptsBroadcastedPermBanMessage,
+
 	// ############################ //
 	// ## NEnchantingEgg related ## //
 	// ############################ //

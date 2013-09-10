@@ -70,7 +70,15 @@ public class RegenHandler {
 		plugin.getLogger().info("Regenerating End world \"" + endWorld.getName() + "\"...");
 		kickPlayers();
 		softRegen();
+
+		final long totalChunks = chunks.size();
+		long i = 0, regen = 0;
+		long lastTime = System.currentTimeMillis();
 		for (final EndChunk c : chunks) {
+			if (System.currentTimeMillis() - lastTime > 500) {
+				plugin.getLogger().info(regen + " chunks regenerated (" + (i * 100 / totalChunks) + "% done)");
+				lastTime = System.currentTimeMillis();
+			}
 			if (c.hasToBeRegen()) {
 				c.cleanCrystalLocations();
 				c.resetSavedDragons();
@@ -83,7 +91,9 @@ public class RegenHandler {
 				}
 				endWorld.regenerateChunk(c.getX(), c.getZ());
 				c.setToBeRegen(false);
+				regen++;
 			}
+			i++;
 		}
 		plugin.getLogger().info("Done.");
 	}

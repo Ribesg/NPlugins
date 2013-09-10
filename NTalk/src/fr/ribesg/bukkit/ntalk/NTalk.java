@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.ntalk;
 
+import fr.ribesg.bukkit.ncore.common.AsyncPermAccessor;
 import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
 import fr.ribesg.bukkit.ntalk.format.Formater;
 import fr.ribesg.bukkit.ntalk.lang.Messages;
@@ -62,6 +63,10 @@ public class NTalk extends TalkNode {
 		getCommand("pm").setExecutor(executor);
 		getCommand("pr").setExecutor(executor);
 		getCommand("nick").setExecutor(executor);
+
+		// We need to access permissions in the AsyncPlayerChatEvent handler
+		// For this purpose, we need to use the AsyncPermAccessor
+		AsyncPermAccessor.init(this, 3);
 
 		return true;
 	}
