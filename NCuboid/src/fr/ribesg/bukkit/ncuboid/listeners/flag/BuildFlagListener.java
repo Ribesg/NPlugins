@@ -31,7 +31,8 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlockClicked().getRelative(ext.getBlockFace()).getLocation());
+		final GeneralCuboid cuboid = getPlugin().getDb()
+				.getPriorByLocation(ext.getBlockClicked().getRelative(ext.getBlockFace()).getLocation());
 		if (cuboid == null) {
 			return;
 		} else if (cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
@@ -41,7 +42,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketFill(final PlayerBucketFillEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlockClicked().getLocation());
+		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getBlockClicked().getLocation());
 		if (cuboid == null) {
 			return;
 		} else if (cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
@@ -65,7 +66,7 @@ public class BuildFlagListener extends AbstractListener {
 				    event.getItem().getType() == Material.MINECART ||
 				    event.getItem().getType() == Material.BOAT) {
 					final GeneralCuboid cuboid = getPlugin().getDb()
-							.getPriorByLoc(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
+							.getPriorByLocation(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
 					if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(event.getPlayer())) {
 						event.setCancelled(true);
 						return;
@@ -102,7 +103,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlock().getLocation());
+		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
 		if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
 			ext.setCancelled(true);
 			return;
@@ -111,7 +112,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlock().getLocation());
+		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
 		if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
 			ext.setCancelled(true);
 			return;
@@ -120,7 +121,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockDamage(final BlockDamageEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getBlock().getLocation());
+		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
 		if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
 			ext.setCancelled(true);
 			return;
@@ -143,7 +144,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onHangingPlace(final HangingPlaceEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getEntity().getLocation());
+		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getEntity().getLocation());
 		if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
 			ext.setCancelled(true);
 			return;
@@ -154,7 +155,7 @@ public class BuildFlagListener extends AbstractListener {
 	public void onVehicleDestroy(final VehicleDestroyEvent event) {
 		if (event.getAttacker() != null && event.getAttacker().getType() == EntityType.PLAYER) {
 			final Player player = (Player) event.getAttacker();
-			final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getVehicle().getLocation());
+			final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(event.getVehicle().getLocation());
 			if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(player)) {
 				event.setCancelled(true);
 				return;
@@ -165,7 +166,7 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onStructureGrow(final StructureGrowEvent ext) {
 		if (ext.isFromBonemeal()) {
-			final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(ext.getLocation());
+			final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getLocation());
 			if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
 				ext.setCancelled(true);
 				return;

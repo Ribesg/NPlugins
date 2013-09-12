@@ -1,8 +1,8 @@
 package fr.ribesg.bukkit.ncuboid;
 
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
 import fr.ribesg.bukkit.ncuboid.beans.WorldCuboid;
 import fr.ribesg.bukkit.ncuboid.commands.MainCommandExecutor;
 import fr.ribesg.bukkit.ncuboid.jail.JailHandler;
@@ -33,7 +33,7 @@ public class NCuboid extends CuboidNode {
 	// // None
 
 	// Cuboids base
-	private CuboidDB db;
+	private CuboidDb db;
 
 	// Jail handling
 	private JailHandler jailHandler;
@@ -71,7 +71,7 @@ public class NCuboid extends CuboidNode {
 			return false;
 		}
 
-		// Create the CuboidDB
+		// Create the CuboidDb
 		try {
 			db = CuboidDBPersistenceHandler.loadDB(this);
 		} catch (final IOException | InvalidConfigurationException e) {
@@ -125,7 +125,7 @@ public class NCuboid extends CuboidNode {
 	protected void handleOtherNodes() {
 		// See if there are new worlds
 		for (final World world : getServer().getWorlds()) {
-			if (db.getByWorld(world) == null) {
+			if (db.getByWorld(world.getName()) == null) {
 				db.addByWorld(new WorldCuboid(world.getName()));
 			}
 		}
@@ -137,13 +137,18 @@ public class NCuboid extends CuboidNode {
 		try {
 			CuboidDBPersistenceHandler.saveDB(this, getDb());
 		} catch (final IOException e) {
-			// TODOs
+			getLogger().severe("An error occured, stacktrace follows:");
 			e.printStackTrace();
+			getLogger().severe("This error occured when NCuboid tried to save cuboidDB.yml");
 		}
 	}
 
-	public CuboidDB getDb() {
+	public CuboidDb getDb() {
 		return db;
+	}
+
+	public void setDb(final CuboidDb db) {
+		this.db = db;
 	}
 
 	@Override

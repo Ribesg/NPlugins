@@ -15,28 +15,32 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 
 	private static final String USAGE = ChatColor.RED + "Usage : /cuboid create <cuboidName>";
 
-	public CreateSubcmdExecutor(final NCuboid instance, final CommandSender sender, final String[] superCommandArgs) {
-		super(instance, sender, superCommandArgs);
+	public CreateSubcmdExecutor(final NCuboid instance) {
+		super(instance);
 	}
 
 	@Override
-	public boolean exec() {
-		if (!(getSender() instanceof Player)) {
-			getPlugin().sendMessage(getSender(), MessageId.cmdOnlyAvailableForPlayers);
+	public boolean exec(final CommandSender sender, final String[] args) {
+		if (!(sender instanceof Player)) {
+			getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			return true;
-		} else if (getArgs().length != 1) {
-			getSender().sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
+		} else if (args.length != 1) {
+			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
 			return true;
-		} else if (Perms.hasCreate(getSender())) {
-			final PlayerCuboid c = getPlugin().getDb().getByName(getArgs()[0]);
+		} else if (Perms.hasCreate(sender)) {
+			final PlayerCuboid c = getPlugin().getDb().getByName(args[0]);
 			if (c != null) {
-				getPlugin().sendMessage(getSender(), MessageId.cuboid_cmdCreateAlreadyExists);
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdCreateAlreadyExists);
+				return true;
+			} else if (args[0].toLowerCase().startsWith("world_")) {
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdCreateForbiddenName);
 				return true;
 			} else {
-				final Player player = (Player) getSender();
-				final RectCuboid selection = (RectCuboid) getPlugin().getDb().delTmp(player.getName());
+				final Player player = (Player) sender;
+				final RectCuboid selection = (RectCuboid) getPlugin().getDb().getSelection(player.getName());
 				if (selection.getState() == CuboidState.TMPSTATE2) {
-					selection.create(getArgs()[0]);
+					getPlugin().getDb().removeSelection(player.getName());
+					selection.create(args[0]);
 					getPlugin().getDb().add(selection);
 					getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateCreated, selection.getCuboidName());
 				} else {
@@ -45,7 +49,7 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 				return true;
 			}
 		} else {
-			getPlugin().sendMessage(getSender(), MessageId.noPermissionForCommand);
+			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
 	}

@@ -12,7 +12,7 @@ public class RectCuboid extends PlayerCuboid {
 	private NLocation minCorner, maxCorner;
 	private int minX, maxX, minY, maxY, minZ, maxZ;
 
-	// Create a new Rectangular Cuboid
+	/** Create a new Rectangular Cuboid */
 	public RectCuboid(final String cuboidName, final String ownerName, final String worldName, final NLocation minCorner) {
 
 		super(cuboidName, ownerName, worldName, CuboidType.RECT);
@@ -21,7 +21,7 @@ public class RectCuboid extends PlayerCuboid {
 		setChunks(null);
 	}
 
-	// Create a Rectangular Cuboid from a save
+	/** Create a Rectangular Cuboid from a save */
 	public RectCuboid(final String cuboidName,
 	                  final String ownerName,
 	                  final String worldName,
@@ -61,7 +61,7 @@ public class RectCuboid extends PlayerCuboid {
 		setMaxZ(maxCorner.getBlockZ());
 	}
 
-	// The player select the second corner
+	/** Called when the player select the second corner */
 	public void secondPoint(final Location secondPoint) {
 		if (secondPoint.getWorld().getName().equals(getWorldName())) {
 			setMinX(getMinCorner().getBlockX() < secondPoint.getBlockX() ? getMinCorner().getBlockX() : secondPoint.getBlockX());
@@ -76,6 +76,7 @@ public class RectCuboid extends PlayerCuboid {
 		}
 	}
 
+	/** @see RectCuboid#create(String) */
 	@Override
 	public void create(final String cuboidName) {
 		super.create(cuboidName);
@@ -83,7 +84,7 @@ public class RectCuboid extends PlayerCuboid {
 		setChunks(computeChunks());
 	}
 
-	// Should only be used when the cuboid is not in the byChunks map
+	/** Should only be used when the cuboid is not in the byChunks map */
 	public Set<ChunkCoord> computeChunks() {
 		final Set<ChunkCoord> chunks = new HashSet<ChunkCoord>();
 		final ChunkCoord cMin = new ChunkCoord(getMinCorner());
@@ -100,8 +101,7 @@ public class RectCuboid extends PlayerCuboid {
 	// Check if <x,y,z> is in a Cuboid
 	@Override
 	public boolean contains(final double x, final double y, final double z) {
-		// Do not use getters here to be faster
-		return minX <= x && maxX + 1 > x && minY <= y && maxY + 1 > y && minZ <= z && maxZ + 1 > z;
+		return minX <= x && maxX + 1 > x && minZ <= z && maxZ + 1 > z && minY <= y && maxY + 1 > y;
 	}
 
 	@Override

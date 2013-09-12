@@ -52,7 +52,7 @@ public class MobFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureSpawn(final CreatureSpawnEvent event) {
 		if (getMobs().contains(event.getEntityType())) {
-			final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getLocation());
+			final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(event.getLocation());
 			if (cuboid != null && cuboid.getFlag(Flag.MOB)) {
 				event.setCancelled(true);
 			}

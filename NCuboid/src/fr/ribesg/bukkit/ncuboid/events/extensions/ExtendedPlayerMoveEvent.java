@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -15,11 +15,11 @@ public class ExtendedPlayerMoveEvent extends AbstractExtendedEvent {
 	private final Set<GeneralCuboid> toCuboids;
 	private       boolean            customCancelled;
 
-	public ExtendedPlayerMoveEvent(final CuboidDB db, final PlayerMoveEvent event) {
+	public ExtendedPlayerMoveEvent(final CuboidDb db, final PlayerMoveEvent event) {
 		super(event);
-		fromCuboids = db.getAllByLoc(event.getFrom());
+		fromCuboids = db.getAllByLocation(event.getFrom());
 		fromCuboid = db.getPrior(fromCuboids);
-		toCuboids = db.getAllByLoc(event.getTo());
+		toCuboids = db.getAllByLocation(event.getTo());
 		toCuboid = db.getPrior(toCuboids);
 		customCancelled = false;
 	}

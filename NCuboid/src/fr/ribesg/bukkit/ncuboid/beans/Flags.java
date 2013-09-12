@@ -19,7 +19,7 @@ public class Flags {
 	}
 
 	private static EnumMap<Flag, Boolean> getDefaultFlagMap() {
-		final EnumMap<Flag, Boolean> defaultFlagMap = new EnumMap<Flag, Boolean>(Flag.class);
+		final EnumMap<Flag, Boolean> defaultFlagMap = new EnumMap<>(Flag.class);
 		// Hardcoded default values
 		// TODO Make this configurable
 		defaultFlagMap.put(Flag.BOOSTER, false);

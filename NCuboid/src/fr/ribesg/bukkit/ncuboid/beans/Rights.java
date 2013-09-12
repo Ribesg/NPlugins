@@ -48,7 +48,7 @@ public class Rights {
 
 	public void allowPlayer(final String playerName) {
 		if (allowedPlayers == null) {
-			allowedPlayers = new HashSet<String>();
+			allowedPlayers = new HashSet<>();
 		}
 		allowedPlayers.add(playerName.toLowerCase());
 	}
@@ -61,7 +61,7 @@ public class Rights {
 
 	public void allowGroup(final String groupName) {
 		if (allowedGroups == null) {
-			allowedGroups = new HashSet<String>();
+			allowedGroups = new HashSet<>();
 		}
 		allowedGroups.add(groupName.toLowerCase());
 	}
@@ -80,7 +80,7 @@ public class Rights {
 
 	public void denyCommand(final String command) {
 		if (disallowedCommands == null) {
-			disallowedCommands = new HashSet<String>();
+			disallowedCommands = new HashSet<>();
 		}
 		disallowedCommands.add(command.toLowerCase());
 	}

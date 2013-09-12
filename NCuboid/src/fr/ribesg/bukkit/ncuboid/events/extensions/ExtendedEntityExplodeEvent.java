@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.block.Block;
@@ -14,11 +14,11 @@ public class ExtendedEntityExplodeEvent extends AbstractExtendedEvent {
 	private final GeneralCuboid             entityCuboid;
 	private final Map<Block, GeneralCuboid> blockCuboidsMap;
 
-	public ExtendedEntityExplodeEvent(final CuboidDB db, final EntityExplodeEvent event) {
+	public ExtendedEntityExplodeEvent(final CuboidDb db, final EntityExplodeEvent event) {
 		super(event);
 		blockCuboidsMap = new HashMap<>();
 		for (final Block b : event.blockList()) {
-			final GeneralCuboid cuboid = db.getPriorByLoc(b.getLocation());
+			final GeneralCuboid cuboid = db.getPriorByLocation(b.getLocation());
 			if (cuboid != null) {
 				blockCuboidsMap.put(b, cuboid);
 			}

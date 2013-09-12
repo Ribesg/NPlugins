@@ -16,6 +16,7 @@ public enum MessageId {
 
 	cmdReloadConfig,
 	cmdReloadMessages,
+	cmdReloadError,
 
 	incorrectValueInConfiguration,
 
@@ -40,6 +41,7 @@ public enum MessageId {
 	cuboid_cmdCreateAlreadyExists,
 	cuboid_cmdCreateCreated,
 	cuboid_cmdCreateNoValidSelection,
+	cuboid_cmdCreateForbiddenName,
 
 	cuboid_cmdDeleteDoesNotExist,
 	cuboid_cmdDeleteDeleted,

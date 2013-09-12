@@ -40,110 +40,110 @@ public class Perms {
 	}
 
 	public static boolean hasFlagBooster(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_BOOSTER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_BOOSTER);
 	}
 
 	public static boolean hasFlagBuild(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_BUILD) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_BUILD) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasFlagChat(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_CHAT) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_CHAT);
 	}
 
 	public static boolean hasFlagChest(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_CHEST) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_CHEST) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasFlagClosed(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_CLOSED) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_CLOSED);
 	}
 
 	public static boolean hasFlagCreative(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_CREATIVE) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_CREATIVE);
 	}
 
 	public static boolean hasFlagDrop(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_DROP) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_DROP);
 	}
 
 	public static boolean hasFlagEndermanGrief(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_ENDERMANGRIEF) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_ENDERMANGRIEF) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasFlagExplosion(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_EXPLOSION) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_EXPLOSION) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasFlagFarm(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_FARM) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_FARM) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasFlagFeed(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_FEED) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_FEED);
 	}
 
 	public static boolean hasFlagFire(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_FIRE) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_FIRE) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasFlagGod(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_GOD) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_GOD);
 	}
 
 	public static boolean hasFlagHeal(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_HEAL) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_HEAL);
 	}
 
 	public static boolean hasFlagInvisible(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_INVISIBLE) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_INVISIBLE);
 	}
 
 	public static boolean hasFlagMob(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_MOB) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_MOB) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasFlagPass(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_PASS) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_PASS);
 	}
 
 	public static boolean hasFlagPvp(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_PVP) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_PVP);
 	}
 
 	public static boolean hasFlagSnow(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_SNOW) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_SNOW) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasFlagTeleport(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_TELEPORT) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_TELEPORT);
 	}
 
 	public static boolean hasFlagUse(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_USE) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_USE) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasFlagWarpgate(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(FLAG_WARPGATE) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(FLAG_WARPGATE);
 	}
 
 	public static boolean hasSeeInvisibleCuboid(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(SEE_INVISIBLE_CUBOID) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(SEE_INVISIBLE_CUBOID);
 	}
 
 	public static boolean hasGeneral(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_GENERAL) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(CMD_GENERAL) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasReload(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_RELOAD) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(CMD_RELOAD);
 	}
 
 	public static boolean hasCreate(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_CREATE) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(CMD_CREATE) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasDelete(CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_DELETE) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+		return isAdmin(sender) || sender.hasPermission(CMD_DELETE) || sender.hasPermission(USER);
 	}
 }

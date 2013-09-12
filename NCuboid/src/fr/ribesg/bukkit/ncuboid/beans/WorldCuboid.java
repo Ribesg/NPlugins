@@ -13,6 +13,8 @@ public class WorldCuboid extends GeneralCuboid {
 		setFlag(Flag.BUILD, false);
 		setFlag(Flag.CHEST, false);
 		setFlag(Flag.USE, false);
+
+		// Should change / remove this
 		setIntFlagAtt(FlagAtt.EXPLOSION_BLOCK_DROP, 100);
 	}
 

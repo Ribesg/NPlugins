@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -12,9 +12,9 @@ public class ExtendedPlayerInteractEntityEvent extends AbstractExtendedEvent {
 	private final GeneralCuboid      cuboid;
 	private final Set<GeneralCuboid> cuboids;
 
-	public ExtendedPlayerInteractEntityEvent(final CuboidDB db, final PlayerInteractEntityEvent event) {
+	public ExtendedPlayerInteractEntityEvent(final CuboidDb db, final PlayerInteractEntityEvent event) {
 		super(event);
-		cuboids = db.getAllByLoc(event.getRightClicked().getLocation());
+		cuboids = db.getAllByLocation(event.getRightClicked().getLocation());
 		cuboid = db.getPrior(cuboids);
 	}
 

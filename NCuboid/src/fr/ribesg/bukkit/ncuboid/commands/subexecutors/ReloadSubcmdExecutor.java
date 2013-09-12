@@ -3,6 +3,8 @@ package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -14,40 +16,39 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 
 	private static final String USAGE = ChatColor.RED + "Usage : /cuboid reload <cuboids|config|messages>";
 
-	public ReloadSubcmdExecutor(final NCuboid instance, final CommandSender sender, final String[] superCommandArgs) {
-		super(instance, sender, superCommandArgs);
+	public ReloadSubcmdExecutor(final NCuboid instance) {
+		super(instance);
 	}
 
 	@Override
-	public boolean exec() {
-		if (getArgs().length != 1) {
-			getSender().sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
+	public boolean exec(final CommandSender sender, final String[] args) {
+		if (args.length != 1) {
+			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
 			return true;
-		} else if (Perms.hasReload(getSender())) {
-			switch (getArgs()[0]) {
+		} else if (Perms.hasReload(sender)) {
+			switch (args[0]) {
 				case "cuboids":
 				case "cuboid":
 				case "cubo":
-					try {
-						getPlugin().getMessages().loadMessages(getPlugin()); // TODO Wrong config file
-						getPlugin().sendMessage(getSender(), MessageId.cuboid_cmdReloadCuboids);
-						return true;
-					} catch (final IOException e) {
-						getPlugin().getLogger().severe("An error occured, stacktrace follows:");
-						e.printStackTrace();
-						getPlugin().getLogger().severe("This error occured when NCuboid tried to reload cuboidDB.yml");
-						return true;
+					final CuboidDb db = CuboidDBPersistenceHandler.reloadDB(getPlugin());
+					if (db == getPlugin().getDb()) {
+						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "cuboidDB.yml");
+					} else {
+						getPlugin().setDb(db);
+						getPlugin().sendMessage(sender, MessageId.cuboid_cmdReloadCuboids);
 					}
+					return true;
 				case "config":
 				case "conf":
 					try {
 						getPlugin().getPluginConfig().loadConfig();
-						getPlugin().sendMessage(getSender(), MessageId.cmdReloadConfig);
+						getPlugin().sendMessage(sender, MessageId.cmdReloadConfig);
 						return true;
 					} catch (final IOException | InvalidConfigurationException e) {
 						getPlugin().getLogger().severe("An error occured, stacktrace follows:");
 						e.printStackTrace();
 						getPlugin().getLogger().severe("This error occured when NCuboid tried to reload config.yml");
+						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "config.yml");
 						return true;
 					}
 				case "messages":
@@ -55,20 +56,21 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 				case "mes":
 					try {
 						getPlugin().getMessages().loadMessages(getPlugin());
-						getPlugin().sendMessage(getSender(), MessageId.cmdReloadMessages);
+						getPlugin().sendMessage(sender, MessageId.cmdReloadMessages);
 						return true;
 					} catch (final IOException e) {
 						getPlugin().getLogger().severe("An error occured, stacktrace follows:");
 						e.printStackTrace();
 						getPlugin().getLogger().severe("This error occured when NCuboid tried to reload messages.yml");
+						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
 						return true;
 					}
 				default:
-					getSender().sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
+					sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
 					return true;
 			}
 		} else {
-			getPlugin().sendMessage(getSender(), MessageId.noPermissionForCommand);
+			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
 	}

@@ -4,7 +4,6 @@ import fr.ribesg.bukkit.ncore.common.ChunkCoord;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import org.bukkit.Location;
-import org.bukkit.World;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,11 +11,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
-public class CuboidDB implements Iterable<GeneralCuboid> {
+public class CuboidDb implements Iterable<GeneralCuboid> {
 
-	@SuppressWarnings("unused")
 	private final NCuboid plugin;
 
 	private final Map<String, PlayerCuboid>          byName;    // CuboidName ; Cuboid
@@ -25,7 +24,7 @@ public class CuboidDB implements Iterable<GeneralCuboid> {
 	private final Map<ChunkCoord, Set<PlayerCuboid>> byChunks;  // Chunk ; Cuboids in this chunk
 	private final Map<String, WorldCuboid>           byWorld;   // WorldName ; Cuboid
 
-	public CuboidDB(final NCuboid instance) {
+	public CuboidDb(final NCuboid instance) {
 		byName = new HashMap<>();
 		byOwner = new HashMap<>();
 		tmpCuboids = new HashMap<>();
@@ -54,7 +53,7 @@ public class CuboidDB implements Iterable<GeneralCuboid> {
 		}
 	}
 
-	public void addTmp(final PlayerCuboid cuboid) {
+	public void addSelection(final PlayerCuboid cuboid) {
 		tmpCuboids.put(cuboid.getOwnerName(), cuboid);
 	}
 
@@ -74,19 +73,19 @@ public class CuboidDB implements Iterable<GeneralCuboid> {
 		byWorld.put(c.getWorldName(), c);
 	}
 
-	public void del(final PlayerCuboid cuboid) {
-		delByName(cuboid);
-		delByOwner(cuboid);
-		delByChunks(cuboid);
+	public void remove(final PlayerCuboid cuboid) {
+		removeByName(cuboid);
+		removeByOwner(cuboid);
+		removeByChunks(cuboid);
 	}
 
-	public void delByName(final PlayerCuboid cuboid) {
+	public void removeByName(final PlayerCuboid cuboid) {
 		if (byName.containsKey(cuboid.getCuboidName())) {
 			byName.remove(cuboid.getCuboidName());
 		}
 	}
 
-	public void delByOwner(final PlayerCuboid cuboid) {
+	public void removeByOwner(final PlayerCuboid cuboid) {
 		if (byOwner.containsKey(cuboid.getOwnerName())) {
 			final Set<PlayerCuboid> set = byOwner.get(cuboid.getOwnerName());
 			if (set.contains(cuboid)) {
@@ -98,14 +97,14 @@ public class CuboidDB implements Iterable<GeneralCuboid> {
 		}
 	}
 
-	public PlayerCuboid delTmp(final String ownerName) {
+	public PlayerCuboid removeSelection(final String ownerName) {
 		if (tmpCuboids.containsKey(ownerName)) {
 			return tmpCuboids.remove(ownerName);
 		}
 		return null;
 	}
 
-	public void delByChunks(final PlayerCuboid cuboid) {
+	public void removeByChunks(final PlayerCuboid cuboid) {
 		for (final ChunkCoord k : cuboid.getChunks()) {
 			if (byChunks.containsKey(k)) {
 				final Set<PlayerCuboid> set = byChunks.get(k);
@@ -119,14 +118,14 @@ public class CuboidDB implements Iterable<GeneralCuboid> {
 		}
 	}
 
-	public void delByWorld(final String worldName) {
+	public void removeByWorld(final String worldName) {
 		if (byWorld.containsKey(worldName)) {
 			byWorld.remove(worldName);
 		}
 	}
 
-	public GeneralCuboid getPriorByLoc(final Location loc) {
-		return getPrior(getAllByLoc(loc));
+	public GeneralCuboid getPriorByLocation(final Location loc) {
+		return getPrior(getAllByLocation(loc));
 	}
 
 	public GeneralCuboid getPrior(final Set<GeneralCuboid> cuboids) {
@@ -160,14 +159,15 @@ public class CuboidDB implements Iterable<GeneralCuboid> {
 									// Wtf ! Well, we should always return the same one.
 									// So let's return in alphabetic order
 									if (c1.getCuboidName().compareTo(c2.getCuboidName()) < 0) {
-										// This can't return 0, so it's < or >
 										return c1;
+									} else { // This can't return 0 as names are unique, so it's < or >
+										return c2;
 									}
 							}
 					}
 				default: // Let's compare them all in O(n) time
 					final int maxPriority = 0; // "current" max priority in cuboids Set
-					final TreeMap<Long, GeneralCuboid> sizeMap = new TreeMap<>(); // TotalSize ; Cuboid
+					final SortedMap<Long, GeneralCuboid> sizeMap = new TreeMap<>(); // TotalSize ; Cuboid
 					for (final GeneralCuboid c : cuboids) {
 						if (c.getPriority() > maxPriority) {
 							// Higher priority spotted, all previous cuboids are less interesting
@@ -183,20 +183,20 @@ public class CuboidDB implements Iterable<GeneralCuboid> {
 		}
 	}
 
-	public Set<GeneralCuboid> getAllByLoc(final Location loc) {
-		return getAllByLoc(new NLocation(loc));
+	public Set<GeneralCuboid> getAllByLocation(final Location loc) {
+		return getAllByLocation(new NLocation(loc));
 	}
 
-	public Set<GeneralCuboid> getAllByLoc(final NLocation loc) {
-		final ChunkCoord k = new ChunkCoord(loc);
+	public Set<GeneralCuboid> getAllByLocation(final NLocation loc) {
+		final ChunkCoord chunkKey = new ChunkCoord(loc);
 		final Set<GeneralCuboid> cuboids = new HashSet<>();
 		if (byWorld.containsKey(loc.getWorldName())) {
 			cuboids.add(byWorld.get(loc.getWorldName()));
 		}
-		if (!byChunks.containsKey(k)) {
+		if (!byChunks.containsKey(chunkKey)) {
 			return cuboids.isEmpty() ? null : cuboids;
 		} else {
-			cuboids.addAll(byChunks.get(k));
+			cuboids.addAll(byChunks.get(chunkKey));
 			final Iterator<GeneralCuboid> it = cuboids.iterator();
 			while (it.hasNext()) {
 				if (!it.next().contains(loc)) {
@@ -215,12 +215,12 @@ public class CuboidDB implements Iterable<GeneralCuboid> {
 		return byOwner.get(ownerName);
 	}
 
-	public PlayerCuboid getTmp(final String ownerName) {
+	public PlayerCuboid getSelection(final String ownerName) {
 		return tmpCuboids.get(ownerName);
 	}
 
-	public WorldCuboid getByWorld(final World world) {
-		return byWorld.get(world.getName());
+	public WorldCuboid getByWorld(final String worldName) {
+		return byWorld.get(worldName);
 	}
 
 	public Iterator<PlayerCuboid> playerCuboidIterator() {
@@ -235,8 +235,8 @@ public class CuboidDB implements Iterable<GeneralCuboid> {
 	public Iterator<GeneralCuboid> iterator() {
 		return new Iterator<GeneralCuboid>() {
 
-			final Iterator<PlayerCuboid> playerCuboidIterator = CuboidDB.this.playerCuboidIterator();
-			final Iterator<WorldCuboid> worldCuboidIterator = CuboidDB.this.worldCuboidIterator();
+			final Iterator<PlayerCuboid> playerCuboidIterator = CuboidDb.this.playerCuboidIterator();
+			final Iterator<WorldCuboid> worldCuboidIterator = CuboidDb.this.worldCuboidIterator();
 
 			@Override
 			public boolean hasNext() {

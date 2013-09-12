@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.entity.Entity;
@@ -20,9 +20,9 @@ public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 	private boolean damagerProjectile = false;
 	private Entity shooter;
 
-	public ExtendedEntityDamageEvent(final CuboidDB db, final EntityDamageEvent event) {
+	public ExtendedEntityDamageEvent(final CuboidDb db, final EntityDamageEvent event) {
 		super(event);
-		entityCuboids = db.getAllByLoc(event.getEntity().getLocation());
+		entityCuboids = db.getAllByLocation(event.getEntity().getLocation());
 		entityCuboid = db.getPrior(entityCuboids);
 		if (event instanceof EntityDamageByEntityEvent) {
 			Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
@@ -31,7 +31,7 @@ public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 				damagerProjectile = true;
 				shooter = damager;
 			}
-			damagerCuboids = db.getAllByLoc(damager.getLocation());
+			damagerCuboids = db.getAllByLocation(damager.getLocation());
 			damagerCuboid = db.getPrior(damagerCuboids);
 		}
 	}

@@ -37,14 +37,14 @@ public class PlayerStickListener extends AbstractListener {
 			if (event.hasBlock()) {
 				if (action == Action.RIGHT_CLICK_BLOCK) {
 					// Selection tool
-					final RectCuboid selection = (RectCuboid) getPlugin().getDb().getTmp(p.getName());
+					final RectCuboid selection = (RectCuboid) getPlugin().getDb().getSelection(p.getName());
 					final Location clickedBlockLocation = event.getClickedBlock().getLocation();
 					if (selection == null) {
 						getPlugin().getDb()
-								.addTmp(new RectCuboid("tmp" + p.getName(),
-								                       p.getName(),
-								                       clickedBlockLocation.getWorld().getName(),
-								                       new NLocation(clickedBlockLocation)));
+								.addSelection(new RectCuboid("tmp" + p.getName(),
+								                             p.getName(),
+								                             clickedBlockLocation.getWorld().getName(),
+								                             new NLocation(clickedBlockLocation)));
 						getPlugin().sendMessage(p, MessageId.cuboid_firstPointSelected, NLocation.toString(clickedBlockLocation));
 					} else if (selection.getState() == CuboidState.TMPSTATE1) {
 						selection.secondPoint(clickedBlockLocation);
@@ -101,7 +101,7 @@ public class PlayerStickListener extends AbstractListener {
 				}
 			} else if (action == Action.RIGHT_CLICK_AIR || action == Action.LEFT_CLICK_AIR) {
 				// Selection reset
-				final PlayerCuboid deletedCuboid = getPlugin().getDb().delTmp(p.getName());
+				final PlayerCuboid deletedCuboid = getPlugin().getDb().removeSelection(p.getName());
 				if (deletedCuboid == null) {
 					getPlugin().sendMessage(p, MessageId.cuboid_noSelection);
 				} else {

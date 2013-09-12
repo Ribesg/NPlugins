@@ -10,14 +10,16 @@ import java.util.Set;
 public abstract class PlayerCuboid extends GeneralCuboid {
 
 	public static enum CuboidState {
+		/** Normal Cuboid */
 		NORMAL,
-		// Normal Cuboid
+
+		/** First point selected */
 		TMPSTATE1,
-		// First point selected
-		TMPSTATE2 // All points selected, waiting for "/cuboid create" command
+
+		/** All points selected, waiting for "/cuboid create" command */
+		TMPSTATE2;
 	}
 
-	// Identification / informations related
 	private String          cuboidName;
 	private String          ownerName;
 	private CuboidState     state;
@@ -26,7 +28,7 @@ public abstract class PlayerCuboid extends GeneralCuboid {
 	private String          farewellMessage;
 	private Set<ChunkCoord> chunks;
 
-	// Create a new Cuboid, when user select points etc
+	/** Create a new Cuboid, when user select points etc */
 	public PlayerCuboid(final String cuboidName, final String ownerName, final String worldName, final CuboidType type) {
 		super(worldName, type);
 		setCuboidName(cuboidName);
@@ -36,7 +38,7 @@ public abstract class PlayerCuboid extends GeneralCuboid {
 		setFarewellMessage(null);
 	}
 
-	// Create a Cuboid from a save
+	/** Create a Cuboid from a save */
 	public PlayerCuboid(final String cuboidName,
 	                    final String ownerName,
 	                    final String worldName,
@@ -61,6 +63,11 @@ public abstract class PlayerCuboid extends GeneralCuboid {
 		setChunks(chunks);
 	}
 
+	/**
+	 * Called on a Selection cuboid to transform it into an actual Cuboid
+	 *
+	 * @param cuboidName the name of the new Cuboid
+	 */
 	public void create(final String cuboidName) {
 		setCuboidName(cuboidName);
 		setState(CuboidState.NORMAL);

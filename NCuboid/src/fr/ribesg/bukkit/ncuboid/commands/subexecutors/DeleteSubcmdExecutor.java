@@ -12,31 +12,31 @@ public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 
 	private static final String USAGE = ChatColor.RED + "Usage : /cuboid delete <cuboidName>";
 
-	public DeleteSubcmdExecutor(final NCuboid instance, final CommandSender sender, final String[] superCommandArgs) {
-		super(instance, sender, superCommandArgs);
+	public DeleteSubcmdExecutor(final NCuboid instance) {
+		super(instance);
 	}
 
 	@Override
-	public boolean exec() {
-		if (getArgs().length != 1) {
-			getSender().sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
+	public boolean exec(final CommandSender sender, final String[] args) {
+		if (args.length != 1) {
+			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
 			return true;
-		} else if (Perms.hasDelete(getSender())) {
-			final PlayerCuboid c = getPlugin().getDb().getByName(getArgs()[0]);
+		} else if (Perms.hasDelete(sender)) {
+			final PlayerCuboid c = getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
-				getPlugin().sendMessage(getSender(), MessageId.cuboid_cmdDeleteDoesNotExist);
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDoesNotExist);
 				return true;
 			} else {
-				if (Perms.isAdmin(getSender()) || c.isOwner(getSender())) {
-					getPlugin().getDb().del(c);
-					getPlugin().sendMessage(getSender(), MessageId.cuboid_cmdDeleteDeleted, c.getCuboidName());
+				if (Perms.isAdmin(sender) || c.isOwner(sender)) {
+					getPlugin().getDb().remove(c);
+					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDeleted, c.getCuboidName());
 				} else {
-					getPlugin().sendMessage(getSender(), MessageId.cuboid_cmdDeleteNoPermission, c.getCuboidName());
+					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteNoPermission, c.getCuboidName());
 				}
 				return true;
 			}
 		} else {
-			getPlugin().sendMessage(getSender(), MessageId.noPermissionForCommand);
+			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
 	}

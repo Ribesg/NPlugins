@@ -106,7 +106,7 @@ public class FarmFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerShearEntity(final PlayerShearEntityEvent event) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLoc(event.getEntity().getLocation());
+		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(event.getEntity().getLocation());
 		if (cuboid != null && cuboid.getFlag(Flag.FARM) && !cuboid.isAllowedPlayer(event.getPlayer())) {
 			event.setCancelled(true);
 		}

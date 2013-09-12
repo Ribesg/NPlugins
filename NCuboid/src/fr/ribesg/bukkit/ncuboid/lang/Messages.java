@@ -40,12 +40,12 @@ public class Messages extends AbstractMessages {
 
 		// PlayerStickListener
 		newMessages.add(new Message(MessageId.cuboid_firstPointSelected,
-		                            "&aFirst point selected : %coords%",
+		                            "&aFirst point selected: %coords%",
 		                            new String[] {"%coords%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_secondPointSelected,
-		                            "&aSecond point selected : %coords%%%&aSelection Size : %size%",
+		                            "&aSecond point selected: %coords%%%&aSelection Size : %size%",
 		                            new String[] {"%coords%", "%size%"},
 		                            null,
 		                            true));
@@ -66,32 +66,42 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.cuboid_noSelection, "&cYou have no selection to reset", null, null, true));
 
 		// Command - RELOAD
-		newMessages.add(new Message(MessageId.cuboid_cmdReloadCuboids, "&aCuboids reloaded !", null, null, true));
-		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null, true));
-		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdReloadCuboids, "&aCuboids reloaded!", null, null, true));
+		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded!", null, null, true));
+		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded!", null, null, true));
+		newMessages.add(new Message(MessageId.cmdReloadError,
+		                            "&An error occured while loading %file%!",
+		                            new String[] {"%file%"},
+		                            null,
+		                            true));
 
 		// Command - CREATE
 		newMessages.add(new Message(MessageId.cuboid_cmdCreateAlreadyExists, "&cThis cuboid already exists !", null, null, true));
 		newMessages.add(new Message(MessageId.cuboid_cmdCreateCreated,
-		                            "&aYou created the cuboid &6%cuboidName% &a!",
+		                            "&aYou created the cuboid &6%cuboidName%&a!",
 		                            new String[] {"%cuboidName%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdCreateNoValidSelection,
-		                            "&cYou need a vallid selection to create a cuboid !",
+		                            "&cYou need a valid selection to create a cuboid!",
+		                            null,
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdCreateForbiddenName,
+		                            "&cSorry, you can't use a name prefixed by 'world_'!",
 		                            null,
 		                            null,
 		                            true));
 
 		// Command - DELETE
-		newMessages.add(new Message(MessageId.cuboid_cmdDeleteDoesNotExist, "&cThis cuboid does not exist !", null, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdDeleteDoesNotExist, "&cThis cuboid does not exist!", null, null, true));
 		newMessages.add(new Message(MessageId.cuboid_cmdDeleteDeleted,
-		                            "&aThe cuboid &6%cuboidName% &ahas been deleted !",
+		                            "&aThe cuboid &6%cuboidName% &ahas been deleted!",
 		                            new String[] {"%cuboidName%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdDeleteNoPermission,
-		                            "&cYou do not have the permission to delete &6%cuboidName% &c!",
+		                            "&cYou do not have the permission to delete &6%cuboidName%&c!",
 		                            new String[] {"%cuboidName%"},
 		                            null,
 		                            true));

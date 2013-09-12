@@ -21,12 +21,11 @@ public enum FlagAtt {
 	BOOSTER_VECTOR;
 
 	public static boolean isIntFlagAtt(final FlagAtt f) {
-		return f != null && HEAL_AMOUNT.compareTo(f) <= 0 && f.compareTo(EXPLOSION_BLOCK_DROP) <= 0;
-
+		return f != null && HEAL_AMOUNT.compareTo(f) >= 0 && f.compareTo(EXPLOSION_BLOCK_DROP) <= 0;
 	}
 
 	public static boolean isLocFlagAtt(final FlagAtt f) {
-		return f != null && EXTERNAL_POINT.compareTo(f) <= 0 && f.compareTo(INTERNAL_POINT) <= 0;
+		return f != null && EXTERNAL_POINT.compareTo(f) >= 0 && f.compareTo(INTERNAL_POINT) <= 0;
 	}
 
 	public static boolean isVectFlagAtt(final FlagAtt f) {

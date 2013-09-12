@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
@@ -12,9 +12,9 @@ public class ExtendedHangingBreakEvent extends AbstractExtendedEvent {
 	private final GeneralCuboid      cuboid;
 	private final Set<GeneralCuboid> cuboids;
 
-	public ExtendedHangingBreakEvent(final CuboidDB db, final HangingBreakEvent event) {
+	public ExtendedHangingBreakEvent(final CuboidDb db, final HangingBreakEvent event) {
 		super(event);
-		cuboids = db.getAllByLoc(event.getEntity().getLocation());
+		cuboids = db.getAllByLocation(event.getEntity().getLocation());
 		cuboid = db.getPrior(cuboids);
 	}
 

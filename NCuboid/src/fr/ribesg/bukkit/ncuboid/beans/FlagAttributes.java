@@ -144,7 +144,7 @@ public class FlagAttributes {
 
 	// Default map
 	private static EnumMap<FlagAtt, Object> getDefaultFlagAttMap() {
-		final EnumMap<FlagAtt, Object> defaultFlagMap = new EnumMap<FlagAtt, Object>(FlagAtt.class);
+		final EnumMap<FlagAtt, Object> defaultFlagMap = new EnumMap<>(FlagAtt.class);
 
 		// We do not put anything in the map, we do not want to store useless objects / references
 

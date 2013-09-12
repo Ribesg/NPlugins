@@ -29,8 +29,21 @@ public class CuboidDBPersistenceHandler {
 	public static final  Charset CHARSET     = StandardCharsets.UTF_8;
 	private final static String  DB_FILENAME = "cuboidDB.yml";
 
-	public static CuboidDB loadDB(final NCuboid plugin) throws IOException, InvalidConfigurationException {
-		final CuboidDB db = new CuboidDB(plugin);
+	public static CuboidDb reloadDB(final NCuboid plugin) {
+		final CuboidDb oldDb = plugin.getDb();
+		try {
+			return loadDB(plugin);
+		} catch (IOException | InvalidConfigurationException e) {
+			plugin.getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			plugin.getLogger().severe("This error occured when NCuboid tried to reload cuboidDB.yml");
+			plugin.getLogger().info("No cuboid has been changed.");
+			return oldDb;
+		}
+	}
+
+	public static CuboidDb loadDB(final NCuboid plugin) throws IOException, InvalidConfigurationException {
+		final CuboidDb db = new CuboidDb(plugin);
 
 		final Path pluginFolder = plugin.getDataFolder().toPath();
 		if (!Files.exists(pluginFolder)) {
@@ -158,7 +171,7 @@ public class CuboidDBPersistenceHandler {
 		return rights;
 	}
 
-	public static void saveDB(final NCuboid plugin, final CuboidDB db) throws IOException {
+	public static void saveDB(final NCuboid plugin, final CuboidDb db) throws IOException {
 		final Path pluginFolder = plugin.getDataFolder().toPath();
 		if (!Files.exists(pluginFolder)) {
 			Files.createDirectories(pluginFolder);

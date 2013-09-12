@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDB;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -14,11 +14,11 @@ public class ExtendedPlayerTeleportEvent extends AbstractExtendedEvent {
 	private final GeneralCuboid      toCuboid;
 	private final Set<GeneralCuboid> toCuboids;
 
-	public ExtendedPlayerTeleportEvent(final CuboidDB db, final PlayerTeleportEvent event) {
+	public ExtendedPlayerTeleportEvent(final CuboidDb db, final PlayerTeleportEvent event) {
 		super(event);
-		fromCuboids = db.getAllByLoc(event.getFrom());
+		fromCuboids = db.getAllByLocation(event.getFrom());
 		fromCuboid = db.getPrior(fromCuboids);
-		toCuboids = db.getAllByLoc(event.getTo());
+		toCuboids = db.getAllByLocation(event.getTo());
 		toCuboid = db.getPrior(toCuboids);
 	}
 

@@ -20,7 +20,7 @@ public class SnowFlagListener extends AbstractListener {
 	public void onBlockForm(final BlockFormEvent event) {
 		final BlockState newState = event.getNewState();
 		if (newState.getType() == Material.SNOW || newState.getType() == Material.ICE) {
-			final GeneralCuboid c = getPlugin().getDb().getPriorByLoc(event.getBlock().getLocation());
+			final GeneralCuboid c = getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
 			if (c != null && c.getFlag(Flag.SNOW)) {
 				event.setCancelled(true);
 			}
