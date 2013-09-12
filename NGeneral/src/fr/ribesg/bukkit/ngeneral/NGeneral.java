@@ -116,6 +116,9 @@ public class NGeneral extends GeneralNode {
 
 	@Override
 	protected void onNodeDisable() {
+		if (pluginConfig.hasFlyModeFeature()) {
+			flyMode.disable();
+		}
 		try {
 			getPluginConfig().writeConfig();
 		} catch (final IOException e) {

@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.ngeneral.feature.flymode;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
+import fr.ribesg.bukkit.ngeneral.Perms;
 import fr.ribesg.bukkit.ngeneral.feature.GeneralFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,6 +26,17 @@ public class FlyModeFeature extends GeneralFeature {
 	public void init() {
 		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
 		getPlugin().getCommand("fly").setExecutor(executor);
+	}
+
+	@Override
+	public void disable() {
+		for (final Player player : Bukkit.getOnlinePlayers()) {
+			if (!Perms.hasFly(player) && this.hasFlyMode(player.getName())) {
+				player.setAllowFlight(false);
+				this.setFlyMode(player, false);
+				player.setFallDistance(-100f);
+			}
+		}
 	}
 
 	public Set<String> getFlyPlayers() {

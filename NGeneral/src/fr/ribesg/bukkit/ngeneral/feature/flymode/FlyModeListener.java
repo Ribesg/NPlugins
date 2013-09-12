@@ -31,6 +31,7 @@ public class FlyModeListener implements Listener {
 		if (!Perms.hasFly(event.getPlayer()) && feature.hasFlyMode(event.getPlayer().getName())) {
 			event.getPlayer().setAllowFlight(false);
 			feature.setFlyMode(event.getPlayer(), false);
+			event.getPlayer().setFallDistance(-100f);
 		}
 	}
 

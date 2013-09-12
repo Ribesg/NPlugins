@@ -14,4 +14,8 @@ public abstract class GeneralFeature {
 	}
 
 	public abstract void init();
+
+	public void disable() {
+		// Should be overriden by Features that have to do something onDisable
+	}
 }
