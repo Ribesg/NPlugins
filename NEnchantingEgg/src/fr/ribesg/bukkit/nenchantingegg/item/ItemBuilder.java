@@ -138,7 +138,7 @@ public class ItemBuilder {
 	}
 
 	public void addItem(final ItemStack is) {
-		if (getPossibleMainItems().contains(is.getTypeId()) && is.getEnchantments().size() != 0) {
+		if (getPossibleMainItems().contains(is.getType()) && is.getEnchantments().size() != 0) {
 			mainItem = is;
 			plugin.getEggProvidedToItemProvidedTransition().doTransition(altar);
 		} else {

@@ -7,9 +7,9 @@ import fr.ribesg.bukkit.nenchantingegg.altar.transition.EggProvidedToItemProvide
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.InactiveToActiveTransition;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.ItemProvidedToLockedTransition;
 import fr.ribesg.bukkit.nenchantingegg.lang.Messages;
-import fr.ribesg.bukkit.nenchantingegg.listener.BlockListener;
 import fr.ribesg.bukkit.nenchantingegg.listener.ItemListener;
 import fr.ribesg.bukkit.nenchantingegg.listener.PlayerListener;
+import fr.ribesg.bukkit.nenchantingegg.listener.WorldListener;
 import fr.ribesg.bukkit.nenchantingegg.task.TimeListenerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -36,7 +36,7 @@ public class NEnchantingEgg extends EnchantingEggNode {
 	private ItemProvidedToLockedTransition      itemProvidedToLockedTransition;
 
 	// Listeners
-	private BlockListener  blockListener;
+	private WorldListener  worldListener;
 	private ItemListener   itemListener;
 	private PlayerListener playerListener;
 
@@ -83,10 +83,10 @@ public class NEnchantingEgg extends EnchantingEggNode {
 
 		// Listener
 		final PluginManager pm = getServer().getPluginManager();
-		blockListener = new BlockListener(this);
+		worldListener = new WorldListener(this);
 		itemListener = new ItemListener(this);
 		playerListener = new PlayerListener(this);
-		pm.registerEvents(blockListener, this);
+		pm.registerEvents(worldListener, this);
 		pm.registerEvents(itemListener, this);
 		pm.registerEvents(playerListener, this);
 
@@ -140,8 +140,8 @@ public class NEnchantingEgg extends EnchantingEggNode {
 		return itemProvidedToLockedTransition;
 	}
 
-	public BlockListener getBlockListener() {
-		return blockListener;
+	public WorldListener getWorldListener() {
+		return worldListener;
 	}
 
 	public ItemListener getItemListener() {

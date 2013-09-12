@@ -4,6 +4,7 @@ import fr.ribesg.bukkit.ncore.common.ChunkCoord;
 import fr.ribesg.bukkit.ncore.common.MinecraftTime;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -91,7 +92,6 @@ public class Altars {
 
 	public void timeChange(final String worldName, final MinecraftTime fromMinecraftTime, final MinecraftTime toMinecraftTime) {
 		if (perWorld.containsKey(worldName)) {
-			int i = 0;
 			if (fromMinecraftTime == MinecraftTime.DAY && toMinecraftTime == MinecraftTime.NIGHT) {
 				for (final Altar a : perWorld.get(worldName)) {
 					if (a.getState() == AltarState.INACTIVE) {
@@ -110,6 +110,18 @@ public class Altars {
 						a.setState(AltarState.INACTIVE);
 					}
 				}
+			}
+		}
+	}
+
+	public void chunkLoad(final ChunkCoord c) {
+		if (perChunk.containsKey(c)) {
+			final World world = Bukkit.getWorld(c.getWorldName());
+			final Altar altar = perChunk.get(c);
+			if (altar.getState() == AltarState.INACTIVE && MinecraftTime.isNightTime(world.getTime())) {
+				plugin.getInactiveToActiveTransition().doTransition(altar);
+			} else if (altar.getState() != AltarState.INACTIVE && MinecraftTime.isNightTime(world.getTime())) {
+				altar.hardResetToInactive();
 			}
 		}
 	}

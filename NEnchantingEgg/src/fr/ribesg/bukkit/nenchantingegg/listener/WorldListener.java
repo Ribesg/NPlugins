@@ -9,16 +9,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class BlockListener implements Listener {
+public class WorldListener implements Listener {
 
 	private final NEnchantingEgg plugin;
 
-	public BlockListener(final NEnchantingEgg instance) {
+	public WorldListener(final NEnchantingEgg instance) {
 		plugin = instance;
 	}
 
@@ -60,5 +61,10 @@ public class BlockListener implements Listener {
 				}
 			}
 		}
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onChunkLoad(final ChunkLoadEvent event) {
+		plugin.getAltars().chunkLoad(new ChunkCoord(event.getChunk()));
 	}
 }
