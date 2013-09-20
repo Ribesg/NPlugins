@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component jdk="1.7" jdk_type="JavaSDK">
-	<exclude-output/>
-	<contentEntry url="file://$MODULE_DIR$"/>
+<component LANGUAGE_LEVEL="JDK_1_7" jdk="1.7" jdk_type="JavaSDK">
+	<output-test url="file://$MODULE_DIR$/target/test-classes"/>
+	<contentEntry url="file://$MODULE_DIR$">
+		<excludeFolder url="file://$MODULE_DIR$/target"/>
+	</contentEntry>
 	<levels>
 		<level name="bukkit" value="project"/>
+		<level name="Maven: org.bukkit:bukkit:1.6.2-R1.0" value="project"/>
 	</levels>
 </component>
