@@ -34,6 +34,7 @@ public class Perms {
 	private static final String CMD_RELOAD           = "ncuboid.cmd.reload";
 	private static final String CMD_CREATE           = "ncuboid.cmd.create";
 	private static final String CMD_DELETE           = "ncuboid.cmd.delete";
+	private static final String CMD_FLAG             = "ncuboid.cmd.flag";
 
 	public static boolean isAdmin(CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(ADMIN);
@@ -145,5 +146,9 @@ public class Perms {
 
 	public static boolean hasDelete(CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(CMD_DELETE) || sender.hasPermission(USER);
+	}
+
+	public static boolean hasFlag(CommandSender sender) {
+		return isAdmin(sender) || sender.hasPermission(CMD_FLAG) || sender.hasPermission(USER);
 	}
 }
