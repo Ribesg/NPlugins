@@ -1,8 +1,46 @@
-*/bin/
+## Generic files to ignore ##
 *~
-*/*.jardesc
-*/.settings/
-*/.classpath
-*/.project
-out/*
-*/*.iml
+*.lock
+*.DS_Store
+*.swp
+*.out
+*/bin
+
+
+## Operating System Specific ##
+
+# Windows stuff
+*Thumbs.db
+*Desktop.ini
+
+# Mac OSX stuff
+*.DS_Store
+
+
+## Java specific ##
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Others #
+*.class
+
+
+## IDE Specific ##
+
+# Eclipse
+*.classpath
+*.project
+*.jardesc
+*.settings/
+
+# Intellij
+*.idea/
+*.eml
+*.iml
+*.iws
+
+# Netbeans
+*nbproject/
