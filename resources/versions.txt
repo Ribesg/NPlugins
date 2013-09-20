@@ -1,2 +1,0 @@
-Bukkit: 1.6.2-R0.1
-TagAPI: 2.5
