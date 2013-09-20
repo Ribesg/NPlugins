@@ -117,8 +117,7 @@ public class LoggedOutUserHandler implements Listener {
 	}
 
 	private boolean isGridMove(Location from, Location to) {
-		boolean res = from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ() || from.getBlockY() != to.getBlockY();
-		return res;
+		return from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ() || from.getBlockY() != to.getBlockY();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
