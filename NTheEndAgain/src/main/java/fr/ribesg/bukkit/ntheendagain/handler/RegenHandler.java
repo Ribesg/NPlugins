@@ -14,6 +14,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 /** @author Ribesg */
 public class RegenHandler {
 
+	/** The End spawn Location is always [100;50;0] */
+	private static final int END_SPAWN_CHUNK_X = 100 >> 4;
+	/** The End spawn Location is always [100;50;0] */
+	private static final int END_SPAWN_CHUNK_Z = 0;
+
 	private final EndWorldHandler worldHandler;
 
 	public RegenHandler(EndWorldHandler worldHandler) {
@@ -100,6 +105,12 @@ public class RegenHandler {
 
 	private void softRegen() {
 		worldHandler.getChunks().softRegen();
+
+		/*
+		 * Instantly regen the spawn chunk to prevent NPE when an Entity
+		 * tries to teleport here and we regen the chunk on Chunk Load.
+		 */
+		worldHandler.getEndWorld().getChunkAt(END_SPAWN_CHUNK_X, END_SPAWN_CHUNK_Z).load(true);
 	}
 
 	private void crystalRegen() {
