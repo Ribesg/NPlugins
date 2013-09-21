@@ -1,0 +1,88 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>fr.ribesg.bukkit.nplugins</groupId>
+	<artifactId>NPlugins</artifactId>
+	<packaging>pom</packaging>
+
+	<version>0.4.0-SNAPSHOT</version>
+
+	<name>NPlugins</name>
+	<url>https://github.com/Ribesg/NPlugins</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<modules>
+		<module>NCore</module>
+		<module>NCuboid</module>
+		<module>NEnchantingEgg</module>
+		<module>NGeneral</module>
+		<module>NPlayer</module>
+		<module>NTalk</module>
+		<module>NTheEndAgain</module>
+		<module>NWorld</module>
+	</modules>
+
+	<licenses>
+		<license>
+			<name>GNU General Public License {GPL} v3</name>
+			<url>http://www.gnu.org/licenses/gpl.txt</url>
+		</license>
+	</licenses>
+
+	<issueManagement>
+		<url>https://github.com/Ribesg/NPlugins/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+	<developers>
+		<developer>
+			<id>ribesg</id>
+			<name>Ribesg</name>
+			<email>ribesg@yahoo.fr</email>
+			<url>http://www.ribesg.fr/</url>
+			<roles>
+				<role>Main contributor</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+	
+	<repositories>
+        <repository>
+          <id>bukkit-repo</id>
+          <url>http://repo.bukkit.org/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.6.2-R1.0</version>
+        </dependency>
+    </dependencies>
+
+	<build>
+		<finalName>${project.name}</finalName>
+		<defaultGoal>clean package</defaultGoal>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>

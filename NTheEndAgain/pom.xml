@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.ribesg.bukkit.nplugins</groupId>
+		<artifactId>NPlugins</artifactId>
+		<version>0.4.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>fr.ribesg.bukkit.ntheendagain</groupId>
+	<artifactId>NTheEndAgain</artifactId>
+	<name>NTheEndAgain</name>
+	<version>0.4.0-SNAPSHOT</version>
+
+	<url>https://github.com/Ribesg/NPlugins/tree/master/NTheEndAgain</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>fr.ribesg.bukkit.ncore</groupId>
+			<artifactId>NCore</artifactId>
+			<version>0.4.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>maven-replacer-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<file>target/classes/plugin.yml</file>
+					<replacements>
+						<replacement>
+							<token>maven-version-number</token>
+							<value>${project.version}</value>
+						</replacement>
+					</replacements>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifestEntries>
+							<Built-By>Ribesg</Built-By>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
