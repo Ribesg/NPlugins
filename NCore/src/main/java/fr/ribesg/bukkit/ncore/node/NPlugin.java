@@ -4,14 +4,11 @@ import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.common.FrameBuilder;
 import fr.ribesg.bukkit.ncore.lang.AbstractMessages;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.metrics.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.io.IOException;
 
 /**
  * This class represents a plugin node of the N plugin suite
@@ -22,8 +19,6 @@ public abstract class NPlugin extends JavaPlugin {
 
 	private static final String NCORE         = "NCore";
 	private static final String NCORE_WEBSITE = "http://www.ribesg.fr/";
-
-	private Metrics metrics;
 
 	private NCore core;
 	private boolean enabled = false;
@@ -59,13 +54,6 @@ public abstract class NPlugin extends JavaPlugin {
 
 			getPluginLoader().disablePlugin(this);
 		} else {
-			try {
-				metrics = new Metrics(this);
-				metrics.start();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
 			boolean activationResult = onNodeEnable();
 			if (activationResult) {
 				enabled = true;
@@ -174,9 +162,5 @@ public abstract class NPlugin extends JavaPlugin {
 
 	protected NCore getCore() {
 		return core;
-	}
-
-	protected Metrics getMetrics() {
-		return metrics;
 	}
 }
