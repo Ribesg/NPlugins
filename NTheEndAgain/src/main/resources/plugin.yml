@@ -1,5 +1,5 @@
 name: NTheEndAgain
-version: 0.4.0
+version: maven-version-number
 description: End plugin for N plugins suite
 author: Ribesg
 website: http://www.ribesg.fr
