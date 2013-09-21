@@ -60,6 +60,9 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 					float value = DEFAULT_BUKKIT_WALKSPEED;
 					try {
 						value = Float.parseFloat(arg0);
+						if (value < -1 || value > 1) {
+							return false;
+						}
 					} catch (NumberFormatException ignored) {
 					}
 					String arg1 = args[1].toLowerCase();
