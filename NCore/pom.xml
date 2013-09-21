@@ -18,6 +18,8 @@
 
 	<url>https://github.com/Ribesg/NPlugins/tree/master/NCore</url>
 
+	<description>Core plugin of the NPlugins suite</description>
+
 	<build>
 		<plugins>
 			<plugin>

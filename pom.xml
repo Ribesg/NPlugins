@@ -70,6 +70,15 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>plugin.yml</include>
+				</includes>
+			</resource>
+		</resources>
 		<finalName>${project.name}</finalName>
 		<defaultGoal>clean package</defaultGoal>
 		<pluginManagement>

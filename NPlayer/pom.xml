@@ -18,6 +18,8 @@
 
 	<url>https://github.com/Ribesg/NPlugins/tree/master/NPlayer</url>
 
+	<description>Authentification, punishment, home and information plugin of the NPlugins suite</description>
+
 	<dependencies>
 		<dependency>
 			<groupId>fr.ribesg.bukkit.ncore</groupId>

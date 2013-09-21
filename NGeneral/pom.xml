@@ -18,6 +18,8 @@
 
 	<url>https://github.com/Ribesg/NPlugins/tree/master/NGeneral</url>
 
+	<description>General plugin of the NPlugins suite</description>
+
 	<dependencies>
 		<dependency>
 			<groupId>fr.ribesg.bukkit.ncore</groupId>

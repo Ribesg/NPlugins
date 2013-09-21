@@ -1,8 +1,8 @@
-name: NCore
-version: maven-version-number
-description: Core of the N plugins suite
 author: Ribesg
-website: http://www.ribesg.fr/
-main: fr.ribesg.bukkit.ncore.NCore
+main: ${project.groupId}.${project.artifactId}.${project.name}
+name: ${project.name}
+description: ${project.description}
+url: ${project.url}
+version: ${project.version}
 
 load: STARTUP

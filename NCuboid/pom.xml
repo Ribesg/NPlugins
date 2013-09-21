@@ -18,6 +18,8 @@
 
 	<url>https://github.com/Ribesg/NPlugins/tree/master/NCuboid</url>
 
+	<description>Region protection plugin of the NPlugins suite</description>
+
 	<dependencies>
 		<dependency>
 			<groupId>fr.ribesg.bukkit.ncore</groupId>

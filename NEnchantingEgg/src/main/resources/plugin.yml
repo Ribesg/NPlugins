@@ -1,9 +1,9 @@
-name: NEnchantingEgg
-version: maven-version-number
-description: EnchantingEgg plugin for N plugin suite
 author: Ribesg
-website: http://www.ribesg.fr
-main: fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg
+main: ${project.groupId}.${project.artifactId}.${project.name}
+name: ${project.name}
+description: ${project.description}
+url: ${project.url}
+version: ${project.version}
 
 load: POSTWORLD
 

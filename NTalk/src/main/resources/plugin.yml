@@ -1,9 +1,9 @@
-name: NTalk
-version: maven-version-number
-description: Chat plugin for N plugins suite
 author: Ribesg
-website: http://www.ribesg.fr/
-main: fr.ribesg.bukkit.ntalk.NTalk
+main: ${project.groupId}.${project.artifactId}.${project.name}
+name: ${project.name}
+description: ${project.description}
+url: ${project.url}
+version: ${project.version}
 
 load: POSTWORLD
 

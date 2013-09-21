@@ -1,9 +1,9 @@
-name: NGeneral
-version: maven-version-number
-description: General commands
 author: Ribesg
-website: http://www.ribesg.fr/
-main: fr.ribesg.bukkit.ngeneral.NGeneral
+main: ${project.groupId}.${project.artifactId}.${project.name}
+name: ${project.name}
+description: ${project.description}
+url: ${project.url}
+version: ${project.version}
 
 load: POSTWORLD
 

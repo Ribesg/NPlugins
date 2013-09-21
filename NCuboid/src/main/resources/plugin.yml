@@ -1,9 +1,9 @@
-name: NCuboid
-version: maven-version-number
-description: Cuboid plugin for N plugin suite
 author: Ribesg
-website: http://www.ribesg.fr
-main: fr.ribesg.bukkit.ncuboid.NCuboid
+main: ${project.groupId}.${project.artifactId}.${project.name}
+name: ${project.name}
+description: ${project.description}
+url: ${project.url}
+version: ${project.version}
 
 load: POSTWORLD
 
