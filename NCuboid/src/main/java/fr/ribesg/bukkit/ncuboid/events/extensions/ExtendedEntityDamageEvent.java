@@ -31,8 +31,10 @@ public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 				damagerProjectile = true;
 				shooter = damager;
 			}
-			damagerCuboids = db.getAllByLocation(damager.getLocation());
-			damagerCuboid = db.getPrior(damagerCuboids);
+			if (damager != null) {
+				damagerCuboids = db.getAllByLocation(damager.getLocation());
+				damagerCuboid = db.getPrior(damagerCuboids);
+			}
 		}
 	}
 
