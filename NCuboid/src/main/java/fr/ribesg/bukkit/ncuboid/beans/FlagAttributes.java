@@ -41,7 +41,7 @@ public class FlagAttributes {
 			atts.put(f, i);
 			checkIntFlagAttCorrection();
 		} else {
-			new IllegalArgumentException(f.name()).printStackTrace();
+			new IllegalArgumentException(f == null ? "null" : f.name()).printStackTrace();
 		}
 	}
 
