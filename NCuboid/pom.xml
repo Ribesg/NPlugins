@@ -26,82 +26,17 @@
 		</dependency>
 	</dependencies>
 
-	<properties>
-		<archive>target/${name}.jar</archive>
-	</properties>
-
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>com.google.code.maven-replacer-plugin</groupId>
 				<artifactId>maven-replacer-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<file>target/classes/plugin.yml</file>
-					<replacements>
-						<replacement>
-							<token>maven-version-number</token>
-							<value>${project.version}</value>
-						</replacement>
-					</replacements>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<addMavenDescriptor>false</addMavenDescriptor>
-						<manifestEntries>
-							<Built-By>Ribesg</Built-By>
-						</manifestEntries>
-					</archive>
-				</configuration>
+				<version>1.4.1</version>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>truezip-maven-plugin</artifactId>
 				<version>1.1</version>
-				<executions>
-					<execution>
-						<id>remove-a-file</id>
-						<goals>
-							<goal>remove</goal>
-						</goals>
-						<phase>package</phase>
-						<configuration>
-							<fileset>
-								<directory>${archive}</directory>
-								<includes>
-									<include>META-INF</include>
-								</includes>
-							</fileset>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-into</id>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<phase>package</phase>
-						<configuration>
-							<fileset>
-								<directory>${basedir}/src/main/java</directory>
-								<includes>
-									<include>**</include>
-								</includes>
-								<outputDirectory>${archive}/sources</outputDirectory>
-							</fileset>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

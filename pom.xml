@@ -17,7 +17,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	
+
 	<modules>
 		<module>NCore</module>
 		<module>NCuboid</module>
@@ -53,21 +53,21 @@
 			<timezone>+1</timezone>
 		</developer>
 	</developers>
-	
-	<repositories>
-        <repository>
-          <id>bukkit-repo</id>
-          <url>http://repo.bukkit.org/content/groups/public/</url>
-        </repository>
-    </repositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.6.2-R1.0</version>
-        </dependency>
-    </dependencies>
+	<repositories>
+		<repository>
+			<id>bukkit-repo</id>
+			<url>http://repo.bukkit.org/content/groups/public/</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>1.6.2-R1.0</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<finalName>${project.name}</finalName>
@@ -81,7 +81,83 @@
 						<target>1.7</target>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>com.google.code.maven-replacer-plugin</groupId>
+					<artifactId>maven-replacer-plugin</artifactId>
+					<version>1.4.1</version>
+					<executions>
+						<execution>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>replace</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<file>target/classes/plugin.yml</file>
+						<replacements>
+							<replacement>
+								<token>maven-version-number</token>
+								<value>${project.version}</value>
+							</replacement>
+						</replacements>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>truezip-maven-plugin</artifactId>
+					<version>1.1</version>
+					<executions>
+						<execution>
+							<id>remove-a-file</id>
+							<goals>
+								<goal>remove</goal>
+							</goals>
+							<phase>package</phase>
+							<configuration>
+								<fileset>
+									<directory>target/${project.name}.jar</directory>
+									<includes>
+										<include>META-INF</include>
+									</includes>
+								</fileset>
+							</configuration>
+						</execution>
+						<execution>
+							<id>copy-into</id>
+							<goals>
+								<goal>copy</goal>
+							</goals>
+							<phase>package</phase>
+							<configuration>
+								<fileset>
+									<directory>${basedir}/src/main/java</directory>
+									<includes>
+										<include>**</include>
+									</includes>
+									<outputDirectory>target/${project.name}.jar/sources</outputDirectory>
+								</fileset>
+							</configuration>
+						</execution>
+						<execution>
+							<id>copy-artifacts</id>
+							<goals>
+								<goal>copy</goal>
+							</goals>
+							<phase>package</phase>
+							<configuration>
+								<files>
+									<file>
+										<source>${basedir}/target/${project.name}.jar</source>
+										<outputDirectory>${basedir}/../output</outputDirectory>
+									</file>
+								</files>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
+
 		</pluginManagement>
 	</build>
 
