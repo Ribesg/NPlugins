@@ -1,6 +1,8 @@
 package fr.ribesg.bukkit.ncore.common;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.World;
 
 public class ChunkCoord {
 
@@ -47,6 +49,19 @@ public class ChunkCoord {
 
 	public String getWorldName() {
 		return worldName;
+	}
+
+	public World getBukkitWorld() {
+		return Bukkit.getWorld(getWorldName());
+	}
+
+	public Chunk getBukkitChunk() {
+		final World world = getBukkitWorld();
+		if (world != null) {
+			return world.getChunkAt(getX(), getZ());
+		} else {
+			return null;
+		}
 	}
 
 	@Override
