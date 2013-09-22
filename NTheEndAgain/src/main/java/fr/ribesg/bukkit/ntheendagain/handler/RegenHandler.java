@@ -2,6 +2,7 @@ package fr.ribesg.bukkit.ntheendagain.handler;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
+import fr.ribesg.bukkit.ntheendagain.task.SlowSoftRegeneratorTaskHandler;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
 import org.bukkit.Bukkit;
@@ -111,6 +112,10 @@ public class RegenHandler {
 		 * tries to teleport here and we regen the chunk on Chunk Load.
 		 */
 		worldHandler.getEndWorld().getChunkAt(END_SPAWN_CHUNK_X, END_SPAWN_CHUNK_Z).load(true);
+
+		// Launch Slow Soft Regen task
+		worldHandler.setSlowSoftRegeneratorTaskHandler(new SlowSoftRegeneratorTaskHandler(worldHandler));
+		worldHandler.getSlowSoftRegeneratorTaskHandler().run();
 	}
 
 	private void crystalRegen() {

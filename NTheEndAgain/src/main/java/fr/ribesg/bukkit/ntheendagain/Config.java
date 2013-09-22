@@ -59,6 +59,12 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	private final static int DEFAULT_hardRegenOnStop = 0;
 	private int hardRegenOnStop;
 
+	private final static int DEFAULT_slowSoftRegenChunks = 5;
+	private int slowSoftRegenChunks;
+
+	private final static int DEFAULT_slowSoftRegenTimer = 5;
+	private int slowSoftRegenTimer;
+
 	// Respawn
 
 	private final static int DEFAULT_respawnNumber = 1;
@@ -98,6 +104,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		setEdPortalSpawn(DEFAULT_edPortalSpawn);
 
 		// EnderCrystals
+		setEcHealthRegainRate(DEFAULT_ecHealthRegainRate);
 
 		// Regeneration
 		setRegenType(DEFAULT_regenType);
@@ -105,6 +112,8 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		setRegenMethod(DEFAULT_regenMethod);
 		setRegenAction(DEFAULT_regenAction);
 		setHardRegenOnStop(DEFAULT_hardRegenOnStop);
+		setSlowSoftRegenChunks(DEFAULT_slowSoftRegenChunks);
+		setSlowSoftRegenTimer(DEFAULT_slowSoftRegenTimer);
 
 		// Respawn
 		setRespawnNumber(DEFAULT_respawnNumber);
@@ -216,6 +225,18 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		if (!match(getHardRegenOnStop(), 0, 1)) {
 			wrongValue(fileName, "hardRegenOnStop", getHardRegenOnStop(), DEFAULT_hardRegenOnStop);
 			setHardRegenOnStop(DEFAULT_hardRegenOnStop);
+		}
+
+		setSlowSoftRegenChunks(config.getInt("slowSoftRegenChunks", DEFAULT_slowSoftRegenChunks));
+		if (!match(getSlowSoftRegenChunks(), 1, Integer.MAX_VALUE)) {
+			wrongValue(fileName, "slowSoftRegenChunks", getSlowSoftRegenChunks(), DEFAULT_slowSoftRegenChunks);
+			setSlowSoftRegenChunks(DEFAULT_slowSoftRegenChunks);
+		}
+
+		setSlowSoftRegenTimer(config.getInt("slowSoftRegenTimer", DEFAULT_slowSoftRegenTimer));
+		if (!match(getSlowSoftRegenTimer(), 1, Integer.MAX_VALUE)) {
+			wrongValue(fileName, "slowSoftRegenTimer", getSlowSoftRegenTimer(), DEFAULT_slowSoftRegenTimer);
+			setSlowSoftRegenTimer(DEFAULT_slowSoftRegenTimer);
 		}
 
 		// Respawn
@@ -458,6 +479,16 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#\n");
 		content.append("hardRegenOnStop: " + getHardRegenOnStop() + "\n\n");
 
+		// slowSoftRegenChunks
+		content.append("# Select the number of chunks to be regen every slowSoftRegenTimer after a Soft Regeneration has started.\n");
+		content.append("# Default value: " + DEFAULT_slowSoftRegenChunks + "\n");
+		content.append("slowSoftRegenChunks: " + getSlowSoftRegenChunks() + "\n\n");
+
+		// slowSoftRegenTimer
+		content.append("# Select the at which rate slowSoftRegenChunks chunks will be regenerated after a\n");
+		content.append("# Soft Regeneration has started. Default value: " + DEFAULT_slowSoftRegenTimer + "\n");
+		content.append("slowSoftRegenTimer: " + getSlowSoftRegenTimer() + "\n\n");
+
 		// #############
 		// ## RESPAWN ##
 		// #############
@@ -657,6 +688,22 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 
 	private void setRegenType(int regenType) {
 		this.regenType = regenType;
+	}
+
+	public int getSlowSoftRegenChunks() {
+		return slowSoftRegenChunks;
+	}
+
+	public void setSlowSoftRegenChunks(int slowSoftRegenChunks) {
+		this.slowSoftRegenChunks = slowSoftRegenChunks;
+	}
+
+	public int getSlowSoftRegenTimer() {
+		return slowSoftRegenTimer;
+	}
+
+	public void setSlowSoftRegenTimer(int slowSoftRegenTimer) {
+		this.slowSoftRegenTimer = slowSoftRegenTimer;
 	}
 
 	// Respawn

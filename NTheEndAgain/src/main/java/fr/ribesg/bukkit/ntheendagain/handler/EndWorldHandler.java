@@ -5,6 +5,7 @@ import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.task.RegenTask;
 import fr.ribesg.bukkit.ntheendagain.task.RespawnTask;
+import fr.ribesg.bukkit.ntheendagain.task.SlowSoftRegeneratorTaskHandler;
 import fr.ribesg.bukkit.ntheendagain.task.UnexpectedDragonDeathHandlerTask;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
@@ -42,6 +43,8 @@ public class EndWorldHandler {
 	private final RespawnHandler                 respawnHandler;
 	private final RegenHandler                   regenHandler;
 
+	private SlowSoftRegeneratorTaskHandler slowSoftRegeneratorTaskHandler;
+
 	/**
 	 * Class constructor
 	 * - Initialize all variables
@@ -62,6 +65,7 @@ public class EndWorldHandler {
 		tasks = new HashSet<>();
 		respawnHandler = new RespawnHandler(this);
 		regenHandler = new RegenHandler(this);
+		slowSoftRegeneratorTaskHandler = null;
 
 		// Config is not yet loaded here
 	}
@@ -258,5 +262,13 @@ public class EndWorldHandler {
 
 	public String getCamelCaseWorldName() {
 		return camelCaseWorldName;
+	}
+
+	public SlowSoftRegeneratorTaskHandler getSlowSoftRegeneratorTaskHandler() {
+		return slowSoftRegeneratorTaskHandler;
+	}
+
+	public void setSlowSoftRegeneratorTaskHandler(SlowSoftRegeneratorTaskHandler slowSoftRegeneratorTaskHandler) {
+		this.slowSoftRegeneratorTaskHandler = slowSoftRegeneratorTaskHandler;
 	}
 }
