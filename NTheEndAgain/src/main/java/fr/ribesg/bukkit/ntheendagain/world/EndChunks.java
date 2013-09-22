@@ -154,7 +154,7 @@ public class EndChunks implements Iterable<EndChunk> {
 	}
 
 	public List<EndChunk> getSafeChunksList() {
-		List<EndChunk> result = new ArrayList<>();
+		final List<EndChunk> result = new ArrayList<>();
 		result.addAll(chunks.values());
 		return result;
 	}

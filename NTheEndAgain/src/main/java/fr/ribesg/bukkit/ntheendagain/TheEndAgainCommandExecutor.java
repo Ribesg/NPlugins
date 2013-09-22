@@ -125,7 +125,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 					handler.getRegenHandler().regen();
 				}
 			} else {
-				plugin.sendMessage(sender, MessageId.unknownWorld);
+				plugin.sendMessage(sender, MessageId.unknownWorld, parsedArgs[0]);
 			}
 		}
 		return true;
@@ -141,7 +141,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 			if (handler != null) {
 				handler.getRespawnHandler().respawn();
 			} else {
-				plugin.sendMessage(sender, MessageId.unknownWorld);
+				plugin.sendMessage(sender, MessageId.unknownWorld, parsedArgs[0]);
 			}
 		}
 		return true;
@@ -158,7 +158,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 				final Integer nb = handler.getNumberOfAliveEnderDragons();
 				plugin.sendMessage(sender, MessageId.theEndAgain_nbAlive, nb.toString(), handler.getEndWorld().getName());
 			} else {
-				plugin.sendMessage(sender, MessageId.unknownWorld);
+				plugin.sendMessage(sender, MessageId.unknownWorld, parsedArgs[0]);
 			}
 		}
 		return true;
