@@ -24,7 +24,7 @@ public class ChestFlagListener extends AbstractListener {
 	public void onPlayerInteract(final ExtendedPlayerInteractEvent ext) {
 		final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
 		if (event.hasBlock()) {
-			if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.CHEST) && !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
+			if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.CHEST) && !ext.getRegion().isAllowedPlayer(event.getPlayer())) {
 				switch (event.getClickedBlock().getType()) {
 					case CHEST:
 					case TRAPPED_CHEST:
@@ -47,7 +47,7 @@ public class ChestFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
 		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
-		if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.CHEST) && !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
+		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.CHEST) && !ext.getRegion().isAllowedPlayer(event.getPlayer())) {
 			switch (event.getRightClicked().getType()) {
 				case ITEM_FRAME:
 				case MINECART_CHEST:
@@ -64,8 +64,8 @@ public class ChestFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityExplode(final ExtendedEntityExplodeEvent ext) {
 		final EntityExplodeEvent event = (EntityExplodeEvent) ext.getBaseEvent();
-		for (final Block b : ext.getBlockCuboidsMap().keySet()) {
-			if (ext.getBlockCuboidsMap().get(b).getFlag(Flag.CHEST)) {
+		for (final Block b : ext.getBlockRegionsMap().keySet()) {
+			if (ext.getBlockRegionsMap().get(b).getFlag(Flag.CHEST)) {
 				switch (b.getType()) {
 					case CHEST:
 					case TRAPPED_CHEST:

@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 
 public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final String USAGE = ChatColor.RED + "Usage : /cuboid flag <cuboidName> <flagName> [value]";
+	private static final String USAGE = ChatColor.RED + "Usage : /cuboid flag <regionName> <flagName> [value]";
 
 	public FlagSubcmdExecutor(final NCuboid instance) {
 		super(instance);
@@ -23,7 +23,7 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
 			return true;
 		} else if (Perms.hasFlag(sender)) {
-			final PlayerCuboid c = getPlugin().getDb().getByName(args[0]);
+			final PlayerRegion c = getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_cmdCreateAlreadyExists);
 				return true;

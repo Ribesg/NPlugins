@@ -2,7 +2,7 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedHangingBreakEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
@@ -31,21 +31,17 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb()
+		final GeneralRegion region = getPlugin().getDb()
 				.getPriorByLocation(ext.getBlockClicked().getRelative(ext.getBlockFace()).getLocation());
-		if (cuboid == null) {
-			return;
-		} else if (cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
 			ext.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketFill(final PlayerBucketFillEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getBlockClicked().getLocation());
-		if (cuboid == null) {
-			return;
-		} else if (cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
+		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getBlockClicked().getLocation());
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
 			ext.setCancelled(true);
 		}
 	}
@@ -65,9 +61,9 @@ public class BuildFlagListener extends AbstractListener {
 				    event.getItem().getType() == Material.FIREBALL ||
 				    event.getItem().getType() == Material.MINECART ||
 				    event.getItem().getType() == Material.BOAT) {
-					final GeneralCuboid cuboid = getPlugin().getDb()
+					final GeneralRegion region = getPlugin().getDb()
 							.getPriorByLocation(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
-					if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(event.getPlayer())) {
+					if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(event.getPlayer())) {
 						event.setCancelled(true);
 						return;
 					}
@@ -76,9 +72,9 @@ public class BuildFlagListener extends AbstractListener {
 				else if (event.getClickedBlock().getType() == Material.JUKEBOX &&
 				         event.getItem().getTypeId() >= 2256 &&
 				         event.getItem().getTypeId() <= 2267) {
-					if (ext.getCuboid() != null &&
-					    ext.getCuboid().getFlag(Flag.BUILD) &&
-					    !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
+					if (ext.getRegion() != null &&
+					    ext.getRegion().getFlag(Flag.BUILD) &&
+					    !ext.getRegion().isAllowedPlayer(event.getPlayer())) {
 						event.setCancelled(true);
 						return;
 					}
@@ -90,11 +86,10 @@ public class BuildFlagListener extends AbstractListener {
 				                                                      Material.REDSTONE_COMPARATOR_OFF ||
 				                                                      event.getClickedBlock().getType() ==
 				                                                      Material.REDSTONE_COMPARATOR_ON)) {
-					if (ext.getCuboid() != null &&
-					    ext.getCuboid().getFlag(Flag.BUILD) &&
-					    !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
+					if (ext.getRegion() != null &&
+					    ext.getRegion().getFlag(Flag.BUILD) &&
+					    !ext.getRegion().isAllowedPlayer(event.getPlayer())) {
 						event.setCancelled(true);
-						return;
 					}
 				}
 			}
@@ -103,28 +98,25 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
-		if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
+		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
 			ext.setCancelled(true);
-			return;
 		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
-		if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
+		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
 			ext.setCancelled(true);
-			return;
 		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockDamage(final BlockDamageEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
-		if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
+		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
 			ext.setCancelled(true);
-			return;
 		}
 	}
 
@@ -134,9 +126,8 @@ public class BuildFlagListener extends AbstractListener {
 			final HangingBreakByEntityEvent event = (HangingBreakByEntityEvent) ext.getBaseEvent();
 			if (event.getRemover().getType() == EntityType.PLAYER) {
 				final Player player = (Player) event.getRemover();
-				if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.BUILD) && !ext.getCuboid().isAllowedPlayer(player)) {
+				if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.BUILD) && !ext.getRegion().isAllowedPlayer(player)) {
 					event.setCancelled(true);
-					return;
 				}
 			}
 		}
@@ -144,10 +135,9 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onHangingPlace(final HangingPlaceEvent ext) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getEntity().getLocation());
-		if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
+		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getEntity().getLocation());
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
 			ext.setCancelled(true);
-			return;
 		}
 	}
 
@@ -155,10 +145,9 @@ public class BuildFlagListener extends AbstractListener {
 	public void onVehicleDestroy(final VehicleDestroyEvent event) {
 		if (event.getAttacker() != null && event.getAttacker().getType() == EntityType.PLAYER) {
 			final Player player = (Player) event.getAttacker();
-			final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(event.getVehicle().getLocation());
-			if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(player)) {
+			final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getVehicle().getLocation());
+			if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(player)) {
 				event.setCancelled(true);
-				return;
 			}
 		}
 	}
@@ -166,10 +155,9 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onStructureGrow(final StructureGrowEvent ext) {
 		if (ext.isFromBonemeal()) {
-			final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(ext.getLocation());
-			if (cuboid != null && cuboid.getFlag(Flag.BUILD) && !cuboid.isAllowedPlayer(ext.getPlayer())) {
+			final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getLocation());
+			if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
 				ext.setCancelled(true);
-				return;
 			}
 		}
 	}

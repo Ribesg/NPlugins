@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList;
 /**
  * Represents an extension of a Bukkit event.
  * <p/>
- * This is used to make the Cuboid detection computation only once.
+ * This is used to make the Region detection computation only once.
  */
 public abstract class AbstractExtendedEvent extends Event {
 

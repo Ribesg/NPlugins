@@ -17,9 +17,9 @@ public class TeleportFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTeleport(final ExtendedPlayerTeleportEvent ext) {
 		final PlayerTeleportEvent event = (PlayerTeleportEvent) ext.getBaseEvent();
-		if (ext.getFromCuboid() != null && ext.getFromCuboid().getFlag(Flag.TELEPORT)) {
+		if (ext.getFromRegion() != null && ext.getFromRegion().getFlag(Flag.TELEPORT)) {
 			event.setCancelled(true);
-		} else if (ext.getToCuboid() != null && ext.getToCuboid().getFlag(Flag.TELEPORT)) {
+		} else if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.TELEPORT)) {
 			event.setCancelled(true);
 		}
 	}

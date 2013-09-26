@@ -2,7 +2,7 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPotionSplashEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
@@ -52,8 +52,8 @@ public class MobFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onCreatureSpawn(final CreatureSpawnEvent event) {
 		if (getMobs().contains(event.getEntityType())) {
-			final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(event.getLocation());
-			if (cuboid != null && cuboid.getFlag(Flag.MOB)) {
+			final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getLocation());
+			if (region != null && region.getFlag(Flag.MOB)) {
 				event.setCancelled(true);
 			}
 		}
@@ -65,8 +65,8 @@ public class MobFlagListener extends AbstractListener {
 			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
 			if (getMobs().contains(event.getDamager().getType()) ||
 			    ext.isDamagerProjectile() && getMobs().contains(((Projectile) event.getDamager()).getShooter().getType())) {
-				if (ext.getEntityCuboid() != null && ext.getEntityCuboid().getFlag(Flag.MOB) ||
-				    ext.getDamagerCuboid() != null && ext.getDamagerCuboid().getFlag(Flag.MOB)) {
+				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.MOB) ||
+				    ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.MOB)) {
 					event.setCancelled(true);
 				}
 			}
@@ -78,11 +78,11 @@ public class MobFlagListener extends AbstractListener {
 		final PotionSplashEvent event = (PotionSplashEvent) ext.getBaseEvent();
 		if (getMobs().contains(event.getPotion().getShooter().getType())) {
 			if (ext.hasNegativeEffect()) {
-				GeneralCuboid c;
-				for (final LivingEntity e : ext.getEntityCuboidsMap().keySet()) {
+				GeneralRegion region;
+				for (final LivingEntity e : ext.getEntityRegionsMap().keySet()) {
 					if (e.getType() == EntityType.PLAYER) {
-						c = ext.getEntityCuboidsMap().get(e);
-						if (c != null && c.getFlag(Flag.PVP)) {
+						region = ext.getEntityRegionsMap().get(e);
+						if (region != null && region.getFlag(Flag.PVP)) {
 							event.setCancelled(true);
 						}
 					}

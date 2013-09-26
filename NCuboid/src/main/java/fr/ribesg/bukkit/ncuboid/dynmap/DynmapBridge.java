@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.dynmap;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.RectCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidRegion;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.plugin.Plugin;
@@ -43,9 +43,9 @@ public class DynmapBridge {
 		this.markerSet = markerSet;
 	}
 
-	public void initialize(final Iterable<GeneralCuboid> regions) {
+	public void initialize(final Iterable<GeneralRegion> regions) {
 		if (this.markerSet != null) {
-			for (final GeneralCuboid r : regions) {
+			for (final GeneralRegion r : regions) {
 				if (r.isDynmapable() && r.isShownOnDynmap()) {
 					this.handle(r);
 				}
@@ -53,7 +53,7 @@ public class DynmapBridge {
 		}
 	}
 
-	public void reinitialize(final Iterable<GeneralCuboid> regions) {
+	public void reinitialize(final Iterable<GeneralRegion> regions) {
 		if (this.markerSet != null) {
 			for (final Marker marker : this.markerSet.getMarkers()) {
 				marker.deleteMarker();
@@ -62,7 +62,7 @@ public class DynmapBridge {
 		}
 	}
 
-	public boolean handle(final GeneralCuboid region) {
+	public boolean handle(final GeneralRegion region) {
 		if (region.isShownOnDynmap()) {
 			return show(region);
 		} else {
@@ -70,13 +70,13 @@ public class DynmapBridge {
 		}
 	}
 
-	public boolean show(final GeneralCuboid region) {
+	public boolean show(final GeneralRegion region) {
 		if (this.markerSet == null || !region.isDynmapable()) {
 			return false;
 		} else {
 			switch (region.getType()) {
-				case RECT:
-					return showCuboid((RectCuboid) region);
+				case CUBOID:
+					return showCuboidRegion((CuboidRegion) region);
 				default:
 					LOG.severe("Unable to dynmap a region of type '" + region.getType() + "'!");
 					return false;
@@ -84,11 +84,11 @@ public class DynmapBridge {
 		}
 	}
 
-	public boolean hide(final GeneralCuboid region) {
+	public boolean hide(final GeneralRegion region) {
 		if (this.markerSet == null || !region.isDynmapable()) {
 			return false;
 		} else {
-			final String id = StringUtils.toLowerCamelCase(region.getCuboidName());
+			final String id = StringUtils.toLowerCamelCase(region.getRegionName());
 			final Marker marker = this.markerSet.findMarker(id);
 			if (marker == null) {
 				return false;
@@ -99,13 +99,13 @@ public class DynmapBridge {
 		}
 	}
 
-	/** Precondition: We already checked that this cuboid can be shown and has to be shown. */
-	private boolean showCuboid(final RectCuboid region) {
+	/** Precondition: We already checked that this cuboid region can be shown and has to be shown. */
+	private boolean showCuboidRegion(final CuboidRegion region) {
 		// Parameter 1: marker ID
-		final String id = StringUtils.toLowerCamelCase(region.getCuboidName());
+		final String id = StringUtils.toLowerCamelCase(region.getRegionName());
 
 		// Parameter 2: marker label
-		final String lbl = "<strong>" + region.getCuboidName() + "</strong>";
+		final String lbl = "<strong>" + region.getRegionName() + "</strong>";
 
 		// Parameter 3: if label contains HTML, always true
 		final boolean markup = true;
@@ -138,7 +138,7 @@ public class DynmapBridge {
 		final AreaMarker marker = this.markerSet.createAreaMarker(id, lbl, markup, world, x, z, persistent);
 
 		if (marker == null) {
-			LOG.warning("Failed to create marker for region " + region.getCuboidName());
+			LOG.warning("Failed to create marker for region " + region.getRegionName());
 			return false;
 		}
 

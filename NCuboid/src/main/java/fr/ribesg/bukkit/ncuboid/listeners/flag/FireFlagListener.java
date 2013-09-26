@@ -2,7 +2,7 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,8 +18,8 @@ public class FireFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockBurn(final BlockBurnEvent event) {
-		final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
-		if (cuboid != null && cuboid.getFlag(Flag.FIRE)) {
+		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
+		if (region != null && region.getFlag(Flag.FIRE)) {
 			event.setCancelled(true);
 		}
 	}
@@ -27,8 +27,8 @@ public class FireFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockIgnite(final BlockIgniteEvent event) {
 		if (event.getCause() != IgniteCause.FLINT_AND_STEEL) {
-			final GeneralCuboid cuboid = getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
-			if (cuboid != null && cuboid.getFlag(Flag.FIRE)) {
+			final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
+			if (region != null && region.getFlag(Flag.FIRE)) {
 				event.setCancelled(true);
 			}
 		}

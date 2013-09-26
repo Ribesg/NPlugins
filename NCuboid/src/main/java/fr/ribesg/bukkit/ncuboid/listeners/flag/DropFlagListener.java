@@ -17,7 +17,7 @@ public class DropFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerDropItem(final ExtendedPlayerDropItemEvent ext) {
 		final PlayerDropItemEvent event = (PlayerDropItemEvent) ext.getBaseEvent();
-		if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.DROP) && !ext.getCuboid().isAllowedPlayer(event.getPlayer())) {
+		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.DROP) && !ext.getRegion().isAllowedPlayer(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}

@@ -19,8 +19,8 @@ public class BoosterFlagListener extends AbstractListener {
 	public void onPlayerMoveBlock(final ExtendedPlayerMoveEvent ext) {
 		final PlayerMoveEvent event = (PlayerMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
-			if (ext.getToCuboid() != null && ext.getToCuboid().getFlag(Flag.BOOSTER)) {
-				event.getPlayer().setVelocity(ext.getToCuboid().getVectFlagAtt(FlagAtt.BOOSTER_VECTOR));
+			if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.BOOSTER)) {
+				event.getPlayer().setVelocity(ext.getToRegion().getVectFlagAtt(FlagAtt.BOOSTER_VECTOR));
 			}
 		}
 	}

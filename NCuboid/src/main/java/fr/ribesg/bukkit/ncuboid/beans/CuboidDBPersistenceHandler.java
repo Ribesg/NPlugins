@@ -3,7 +3,6 @@ package fr.ribesg.bukkit.ncuboid.beans;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid.CuboidType;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -29,8 +28,8 @@ public class CuboidDBPersistenceHandler {
 	public static final  Charset CHARSET     = StandardCharsets.UTF_8;
 	private final static String  DB_FILENAME = "cuboidDB.yml";
 
-	public static CuboidDb reloadDB(final NCuboid plugin) {
-		final CuboidDb oldDb = plugin.getDb();
+	public static RegionDb reloadDB(final NCuboid plugin) {
+		final RegionDb oldDb = plugin.getDb();
 		try {
 			return loadDB(plugin);
 		} catch (IOException | InvalidConfigurationException e) {
@@ -42,8 +41,8 @@ public class CuboidDBPersistenceHandler {
 		}
 	}
 
-	public static CuboidDb loadDB(final NCuboid plugin) throws IOException, InvalidConfigurationException {
-		final CuboidDb db = new CuboidDb(plugin);
+	public static RegionDb loadDB(final NCuboid plugin) throws IOException, InvalidConfigurationException {
+		final RegionDb db = new RegionDb(plugin);
 
 		final Path pluginFolder = plugin.getDataFolder().toPath();
 		if (!Files.exists(pluginFolder)) {
@@ -70,7 +69,7 @@ public class CuboidDBPersistenceHandler {
 			if (config.isConfigurationSection("worldCuboids")) {
 				final ConfigurationSection sec = config.getConfigurationSection("worldCuboids");
 				for (final String key : sec.getKeys(false)) {
-					final WorldCuboid cuboid = readWorldCuboid(sec, key);
+					final WorldRegion cuboid = readWorldCuboid(sec, key);
 					db.addByWorld(cuboid);
 				}
 			}
@@ -78,7 +77,7 @@ public class CuboidDBPersistenceHandler {
 			if (config.isConfigurationSection("playerCuboids")) {
 				final ConfigurationSection sec = config.getConfigurationSection("playerCuboids");
 				for (final String key : sec.getKeys(false)) {
-					final PlayerCuboid cuboid = readPlayerCuboid(sec, key);
+					final PlayerRegion cuboid = readPlayerCuboid(sec, key);
 					db.add(cuboid);
 				}
 			}
@@ -87,7 +86,7 @@ public class CuboidDBPersistenceHandler {
 		}
 	}
 
-	private static WorldCuboid readWorldCuboid(final ConfigurationSection parent, final String name) {
+	private static WorldRegion readWorldCuboid(final ConfigurationSection parent, final String name) {
 		final ConfigurationSection worldSection = parent.getConfigurationSection(name);
 
 		final int priority = worldSection.getInt("priority", 0);
@@ -96,10 +95,10 @@ public class CuboidDBPersistenceHandler {
 		final FlagAttributes attributes = readFlagAttributes(worldSection);
 		final Rights rights = readRights(worldSection);
 
-		return new WorldCuboid(name, rights, priority, flags, attributes);
+		return new WorldRegion(name, rights, priority, flags, attributes);
 	}
 
-	private static PlayerCuboid readPlayerCuboid(final ConfigurationSection sec, final String name) {
+	private static PlayerRegion readPlayerCuboid(final ConfigurationSection sec, final String name) {
 
 		// TODO
 
@@ -171,7 +170,7 @@ public class CuboidDBPersistenceHandler {
 		return rights;
 	}
 
-	public static void saveDB(final NCuboid plugin, final CuboidDb db) throws IOException {
+	public static void saveDB(final NCuboid plugin, final RegionDb db) throws IOException {
 		final Path pluginFolder = plugin.getDataFolder().toPath();
 		if (!Files.exists(pluginFolder)) {
 			Files.createDirectories(pluginFolder);
@@ -185,17 +184,17 @@ public class CuboidDBPersistenceHandler {
 		final YamlConfiguration config = new YamlConfiguration();
 
 		final ConfigurationSection worldCuboidsSection = config.createSection("worldCuboids");
-		final Iterator<WorldCuboid> worldCuboidIterator = db.worldCuboidIterator();
+		final Iterator<WorldRegion> worldCuboidIterator = db.worldRegionsIterator();
 		while (worldCuboidIterator.hasNext()) {
-			final WorldCuboid cuboid = worldCuboidIterator.next();
+			final WorldRegion cuboid = worldCuboidIterator.next();
 			writeWorldCuboid(worldCuboidsSection, cuboid);
 
 		}
 
 		final ConfigurationSection playerCuboidsSection = config.createSection("playerCuboids");
-		final Iterator<PlayerCuboid> playerCuboidIterator = db.playerCuboidIterator();
+		final Iterator<PlayerRegion> playerCuboidIterator = db.playerRegionsIterator();
 		while (playerCuboidIterator.hasNext()) {
-			final PlayerCuboid cuboid = playerCuboidIterator.next();
+			final PlayerRegion cuboid = playerCuboidIterator.next();
 			writePlayerCuboid(playerCuboidsSection, cuboid);
 		}
 
@@ -208,7 +207,7 @@ public class CuboidDBPersistenceHandler {
 		}
 	}
 
-	private static void writeWorldCuboid(final ConfigurationSection parent, final WorldCuboid cuboid) {
+	private static void writeWorldCuboid(final ConfigurationSection parent, final WorldRegion cuboid) {
 		final ConfigurationSection sec = parent.createSection(cuboid.getWorldName());
 		sec.set("priority", cuboid.getPriority());
 		writeFlags(sec, cuboid);
@@ -217,13 +216,13 @@ public class CuboidDBPersistenceHandler {
 
 	}
 
-	private static void writePlayerCuboid(final ConfigurationSection parent, final PlayerCuboid cuboid) {
-		final ConfigurationSection sec = parent.createSection(cuboid.getCuboidName());
+	private static void writePlayerCuboid(final ConfigurationSection parent, final PlayerRegion cuboid) {
+		final ConfigurationSection sec = parent.createSection(cuboid.getRegionName());
 
 		// TODO Set everything else here
 		sec.set("priority", cuboid.getPriority());
 
-		if (cuboid.getType() == CuboidType.RECT) {
+		if (cuboid.getType() == GeneralRegion.RegionType.CUBOID) {
 			// Set coords etc
 		} else {
 			// Hello, future
@@ -234,7 +233,7 @@ public class CuboidDBPersistenceHandler {
 		writeRights(sec, cuboid);
 	}
 
-	private static void writeFlags(final ConfigurationSection parent, final GeneralCuboid cuboid) {
+	private static void writeFlags(final ConfigurationSection parent, final GeneralRegion cuboid) {
 		final List<String> flags = new ArrayList<String>();
 		for (final Flag f : Flag.values()) {
 			if (cuboid.getFlag(f)) {
@@ -246,7 +245,7 @@ public class CuboidDBPersistenceHandler {
 		}
 	}
 
-	private static void writeFlagAtts(final ConfigurationSection parent, final GeneralCuboid cuboid) {
+	private static void writeFlagAtts(final ConfigurationSection parent, final GeneralRegion cuboid) {
 		final ConfigurationSection sec = parent.createSection("flagAttributes");
 		boolean used = false;
 
@@ -279,7 +278,7 @@ public class CuboidDBPersistenceHandler {
 		}
 	}
 
-	private static void writeRights(final ConfigurationSection parent, final GeneralCuboid cuboid) {
+	private static void writeRights(final ConfigurationSection parent, final GeneralRegion cuboid) {
 		final ConfigurationSection sec = parent.createSection("rights");
 		boolean used = false;
 

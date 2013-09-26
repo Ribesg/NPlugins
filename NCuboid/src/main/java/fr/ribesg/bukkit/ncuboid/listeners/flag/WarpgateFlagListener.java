@@ -19,8 +19,8 @@ public class WarpgateFlagListener extends AbstractListener {
 	public void onPlayerMoveBlock(final ExtendedPlayerMoveEvent ext) {
 		final PlayerMoveEvent event = (PlayerMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
-			if (ext.getToCuboid() != null && ext.getToCuboid().getFlag(Flag.WARPGATE)) {
-				event.getPlayer().teleport(ext.getToCuboid().getLocFlagAtt(FlagAtt.EXTERNAL_POINT));
+			if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.WARPGATE)) {
+				event.getPlayer().teleport(ext.getToRegion().getLocFlagAtt(FlagAtt.EXTERNAL_POINT));
 				event.setCancelled(true);
 			}
 		}

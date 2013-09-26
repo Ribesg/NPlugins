@@ -31,11 +31,11 @@ public class InvisibleFlagListener extends AbstractListener {
 		final PlayerMoveEvent event = (PlayerMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			if (invisiblePlayers.contains(event.getPlayer())) {
-				if (ext.getToCuboid() == null || ext.getToCuboid() != null && !ext.getToCuboid().getFlag(Flag.INVISIBLE)) {
+				if (ext.getToRegion() == null || ext.getToRegion() != null && !ext.getToRegion().getFlag(Flag.INVISIBLE)) {
 					showToAll(event.getPlayer());
 					invisiblePlayers.remove(event.getPlayer());
 				}
-			} else if (ext.getToCuboid() != null && ext.getToCuboid().getFlag(Flag.INVISIBLE)) {
+			} else if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.INVISIBLE)) {
 				hideToAll(event.getPlayer());
 				invisiblePlayers.add(event.getPlayer());
 			}
@@ -45,7 +45,7 @@ public class InvisibleFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerJoin(final ExtendedPlayerJoinEvent ext) {
 		final PlayerJoinEvent event = (PlayerJoinEvent) ext.getBaseEvent();
-		if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.INVISIBLE)) {
+		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.INVISIBLE)) {
 			invisiblePlayers.add(event.getPlayer());
 			hideToAll(event.getPlayer());
 		}

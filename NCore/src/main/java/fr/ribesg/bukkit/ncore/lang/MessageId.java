@@ -29,14 +29,14 @@ public enum MessageId {
 	cuboid_blockInSelection,
 	cuboid_blockNotInSelection,
 	cuboid_blockNotProtected,
-	cuboid_blockProtectedMultipleCuboids,
-	cuboid_blockProtectedOneCuboid,
+	cuboid_blockProtectedMultipleRegions,
+	cuboid_blockProtectedOneRegion,
 	cuboid_firstPointSelected,
 	cuboid_noSelection,
 	cuboid_secondPointSelected,
 	cuboid_selectionReset,
 
-	cuboid_cmdReloadCuboids,
+	cuboid_cmdReloadRegions,
 
 	cuboid_cmdCreateAlreadyExists,
 	cuboid_cmdCreateCreated,

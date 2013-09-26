@@ -3,9 +3,8 @@ package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid.CuboidState;
-import fr.ribesg.bukkit.ncuboid.beans.RectCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidRegion;
+import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -13,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final String USAGE = ChatColor.RED + "Usage : /cuboid create <cuboidName>";
+	private static final String USAGE = ChatColor.RED + "Usage : /cuboid create <regionName>";
 
 	public CreateSubcmdExecutor(final NCuboid instance) {
 		super(instance);
@@ -28,7 +27,7 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
 			return true;
 		} else if (Perms.hasCreate(sender)) {
-			final PlayerCuboid c = getPlugin().getDb().getByName(args[0]);
+			final PlayerRegion c = getPlugin().getDb().getByName(args[0]);
 			if (c != null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_cmdCreateAlreadyExists);
 				return true;
@@ -37,12 +36,12 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 				return true;
 			} else {
 				final Player player = (Player) sender;
-				final RectCuboid selection = (RectCuboid) getPlugin().getDb().getSelection(player.getName());
-				if (selection.getState() == CuboidState.TMPSTATE2) {
+				final CuboidRegion selection = (CuboidRegion) getPlugin().getDb().getSelection(player.getName());
+				if (selection.getState() == PlayerRegion.RegionState.TMPSTATE2) {
 					getPlugin().getDb().removeSelection(player.getName());
 					selection.create(args[0]);
 					getPlugin().getDb().add(selection);
-					getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateCreated, selection.getCuboidName());
+					getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateCreated, selection.getRegionName());
 				} else {
 					getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateNoValidSelection);
 				}

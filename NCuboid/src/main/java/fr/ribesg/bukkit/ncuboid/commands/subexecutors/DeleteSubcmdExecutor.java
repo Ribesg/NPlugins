@@ -3,14 +3,14 @@ package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final String USAGE = ChatColor.RED + "Usage : /cuboid delete <cuboidName>";
+	private static final String USAGE = ChatColor.RED + "Usage : /cuboid delete <regionName>";
 
 	public DeleteSubcmdExecutor(final NCuboid instance) {
 		super(instance);
@@ -22,16 +22,16 @@ public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
 			return true;
 		} else if (Perms.hasDelete(sender)) {
-			final PlayerCuboid c = getPlugin().getDb().getByName(args[0]);
+			final PlayerRegion c = getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDoesNotExist);
 				return true;
 			} else {
 				if (Perms.isAdmin(sender) || c.isOwner(sender)) {
 					getPlugin().getDb().remove(c);
-					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDeleted, c.getCuboidName());
+					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDeleted, c.getRegionName());
 				} else {
-					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteNoPermission, c.getCuboidName());
+					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteNoPermission, c.getRegionName());
 				}
 				return true;
 			}

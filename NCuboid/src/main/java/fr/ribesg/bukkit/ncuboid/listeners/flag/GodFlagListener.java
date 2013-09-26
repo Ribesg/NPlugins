@@ -32,10 +32,10 @@ public class GodFlagListener extends AbstractListener {
 		final PlayerMoveEvent event = (PlayerMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			if (godPlayers.contains(event.getPlayer())) {
-				if (ext.getToCuboid() == null || ext.getToCuboid() != null && !ext.getToCuboid().getFlag(Flag.GOD)) {
+				if (ext.getToRegion() == null || ext.getToRegion() != null && !ext.getToRegion().getFlag(Flag.GOD)) {
 					godPlayers.remove(event.getPlayer());
 				}
-			} else if (ext.getToCuboid() != null && ext.getToCuboid().getFlag(Flag.GOD)) {
+			} else if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.GOD)) {
 				godPlayers.add(event.getPlayer());
 			}
 		}
@@ -54,7 +54,7 @@ public class GodFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerJoin(final ExtendedPlayerJoinEvent ext) {
 		final PlayerJoinEvent event = (PlayerJoinEvent) ext.getBaseEvent();
-		if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.INVISIBLE)) {
+		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.INVISIBLE)) {
 			godPlayers.add(event.getPlayer());
 		}
 	}

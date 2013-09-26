@@ -27,8 +27,8 @@ public class Messages extends AbstractMessages {
 
 		// General deny response
 		newMessages.add(new Message(MessageId.cuboid_actionCancelledByCuboid,
-		                            "&cAction cancelled by the cuboid %cuboid%",
-		                            new String[] {"%cuboid%"},
+		                            "&cAction cancelled by the region %region%",
+		                            new String[] {"%region%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.noPermissionForCommand,
@@ -45,28 +45,28 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_secondPointSelected,
-		                            "&aSecond point selected: %coords%%%&aSelection Size : %size%",
+		                            "&aSecond point selected: %coords%" + LINE_SEPARATOR + "&aSelection Size : %size%",
 		                            new String[] {"%coords%", "%size%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_blockInSelection, "&aThis block is in your selection", null, null, true));
 		newMessages.add(new Message(MessageId.cuboid_blockNotInSelection, "&cThis block is not in your selection", null, null, true));
 		newMessages.add(new Message(MessageId.cuboid_blockNotProtected, "&aThis block is not protected", null, null, true));
-		newMessages.add(new Message(MessageId.cuboid_blockProtectedOneCuboid,
-		                            "&cThis block is protected by one cuboid:" + LINE_SEPARATOR + "%cuboidInfo%",
+		newMessages.add(new Message(MessageId.cuboid_blockProtectedOneRegion,
+		                            "&cThis block is protected by one region:" + LINE_SEPARATOR + "%regionInfo%",
 		                            new String[] {"%cuboidInfo%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.cuboid_blockProtectedMultipleCuboids,
-		                            "&cThis block is protected by %nb% cuboids:" + LINE_SEPARATOR + "%cuboidsInfos%",
-		                            new String[] {"%nb%", "%cuboidsInfos%"},
+		newMessages.add(new Message(MessageId.cuboid_blockProtectedMultipleRegions,
+		                            "&cThis block is protected by %nb% regions:" + LINE_SEPARATOR + "%regionsInfos%",
+		                            new String[] {"%nb%", "%regionsInfos%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_selectionReset, "&aYour selection has been reset", null, null, true));
 		newMessages.add(new Message(MessageId.cuboid_noSelection, "&cYou have no selection to reset", null, null, true));
 
 		// Command - RELOAD
-		newMessages.add(new Message(MessageId.cuboid_cmdReloadCuboids, "&aCuboids reloaded!", null, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdReloadRegions, "&aRegions reloaded!", null, null, true));
 		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded!", null, null, true));
 		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded!", null, null, true));
 		newMessages.add(new Message(MessageId.cmdReloadError,
@@ -76,14 +76,14 @@ public class Messages extends AbstractMessages {
 		                            true));
 
 		// Command - CREATE
-		newMessages.add(new Message(MessageId.cuboid_cmdCreateAlreadyExists, "&cThis cuboid already exists !", null, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdCreateAlreadyExists, "&cThis region already exists !", null, null, true));
 		newMessages.add(new Message(MessageId.cuboid_cmdCreateCreated,
-		                            "&aYou created the cuboid &6%cuboidName%&a!",
-		                            new String[] {"%cuboidName%"},
+		                            "&aYou created the region &6%regionName%&a!",
+		                            new String[] {"%regionName%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdCreateNoValidSelection,
-		                            "&cYou need a valid selection to create a cuboid!",
+		                            "&cYou need a valid selection to create a region!",
 		                            null,
 		                            null,
 		                            true));
@@ -94,15 +94,15 @@ public class Messages extends AbstractMessages {
 		                            true));
 
 		// Command - DELETE
-		newMessages.add(new Message(MessageId.cuboid_cmdDeleteDoesNotExist, "&cThis cuboid does not exist!", null, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdDeleteDoesNotExist, "&cThis region does not exist!", null, null, true));
 		newMessages.add(new Message(MessageId.cuboid_cmdDeleteDeleted,
-		                            "&aThe cuboid &6%cuboidName% &ahas been deleted!",
-		                            new String[] {"%cuboidName%"},
+		                            "&aThe region &6%regionName% &ahas been deleted!",
+		                            new String[] {"%regionName%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdDeleteNoPermission,
-		                            "&cYou do not have the permission to delete &6%cuboidName%&c!",
-		                            new String[] {"%cuboidName%"},
+		                            "&cYou do not have the permission to delete &6%regionName%&c!",
+		                            new String[] {"%regionName%"},
 		                            null,
 		                            true));
 		return newMessages;

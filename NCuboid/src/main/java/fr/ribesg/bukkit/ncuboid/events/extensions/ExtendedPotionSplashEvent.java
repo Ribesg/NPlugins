@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.ThrownPotion;
@@ -20,7 +20,7 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
 
 	private static Set<PotionEffectType> getNegativeEffects() {
 		if (negativeEffects == null) {
-			negativeEffects = new HashSet<PotionEffectType>();
+			negativeEffects = new HashSet<>();
 			negativeEffects.add(PotionEffectType.BLINDNESS);
 			negativeEffects.add(PotionEffectType.CONFUSION);
 			negativeEffects.add(PotionEffectType.HARM);
@@ -34,10 +34,10 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
 		return negativeEffects;
 	}
 
-	private final Map<LivingEntity, GeneralCuboid> entityCuboidsMap;
+	private final Map<LivingEntity, GeneralRegion> entityRegionsMap;
 	private boolean hasNegativeEffect = false;
 
-	public ExtendedPotionSplashEvent(final CuboidDb db, final PotionSplashEvent event) {
+	public ExtendedPotionSplashEvent(final RegionDb db, final PotionSplashEvent event) {
 		super(event);
 		final ThrownPotion potion = event.getPotion();
 		for (final PotionEffect e : potion.getEffects()) {
@@ -46,11 +46,11 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
 				break;
 			}
 		}
-		entityCuboidsMap = new HashMap<LivingEntity, GeneralCuboid>();
+		entityRegionsMap = new HashMap<>();
 		for (final LivingEntity e : event.getAffectedEntities()) {
-			final GeneralCuboid cuboid = db.getPriorByLocation(e.getLocation());
+			final GeneralRegion cuboid = db.getPriorByLocation(e.getLocation());
 			if (cuboid != null) {
-				entityCuboidsMap.put(e, cuboid);
+				entityRegionsMap.put(e, cuboid);
 			}
 		}
 
@@ -60,7 +60,7 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
 		return hasNegativeEffect;
 	}
 
-	public Map<LivingEntity, GeneralCuboid> getEntityCuboidsMap() {
-		return entityCuboidsMap;
+	public Map<LivingEntity, GeneralRegion> getEntityRegionsMap() {
+		return entityRegionsMap;
 	}
 }

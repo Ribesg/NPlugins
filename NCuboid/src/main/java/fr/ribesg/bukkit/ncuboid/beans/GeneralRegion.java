@@ -7,19 +7,19 @@ import org.bukkit.util.Vector;
 
 import java.util.Set;
 
-public abstract class GeneralCuboid extends Cuboid {
+public abstract class GeneralRegion extends Region {
 
-	public static enum CuboidType {
-		// RectCuboid
-		RECT,
+	public static enum RegionType {
+		// Cuboid Region
+		CUBOID,
 
-		// WorldCuboid
-		WORLD;
+		// World Region
+		WORLD
 	}
 
 	// Identification / informations related
 	private String     worldName;
-	private CuboidType type;
+	private RegionType type;
 
 	// Protection related
 	private final Rights rights;
@@ -33,13 +33,13 @@ public abstract class GeneralCuboid extends Cuboid {
 	private final boolean dynmapable;
 	private       boolean shownOnDynmap;
 
-	// Create a new Cuboid, when user select points etc
-	public GeneralCuboid(final String worldName, final CuboidType type) {
+	// Create a new Region, when user select points etc
+	public GeneralRegion(final String worldName, final RegionType type) {
 		this(worldName, type, new Rights(), 0, new Flags(), new FlagAttributes(), true);
 	}
 
-	public GeneralCuboid(final String worldName,
-	                     final CuboidType type,
+	public GeneralRegion(final String worldName,
+	                     final RegionType type,
 	                     final Rights rights,
 	                     final int priority,
 	                     final Flags flags,
@@ -48,7 +48,7 @@ public abstract class GeneralCuboid extends Cuboid {
 		setWorldName(worldName);
 		setType(type);
 		switch (type) {
-			case RECT:
+			case CUBOID:
 				this.dynmapable = true;
 				this.shownOnDynmap = shownOnDynmap;
 				break;
@@ -71,7 +71,7 @@ public abstract class GeneralCuboid extends Cuboid {
 
 	public abstract boolean contains(final NLocation loc);
 
-	public abstract String getCuboidName();
+	public abstract String getRegionName();
 
 	public abstract long getTotalSize();
 
@@ -87,11 +87,11 @@ public abstract class GeneralCuboid extends Cuboid {
 		this.priority = priority;
 	}
 
-	public CuboidType getType() {
+	public RegionType getType() {
 		return type;
 	}
 
-	public void setType(CuboidType type) {
+	public void setType(RegionType type) {
 		this.type = type;
 	}
 

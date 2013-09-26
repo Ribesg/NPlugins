@@ -2,11 +2,11 @@ package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 
-// This is a really different Cuboid type.
-public class WorldCuboid extends GeneralCuboid {
+// This is a really different Region type.
+public class WorldRegion extends GeneralRegion {
 
-	public WorldCuboid(final String worldName) {
-		super(worldName, CuboidType.WORLD);
+	public WorldRegion(final String worldName) {
+		super(worldName, RegionType.WORLD);
 
 		// Default flags are a little different for worlds
 		// TODO Make this configurable
@@ -18,8 +18,8 @@ public class WorldCuboid extends GeneralCuboid {
 		setIntFlagAtt(FlagAtt.EXPLOSION_BLOCK_DROP, 100);
 	}
 
-	public WorldCuboid(final String worldName, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
-		super(worldName, CuboidType.WORLD, rights, priority, flags, flagAtts);
+	public WorldRegion(final String worldName, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
+		super(worldName, RegionType.WORLD, rights, priority, flags, flagAtts, false);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class WorldCuboid extends GeneralCuboid {
 	}
 
 	@Override
-	public String getCuboidName() {
+	public String getRegionName() {
 		return "world_" + getWorldName();
 	}
 

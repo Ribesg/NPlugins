@@ -19,7 +19,7 @@ public class PassFlagListener extends AbstractListener {
 	public void onPlayerMoveBlock(final ExtendedPlayerMoveEvent ext) {
 		final PlayerMoveEvent event = (PlayerMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
-			if (ext.getFromCuboid() != null && ext.getFromCuboid().getFlag(Flag.PASS) && !ext.getFromCuboid().equals(ext.getToCuboid())) {
+			if (ext.getFromRegion() != null && ext.getFromRegion().getFlag(Flag.PASS) && !ext.getFromRegion().equals(ext.getToRegion())) {
 				event.setTo(new Location(event.getFrom().getWorld(),
 				                         event.getFrom().getBlockX() + 0.5,
 				                         event.getFrom().getBlockY() + 0.25,

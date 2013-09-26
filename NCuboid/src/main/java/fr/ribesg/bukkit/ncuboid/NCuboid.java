@@ -2,8 +2,8 @@ package fr.ribesg.bukkit.ncuboid;
 
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
-import fr.ribesg.bukkit.ncuboid.beans.WorldCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
+import fr.ribesg.bukkit.ncuboid.beans.WorldRegion;
 import fr.ribesg.bukkit.ncuboid.commands.MainCommandExecutor;
 import fr.ribesg.bukkit.ncuboid.dynmap.DynmapBridge;
 import fr.ribesg.bukkit.ncuboid.jail.JailHandler;
@@ -34,7 +34,7 @@ public class NCuboid extends CuboidNode {
 	// // None
 
 	// Cuboids base
-	private CuboidDb db;
+	private RegionDb db;
 
 	// Jail handling
 	private JailHandler jailHandler;
@@ -75,7 +75,7 @@ public class NCuboid extends CuboidNode {
 			return false;
 		}
 
-		// Create the CuboidDb
+		// Create the RegionDb
 		try {
 			db = CuboidDBPersistenceHandler.loadDB(this);
 		} catch (final IOException | InvalidConfigurationException e) {
@@ -112,7 +112,7 @@ public class NCuboid extends CuboidNode {
 		pm.registerEvents(new InvisibleFlagListener(this), this);
 		pm.registerEvents(new MobFlagListener(this), this);
 		pm.registerEvents(new PassFlagListener(this), this);
-		pm.registerEvents(new PVPFlagListener(this), this);
+		pm.registerEvents(new PvpFlagListener(this), this);
 		pm.registerEvents(new SnowFlagListener(this), this);
 		pm.registerEvents(new TeleportFlagListener(this), this);
 		pm.registerEvents(new UseFlagListener(this), this);
@@ -134,7 +134,7 @@ public class NCuboid extends CuboidNode {
 		// See if there are new worlds
 		for (final World world : getServer().getWorlds()) {
 			if (db.getByWorld(world.getName()) == null) {
-				db.addByWorld(new WorldCuboid(world.getName()));
+				db.addByWorld(new WorldRegion(world.getName()));
 			}
 		}
 	}
@@ -151,11 +151,11 @@ public class NCuboid extends CuboidNode {
 		}
 	}
 
-	public CuboidDb getDb() {
+	public RegionDb getDb() {
 		return db;
 	}
 
-	public void setDb(final CuboidDb db) {
+	public void setDb(final RegionDb db) {
 		this.db = db;
 	}
 

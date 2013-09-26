@@ -23,13 +23,13 @@ public class ExplosionFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityExplode(final ExtendedEntityExplodeEvent ext) {
 		final EntityExplodeEvent event = (EntityExplodeEvent) ext.getBaseEvent();
-		for (final Block b : ext.getBlockCuboidsMap().keySet()) {
-			if (ext.getBlockCuboidsMap().get(b).getFlag(Flag.EXPLOSION_BLOCK)) {
+		for (final Block b : ext.getBlockRegionsMap().keySet()) {
+			if (ext.getBlockRegionsMap().get(b).getFlag(Flag.EXPLOSION_BLOCK)) {
 				event.blockList().remove(b);
 			}
 		}
-		if (ext.getEntityCuboid() != null) {
-			final Integer blockDropRatio = ext.getEntityCuboid().getIntFlagAtt(FlagAtt.EXPLOSION_BLOCK_DROP);
+		if (ext.getEntityRegion() != null) {
+			final Integer blockDropRatio = ext.getEntityRegion().getIntFlagAtt(FlagAtt.EXPLOSION_BLOCK_DROP);
 			if (blockDropRatio != null) {
 				event.setYield(blockDropRatio / 100f);
 			}
@@ -40,8 +40,8 @@ public class ExplosionFlagListener extends AbstractListener {
 	public void onEntityDamage(final ExtendedEntityDamageEvent ext) {
 		final EntityDamageEvent event = (EntityDamageEvent) ext.getBaseEvent();
 		if (event.getEntityType() == EntityType.DROPPED_ITEM && event.getCause() == DamageCause.ENTITY_EXPLOSION) {
-			if (ext.getEntityCuboid() != null && ext.getEntityCuboid().getFlag(Flag.EXPLOSION_ITEM) ||
-			    ext.getDamagerCuboid() != null && ext.getDamagerCuboid().getFlag(Flag.EXPLOSION_ITEM)) {
+			if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.EXPLOSION_ITEM) ||
+			    ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.EXPLOSION_ITEM)) {
 				event.setCancelled(true);
 			}
 		}

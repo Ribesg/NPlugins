@@ -19,7 +19,7 @@ public class ClosedFlagListener extends AbstractListener {
 	public void onPlayerMoveBlock(final ExtendedPlayerMoveEvent ext) {
 		final PlayerMoveEvent event = (PlayerMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
-			if (ext.getFromCuboid() != null && ext.getFromCuboid().getFlag(Flag.CLOSED) && !ext.getFromCuboid().equals(ext.getToCuboid())) {
+			if (ext.getFromRegion() != null && ext.getFromRegion().getFlag(Flag.CLOSED) && !ext.getFromRegion().equals(ext.getToRegion())) {
 				// TODO Use Internal Point if defined
 				event.setTo(new Location(event.getFrom().getWorld(),
 				                         event.getFrom().getBlockX() + 0.5,

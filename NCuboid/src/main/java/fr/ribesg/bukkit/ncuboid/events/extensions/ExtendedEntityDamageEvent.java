@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
@@ -12,18 +12,18 @@ import java.util.Set;
 
 public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 
-	private final Set<GeneralCuboid> entityCuboids;
-	private       Set<GeneralCuboid> damagerCuboids;
-	private final GeneralCuboid      entityCuboid;
-	private       GeneralCuboid      damagerCuboid;
+	private final Set<GeneralRegion> entityRegions;
+	private       Set<GeneralRegion> damagerRegions;
+	private final GeneralRegion      entityRegion;
+	private       GeneralRegion      damagerRegion;
 
 	private boolean damagerProjectile = false;
 	private Entity shooter;
 
-	public ExtendedEntityDamageEvent(final CuboidDb db, final EntityDamageEvent event) {
+	public ExtendedEntityDamageEvent(final RegionDb db, final EntityDamageEvent event) {
 		super(event);
-		entityCuboids = db.getAllByLocation(event.getEntity().getLocation());
-		entityCuboid = db.getPrior(entityCuboids);
+		entityRegions = db.getAllByLocation(event.getEntity().getLocation());
+		entityRegion = db.getPrior(entityRegions);
 		if (event instanceof EntityDamageByEntityEvent) {
 			Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 			if (damager instanceof Projectile) {
@@ -32,30 +32,30 @@ public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 				shooter = damager;
 			}
 			if (damager != null) {
-				damagerCuboids = db.getAllByLocation(damager.getLocation());
-				damagerCuboid = db.getPrior(damagerCuboids);
+				damagerRegions = db.getAllByLocation(damager.getLocation());
+				damagerRegion = db.getPrior(damagerRegions);
 			}
 		}
 	}
 
-	public GeneralCuboid getDamagerCuboid() {
-		return damagerCuboid;
+	public GeneralRegion getDamagerRegion() {
+		return damagerRegion;
 	}
 
-	public Set<GeneralCuboid> getDamagerCuboids() {
-		return damagerCuboids;
+	public Set<GeneralRegion> getDamagerRegions() {
+		return damagerRegions;
 	}
 
 	public boolean isDamagerProjectile() {
 		return damagerProjectile;
 	}
 
-	public GeneralCuboid getEntityCuboid() {
-		return entityCuboid;
+	public GeneralRegion getEntityRegion() {
+		return entityRegion;
 	}
 
-	public Set<GeneralCuboid> getEntityCuboids() {
-		return entityCuboids;
+	public Set<GeneralRegion> getEntityRegions() {
+		return entityRegions;
 	}
 
 	public Entity getShooter() {

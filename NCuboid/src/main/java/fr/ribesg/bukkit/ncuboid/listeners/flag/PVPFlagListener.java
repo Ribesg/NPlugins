@@ -2,7 +2,7 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPotionSplashEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
@@ -14,9 +14,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 
-public class PVPFlagListener extends AbstractListener {
+public class PvpFlagListener extends AbstractListener {
 
-	public PVPFlagListener(final NCuboid instance) {
+	public PvpFlagListener(final NCuboid instance) {
 		super(instance);
 	}
 
@@ -27,8 +27,8 @@ public class PVPFlagListener extends AbstractListener {
 			if (event.getEntityType() == EntityType.PLAYER &&
 			    (event.getDamager().getType() == EntityType.PLAYER ||
 			     ext.isDamagerProjectile() && ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER)) {
-				if (ext.getEntityCuboid() != null && ext.getEntityCuboid().getFlag(Flag.PVP) ||
-				    ext.getDamagerCuboid() != null && ext.getDamagerCuboid().getFlag(Flag.PVP)) {
+				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.PVP) ||
+				    ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.PVP)) {
 					event.setCancelled(true);
 				}
 			}
@@ -40,11 +40,11 @@ public class PVPFlagListener extends AbstractListener {
 		final PotionSplashEvent event = (PotionSplashEvent) ext.getBaseEvent();
 		if (event.getPotion().getShooter().getType() == EntityType.PLAYER) {
 			if (ext.hasNegativeEffect()) {
-				GeneralCuboid c;
-				for (final LivingEntity e : ext.getEntityCuboidsMap().keySet()) {
+				GeneralRegion region;
+				for (final LivingEntity e : ext.getEntityRegionsMap().keySet()) {
 					if (e.getType() == EntityType.PLAYER) {
-						c = ext.getEntityCuboidsMap().get(e);
-						if (c != null && c.getFlag(Flag.PVP)) {
+						region = ext.getEntityRegionsMap().get(e);
+						if (region != null && region.getFlag(Flag.PVP)) {
 							event.setCancelled(true);
 						}
 					}

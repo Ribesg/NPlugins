@@ -35,7 +35,7 @@ public class CreativeFlagListener extends AbstractListener {
 	public void onPlayerInteract(final ExtendedPlayerInteractEvent ext) {
 		final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
 		if (event.hasBlock()) {
-			if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.CREATIVE)) {
+			if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.CREATIVE)) {
 				switch (event.getClickedBlock().getType()) {
 					case CHEST:
 					case TRAPPED_CHEST:
@@ -58,7 +58,7 @@ public class CreativeFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
 		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
-		if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.CREATIVE)) {
+		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.CREATIVE)) {
 			Player p = event.getPlayer();
 			switch (event.getRightClicked().getType()) {
 				case ITEM_FRAME:
@@ -76,7 +76,7 @@ public class CreativeFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerDropItem(final ExtendedPlayerDropItemEvent ext) {
 		final PlayerDropItemEvent event = (PlayerDropItemEvent) ext.getBaseEvent();
-		if (ext.getCuboid() != null && ext.getCuboid().getFlag(Flag.CREATIVE)) {
+		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.CREATIVE)) {
 			event.setCancelled(true);
 		}
 	}

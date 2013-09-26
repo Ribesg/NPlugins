@@ -3,11 +3,9 @@ package fr.ribesg.bukkit.ncuboid.listeners;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid.CuboidType;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerCuboid.CuboidState;
-import fr.ribesg.bukkit.ncuboid.beans.RectCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.CuboidRegion;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
+import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
 import org.bukkit.Location;
@@ -37,22 +35,22 @@ public class PlayerStickListener extends AbstractListener {
 			if (event.hasBlock()) {
 				if (action == Action.RIGHT_CLICK_BLOCK) {
 					// Selection tool
-					final RectCuboid selection = (RectCuboid) getPlugin().getDb().getSelection(p.getName());
+					final CuboidRegion selection = (CuboidRegion) getPlugin().getDb().getSelection(p.getName());
 					final Location clickedBlockLocation = event.getClickedBlock().getLocation();
 					if (selection == null) {
 						getPlugin().getDb()
-								.addSelection(new RectCuboid("tmp" + p.getName(),
-								                             p.getName(),
-								                             clickedBlockLocation.getWorld().getName(),
-								                             new NLocation(clickedBlockLocation)));
+								.addSelection(new CuboidRegion("tmp" + p.getName(),
+								                               p.getName(),
+								                               clickedBlockLocation.getWorld().getName(),
+								                               new NLocation(clickedBlockLocation)));
 						getPlugin().sendMessage(p, MessageId.cuboid_firstPointSelected, NLocation.toString(clickedBlockLocation));
-					} else if (selection.getState() == CuboidState.TMPSTATE1) {
+					} else if (selection.getState() == PlayerRegion.RegionState.TMPSTATE1) {
 						selection.secondPoint(clickedBlockLocation);
 						getPlugin().sendMessage(p,
 						                        MessageId.cuboid_secondPointSelected,
 						                        NLocation.toString(clickedBlockLocation),
 						                        selection.getSizeString());
-					} else if (selection.getState() == CuboidState.TMPSTATE2) {
+					} else if (selection.getState() == PlayerRegion.RegionState.TMPSTATE2) {
 						if (selection.contains(clickedBlockLocation)) {
 							getPlugin().sendMessage(p, MessageId.cuboid_blockInSelection);
 						} else {
@@ -61,39 +59,39 @@ public class PlayerStickListener extends AbstractListener {
 					}
 				} else { // Action.LEFT_CLICK_BLOCK
 					// Info tool
-					final Set<GeneralCuboid> cuboids = ext.getCuboids();
-					if (cuboids == null ||
-					    cuboids.size() == 0 ||
-					    cuboids.size() == 1 && cuboids.iterator().next().getType() == CuboidType.WORLD) {
+					final Set<GeneralRegion> regions = ext.getRegions();
+					if (regions == null ||
+					    regions.size() == 0 ||
+					    regions.size() == 1 && regions.iterator().next().getType() == GeneralRegion.RegionType.WORLD) {
 						getPlugin().sendMessage(p, MessageId.cuboid_blockNotProtected);
 					} else {
-						int size = cuboids.size();
-						boolean containsWorldCuboid = false;
-						for (final GeneralCuboid c : cuboids) {
-							if (c.getType() == CuboidType.WORLD) {
+						int size = regions.size();
+						boolean containsWorldRegion = false;
+						for (final GeneralRegion c : regions) {
+							if (c.getType() == GeneralRegion.RegionType.WORLD) {
 								size--;
-								containsWorldCuboid = true;
+								containsWorldRegion = true;
 								break;
 							}
 						}
 						if (size == 1) {
-							final Iterator<GeneralCuboid> it = cuboids.iterator();
-							GeneralCuboid cuboid = it.next();
-							if (cuboid.getType() == CuboidType.WORLD) {
-								cuboid = it.next();
+							final Iterator<GeneralRegion> it = regions.iterator();
+							GeneralRegion region = it.next();
+							if (region.getType() == GeneralRegion.RegionType.WORLD) {
+								region = it.next();
 							}
-							getPlugin().sendMessage(p, MessageId.cuboid_blockProtectedOneCuboid, ((PlayerCuboid) cuboid).getInfoLine());
+							getPlugin().sendMessage(p, MessageId.cuboid_blockProtectedOneRegion, ((PlayerRegion) region).getInfoLine());
 						} else {
-							final String[] strings = new String[cuboids.size() - (containsWorldCuboid ? 1 : 0)];
+							final String[] strings = new String[regions.size() - (containsWorldRegion ? 1 : 0)];
 							int i = 0;
-							for (final GeneralCuboid c : cuboids) {
-								if (c.getType() != CuboidType.WORLD) {
-									strings[i++] = ((PlayerCuboid) c).getInfoLine();
+							for (final GeneralRegion region : regions) {
+								if (region.getType() != GeneralRegion.RegionType.WORLD) {
+									strings[i++] = ((PlayerRegion) region).getInfoLine();
 								}
 							}
 							Arrays.sort(strings);
 							getPlugin().sendMessage(p,
-							                        MessageId.cuboid_blockProtectedMultipleCuboids,
+							                        MessageId.cuboid_blockProtectedMultipleRegions,
 							                        String.valueOf(strings.length),
 							                        Messages.merge(strings));
 						}
@@ -101,8 +99,8 @@ public class PlayerStickListener extends AbstractListener {
 				}
 			} else if (action == Action.RIGHT_CLICK_AIR || action == Action.LEFT_CLICK_AIR) {
 				// Selection reset
-				final PlayerCuboid deletedCuboid = getPlugin().getDb().removeSelection(p.getName());
-				if (deletedCuboid == null) {
+				final PlayerRegion removedRegion = getPlugin().getDb().removeSelection(p.getName());
+				if (removedRegion == null) {
 					getPlugin().sendMessage(p, MessageId.cuboid_noSelection);
 				} else {
 					getPlugin().sendMessage(p, MessageId.cuboid_selectionReset);

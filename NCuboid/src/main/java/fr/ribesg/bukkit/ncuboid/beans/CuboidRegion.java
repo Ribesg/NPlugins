@@ -7,35 +7,36 @@ import org.bukkit.Location;
 import java.util.HashSet;
 import java.util.Set;
 
-public class RectCuboid extends PlayerCuboid {
+public class CuboidRegion extends PlayerRegion {
 
 	private NLocation minCorner, maxCorner;
 	private int minX, maxX, minY, maxY, minZ, maxZ;
 
-	/** Create a new Rectangular Cuboid */
-	public RectCuboid(final String cuboidName, final String ownerName, final String worldName, final NLocation minCorner) {
+	/** Create a new Cuboid Region */
+	public CuboidRegion(final String cuboidName, final String ownerName, final String worldName, final NLocation minCorner) {
 
-		super(cuboidName, ownerName, worldName, CuboidType.RECT);
+		super(cuboidName, ownerName, worldName, RegionType.CUBOID);
 
 		setMinCorner(minCorner);
 		setChunks(null);
 	}
 
-	/** Create a Rectangular Cuboid from a save */
-	public RectCuboid(final String cuboidName,
-	                  final String ownerName,
-	                  final String worldName,
-	                  final CuboidState state,
-	                  final long totalSize,
-	                  final String welcomeMessage,
-	                  final String farewellMessage,
-	                  final Set<ChunkCoord> chunks,
-	                  final Rights rights,
-	                  final int priority,
-	                  final Flags flags,
-	                  final FlagAttributes flagAtts,
-	                  final NLocation minCorner,
-	                  final NLocation maxCorner) {
+	/** Create a Cuboid Region from a save */
+	public CuboidRegion(final String cuboidName,
+	                    final String ownerName,
+	                    final String worldName,
+	                    final RegionState state,
+	                    final long totalSize,
+	                    final String welcomeMessage,
+	                    final String farewellMessage,
+	                    final Set<ChunkCoord> chunks,
+	                    final Rights rights,
+	                    final int priority,
+	                    final Flags flags,
+	                    final FlagAttributes flagAtts,
+	                    final boolean dynmapable,
+	                    final NLocation minCorner,
+	                    final NLocation maxCorner) {
 
 		super(cuboidName,
 		      ownerName,
@@ -45,11 +46,12 @@ public class RectCuboid extends PlayerCuboid {
 		      welcomeMessage,
 		      farewellMessage,
 		      chunks,
-		      CuboidType.RECT,
+		      RegionType.CUBOID,
 		      rights,
 		      priority,
 		      flags,
-		      flagAtts);
+		      flagAtts,
+		      dynmapable);
 
 		setMinCorner(minCorner);
 		setMaxCorner(maxCorner);
@@ -72,14 +74,14 @@ public class RectCuboid extends PlayerCuboid {
 			setMaxZ(getMinZ() == secondPoint.getBlockZ() ? getMinCorner().getBlockZ() : secondPoint.getBlockZ());
 			setMinCorner(new NLocation(getWorldName(), getMinX(), getMinY(), getMinZ()));
 			setMaxCorner(new NLocation(getWorldName(), getMaxX(), getMaxY(), getMaxZ()));
-			setState(CuboidState.TMPSTATE2);
+			setState(RegionState.TMPSTATE2);
 		}
 	}
 
-	/** @see RectCuboid#create(String) */
+	/** @see CuboidRegion#create(String) */
 	@Override
-	public void create(final String cuboidName) {
-		super.create(cuboidName);
+	public void create(final String regionName) {
+		super.create(regionName);
 		setTotalSize((getMaxX() - getMinX() + 1) * (getMaxY() - getMinY() + 1) * (getMaxZ() - getMinZ() + 1));
 		setChunks(computeChunks());
 	}
@@ -98,7 +100,7 @@ public class RectCuboid extends PlayerCuboid {
 		return chunks;
 	}
 
-	// Check if <x,y,z> is in a Cuboid
+	// Check if <x,y,z> is in a Region
 	@Override
 	public boolean contains(final double x, final double y, final double z) {
 		return minX <= x && maxX + 1 > x && minZ <= z && maxZ + 1 > z && minY <= y && maxY + 1 > y;

@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 
 import java.util.Set;
 
-public abstract class PlayerCuboid extends GeneralCuboid {
+public abstract class PlayerRegion extends GeneralRegion {
 
-	public static enum CuboidState {
-		/** Normal Cuboid */
+	public static enum RegionState {
+		/** Normal Region */
 		NORMAL,
 
 		/** First point selected */
@@ -20,41 +20,42 @@ public abstract class PlayerCuboid extends GeneralCuboid {
 		TMPSTATE2;
 	}
 
-	private String          cuboidName;
+	private String          regionName;
 	private String          ownerName;
-	private CuboidState     state;
+	private RegionState     state;
 	private long            totalSize;
 	private String          welcomeMessage;
 	private String          farewellMessage;
 	private Set<ChunkCoord> chunks;
 
-	/** Create a new Cuboid, when user select points etc */
-	public PlayerCuboid(final String cuboidName, final String ownerName, final String worldName, final CuboidType type) {
+	/** Create a new Region, when user select points etc */
+	public PlayerRegion(final String regionName, final String ownerName, final String worldName, final RegionType type) {
 		super(worldName, type);
-		setCuboidName(cuboidName);
+		setRegionName(regionName);
 		setOwnerName(ownerName);
-		setState(CuboidState.TMPSTATE1);
+		setState(RegionState.TMPSTATE1);
 		setWelcomeMessage(null);
 		setFarewellMessage(null);
 	}
 
-	/** Create a Cuboid from a save */
-	public PlayerCuboid(final String cuboidName,
+	/** Create a Region from a save */
+	public PlayerRegion(final String regionName,
 	                    final String ownerName,
 	                    final String worldName,
-	                    final CuboidState state,
+	                    final RegionState state,
 	                    final long totalSize,
 	                    final String welcomeMessage,
 	                    final String farewellMessage,
 	                    final Set<ChunkCoord> chunks,
-	                    final CuboidType type,
+	                    final RegionType type,
 	                    final Rights rights,
 	                    final int priority,
 	                    final Flags flags,
-	                    final FlagAttributes flagAtts) {
+	                    final FlagAttributes flagAtts,
+	                    final boolean dynmapable) {
 
-		super(worldName, type, rights, priority, flags, flagAtts);
-		setCuboidName(cuboidName);
+		super(worldName, type, rights, priority, flags, flagAtts, dynmapable);
+		setRegionName(regionName);
 		setOwnerName(ownerName);
 		setState(state);
 		setTotalSize(totalSize);
@@ -64,13 +65,13 @@ public abstract class PlayerCuboid extends GeneralCuboid {
 	}
 
 	/**
-	 * Called on a Selection cuboid to transform it into an actual Cuboid
+	 * Called on a Selection region to transform it into an actual Region
 	 *
-	 * @param cuboidName the name of the new Cuboid
+	 * @param regionName the name of the new Region
 	 */
-	public void create(final String cuboidName) {
-		setCuboidName(cuboidName);
-		setState(CuboidState.NORMAL);
+	public void create(final String regionName) {
+		setRegionName(regionName);
+		setState(RegionState.NORMAL);
 	}
 
 	// Location check
@@ -83,7 +84,7 @@ public abstract class PlayerCuboid extends GeneralCuboid {
 
 	// Info
 	public String getInfoLine() {
-		return "- " + getCuboidName() + " (" + getOwnerName() + ") " + getSizeString();
+		return "- " + getRegionName() + " (" + getOwnerName() + ") " + getSizeString();
 	}
 
 	public abstract String getSizeString();
@@ -104,12 +105,12 @@ public abstract class PlayerCuboid extends GeneralCuboid {
 		this.chunks = chunks;
 	}
 
-	public String getCuboidName() {
-		return cuboidName;
+	public String getRegionName() {
+		return regionName;
 	}
 
-	public void setCuboidName(String cuboidName) {
-		this.cuboidName = cuboidName;
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
 
 	public String getFarewellMessage() {
@@ -128,11 +129,11 @@ public abstract class PlayerCuboid extends GeneralCuboid {
 		this.ownerName = ownerName;
 	}
 
-	public CuboidState getState() {
+	public RegionState getState() {
 		return state;
 	}
 
-	public void setState(CuboidState state) {
+	public void setState(RegionState state) {
 		this.state = state;
 	}
 

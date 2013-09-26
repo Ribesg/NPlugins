@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.jail;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,8 +22,8 @@ public class JailHandler {
 	// PlayerName, JailName
 	private final Map<String, String> jailedMap;
 
-	// JailName, Cuboid
-	private final Map<String, GeneralCuboid> jailsMap;
+	// JailName, Region
+	private final Map<String, GeneralRegion> jailsMap;
 
 	public JailHandler(NCuboid instance) {
 		this.plugin = instance;
@@ -33,7 +33,7 @@ public class JailHandler {
 	}
 
 	public void loadJails() {
-		for (GeneralCuboid cuboid : plugin.getDb()) {
+		for (GeneralRegion cuboid : plugin.getDb()) {
 			// TODO Fill jails & jailsMap
 		}
 	}

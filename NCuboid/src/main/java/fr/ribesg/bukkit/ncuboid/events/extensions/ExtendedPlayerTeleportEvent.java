@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -9,32 +9,32 @@ import java.util.Set;
 
 public class ExtendedPlayerTeleportEvent extends AbstractExtendedEvent {
 
-	private final GeneralCuboid      fromCuboid;
-	private final Set<GeneralCuboid> fromCuboids;
-	private final GeneralCuboid      toCuboid;
-	private final Set<GeneralCuboid> toCuboids;
+	private final GeneralRegion      fromRegion;
+	private final Set<GeneralRegion> fromRegions;
+	private final GeneralRegion      toRegion;
+	private final Set<GeneralRegion> toRegions;
 
-	public ExtendedPlayerTeleportEvent(final CuboidDb db, final PlayerTeleportEvent event) {
+	public ExtendedPlayerTeleportEvent(final RegionDb db, final PlayerTeleportEvent event) {
 		super(event);
-		fromCuboids = db.getAllByLocation(event.getFrom());
-		fromCuboid = db.getPrior(fromCuboids);
-		toCuboids = db.getAllByLocation(event.getTo());
-		toCuboid = db.getPrior(toCuboids);
+		fromRegions = db.getAllByLocation(event.getFrom());
+		fromRegion = db.getPrior(fromRegions);
+		toRegions = db.getAllByLocation(event.getTo());
+		toRegion = db.getPrior(toRegions);
 	}
 
-	public GeneralCuboid getFromCuboid() {
-		return fromCuboid;
+	public GeneralRegion getFromRegion() {
+		return fromRegion;
 	}
 
-	public Set<GeneralCuboid> getFromCuboids() {
-		return fromCuboids;
+	public Set<GeneralRegion> getFromRegions() {
+		return fromRegions;
 	}
 
-	public GeneralCuboid getToCuboid() {
-		return toCuboid;
+	public GeneralRegion getToRegion() {
+		return toRegion;
 	}
 
-	public Set<GeneralCuboid> getToCuboids() {
-		return toCuboids;
+	public Set<GeneralRegion> getToRegions() {
+		return toRegions;
 	}
 }

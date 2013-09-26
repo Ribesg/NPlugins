@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -9,20 +9,20 @@ import java.util.Set;
 
 public class ExtendedPlayerJoinEvent extends AbstractExtendedEvent {
 
-	private final GeneralCuboid      cuboid;
-	private final Set<GeneralCuboid> cuboids;
+	private final GeneralRegion      region;
+	private final Set<GeneralRegion> regions;
 
-	public ExtendedPlayerJoinEvent(final CuboidDb db, final PlayerJoinEvent event) {
+	public ExtendedPlayerJoinEvent(final RegionDb db, final PlayerJoinEvent event) {
 		super(event);
-		cuboids = db.getAllByLocation(event.getPlayer().getLocation());
-		cuboid = db.getPrior(cuboids);
+		regions = db.getAllByLocation(event.getPlayer().getLocation());
+		region = db.getPrior(regions);
 	}
 
-	public GeneralCuboid getCuboid() {
-		return cuboid;
+	public GeneralRegion getRegion() {
+		return region;
 	}
 
-	public Set<GeneralCuboid> getCuboids() {
-		return cuboids;
+	public Set<GeneralRegion> getRegions() {
+		return regions;
 	}
 }

@@ -22,7 +22,7 @@ public class UseFlagListener extends AbstractListener {
 
 	private static Set<EntityType> getDenyUseEntity() {
 		if (denyUseEntities == null) {
-			denyUseEntities = new HashSet<EntityType>();
+			denyUseEntities = new HashSet<>();
 			denyUseEntities.add(EntityType.BOAT);
 			denyUseEntities.add(EntityType.ITEM_FRAME);
 			denyUseEntities.add(EntityType.MINECART);
@@ -33,7 +33,7 @@ public class UseFlagListener extends AbstractListener {
 
 	private static Set<Material> getDenyUseMaterials() {
 		if (denyUseMaterials == null) {
-			denyUseMaterials = new HashSet<Material>();
+			denyUseMaterials = new HashSet<>();
 			denyUseMaterials.add(Material.ANVIL);
 			denyUseMaterials.add(Material.BED_BLOCK);
 			denyUseMaterials.add(Material.CAKE_BLOCK);
@@ -70,9 +70,9 @@ public class UseFlagListener extends AbstractListener {
 	public void onPlayerInteract(final ExtendedPlayerInteractEvent ext) {
 		final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
 		if (event.hasBlock()) {
-			if (ext.getCuboid() != null &&
-			    ext.getCuboid().getFlag(Flag.USE) &&
-			    !ext.getCuboid().isAllowedPlayer(event.getPlayer()) &&
+			if (ext.getRegion() != null &&
+			    ext.getRegion().getFlag(Flag.USE) &&
+			    !ext.getRegion().isAllowedPlayer(event.getPlayer()) &&
 			    getDenyUseMaterials().contains(event.getClickedBlock().getType())) {
 				event.setCancelled(true);
 			}
@@ -82,9 +82,9 @@ public class UseFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
 		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
-		if (ext.getCuboid() != null &&
-		    ext.getCuboid().getFlag(Flag.USE) &&
-		    !ext.getCuboid().isAllowedPlayer(event.getPlayer()) &&
+		if (ext.getRegion() != null &&
+		    ext.getRegion().getFlag(Flag.USE) &&
+		    !ext.getRegion().isAllowedPlayer(event.getPlayer()) &&
 		    getDenyUseEntity().contains(event.getRightClicked().getType())) {
 			event.setCancelled(true);
 		}

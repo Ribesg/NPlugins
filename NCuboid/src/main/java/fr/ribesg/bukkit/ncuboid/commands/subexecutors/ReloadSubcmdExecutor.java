@@ -4,7 +4,7 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final String USAGE = ChatColor.RED + "Usage : /cuboid reload <cuboids|config|messages>";
+	private static final String USAGE = ChatColor.RED + "Usage : /cuboid reload <regions|config|messages>";
 
 	public ReloadSubcmdExecutor(final NCuboid instance) {
 		super(instance);
@@ -27,15 +27,14 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 			return true;
 		} else if (Perms.hasReload(sender)) {
 			switch (args[0]) {
-				case "cuboids":
-				case "cuboid":
-				case "cubo":
-					final CuboidDb db = CuboidDBPersistenceHandler.reloadDB(getPlugin());
+				case "regions":
+				case "region":
+					final RegionDb db = CuboidDBPersistenceHandler.reloadDB(getPlugin());
 					if (db == getPlugin().getDb()) {
-						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "cuboidDB.yml");
+						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "regionDB.yml");
 					} else {
 						getPlugin().setDb(db);
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdReloadCuboids);
+						getPlugin().sendMessage(sender, MessageId.cuboid_cmdReloadRegions);
 					}
 					return true;
 				case "config":
