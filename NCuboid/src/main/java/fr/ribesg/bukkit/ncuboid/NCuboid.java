@@ -1,8 +1,8 @@
 package fr.ribesg.bukkit.ncuboid;
 
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDbPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.beans.WorldRegion;
 import fr.ribesg.bukkit.ncuboid.commands.MainCommandExecutor;
 import fr.ribesg.bukkit.ncuboid.dynmap.DynmapBridge;
@@ -75,9 +75,12 @@ public class NCuboid extends CuboidNode {
 			return false;
 		}
 
+		// Dynmap Bridge! Before loading Regions!
+		this.dynmapBridge = new DynmapBridge();
+
 		// Create the RegionDb
 		try {
-			db = CuboidDBPersistenceHandler.loadDB(this);
+			db = RegionDbPersistenceHandler.loadDb(this);
 		} catch (final IOException | InvalidConfigurationException e) {
 			getLogger().severe("An error occured, stacktrace follows:");
 			e.printStackTrace();
@@ -121,9 +124,8 @@ public class NCuboid extends CuboidNode {
 		// Command
 		getCommand("cuboid").setExecutor(new MainCommandExecutor(this));
 
-		// Dynmap Bridge!
-		this.dynmapBridge = new DynmapBridge();
-		this.dynmapBridge.initialize(db);
+		// Dynmap Bridge! After loading Regions!
+		this.dynmapBridge.initialize(this.db);
 
 		return true;
 	}
@@ -143,7 +145,7 @@ public class NCuboid extends CuboidNode {
 	@Override
 	protected void onNodeDisable() {
 		try {
-			CuboidDBPersistenceHandler.saveDB(this, getDb());
+			RegionDbPersistenceHandler.saveDb(this, getDb());
 		} catch (final IOException e) {
 			getLogger().severe("An error occured, stacktrace follows:");
 			e.printStackTrace();

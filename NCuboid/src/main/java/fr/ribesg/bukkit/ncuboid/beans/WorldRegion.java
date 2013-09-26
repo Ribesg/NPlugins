@@ -19,7 +19,7 @@ public class WorldRegion extends GeneralRegion {
 	}
 
 	public WorldRegion(final String worldName, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
-		super(worldName, RegionType.WORLD, rights, priority, flags, flagAtts, false);
+		super(worldName, RegionType.WORLD, rights, priority, flags, flagAtts);
 	}
 
 	@Override

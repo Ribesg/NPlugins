@@ -46,22 +46,19 @@ public abstract class PlayerRegion extends GeneralRegion {
 	                    final long totalSize,
 	                    final String welcomeMessage,
 	                    final String farewellMessage,
-	                    final Set<ChunkCoord> chunks,
 	                    final RegionType type,
 	                    final Rights rights,
 	                    final int priority,
 	                    final Flags flags,
-	                    final FlagAttributes flagAtts,
-	                    final boolean dynmapable) {
+	                    final FlagAttributes flagAtts) {
 
-		super(worldName, type, rights, priority, flags, flagAtts, dynmapable);
+		super(worldName, type, rights, priority, flags, flagAtts);
 		setRegionName(regionName);
 		setOwnerName(ownerName);
 		setState(state);
 		setTotalSize(totalSize);
 		setWelcomeMessage(welcomeMessage);
 		setFarewellMessage(farewellMessage);
-		setChunks(chunks);
 	}
 
 	/**

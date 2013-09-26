@@ -3,7 +3,7 @@ package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
-import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDbPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
@@ -29,7 +29,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 			switch (args[0]) {
 				case "regions":
 				case "region":
-					final RegionDb db = CuboidDBPersistenceHandler.reloadDB(getPlugin());
+					final RegionDb db = RegionDbPersistenceHandler.reloadDb(getPlugin());
 					if (db == getPlugin().getDb()) {
 						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "regionDB.yml");
 					} else {

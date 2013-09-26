@@ -29,12 +29,10 @@ public class CuboidRegion extends PlayerRegion {
 	                    final long totalSize,
 	                    final String welcomeMessage,
 	                    final String farewellMessage,
-	                    final Set<ChunkCoord> chunks,
 	                    final Rights rights,
 	                    final int priority,
 	                    final Flags flags,
 	                    final FlagAttributes flagAtts,
-	                    final boolean dynmapable,
 	                    final NLocation minCorner,
 	                    final NLocation maxCorner) {
 
@@ -45,13 +43,11 @@ public class CuboidRegion extends PlayerRegion {
 		      totalSize,
 		      welcomeMessage,
 		      farewellMessage,
-		      chunks,
 		      RegionType.CUBOID,
 		      rights,
 		      priority,
 		      flags,
-		      flagAtts,
-		      dynmapable);
+		      flagAtts);
 
 		setMinCorner(minCorner);
 		setMaxCorner(maxCorner);
@@ -61,6 +57,7 @@ public class CuboidRegion extends PlayerRegion {
 		setMaxY(maxCorner.getBlockY());
 		setMinZ(minCorner.getBlockZ());
 		setMaxZ(maxCorner.getBlockZ());
+		setChunks(computeChunks());
 	}
 
 	/** Called when the player select the second corner */

@@ -37,7 +37,9 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		addByName(region);
 		addByOwner(region);
 		addByChunks(region);
-		this.plugin.getDynmapBridge().handle(region);
+		if (this.plugin.getDynmapBridge().isInitialized()) {
+			this.plugin.getDynmapBridge().handle(region);
+		}
 	}
 
 	public void addByName(final PlayerRegion region) {
@@ -78,7 +80,9 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		removeByName(region);
 		removeByOwner(region);
 		removeByChunks(region);
-		this.plugin.getDynmapBridge().hide(region);
+		if (this.plugin.getDynmapBridge().isInitialized()) {
+			this.plugin.getDynmapBridge().hide(region);
+		}
 	}
 
 	public void removeByName(final PlayerRegion region) {

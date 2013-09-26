@@ -31,11 +31,10 @@ public abstract class GeneralRegion extends Region {
 
 	// This is for Dynmap!
 	private final boolean dynmapable;
-	private       boolean shownOnDynmap;
 
 	// Create a new Region, when user select points etc
 	public GeneralRegion(final String worldName, final RegionType type) {
-		this(worldName, type, new Rights(), 0, new Flags(), new FlagAttributes(), true);
+		this(worldName, type, new Rights(), 0, new Flags(), new FlagAttributes());
 	}
 
 	public GeneralRegion(final String worldName,
@@ -43,19 +42,16 @@ public abstract class GeneralRegion extends Region {
 	                     final Rights rights,
 	                     final int priority,
 	                     final Flags flags,
-	                     final FlagAttributes flagAtts,
-	                     final boolean shownOnDynmap) {
+	                     final FlagAttributes flagAtts) {
 		setWorldName(worldName);
 		setType(type);
 		switch (type) {
 			case CUBOID:
 				this.dynmapable = true;
-				this.shownOnDynmap = shownOnDynmap;
 				break;
 			case WORLD:
 			default:
 				this.dynmapable = false;
-				this.shownOnDynmap = false;
 				break;
 		}
 		this.rights = rights;
@@ -105,14 +101,6 @@ public abstract class GeneralRegion extends Region {
 
 	public boolean isDynmapable() {
 		return this.dynmapable;
-	}
-
-	public boolean isShownOnDynmap() {
-		return shownOnDynmap;
-	}
-
-	public void setShownOnDynmap(boolean shownOnDynmap) {
-		this.shownOnDynmap = shownOnDynmap;
 	}
 
 	public boolean getFlag(Flag f) {

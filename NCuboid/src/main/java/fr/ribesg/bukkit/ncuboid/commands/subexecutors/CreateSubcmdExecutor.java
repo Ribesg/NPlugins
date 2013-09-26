@@ -27,8 +27,8 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
 			return true;
 		} else if (Perms.hasCreate(sender)) {
-			final PlayerRegion c = getPlugin().getDb().getByName(args[0]);
-			if (c != null) {
+			final PlayerRegion region = getPlugin().getDb().getByName(args[0]);
+			if (region != null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_cmdCreateAlreadyExists);
 				return true;
 			} else if (args[0].toLowerCase().startsWith("world_")) {

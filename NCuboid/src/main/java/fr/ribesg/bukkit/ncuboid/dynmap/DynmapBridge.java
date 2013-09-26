@@ -1,6 +1,7 @@
 package fr.ribesg.bukkit.ncuboid.dynmap;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidRegion;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -26,6 +27,8 @@ public class DynmapBridge {
 
 	private final MarkerSet markerSet;
 
+	private boolean initialized;
+
 	public DynmapBridge() {
 		final Plugin dynmapPlugin = Bukkit.getPluginManager().getPlugin(DYNMAP_PLUGIN_NAME);
 		MarkerSet markerSet = null;
@@ -41,16 +44,16 @@ public class DynmapBridge {
 			}
 		}
 		this.markerSet = markerSet;
+		this.initialized = false;
 	}
 
 	public void initialize(final Iterable<GeneralRegion> regions) {
 		if (this.markerSet != null) {
 			for (final GeneralRegion r : regions) {
-				if (r.isDynmapable() && r.isShownOnDynmap()) {
-					this.handle(r);
-				}
+				this.handle(r);
 			}
 		}
+		this.initialized = true;
 	}
 
 	public void reinitialize(final Iterable<GeneralRegion> regions) {
@@ -63,10 +66,14 @@ public class DynmapBridge {
 	}
 
 	public boolean handle(final GeneralRegion region) {
-		if (region.isShownOnDynmap()) {
-			return show(region);
+		if (region.isDynmapable()) {
+			if (region.getFlag(Flag.HIDDEN)) {
+				return hide(region);
+			} else {
+				return show(region);
+			}
 		} else {
-			return hide(region);
+			return false;
 		}
 	}
 
@@ -78,7 +85,7 @@ public class DynmapBridge {
 				case CUBOID:
 					return showCuboidRegion((CuboidRegion) region);
 				default:
-					LOG.severe("Unable to dynmap a region of type '" + region.getType() + "'!");
+					LOG.severe("Unable to dynmapize a region of type '" + region.getType() + "'!");
 					return false;
 			}
 		}
@@ -88,8 +95,9 @@ public class DynmapBridge {
 		if (this.markerSet == null || !region.isDynmapable()) {
 			return false;
 		} else {
+			// TODO Handle non-area marker if needed
 			final String id = StringUtils.toLowerCamelCase(region.getRegionName());
-			final Marker marker = this.markerSet.findMarker(id);
+			final AreaMarker marker = this.markerSet.findAreaMarker(id);
 			if (marker == null) {
 				return false;
 			} else {
@@ -105,7 +113,7 @@ public class DynmapBridge {
 		final String id = StringUtils.toLowerCamelCase(region.getRegionName());
 
 		// Parameter 2: marker label
-		final String lbl = "<strong>" + region.getRegionName() + "</strong>";
+		final String lbl = region.getRegionName();
 
 		// Parameter 3: if label contains HTML, always true
 		final boolean markup = true;
@@ -146,21 +154,34 @@ public class DynmapBridge {
 		marker.setRangeY(region.getMinY(), region.getMaxY());
 
 		// Description
+		final String wrap = "<br />";
 		final StringBuilder description = new StringBuilder();
+		description.append("<strong>").append(lbl).append("</strong>").append(wrap);
+		description.append("Owner: ").append(region.getOwnerName()).append(wrap);
+		description.append("Size: ").append(region.getTotalSize()).append(" blocks").append(wrap);
+		description.append("Flags: ");
 		description.append("<ul>");
-		description.append("<li>Hello</li>");
-		description.append("<li>World</li>");
-		description.append("</ul>");
+		for (final Flag f : Flag.values()) {
+			if (region.getFlag(f)) {
+				description.append("  <li>").append(f.toString()).append("</li>");
+			}
+		}
+		description.append("<ul>");
 		marker.setDescription(description.toString());
 
-		// Random pastel color!
-		final int red = 128 + rand.nextInt(128);
-		final int green = 128 + rand.nextInt(128);
-		final int blue = 128 + rand.nextInt(128);
-		final int color = Color.fromRGB(red, green, blue).asRGB();
+		// Color!
+		final int color = Color.fromRGB(200, 200, 20).asRGB();
 		marker.setLineStyle(1, 0.9, color);
 		marker.setFillStyle(0.1, color);
 
 		return true;
+	}
+
+	public boolean isInitialized() {
+		return initialized;
+	}
+
+	public void setInitialized(boolean initialized) {
+		this.initialized = initialized;
 	}
 }

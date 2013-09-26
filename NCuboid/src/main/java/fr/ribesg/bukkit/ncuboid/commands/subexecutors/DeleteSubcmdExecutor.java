@@ -22,16 +22,16 @@ public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
 			return true;
 		} else if (Perms.hasDelete(sender)) {
-			final PlayerRegion c = getPlugin().getDb().getByName(args[0]);
-			if (c == null) {
+			final PlayerRegion region = getPlugin().getDb().getByName(args[0]);
+			if (region == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDoesNotExist);
 				return true;
 			} else {
-				if (Perms.isAdmin(sender) || c.isOwner(sender)) {
-					getPlugin().getDb().remove(c);
-					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDeleted, c.getRegionName());
+				if (Perms.isAdmin(sender) || region.isOwner(sender)) {
+					getPlugin().getDb().remove(region);
+					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDeleted, region.getRegionName());
 				} else {
-					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteNoPermission, c.getRegionName());
+					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteNoPermission, region.getRegionName());
 				}
 				return true;
 			}
