@@ -37,6 +37,7 @@ public class CuboidDb implements Iterable<GeneralCuboid> {
 		addByName(cuboid);
 		addByOwner(cuboid);
 		addByChunks(cuboid);
+		this.plugin.getDynmapBridge().handle(cuboid);
 	}
 
 	public void addByName(final PlayerCuboid cuboid) {
@@ -77,6 +78,7 @@ public class CuboidDb implements Iterable<GeneralCuboid> {
 		removeByName(cuboid);
 		removeByOwner(cuboid);
 		removeByChunks(cuboid);
+		this.plugin.getDynmapBridge().hide(cuboid);
 	}
 
 	public void removeByName(final PlayerCuboid cuboid) {

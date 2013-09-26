@@ -5,6 +5,7 @@ import fr.ribesg.bukkit.ncuboid.beans.CuboidDBPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidDb;
 import fr.ribesg.bukkit.ncuboid.beans.WorldCuboid;
 import fr.ribesg.bukkit.ncuboid.commands.MainCommandExecutor;
+import fr.ribesg.bukkit.ncuboid.dynmap.DynmapBridge;
 import fr.ribesg.bukkit.ncuboid.jail.JailHandler;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
 import fr.ribesg.bukkit.ncuboid.listeners.EventExtensionListener;
@@ -37,6 +38,9 @@ public class NCuboid extends CuboidNode {
 
 	// Jail handling
 	private JailHandler jailHandler;
+
+	// Dynmap!
+	private DynmapBridge dynmapBridge;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -117,6 +121,10 @@ public class NCuboid extends CuboidNode {
 		// Command
 		getCommand("cuboid").setExecutor(new MainCommandExecutor(this));
 
+		// Dynmap Bridge!
+		this.dynmapBridge = new DynmapBridge();
+		this.dynmapBridge.initialize(db);
+
 		return true;
 	}
 
@@ -158,6 +166,10 @@ public class NCuboid extends CuboidNode {
 
 	public Config getPluginConfig() {
 		return pluginConfig;
+	}
+
+	public DynmapBridge getDynmapBridge() {
+		return dynmapBridge;
 	}
 
 	// API for other nodes

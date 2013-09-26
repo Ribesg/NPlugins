@@ -20,11 +20,23 @@
 
 	<description>Region protection plugin of the NPlugins suite</description>
 
+	<repositories>
+		<repository>
+			<id>dynmap-api-repo</id>
+			<url>http://repo.mikeprimm.com/</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>fr.ribesg.bukkit.ncore</groupId>
 			<artifactId>NCore</artifactId>
 			<version>0.4.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.dynmap</groupId>
+			<artifactId>DynmapCoreAPI</artifactId>
+			<version>1.9</version>
 		</dependency>
 	</dependencies>
 

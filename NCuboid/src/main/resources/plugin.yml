@@ -8,7 +8,7 @@ version: ${project.version}
 load: POSTWORLD
 
 depend: [NCore]
-softdepend: [NWorld]
+softdepend: [NWorld, dynmap]
 
 commands:
     cuboid:

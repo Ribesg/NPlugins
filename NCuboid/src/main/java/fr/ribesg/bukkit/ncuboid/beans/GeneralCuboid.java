@@ -14,7 +14,7 @@ public abstract class GeneralCuboid extends Cuboid {
 		RECT,
 
 		// WorldCuboid
-		WORLD,
+		WORLD;
 	}
 
 	// Identification / informations related
@@ -29,14 +29,13 @@ public abstract class GeneralCuboid extends Cuboid {
 	private final Flags          flags;
 	private final FlagAttributes flagAtts;
 
+	// This is for Dynmap!
+	private final boolean dynmapable;
+	private       boolean shownOnDynmap;
+
 	// Create a new Cuboid, when user select points etc
 	public GeneralCuboid(final String worldName, final CuboidType type) {
-		setWorldName(worldName);
-		setType(type);
-		rights = new Rights();
-		setPriority(0);
-		flags = new Flags();
-		flagAtts = new FlagAttributes();
+		this(worldName, type, new Rights(), 0, new Flags(), new FlagAttributes(), true);
 	}
 
 	public GeneralCuboid(final String worldName,
@@ -44,9 +43,21 @@ public abstract class GeneralCuboid extends Cuboid {
 	                     final Rights rights,
 	                     final int priority,
 	                     final Flags flags,
-	                     final FlagAttributes flagAtts) {
+	                     final FlagAttributes flagAtts,
+	                     final boolean shownOnDynmap) {
 		setWorldName(worldName);
 		setType(type);
+		switch (type) {
+			case RECT:
+				this.dynmapable = true;
+				this.shownOnDynmap = shownOnDynmap;
+				break;
+			case WORLD:
+			default:
+				this.dynmapable = false;
+				this.shownOnDynmap = false;
+				break;
+		}
 		this.rights = rights;
 		setPriority(priority);
 		this.flags = flags;
@@ -90,6 +101,18 @@ public abstract class GeneralCuboid extends Cuboid {
 
 	public void setWorldName(String worldName) {
 		this.worldName = worldName;
+	}
+
+	public boolean isDynmapable() {
+		return this.dynmapable;
+	}
+
+	public boolean isShownOnDynmap() {
+		return shownOnDynmap;
+	}
+
+	public void setShownOnDynmap(boolean shownOnDynmap) {
+		this.shownOnDynmap = shownOnDynmap;
 	}
 
 	public boolean getFlag(Flag f) {
