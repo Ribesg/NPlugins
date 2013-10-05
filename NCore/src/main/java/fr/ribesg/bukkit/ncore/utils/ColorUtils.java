@@ -6,8 +6,26 @@ public class ColorUtils {
 	public static final char   ALTERNATE_COLOR_CHAR        = '&';
 	public static final String ALTERNATE_COLOR_CHAR_STRING = Character.toString(ALTERNATE_COLOR_CHAR);
 
-	public static String colorize(String toColorize) {
+	/**
+	 * Transform NPlugins color codes into Bukkit color codes.
+	 *
+	 * @param toColorize the String to colorize
+	 *
+	 * @return the modified String
+	 */
+	public static String colorize(final String toColorize) {
 		return ChatColor.translateAlternateColorCodes(ALTERNATE_COLOR_CHAR, toColorize);
+	}
+
+	/**
+	 * Removes all types of color codes: Bukkit & NPlugins ones.
+	 *
+	 * @param toStrip the String to strip
+	 *
+	 * @return the same String without any color codes
+	 */
+	public static String stripColorCodes(final String toStrip) {
+		return ChatColor.stripColor(colorize(toStrip));
 	}
 
 }

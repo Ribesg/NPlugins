@@ -1,15 +1,17 @@
 package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
-import fr.ribesg.bukkit.ncore.utils.SignUtils;
 import fr.ribesg.bukkit.ncore.utils.UsernameUtils;
 import fr.ribesg.bukkit.ngeneral.Perms;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.*;
-import org.bukkit.entity.Player;
+import org.bukkit.block.Beacon;
+import org.bukkit.block.Block;
+import org.bukkit.block.BrewingStand;
+import org.bukkit.block.Chest;
+import org.bukkit.block.Dispenser;
+import org.bukkit.block.DoubleChest;
+import org.bukkit.block.Dropper;
+import org.bukkit.block.Furnace;
+import org.bukkit.block.Hopper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -22,78 +24,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.InventoryHolder;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 
 public class ProtectionSignListener implements Listener {
-
-	// ############### //
-	// ## Constants ## //
-	// ############### //
-
-	/** First line of a Protection sign - Exactly 16 chars */
-	private static final String PROTECTION       = "[" + ChatColor.GREEN + "Private" + ChatColor.BLACK + "]";
-	/** Prefix of the Protection sign Owner name */
-	private static final String PRIMARY_PREFIX   = ChatColor.GREEN.toString();
-	/** Prefix of a Protection sign additional name */
-	private static final String SECONDARY_PREFIX = ChatColor.GRAY.toString();
-
-	/** First line of an Error sign */
-	private static final String ERROR = "[" + ChatColor.DARK_RED + "Error" + ChatColor.RESET + "]";
-
-	/** The ID of a Post Sign block */
-	private static final Material SIGN_POST = Material.SIGN_POST;
-	/** The ID of a Wall Sign block */
-	private static final Material WALL_SIGN = Material.WALL_SIGN;
-
-	/** The ID of a Chest block */
-	private static final Material CHEST         = Material.CHEST;
-	/** The ID of a Trapped Chest block */
-	private static final Material TRAPPED_CHEST = Material.TRAPPED_CHEST;
-
-	// ################### //
-	// ## Constant sets ## //
-	// ################### //
-
-	/** Set of String that players could write as first lines to say that it's a Protection sign */
-	private static Set<String> protectionStrings;
-
-	/** Static lazy getter for {@link #protectionStrings} */
-	private static Set<String> getProtectionStrings() {
-		if (protectionStrings == null) {
-			protectionStrings = new HashSet<>(5);
-			protectionStrings.add("protection");
-			protectionStrings.add("[protection]");
-			protectionStrings.add("private");
-			protectionStrings.add("[private]");
-			protectionStrings.add("p");
-		}
-		return protectionStrings;
-	}
-
-	/** Set of block types that can be protected by a Protection sign */
-	private static Set<Material> protectedMaterials;
-
-	/** Static lazy getter for {@link #protectedMaterials} */
-	private static Set<Material> getProtectedMaterials() {
-		if (protectedMaterials == null) {
-			protectedMaterials = new HashSet<>(11);
-			protectedMaterials.add(Material.BEACON);
-			protectedMaterials.add(Material.BREWING_STAND);
-			protectedMaterials.add(Material.BURNING_FURNACE);
-			protectedMaterials.add(Material.CHEST);
-			protectedMaterials.add(Material.COMMAND);
-			protectedMaterials.add(Material.DISPENSER);
-			protectedMaterials.add(Material.DROPPER);
-			protectedMaterials.add(Material.FURNACE);
-			protectedMaterials.add(Material.HOPPER);
-			protectedMaterials.add(Material.JUKEBOX);
-			protectedMaterials.add(Material.TRAPPED_CHEST);
-		}
-		return protectedMaterials;
-	}
 
 	// ############ //
 	// ## Fields ## //
@@ -116,27 +49,27 @@ public class ProtectionSignListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onSignChange(SignChangeEvent event) {
 		String[] lines = event.getLines();
-		if (getProtectionStrings().contains(parse(lines[0]))) {
+		if (ProtectionSignFeature.getProtectionStrings().contains(ColorUtils.stripColorCodes(lines[0]).toLowerCase())) {
 			// This is a Protection sign
 			if (!Perms.hasProtectionSign(event.getPlayer())) {
-				lines[0] = ERROR;
+				lines[0] = ProtectionSignFeature.ERROR;
 				lines[1] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine1());
 				lines[2] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine2());
 				lines[3] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine3());
-			} else if (protectsSomething(event.getBlock().getLocation())) {
-				if (canProtect(event.getBlock().getLocation(), event.getPlayer().getName())) {
-					lines[0] = PROTECTION;
-					lines[1] = SECONDARY_PREFIX + UsernameUtils.getId(strip(lines[1]));
-					lines[2] = SECONDARY_PREFIX + UsernameUtils.getId(strip(lines[2]));
-					lines[3] = PRIMARY_PREFIX + UsernameUtils.getId(event.getPlayer().getName());
+			} else if (feature.protectsSomething(event.getBlock().getLocation())) {
+				if (feature.canPlaceSign(event.getPlayer().getName(), event.getBlock().getLocation())) {
+					lines[0] = ProtectionSignFeature.PROTECTION;
+					lines[1] = ProtectionSignFeature.SECONDARY_PREFIX + UsernameUtils.getId(ColorUtils.stripColorCodes(lines[1]));
+					lines[2] = ProtectionSignFeature.SECONDARY_PREFIX + UsernameUtils.getId(ColorUtils.stripColorCodes(lines[2]));
+					lines[3] = ProtectionSignFeature.PRIMARY_PREFIX + UsernameUtils.getId(event.getPlayer().getName());
 				} else {
-					lines[0] = ERROR;
+					lines[0] = ProtectionSignFeature.ERROR;
 					lines[1] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine1());
 					lines[2] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine2());
 					lines[3] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine3());
 				}
 			} else {
-				lines[0] = ERROR;
+				lines[0] = ProtectionSignFeature.ERROR;
 				lines[1] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine1());
 				lines[2] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine2());
 				lines[3] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine3());
@@ -149,7 +82,7 @@ public class ProtectionSignListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBreakBlock(BlockBreakEvent event) {
-		if (!canBreak(event.getBlock(), event.getPlayer())) {
+		if (!feature.canBreak(event.getBlock(), event.getPlayer())) {
 			feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_breakDenied);
 			event.setCancelled(true);
 		}
@@ -158,7 +91,7 @@ public class ProtectionSignListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			if (!canUse(event.getClickedBlock(), event.getPlayer())) {
+			if (!feature.canUse(event.getPlayer(), event.getClickedBlock())) {
 				feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_accessDenied);
 				event.setCancelled(true);
 			}
@@ -169,7 +102,7 @@ public class ProtectionSignListener implements Listener {
 	public void onEntityExplode(EntityExplodeEvent event) {
 		final Iterator<Block> it = event.blockList().iterator();
 		while (it.hasNext()) {
-			if (!canBreak(it.next(), null)) {
+			if (!feature.canBreak(it.next(), null)) {
 				it.remove();
 			}
 		}
@@ -209,186 +142,6 @@ public class ProtectionSignListener implements Listener {
 			default:
 				return;
 		}
-		event.setCancelled(isProtected(b) != null);
-	}
-
-	// ############# //
-	// ## Methods ## //
-	// ############# //
-
-	/**
-	 * Detect if a block can be broken by a Player or by something else (Explosion...)
-	 *
-	 * @param b      Block to be broken
-	 * @param player Player that want to break the block, if there is one. Null otherwise
-	 *
-	 * @return If the block can be broken [by the Player]
-	 */
-	private boolean canBreak(Block b, Player player) {
-		final Material blockType = b.getType();
-		final String userId = player != null ? UsernameUtils.getId(player.getName()) : null;
-		if (blockType == SIGN_POST || blockType == WALL_SIGN) {
-			final Sign sign = (Sign) b.getState();
-			return !sign.getLine(0).equals(PROTECTION) ||
-			       player != null && strip(sign.getLine(3)).equals(userId) ||
-			       player != null && Perms.hasProtectionSignBreak(player);
-		} else {
-			List<String[]> signLines;
-			if (blockType == CHEST || blockType == TRAPPED_CHEST) {
-				signLines = SignUtils.getSignsForChest(b);
-			} else if (getProtectedMaterials().contains(blockType)) {
-				signLines = SignUtils.getSignsForBlock(b);
-			} else {
-				return true;
-			}
-			for (String[] lines : signLines) {
-				if (lines[0].equals(PROTECTION)) {
-					return false;
-				}
-			}
-			return true;
-		}
-	}
-
-	/**
-	 * Detects if a Player can use a "Protectable" block or not
-	 *
-	 * @param b      Block to be used
-	 * @param player Player
-	 *
-	 * @return True if the player can use the block, false otherwise
-	 */
-	private boolean canUse(Block b, Player player) {
-		if (Perms.hasProtectionSignBypass(player)) {
-			return true;
-		}
-		final Material blockType = b.getType();
-		final String userId = UsernameUtils.getId(player.getName());
-		List<String[]> signLines;
-		if (blockType == CHEST || blockType == TRAPPED_CHEST) {
-			signLines = SignUtils.getSignsForChest(b);
-		} else if (getProtectedMaterials().contains(blockType)) {
-			signLines = SignUtils.getSignsForBlock(b);
-		} else {
-			return true;
-		}
-		boolean protectedBySign = false;
-		boolean explicitlyAllowed = false;
-		for (String[] lines : signLines) {
-			if (lines[0].equals(PROTECTION)) {
-				protectedBySign = true;
-				if (strip(lines[1]).equals(userId) || strip(lines[2]).equals(userId) || strip(lines[3]).equals(userId)) {
-					explicitlyAllowed = true;
-					break;
-				}
-			}
-		}
-		return !protectedBySign || explicitlyAllowed;
-	}
-
-	/**
-	 * Detect if a Protection Sign has something to protect
-	 *
-	 * @param l Location of the protection sign
-	 *
-	 * @return True if there is a "protectable" block, otherwise false
-	 */
-	private boolean protectsSomething(Location l) {
-		final World w = l.getWorld();
-		final int x = l.getBlockX();
-		final int y = l.getBlockY();
-		final int z = l.getBlockZ();
-
-		return getProtectedMaterials().contains(w.getBlockAt(x - 1, y, z).getType()) ||
-		       getProtectedMaterials().contains(w.getBlockAt(x + 1, y, z).getType()) ||
-		       getProtectedMaterials().contains(w.getBlockAt(x, y - 1, z).getType()) ||
-		       getProtectedMaterials().contains(w.getBlockAt(x, y + 1, z).getType()) ||
-		       getProtectedMaterials().contains(w.getBlockAt(x, y, z - 1).getType()) ||
-		       getProtectedMaterials().contains(w.getBlockAt(x, y, z + 1).getType());
-	}
-
-	/**
-	 * Detects if a Block is protected by a Sign or not.
-	 * Returns the Sign owner if protected, null otherwise.
-	 *
-	 * @param b The block
-	 *
-	 * @return Sign owner name if protected, null otherwise
-	 */
-	private String isProtected(Block b) {
-		final Material blockType = b.getType();
-		List<String[]> signLines;
-		if (blockType == CHEST || blockType == TRAPPED_CHEST) {
-			signLines = SignUtils.getSignsForChest(b);
-		} else if (getProtectedMaterials().contains(blockType)) {
-			signLines = SignUtils.getSignsForBlock(b);
-		} else {
-			return null;
-		}
-		for (String[] sign : signLines) {
-			if (PROTECTION.equals(sign[0])) {
-				return strip(sign[3]);
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Checks if this Protection Sign location would interfer with another Protection sign
-	 *
-	 * @param l
-	 *
-	 * @return
-	 */
-	private boolean canProtect(Location l, String playerName) {
-		final World w = l.getWorld();
-		final int x = l.getBlockX();
-		final int y = l.getBlockY();
-		final int z = l.getBlockZ();
-
-		final String userId = UsernameUtils.getId(playerName);
-		String protecterId;
-
-		protecterId = isProtected(w.getBlockAt(x - 1, y, z));
-		if (protecterId != null && !protecterId.equals(userId)) {
-			return false;
-		}
-
-		protecterId = isProtected(w.getBlockAt(x + 1, y, z));
-		if (protecterId != null && !protecterId.equals(userId)) {
-			return false;
-		}
-
-		protecterId = isProtected(w.getBlockAt(x, y - 1, z));
-		if (protecterId != null && !protecterId.equals(userId)) {
-			return false;
-		}
-
-		protecterId = isProtected(w.getBlockAt(x, y + 1, z));
-		if (protecterId != null && !protecterId.equals(userId)) {
-			return false;
-		}
-
-		protecterId = isProtected(w.getBlockAt(x, y, z - 1));
-		if (protecterId != null && !protecterId.equals(userId)) {
-			return false;
-		}
-
-		protecterId = isProtected(w.getBlockAt(x, y, z + 1));
-		if (protecterId != null && !protecterId.equals(userId)) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/** Removes colors and lowercases the provided String */
-	private String parse(String string) {
-		return strip(string).toLowerCase();
-	}
-
-	/** Removes colors (Both Bukkit and custom) of the provided String */
-	private String strip(String string) {
-		return ChatColor.stripColor(ColorUtils.colorize(string));
+		event.setCancelled(feature.isProtected(b) != null);
 	}
 }
