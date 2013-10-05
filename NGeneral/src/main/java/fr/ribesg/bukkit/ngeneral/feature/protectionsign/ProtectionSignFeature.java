@@ -94,7 +94,7 @@ public class ProtectionSignFeature extends GeneralFeature {
 
 	private final ProtectionSignListener listener;
 
-	public ProtectionSignFeature(NGeneral instance) {
+	public ProtectionSignFeature(final NGeneral instance) {
 		super(instance);
 		listener = new ProtectionSignListener(this);
 	}

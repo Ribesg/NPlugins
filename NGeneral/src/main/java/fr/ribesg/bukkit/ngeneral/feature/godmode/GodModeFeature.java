@@ -14,7 +14,7 @@ public class GodModeFeature extends GeneralFeature {
 
 	private Set<String> godPlayers;
 
-	public GodModeFeature(NGeneral instance) {
+	public GodModeFeature(final NGeneral instance) {
 		super(instance);
 		listener = new GodModeListener(this);
 		executor = new GodModeCommandExecutor(this);

@@ -5,7 +5,7 @@ public abstract class GeneralFeature {
 
 	protected final NGeneral plugin;
 
-	protected GeneralFeature(NGeneral instance) {
+	protected GeneralFeature(final NGeneral instance) {
 		this.plugin = instance;
 	}
 

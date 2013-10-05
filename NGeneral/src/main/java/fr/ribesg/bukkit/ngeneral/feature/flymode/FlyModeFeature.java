@@ -15,7 +15,7 @@ public class FlyModeFeature extends GeneralFeature {
 
 	private Set<String> flyPlayers;
 
-	public FlyModeFeature(NGeneral instance) {
+	public FlyModeFeature(final NGeneral instance) {
 		super(instance);
 		listener = new FlyModeListener(this);
 		executor = new FlyModeCommandExecutor(this);
