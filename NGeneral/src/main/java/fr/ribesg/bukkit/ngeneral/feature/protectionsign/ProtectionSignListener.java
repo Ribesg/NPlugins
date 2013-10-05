@@ -44,14 +44,14 @@ public class ProtectionSignListener implements Listener {
 	private static final String ERROR = "[" + ChatColor.DARK_RED + "Error" + ChatColor.RESET + "]";
 
 	/** The ID of a Post Sign block */
-	private static final int SIGN_POST_ID = Material.SIGN_POST.getId();
+	private static final Material SIGN_POST = Material.SIGN_POST;
 	/** The ID of a Wall Sign block */
-	private static final int WALL_SIGN_ID = Material.WALL_SIGN.getId();
+	private static final Material WALL_SIGN = Material.WALL_SIGN;
 
 	/** The ID of a Chest block */
-	private static final int CHEST_ID         = Material.CHEST.getId();
+	private static final Material CHEST         = Material.CHEST;
 	/** The ID of a Trapped Chest block */
-	private static final int TRAPPED_CHEST_ID = Material.TRAPPED_CHEST.getId();
+	private static final Material TRAPPED_CHEST = Material.TRAPPED_CHEST;
 
 	// ################### //
 	// ## Constant sets ## //
@@ -74,23 +74,23 @@ public class ProtectionSignListener implements Listener {
 	}
 
 	/** Set of block types that can be protected by a Protection sign */
-	private static Set<Integer> protectedMaterials;
+	private static Set<Material> protectedMaterials;
 
 	/** Static lazy getter for {@link #protectedMaterials} */
-	private static Set<Integer> getProtectedMaterials() {
+	private static Set<Material> getProtectedMaterials() {
 		if (protectedMaterials == null) {
 			protectedMaterials = new HashSet<>(11);
-			protectedMaterials.add(Material.BEACON.getId());
-			protectedMaterials.add(Material.BREWING_STAND.getId());
-			protectedMaterials.add(Material.BURNING_FURNACE.getId());
-			protectedMaterials.add(Material.CHEST.getId());
-			protectedMaterials.add(Material.COMMAND.getId());
-			protectedMaterials.add(Material.DISPENSER.getId());
-			protectedMaterials.add(Material.DROPPER.getId());
-			protectedMaterials.add(Material.FURNACE.getId());
-			protectedMaterials.add(Material.HOPPER.getId());
-			protectedMaterials.add(Material.JUKEBOX.getId());
-			protectedMaterials.add(Material.TRAPPED_CHEST.getId());
+			protectedMaterials.add(Material.BEACON);
+			protectedMaterials.add(Material.BREWING_STAND);
+			protectedMaterials.add(Material.BURNING_FURNACE);
+			protectedMaterials.add(Material.CHEST);
+			protectedMaterials.add(Material.COMMAND);
+			protectedMaterials.add(Material.DISPENSER);
+			protectedMaterials.add(Material.DROPPER);
+			protectedMaterials.add(Material.FURNACE);
+			protectedMaterials.add(Material.HOPPER);
+			protectedMaterials.add(Material.JUKEBOX);
+			protectedMaterials.add(Material.TRAPPED_CHEST);
 		}
 		return protectedMaterials;
 	}
@@ -225,18 +225,18 @@ public class ProtectionSignListener implements Listener {
 	 * @return If the block can be broken [by the Player]
 	 */
 	private boolean canBreak(Block b, Player player) {
-		final int blockId = b.getTypeId();
+		final Material blockType = b.getType();
 		final String userId = player != null ? UsernameUtils.getId(player.getName()) : null;
-		if (blockId == SIGN_POST_ID || blockId == WALL_SIGN_ID) {
+		if (blockType == SIGN_POST || blockType == WALL_SIGN) {
 			final Sign sign = (Sign) b.getState();
 			return !sign.getLine(0).equals(PROTECTION) ||
 			       player != null && strip(sign.getLine(3)).equals(userId) ||
 			       player != null && Perms.hasProtectionSignBreak(player);
 		} else {
 			List<String[]> signLines;
-			if (blockId == CHEST_ID || blockId == TRAPPED_CHEST_ID) {
+			if (blockType == CHEST || blockType == TRAPPED_CHEST) {
 				signLines = SignUtils.getSignsForChest(b);
-			} else if (getProtectedMaterials().contains(blockId)) {
+			} else if (getProtectedMaterials().contains(blockType)) {
 				signLines = SignUtils.getSignsForBlock(b);
 			} else {
 				return true;
@@ -262,12 +262,12 @@ public class ProtectionSignListener implements Listener {
 		if (Perms.hasProtectionSignBypass(player)) {
 			return true;
 		}
-		final int blockId = b.getTypeId();
+		final Material blockType = b.getType();
 		final String userId = UsernameUtils.getId(player.getName());
 		List<String[]> signLines;
-		if (blockId == CHEST_ID || blockId == TRAPPED_CHEST_ID) {
+		if (blockType == CHEST || blockType == TRAPPED_CHEST) {
 			signLines = SignUtils.getSignsForChest(b);
-		} else if (getProtectedMaterials().contains(blockId)) {
+		} else if (getProtectedMaterials().contains(blockType)) {
 			signLines = SignUtils.getSignsForBlock(b);
 		} else {
 			return true;
@@ -299,12 +299,12 @@ public class ProtectionSignListener implements Listener {
 		final int y = l.getBlockY();
 		final int z = l.getBlockZ();
 
-		return getProtectedMaterials().contains(w.getBlockTypeIdAt(x - 1, y, z)) ||
-		       getProtectedMaterials().contains(w.getBlockTypeIdAt(x + 1, y, z)) ||
-		       getProtectedMaterials().contains(w.getBlockTypeIdAt(x, y - 1, z)) ||
-		       getProtectedMaterials().contains(w.getBlockTypeIdAt(x, y + 1, z)) ||
-		       getProtectedMaterials().contains(w.getBlockTypeIdAt(x, y, z - 1)) ||
-		       getProtectedMaterials().contains(w.getBlockTypeIdAt(x, y, z + 1));
+		return getProtectedMaterials().contains(w.getBlockAt(x - 1, y, z).getType()) ||
+		       getProtectedMaterials().contains(w.getBlockAt(x + 1, y, z).getType()) ||
+		       getProtectedMaterials().contains(w.getBlockAt(x, y - 1, z).getType()) ||
+		       getProtectedMaterials().contains(w.getBlockAt(x, y + 1, z).getType()) ||
+		       getProtectedMaterials().contains(w.getBlockAt(x, y, z - 1).getType()) ||
+		       getProtectedMaterials().contains(w.getBlockAt(x, y, z + 1).getType());
 	}
 
 	/**
@@ -316,11 +316,11 @@ public class ProtectionSignListener implements Listener {
 	 * @return Sign owner name if protected, null otherwise
 	 */
 	private String isProtected(Block b) {
-		int blockId = b.getTypeId();
+		final Material blockType = b.getType();
 		List<String[]> signLines;
-		if (blockId == CHEST_ID || blockId == TRAPPED_CHEST_ID) {
+		if (blockType == CHEST || blockType == TRAPPED_CHEST) {
 			signLines = SignUtils.getSignsForChest(b);
-		} else if (getProtectedMaterials().contains(blockId)) {
+		} else if (getProtectedMaterials().contains(blockType)) {
 			signLines = SignUtils.getSignsForBlock(b);
 		} else {
 			return null;
