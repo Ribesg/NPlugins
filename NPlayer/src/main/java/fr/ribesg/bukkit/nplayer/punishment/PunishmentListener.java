@@ -22,32 +22,34 @@ public class PunishmentListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerLogin(final PlayerLoginEvent event) {
-		final String playerName = event.getPlayer().getName();
-		final String playerIp = event.getAddress().getHostAddress();
-		if (punishmentDb.isNickBanned(playerName)) {
-			final Punishment ban = punishmentDb.get(playerName, PunishmentType.BAN);
-			String playerBannedMessage;
-			if (ban.isPermanent()) {
-				playerBannedMessage = plugin.getMessages().get(MessageId.player_deniedPermBanned, ban.getReason())[0];
-			} else {
-				playerBannedMessage = plugin.getMessages()
-				                            .get(MessageId.player_deniedTempBanned,
-				                                 ban.getReason(),
-				                                 TimeUtils.toString((ban.getEndDate() - System.currentTimeMillis()) / 1000))[0];
+		if (event.getResult() == PlayerLoginEvent.Result.ALLOWED) {
+			final String playerName = event.getPlayer().getName();
+			final String playerIp = event.getAddress().getHostAddress();
+			if (punishmentDb.isNickBanned(playerName)) {
+				final Punishment ban = punishmentDb.get(playerName, PunishmentType.BAN);
+				String playerBannedMessage;
+				if (ban.isPermanent()) {
+					playerBannedMessage = plugin.getMessages().get(MessageId.player_deniedPermBanned, ban.getReason())[0];
+				} else {
+					playerBannedMessage = plugin.getMessages()
+					                            .get(MessageId.player_deniedTempBanned,
+					                                 ban.getReason(),
+					                                 TimeUtils.toString((ban.getEndDate() - System.currentTimeMillis()) / 1000))[0];
+				}
+				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, playerBannedMessage);
+			} else if (punishmentDb.isIpBanned(playerIp)) {
+				final Punishment ipBan = punishmentDb.get(playerName, PunishmentType.IPBAN);
+				String ipBannedMessage;
+				if (ipBan.isPermanent()) {
+					ipBannedMessage = plugin.getMessages().get(MessageId.player_deniedPermIpBanned, ipBan.getReason())[0];
+				} else {
+					ipBannedMessage = plugin.getMessages()
+					                        .get(MessageId.player_deniedTempIpBanned,
+					                             ipBan.getReason(),
+					                             TimeUtils.toString((ipBan.getEndDate() - System.currentTimeMillis()) / 1000))[0];
+				}
+				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, ipBannedMessage);
 			}
-			event.disallow(PlayerLoginEvent.Result.KICK_BANNED, playerBannedMessage);
-		} else if (punishmentDb.isIpBanned(playerIp)) {
-			final Punishment ipBan = punishmentDb.get(playerName, PunishmentType.IPBAN);
-			String ipBannedMessage;
-			if (ipBan.isPermanent()) {
-				ipBannedMessage = plugin.getMessages().get(MessageId.player_deniedPermIpBanned, ipBan.getReason())[0];
-			} else {
-				ipBannedMessage = plugin.getMessages()
-				                        .get(MessageId.player_deniedTempIpBanned,
-				                             ipBan.getReason(),
-				                             TimeUtils.toString((ipBan.getEndDate() - System.currentTimeMillis()) / 1000))[0];
-			}
-			event.disallow(PlayerLoginEvent.Result.KICK_BANNED, ipBannedMessage);
 		}
 	}
 

@@ -178,6 +178,13 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            true));
 
+		// Feature - NICKNAME FILTER
+		newMessages.add(new Message(MessageId.general_nicknameFilter_invalid,
+		                            "&cInvalid Nick: '%playerName%'",
+		                            new String[] {"%playerName%"},
+		                            null,
+		                            false));
+
 		return newMessages;
 	}
 

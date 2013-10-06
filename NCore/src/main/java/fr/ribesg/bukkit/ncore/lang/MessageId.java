@@ -268,4 +268,6 @@ public enum MessageId {
 	general_protectionsign_accessDenied,
 	general_protectionsign_breakDenied,
 
+	general_nicknameFilter_invalid,
+
 }
