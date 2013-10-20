@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.nplayer;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.IPValidator;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.ncore.utils.TimeUtils;
 import fr.ribesg.bukkit.nplayer.punishment.PunishmentDb;
@@ -12,7 +13,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import sun.net.util.IPAddressUtil;
 
 import java.util.List;
 
@@ -154,7 +154,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		if (res == null) {
 			return false;
 		}
-		boolean isIp = IPAddressUtil.isIPv4LiteralAddress(res.punished) || IPAddressUtil.isIPv6LiteralAddress(res.punished);
+		boolean isIp = IPValidator.isValidIp(res.punished);
 		String ip;
 		if (isIp) {
 			ip = res.punished;
