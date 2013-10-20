@@ -120,8 +120,11 @@ public class ProtectionSignListener implements Listener {
 			case CHEST:
 				if (holder instanceof Chest) {
 					b = ((Chest) holder).getBlock();
-				} else {
+				} else if (holder instanceof DoubleChest) {
 					b = ((DoubleChest) holder).getLocation().getBlock();
+				} else {
+					// We may be in a case of MinecartChest, which cannot be protected
+					return;
 				}
 				break;
 			case BEACON:
