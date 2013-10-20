@@ -14,9 +14,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 
-public class PvpFlagListener extends AbstractListener {
+public class PvpFlagListenerHack extends AbstractListener {
 
-	public PvpFlagListener(final NCuboid instance) {
+	public PvpFlagListenerHack(final NCuboid instance) {
 		super(instance);
 	}
 
