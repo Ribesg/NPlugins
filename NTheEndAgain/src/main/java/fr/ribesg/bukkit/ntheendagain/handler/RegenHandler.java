@@ -38,10 +38,10 @@ public class RegenHandler {
 			public void run() {
 				switch (type) {
 					case 0:
-						hardRegen();
+						hardRegen(false);
 						break;
 					case 1:
-						softRegen();
+						softRegen(false);
 						break;
 					case 2:
 						crystalRegen();
@@ -54,7 +54,7 @@ public class RegenHandler {
 	}
 
 	public void hardRegenOnStop() {
-		hardRegen();
+		hardRegen(true);
 	}
 
 	/*package*/ void regenThenRespawn() {
@@ -68,14 +68,14 @@ public class RegenHandler {
 		}, EndWorldHandler.REGEN_TO_RESPAWN_DELAY);
 	}
 
-	private void hardRegen() {
+	private void hardRegen(final boolean pluginDisabled) {
 		final NTheEndAgain plugin = worldHandler.getPlugin();
 		final World endWorld = worldHandler.getEndWorld();
 		final EndChunks chunks = worldHandler.getChunks();
 
 		plugin.getLogger().info("Regenerating End world \"" + endWorld.getName() + "\"...");
 		kickPlayers();
-		softRegen();
+		softRegen(pluginDisabled);
 
 		final long totalChunks = chunks.size();
 		long i = 0, regen = 0;
@@ -104,7 +104,7 @@ public class RegenHandler {
 		plugin.getLogger().info("Done.");
 	}
 
-	private void softRegen() {
+	private void softRegen(final boolean pluginDisabled) {
 		worldHandler.getChunks().softRegen();
 
 		/*
@@ -113,9 +113,11 @@ public class RegenHandler {
 		 */
 		worldHandler.getEndWorld().getChunkAt(END_SPAWN_CHUNK_X, END_SPAWN_CHUNK_Z).load(true);
 
-		// Launch Slow Soft Regen task
-		worldHandler.setSlowSoftRegeneratorTaskHandler(new SlowSoftRegeneratorTaskHandler(worldHandler));
-		worldHandler.getSlowSoftRegeneratorTaskHandler().run();
+		if (!pluginDisabled) {
+			// Launch Slow Soft Regen task
+			worldHandler.setSlowSoftRegeneratorTaskHandler(new SlowSoftRegeneratorTaskHandler(worldHandler));
+			worldHandler.getSlowSoftRegeneratorTaskHandler().run();
+		}
 	}
 
 	private void crystalRegen() {
