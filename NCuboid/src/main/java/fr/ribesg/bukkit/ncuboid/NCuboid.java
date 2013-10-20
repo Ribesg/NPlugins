@@ -115,7 +115,7 @@ public class NCuboid extends CuboidNode {
 		pm.registerEvents(new InvisibleFlagListener(this), this);
 		pm.registerEvents(new MobFlagListener(this), this);
 		pm.registerEvents(new PassFlagListener(this), this);
-		pm.registerEvents(new PvpFlagListenerHack(this), this);
+		pm.registerEvents(new PvpFlagListener(this), this);
 		pm.registerEvents(new SnowFlagListener(this), this);
 		pm.registerEvents(new TeleportFlagListener(this), this);
 		pm.registerEvents(new UseFlagListener(this), this);
