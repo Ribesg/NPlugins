@@ -3,6 +3,7 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityChangeBlockEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
@@ -10,6 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -42,6 +44,16 @@ public class ExplosionFlagListener extends AbstractListener {
 		if (event.getEntityType() == EntityType.DROPPED_ITEM && event.getCause() == DamageCause.ENTITY_EXPLOSION) {
 			if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.EXPLOSION_ITEM) ||
 			    ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.EXPLOSION_ITEM)) {
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityChangeBlock(final ExtendedEntityChangeBlockEvent ext) {
+		final EntityChangeBlockEvent event = (EntityChangeBlockEvent) ext.getBaseEvent();
+		if (event.getEntityType() == EntityType.ENDER_DRAGON || event.getEntityType() == EntityType.WITHER) {
+			if (ext.getBlockRegion() != null && ext.getBlockRegion().getFlag(Flag.EXPLOSION_BLOCK)) {
 				event.setCancelled(true);
 			}
 		}

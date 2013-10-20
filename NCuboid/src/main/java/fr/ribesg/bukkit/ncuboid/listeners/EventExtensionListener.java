@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
@@ -90,5 +91,11 @@ public class EventExtensionListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		Bukkit.getPluginManager().callEvent(new ExtendedPlayerJoinEvent(getPlugin().getDb(), event));
+	}
+
+	// EntityChangeBlockEvent
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onEntityChangeBlock(final EntityChangeBlockEvent event) {
+		Bukkit.getPluginManager().callEvent(new ExtendedEntityChangeBlockEvent(getPlugin().getDb(), event));
 	}
 }
