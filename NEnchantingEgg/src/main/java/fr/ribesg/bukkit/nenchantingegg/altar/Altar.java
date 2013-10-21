@@ -91,13 +91,15 @@ public class Altar {
 			throw new IllegalStateException();
 		} else {
 			final Location itemDropLocation = centerLocation.toBukkitLocation().clone().add(0.5, 3, 0.5);
-			final Item i = itemDropLocation.getWorld().dropItem(itemDropLocation, is);
-			if (i != null) {
-				i.setPickupDelay(80);
-				i.setVelocity(new Vector(0, -0.25, 0));
-				plugin.getItemListener().getItemMap().put(i, playerName);
-			} else {
-				plugin.getLogger().severe("Unable to spawn the Item!");
+			if (is != null) {
+				final Item i = itemDropLocation.getWorld().dropItem(itemDropLocation, is);
+				if (i != null) {
+					i.setPickupDelay(80);
+					i.setVelocity(new Vector(0, -0.25, 0));
+					plugin.getItemListener().getItemMap().put(i, playerName);
+				} else {
+					plugin.getLogger().severe("Unable to spawn the Item!");
+				}
 			}
 			builder = null;
 

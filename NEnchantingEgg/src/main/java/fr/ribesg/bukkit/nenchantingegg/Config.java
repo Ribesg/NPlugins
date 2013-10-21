@@ -14,6 +14,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 
 	private int    minimumDistanceBetweenTwoAltars;
 	private double repairBoostMultiplier;
+	private double enchantmentBoostMultiplier;
 
 	private Altars altars;
 
@@ -42,7 +43,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 			                   "500");
 		}
 
-		// boostMultiplier. Default: 1.0.
+		// repairBoostMultiplier. Default: 1.0.
 		// Possible values: Positive double
 		setRepairBoostMultiplier(config.getDouble("repairBoostMultiplier", 1.0));
 		if (getRepairBoostMultiplier() <= 0.0) {
@@ -51,6 +52,18 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 			                   MessageId.incorrectValueInConfiguration,
 			                   "config.yml",
 			                   "repairBoostMultiplier",
+			                   "1.0");
+		}
+
+		// enchantmentBoostMultiplier. Default: 1.0.
+		// Possible values: Positive double
+		setEnchantmentBoostMultiplier(config.getDouble("enchantmentBoostMultiplier", 1.0));
+		if (getEnchantmentBoostMultiplier() <= 0.0) {
+			setEnchantmentBoostMultiplier(1.0);
+			plugin.sendMessage(plugin.getServer().getConsoleSender(),
+			                   MessageId.incorrectValueInConfiguration,
+			                   "config.yml",
+			                   "enchantmentBoostMultiplier",
 			                   "1.0");
 		}
 
@@ -97,6 +110,13 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		content.append("# Note: You can't use a value equals to or under 0.0\n");
 		content.append("repairBoostMultiplier: " + getRepairBoostMultiplier() + "\n\n");
 
+		// Enchantment boost multiplier
+		content.append("# The coefficient applied to probabilities of enchantment boost. Default: 1.0\n");
+		content.append("# Note: You can't use a value equals to or under 0.0, and you may prefer\n");
+		content.append("#       to use values close to 1 to prevent breaking everything.\n");
+		content.append("#       Example: 1.1 is an IMPORTANT increase!\n");
+		content.append("enchantmentBoostMultiplier: " + getEnchantmentBoostMultiplier() + "\n\n");
+
 		// Altars
 		content.append("# This stores created altars\n");
 		content.append("altars:\n");
@@ -121,5 +141,13 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 
 	public void setRepairBoostMultiplier(double repairBoostMultiplier) {
 		this.repairBoostMultiplier = repairBoostMultiplier;
+	}
+
+	public double getEnchantmentBoostMultiplier() {
+		return enchantmentBoostMultiplier;
+	}
+
+	public void setEnchantmentBoostMultiplier(double enchantmentBoostMultiplier) {
+		this.enchantmentBoostMultiplier = enchantmentBoostMultiplier;
 	}
 }
