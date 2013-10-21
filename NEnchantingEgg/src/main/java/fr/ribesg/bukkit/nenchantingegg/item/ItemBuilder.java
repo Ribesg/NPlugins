@@ -18,8 +18,6 @@ import java.util.Set;
 /** Based on a main item and some ingredients, builds a new boosted item. */
 public class ItemBuilder {
 
-	private static final boolean ITEMBUILDER_DEBUG = false;
-
 	private static final Random        rand              = new Random();
 	private static       Set<Material> possibleMainItems = null;
 
@@ -183,10 +181,6 @@ public class ItemBuilder {
 		final Material mat = mainItem.getType();
 		final short maxDurability = mat.getMaxDurability();
 
-		if (ITEMBUILDER_DEBUG) {
-			System.out.println("MaxDurability=" + maxDurability);
-		}
-
 		// Get the total durability points sacrificed, in %
 		double repairCount = 0;
 		final Iterator<ItemStack> it = items.iterator();
@@ -199,19 +193,7 @@ public class ItemBuilder {
 			}
 		}
 
-		if (ITEMBUILDER_DEBUG) {
-			System.out.println("RepairCount=" + repairCount);
-		}
-
-		if (ITEMBUILDER_DEBUG) {
-			System.out.println("Applying item cost boost...");
-		}
-
 		repairCount *= getBaseRessourceAmount(mat);
-
-		if (ITEMBUILDER_DEBUG) {
-			System.out.println("RepairCount=" + repairCount);
-		}
 
 		// Get the number of enchantment levels
 		int totalEnchantmentLevel = 0;
@@ -219,33 +201,17 @@ public class ItemBuilder {
 			totalEnchantmentLevel += i;
 		}
 
-		if (ITEMBUILDER_DEBUG) {
-			System.out.println("TotalEnchantmentLevel=" + totalEnchantmentLevel);
-		}
-
 		// Compute base durability boost
 		final double configurableCoef = plugin.getPluginConfig().getRepairBoostMultiplier();
 		double boost = configurableCoef * repairCount / totalEnchantmentLevel;
 
-		if (ITEMBUILDER_DEBUG) {
-			System.out.println("Boost=" + boost);
-		}
-
 		// Add some randomness: boost = 80%*boost + [0-40%]*boost; => boost = [80-120%]*boost;
 		boost = boost - 0.2 * boost + rand.nextFloat() * 0.4 * boost;
-
-		if (ITEMBUILDER_DEBUG) {
-			System.out.println("Boost=" + boost + " (Random)");
-		}
 
 		// Apply durability
 		double finalDurability = mainItem.getDurability() - boost * maxDurability;
 		if (finalDurability < 0) {
 			finalDurability = 0;
-		}
-
-		if (ITEMBUILDER_DEBUG) {
-			System.out.println("FinalDurability=" + finalDurability);
 		}
 
 		mainItem.setDurability((short) finalDurability);
@@ -268,10 +234,6 @@ public class ItemBuilder {
 			}
 		}
 
-		if (ITEMBUILDER_DEBUG) {
-			System.out.println("MagmaCream=" + magmaCream + " ; EyeOfEnder=" + eyeOfEnder);
-		}
-
 		// Reduce amounts to max allowed quantity
 		if (magmaCream > 64) {
 			magmaCream = 64;
@@ -288,16 +250,8 @@ public class ItemBuilder {
 				enchantments += 0.75f + 0.25f * i;
 			}
 
-			if (ITEMBUILDER_DEBUG) {
-				System.out.println("Enchantments=" + enchantments);
-			}
-
 			// Get the total amount of ingredients
 			final int total = magmaCream + eyeOfEnder;
-
-			if (ITEMBUILDER_DEBUG) {
-				System.out.println("Total=" + total);
-			}
 
 			// Get a ratio between 0 and 1 of the total of ingredients
 			double ratio = magmaCream == 0 ? 0 : eyeOfEnder / magmaCream;
@@ -308,16 +262,8 @@ public class ItemBuilder {
 			// Weight the total with the ratio
 			final double weightedTotal = total / 2 + ratio * (total / 2);
 
-			if (ITEMBUILDER_DEBUG) {
-				System.out.println("WeightedTotal=" + weightedTotal);
-			}
-
 			// Get a coef between 0 and 1 from the weightedTotal (Math.exp(something between -1 and 0))
 			final double coef = Math.exp(-(1f - (weightedTotal / 128f)));
-
-			if (ITEMBUILDER_DEBUG) {
-				System.out.println("Coef=" + coef);
-			}
 
 			// Compute probabilities
 			final double[] probabilities = new double[] {coef * boostValues[0][0] + boostValues[0][1] - enchReduce * enchantments,
@@ -338,15 +284,6 @@ public class ItemBuilder {
 				}
 			}
 
-			if (ITEMBUILDER_DEBUG) {
-				System.out.println("Probability+1=" + probabilities[0]);
-				System.out.println("Probability+2=" + probabilities[1]);
-				System.out.println("Probability+3=" + probabilities[2]);
-				System.out.println("Probability+4=" + probabilities[3]);
-				System.out.println("Probability+5=" + probabilities[4]);
-				System.out.println("Probability+6=" + probabilities[5]);
-			}
-
 			// Roll dice
 			final Map<Enchantment, Integer> newEnchantmentsMap = new HashMap<>();
 			for (final Map.Entry<Enchantment, Integer> e : mainItem.getEnchantments().entrySet()) {
@@ -358,14 +295,6 @@ public class ItemBuilder {
 					}
 				}
 				newEnchantmentsMap.put(e.getKey(), Math.min(10, e.getValue() + result));
-
-				if (ITEMBUILDER_DEBUG) {
-					System.out.println("-------------------------------------");
-					System.out.println("\tEnchantment=" + e.getKey().toString());
-					System.out.println("\tOriginalLevel=" + e.getValue());
-					System.out.println("\tResult=" + result);
-					System.out.println("\tFinalLevel=" + Math.min(10, e.getValue() + result));
-				}
 			}
 
 			// Clear enchantments
