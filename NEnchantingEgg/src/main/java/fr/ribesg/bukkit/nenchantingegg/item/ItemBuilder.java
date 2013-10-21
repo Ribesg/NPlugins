@@ -3,22 +3,35 @@ package fr.ribesg.bukkit.nenchantingegg.item;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+/** Based on a main item and some ingredients, builds a new boosted item. */
 public class ItemBuilder {
 
 	private static final boolean ITEMBUILDER_DEBUG = false;
 
-	private static Random        rand              = new Random();
-	private static Set<Material> possibleMainItems = null;
+	private static final Random        rand              = new Random();
+	private static       Set<Material> possibleMainItems = null;
 
+	private static final float[][] boostValues = new float[][] {new float[] {1.3f, -0.05f},
+	                                                            new float[] {1.1f, -0.15f},
+	                                                            new float[] {1.2f, -0.37f},
+	                                                            new float[] {1.4f, -0.68f},
+	                                                            new float[] {1.7f, -1.09f},
+	                                                            new float[] {1.9f, -1.42f}};
+	private static final float     enchReduce  = 0.1f;
+
+	/** List of items that can be boosted */
 	private static Set<Material> getPossibleMainItems() {
 		if (possibleMainItems == null) {
 			possibleMainItems = new HashSet<>();
@@ -72,6 +85,7 @@ public class ItemBuilder {
 		return possibleMainItems;
 	}
 
+	/** The amount of base material needed based on the type of item */
 	private int getBaseRessourceAmount(Material material) {
 		switch (material) {
 			case LEATHER_CHESTPLATE:
@@ -137,6 +151,7 @@ public class ItemBuilder {
 		items = new ArrayList<>();
 	}
 
+	/** Handles the reception of an item */
 	public void addItem(final ItemStack is) {
 		if (getPossibleMainItems().contains(is.getType()) && is.getEnchantments().size() != 0) {
 			mainItem = is;
@@ -147,14 +162,17 @@ public class ItemBuilder {
 	}
 
 	public void computeItem() {
-		if (items != null && mainItem != null) {
+		if (!items.isEmpty() && mainItem != null) {
 			// Step 1: repair
 			repair();
+
+			// Step 2: boost
+			boost();
 
 			// TODO: Other steps
 
 			// Output the item
-			altar.buildItem(mainItem);
+			altar.buildItem(mainItem, items);
 		} else {
 			plugin.getItemProvidedToLockedTransition().doTransition(altar);
 		}
@@ -230,5 +248,88 @@ public class ItemBuilder {
 		}
 
 		mainItem.setDurability((short) finalDurability);
+	}
+
+	private void boost() {
+		// Count the amount of Magma Cream and Eye of Ender sacrificed
+		int magmaCream = 0;
+		int eyeOfEnder = 0;
+		final Iterator<ItemStack> it = items.iterator();
+		ItemStack is;
+		while (it.hasNext()) {
+			is = it.next();
+			if (is.getType() == Material.MAGMA_CREAM) {
+				magmaCream++;
+				it.remove();
+			} else if (is.getType() == Material.EYE_OF_ENDER) {
+				eyeOfEnder++;
+				it.remove();
+			}
+		}
+
+		if (ITEMBUILDER_DEBUG) {
+			System.out.println("MagmaCream=" + magmaCream + " ; EyeOfEnder=" + eyeOfEnder);
+		}
+
+		// Reduce amounts to max allowed quantity
+		if (magmaCream > 64) {
+			magmaCream = 64;
+		}
+		if (eyeOfEnder > 64) {
+			eyeOfEnder = 64;
+		}
+
+		// We do nothing if there's none
+		if (magmaCream != 0 || eyeOfEnder != 0) {
+			// Get the amount of enchantment levels
+			float enchantments = -1f;
+			for (final Integer i : mainItem.getEnchantments().values()) {
+				enchantments += 0.75f + 0.25f * i;
+			}
+
+			// Get the total amount of ingredients
+			final int total = magmaCream + eyeOfEnder;
+
+			// Get a ratio between 0 and 1 of the total of ingredients
+			float ratio = magmaCream == 0 ? 0 : eyeOfEnder / magmaCream;
+			if (ratio > 1) {
+				ratio = 1 / ratio;
+			}
+
+			// Weight the total with the ratio
+			final float weightedTotal = total / 2 + ratio * (total / 2);
+
+			// Get a coef between 0 and 1 from the weightedTotal (Math.exp(something between -1 and 0))
+			final double coef = Math.exp(-(1f - (weightedTotal / 128f)));
+
+			// Compute probabilities
+			final float[] probabilities = new float[] {(float) (coef * boostValues[0][0] + boostValues[0][1] - enchReduce * enchantments),
+			                                           (float) (coef * boostValues[1][0] + boostValues[1][1] - enchReduce * enchantments),
+			                                           (float) (coef * boostValues[2][0] + boostValues[2][1] - enchReduce * enchantments),
+			                                           (float) (coef * boostValues[3][0] + boostValues[3][1] - enchReduce * enchantments),
+			                                           (float) (coef * boostValues[4][0] + boostValues[4][1] - enchReduce * enchantments),
+			                                           (float) (coef * boostValues[5][0] + boostValues[5][1] - enchReduce * enchantments)};
+
+			// Roll dice
+			final Map<Enchantment, Integer> newEnchantmentsMap = new HashMap<>();
+			for (final Map.Entry<Enchantment, Integer> e : mainItem.getEnchantments().entrySet()) {
+				int result = 0;
+				for (int i = 6; i > 0; i--) {
+					if (rand.nextFloat() <= probabilities[i - 1]) {
+						result = i;
+						break;
+					}
+				}
+				newEnchantmentsMap.put(e.getKey(), Math.min(10, e.getValue() + result));
+			}
+
+			// Clear enchantments
+			for (final Enchantment e : Enchantment.values()) {
+				mainItem.removeEnchantment(e);
+			}
+
+			// Apply enchantments
+			mainItem.addUnsafeEnchantments(newEnchantmentsMap);
+		}
 	}
 }

@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Altar {
@@ -85,7 +86,7 @@ public class Altar {
 		}
 	}
 
-	public void buildItem(final ItemStack is) {
+	public void buildItem(final ItemStack is, final List<ItemStack> items) {
 		if (state != AltarState.ITEM_PROVIDED) {
 			throw new IllegalStateException();
 		} else {
@@ -99,6 +100,13 @@ public class Altar {
 				plugin.getLogger().severe("Unable to spawn the Item!");
 			}
 			builder = null;
+
+			for (final ItemStack item : items) {
+				final Item it = itemDropLocation.getWorld().dropItem(itemDropLocation, item);
+				if (it != null) {
+					it.setVelocity(new Vector(0, 0.5, 0));
+				}
+			}
 		}
 	}
 
