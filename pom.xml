@@ -9,7 +9,7 @@
 	<artifactId>NPlugins</artifactId>
 	<packaging>pom</packaging>
 
-	<version>0.4.1-SNAPSHOT</version>
+	<version>0.4.1</version>
 
 	<name>NPlugins</name>
 	<url>https://github.com/Ribesg/NPlugins</url>
