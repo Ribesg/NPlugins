@@ -8,13 +8,13 @@
 	<parent>
 		<groupId>fr.ribesg.bukkit.nplugins</groupId>
 		<artifactId>NPlugins</artifactId>
-		<version>0.4.2-SNAPSHOT</version>
+		<version>0.4.1</version>
 	</parent>
 
 	<groupId>fr.ribesg.bukkit.ncuboid</groupId>
 	<artifactId>NCuboid</artifactId>
 	<name>NCuboid</name>
-	<version>0.4.2-SNAPSHOT</version>
+	<version>0.4.1</version>
 
 	<url>https://github.com/Ribesg/NPlugins/tree/master/NCuboid</url>
 
@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>fr.ribesg.bukkit.ncore</groupId>
 			<artifactId>NCore</artifactId>
-			<version>0.4.2-SNAPSHOT</version>
+			<version>0.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dynmap</groupId>
