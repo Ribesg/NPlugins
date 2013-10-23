@@ -5,7 +5,6 @@ import fr.ribesg.bukkit.ncore.common.MinecraftTime;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.HashMap;
@@ -90,22 +89,18 @@ public class Altars {
 		return perChunk.get(coord);
 	}
 
-	public void timeChange(final String worldName, final MinecraftTime fromMinecraftTime, final MinecraftTime toMinecraftTime) {
+	public void time(final String worldName, final MinecraftTime currentTime) {
 		if (perWorld.containsKey(worldName)) {
-			if (fromMinecraftTime == MinecraftTime.DAY && toMinecraftTime == MinecraftTime.NIGHT) {
+			if (currentTime == MinecraftTime.NIGHT) {
 				for (final Altar a : perWorld.get(worldName)) {
 					if (a.getState() == AltarState.INACTIVE) {
 						plugin.getInactiveToActiveTransition().doTransition(a);
 					}
 				}
-			} else if (fromMinecraftTime == MinecraftTime.NIGHT && toMinecraftTime == MinecraftTime.DAY) {
+			} else {
 				for (final Altar a : perWorld.get(worldName)) {
 					if (a.getState() == AltarState.ACTIVE) {
 						a.hardResetToInactive();
-						Location loc = a.getCenterLocation().toBukkitLocation();
-						if (loc != null) {
-							loc.getWorld().createExplosion(loc, 0f, false);
-						}
 					} else if (a.getState() == AltarState.LOCKED) {
 						a.setState(AltarState.INACTIVE);
 					}

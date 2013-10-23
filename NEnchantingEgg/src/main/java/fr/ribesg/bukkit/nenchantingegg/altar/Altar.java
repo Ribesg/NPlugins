@@ -75,7 +75,7 @@ public class Altar {
 	/** This is called on server stops, prevents Altars from being save with an invalid state */
 	public void hardResetToInactive() {
 		this.state = AltarState.INACTIVE;
-		Location loc = getCenterLocation().toBukkitLocation();
+		final Location loc = getCenterLocation().toBukkitLocation();
 		for (final RelativeBlock r : AltarState.getInactiveStateBlocks()) {
 			final Block b = loc.clone().add(r.getRelativeLocation()).getBlock();
 			b.setType(r.getBlockMaterial());
@@ -84,6 +84,7 @@ public class Altar {
 				r.setAdditionalData(b);
 			}
 		}
+		loc.getWorld().createExplosion(loc, 0f, false);
 	}
 
 	public void buildItem(final ItemStack is, final List<ItemStack> items) {

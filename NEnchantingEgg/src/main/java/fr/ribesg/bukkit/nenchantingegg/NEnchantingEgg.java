@@ -94,7 +94,7 @@ public class NEnchantingEgg extends EnchantingEggNode {
 		//getCommand("theCommand").setExecutor(new NCommandExecutor(this));
 
 		// Tasks
-		Bukkit.getScheduler().runTaskTimer(this, new TimeListenerTask(this), 0, 20);
+		Bukkit.getScheduler().runTaskTimer(this, new TimeListenerTask(this), 100L, 50);
 
 		return true;
 	}
