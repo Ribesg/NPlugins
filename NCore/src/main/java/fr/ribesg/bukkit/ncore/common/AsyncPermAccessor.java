@@ -151,6 +151,8 @@ public final class AsyncPermAccessor {
 		Set<String> playerPerms = this.permissions.get(playerName);
 		if (playerPerms == null) {
 			playerPerms = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+		} else {
+			playerPerms.clear();
 		}
 		for (final PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
 			if (perm.getValue()) {
