@@ -9,6 +9,7 @@ import fr.ribesg.bukkit.ngeneral.feature.protectionsign.ProtectionSignFeature;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
 import fr.ribesg.bukkit.ngeneral.simplefeature.AfkCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.FlySpeedCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.SignColorsListener;
 import fr.ribesg.bukkit.ngeneral.simplefeature.TimeCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.WalkSpeedCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.WeatherCommand;
@@ -28,12 +29,13 @@ public class NGeneral extends GeneralNode {
 	private FlyModeFeature        flyMode;
 	private ProtectionSignFeature protectionSign;
 
-	// Simple commands
-	private FlySpeedCommand  flySpeedCommand;
-	private WalkSpeedCommand walkSpeedCommand;
-	private AfkCommand       afkCommand;
-	private TimeCommand      timeCommand;
-	private WeatherCommand   weatherCommand;
+	// Simple features
+	private FlySpeedCommand    flySpeedCommand;
+	private WalkSpeedCommand   walkSpeedCommand;
+	private AfkCommand         afkCommand;
+	private TimeCommand        timeCommand;
+	private WeatherCommand     weatherCommand;
+	private SignColorsListener signColorsListener;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -110,6 +112,7 @@ public class NGeneral extends GeneralNode {
 		afkCommand = new AfkCommand(this);
 		timeCommand = new TimeCommand(this);
 		weatherCommand = new WeatherCommand(this);
+		signColorsListener = new SignColorsListener(this);
 
 		return true;
 	}
