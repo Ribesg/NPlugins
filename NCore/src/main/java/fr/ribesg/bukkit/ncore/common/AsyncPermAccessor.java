@@ -153,7 +153,9 @@ public final class AsyncPermAccessor {
 			playerPerms = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 		}
 		for (final PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
-			playerPerms.add(perm.getPermission());
+			if (perm.getValue()) {
+				playerPerms.add(perm.getPermission());
+			}
 		}
 		this.permissions.put(playerName, playerPerms);
 	}
