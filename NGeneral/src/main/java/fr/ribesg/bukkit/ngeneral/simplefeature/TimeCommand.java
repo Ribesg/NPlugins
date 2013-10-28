@@ -63,17 +63,20 @@ public class TimeCommand implements CommandExecutor {
 	}
 
 	private long parseValue(final String value) {
-		if ("day".equals(value)) {
-			return MinecraftTime.DAY.start();
-		} else if ("night".equals(value)) {
-			return MinecraftTime.NIGHT.start();
-		} else {
-			try {
-				long l = Long.parseLong(value);
-				return l % MinecraftTime.DAY_LENGTH;
-			} catch (NumberFormatException e) {
-				return -1;
-			}
+		switch (value.toLowerCase()) {
+			case "d":
+			case "day":
+				return MinecraftTime.DAY.start();
+			case "n":
+			case "night":
+				return MinecraftTime.NIGHT.start();
+			default:
+				try {
+					long l = Long.parseLong(value);
+					return l % MinecraftTime.DAY_LENGTH;
+				} catch (NumberFormatException e) {
+					return -1;
+				}
 		}
 	}
 

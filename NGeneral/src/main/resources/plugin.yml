@@ -34,9 +34,11 @@ commands:
       /<command> [Reason]
   time:
     description: Time Command
+    aliases: [t]
     usage: |
-      /<command> <"day"|"night"|value> [world]
+      /<command> <"d"|"day"|"n"|"night"|value> [world]
   weather:
     description: Weather Command
+    aliases: [w]
     usage: |
-      /<command> <"clear"|"rain"|"thunder"> [duration] [world]
+      /<command> <"c"|"clear"|"r"|"rain"|"t"|"thunder"> [duration] [world]

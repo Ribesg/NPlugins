@@ -71,18 +71,21 @@ public class WeatherCommand implements CommandExecutor {
 					return false;
 				}
 				switch (type) {
+					case "c":
 					case "clear":
 						world.setStorm(false);
 						world.setThundering(false);
 						world.setWeatherDuration(duration * 20);
 						world.setThunderDuration(0);
 						break;
+					case "r":
 					case "rain":
 						world.setStorm(true);
 						world.setThundering(false);
 						world.setWeatherDuration(duration * 20);
 						world.setThunderDuration(0);
 						break;
+					case "t":
 					case "thunder":
 						world.setStorm(true);
 						world.setThundering(true);
