@@ -3,10 +3,8 @@ package fr.ribesg.bukkit.ncuboid.beans;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public abstract class GeneralRegion extends Region {
@@ -34,12 +32,9 @@ public abstract class GeneralRegion extends Region {
 	// This is for Dynmap!
 	private final boolean dynmapable;
 
-	// List of person who can allow/dany/flag this Region
-	private final Set<String> admins;
-
 	// Create a new Region, when user select points etc
 	public GeneralRegion(final String worldName, final RegionType type) {
-		this(worldName, type, new Rights(), 0, new Flags(), new FlagAttributes(), new HashSet<String>());
+		this(worldName, type, new Rights(), 0, new Flags(), new FlagAttributes());
 	}
 
 	public GeneralRegion(final String worldName,
@@ -47,8 +42,7 @@ public abstract class GeneralRegion extends Region {
 	                     final Rights rights,
 	                     final int priority,
 	                     final Flags flags,
-	                     final FlagAttributes flagAtts,
-	                     final Set<String> admins) {
+	                     final FlagAttributes flagAtts) {
 		setWorldName(worldName);
 		setType(type);
 		switch (type) {
@@ -64,7 +58,6 @@ public abstract class GeneralRegion extends Region {
 		setPriority(priority);
 		this.flags = flags;
 		this.flagAtts = flagAtts;
-		this.admins = admins;
 	}
 
 	// Location check
@@ -86,7 +79,7 @@ public abstract class GeneralRegion extends Region {
 		return priority;
 	}
 
-	public void setPriority(int priority) {
+	public void setPriority(final int priority) {
 		this.priority = priority;
 	}
 
@@ -94,7 +87,7 @@ public abstract class GeneralRegion extends Region {
 		return type;
 	}
 
-	public void setType(RegionType type) {
+	public void setType(final RegionType type) {
 		this.type = type;
 	}
 
@@ -102,7 +95,7 @@ public abstract class GeneralRegion extends Region {
 		return worldName;
 	}
 
-	public void setWorldName(String worldName) {
+	public void setWorldName(final String worldName) {
 		this.worldName = worldName;
 	}
 
@@ -110,99 +103,83 @@ public abstract class GeneralRegion extends Region {
 		return this.dynmapable;
 	}
 
-	public boolean getFlag(Flag f) {
+	public boolean getFlag(final Flag f) {
 		return flags.getFlag(f);
 	}
 
-	public void setFlag(Flag f, boolean b) {
+	public void setFlag(final Flag f, final boolean b) {
 		flags.setFlag(f, b);
 	}
 
-	public void allowCommand(String command) {
-		rights.allowCommand(command);
-	}
-
-	public void denyGroup(String groupName) {
-		rights.denyGroup(groupName);
-	}
-
-	public boolean isAllowedPlayer(Player p) {
-		return rights.isAllowedPlayer(p);
-	}
-
-	public void allowGroup(String groupName) {
-		rights.allowGroup(groupName);
-	}
-
-	public void denyCommand(String command) {
-		rights.denyCommand(command);
-	}
-
-	public void allowPlayer(String playerName) {
-		rights.allowPlayer(playerName);
-	}
-
-	public boolean isAllowedPlayerName(String playerName) {
-		return rights.isAllowedPlayerName(playerName);
-	}
-
-	public boolean isAllowedCommand(String command) {
-		return rights.isAllowedCommand(command);
-	}
-
-	public void denyPlayer(String playerName) {
-		rights.denyPlayer(playerName);
-	}
-
-	public boolean isAllowedGroupName(String groupName) {
-		return rights.isAllowedGroupName(groupName);
-	}
-
-	public Integer getIntFlagAtt(FlagAtt f) {
+	public Integer getIntFlagAtt(final FlagAtt f) {
 		return flagAtts.getIntFlagAtt(f);
 	}
 
-	public void setIntFlagAtt(FlagAtt f, Integer i) {
+	public void setIntFlagAtt(final FlagAtt f, final Integer i) {
 		flagAtts.setIntFlagAtt(f, i);
 	}
 
-	public Location getLocFlagAtt(FlagAtt f) {
+	public Location getLocFlagAtt(final FlagAtt f) {
 		return flagAtts.getLocFlagAtt(f);
 	}
 
-	public Vector getVectFlagAtt(FlagAtt f) {
-		return flagAtts.getVectFlagAtt(f);
-	}
-
-	public void setLocFlagAtt(FlagAtt f, Location loc) {
+	public void setLocFlagAtt(final FlagAtt f, final Location loc) {
 		flagAtts.setLocFlagAtt(f, loc);
 	}
 
-	public void setVectFlagAtt(FlagAtt f, Vector v) {
+	public Vector getVectFlagAtt(final FlagAtt f) {
+		return flagAtts.getVectFlagAtt(f);
+	}
+
+	public void setVectFlagAtt(final FlagAtt f, final Vector v) {
 		flagAtts.setVectFlagAtt(f, v);
 	}
 
-	public Set<String> getDisallowedCommands() {
-		return rights.getDisallowedCommands();
+	public boolean isUser(final CommandSender sender) {
+		return rights.isUser(sender);
 	}
 
-	public Set<String> getAllowedPlayers() {
-		return rights.getAllowedPlayers();
+	public boolean isUserName(final String name) {
+		return rights.isUserName(name);
+	}
+
+	public boolean isAdmin(final CommandSender sender) {
+		return rights.isAdmin(sender);
+	}
+
+	public boolean isAdminName(final String name) {
+		return rights.isAdminName(name);
+	}
+
+	public Set<String> getUsers() {
+		return rights.getUsers();
+	}
+
+	public Set<String> getAdmins() {
+		return rights.getAdmins();
 	}
 
 	public Set<String> getAllowedGroups() {
 		return rights.getAllowedGroups();
 	}
 
-	public Set<String> getAdmins() {
-		return admins;
+	public Set<String> getDisallowedCommands() {
+		return rights.getDisallowedCommands();
 	}
 
-	public boolean isAdmin(final String playerName) {
-		return admins.contains(playerName);
+	public void removeUser(final String playerName) {
+		rights.removeUser(playerName);
 	}
 
-	public boolean isAdmin(final CommandSender sender) {
-		return isAdmin(sender.getName());
+	public void addUser(final String playerName) {
+		rights.addUser(playerName);
+	}
+
+	public void addAdmin(final String playerName) {
+		rights.addAdmin(playerName);
+	}
+
+	public void removeAdmin(final String playerName) {
+		rights.removeAdmin(playerName);
 	}
 }

@@ -33,7 +33,7 @@ public class BuildFlagListener extends AbstractListener {
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent ext) {
 		final GeneralRegion region = getPlugin().getDb()
 				.getPriorByLocation(ext.getBlockClicked().getRelative(ext.getBlockFace()).getLocation());
-		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(ext.getPlayer())) {
 			ext.setCancelled(true);
 		}
 	}
@@ -41,7 +41,7 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketFill(final PlayerBucketFillEvent ext) {
 		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getBlockClicked().getLocation());
-		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(ext.getPlayer())) {
 			ext.setCancelled(true);
 		}
 	}
@@ -63,7 +63,7 @@ public class BuildFlagListener extends AbstractListener {
 				    event.getItem().getType() == Material.BOAT) {
 					final GeneralRegion region = getPlugin().getDb()
 							.getPriorByLocation(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
-					if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(event.getPlayer())) {
+					if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(event.getPlayer())) {
 						event.setCancelled(true);
 						return;
 					}
@@ -74,7 +74,7 @@ public class BuildFlagListener extends AbstractListener {
 				         event.getItem().getTypeId() <= 2267) {
 					if (ext.getRegion() != null &&
 					    ext.getRegion().getFlag(Flag.BUILD) &&
-					    !ext.getRegion().isAllowedPlayer(event.getPlayer())) {
+					    !ext.getRegion().isUser(event.getPlayer())) {
 						event.setCancelled(true);
 						return;
 					}
@@ -88,7 +88,7 @@ public class BuildFlagListener extends AbstractListener {
 				                                                      Material.REDSTONE_COMPARATOR_ON)) {
 					if (ext.getRegion() != null &&
 					    ext.getRegion().getFlag(Flag.BUILD) &&
-					    !ext.getRegion().isAllowedPlayer(event.getPlayer())) {
+					    !ext.getRegion().isUser(event.getPlayer())) {
 						event.setCancelled(true);
 					}
 				}
@@ -99,7 +99,7 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent ext) {
 		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
-		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(ext.getPlayer())) {
 			ext.setCancelled(true);
 		}
 	}
@@ -107,7 +107,7 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent ext) {
 		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
-		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(ext.getPlayer())) {
 			ext.setCancelled(true);
 		}
 	}
@@ -115,7 +115,7 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockDamage(final BlockDamageEvent ext) {
 		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getBlock().getLocation());
-		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(ext.getPlayer())) {
 			ext.setCancelled(true);
 		}
 	}
@@ -126,7 +126,7 @@ public class BuildFlagListener extends AbstractListener {
 			final HangingBreakByEntityEvent event = (HangingBreakByEntityEvent) ext.getBaseEvent();
 			if (event.getRemover().getType() == EntityType.PLAYER) {
 				final Player player = (Player) event.getRemover();
-				if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.BUILD) && !ext.getRegion().isAllowedPlayer(player)) {
+				if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.BUILD) && !ext.getRegion().isUser(player)) {
 					event.setCancelled(true);
 				}
 			}
@@ -136,7 +136,7 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onHangingPlace(final HangingPlaceEvent ext) {
 		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getEntity().getLocation());
-		if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
+		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(ext.getPlayer())) {
 			ext.setCancelled(true);
 		}
 	}
@@ -146,7 +146,7 @@ public class BuildFlagListener extends AbstractListener {
 		if (event.getAttacker() != null && event.getAttacker().getType() == EntityType.PLAYER) {
 			final Player player = (Player) event.getAttacker();
 			final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getVehicle().getLocation());
-			if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(player)) {
+			if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(player)) {
 				event.setCancelled(true);
 			}
 		}
@@ -156,7 +156,7 @@ public class BuildFlagListener extends AbstractListener {
 	public void onStructureGrow(final StructureGrowEvent ext) {
 		if (ext.isFromBonemeal()) {
 			final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getLocation());
-			if (region != null && region.getFlag(Flag.BUILD) && !region.isAllowedPlayer(ext.getPlayer())) {
+			if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(ext.getPlayer())) {
 				ext.setCancelled(true);
 			}
 		}

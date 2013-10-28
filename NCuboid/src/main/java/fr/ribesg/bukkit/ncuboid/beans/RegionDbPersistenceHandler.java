@@ -19,7 +19,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +36,6 @@ public class RegionDbPersistenceHandler {
 	// Common attributes
 	private static final String WORLD_NAME = "world";
 	private static final String PRIORITY   = "priority";
-	private static final String ADMINS     = "admins";
 
 	// PLAYER attributes
 	private static final String OWNER_NAME       = "owner";
@@ -56,7 +54,8 @@ public class RegionDbPersistenceHandler {
 	private static final String RIGHTS          = "rights";
 
 	// For rights
-	private static final String ALLOWED_PLAYERS     = "allowedPlayers";
+	private static final String ADMINS              = "admins";
+	private static final String USERS               = "users";
 	private static final String ALLOWED_GROUPS      = "allowedGroups";
 	private static final String DISALLOWED_COMMANDS = "disallowedCommands";
 
@@ -127,9 +126,7 @@ public class RegionDbPersistenceHandler {
 		final FlagAttributes attributes = readFlagAttributes(worldSection);
 		final Rights rights = readRights(worldSection);
 
-		final Set<String> admins = new HashSet<>(worldSection.getStringList(ADMINS));
-
-		return new WorldRegion(name, rights, priority, flags, attributes, admins);
+		return new WorldRegion(name, rights, priority, flags, attributes);
 	}
 
 	private static PlayerRegion readPlayerRegion(final ConfigurationSection parent, final String name) {
@@ -148,7 +145,6 @@ public class RegionDbPersistenceHandler {
 		final Flags flags = readFlags(playerSection);
 		final FlagAttributes attributes = readFlagAttributes(playerSection);
 		final Rights rights = readRights(playerSection);
-		final Set<String> admins = new HashSet<>(playerSection.getStringList(ADMINS));
 
 		// Read specific stuff and return corresponding Region
 		switch (type) {
@@ -166,7 +162,6 @@ public class RegionDbPersistenceHandler {
 				                        priority,
 				                        flags,
 				                        attributes,
-				                        admins,
 				                        minCorner,
 				                        maxCorner);
 			default:
@@ -217,10 +212,16 @@ public class RegionDbPersistenceHandler {
 		final Rights rights = new Rights();
 		if (sec.isConfigurationSection(RIGHTS)) {
 			final ConfigurationSection rightsSection = sec.getConfigurationSection(RIGHTS);
-			if (rightsSection.isList(ALLOWED_PLAYERS)) {
-				final List<String> allowedPlayers = rightsSection.getStringList(ALLOWED_PLAYERS);
-				for (final String playerName : allowedPlayers) {
-					rights.allowPlayer(playerName);
+			if (rightsSection.isList(ADMINS)) {
+				final List<String> admins = rightsSection.getStringList(ADMINS);
+				for (final String playerName : admins) {
+					rights.addAdmin(playerName);
+				}
+			}
+			if (rightsSection.isList(USERS)) {
+				final List<String> users = rightsSection.getStringList(USERS);
+				for (final String playerName : users) {
+					rights.addUser(playerName);
 				}
 			}
 			if (rightsSection.isList(ALLOWED_GROUPS)) {
@@ -282,8 +283,6 @@ public class RegionDbPersistenceHandler {
 		writeFlags(sec, region);
 		writeFlagAtts(sec, region);
 		writeRights(sec, region);
-		final List<String> admins = new ArrayList<>(region.getAdmins());
-		sec.set(ADMINS, admins);
 	}
 
 	private static void writePlayerRegion(final ConfigurationSection parent, final PlayerRegion region) {
@@ -311,8 +310,6 @@ public class RegionDbPersistenceHandler {
 		writeFlags(sec, region);
 		writeFlagAtts(sec, region);
 		writeRights(sec, region);
-		final List<String> admins = new ArrayList<>(region.getAdmins());
-		sec.set(ADMINS, admins);
 	}
 
 	private static void writeFlags(final ConfigurationSection parent, final GeneralRegion region) {
@@ -364,10 +361,17 @@ public class RegionDbPersistenceHandler {
 		final ConfigurationSection sec = parent.createSection(RIGHTS);
 		boolean used = false;
 
-		final Set<String> allowedPlayers = region.getAllowedPlayers();
-		if (allowedPlayers != null) {
-			final List<String> allowedPlayersStringList = new ArrayList<>(allowedPlayers);
-			sec.set(ALLOWED_PLAYERS, allowedPlayersStringList);
+		final Set<String> admins = region.getAdmins();
+		if (admins != null) {
+			final List<String> adminsStringList = new ArrayList<>(admins);
+			sec.set(ADMINS, adminsStringList);
+			used = true;
+		}
+
+		final Set<String> users = region.getUsers();
+		if (users != null) {
+			final List<String> usersStringList = new ArrayList<>(users);
+			sec.set(USERS, usersStringList);
 			used = true;
 		}
 

@@ -17,7 +17,7 @@ public class ChatFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerChat(final AsyncPlayerChatEvent event) {
 		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getPlayer().getLocation());
-		if (region != null && region.getFlag(Flag.CHAT) && !region.isAllowedPlayer(event.getPlayer())) {
+		if (region != null && region.getFlag(Flag.CHAT) && !region.isUser(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}

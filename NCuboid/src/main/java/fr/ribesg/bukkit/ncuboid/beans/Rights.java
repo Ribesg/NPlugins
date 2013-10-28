@@ -1,32 +1,37 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncuboid.Perms;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class Rights {
 
-	private Set<String> allowedPlayers;
+	private Set<String> users;
+	private Set<String> admins;
 	private Set<String> allowedGroups;
 	private Set<String> disallowedCommands;
 
 	public Rights() {
 	}
 
-	public Rights(final Set<String> allowedPlayers, final Set<String> allowedGroups, final Set<String> disallowedCommands) {
-		this.allowedPlayers = allowedPlayers;
+	public Rights(final Set<String> users,
+	              final Set<String> admins,
+	              final Set<String> allowedGroups,
+	              final Set<String> disallowedCommands) {
+		this.users = users;
+		this.admins = admins;
 		this.allowedGroups = allowedGroups;
 		this.disallowedCommands = disallowedCommands;
 	}
 
-	public boolean isAllowedPlayer(final Player p) {
-		if (Perms.isAdmin(p) || isAllowedPlayerName(p.getName())) {
+	public boolean isUser(final CommandSender sender) {
+		if (Perms.isAdmin(sender) || isUserName(sender.getName())) {
 			return true;
 		} else if (allowedGroups != null) {
 			for (final String groupName : allowedGroups) {
-				if (p.hasPermission("group." + groupName)) {
+				if (sender.hasPermission("group." + groupName)) {
 					return true;
 				}
 			}
@@ -34,28 +39,51 @@ public class Rights {
 		return false;
 	}
 
-	public boolean isAllowedPlayerName(final String playerName) {
-		return allowedPlayers != null && allowedPlayers.contains(playerName);
+	public boolean isUserName(final String playerName) {
+		return users != null && users.contains(playerName.toLowerCase()) || isAdminName(playerName);
+	}
+
+	public boolean isAdmin(final CommandSender sender) {
+		return Perms.isAdmin(sender) || isAdminName(sender.getName());
+	}
+
+	public boolean isAdminName(final String playerName) {
+		return admins != null && admins.contains(playerName.toLowerCase());
 	}
 
 	public boolean isAllowedGroupName(final String groupName) {
-		return allowedGroups != null && allowedGroups.contains(groupName);
+		return allowedGroups != null && allowedGroups.contains(groupName.toLowerCase());
 	}
 
 	public boolean isAllowedCommand(final String command) {
-		return disallowedCommands == null || !disallowedCommands.contains(command);
+		return disallowedCommands == null || !disallowedCommands.contains(command.toLowerCase());
 	}
 
-	public void allowPlayer(final String playerName) {
-		if (allowedPlayers == null) {
-			allowedPlayers = new HashSet<>();
+	public void addUser(final String playerName) {
+		if (users == null) {
+			users = new HashSet<>();
 		}
-		allowedPlayers.add(playerName.toLowerCase());
+		users.add(playerName.toLowerCase());
 	}
 
-	public void denyPlayer(final String playerName) {
-		if (allowedPlayers != null) {
-			allowedPlayers.remove(playerName.toLowerCase());
+	public void removeUser(final String playerName) {
+		removeAdmin(playerName);
+		if (users != null) {
+			users.remove(playerName.toLowerCase());
+		}
+	}
+
+	public void addAdmin(final String playerName) {
+		addUser(playerName);
+		if (admins == null) {
+			admins = new HashSet<>();
+		}
+		admins.add(playerName.toLowerCase());
+	}
+
+	public void removeAdmin(final String playerName) {
+		if (admins != null) {
+			admins.remove(playerName.toLowerCase());
 		}
 	}
 
@@ -89,8 +117,12 @@ public class Rights {
 		return allowedGroups;
 	}
 
-	public Set<String> getAllowedPlayers() {
-		return allowedPlayers;
+	public Set<String> getUsers() {
+		return users;
+	}
+
+	public Set<String> getAdmins() {
+		return admins;
 	}
 
 	public Set<String> getDisallowedCommands() {

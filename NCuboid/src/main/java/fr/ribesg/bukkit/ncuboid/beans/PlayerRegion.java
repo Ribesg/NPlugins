@@ -5,6 +5,7 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public abstract class PlayerRegion extends GeneralRegion {
@@ -50,10 +51,9 @@ public abstract class PlayerRegion extends GeneralRegion {
 	                    final Rights rights,
 	                    final int priority,
 	                    final Flags flags,
-	                    final FlagAttributes flagAtts,
-	                    final Set<String> admins) {
+	                    final FlagAttributes flagAtts) {
 
-		super(worldName, type, rights, priority, flags, flagAtts, admins);
+		super(worldName, type, rights, priority, flags, flagAtts);
 		setRegionName(regionName);
 		setOwnerName(ownerName);
 		setState(state);
@@ -87,11 +87,11 @@ public abstract class PlayerRegion extends GeneralRegion {
 
 	public abstract String getSizeString();
 
-	public boolean isOwner(CommandSender sender) {
+	public boolean isOwner(final CommandSender sender) {
 		return sender instanceof Player && isOwner(sender.getName());
 	}
 
-	public boolean isOwner(String playerName) {
+	public boolean isOwner(final String playerName) {
 		return this.ownerName.equals(playerName);
 	}
 
@@ -99,7 +99,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		return chunks;
 	}
 
-	public void setChunks(Set<ChunkCoord> chunks) {
+	public void setChunks(final Set<ChunkCoord> chunks) {
 		this.chunks = chunks;
 	}
 
@@ -107,7 +107,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		return regionName;
 	}
 
-	public void setRegionName(String regionName) {
+	public void setRegionName(final String regionName) {
 		this.regionName = regionName;
 	}
 
@@ -115,7 +115,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		return farewellMessage;
 	}
 
-	public void setFarewellMessage(String farewellMessage) {
+	public void setFarewellMessage(final String farewellMessage) {
 		this.farewellMessage = farewellMessage;
 	}
 
@@ -123,7 +123,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		return ownerName;
 	}
 
-	public void setOwnerName(String ownerName) {
+	public void setOwnerName(final String ownerName) {
 		this.ownerName = ownerName;
 	}
 
@@ -131,7 +131,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		return state;
 	}
 
-	public void setState(RegionState state) {
+	public void setState(final RegionState state) {
 		this.state = state;
 	}
 
@@ -139,7 +139,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		return totalSize;
 	}
 
-	public void setTotalSize(long totalSize) {
+	public void setTotalSize(final long totalSize) {
 		this.totalSize = totalSize;
 	}
 
@@ -147,12 +147,41 @@ public abstract class PlayerRegion extends GeneralRegion {
 		return welcomeMessage;
 	}
 
-	public void setWelcomeMessage(String welcomeMessage) {
+	public void setWelcomeMessage(final String welcomeMessage) {
 		this.welcomeMessage = welcomeMessage;
 	}
 
 	@Override
-	public boolean isAdmin(final String playerName) {
-		return isOwner(playerName) || super.isAdmin(playerName);
+	public boolean isUser(final CommandSender sender) {
+		return isOwner(sender.getName()) || super.isUser(sender);
+	}
+
+	@Override
+	public boolean isUserName(final String name) {
+		return isOwner(name) || super.isUserName(name);
+	}
+
+	@Override
+	public boolean isAdmin(final CommandSender sender) {
+		return isOwner(sender.getName()) || super.isAdmin(sender);
+	}
+
+	@Override
+	public boolean isAdminName(final String name) {
+		return isOwner(name) || super.isAdminName(name);
+	}
+
+	@Override
+	public Set<String> getUsers() {
+		final Set<String> result = new HashSet<>(super.getUsers());
+		result.add(getOwnerName());
+		return result;
+	}
+
+	@Override
+	public Set<String> getAdmins() {
+		final Set<String> result = new HashSet<>(super.getAdmins());
+		result.add(getOwnerName());
+		return result;
 	}
 }

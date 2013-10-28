@@ -73,7 +73,7 @@ public class FarmFlagListener extends AbstractListener {
 			if (getAnimals().contains(event.getEntityType()) &&
 			    ext.getEntityRegion() != null &&
 			    ext.getEntityRegion().getFlag(Flag.FARM) &&
-			    !ext.getEntityRegion().isAllowedPlayer(p)) {
+			    !ext.getEntityRegion().isUser(p)) {
 				event.setCancelled(true);
 			}
 		}
@@ -103,7 +103,7 @@ public class FarmFlagListener extends AbstractListener {
 	public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
 		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
 		if (getAnimals().contains(event.getRightClicked().getType())) {
-			if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.FARM) && !ext.getRegion().isAllowedPlayer(event.getPlayer())) {
+			if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.FARM) && !ext.getRegion().isUser(event.getPlayer())) {
 				event.setCancelled(true);
 			}
 		}
@@ -112,7 +112,7 @@ public class FarmFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerShearEntity(final PlayerShearEntityEvent event) {
 		final GeneralRegion cuboid = getPlugin().getDb().getPriorByLocation(event.getEntity().getLocation());
-		if (cuboid != null && cuboid.getFlag(Flag.FARM) && !cuboid.isAllowedPlayer(event.getPlayer())) {
+		if (cuboid != null && cuboid.getFlag(Flag.FARM) && !cuboid.isUser(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}
