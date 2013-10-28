@@ -2,6 +2,8 @@ package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 
+import java.util.Set;
+
 // This is a really different Region type.
 public class WorldRegion extends GeneralRegion {
 
@@ -18,8 +20,13 @@ public class WorldRegion extends GeneralRegion {
 		setIntFlagAtt(FlagAtt.EXPLOSION_BLOCK_DROP, 100);
 	}
 
-	public WorldRegion(final String worldName, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
-		super(worldName, RegionType.WORLD, rights, priority, flags, flagAtts);
+	public WorldRegion(final String worldName,
+	                   final Rights rights,
+	                   final int priority,
+	                   final Flags flags,
+	                   final FlagAttributes flagAtts,
+	                   final Set<String> admins) {
+		super(worldName, RegionType.WORLD, rights, priority, flags, flagAtts, admins);
 	}
 
 	@Override

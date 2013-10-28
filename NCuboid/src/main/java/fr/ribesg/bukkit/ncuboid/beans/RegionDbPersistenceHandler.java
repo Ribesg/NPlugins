@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,7 @@ public class RegionDbPersistenceHandler {
 	// Common attributes
 	private static final String WORLD_NAME = "world";
 	private static final String PRIORITY   = "priority";
+	private static final String ADMINS     = "admins";
 
 	// PLAYER attributes
 	private static final String OWNER_NAME       = "owner";
@@ -125,7 +127,9 @@ public class RegionDbPersistenceHandler {
 		final FlagAttributes attributes = readFlagAttributes(worldSection);
 		final Rights rights = readRights(worldSection);
 
-		return new WorldRegion(name, rights, priority, flags, attributes);
+		final Set<String> admins = new HashSet<>(worldSection.getStringList(ADMINS));
+
+		return new WorldRegion(name, rights, priority, flags, attributes, admins);
 	}
 
 	private static PlayerRegion readPlayerRegion(final ConfigurationSection parent, final String name) {
@@ -144,6 +148,7 @@ public class RegionDbPersistenceHandler {
 		final Flags flags = readFlags(playerSection);
 		final FlagAttributes attributes = readFlagAttributes(playerSection);
 		final Rights rights = readRights(playerSection);
+		final Set<String> admins = new HashSet<>(playerSection.getStringList(ADMINS));
 
 		// Read specific stuff and return corresponding Region
 		switch (type) {
@@ -161,6 +166,7 @@ public class RegionDbPersistenceHandler {
 				                        priority,
 				                        flags,
 				                        attributes,
+				                        admins,
 				                        minCorner,
 				                        maxCorner);
 			default:
@@ -276,7 +282,8 @@ public class RegionDbPersistenceHandler {
 		writeFlags(sec, region);
 		writeFlagAtts(sec, region);
 		writeRights(sec, region);
-
+		final List<String> admins = new ArrayList<>(region.getAdmins());
+		sec.set(ADMINS, admins);
 	}
 
 	private static void writePlayerRegion(final ConfigurationSection parent, final PlayerRegion region) {
@@ -304,6 +311,8 @@ public class RegionDbPersistenceHandler {
 		writeFlags(sec, region);
 		writeFlagAtts(sec, region);
 		writeRights(sec, region);
+		final List<String> admins = new ArrayList<>(region.getAdmins());
+		sec.set(ADMINS, admins);
 	}
 
 	private static void writeFlags(final ConfigurationSection parent, final GeneralRegion region) {

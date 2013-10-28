@@ -50,9 +50,10 @@ public abstract class PlayerRegion extends GeneralRegion {
 	                    final Rights rights,
 	                    final int priority,
 	                    final Flags flags,
-	                    final FlagAttributes flagAtts) {
+	                    final FlagAttributes flagAtts,
+	                    final Set<String> admins) {
 
-		super(worldName, type, rights, priority, flags, flagAtts);
+		super(worldName, type, rights, priority, flags, flagAtts, admins);
 		setRegionName(regionName);
 		setOwnerName(ownerName);
 		setState(state);
@@ -148,5 +149,10 @@ public abstract class PlayerRegion extends GeneralRegion {
 
 	public void setWelcomeMessage(String welcomeMessage) {
 		this.welcomeMessage = welcomeMessage;
+	}
+
+	@Override
+	public boolean isAdmin(final String playerName) {
+		return isOwner(playerName) || super.isAdmin(playerName);
 	}
 }

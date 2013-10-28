@@ -25,6 +25,9 @@ public enum MessageId {
 	// ##################### //
 
 	cuboid_actionCancelledByCuboid,
+	cuboid_doesNotExist,
+	cuboid_notCuboidOwner,
+	cuboid_notCuboidAdmin,
 
 	cuboid_blockInSelection,
 	cuboid_blockNotInSelection,
@@ -43,9 +46,24 @@ public enum MessageId {
 	cuboid_cmdCreateNoValidSelection,
 	cuboid_cmdCreateForbiddenName,
 
-	cuboid_cmdDeleteDoesNotExist,
 	cuboid_cmdDeleteDeleted,
 	cuboid_cmdDeleteNoPermission,
+
+	cuboid_cmdFlagUnknownFlag,
+	cuboid_cmdFlagUnknownValue,
+	cuboid_cmdFlagAlreadySet,
+	cuboid_cmdFlagSet,
+	cuboid_cmdFlagNoPermission,
+
+	cuboid_cmdAdminAdded,
+	cuboid_cmdAdminAlreadyAdmin,
+	cuboid_cmdAdminRemoved,
+	cuboid_cmdAdminNotAdmin,
+
+	cuboid_cmdUserAdded,
+	cuboid_cmdUserAlreadyUser,
+	cuboid_cmdUserRemoved,
+	cuboid_cmdUserNotUser,
 
 	// ########################## //
 	// ## NTheEndAgain related ## //

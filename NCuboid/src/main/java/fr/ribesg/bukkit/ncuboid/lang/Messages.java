@@ -31,12 +31,27 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%region%"},
 		                            null,
 		                            true));
+		newMessages.add(new Message(MessageId.cuboid_doesNotExist,
+		                            "&cThe region '%region%' does not exist!",
+		                            new String[] {"%region%"},
+		                            null,
+		                            true));
 		newMessages.add(new Message(MessageId.noPermissionForCommand,
 		                            "&cYou do not have the permission to use that command",
 		                            null,
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null, true));
+		newMessages.add(new Message(MessageId.cuboid_notCuboidOwner,
+		                            "&cYou need to be the owner of '%region%'!",
+		                            new String[] {"%region%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_notCuboidAdmin,
+		                            "&cYou don't have the right to modify '%region%'!",
+		                            new String[] {"%region%"},
+		                            null,
+		                            true));
 
 		// PlayerStickListener
 		newMessages.add(new Message(MessageId.cuboid_firstPointSelected,
@@ -94,7 +109,6 @@ public class Messages extends AbstractMessages {
 		                            true));
 
 		// Command - DELETE
-		newMessages.add(new Message(MessageId.cuboid_cmdDeleteDoesNotExist, "&cThis region does not exist!", null, null, true));
 		newMessages.add(new Message(MessageId.cuboid_cmdDeleteDeleted,
 		                            "&aThe region &6%regionName% &ahas been deleted!",
 		                            new String[] {"%regionName%"},
@@ -105,6 +119,78 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%regionName%"},
 		                            null,
 		                            true));
+
+		// Command - FLAG
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagUnknownFlag,
+		                            "&cUnknown flag: '%flagName%'",
+		                            new String[] {"%flagName%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagUnknownValue,
+		                            "&cUnknown value: '%value%'",
+		                            new String[] {"%value%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagAlreadySet,
+		                            "&6The flag '%flag%' is already set to '%value%' for region '%region%'",
+		                            new String[] {"%flag%", "%value%", "%region%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagAlreadySet,
+		                            "&aThe flag '%flag%' has been set to '%value%' for region '%region%'",
+		                            new String[] {"%flag%", "%value%", "%region%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagNoPermission,
+		                            "&cYou don't have the permissions to use flag '%flagName%'",
+		                            new String[] {"%flagName%"},
+		                            null,
+		                            true));
+
+		// Command - ADMIN
+		newMessages.add(new Message(MessageId.cuboid_cmdAdminAdded,
+		                            "&a%player% has been added to admins of '%region%'",
+		                            new String[] {"%player%", "%region%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdAdminAlreadyAdmin,
+		                            "&c%player% is already admin of '%region%'",
+		                            new String[] {"%player%", "%region%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdAdminRemoved,
+		                            "&a%player% is no longer admin of '%region%'",
+		                            new String[] {"%player%", "%region%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdAdminRemoved,
+		                            "&c%player% is not admin of '%region%'",
+		                            new String[] {"%player%", "%region%"},
+		                            null,
+		                            true));
+
+		// Command - USER
+		newMessages.add(new Message(MessageId.cuboid_cmdUserAdded,
+		                            "&a%player% has been added to users of '%region%'",
+		                            new String[] {"%player%", "%region%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdUserAlreadyUser,
+		                            "&c%player% is already user of '%region%'",
+		                            new String[] {"%player%", "%region%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdUserRemoved,
+		                            "&a%player% is no longer user of '%region%'",
+		                            new String[] {"%player%", "%region%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdUserRemoved,
+		                            "&c%player% is not user of '%region%'",
+		                            new String[] {"%player%", "%region%"},
+		                            null,
+		                            true));
+
 		return newMessages;
 	}
 }

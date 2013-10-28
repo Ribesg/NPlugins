@@ -21,7 +21,7 @@ public class EndermanGriefFlagListener extends AbstractListener {
 	public void onEntityChangeBlock(final EntityChangeBlockEvent event) {
 		if (event.getEntityType() == EntityType.ENDERMAN) {
 			final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
-			if (region != null && region.getFlag(Flag.ENDERMAN)) {
+			if (region != null && region.getFlag(Flag.ENDERMANGRIEF)) {
 				((Enderman) event.getEntity()).setCarriedMaterial(Material.JACK_O_LANTERN.getNewData((byte) 0));
 				event.setCancelled(true);
 			}

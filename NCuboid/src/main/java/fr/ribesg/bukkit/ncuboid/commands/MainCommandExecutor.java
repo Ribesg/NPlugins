@@ -3,8 +3,10 @@ package fr.ribesg.bukkit.ncuboid.commands;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
+import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AdminUserSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.CreateSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.DeleteSubcmdExecutor;
+import fr.ribesg.bukkit.ncuboid.commands.subexecutors.FlagSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.ReloadSubcmdExecutor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,13 +29,20 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.aliasesMap.put("rld", "reload");
 		this.aliasesMap.put("c", "create");
 		this.aliasesMap.put("d", "delete");
+		this.aliasesMap.put("del", "delete");
 		this.aliasesMap.put("rm", "delete");
 		this.aliasesMap.put("remove", "delete");
+		this.aliasesMap.put("a", "admin");
+		this.aliasesMap.put("u", "user");
+		this.aliasesMap.put("f", "flag");
 
 		this.executorsMap = new HashMap<>(3);
 		this.executorsMap.put("create", new CreateSubcmdExecutor(instance));
 		this.executorsMap.put("delete", new DeleteSubcmdExecutor(instance));
 		this.executorsMap.put("reload", new ReloadSubcmdExecutor(instance));
+		this.executorsMap.put("admin", new AdminUserSubcmdExecutor(instance, true));
+		this.executorsMap.put("user", new AdminUserSubcmdExecutor(instance, false));
+		this.executorsMap.put("flag", new FlagSubcmdExecutor(instance));
 	}
 
 	@Override
@@ -47,11 +56,7 @@ public class MainCommandExecutor implements CommandExecutor {
 					return cmdDefault(sender);
 				} else {
 					final AbstractSubcmdExecutor executor = getExecutor(args[0].toLowerCase());
-					if (executor == null) {
-						return false;
-					} else {
-						return executor.execute(sender, args);
-					}
+					return executor != null && executor.execute(sender, args);
 				}
 			}
 		} else {

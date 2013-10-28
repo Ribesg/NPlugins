@@ -24,7 +24,7 @@ public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 		} else if (Perms.hasDelete(sender)) {
 			final PlayerRegion region = getPlugin().getDb().getByName(args[0]);
 			if (region == null) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDoesNotExist);
+				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
 			} else {
 				if (Perms.isAdmin(sender) || region.isOwner(sender)) {

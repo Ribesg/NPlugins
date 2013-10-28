@@ -2,9 +2,11 @@ package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public abstract class GeneralRegion extends Region {
@@ -32,9 +34,12 @@ public abstract class GeneralRegion extends Region {
 	// This is for Dynmap!
 	private final boolean dynmapable;
 
+	// List of person who can allow/dany/flag this Region
+	private final Set<String> admins;
+
 	// Create a new Region, when user select points etc
 	public GeneralRegion(final String worldName, final RegionType type) {
-		this(worldName, type, new Rights(), 0, new Flags(), new FlagAttributes());
+		this(worldName, type, new Rights(), 0, new Flags(), new FlagAttributes(), new HashSet<String>());
 	}
 
 	public GeneralRegion(final String worldName,
@@ -42,7 +47,8 @@ public abstract class GeneralRegion extends Region {
 	                     final Rights rights,
 	                     final int priority,
 	                     final Flags flags,
-	                     final FlagAttributes flagAtts) {
+	                     final FlagAttributes flagAtts,
+	                     final Set<String> admins) {
 		setWorldName(worldName);
 		setType(type);
 		switch (type) {
@@ -58,6 +64,7 @@ public abstract class GeneralRegion extends Region {
 		setPriority(priority);
 		this.flags = flags;
 		this.flagAtts = flagAtts;
+		this.admins = admins;
 	}
 
 	// Location check
@@ -185,5 +192,17 @@ public abstract class GeneralRegion extends Region {
 
 	public Set<String> getAllowedGroups() {
 		return rights.getAllowedGroups();
+	}
+
+	public Set<String> getAdmins() {
+		return admins;
+	}
+
+	public boolean isAdmin(final String playerName) {
+		return admins.contains(playerName);
+	}
+
+	public boolean isAdmin(final CommandSender sender) {
+		return isAdmin(sender.getName());
 	}
 }

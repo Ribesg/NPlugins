@@ -12,7 +12,6 @@ import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
 
-import java.util.Random;
 import java.util.logging.Logger;
 
 public class DynmapBridge {
@@ -22,8 +21,6 @@ public class DynmapBridge {
 	private static final String DYNMAP_PLUGIN_NAME = "dynmap";
 	private static final String MARKERSET_ID       = "ncuboids";
 	private static final String MARKERSET_NAME     = "Regions";
-
-	private static final Random rand = new Random();
 
 	private final MarkerSet markerSet;
 

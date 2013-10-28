@@ -8,7 +8,7 @@ public enum Flag {
 	CLOSED,
 	CREATIVE,
 	DROP,
-	ENDERMAN,
+	ENDERMANGRIEF,
 	EXPLOSION_BLOCK,
 	EXPLOSION_PLAYER,
 	EXPLOSION_ITEM,
@@ -47,7 +47,7 @@ public enum Flag {
 			} else if (in.equals("EXPLOSIONITEM") || in.equals("EXP_ITEM") || in.equals("EXPITEM")) {
 				f = EXPLOSION_ITEM;
 			} else if (in.equals("ENDERMAN")) {
-				f = ENDERMAN;
+				f = ENDERMANGRIEF;
 			} else if (in.equals("HIDE")) {
 				f = HIDDEN;
 			} else if (in.equals("PERM")) {
@@ -56,6 +56,8 @@ public enum Flag {
 				f = TELEPORT;
 			} else if (in.equals("WARP")) {
 				f = WARPGATE;
+			} else {
+				f = null;
 			}
 		}
 		return f;

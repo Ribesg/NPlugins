@@ -29,7 +29,7 @@ public class Flags {
 		defaultFlagMap.put(Flag.CLOSED, false);
 		defaultFlagMap.put(Flag.CREATIVE, false);
 		defaultFlagMap.put(Flag.DROP, false);
-		defaultFlagMap.put(Flag.ENDERMAN, true);
+		defaultFlagMap.put(Flag.ENDERMANGRIEF, true);
 		defaultFlagMap.put(Flag.EXPLOSION_BLOCK, true);
 		defaultFlagMap.put(Flag.EXPLOSION_PLAYER, false);
 		defaultFlagMap.put(Flag.EXPLOSION_ITEM, true);

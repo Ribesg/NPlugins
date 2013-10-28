@@ -33,6 +33,7 @@ public class CuboidRegion extends PlayerRegion {
 	                    final int priority,
 	                    final Flags flags,
 	                    final FlagAttributes flagAtts,
+	                    final Set<String> admins,
 	                    final NLocation minCorner,
 	                    final NLocation maxCorner) {
 
@@ -47,7 +48,8 @@ public class CuboidRegion extends PlayerRegion {
 		      rights,
 		      priority,
 		      flags,
-		      flagAtts);
+		      flagAtts,
+		      admins);
 
 		setMinCorner(minCorner);
 		setMaxCorner(maxCorner);
