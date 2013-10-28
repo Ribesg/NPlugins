@@ -32,7 +32,7 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 			if (c == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
-			} else if (!c.isAdmin(sender.getName())) {
+			} else if (!c.isAdmin(sender)) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidAdmin, args[0]);
 				return true;
 			}
