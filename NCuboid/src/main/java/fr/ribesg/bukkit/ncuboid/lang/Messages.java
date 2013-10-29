@@ -136,7 +136,7 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%flag%", "%value%", "%region%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.cuboid_cmdFlagAlreadySet,
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagSet,
 		                            "&aThe flag '%flag%' is now '%value%' for region '%region%'",
 		                            new String[] {"%flag%", "%value%", "%region%"},
 		                            null,
@@ -152,7 +152,7 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            true));
 
-		// Command - FLAG
+		// Command - FLAG ATTRIBUTE
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttUnknownFlagAtt,
 		                            "&cUnknown flag attribute: '%flagAttName%'",
 		                            new String[] {"%flagAttName%"},
