@@ -6,6 +6,7 @@ import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AdminUserSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.CreateSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.DeleteSubcmdExecutor;
+import fr.ribesg.bukkit.ncuboid.commands.subexecutors.FlagAttributeSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.FlagSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.ReloadSubcmdExecutor;
 import org.bukkit.command.Command;
@@ -35,6 +36,9 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.aliasesMap.put("a", "admin");
 		this.aliasesMap.put("u", "user");
 		this.aliasesMap.put("f", "flag");
+		this.aliasesMap.put("fa", "flagattribute");
+		this.aliasesMap.put("flagatt", "flagattribute");
+		this.aliasesMap.put("flagattributes", "flagattribute");
 
 		this.executorsMap = new HashMap<>(3);
 		this.executorsMap.put("create", new CreateSubcmdExecutor(instance));
@@ -43,6 +47,7 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.executorsMap.put("admin", new AdminUserSubcmdExecutor(instance, true));
 		this.executorsMap.put("user", new AdminUserSubcmdExecutor(instance, false));
 		this.executorsMap.put("flag", new FlagSubcmdExecutor(instance));
+		this.executorsMap.put("flagattribute", new FlagAttributeSubcmdExecutor(instance));
 	}
 
 	@Override

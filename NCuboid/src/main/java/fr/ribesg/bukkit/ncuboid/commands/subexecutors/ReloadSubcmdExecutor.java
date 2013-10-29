@@ -3,8 +3,8 @@ package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
-import fr.ribesg.bukkit.ncuboid.beans.RegionDbPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDbPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -14,17 +14,15 @@ import java.io.IOException;
 
 public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final String USAGE = ChatColor.RED + "Usage : /cuboid reload <regions|config|messages>";
-
 	public ReloadSubcmdExecutor(final NCuboid instance) {
 		super(instance);
+		setUsage(ChatColor.RED + "Usage : /cuboid reload <regions|config|messages>");
 	}
 
 	@Override
 	public boolean exec(final CommandSender sender, final String[] args) {
 		if (args.length != 1) {
-			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
-			return true;
+			return false;
 		} else if (Perms.hasReload(sender)) {
 			switch (args[0]) {
 				case "regions":
@@ -65,8 +63,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 						return true;
 					}
 				default:
-					sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
-					return true;
+					return false;
 			}
 		} else {
 			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);

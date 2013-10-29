@@ -1,6 +1,7 @@
 package fr.ribesg.bukkit.ncuboid;
 
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
 import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
@@ -11,40 +12,13 @@ public class Perms {
 	// Cuboid node permissions
 	private static final String ADMIN                = "ncuboid.admin";
 	private static final String USER                 = "ncuboid.user";
-	private static final String FLAG_BOOSTER         = "ncuboid.flag.booster";
-	private static final String FLAG_BUILD           = "ncuboid.flag.build";
-	private static final String FLAG_CHAT            = "ncuboid.flag.chat";
-	private static final String FLAG_CHEST           = "ncuboid.flag.chest";
-	private static final String FLAG_CLOSED          = "ncuboid.flag.closed";
-	private static final String FLAG_CREATIVE        = "ncuboid.flag.creative";
-	private static final String FLAG_DROP            = "ncuboid.flag.drop";
-	private static final String FLAG_ENDERMANGRIEF   = "ncuboid.flag.endermangrief";
-	private static final String FLAG_EXPLOSIONBLOCK  = "ncuboid.flag.explosionblock";
-	private static final String FLAG_EXPLOSIONITEM   = "ncuboid.flag.explosionitem";
-	private static final String FLAG_EXPLOSIONPLAYER = "ncuboid.flag.explosionplayer";
-	private static final String FLAG_FARM            = "ncuboid.flag.farm";
-	private static final String FLAG_FEED            = "ncuboid.flag.feed";
-	private static final String FLAG_FIRE            = "ncuboid.flag.fire";
-	private static final String FLAG_GOD             = "ncuboid.flag.god";
-	private static final String FLAG_HEAL            = "ncuboid.flag.heal";
-	private static final String FLAG_HIDDEN          = "ncuboid.flag.hidden";
-	private static final String FLAG_INVISIBLE       = "ncuboid.flag.invisible";
-	private static final String FLAG_JAIL            = "ncuboid.flag.jail";
-	private static final String FLAG_MOB             = "ncuboid.flag.mob";
-	private static final String FLAG_PASS            = "ncuboid.flag.pass";
-	private static final String FLAG_PERMANENT       = "ncuboid.flag.permanent";
-	private static final String FLAG_PICKUP          = "ncuboid.flag.pickup";
-	private static final String FLAG_PVP             = "ncuboid.flag.pvp";
-	private static final String FLAG_SNOW            = "ncuboid.flag.snow";
-	private static final String FLAG_TELEPORT        = "ncuboid.flag.teleport";
-	private static final String FLAG_USE             = "ncuboid.flag.use";
-	private static final String FLAG_WARPGATE        = "ncuboid.flag.warpgate";
 	private static final String SEE_INVISIBLE_CUBOID = "ncuboid.seeinvisible";
 	private static final String CMD_GENERAL          = "ncuboid.cmd.cuboid";
 	private static final String CMD_RELOAD           = "ncuboid.cmd.reload";
 	private static final String CMD_CREATE           = "ncuboid.cmd.create";
 	private static final String CMD_DELETE           = "ncuboid.cmd.delete";
 	private static final String CMD_FLAG             = "ncuboid.cmd.flag";
+	private static final String CMD_FLAGATTRIBUTE    = "ncuboid.cmd.flagattribute";
 	private static final String CMD_ALLOW            = "ncuboid.cmd.allow";
 	private static final String CMD_DENY             = "ncuboid.cmd.deny";
 
@@ -86,11 +60,33 @@ public class Perms {
 		return flagPermissions.get(f);
 	}
 
-	public static boolean isAdmin(CommandSender sender) {
+	// Flag attributes permissions, linked to their related Flag permission
+	private static Map<FlagAtt, String> flagAttributesPermissions;
+
+	private static String getFlagAttributePermission(final FlagAtt fa) {
+		if (flagAttributesPermissions == null) {
+			flagAttributesPermissions = new HashMap<>(FlagAtt.values().length);
+			flagAttributesPermissions.put(FlagAtt.HEAL_AMOUNT, "ncuboid.flag.heal");
+			flagAttributesPermissions.put(FlagAtt.HEAL_TIMER, "ncuboid.flag.heal");
+			flagAttributesPermissions.put(FlagAtt.HEAL_MIN_HEALTH, "ncuboid.flag.heal");
+			flagAttributesPermissions.put(FlagAtt.HEAL_MAX_HEALTH, "ncuboid.flag.heal");
+			flagAttributesPermissions.put(FlagAtt.FEED_AMOUNT, "ncuboid.flag.feed");
+			flagAttributesPermissions.put(FlagAtt.FEED_TIMER, "ncuboid.flag.feed");
+			flagAttributesPermissions.put(FlagAtt.FEED_MIN_FOOD, "ncuboid.flag.feed");
+			flagAttributesPermissions.put(FlagAtt.FEED_MAX_FOOD, "ncuboid.flag.feed");
+			flagAttributesPermissions.put(FlagAtt.EXPLOSION_BLOCK_DROP, "ncuboid.flag.explosionblock");
+			flagAttributesPermissions.put(FlagAtt.EXTERNAL_POINT, "ncuboid.flag.pass");
+			flagAttributesPermissions.put(FlagAtt.INTERNAL_POINT, "ncuboid.flag.closed");
+			flagAttributesPermissions.put(FlagAtt.BOOSTER_VECTOR, "ncuboid.flag.booster");
+		}
+		return flagAttributesPermissions.get(fa);
+	}
+
+	public static boolean isAdmin(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasFlag(CommandSender sender, Flag f) {
+	public static boolean hasFlag(final CommandSender sender, final Flag f) {
 		final String perm = getFlagPermission(f);
 		boolean user;
 		switch (f) {
@@ -114,35 +110,53 @@ public class Perms {
 		return isAdmin(sender) || sender.hasPermission(perm) || user && sender.hasPermission(USER);
 	}
 
-	public static boolean hasSeeInvisibleCuboid(CommandSender sender) {
+	public static boolean hasFlagAttribute(final CommandSender sender, final FlagAtt fa) {
+		final String perm = getFlagAttributePermission(fa);
+		boolean user;
+		switch (fa) {
+			case EXPLOSION_BLOCK_DROP:
+				user = true;
+				break;
+			default:
+				user = false;
+				break;
+		}
+		return isAdmin(sender) || sender.hasPermission(perm) || user && sender.hasPermission(USER);
+	}
+
+	public static boolean hasSeeInvisibleCuboid(final CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(SEE_INVISIBLE_CUBOID);
 	}
 
-	public static boolean hasGeneral(CommandSender sender) {
+	public static boolean hasGeneral(final CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(CMD_GENERAL) || sender.hasPermission(USER);
 	}
 
-	public static boolean hasReload(CommandSender sender) {
+	public static boolean hasReload(final CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(CMD_RELOAD);
 	}
 
-	public static boolean hasCreate(CommandSender sender) {
+	public static boolean hasCreate(final CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(CMD_CREATE) || sender.hasPermission(USER);
 	}
 
-	public static boolean hasDelete(CommandSender sender) {
+	public static boolean hasDelete(final CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(CMD_DELETE) || sender.hasPermission(USER);
 	}
 
-	public static boolean hasFlag(CommandSender sender) {
+	public static boolean hasFlag(final CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(CMD_FLAG) || sender.hasPermission(USER);
 	}
 
-	public static boolean hasAdmin(CommandSender sender) {
+	public static boolean hasFlagAttribute(final CommandSender sender) {
+		return isAdmin(sender) || sender.hasPermission(CMD_FLAGATTRIBUTE) || sender.hasPermission(USER);
+	}
+
+	public static boolean hasAdmin(final CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(CMD_ALLOW) || sender.hasPermission(USER);
 	}
 
-	public static boolean hasUser(CommandSender sender) {
+	public static boolean hasUser(final CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(CMD_DENY) || sender.hasPermission(USER);
 	}
 }

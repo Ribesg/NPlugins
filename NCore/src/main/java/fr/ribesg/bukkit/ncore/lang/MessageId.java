@@ -54,6 +54,12 @@ public enum MessageId {
 	cuboid_cmdFlagAlreadySet,
 	cuboid_cmdFlagSet,
 	cuboid_cmdFlagNoPermission,
+	cuboid_cmdFlagValue,
+
+	cuboid_cmdFlagAttUnknownFlagAtt,
+	cuboid_cmdFlagAttNoPermission,
+	cuboid_cmdFlagAttValue,
+	cuboid_cmdFlagAttSet,
 
 	cuboid_cmdAdminAdded,
 	cuboid_cmdAdminAlreadyAdmin,

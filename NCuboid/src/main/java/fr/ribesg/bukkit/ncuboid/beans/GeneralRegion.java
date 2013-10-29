@@ -111,28 +111,32 @@ public abstract class GeneralRegion extends Region {
 		flags.setFlag(f, b);
 	}
 
-	public Integer getIntFlagAtt(final FlagAtt f) {
-		return flagAtts.getIntFlagAtt(f);
+	public Integer getIntFlagAtt(final FlagAtt fa) {
+		return flagAtts.getIntFlagAtt(fa);
 	}
 
-	public void setIntFlagAtt(final FlagAtt f, final Integer i) {
-		flagAtts.setIntFlagAtt(f, i);
+	public void setIntFlagAtt(final FlagAtt fa, final Integer i) {
+		flagAtts.setIntFlagAtt(fa, i);
 	}
 
-	public Location getLocFlagAtt(final FlagAtt f) {
-		return flagAtts.getLocFlagAtt(f);
+	public Location getLocFlagAtt(final FlagAtt fa) {
+		return flagAtts.getLocFlagAtt(fa);
 	}
 
-	public void setLocFlagAtt(final FlagAtt f, final Location loc) {
-		flagAtts.setLocFlagAtt(f, loc);
+	public void setLocFlagAtt(final FlagAtt fa, final Location loc) {
+		flagAtts.setLocFlagAtt(fa, loc);
 	}
 
-	public Vector getVectFlagAtt(final FlagAtt f) {
-		return flagAtts.getVectFlagAtt(f);
+	public Vector getVectFlagAtt(final FlagAtt fa) {
+		return flagAtts.getVectFlagAtt(fa);
 	}
 
-	public void setVectFlagAtt(final FlagAtt f, final Vector v) {
-		flagAtts.setVectFlagAtt(f, v);
+	public void setVectFlagAtt(final FlagAtt fa, final Vector v) {
+		flagAtts.setVectFlagAtt(fa, v);
+	}
+
+	public String getStringRepresentation(final FlagAtt fa) {
+		return flagAtts.getStringRepresentation(fa);
 	}
 
 	public boolean isUser(final CommandSender sender) {

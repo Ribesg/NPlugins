@@ -10,17 +10,15 @@ import org.bukkit.command.CommandSender;
 
 public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final String USAGE = ChatColor.RED + "Usage : /cuboid delete <regionName>";
-
 	public DeleteSubcmdExecutor(final NCuboid instance) {
 		super(instance);
+		setUsage(ChatColor.RED + "Usage : /cuboid delete <regionName>");
 	}
 
 	@Override
 	public boolean exec(final CommandSender sender, final String[] args) {
 		if (args.length != 1) {
-			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
-			return true;
+			return false;
 		} else if (Perms.hasDelete(sender)) {
 			final PlayerRegion region = getPlugin().getDb().getByName(args[0]);
 			if (region == null) {

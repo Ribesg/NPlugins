@@ -12,10 +12,9 @@ import org.bukkit.entity.Player;
 
 public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final String USAGE = ChatColor.RED + "Usage : /cuboid create <regionName>";
-
 	public CreateSubcmdExecutor(final NCuboid instance) {
 		super(instance);
+		setUsage(ChatColor.RED + "Usage : /cuboid create <regionName>");
 	}
 
 	@Override
@@ -24,8 +23,7 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 			getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			return true;
 		} else if (args.length != 1) {
-			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
-			return true;
+			return false;
 		} else if (Perms.hasCreate(sender)) {
 			final PlayerRegion region = getPlugin().getDb().getByName(args[0]);
 			if (region != null) {

@@ -132,18 +132,45 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagAlreadySet,
-		                            "&6The flag '%flag%' is already set to '%value%' for region '%region%'",
+		                            "&6The flag '%flag%' is already '%value%' for region '%region%'",
 		                            new String[] {"%flag%", "%value%", "%region%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagAlreadySet,
-		                            "&aThe flag '%flag%' has been set to '%value%' for region '%region%'",
+		                            "&aThe flag '%flag%' is now '%value%' for region '%region%'",
 		                            new String[] {"%flag%", "%value%", "%region%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagNoPermission,
 		                            "&cYou don't have the permissions to use flag '%flagName%'",
 		                            new String[] {"%flagName%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagValue,
+		                            "&aThe flag '%flag%' is '%value%' for region '%region%'",
+		                            new String[] {"%flag%", "%value%", "%region%"},
+		                            null,
+		                            true));
+
+		// Command - FLAG
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttUnknownFlagAtt,
+		                            "&cUnknown flag attribute: '%flagAttName%'",
+		                            new String[] {"%flagAttName%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttNoPermission,
+		                            "&cYou don't have the permissions to use flag attribute '%flagAttName%'",
+		                            new String[] {"%flagAttName%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttValue,
+		                            "&aThe flag attribute '%flagAtt%' is currently set to '%value%' for region '%region%'",
+		                            new String[] {"%flagAtt%", "%value%", "%region%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttSet,
+		                            "&aThe flag attribute '%flagAtt%' is now set to '%value%' for region '%region%'",
+		                            new String[] {"%flagAtt%", "%value%", "%region%"},
 		                            null,
 		                            true));
 

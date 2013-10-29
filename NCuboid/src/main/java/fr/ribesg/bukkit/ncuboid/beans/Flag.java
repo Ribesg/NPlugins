@@ -32,32 +32,50 @@ public enum Flag {
 
 	public static Flag get(final String val) {
 		final String in = val.toUpperCase();
-		Flag f = null;
+		Flag f;
 		try {
 			f = Flag.valueOf(in);
 		} catch (final IllegalArgumentException e) {
-			if (in.equals("BOOST")) {
-				f = BOOSTER;
-			} else if (in.equals("SPEAK")) {
-				f = CHAT;
-			} else if (in.equals("EXPLOSIONBLOCK") || in.equals("EXP_BLOCK") || in.equals("EXPBLOCK")) {
-				f = EXPLOSION_BLOCK;
-			} else if (in.equals("EXPLOSIONPLAYER") || in.equals("EXP_PLAYER") || in.equals("EXPPLAYER")) {
-				f = EXPLOSION_PLAYER;
-			} else if (in.equals("EXPLOSIONITEM") || in.equals("EXP_ITEM") || in.equals("EXPITEM")) {
-				f = EXPLOSION_ITEM;
-			} else if (in.equals("ENDERMAN")) {
-				f = ENDERMANGRIEF;
-			} else if (in.equals("HIDE")) {
-				f = HIDDEN;
-			} else if (in.equals("PERM")) {
-				f = PERMANENT;
-			} else if (in.equals("TEL")) {
-				f = TELEPORT;
-			} else if (in.equals("WARP")) {
-				f = WARPGATE;
-			} else {
-				f = null;
+			switch (in) {
+				case "BOOST":
+					f = BOOSTER;
+					break;
+				case "SPEAK":
+					f = CHAT;
+					break;
+				case "EXPLOSIONBLOCK":
+				case "EXP_BLOCK":
+				case "EXPBLOCK":
+					f = EXPLOSION_BLOCK;
+					break;
+				case "EXPLOSIONPLAYER":
+				case "EXP_PLAYER":
+				case "EXPPLAYER":
+					f = EXPLOSION_PLAYER;
+					break;
+				case "EXPLOSIONITEM":
+				case "EXP_ITEM":
+				case "EXPITEM":
+					f = EXPLOSION_ITEM;
+					break;
+				case "ENDERMAN":
+					f = ENDERMANGRIEF;
+					break;
+				case "HIDE":
+					f = HIDDEN;
+					break;
+				case "PERM":
+					f = PERMANENT;
+					break;
+				case "TEL":
+					f = TELEPORT;
+					break;
+				case "WARP":
+					f = WARPGATE;
+					break;
+				default:
+					f = null;
+					break;
 			}
 		}
 		return f;

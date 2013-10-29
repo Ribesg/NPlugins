@@ -9,24 +9,21 @@ import org.bukkit.command.CommandSender;
 
 public class AdminUserSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final String USAGE_ADMIN = ChatColor.RED + "Usage : /cuboid admin <regionName> add|del <playerName>[,playerName]";
-	private static final String USAGE_USER  = ChatColor.RED + "Usage : /cuboid user <regionName> add|del <playerName>[,playerName]";
-
 	private final boolean adminMode;
 
 	public AdminUserSubcmdExecutor(final NCuboid instance, final boolean adminMode) {
 		super(instance);
 		this.adminMode = adminMode;
+		if (adminMode) {
+			setUsage(ChatColor.RED + "Usage : /cuboid admin <regionName> add|del <playerName>[,playerName]");
+		} else {
+			setUsage(ChatColor.RED + "Usage : /cuboid user <regionName> add|del <playerName>[,playerName]");
+		}
 	}
 
 	@Override
 	protected boolean exec(final CommandSender sender, final String[] args) {
-		if (args.length != 3) {
-			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + (adminMode ? USAGE_ADMIN : USAGE_USER));
-			return true;
-		} else {
-			return adminMode ? execAdmin(sender, args) : execUser(sender, args);
-		}
+		return args.length == 3 && (adminMode ? execAdmin(sender, args) : execUser(sender, args));
 	}
 
 	private boolean execAdmin(final CommandSender sender, final String[] args) {
@@ -45,8 +42,7 @@ public class AdminUserSubcmdExecutor extends AbstractSubcmdExecutor {
 			// Get required action
 			final Boolean add = getAction(args[1]);
 			if (add == null) {
-				sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE_ADMIN);
-				return true;
+				return false;
 			}
 
 			// Now for each provided playerName
@@ -91,8 +87,7 @@ public class AdminUserSubcmdExecutor extends AbstractSubcmdExecutor {
 			// Get required action
 			final Boolean add = getAction(args[1]);
 			if (add == null) {
-				sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE_USER);
-				return true;
+				return false;
 			}
 
 			// Now for each provided playerName

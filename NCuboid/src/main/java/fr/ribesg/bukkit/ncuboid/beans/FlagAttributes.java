@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -10,6 +11,15 @@ import static fr.ribesg.bukkit.ncuboid.beans.FlagAtt.isLocFlagAtt;
 import static fr.ribesg.bukkit.ncuboid.beans.FlagAtt.isVectFlagAtt;
 
 public class FlagAttributes {
+
+	// Default map
+	private static EnumMap<FlagAtt, Object> getDefaultFlagAttMap() {
+		final EnumMap<FlagAtt, Object> defaultFlagMap = new EnumMap<>(FlagAtt.class);
+
+		// We do not put anything in the map, we do not want to store useless objects / references
+
+		return defaultFlagMap;
+	}
 
 	private EnumMap<FlagAtt, Object> atts;
 
@@ -33,23 +43,23 @@ public class FlagAttributes {
 		}
 	}
 
-	public void setIntFlagAtt(final FlagAtt f, final Integer i) {
+	public void setIntFlagAtt(final FlagAtt fa, final Integer i) {
 		if (atts == null) {
 			newMap();
 		}
-		if (isIntFlagAtt(f)) {
-			atts.put(f, i);
-			checkIntFlagAttCorrection();
+		if (isIntFlagAtt(fa)) {
+			atts.put(fa, i);
+			checkIntFlagAttCorrectness();
 		} else {
-			new IllegalArgumentException(f == null ? "null" : f.name()).printStackTrace();
+			new IllegalArgumentException(fa == null ? "null" : fa.name()).printStackTrace();
 		}
 	}
 
-	private void setIntFlagAttNoCheck(final FlagAtt f, final Integer i) {
-		atts.put(f, i);
+	private void setIntFlagAttNoCheck(final FlagAtt fa, final Integer i) {
+		atts.put(fa, i);
 	}
 
-	private void checkIntFlagAttCorrection() {
+	private void checkIntFlagAttCorrectness() {
 		if (getIntFlagAtt(FlagAtt.HEAL_TIMER) != null && getIntFlagAtt(FlagAtt.HEAL_TIMER) < 5) {
 			setIntFlagAttNoCheck(FlagAtt.HEAL_TIMER, 5);
 		}
@@ -84,70 +94,74 @@ public class FlagAttributes {
 	}
 
 	// Locations handling
-	public Location getLocFlagAtt(final FlagAtt f) {
+	public Location getLocFlagAtt(final FlagAtt fa) {
 		if (atts == null) {
 			return null;
-		} else if (isLocFlagAtt(f)) {
-			return (Location) atts.get(f);
+		} else if (isLocFlagAtt(fa)) {
+			return (Location) atts.get(fa);
 		} else {
-			new IllegalArgumentException(f.name()).printStackTrace();
+			new IllegalArgumentException(fa.name()).printStackTrace();
 			return null;
 		}
 	}
 
-	public void setLocFlagAtt(final FlagAtt f, final Location loc) {
+	public void setLocFlagAtt(final FlagAtt fa, final Location loc) {
 		if (atts == null) {
 			newMap();
 		}
-		if (isLocFlagAtt(f)) {
-			atts.put(f, loc);
-			checkLocFlagAttCorrection();
+		if (isLocFlagAtt(fa)) {
+			atts.put(fa, loc);
+			checkLocFlagAttCorrectness();
 		} else {
-			new IllegalArgumentException(f.name()).printStackTrace();
+			new IllegalArgumentException(fa.name()).printStackTrace();
 		}
 	}
 
-	private void checkLocFlagAttCorrection() {
+	private void checkLocFlagAttCorrectness() {
 		// Nothing to do yet
 	}
 
 	// Vectors handling
-	public Vector getVectFlagAtt(final FlagAtt f) {
+	public Vector getVectFlagAtt(final FlagAtt fa) {
 		if (atts == null) {
 			return null;
-		} else if (isVectFlagAtt(f)) {
-			return (Vector) atts.get(f);
+		} else if (isVectFlagAtt(fa)) {
+			return (Vector) atts.get(fa);
 		} else {
-			new IllegalArgumentException(f.name()).printStackTrace();
+			new IllegalArgumentException(fa.name()).printStackTrace();
 			return null;
 		}
 	}
 
-	public void setVectFlagAtt(final FlagAtt f, final Vector v) {
+	public void setVectFlagAtt(final FlagAtt fa, final Vector v) {
 		if (atts == null) {
 			newMap();
 		}
-		if (isVectFlagAtt(f)) {
-			atts.put(f, v);
-			checkVectFlagAttCorrection();
+		if (isVectFlagAtt(fa)) {
+			atts.put(fa, v);
+			checkVectFlagAttCorrectness();
 		} else {
-			new IllegalArgumentException(f.name()).printStackTrace();
+			new IllegalArgumentException(fa.name()).printStackTrace();
 		}
 	}
 
-	private void checkVectFlagAttCorrection() {
+	private void checkVectFlagAttCorrectness() {
 		if (getVectFlagAtt(FlagAtt.BOOSTER_VECTOR) != null && getVectFlagAtt(FlagAtt.BOOSTER_VECTOR).lengthSquared() > 100) {
 			// XXX: Bukkit does not allow > 10 m/s Velocity
 			setVectFlagAtt(FlagAtt.BOOSTER_VECTOR, getVectFlagAtt(FlagAtt.BOOSTER_VECTOR).normalize().multiply(10));
 		}
 	}
 
-	// Default map
-	private static EnumMap<FlagAtt, Object> getDefaultFlagAttMap() {
-		final EnumMap<FlagAtt, Object> defaultFlagMap = new EnumMap<>(FlagAtt.class);
-
-		// We do not put anything in the map, we do not want to store useless objects / references
-
-		return defaultFlagMap;
+	public String getStringRepresentation(final FlagAtt fa) {
+		if (isIntFlagAtt(fa)) {
+			return Integer.toString(getIntFlagAtt(fa));
+		} else if (isVectFlagAtt(fa)) {
+			final Vector v = getVectFlagAtt(fa);
+			return "<" + v.getX() + ";" + v.getY() + ";" + v.getZ() + ">";
+		} else if (isLocFlagAtt(fa)) {
+			return NLocation.toStringPlus(getLocFlagAtt(fa));
+		} else {
+			throw new UnsupportedOperationException("Not yet implemented for " + fa.name());
+		}
 	}
 }

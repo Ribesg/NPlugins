@@ -20,6 +20,30 @@ public enum FlagAtt {
 	// Vector
 	BOOSTER_VECTOR;
 
+	public static FlagAtt get(final String val) {
+		final String in = val.toUpperCase();
+		FlagAtt fa;
+		try {
+			fa = FlagAtt.valueOf(in);
+		} catch (final IllegalArgumentException e) {
+			switch (in) {
+				case "EXPLOSION_DROP":
+				case "EXPLOSIONDROP":
+				case "EXP_BLOCK_DROP":
+				case "EXPBLOCKDROP":
+				case "EXP_DROP":
+				case "EXPDROP":
+					fa = EXPLOSION_BLOCK_DROP;
+					break;
+				default:
+					fa = null;
+					break;
+			}
+		}
+
+		return fa;
+	}
+
 	public static boolean isIntFlagAtt(final FlagAtt f) {
 		return f != null && HEAL_AMOUNT.compareTo(f) <= 0 && EXPLOSION_BLOCK_DROP.compareTo(f) >= 0;
 	}

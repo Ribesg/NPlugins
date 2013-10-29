@@ -13,19 +13,18 @@ import java.util.regex.Pattern;
 
 public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final String  USAGE   = ChatColor.RED + "Usage : /cuboid flag <regionName> <flagName> [value]";
 	private static final Pattern enable  = Pattern.compile("^(enabled?|true|1)$");
 	private static final Pattern disable = Pattern.compile("^(disabled?|false|0)$");
 
 	public FlagSubcmdExecutor(final NCuboid instance) {
 		super(instance);
+		setUsage(ChatColor.RED + "Usage : /cuboid flag <regionName> <flagName> [value]");
 	}
 
 	@Override
 	public boolean exec(final CommandSender sender, final String[] args) {
 		if (args.length != 2 && args.length != 3) {
-			sender.sendMessage(getPlugin().getMessages().getMessageHeader() + USAGE);
-			return true;
+			return false;
 		} else if (Perms.hasFlag(sender)) {
 			// Get region, check rights on region
 			final PlayerRegion c = getPlugin().getDb().getByName(args[0]);
@@ -47,26 +46,33 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 				return true;
 			}
 
-			// Get value
-			final String valueString = args[2].toLowerCase();
-			boolean value;
-			if (enable.matcher(valueString).matches()) {
-				value = true;
-			} else if (disable.matcher(valueString).matches()) {
-				value = false;
+			if (args.length == 2) {
+				// Show value
+				final boolean value = c.getFlag(f);
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagValue, f.name(), value ? "ON" : "OFF", c.getRegionName());
+				return true;
 			} else {
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagUnknownValue, args[2]);
-				return true;
-			}
-			if (value == c.getFlag(f)) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAlreadySet, f.name(), Boolean.toString(value), c.getRegionName());
-				return true;
-			}
+				// Get provided value
+				final String valueString = args[2].toLowerCase();
+				boolean value;
+				if (enable.matcher(valueString).matches()) {
+					value = true;
+				} else if (disable.matcher(valueString).matches()) {
+					value = false;
+				} else {
+					getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagUnknownValue, args[2]);
+					return true;
+				}
+				if (value == c.getFlag(f)) {
+					getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAlreadySet, f.name(), value ? "ON" : "OFF", c.getRegionName());
+					return true;
+				}
 
-			// Set value
-			c.setFlag(f, value);
-			getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagSet, f.name(), Boolean.toString(value), c.getRegionName());
-			return true;
+				// Set value
+				c.setFlag(f, value);
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagSet, f.name(), Boolean.toString(value), c.getRegionName());
+				return true;
+			}
 		} else {
 			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
