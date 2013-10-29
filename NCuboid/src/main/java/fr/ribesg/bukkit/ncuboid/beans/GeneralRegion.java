@@ -33,8 +33,8 @@ public abstract class GeneralRegion extends Region {
 	private final boolean dynmapable;
 
 	// Create a new Region, when user select points etc
-	public GeneralRegion(final String worldName, final RegionType type) {
-		this(worldName, type, new Rights(), 0, new Flags(), new FlagAttributes());
+	public GeneralRegion(final String worldName, final RegionType type, final int priority) {
+		this(worldName, type, new Rights(), priority, new Flags(), new FlagAttributes());
 	}
 
 	public GeneralRegion(final String worldName,

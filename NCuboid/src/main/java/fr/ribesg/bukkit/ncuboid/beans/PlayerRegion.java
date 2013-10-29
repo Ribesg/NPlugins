@@ -31,7 +31,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 
 	/** Create a new Region, when user select points etc */
 	public PlayerRegion(final String regionName, final String ownerName, final String worldName, final RegionType type) {
-		super(worldName, type);
+		super(worldName, type, 1);
 		setRegionName(regionName);
 		setOwnerName(ownerName);
 		setState(RegionState.TMPSTATE1);
@@ -173,14 +173,22 @@ public abstract class PlayerRegion extends GeneralRegion {
 
 	@Override
 	public Set<String> getUsers() {
-		final Set<String> result = new HashSet<>(super.getUsers());
+		final Set<String> users = super.getUsers();
+		final Set<String> result = new HashSet<>();
+		if (users != null) {
+			result.addAll(users);
+		}
 		result.add(getOwnerName());
 		return result;
 	}
 
 	@Override
 	public Set<String> getAdmins() {
-		final Set<String> result = new HashSet<>(super.getAdmins());
+		final Set<String> admins = super.getAdmins();
+		final Set<String> result = new HashSet<>();
+		if (admins != null) {
+			result.addAll(admins);
+		}
 		result.add(getOwnerName());
 		return result;
 	}

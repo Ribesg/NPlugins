@@ -27,6 +27,42 @@ public enum FlagAtt {
 			fa = FlagAtt.valueOf(in);
 		} catch (final IllegalArgumentException e) {
 			switch (in) {
+				case "HA":
+				case "HAMOUNT":
+				case "H_AMOUNT":
+					fa = HEAL_AMOUNT;
+					break;
+				case "HT":
+				case "HTIMER":
+				case "H_TIMER":
+					fa = HEAL_TIMER;
+					break;
+				case "HMIN":
+				case "HEALMIN":
+					fa = HEAL_MIN_HEALTH;
+					break;
+				case "HMAX":
+				case "HEALMAX":
+					fa = HEAL_MAX_HEALTH;
+					break;
+				case "FA":
+				case "FAMOUNT":
+				case "F_AMOUNT":
+					fa = FEED_AMOUNT;
+					break;
+				case "FT":
+				case "FTIMER":
+				case "F_TIMER":
+					fa = FEED_TIMER;
+					break;
+				case "FMIN":
+				case "FEEDMIN":
+					fa = FEED_MIN_FOOD;
+					break;
+				case "FMAX":
+				case "FEEDMAX":
+					fa = FEED_MAX_FOOD;
+					break;
 				case "EXPLOSION_DROP":
 				case "EXPLOSIONDROP":
 				case "EXP_BLOCK_DROP":
@@ -34,6 +70,24 @@ public enum FlagAtt {
 				case "EXP_DROP":
 				case "EXPDROP":
 					fa = EXPLOSION_BLOCK_DROP;
+					break;
+				case "EP":
+				case "EXTERNALPOINT":
+				case "EXTPOINT":
+				case "EXT_POINT":
+					fa = EXTERNAL_POINT;
+					break;
+				case "IP":
+				case "INTERNALPOINT":
+				case "INTPOINT":
+				case "INT_POINT":
+					fa = INTERNAL_POINT;
+					break;
+				case "BV":
+				case "BVECTOR":
+				case "B_VECTOR":
+				case "BOOSTERVECTOR":
+					fa = BOOSTER_VECTOR;
 					break;
 				default:
 					fa = null;

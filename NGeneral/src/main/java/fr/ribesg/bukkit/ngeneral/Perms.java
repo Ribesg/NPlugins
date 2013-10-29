@@ -19,6 +19,8 @@ public class Perms {
 	private static final String CMD_AFK               = "ngeneral.cmd.afk";
 	private static final String CMD_TIME              = "ngeneral.cmd.time";
 	private static final String CMD_WEATHER           = "ngeneral.cmd.weather";
+	private static final String CMD_ITEMNETWORK       = "ngeneral.cmd.itemnetwork";
+	private static final String CMD_ITEMNETWORK_ALL   = "ngeneral.cmd.itemnetwork.all";
 	private static final String PROTECTIONSIGN        = "ngeneral.protectionsign";
 	private static final String PROTECTIONSIGN_BYPASS = "ngeneral.protectionsign.bypass";
 	private static final String PROTECTIONSIGN_BREAK  = "ngeneral.protectionsign.break";
@@ -66,6 +68,10 @@ public class Perms {
 
 	public static boolean hasWeather(CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_WEATHER) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasItemNetwork(CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_ITEMNETWORK) || sender.hasPermission(ADMIN);
 	}
 
 	public static boolean hasProtectionSign(Player player) {

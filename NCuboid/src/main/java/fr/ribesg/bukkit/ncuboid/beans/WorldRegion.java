@@ -6,7 +6,7 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 public class WorldRegion extends GeneralRegion {
 
 	public WorldRegion(final String worldName) {
-		super(worldName, RegionType.WORLD);
+		super(worldName, RegionType.WORLD, 0);
 
 		// Default flags are a little different for worlds
 		// TODO Make this configurable
