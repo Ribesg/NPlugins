@@ -320,7 +320,7 @@ public class RegionDb implements Iterable<GeneralRegion> {
 			}
 		}
 		for (final PlayerRegion pr : potentiallyOverlappingRegions) {
-			if (r.overlaps(pr)) {
+			if (r.overlaps(pr) && !pr.isAdmin(player)) {
 				return new CreationResult(CreationResultEnum.DENIED_OVERLAP, pr);
 			}
 		}
