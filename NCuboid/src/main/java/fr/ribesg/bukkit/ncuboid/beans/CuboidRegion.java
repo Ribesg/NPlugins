@@ -72,6 +72,8 @@ public class CuboidRegion extends PlayerRegion {
 			setMinCorner(new NLocation(getWorldName(), getMinX(), getMinY(), getMinZ()));
 			setMaxCorner(new NLocation(getWorldName(), getMaxX(), getMaxY(), getMaxZ()));
 			setState(RegionState.TMPSTATE2);
+			setTotalSize((getMaxX() - getMinX() + 1) * (getMaxY() - getMinY() + 1) * (getMaxZ() - getMinZ() + 1));
+			setChunks(computeChunks());
 		}
 	}
 
@@ -79,13 +81,11 @@ public class CuboidRegion extends PlayerRegion {
 	@Override
 	public void create(final String regionName) {
 		super.create(regionName);
-		setTotalSize((getMaxX() - getMinX() + 1) * (getMaxY() - getMinY() + 1) * (getMaxZ() - getMinZ() + 1));
-		setChunks(computeChunks());
 	}
 
 	/** Should only be used when the cuboid is not in the byChunks map */
 	public Set<ChunkCoord> computeChunks() {
-		final Set<ChunkCoord> chunks = new HashSet<ChunkCoord>();
+		final Set<ChunkCoord> chunks = new HashSet<>();
 		final ChunkCoord cMin = new ChunkCoord(getMinCorner());
 		final ChunkCoord cMax = new ChunkCoord(getMaxCorner());
 		for (int x = cMin.getX(); x <= cMax.getX(); x++) {
@@ -104,15 +104,28 @@ public class CuboidRegion extends PlayerRegion {
 	}
 
 	@Override
+	public boolean overlaps(final PlayerRegion r) {
+		switch (r.getType()) {
+			case CUBOID:
+				final CuboidRegion o = (CuboidRegion) r;
+				return !((this.minX > o.maxX || this.maxX < o.minX) ||
+				         (this.minY > o.maxY || this.maxY < o.minY) ||
+				         (this.minZ > o.maxZ || this.maxZ < o.minZ));
+			default:
+				throw new UnsupportedOperationException("Note yet implemented for " + r.getType().name());
+		}
+	}
+
+	@Override
 	public String getSizeString() {
-		return maxX - minX + 1 + "x" + (maxY - minY + 1) + "x" + (maxZ - minZ + 1);
+		return (maxX - minX + 1) + "x" + (maxY - minY + 1) + "x" + (maxZ - minZ + 1);
 	}
 
 	public NLocation getMaxCorner() {
 		return maxCorner;
 	}
 
-	public void setMaxCorner(NLocation maxCorner) {
+	public void setMaxCorner(final NLocation maxCorner) {
 		this.maxCorner = maxCorner;
 	}
 
@@ -120,7 +133,7 @@ public class CuboidRegion extends PlayerRegion {
 		return maxX;
 	}
 
-	public void setMaxX(int maxX) {
+	public void setMaxX(final int maxX) {
 		this.maxX = maxX;
 	}
 
@@ -128,7 +141,7 @@ public class CuboidRegion extends PlayerRegion {
 		return maxY;
 	}
 
-	public void setMaxY(int maxY) {
+	public void setMaxY(final int maxY) {
 		this.maxY = maxY;
 	}
 
@@ -136,7 +149,7 @@ public class CuboidRegion extends PlayerRegion {
 		return maxZ;
 	}
 
-	public void setMaxZ(int maxZ) {
+	public void setMaxZ(final int maxZ) {
 		this.maxZ = maxZ;
 	}
 
@@ -144,7 +157,7 @@ public class CuboidRegion extends PlayerRegion {
 		return minCorner;
 	}
 
-	public void setMinCorner(NLocation minCorner) {
+	public void setMinCorner(final NLocation minCorner) {
 		this.minCorner = minCorner;
 	}
 
@@ -152,7 +165,7 @@ public class CuboidRegion extends PlayerRegion {
 		return minX;
 	}
 
-	public void setMinX(int minX) {
+	public void setMinX(final int minX) {
 		this.minX = minX;
 	}
 
@@ -160,7 +173,7 @@ public class CuboidRegion extends PlayerRegion {
 		return minY;
 	}
 
-	public void setMinY(int minY) {
+	public void setMinY(final int minY) {
 		this.minY = minY;
 	}
 
@@ -168,7 +181,14 @@ public class CuboidRegion extends PlayerRegion {
 		return minZ;
 	}
 
-	public void setMinZ(int minZ) {
+	public void setMinZ(final int minZ) {
 		this.minZ = minZ;
+	}
+
+	public long getMaxLength() {
+		final long xLength = getMaxX() - getMinX();
+		final long yLength = getMaxY() - getMinY();
+		final long zLength = getMaxZ() - getMinZ();
+		return Math.max(xLength, Math.max(yLength, zLength));
 	}
 }

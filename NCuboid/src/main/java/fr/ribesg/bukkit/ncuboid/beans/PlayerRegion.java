@@ -80,6 +80,8 @@ public abstract class PlayerRegion extends GeneralRegion {
 
 	public abstract boolean contains(final double x, final double y, final double z);
 
+	public abstract boolean overlaps(final PlayerRegion r);
+
 	// Info
 	public String getInfoLine() {
 		return "- " + getRegionName() + " (" + getOwnerName() + ") " + getSizeString();
@@ -99,7 +101,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		return chunks;
 	}
 
-	public void setChunks(final Set<ChunkCoord> chunks) {
+	protected void setChunks(final Set<ChunkCoord> chunks) {
 		this.chunks = chunks;
 	}
 
@@ -131,15 +133,17 @@ public abstract class PlayerRegion extends GeneralRegion {
 		return state;
 	}
 
-	public void setState(final RegionState state) {
+	protected void setState(final RegionState state) {
 		this.state = state;
 	}
+
+	public abstract long getMaxLength();
 
 	public long getTotalSize() {
 		return totalSize;
 	}
 
-	public void setTotalSize(final long totalSize) {
+	protected void setTotalSize(final long totalSize) {
 		this.totalSize = totalSize;
 	}
 

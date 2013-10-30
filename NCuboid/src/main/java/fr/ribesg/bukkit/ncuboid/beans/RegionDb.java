@@ -3,7 +3,9 @@ package fr.ribesg.bukkit.ncuboid.beans;
 import fr.ribesg.bukkit.ncore.common.ChunkCoord;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.config.GroupConfig;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +34,10 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		byWorld = new HashMap<>();
 		plugin = instance;
 	}
+
+	// #################### //
+	// ## ADDING REGIONS ## //
+	// #################### //
 
 	public void add(final PlayerRegion region) {
 		addByName(region);
@@ -75,6 +81,10 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	public void addByWorld(final WorldRegion region) {
 		byWorld.put(region.getWorldName(), region);
 	}
+
+	// ###################### //
+	// ## REMOVING REGIONS ## //
+	// ###################### //
 
 	public void remove(final PlayerRegion region) {
 		removeByName(region);
@@ -129,6 +139,10 @@ public class RegionDb implements Iterable<GeneralRegion> {
 			byWorld.remove(worldName);
 		}
 	}
+
+	// ##################### //
+	// ## GETTING REGIONS ## //
+	// ##################### //
 
 	public GeneralRegion getPriorByLocation(final Location loc) {
 		return getPrior(getAllByLocation(loc));
@@ -226,8 +240,97 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	}
 
 	public WorldRegion getByWorld(final String worldName) {
-		return byWorld.get(worldName);
+		return byWorld.get("world_" + worldName);
 	}
+
+	// ##################################### //
+	// ## CHECKING REGION CREATION RIGHTS ## //
+	// ##################################### //
+
+	public enum CreationResultEnum {
+		OK,
+		DENIED_TOO_MUCH,
+		DENIED_TOO_LONG,
+		DENIED_TOO_BIG,
+		DENIED_OVERLAP,
+		DENIED_NO_SELECTION
+	}
+
+	public class CreationResult {
+
+		private final CreationResultEnum result;
+		private final GeneralRegion      region;
+
+		public CreationResult(final CreationResultEnum result) {
+			this.result = result;
+			this.region = null;
+		}
+
+		public CreationResult(final CreationResultEnum result, final GeneralRegion region) {
+			this.result = result;
+			this.region = region;
+		}
+
+		public CreationResultEnum getResult() {
+			return result;
+		}
+
+		/** Only available if OVERLAP result */
+		public GeneralRegion getRegion() {
+			return region;
+		}
+	}
+
+	public CreationResult canCreate(final Player player) {
+		final String playerName = player.getName();
+		final GroupConfig config = plugin.getPluginConfig().getGroupConfig(player);
+		final PlayerRegion r = getSelection(playerName);
+
+		if (r == null) {
+			return new CreationResult(CreationResultEnum.DENIED_NO_SELECTION);
+		}
+
+		// Amount of regions
+		final int nbRegion = getByOwner(playerName) == null ? 0 : getByOwner(playerName).size();
+		if (nbRegion >= config.getMaxRegionNb()) {
+			return new CreationResult(CreationResultEnum.DENIED_TOO_MUCH);
+		}
+
+		// Length of each dimension
+		if (r.getMaxLength() >= config.getMaxRegion1DSize()) {
+			return new CreationResult(CreationResultEnum.DENIED_TOO_LONG);
+		}
+
+		// Total size
+		if (r.getTotalSize() >= config.getMaxRegion3DSize()) {
+			return new CreationResult(CreationResultEnum.DENIED_TOO_BIG);
+		}
+
+		// Overlaping with other cuboids
+		final WorldRegion worldRegion = getByWorld(r.getWorldName());
+		if (worldRegion != null && !worldRegion.isUser(player)) {
+			return new CreationResult(CreationResultEnum.DENIED_OVERLAP, worldRegion);
+		}
+		final Set<PlayerRegion> potentiallyOverlappingRegions = new HashSet<>();
+		for (final ChunkCoord c : r.getChunks()) {
+			if (byChunks.containsKey(c)) {
+				for (final PlayerRegion pr : byChunks.get(c)) {
+					potentiallyOverlappingRegions.add(pr);
+				}
+			}
+		}
+		for (final PlayerRegion pr : potentiallyOverlappingRegions) {
+			if (r.overlaps(pr)) {
+				return new CreationResult(CreationResultEnum.DENIED_OVERLAP, pr);
+			}
+		}
+
+		return new CreationResult(CreationResultEnum.OK);
+	}
+
+	// ############################ //
+	// ## ITERATING OVER REGIONS ## //
+	// ############################ //
 
 	public Iterator<PlayerRegion> playerRegionsIterator() {
 		return byName.values().iterator();

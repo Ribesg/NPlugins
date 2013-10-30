@@ -5,6 +5,7 @@ import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDbPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.beans.WorldRegion;
 import fr.ribesg.bukkit.ncuboid.commands.MainCommandExecutor;
+import fr.ribesg.bukkit.ncuboid.config.Config;
 import fr.ribesg.bukkit.ncuboid.dynmap.DynmapBridge;
 import fr.ribesg.bukkit.ncuboid.jail.JailHandler;
 import fr.ribesg.bukkit.ncuboid.lang.Messages;
