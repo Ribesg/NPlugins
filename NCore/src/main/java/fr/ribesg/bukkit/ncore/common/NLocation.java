@@ -52,7 +52,7 @@ public class NLocation {
 	}
 
 	public Location toBukkitLocation() {
-		World world = Bukkit.getWorld(worldName);
+		final World world = Bukkit.getWorld(worldName);
 		if (world == null) {
 			return null;
 		} else {

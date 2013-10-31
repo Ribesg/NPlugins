@@ -10,6 +10,7 @@ import fr.ribesg.bukkit.ngeneral.lang.Messages;
 import fr.ribesg.bukkit.ngeneral.simplefeature.AfkCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.FlySpeedCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.SignColorsListener;
+import fr.ribesg.bukkit.ngeneral.simplefeature.TeleportCommands;
 import fr.ribesg.bukkit.ngeneral.simplefeature.TimeCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.WalkSpeedCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.WeatherCommand;
@@ -36,6 +37,7 @@ public class NGeneral extends GeneralNode {
 	private TimeCommand        timeCommand;
 	private WeatherCommand     weatherCommand;
 	private SignColorsListener signColorsListener;
+	private TeleportCommands   teleportCommands;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -113,6 +115,7 @@ public class NGeneral extends GeneralNode {
 		timeCommand = new TimeCommand(this);
 		weatherCommand = new WeatherCommand(this);
 		signColorsListener = new SignColorsListener(this);
+		teleportCommands = new TeleportCommands(this);
 
 		return true;
 	}

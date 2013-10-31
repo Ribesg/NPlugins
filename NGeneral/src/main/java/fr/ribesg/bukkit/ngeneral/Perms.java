@@ -21,72 +21,96 @@ public class Perms {
 	private static final String CMD_WEATHER           = "ngeneral.cmd.weather";
 	private static final String CMD_ITEMNETWORK       = "ngeneral.cmd.itemnetwork";
 	private static final String CMD_ITEMNETWORK_ALL   = "ngeneral.cmd.itemnetwork.all";
+	private static final String CMD_TP                = "ngeneral.cmd.tp";
+	private static final String CMD_TPHERE            = "ngeneral.cmd.tphere";
+	private static final String CMD_TPTHERE           = "ngeneral.cmd.tpthere";
+	private static final String CMD_TPBACK            = "ngeneral.cmd.tpback";
 	private static final String PROTECTIONSIGN        = "ngeneral.protectionsign";
 	private static final String PROTECTIONSIGN_BYPASS = "ngeneral.protectionsign.bypass";
 	private static final String PROTECTIONSIGN_BREAK  = "ngeneral.protectionsign.break";
 	private static final String SIGN_COLORS           = "ngeneral.signcolors";
 
-	public static boolean hasGod(CommandSender sender) {
+	public static boolean hasGod(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_GOD) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasGodOthers(CommandSender sender) {
+	public static boolean hasGodOthers(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_GOD_OTHERS) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasFly(CommandSender sender) {
+	public static boolean hasFly(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_FLY) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasFlyOthers(CommandSender sender) {
+	public static boolean hasFlyOthers(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_FLY_OTHERS) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasFlySpeed(CommandSender sender) {
+	public static boolean hasFlySpeed(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_FLYSPEED) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasFlySpeedOthers(CommandSender sender) {
+	public static boolean hasFlySpeedOthers(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_FLYSPEED_OTHERS) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasWalkSpeed(CommandSender sender) {
+	public static boolean hasWalkSpeed(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_WALKSPEED) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasWalkSpeedOthers(CommandSender sender) {
+	public static boolean hasWalkSpeedOthers(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_WALKSPEED_OTHERS) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasAfk(CommandSender sender) {
+	public static boolean hasAfk(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_AFK) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasTime(CommandSender sender) {
+	public static boolean hasTime(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_TIME) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasWeather(CommandSender sender) {
+	public static boolean hasWeather(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_WEATHER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasItemNetwork(CommandSender sender) {
+	public static boolean hasItemNetwork(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_ITEMNETWORK) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasProtectionSign(Player player) {
+	public static boolean hasItemNetworkAll(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_ITEMNETWORK_ALL) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasTp(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_TP) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasTpHere(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_TPHERE) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasTpThere(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_TPTHERE) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasTpBack(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_TPBACK) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasProtectionSign(final Player player) {
 		return player.isOp() || player.hasPermission(PROTECTIONSIGN) || player.hasPermission(USER) || player.hasPermission(ADMIN);
 	}
 
-	public static boolean hasProtectionSignBypass(Player player) {
+	public static boolean hasProtectionSignBypass(final Player player) {
 		return player.isOp() || player.hasPermission(PROTECTIONSIGN_BYPASS) || player.hasPermission(ADMIN);
 	}
 
-	public static boolean hasProtectionSignBreak(Player player) {
+	public static boolean hasProtectionSignBreak(final Player player) {
 		return player.isOp() || player.hasPermission(PROTECTIONSIGN_BREAK) || player.hasPermission(ADMIN);
 	}
 
-	public static boolean hasSignColors(Player player) {
+	public static boolean hasSignColors(final Player player) {
 		return player.isOp() || player.hasPermission(SIGN_COLORS) || player.hasPermission(USER) || player.hasPermission(ADMIN);
 	}
 }

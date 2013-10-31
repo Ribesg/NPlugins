@@ -163,6 +163,75 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            true));
 
+		// Commands - TP / TPHERE / TPTHERE / TPBACK
+		newMessages.add(new Message(MessageId.general_tp_youToTarget,
+		                            "&aYou teleported yourself to %target%",
+		                            new String[] {"%target%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_youToTarget,
+		                            "&a%teleporter% teleported you to %target%",
+		                            new String[] {"%teleporter%", "%target%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_youSomebodyToTarget,
+		                            "&aYou teleported %player% to %target%",
+		                            new String[] {"%player%", "%target%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_youToTarget,
+		                            "&a%teleporter% teleported you to him",
+		                            new String[] {"%teleporter%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_noTarget, "&cCould not find a correct location to teleport", null, null, true));
+		newMessages.add(new Message(MessageId.general_tp_youToLocation,
+		                            "&aYou teleported yourself where you were looking at",
+		                            null,
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_somebodyToLocation,
+		                            "&a%teleporter% teleported you here",
+		                            new String[] {"%teleporter%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_somebodyToLocation,
+		                            "&aYou teleported %player% where you were looking at",
+		                            new String[] {"%player%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_youNoKnownBack, "&cCould not find a location to go back to", null, null, true));
+		newMessages.add(new Message(MessageId.general_tp_youBackWorldUnloaded,
+		                            "&cThe back location is in an unloaded world, '%worldName%'",
+		                            new String[] {"%worldName%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_youTeleportedBack,
+		                            "&aYou teleported yourself back to the location you were before",
+		                            null,
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_somebodyNoKnownBack,
+		                            "&cCould not find a location to teleport %player% back to",
+		                            new String[] {"%player%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_somebodyBackWorldUnloaded,
+		                            "&cThe back location of %player% is in an unloaded world, '%worldName%'",
+		                            new String[] {"%player%", "%worldName%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_somebodyTeleportedYouBack,
+		                            "&a%teleporter% teleported you back to the location you were before",
+		                            new String[] {"%teleporter%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_youTeleportedSomebodyBack,
+		                            "&aYou teleported %player% back to the location he was before",
+		                            new String[] {"%player%"},
+		                            null,
+		                            true));
+
 		// Feature - SIGN COLORS
 		newMessages.add(new Message(MessageId.general_signcolors_permissionDenied,
 		                            "&cYou do not have the permission to use colors on signs",

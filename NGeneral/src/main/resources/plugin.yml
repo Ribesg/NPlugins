@@ -42,3 +42,22 @@ commands:
     aliases: [w]
     usage: |
       /<command> <"c"|"clear"|"r"|"rain"|"t"|"thunder"> [duration] [world]
+  tp:
+    description: Teleport Command
+    usage: |
+      /<command> [playerName[,...]] <playerName>
+  tphere:
+    description: Teleport Command
+    aliases: [tph]
+    usage: |
+      /<command> <playerName[,...]>
+  tpthere:
+    description: Teleport Command
+    aliases: [tpt]
+    usage: |
+      /<command> [playerName[,...]]
+  tpback:
+    description: Teleport Command
+    aliases: [tpb]
+    usage: |
+      /<command> [playerName[,...]]

@@ -284,6 +284,23 @@ public enum MessageId {
 	general_afk_nowAfkBroadcastReason,
 	general_afk_noLongerAfkBroadcastReason,
 
+	general_tp_youToTarget,
+	general_tp_somebodyToTarget,
+	general_tp_youSomebodyToTarget,
+	general_tp_somebodyToHim,
+	general_tp_youSomebodyToYou,
+	general_tp_noTarget,
+	general_tp_youToLocation,
+	general_tp_somebodyToLocation,
+	general_tp_youSomebodyToLocation,
+	general_tp_youNoKnownBack,
+	general_tp_youBackWorldUnloaded,
+	general_tp_youTeleportedBack,
+	general_tp_somebodyNoKnownBack,
+	general_tp_somebodyBackWorldUnloaded,
+	general_tp_somebodyTeleportedYouBack,
+	general_tp_youTeleportedSomebodyBack,
+
 	general_timeSet,
 	general_weatherSet,
 
