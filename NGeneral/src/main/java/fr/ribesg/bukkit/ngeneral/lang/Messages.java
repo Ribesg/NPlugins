@@ -169,7 +169,7 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%target%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.general_tp_youToTarget,
+		newMessages.add(new Message(MessageId.general_tp_somebodyToTarget,
 		                            "&a%teleporter% teleported you to %target%",
 		                            new String[] {"%teleporter%", "%target%"},
 		                            null,
