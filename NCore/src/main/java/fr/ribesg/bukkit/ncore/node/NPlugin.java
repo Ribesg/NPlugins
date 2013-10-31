@@ -9,6 +9,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.mcstats.Metrics;
+
+import java.io.IOException;
 
 /**
  * This class represents a plugin node of the N plugin suite
@@ -22,6 +25,8 @@ public abstract class NPlugin extends JavaPlugin {
 
 	private NCore core;
 	private boolean enabled = false;
+
+	private Metrics metrics;
 
 	@Override
 	public void onEnable() {
@@ -53,7 +58,13 @@ public abstract class NPlugin extends JavaPlugin {
 			}
 
 			getPluginLoader().disablePlugin(this);
-		} else {
+		} else /* Everything's ok */ {
+			try {
+				metrics = new Metrics(this);
+				metrics.start();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
 			boolean activationResult = onNodeEnable();
 			if (activationResult) {
 				enabled = true;
@@ -162,5 +173,9 @@ public abstract class NPlugin extends JavaPlugin {
 
 	protected NCore getCore() {
 		return core;
+	}
+
+	protected Metrics getMetrics() {
+		return metrics;
 	}
 }
