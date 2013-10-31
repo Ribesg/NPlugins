@@ -151,6 +151,8 @@ public class TeleportCommands implements CommandExecutor {
 					while (loc.getBlock().getType().isSolid() || loc.getBlock().getRelative(BlockFace.UP).getType().isSolid()) {
 						loc.add(0, 1, 0);
 					}
+					loc.setPitch(player.getLocation().getPitch());
+					loc.setYaw(player.getLocation().getYaw());
 					backMap.put(player.getName(), new NLocation(player.getLocation()));
 					player.teleport(loc);
 					plugin.sendMessage(player, MessageId.general_tp_youToLocation);
@@ -179,6 +181,8 @@ public class TeleportCommands implements CommandExecutor {
 							plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, args[0]);
 						} else {
 							backMap.put(toTeleport.getName(), new NLocation(toTeleport.getLocation()));
+							loc.setPitch(toTeleport.getLocation().getPitch());
+							loc.setYaw(toTeleport.getLocation().getYaw());
 							toTeleport.teleport(loc);
 							plugin.sendMessage(toTeleport, MessageId.general_tp_somebodyToLocation, sender.getName());
 							plugin.sendMessage(sender, MessageId.general_tp_youSomebodyToLocation, toTeleport.getName());
