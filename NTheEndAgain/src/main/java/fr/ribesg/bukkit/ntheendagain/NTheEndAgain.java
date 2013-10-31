@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.mcstats.Metrics;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -82,6 +83,16 @@ public class NTheEndAgain extends TheEndAgainNode {
 		getServer().getPluginManager().registerEvents(new DamageListener(this), this);
 
 		getCommand("nend").setExecutor(new TheEndAgainCommandExecutor(this));
+
+		// Metrics
+		final Metrics.Graph g = getMetrics().createGraph("Number of End Worlds handled");
+		g.addPlotter(new Metrics.Plotter() {
+
+			@Override
+			public int getValue() {
+				return getWorldHandlers().size();
+			}
+		});
 
 		return true;
 	}

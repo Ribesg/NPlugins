@@ -8,6 +8,7 @@ import fr.ribesg.bukkit.nplayer.user.LoggedOutUserHandler;
 import fr.ribesg.bukkit.nplayer.user.UserDb;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
+import org.mcstats.Metrics;
 
 import java.io.IOException;
 
@@ -107,6 +108,24 @@ public class NPlayer extends PlayerNode {
 
 		// CommandHandler's Listeners
 		pm.registerEvents(playerCommandHandler, this);
+
+		// Metrics
+		final Metrics.Graph g1 = getMetrics().createGraph("Number of registered Players");
+		g1.addPlotter(new Metrics.Plotter() {
+
+			@Override
+			public int getValue() {
+				return getUserDb().size();
+			}
+		});
+		final Metrics.Graph g2 = getMetrics().createGraph("Number of recurrent registered Players");
+		g2.addPlotter(new Metrics.Plotter() {
+
+			@Override
+			public int getValue() {
+				return getUserDb().recurrentSize();
+			}
+		});
 
 		return true;
 	}

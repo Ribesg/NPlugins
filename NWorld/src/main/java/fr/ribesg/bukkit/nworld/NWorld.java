@@ -14,6 +14,7 @@ import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
+import org.mcstats.Metrics;
 
 import java.io.IOException;
 
@@ -162,6 +163,32 @@ public class NWorld extends WorldNode {
 		getCommand("setspawn").setExecutor(executor);
 		getCommand("warp").setExecutor(executor);
 		getCommand("setwarp").setExecutor(executor);
+
+		// Metrics
+		final Metrics.Graph g1 = getMetrics().createGraph("Number of Normal Worlds");
+		g1.addPlotter(new Metrics.Plotter() {
+
+			@Override
+			public int getValue() {
+				return getWorlds().sizeNormal();
+			}
+		});
+		final Metrics.Graph g2 = getMetrics().createGraph("Number of Nether Worlds");
+		g1.addPlotter(new Metrics.Plotter() {
+
+			@Override
+			public int getValue() {
+				return getWorlds().sizeNether();
+			}
+		});
+		final Metrics.Graph g3 = getMetrics().createGraph("Number of End Worlds");
+		g1.addPlotter(new Metrics.Plotter() {
+
+			@Override
+			public int getValue() {
+				return getWorlds().sizeEnd();
+			}
+		});
 
 		return true;
 	}

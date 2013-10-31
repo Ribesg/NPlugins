@@ -18,6 +18,8 @@ import java.util.Map;
 
 public class UserDb {
 
+	private final static long TWO_WEEKS = 2 * 7 * 24 * 60 * 60 * 1000;
+
 	private final NPlayer                 plugin;
 	private final Map<String, User>       usersPerName;
 	private final Map<String, List<User>> usersPerIp;
@@ -62,6 +64,20 @@ public class UserDb {
 		} else {
 			usersWithSameIp.add(user);
 		}
+	}
+
+	public int size() {
+		return usersPerName.size();
+	}
+
+	public int recurrentSize() {
+		int size = 0;
+		for (final User u : usersPerName.values()) {
+			if (System.currentTimeMillis() - u.getLastSeen().getTime() < TWO_WEEKS) {
+				size++;
+			}
+		}
+		return size;
 	}
 
 	public void saveConfig() throws IOException {

@@ -57,6 +57,36 @@ public class Worlds implements Iterable<GeneralWorld> {
 		return worlds.size();
 	}
 
+	public int sizeNormal() {
+		int size = 0;
+		for (final GeneralWorld w : worlds.values()) {
+			if (w.getType() == WorldType.STOCK || w.getType() == WorldType.ADDITIONAL) {
+				size++;
+			}
+		}
+		return size;
+	}
+
+	public int sizeNether() {
+		int size = 0;
+		for (final GeneralWorld w : worlds.values()) {
+			if (w.getType() == WorldType.STOCK_NETHER || w.getType() == WorldType.ADDITIONAL_SUB_NETHER) {
+				size++;
+			}
+		}
+		return size;
+	}
+
+	public int sizeEnd() {
+		int size = 0;
+		for (final GeneralWorld w : worlds.values()) {
+			if (w.getType() == WorldType.STOCK_END || w.getType() == WorldType.ADDITIONAL_SUB_END) {
+				size++;
+			}
+		}
+		return size;
+	}
+
 	public boolean isEmpty() {
 		return worlds.isEmpty();
 	}

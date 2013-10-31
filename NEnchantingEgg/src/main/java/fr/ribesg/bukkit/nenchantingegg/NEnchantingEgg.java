@@ -14,6 +14,7 @@ import fr.ribesg.bukkit.nenchantingegg.task.TimeListenerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
+import org.mcstats.Metrics;
 
 import java.io.IOException;
 
@@ -95,6 +96,16 @@ public class NEnchantingEgg extends EnchantingEggNode {
 
 		// Tasks
 		Bukkit.getScheduler().runTaskTimer(this, new TimeListenerTask(this), 100L, 50);
+
+		// Metrics
+		final Metrics.Graph g = getMetrics().createGraph("Number of Altars");
+		g.addPlotter(new Metrics.Plotter() {
+
+			@Override
+			public int getValue() {
+				return getAltars().getAltars().size();
+			}
+		});
 
 		return true;
 	}
