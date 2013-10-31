@@ -16,6 +16,7 @@ import fr.ribesg.bukkit.ncuboid.listeners.flag.*;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
+import org.mcstats.Metrics;
 
 import java.io.IOException;
 import java.util.List;
@@ -127,6 +128,16 @@ public class NCuboid extends CuboidNode {
 
 		// Dynmap Bridge! After loading Regions!
 		this.dynmapBridge.initialize(this.db);
+
+		// Metrics - Number of Regions
+		final Metrics.Graph g = getMetrics().createGraph("Amount of Regions");
+		g.addPlotter(new Metrics.Plotter() {
+
+			@Override
+			public int getValue() {
+				return getDb().size();
+			}
+		});
 
 		return true;
 	}

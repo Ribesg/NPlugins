@@ -84,13 +84,95 @@ public class NTheEndAgain extends TheEndAgainNode {
 
 		getCommand("nend").setExecutor(new TheEndAgainCommandExecutor(this));
 
-		// Metrics
-		final Metrics.Graph g = getMetrics().createGraph("Number of End Worlds handled");
-		g.addPlotter(new Metrics.Plotter() {
+		// Metrics - Number of End Worlds handled
+		final Metrics.Graph g1 = getMetrics().createGraph("Amount of End Worlds handled");
+		g1.addPlotter(new Metrics.Plotter() {
 
 			@Override
 			public int getValue() {
 				return getWorldHandlers().size();
+			}
+		});
+
+		// Metrics - Type of regeneration
+		int disabled = 0;
+		int hard = 0;
+		int soft = 0;
+		int crystal = 0;
+		for (final EndWorldHandler h : getWorldHandlers().values()) {
+			if (h.getConfig().getRegenType() == 0) {
+				disabled++;
+			} else {
+				switch (h.getConfig().getRegenMethod()) {
+					case 0:
+						hard++;
+						break;
+					case 1:
+						soft++;
+						break;
+					case 2:
+						crystal++;
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		final int finalDisabled = disabled;
+		final int finalHard = hard;
+		final int finalSoft = soft;
+		final int finalCrystal = crystal;
+		final Metrics.Graph g2 = getMetrics().createGraph("Regeneration Method");
+		g2.addPlotter(new Metrics.Plotter("Disabled") {
+
+			@Override
+			public int getValue() {
+				return finalDisabled;
+			}
+		});
+		g2.addPlotter(new Metrics.Plotter("Hard Regen") {
+
+			@Override
+			public int getValue() {
+				return finalHard;
+			}
+		});
+		g2.addPlotter(new Metrics.Plotter("Soft Regen") {
+
+			@Override
+			public int getValue() {
+				return finalSoft;
+			}
+		});
+		g2.addPlotter(new Metrics.Plotter("Crystals Only") {
+
+			@Override
+			public int getValue() {
+				return finalCrystal;
+			}
+		});
+
+		// Metrics - Regeneration on Stop
+		int regenOnStop = 0;
+		for (final EndWorldHandler h : getWorldHandlers().values()) {
+			if (h.getConfig().getHardRegenOnStop() == 1) {
+				regenOnStop++;
+			}
+		}
+		final int finalRegenOnStop = regenOnStop;
+		final Metrics.Graph g3 = getMetrics().createGraph("Hard Regeneration on Stop");
+		g3.addPlotter(new Metrics.Plotter("Enabled") {
+
+			@Override
+			public int getValue() {
+				return finalRegenOnStop;
+			}
+		});
+		g3.addPlotter(new Metrics.Plotter("Disabled") {
+
+			@Override
+			public int getValue() {
+				return getWorldHandlers().size() - finalRegenOnStop;
 			}
 		});
 

@@ -110,16 +110,15 @@ public class NPlayer extends PlayerNode {
 		pm.registerEvents(playerCommandHandler, this);
 
 		// Metrics
-		final Metrics.Graph g1 = getMetrics().createGraph("Number of registered Players");
-		g1.addPlotter(new Metrics.Plotter() {
+		final Metrics.Graph g = getMetrics().createGraph("Amount of Players");
+		g.addPlotter(new Metrics.Plotter("Registered") {
 
 			@Override
 			public int getValue() {
 				return getUserDb().size();
 			}
 		});
-		final Metrics.Graph g2 = getMetrics().createGraph("Number of recurrent registered Players");
-		g2.addPlotter(new Metrics.Plotter() {
+		g.addPlotter(new Metrics.Plotter("Played in the last 2 weeks") {
 
 			@Override
 			public int getValue() {

@@ -243,6 +243,10 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		return byWorld.get("world_" + worldName);
 	}
 
+	public int size() {
+		return byName.size() + byWorld.size();
+	}
+
 	// ##################################### //
 	// ## CHECKING REGION CREATION RIGHTS ## //
 	// ##################################### //

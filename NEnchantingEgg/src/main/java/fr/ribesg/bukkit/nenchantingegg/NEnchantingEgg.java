@@ -98,7 +98,7 @@ public class NEnchantingEgg extends EnchantingEggNode {
 		Bukkit.getScheduler().runTaskTimer(this, new TimeListenerTask(this), 100L, 50);
 
 		// Metrics
-		final Metrics.Graph g = getMetrics().createGraph("Number of Altars");
+		final Metrics.Graph g = getMetrics().createGraph("Amount of Altars");
 		g.addPlotter(new Metrics.Plotter() {
 
 			@Override
