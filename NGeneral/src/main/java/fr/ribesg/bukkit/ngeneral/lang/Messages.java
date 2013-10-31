@@ -195,7 +195,7 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%teleporter%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.general_tp_somebodyToLocation,
+		newMessages.add(new Message(MessageId.general_tp_youSomebodyToLocation,
 		                            "&aYou teleported %player% where you were looking at",
 		                            new String[] {"%player%"},
 		                            null,
@@ -240,7 +240,8 @@ public class Messages extends AbstractMessages {
 		                            true));
 
 		// Feature - PROTECTION SIGNS
-		newMessages.add(new Message(MessageId.general_protectionsign_accessDenied, "&cAccess denied by a Private sign.", null, null, true));
+		newMessages.add(new Message(MessageId.general_protectionsign_accessDenied, "&cAccess denied by a Private sign.", null, null,
+		                            true));
 		newMessages.add(new Message(MessageId.general_protectionsign_breakDenied,
 		                            "&cThis bloc is protected by a Private sign.",
 		                            null,
