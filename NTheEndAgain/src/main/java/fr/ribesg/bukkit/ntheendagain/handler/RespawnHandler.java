@@ -52,11 +52,13 @@ public class RespawnHandler {
 			respawnDragon();
 			respawning++;
 		}
-		if (respawning > 0) {
+		if (respawning > 1) {
 			worldHandler.getPlugin()
-			            .broadcastMessage(MessageId.theEndAgain_respawned,
+			            .broadcastMessage(MessageId.theEndAgain_respawnedX,
 			                              Integer.toString(respawning),
 			                              worldHandler.getEndWorld().getName());
+		} else if (respawning == 1) {
+			worldHandler.getPlugin().broadcastMessage(MessageId.theEndAgain_respawned1, worldHandler.getEndWorld().getName());
 		}
 	}
 

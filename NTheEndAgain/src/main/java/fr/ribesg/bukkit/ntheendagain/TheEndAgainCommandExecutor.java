@@ -156,7 +156,13 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(parsedArgs[0]));
 			if (handler != null) {
 				final Integer nb = handler.getNumberOfAliveEnderDragons();
-				plugin.sendMessage(sender, MessageId.theEndAgain_nbAlive, nb.toString(), handler.getEndWorld().getName());
+				if (nb == 0 || nb == 1) {
+					plugin.sendMessage(sender,
+					                   nb == 0 ? MessageId.theEndAgain_nbAlive0 : MessageId.theEndAgain_nbAlive1,
+					                   handler.getEndWorld().getName());
+				} else {
+					plugin.sendMessage(sender, MessageId.theEndAgain_nbAliveX, nb.toString(), handler.getEndWorld().getName());
+				}
 			} else {
 				plugin.sendMessage(sender, MessageId.unknownWorld, parsedArgs[0]);
 			}

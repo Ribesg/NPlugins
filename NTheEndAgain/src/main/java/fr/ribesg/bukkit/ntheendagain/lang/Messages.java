@@ -56,12 +56,27 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%world%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.theEndAgain_respawned,
+		newMessages.add(new Message(MessageId.theEndAgain_respawned1,
+		                            "&aAn EnderDragon has been respawned in world %world%",
+		                            new String[] {"%world%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.theEndAgain_respawnedX,
 		                            "&a%nb% EnderDragons have been respawned in world %world%",
 		                            new String[] {"%nb%", "%world%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.theEndAgain_nbAlive,
+		newMessages.add(new Message(MessageId.theEndAgain_nbAlive0,
+		                            "&aThere is no EnderDragon alive in world %world%",
+		                            new String[] {"%world%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.theEndAgain_nbAlive1,
+		                            "&aThere is 1 EnderDragon alive in world %world%",
+		                            new String[] {"%world%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.theEndAgain_nbAliveX,
 		                            "&aThere are %nb% EnderDragons alive in world %world%",
 		                            new String[] {"%nb%", "%world%"},
 		                            null,

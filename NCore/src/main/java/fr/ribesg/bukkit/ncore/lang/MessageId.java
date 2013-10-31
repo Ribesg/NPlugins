@@ -78,8 +78,11 @@ public enum MessageId {
 	theEndAgain_unkownSubCmd,
 
 	theEndAgain_regenerating,
-	theEndAgain_respawned,
-	theEndAgain_nbAlive,
+	theEndAgain_respawned1,
+	theEndAgain_respawnedX,
+	theEndAgain_nbAlive0,
+	theEndAgain_nbAlive1,
+	theEndAgain_nbAliveX,
 	theEndAgain_notInAnEndWorld,
 
 	theEndAgain_protectedChunkInfo,
