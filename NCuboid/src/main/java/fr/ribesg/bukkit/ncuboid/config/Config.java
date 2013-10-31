@@ -109,11 +109,11 @@ public class Config extends AbstractConfig<NCuboid> {
 		content.append("# Note: For any of those values, '-1' means 'unlimited'.\n");
 		content.append("groupConfigs:\n");
 		for (final GroupConfig gc : this.groupConfigs.values()) {
-			content.append("  # Group '" + gc.getGroupName() + "'. The permission for this group is " + gc.getGroupPerm());
+			content.append("  # Group '" + gc.getGroupName() + "'. The permission for this group is " + gc.getGroupPerm() + "\n");
 			content.append("  " + gc.getGroupName() + ":\n");
-			content.append("    maxRegionNb:" + gc.getMaxRegionNb() + "\n");
-			content.append("    maxRegion1DSize:" + gc.getMaxRegion1DSize() + "\n");
-			content.append("    maxRegion3DSize:" + gc.getMaxRegion3DSize() + "\n");
+			content.append("    maxRegionNb: " + gc.getMaxRegionNb() + "\n");
+			content.append("    maxRegion1DSize: " + gc.getMaxRegion1DSize() + "\n");
+			content.append("    maxRegion3DSize: " + gc.getMaxRegion3DSize() + "\n");
 		}
 
 		return content.toString();
