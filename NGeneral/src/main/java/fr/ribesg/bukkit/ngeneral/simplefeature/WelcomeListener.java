@@ -2,6 +2,7 @@ package fr.ribesg.bukkit.ngeneral.simplefeature;
 import fr.ribesg.bukkit.ncore.common.event.PlayerJoinedEvent;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
+import fr.ribesg.bukkit.ngeneral.lang.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
@@ -19,7 +20,10 @@ public class WelcomeListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinedInitial(final PlayerJoinedEvent event) {
-		event.getPlayer().sendMessage(plugin.getPluginConfig().getInitialMessage().split("##"));
+		event.getPlayer().sendMessage(plugin.getPluginConfig().getInitialMessage().split(Messages.LINE_SEPARATOR));
+		for (int i = 0; i < 20; i++) {
+			event.getPlayer().sendMessage("");
+		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)

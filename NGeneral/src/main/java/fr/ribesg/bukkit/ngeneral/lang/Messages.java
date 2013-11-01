@@ -64,11 +64,11 @@ public class Messages extends AbstractMessages {
 		variablesList.add("%version%");
 		variablesList.add("%viewDistance%");
 
-		final StringBuilder textBuilder = new StringBuilder("&aWelcome to this Server!##");
-		textBuilder.append("&7This example welcome message will show you all the available variables.##");
-		textBuilder.append("&7Your not forced to use all (or even any) of them!##");
+		final StringBuilder textBuilder = new StringBuilder("&aWelcome to this Server!" + Messages.LINE_SEPARATOR);
+		textBuilder.append("&7This example welcome message will show you all the available variables." + Messages.LINE_SEPARATOR);
+		textBuilder.append("&7Your not forced to use all (or even any) of them!" + Messages.LINE_SEPARATOR);
 		for (final String v : variablesList) {
-			textBuilder.append("&a").append(v.substring(1, v.length() - 1)).append(": &c").append(v);
+			textBuilder.append("&a").append(v.substring(1, v.length() - 1)).append(": &c").append(v).append(Messages.LINE_SEPARATOR);
 		}
 		textBuilder.append("&aTell me if you have an idea of a fun variable!");
 

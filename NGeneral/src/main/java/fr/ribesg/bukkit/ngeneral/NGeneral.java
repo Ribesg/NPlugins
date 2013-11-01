@@ -14,6 +14,7 @@ import fr.ribesg.bukkit.ngeneral.simplefeature.TeleportCommands;
 import fr.ribesg.bukkit.ngeneral.simplefeature.TimeCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.WalkSpeedCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.WeatherCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.WelcomeListener;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
@@ -38,6 +39,7 @@ public class NGeneral extends GeneralNode {
 	private WeatherCommand     weatherCommand;
 	private SignColorsListener signColorsListener;
 	private TeleportCommands   teleportCommands;
+	private WelcomeListener    welcomeListener;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -116,6 +118,7 @@ public class NGeneral extends GeneralNode {
 		weatherCommand = new WeatherCommand(this);
 		signColorsListener = new SignColorsListener(this);
 		teleportCommands = new TeleportCommands(this);
+		welcomeListener = new WelcomeListener(this);
 
 		return true;
 	}

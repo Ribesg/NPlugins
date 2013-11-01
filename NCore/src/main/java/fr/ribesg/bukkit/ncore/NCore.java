@@ -48,6 +48,8 @@ public class NCore extends JavaPlugin {
 				afterNodesLoad();
 			}
 		}, 5 * 20L /* ~5 seconds */);
+
+		Bukkit.getPluginManager().registerEvents(new NEventsListener(), this);
 	}
 
 	@Override
@@ -156,8 +158,6 @@ public class NCore extends JavaPlugin {
 		}
 
 		metrics.start();
-
-		Bukkit.getPluginManager().registerEvents(new NEventsListener(), this);
 
 		if (noNodeFound) {
 			// TODO
