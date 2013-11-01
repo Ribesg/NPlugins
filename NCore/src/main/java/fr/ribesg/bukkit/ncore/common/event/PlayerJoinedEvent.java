@@ -13,6 +13,10 @@ public class PlayerJoinedEvent extends PlayerEvent {
 	// Handlers
 	private static final HandlerList handlers = new HandlerList();
 
+	public static HandlerList getHandlerList() {
+		return handlers;
+	}
+
 	public PlayerJoinedEvent(final Player who) {
 		super(who);
 	}
