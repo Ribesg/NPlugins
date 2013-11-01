@@ -1,5 +1,6 @@
 package fr.ribesg.bukkit.ncore;
 
+import fr.ribesg.bukkit.ncore.common.event.NEventsListener;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.node.dodgeball.DodgeBallNode;
 import fr.ribesg.bukkit.ncore.node.enchantingegg.EnchantingEggNode;
@@ -155,6 +156,8 @@ public class NCore extends JavaPlugin {
 		}
 
 		metrics.start();
+
+		Bukkit.getPluginManager().registerEvents(new NEventsListener(), this);
 
 		if (noNodeFound) {
 			// TODO

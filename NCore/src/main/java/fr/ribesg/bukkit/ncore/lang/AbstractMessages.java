@@ -181,8 +181,10 @@ public abstract class AbstractMessages {
 			}
 
 			// Replacing args by there values
-			for (int i = 0; i < m.getAwaitedArgsNb(); i++) {
-				res = res.replace(m.getAwaitedArgs()[i], args[i]);
+			if (args != null) {
+				for (int i = 0; i < args.length; i++) {
+					res = res.replace(m.getAwaitedArgs()[i], args[i]);
+				}
 			}
 			// Adding Header, colors
 			final String[] resSplit = res.concat(LINE_SEPARATOR).split(LINE_SEPARATOR);
