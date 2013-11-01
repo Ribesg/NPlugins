@@ -4,7 +4,7 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 
 public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final Pattern enable  = Pattern.compile("^(enabled?|true|1)$");
-	private static final Pattern disable = Pattern.compile("^(disabled?|false|0)$");
+	private static final Pattern enable  = Pattern.compile("^(on|enabled?|true|1)$");
+	private static final Pattern disable = Pattern.compile("^(off|disabled?|false|0)$");
 
 	public FlagSubcmdExecutor(final NCuboid instance) {
 		super(instance);
@@ -27,7 +27,7 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 			return false;
 		} else if (Perms.hasFlag(sender)) {
 			// Get region, check rights on region
-			final PlayerRegion c = getPlugin().getDb().getByName(args[0]);
+			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;

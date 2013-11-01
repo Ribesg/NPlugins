@@ -4,7 +4,7 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -25,7 +25,7 @@ public class FlagAttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 			return false;
 		} else if (Perms.hasFlagAttribute(sender)) {
 			// Get region, check rights on region
-			final PlayerRegion c = getPlugin().getDb().getByName(args[0]);
+			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;

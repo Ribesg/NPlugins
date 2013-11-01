@@ -107,6 +107,26 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            null,
 		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdCreateTooMuchRegions,
+		                            "&cYou are only allowed to have %max% regions, and you currently have %value% regions!",
+		                            new String[] {"%max%", "%value%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdCreateRegionTooLong,
+		                            "&cYour selection is too long (%value%), your maximum allowed length is %max%!",
+		                            new String[] {"%max%", "%value%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdCreateRegionTooBig,
+		                            "&cYour selection is too big (%value% blocks), your maximum allowed size is %max% blocks!",
+		                            new String[] {"%max%", "%value%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdCreateOverlap,
+		                            "&cYour selection overlaps with the region '%regionName%'!",
+		                            new String[] {"%regionName%"},
+		                            null,
+		                            true));
 
 		// Command - DELETE
 		newMessages.add(new Message(MessageId.cuboid_cmdDeleteDeleted,

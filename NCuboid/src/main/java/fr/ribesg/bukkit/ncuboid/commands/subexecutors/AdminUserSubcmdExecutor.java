@@ -2,6 +2,7 @@ package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
@@ -29,12 +30,12 @@ public class AdminUserSubcmdExecutor extends AbstractSubcmdExecutor {
 	private boolean execAdmin(final CommandSender sender, final String[] args) {
 		if (Perms.hasAdmin(sender)) {
 			// Get region, check rights on region
-			final PlayerRegion c = getPlugin().getDb().getByName(args[0]);
+			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
 			}
-			if (!Perms.isAdmin(sender) && !c.isOwner(sender)) {
+			if (!Perms.isAdmin(sender) && (c.getType() == GeneralRegion.RegionType.WORLD || !((PlayerRegion) c).isOwner(sender))) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidOwner, c.getRegionName());
 				return true;
 			}
@@ -74,7 +75,7 @@ public class AdminUserSubcmdExecutor extends AbstractSubcmdExecutor {
 	private boolean execUser(final CommandSender sender, final String[] args) {
 		if (Perms.hasUser(sender)) {
 			// Get region, check rights on region
-			final PlayerRegion c = getPlugin().getDb().getByName(args[0]);
+			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;

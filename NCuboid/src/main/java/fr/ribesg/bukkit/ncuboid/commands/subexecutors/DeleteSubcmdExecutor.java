@@ -3,6 +3,7 @@ package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
@@ -20,13 +21,14 @@ public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 		if (args.length != 1) {
 			return false;
 		} else if (Perms.hasDelete(sender)) {
-			final PlayerRegion region = getPlugin().getDb().getByName(args[0]);
-			if (region == null) {
+			final GeneralRegion region = getPlugin().getDb().getByName(args[0]);
+			if (region == null || region.getType() == GeneralRegion.RegionType.WORLD) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
 			} else {
-				if (Perms.isAdmin(sender) || region.isOwner(sender)) {
-					getPlugin().getDb().remove(region);
+				final PlayerRegion r = (PlayerRegion) region;
+				if (Perms.isAdmin(sender) || r.isOwner(sender)) {
+					getPlugin().getDb().remove(r);
 					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDeleted, region.getRegionName());
 				} else {
 					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteNoPermission, region.getRegionName());

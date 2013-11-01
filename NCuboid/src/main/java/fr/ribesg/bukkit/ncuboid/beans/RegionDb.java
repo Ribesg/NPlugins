@@ -68,13 +68,12 @@ public class RegionDb implements Iterable<GeneralRegion> {
 
 	public void addByChunks(final PlayerRegion region) {
 		for (final ChunkCoord k : region.getChunks()) {
-			if (byChunks.containsKey(k)) {
-				byChunks.get(k).add(region);
-			} else {
-				final Set<PlayerRegion> newSet = new HashSet<>();
-				newSet.add(region);
-				byChunks.put(k, newSet);
+			Set<PlayerRegion> set = byChunks.get(k);
+			if (set == null) {
+				set = new HashSet<>(1);
+				byChunks.put(k, set);
 			}
+			set.add(region);
 		}
 	}
 
@@ -227,8 +226,9 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		}
 	}
 
-	public PlayerRegion getByName(final String regionName) {
-		return byName.get(regionName);
+	public GeneralRegion getByName(final String regionName) {
+		final GeneralRegion r = byName.get(regionName);
+		return r == null ? getByWorld(regionName) : r;
 	}
 
 	public Set<PlayerRegion> getByOwner(final String ownerName) {
@@ -239,8 +239,8 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		return tmpRegions.get(ownerName);
 	}
 
-	public WorldRegion getByWorld(final String worldName) {
-		return byWorld.get("world_" + worldName);
+	public WorldRegion getByWorld(final String worldRegionName) {
+		return byWorld.get(worldRegionName);
 	}
 
 	public int size() {
@@ -264,15 +264,28 @@ public class RegionDb implements Iterable<GeneralRegion> {
 
 		private final CreationResultEnum result;
 		private final GeneralRegion      region;
+		private final int                maxValue;
+		private final long               value;
 
 		public CreationResult(final CreationResultEnum result) {
 			this.result = result;
 			this.region = null;
+			this.maxValue = 0;
+			this.value = 0;
+		}
+
+		public CreationResult(final CreationResultEnum result, final int maxValue, final long value) {
+			this.result = result;
+			this.region = null;
+			this.maxValue = maxValue;
+			this.value = value;
 		}
 
 		public CreationResult(final CreationResultEnum result, final GeneralRegion region) {
 			this.result = result;
 			this.region = region;
+			this.maxValue = 0;
+			this.value = 0;
 		}
 
 		public CreationResultEnum getResult() {
@@ -283,6 +296,14 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		public GeneralRegion getRegion() {
 			return region;
 		}
+
+		public int getMaxValue() {
+			return maxValue;
+		}
+
+		public long getValue() {
+			return value;
+		}
 	}
 
 	public CreationResult canCreate(final Player player) {
@@ -290,24 +311,24 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		final GroupConfig config = plugin.getPluginConfig().getGroupConfig(player);
 		final PlayerRegion r = getSelection(playerName);
 
-		if (r == null) {
+		if (r == null || r.getState() != PlayerRegion.RegionState.TMPSTATE2) {
 			return new CreationResult(CreationResultEnum.DENIED_NO_SELECTION);
 		}
 
 		// Amount of regions
 		final int nbRegion = getByOwner(playerName) == null ? 0 : getByOwner(playerName).size();
 		if (nbRegion >= config.getMaxRegionNb()) {
-			return new CreationResult(CreationResultEnum.DENIED_TOO_MUCH);
+			return new CreationResult(CreationResultEnum.DENIED_TOO_MUCH, config.getMaxRegionNb(), nbRegion);
 		}
 
 		// Length of each dimension
 		if (r.getMaxLength() >= config.getMaxRegion1DSize()) {
-			return new CreationResult(CreationResultEnum.DENIED_TOO_LONG);
+			return new CreationResult(CreationResultEnum.DENIED_TOO_LONG, config.getMaxRegion1DSize(), r.getMaxLength());
 		}
 
 		// Total size
 		if (r.getTotalSize() >= config.getMaxRegion3DSize()) {
-			return new CreationResult(CreationResultEnum.DENIED_TOO_BIG);
+			return new CreationResult(CreationResultEnum.DENIED_TOO_BIG, config.getMaxRegion3DSize(), r.getTotalSize());
 		}
 
 		// Overlaping with other cuboids

@@ -14,6 +14,5 @@ commands:
     cuboid:
         description: General cuboid command
         aliases: [c,cubo]
-        permission: ncuboid.cmd.general
         usage: |
-            §c/<command> help
+            /<command> help

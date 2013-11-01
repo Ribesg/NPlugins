@@ -4,7 +4,8 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidRegion;
-import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -25,7 +26,7 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 		} else if (args.length != 1) {
 			return false;
 		} else if (Perms.hasCreate(sender)) {
-			final PlayerRegion region = getPlugin().getDb().getByName(args[0]);
+			final GeneralRegion region = getPlugin().getDb().getByName(args[0]);
 			if (region != null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_cmdCreateAlreadyExists);
 				return true;
@@ -34,14 +35,39 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 				return true;
 			} else {
 				final Player player = (Player) sender;
-				final CuboidRegion selection = (CuboidRegion) getPlugin().getDb().getSelection(player.getName());
-				if (selection.getState() == PlayerRegion.RegionState.TMPSTATE2) {
-					getPlugin().getDb().removeSelection(player.getName());
-					selection.create(args[0]);
-					getPlugin().getDb().add(selection);
-					getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateCreated, selection.getRegionName());
-				} else {
-					getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateNoValidSelection);
+				final RegionDb.CreationResult result = getPlugin().getDb().canCreate(player);
+				switch (result.getResult()) {
+					case DENIED_NO_SELECTION:
+						getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateNoValidSelection);
+						break;
+					case DENIED_TOO_MUCH:
+						getPlugin().sendMessage(player,
+						                        MessageId.cuboid_cmdCreateTooMuchRegions,
+						                        Integer.toString(result.getMaxValue()),
+						                        Long.toString(result.getValue()));
+						break;
+					case DENIED_TOO_LONG:
+						getPlugin().sendMessage(player,
+						                        MessageId.cuboid_cmdCreateRegionTooLong,
+						                        Integer.toString(result.getMaxValue()),
+						                        Long.toString(result.getValue()));
+						break;
+					case DENIED_TOO_BIG:
+						getPlugin().sendMessage(player,
+						                        MessageId.cuboid_cmdCreateRegionTooBig,
+						                        Integer.toString(result.getMaxValue()),
+						                        Long.toString(result.getValue()));
+						break;
+					case DENIED_OVERLAP:
+						getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateOverlap, result.getRegion().getRegionName());
+						break;
+					default:
+						final CuboidRegion selection = (CuboidRegion) getPlugin().getDb().getSelection(player.getName());
+						getPlugin().getDb().removeSelection(player.getName());
+						selection.create(args[0]);
+						getPlugin().getDb().add(selection);
+						getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateCreated, selection.getRegionName());
+						break;
 				}
 				return true;
 			}
