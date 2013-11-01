@@ -28,7 +28,7 @@ import java.util.Set;
 public abstract class AbstractMessages {
 
 	/** Separator used in config to define if you want to send multiple messages to player */
-	public static final String LINE_SEPARATOR = "%%";
+	public static final String LINE_SEPARATOR = "##";
 
 	private String nodeName;
 
