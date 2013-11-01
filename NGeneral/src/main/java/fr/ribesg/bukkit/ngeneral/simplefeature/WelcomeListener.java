@@ -21,7 +21,7 @@ public class WelcomeListener implements Listener {
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerJoinedInitial(final PlayerJoinedEvent event) {
 		event.getPlayer().sendMessage(plugin.getPluginConfig().getInitialMessage().split(Messages.LINE_SEPARATOR));
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 150; i++) {
 			event.getPlayer().sendMessage("");
 		}
 	}
