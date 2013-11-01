@@ -45,6 +45,10 @@ public enum MessageId {
 	cuboid_cmdCreateCreated,
 	cuboid_cmdCreateNoValidSelection,
 	cuboid_cmdCreateForbiddenName,
+	cuboid_cmdCreateTooMuchRegions,
+	cuboid_cmdCreateRegionTooLong,
+	cuboid_cmdCreateRegionTooBig,
+	cuboid_cmdCreateOverlap,
 
 	cuboid_cmdDeleteDeleted,
 	cuboid_cmdDeleteNoPermission,
@@ -194,6 +198,10 @@ public enum MessageId {
 	player_userHomeSet,
 	player_yourHomeSet,
 
+	player_pleaseRegister,
+	player_autoLogged,
+	player_pleaseLogin,
+
 	player_kickMessage,
 	player_broadcastedKickMessage,
 
@@ -257,6 +265,8 @@ public enum MessageId {
 	// ###################### //
 	// ## NGeneral related ## //
 	// ###################### //
+
+	general_welcome,
 
 	general_god_enabled,
 	general_god_disabled,

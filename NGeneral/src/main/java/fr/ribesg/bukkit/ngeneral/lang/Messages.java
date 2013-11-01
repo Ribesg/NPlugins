@@ -4,7 +4,9 @@ import fr.ribesg.bukkit.ncore.lang.AbstractMessages;
 import fr.ribesg.bukkit.ncore.lang.Message;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,6 +48,35 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null, true));
 		newMessages.add(new Message(MessageId.missingWorldArg, "&cNon-player user should provide a world name", null, null, true));
 		newMessages.add(new Message(MessageId.unknownWorld, "&cUnknown world '%world%'", new String[] {"%world%"}, null, true));
+
+		// Welcome Message
+		final List<String> variablesList = new ArrayList<>();
+		variablesList.add("%bukkitVersion%");
+		variablesList.add("%ip%");
+		variablesList.add("%maxPlayers%");
+		variablesList.add("%motd%");
+		variablesList.add("%name%");
+		variablesList.add("%onlineMode%");
+		variablesList.add("%onlinePlayersCount%");
+		variablesList.add("%port%");
+		variablesList.add("%serverId%");
+		variablesList.add("%serverName%");
+		variablesList.add("%version%");
+		variablesList.add("%viewDistance%");
+
+		final StringBuilder textBuilder = new StringBuilder("&aWelcome to this Server!##");
+		textBuilder.append("&7This example welcome message will show you all the available variables.##");
+		textBuilder.append("&7Your not forced to use all (or even any) of them!##");
+		for (final String v : variablesList) {
+			textBuilder.append("&a").append(v.substring(1, v.length() - 1)).append(": &c").append(v);
+		}
+		textBuilder.append("&aTell me if you have an idea of a fun variable!");
+
+		newMessages.add(new Message(MessageId.general_welcome,
+		                            textBuilder.toString(),
+		                            variablesList.toArray(new String[variablesList.size()]),
+		                            null,
+		                            false));
 
 		// Command - RELOAD
 		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null, true));
@@ -179,9 +210,14 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%player%", "%target%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.general_tp_youToTarget,
+		newMessages.add(new Message(MessageId.general_tp_somebodyToHim,
 		                            "&a%teleporter% teleported you to him",
 		                            new String[] {"%teleporter%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_tp_youSomebodyToYou,
+		                            "&aYou teleported %player% to you",
+		                            new String[] {"%player%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_noTarget, "&cCould not find a correct location to teleport", null, null, true));

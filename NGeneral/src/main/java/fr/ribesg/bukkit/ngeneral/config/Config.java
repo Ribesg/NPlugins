@@ -13,6 +13,8 @@ public class Config extends AbstractConfig<NGeneral> {
 	private final Logger log;
 
 	// Features control
+	private String initialMessage;
+
 	private boolean godModeFeature;
 	private boolean flyModeFeature;
 	private boolean protectionSignFeature;
@@ -45,6 +47,8 @@ public class Config extends AbstractConfig<NGeneral> {
 		super(instance);
 		log = instance.getLogger();
 
+		initialMessage = "";
+
 		godModeFeature = true;
 		flyModeFeature = true;
 		protectionSignFeature = true;
@@ -71,6 +75,10 @@ public class Config extends AbstractConfig<NGeneral> {
 		// ######################
 		// ## Features control ##
 		// ######################
+
+		// initialMessage. Default: ""
+		// Possible values: anything, multi-line with ##
+		setInitialMessage(config.getString("initialMessage", ""));
 
 		// godModeFeature. Default: true.
 		// Possible values: true, false
@@ -205,6 +213,13 @@ public class Config extends AbstractConfig<NGeneral> {
 			content.append(line + '\n');
 		}
 		content.append('\n');
+
+		// Initial Message
+		content.append("# Initial Message. This will be sent to any connecting Player,\n");
+		content.append("# followed by a bunch of spaces to hide it.\n");
+		content.append("# You can specify different lines using the ## separator.\n");
+		content.append("# For example, this is the perfect place to use Rei's Minimap codes.\n");
+		content.append("initialMessage: " + getInitialMessage() + "\n\n");
 
 		// God Mode Feature
 		content.append("# Defines if the GodMode feature is enabled or not\n");
@@ -374,5 +389,13 @@ public class Config extends AbstractConfig<NGeneral> {
 
 	public void setProtectionSignAlreadyProtectedMsgLine3(String protectionSignAlreadyProtectedMsgLine3) {
 		this.protectionSignAlreadyProtectedMsgLine3 = protectionSignAlreadyProtectedMsgLine3;
+	}
+
+	public String getInitialMessage() {
+		return initialMessage;
+	}
+
+	public void setInitialMessage(String initialMessage) {
+		this.initialMessage = initialMessage;
 	}
 }
