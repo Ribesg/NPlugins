@@ -1,4 +1,6 @@
 package fr.ribesg.bukkit.nplayer.user;
+import fr.ribesg.bukkit.ncore.common.event.PlayerJoinedEvent;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -77,16 +79,23 @@ public class LoggedOutUserHandler implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		String userName = event.getPlayer().getName();
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerJoined(PlayerJoinedEvent event) {
+		final Player player = event.getPlayer();
+		final String userName = player.getName();
 		notifyConnect(userName);
-		User user = plugin.getUserDb().get(userName);
-		if (user != null &&
-		    user.getLastIp().equals(event.getPlayer().getAddress().getAddress().getHostAddress()) &&
-		    !user.hasAutoLogout()) {
+		final User user = plugin.getUserDb().get(userName);
+		if (user == null) {
+			// Unknown, should /register
+			plugin.sendMessage(player, MessageId.player_pleaseRegister);
+		} else if (user.getLastIp().equals(event.getPlayer().getAddress().getAddress().getHostAddress()) && !user.hasAutoLogout()) {
+			// Auto-login
 			user.setLoggedIn(true);
 			notifyLogin(user);
+			plugin.sendMessage(player, MessageId.player_autoLogged);
+		} else {
+			// Should /login
+			plugin.sendMessage(player, MessageId.player_pleaseLogin);
 		}
 	}
 

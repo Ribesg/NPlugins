@@ -23,7 +23,7 @@ public class Messages extends AbstractMessages {
 	/** @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#createMessage() */
 	@Override
 	protected Set<Message> createMessage() {
-		final Set<Message> newMessages = new HashSet<Message>();
+		final Set<Message> newMessages = new HashSet<>();
 
 		// General plugin messages
 		newMessages.add(new Message(MessageId.incorrectValueInConfiguration,
@@ -39,6 +39,11 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null, true));
+
+		// Welcome
+		newMessages.add(new Message(MessageId.player_pleaseLogin, "&6Please login using the /login command", null, null, false));
+		newMessages.add(new Message(MessageId.player_pleaseRegister, "&6Please register using the /register command", null, null, false));
+		newMessages.add(new Message(MessageId.player_autoLogged, "&aYou have been automatically logged in!", null, null, false));
 
 		// Command - RELOAD
 		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null, true));
