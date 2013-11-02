@@ -94,6 +94,7 @@ public class NPlayer extends PlayerNode {
 		// TODO getCommand("info").setExecutor(playerCommandHandler);
 		getCommand("home").setExecutor(playerCommandHandler);
 		getCommand("sethome").setExecutor(playerCommandHandler);
+		getCommand("forcelogin").setExecutor(playerCommandHandler);
 
 		final PunishmentCommandHandler punishmentCommandHandler = new PunishmentCommandHandler(this);
 		getCommand("ban").setExecutor(punishmentCommandHandler);
