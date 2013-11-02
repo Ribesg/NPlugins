@@ -284,6 +284,18 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%userName%", "%duration%"},
 		                            null,
 		                            false));
+
+		// Force Login
+		newMessages.add(new Message(MessageId.player_somebodyForcedLoginYou,
+		                            "&6You have been logged in by %admin%",
+		                            new String[] {"%admin%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.player_somebodyForcedLoginYou,
+		                            "&6You logged in %player%",
+		                            new String[] {"%player%"},
+		                            null,
+		                            true));
 		return newMessages;
 	}
 }

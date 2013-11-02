@@ -162,11 +162,18 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 					return true;
 				}
+			case "forcelogin":
+				if (Perms.hasForceLogin(sender)) {
+					return forceLoginCommand(sender, args);
+				} else {
+					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					return true;
+				}
 		}
 		return false;
 	}
 
-	private boolean loginCommand(Player player, String[] args) {
+	private boolean loginCommand(final Player player, final String[] args) {
 		User user = plugin.getUserDb().get(player.getName());
 		if (user == null) {
 			plugin.sendMessage(player, MessageId.player_registerFirst);
@@ -186,11 +193,12 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean registerCommand(Player player, String[] args) {
+	private boolean registerCommand(final Player player, final String[] args) {
 		User user = plugin.getUserDb().get(player.getName());
 		String password = StringUtils.joinStrings(args);
 		if (user == null) {
-			user = plugin.getUserDb().newUser(player.getName(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
+			user = plugin.getUserDb().newUser(player.getName(), Security.hash(password), player.getAddress().getAddress().getHostAddress
+					());
 			user.setLoggedIn(true);
 			plugin.sendMessage(player, MessageId.player_welcomeToTheServer);
 			return true;
@@ -204,7 +212,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean logoutCommand(Player player, String[] args) {
+	private boolean logoutCommand(final Player player, final String[] args) {
 		User user = plugin.getUserDb().get(player.getName());
 		if (user == null) {
 			plugin.sendMessage(player, MessageId.player_registerFirst);
@@ -258,13 +266,13 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean infoCommand(CommandSender sender, String[] args) {
+	private boolean infoCommand(final CommandSender sender, final String[] args) {
 		boolean isAdmin = Perms.hasInfoAdmin(sender);
 		sender.sendMessage("/info command STILL TODO");
 		return false; // TODO
 	}
 
-	private boolean homeCommand(final Player player, String[] args) {
+	private boolean homeCommand(final Player player, final String[] args) {
 		if (args.length > 0) {
 			if (!Perms.hasHomeOthers(player)) {
 				plugin.sendMessage(player, MessageId.noPermissionForCommand);
@@ -324,7 +332,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean setHomeCommand(final Player player, String[] args) {
+	private boolean setHomeCommand(final Player player, final String[] args) {
 		if (args.length > 0) {
 			if (!Perms.hasSetHomeOthers(player)) {
 				plugin.sendMessage(player, MessageId.noPermissionForCommand);
@@ -355,6 +363,29 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			user.setHome(player.getLocation());
 			plugin.sendMessage(player, MessageId.player_yourHomeSet);
 			return true;
+		}
+	}
+
+	private boolean forceLoginCommand(final CommandSender sender, final String[] args) {
+		if (args.length != 1) {
+			return false;
+		}
+		final Player player = Bukkit.getPlayer(args[0]);
+		if (player == null) {
+			plugin.sendMessage(sender, MessageId.player_unknownUser, args[0]);
+			return true;
+		} else {
+			final User user = plugin.getUserDb().get(player.getName());
+			if (user == null) {
+				plugin.sendMessage(sender, MessageId.player_unknownUser, player.getName());
+				return true;
+			} else {
+				user.setLoggedIn(true);
+				plugin.getLoggedOutUserHandler().notifyLogin(user);
+				plugin.sendMessage(sender, MessageId.player_youForcedLogin, player.getName());
+				plugin.sendMessage(player, MessageId.player_somebodyForcedLoginYou, sender.getName());
+				return true;
+			}
 		}
 	}
 

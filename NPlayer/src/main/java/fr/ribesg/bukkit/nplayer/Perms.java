@@ -7,6 +7,7 @@ public class Perms {
 	// Player node permissions
 	private static final String ADMIN               = "nplayer.admin";
 	private static final String USER                = "nplayer.user";
+	private static final String CMD_FORCELOGIN      = "nplayer.cmd.forcelogin";
 	private static final String CMD_LOGIN           = "nplayer.cmd.login";
 	private static final String CMD_LOGOUT          = "nplayer.cmd.logout";
 	private static final String CMD_REGISTER        = "nplayer.cmd.register";
@@ -29,6 +30,10 @@ public class Perms {
 	private static final String CMD_MUTE_PERMANENT  = "nplayer.cmd.mute.permanent";
 	private static final String CMD_UNMUTE          = "nplayer.cmd.unmute";
 	private static final String CMD_KICK            = "nplayer.cmd.kick";
+
+	public static boolean hasForceLogin(CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_FORCELOGIN) || sender.hasPermission(ADMIN);
+	}
 
 	public static boolean hasLogin(CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_LOGIN) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);

@@ -250,6 +250,9 @@ public enum MessageId {
 	player_loginAttemptsPermBanMessage,
 	player_loginAttemptsBroadcastedPermBanMessage,
 
+	player_youForcedLogin,
+	player_somebodyForcedLoginYou,
+
 	// ############################ //
 	// ## NEnchantingEgg related ## //
 	// ############################ //

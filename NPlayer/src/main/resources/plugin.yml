@@ -11,6 +11,11 @@ depend: [NCore]
 softdepend: [NWorld]
 
 commands:
+  forcelogin:
+    decription: Force-login a Player
+    aliases: [flogin]
+    usage: |
+      /<command> <playerName>
   login:
     description: Login command
     usage: |
