@@ -291,7 +291,7 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%admin%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.player_somebodyForcedLoginYou,
+		newMessages.add(new Message(MessageId.player_youForcedLogin,
 		                            "&6You logged in %player%",
 		                            new String[] {"%player%"},
 		                            null,
