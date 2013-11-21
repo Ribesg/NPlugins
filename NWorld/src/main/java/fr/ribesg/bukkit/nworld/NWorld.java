@@ -163,6 +163,7 @@ public class NWorld extends WorldNode {
 		getCommand("setspawn").setExecutor(executor);
 		getCommand("warp").setExecutor(executor);
 		getCommand("setwarp").setExecutor(executor);
+		getCommand("delwarp").setExecutor(executor);
 
 		// Metrics - Worlds
 		final Metrics.Graph g1 = getMetrics().createGraph("Amount of Worlds");

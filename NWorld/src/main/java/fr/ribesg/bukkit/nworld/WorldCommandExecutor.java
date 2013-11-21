@@ -752,7 +752,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
-		if (args.length < 1) {
+		if (args.length != 1) {
 			return false;
 		}
 		String warpName = args[0];
