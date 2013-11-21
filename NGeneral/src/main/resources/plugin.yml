@@ -46,6 +46,11 @@ commands:
     description: Teleport Command
     usage: |
       /<command> [playerName[,...]] <playerName>
+  tppos:
+    description: Teleport Command
+    aliases: [tpp]
+    usage: |
+      /<command> [playerName[,...]] <x y z>|<x;y;z>
   tphere:
     description: Teleport Command
     aliases: [tph]

@@ -222,8 +222,8 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_noTarget, "&cCould not find a correct location to teleport", null, null, true));
 		newMessages.add(new Message(MessageId.general_tp_youToLocation,
-		                            "&aYou teleported yourself where you were looking at",
-		                            null,
+		                            "&aYou teleported yourself to location %location%",
+		                            new String[]{"%location%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_somebodyToLocation,
@@ -232,8 +232,8 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_youSomebodyToLocation,
-		                            "&aYou teleported %player% where you were looking at",
-		                            new String[] {"%player%"},
+		                            "&aYou teleported %player% to location %location%",
+		                            new String[] {"%player%", "%location%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_youNoKnownBack, "&cCould not find a location to go back to", null, null, true));

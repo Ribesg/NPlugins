@@ -6,6 +6,7 @@ import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
@@ -26,6 +27,7 @@ public class TeleportCommands implements CommandExecutor {
 		this.plugin = instance;
 		this.backMap = new HashMap<>();
 		plugin.getCommand("tp").setExecutor(this);
+		plugin.getCommand("tppos").setExecutor(this);
 		plugin.getCommand("tphere").setExecutor(this);
 		plugin.getCommand("tpthere").setExecutor(this);
 		plugin.getCommand("tpback").setExecutor(this);
@@ -37,6 +39,13 @@ public class TeleportCommands implements CommandExecutor {
 			case "tp":
 				if (Perms.hasTp(sender)) {
 					return execTpCommand(sender, args);
+				} else {
+					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					return true;
+				}
+			case "tppos":
+				if (Perms.hasTpPos(sender)) {
+					return execTpPosCommand(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
@@ -104,6 +113,87 @@ public class TeleportCommands implements CommandExecutor {
 				}
 				return true;
 			}
+		} else {
+			return false;
+		}
+	}
+
+	private boolean execTpPosCommand(final CommandSender sender, final String[] args) {
+		if (!(sender instanceof Player)) {
+			plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+			return true;
+		} else if (args.length == 1 || args.length == 3) {
+			final Player player = (Player) sender;
+			final Location loc = player.getLocation();
+			final Location dest = new Location(loc.getWorld(), 0, 0, 0, loc.getYaw(), loc.getPitch());
+			if (args.length == 1) {
+				try {
+					final String[] split = args[0].split(";");
+					final double x = Double.parseDouble(split[0]);
+					final double y = Double.parseDouble(split[1]);
+					final double z = Double.parseDouble(split[2]);
+					dest.add(x, y, z);
+				} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+					return false;
+				}
+			} else {
+				try {
+					final double x = Double.parseDouble(args[0]);
+					final double y = Double.parseDouble(args[1]);
+					final double z = Double.parseDouble(args[2]);
+					dest.add(x, y, z);
+				} catch (NumberFormatException e) {
+					return false;
+				}
+			}
+			backMap.put(player.getName(), new NLocation(player.getLocation()));
+			player.teleport(dest);
+			plugin.sendMessage(player, MessageId.general_tp_youToLocation, "<" + dest.getX() +
+			                                                               ";" + dest.getY() +
+			                                                               ";" + dest.getZ() +
+			                                                               ">");
+			return true;
+		} else if (args.length == 2 || args.length == 4) {
+			final Player player = (Player) sender;
+			double x;
+			double y;
+			double z;
+			if (args.length == 2) {
+				try {
+					final String[] split = args[1].split(";");
+					x = Double.parseDouble(split[0]);
+					y = Double.parseDouble(split[1]);
+					z = Double.parseDouble(split[2]);
+				} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+					return false;
+				}
+			} else {
+				try {
+					x = Double.parseDouble(args[1]);
+					y = Double.parseDouble(args[2]);
+					z = Double.parseDouble(args[3]);
+				} catch (NumberFormatException e) {
+					return false;
+				}
+			}
+			final World world = player.getWorld();
+			for (final String playerName : args[0].split(",")) {
+				final Player playerToTeleport = Bukkit.getPlayer(playerName);
+				if (playerToTeleport == null) {
+					plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, args[0]);
+				} else {
+					backMap.put(playerToTeleport.getName(), new NLocation(playerToTeleport.getLocation()));
+					final Location loc = playerToTeleport.getLocation();
+					final Location dest = new Location(world, x, y, z, loc.getYaw(), loc.getPitch());
+					playerToTeleport.teleport(dest);
+					plugin.sendMessage(playerToTeleport, MessageId.general_tp_somebodyToTarget, sender.getName());
+					plugin.sendMessage(sender,
+					                   MessageId.general_tp_youSomebodyToTarget,
+					                   playerToTeleport.getName(),
+					                   "<" + x + ";" + y + ";" + z + ">");
+				}
+			}
+			return true;
 		} else {
 			return false;
 		}

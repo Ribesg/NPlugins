@@ -22,6 +22,7 @@ public class Perms {
 	private static final String CMD_ITEMNETWORK       = "ngeneral.cmd.itemnetwork";
 	private static final String CMD_ITEMNETWORK_ALL   = "ngeneral.cmd.itemnetwork.all";
 	private static final String CMD_TP                = "ngeneral.cmd.tp";
+	private static final String CMD_TPPOS             = "ngeneral.cmd.tppos";
 	private static final String CMD_TPHERE            = "ngeneral.cmd.tphere";
 	private static final String CMD_TPTHERE           = "ngeneral.cmd.tpthere";
 	private static final String CMD_TPBACK            = "ngeneral.cmd.tpback";
@@ -88,6 +89,10 @@ public class Perms {
 
 	public static boolean hasTp(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_TP) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasTpPos(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_TPPOS) || sender.hasPermission(ADMIN);
 	}
 
 	public static boolean hasTpHere(final CommandSender sender) {
