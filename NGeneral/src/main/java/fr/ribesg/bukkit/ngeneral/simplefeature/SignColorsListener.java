@@ -17,12 +17,13 @@ public class SignColorsListener implements Listener {
 	private static String getColorsRegex() {
 		if (colorsRegex == null) {
 			final StringBuilder s = new StringBuilder(3 + ChatColor.values().length);
+			s.append("^*");
 			s.append(ColorUtils.ALTERNATE_COLOR_CHAR_STRING);
 			s.append('[');
 			for (ChatColor c : ChatColor.values()) {
 				s.append(c.getChar());
 			}
-			s.append(']');
+			s.append("]*$");
 			colorsRegex = s.toString();
 		}
 		return colorsRegex;
