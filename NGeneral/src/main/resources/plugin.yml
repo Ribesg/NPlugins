@@ -61,3 +61,8 @@ commands:
     aliases: [tpb]
     usage: |
       /<command> [playerName[,...]]
+  itemnetwork:
+    description: ItemNetwork Command
+    aliases: [in]
+    usage: |
+      /<command> <create|delete> <networkName>

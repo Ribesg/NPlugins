@@ -34,16 +34,6 @@ public class ProtectionSignFeature extends GeneralFeature {
 	/** First line of an Error sign */
 	/* package */ static final String ERROR = "[" + ChatColor.DARK_RED + "Error" + ChatColor.RESET + "]";
 
-	/** The ID of a Post Sign block */
-	/* package */ static final Material SIGN_POST = Material.SIGN_POST;
-	/** The ID of a Wall Sign block */
-	/* package */ static final Material WALL_SIGN = Material.WALL_SIGN;
-
-	/** The ID of a Chest block */
-	/* package */ static final Material CHEST         = Material.CHEST;
-	/** The ID of a Trapped Chest block */
-	/* package */ static final Material TRAPPED_CHEST = Material.TRAPPED_CHEST;
-
 	// ################### //
 	// ## Constant sets ## //
 	// ################### //
@@ -115,22 +105,22 @@ public class ProtectionSignFeature extends GeneralFeature {
 	public boolean canBreak(Block b, Player player) {
 		final Material blockType = b.getType();
 		final String userId = player != null ? UsernameUtils.getId(player.getName()) : null;
-		if (blockType == SIGN_POST || blockType == WALL_SIGN) {
+		if (blockType == Material.SIGN_POST || blockType == Material.WALL_SIGN) {
 			final Sign sign = (Sign) b.getState();
 			return !sign.getLine(0).equals(PROTECTION) ||
 			       player != null && ColorUtils.stripColorCodes(sign.getLine(3)).equals(userId) ||
 			       player != null && Perms.hasProtectionSignBreak(player);
 		} else {
-			List<String[]> signLines;
-			if (blockType == CHEST || blockType == TRAPPED_CHEST) {
+			List<Sign> signLines;
+			if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
 				signLines = SignUtils.getSignsForChest(b);
 			} else if (getProtectedMaterials().contains(blockType)) {
 				signLines = SignUtils.getSignsForBlock(b);
 			} else {
 				return true;
 			}
-			for (String[] lines : signLines) {
-				if (lines[0].equals(PROTECTION)) {
+			for (Sign sign : signLines) {
+				if (sign.getLine(0).equals(PROTECTION)) {
 					return false;
 				}
 			}
@@ -152,8 +142,8 @@ public class ProtectionSignFeature extends GeneralFeature {
 		}
 		final Material blockType = b.getType();
 		final String userId = UsernameUtils.getId(player.getName());
-		List<String[]> signLines;
-		if (blockType == CHEST || blockType == TRAPPED_CHEST) {
+		List<Sign> signLines;
+		if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
 			signLines = SignUtils.getSignsForChest(b);
 		} else if (getProtectedMaterials().contains(blockType)) {
 			signLines = SignUtils.getSignsForBlock(b);
@@ -162,12 +152,12 @@ public class ProtectionSignFeature extends GeneralFeature {
 		}
 		boolean protectedBySign = false;
 		boolean explicitlyAllowed = false;
-		for (String[] lines : signLines) {
-			if (lines[0].equals(PROTECTION)) {
+		for (Sign sign : signLines) {
+			if (sign.getLine(0).equals(PROTECTION)) {
 				protectedBySign = true;
-				if (ColorUtils.stripColorCodes(lines[1]).equals(userId) ||
-				    ColorUtils.stripColorCodes(lines[2]).equals(userId) ||
-				    ColorUtils.stripColorCodes(lines[3]).equals(userId)) {
+				if (ColorUtils.stripColorCodes(sign.getLine(1)).equals(userId) ||
+				    ColorUtils.stripColorCodes(sign.getLine(2)).equals(userId) ||
+				    ColorUtils.stripColorCodes(sign.getLine(3)).equals(userId)) {
 					explicitlyAllowed = true;
 					break;
 				}
@@ -208,17 +198,17 @@ public class ProtectionSignFeature extends GeneralFeature {
 	 */
 	public String isProtected(final Block b) {
 		final Material blockType = b.getType();
-		List<String[]> signLines;
-		if (blockType == CHEST || blockType == TRAPPED_CHEST) {
+		List<Sign> signLines;
+		if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
 			signLines = SignUtils.getSignsForChest(b);
 		} else if (getProtectedMaterials().contains(blockType)) {
 			signLines = SignUtils.getSignsForBlock(b);
 		} else {
 			return null;
 		}
-		for (String[] sign : signLines) {
-			if (PROTECTION.equals(sign[0])) {
-				return ColorUtils.stripColorCodes(sign[3]);
+		for (Sign sign : signLines) {
+			if (PROTECTION.equals(sign.getLine(0))) {
+				return ColorUtils.stripColorCodes(sign.getLine(3));
 			}
 		}
 		return null;

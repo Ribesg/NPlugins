@@ -135,6 +135,55 @@ public class NLocation {
 		return new NLocation(getWorldName(), x, y, z);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		NLocation nLocation = (NLocation) o;
+
+		if (Float.compare(nLocation.pitch, pitch) != 0) {
+			return false;
+		}
+		if (Double.compare(nLocation.x, x) != 0) {
+			return false;
+		}
+		if (Double.compare(nLocation.y, y) != 0) {
+			return false;
+		}
+		if (Float.compare(nLocation.yaw, yaw) != 0) {
+			return false;
+		}
+		if (Double.compare(nLocation.z, z) != 0) {
+			return false;
+		}
+		if (!worldName.equals(nLocation.worldName)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result;
+		long temp;
+		result = worldName.hashCode();
+		temp = Double.doubleToLongBits(x);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(y);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(z);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		result = 31 * result + (yaw != +0.0f ? Float.floatToIntBits(yaw) : 0);
+		result = 31 * result + (pitch != +0.0f ? Float.floatToIntBits(pitch) : 0);
+		return result;
+	}
+
 	public NLocation clone() {
 		return new NLocation(getWorldName(), getX(), getY(), getZ(), getYaw(), getPitch());
 	}

@@ -291,6 +291,33 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            false));
 
+		// Feature - ITEM NETWORK
+		newMessages.add(new Message(MessageId.general_itemnetwork_youNeedToBeCreator,
+		                            "&cYou need to be the creator of the Item Network to do that!",
+		                            null,
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_itemnetwork_alreadyExists,
+		                            "&cThe Item Network '%networkName%' already exists!",
+		                            new String[] {"%networkName%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_itemnetwork_unknown,
+		                            "&cUnkown Item Network '%networkName%'",
+		                            new String[] {"%networkName%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_itemnetwork_created,
+		                            "&aThe Item Network '%networkName%' has been created!",
+		                            new String[] {"%networkName%"},
+		                            null,
+		                            true));
+		newMessages.add(new Message(MessageId.general_itemnetwork_deleted,
+		                            "&aThe Item Network '%networkName%' has been deleted!",
+		                            new String[] {"%networkName%"},
+		                            null,
+		                            true));
+
 		return newMessages;
 	}
 

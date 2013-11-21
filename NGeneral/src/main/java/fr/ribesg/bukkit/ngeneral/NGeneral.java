@@ -5,6 +5,7 @@ import fr.ribesg.bukkit.ngeneral.config.Config;
 import fr.ribesg.bukkit.ngeneral.config.DbConfig;
 import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
+import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
 import fr.ribesg.bukkit.ngeneral.feature.protectionsign.ProtectionSignFeature;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
 import fr.ribesg.bukkit.ngeneral.simplefeature.AfkCommand;
@@ -30,6 +31,7 @@ public class NGeneral extends GeneralNode {
 	private GodModeFeature        godMode;
 	private FlyModeFeature        flyMode;
 	private ProtectionSignFeature protectionSign;
+	private ItemNetworkFeature    itemNetwork;
 
 	// Simple features
 	private FlySpeedCommand    flySpeedCommand;
@@ -87,6 +89,9 @@ public class NGeneral extends GeneralNode {
 		if (pluginConfig.hasProtectionSignFeature()) {
 			protectionSign = new ProtectionSignFeature(this);
 		}
+		if (pluginConfig.hasItemNetworkFeature()) {
+			itemNetwork = new ItemNetworkFeature(this);
+		}
 
 		// Db
 		try {
@@ -108,6 +113,9 @@ public class NGeneral extends GeneralNode {
 		}
 		if (pluginConfig.hasProtectionSignFeature()) {
 			protectionSign.init();
+		}
+		if (pluginConfig.hasItemNetworkFeature()) {
+			itemNetwork.init();
 		}
 
 		// Simple commands - Self-registered
@@ -171,5 +179,9 @@ public class NGeneral extends GeneralNode {
 
 	public FlyModeFeature getFlyMode() {
 		return flyMode;
+	}
+
+	public ItemNetworkFeature getItemNetwork() {
+		return itemNetwork;
 	}
 }

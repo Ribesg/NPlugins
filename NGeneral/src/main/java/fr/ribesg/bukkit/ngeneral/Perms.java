@@ -30,6 +30,10 @@ public class Perms {
 	private static final String PROTECTIONSIGN_BREAK  = "ngeneral.protectionsign.break";
 	private static final String SIGN_COLORS           = "ngeneral.signcolors";
 
+	public static boolean isAdmin(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(ADMIN);
+	}
+
 	public static boolean hasGod(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_GOD) || sender.hasPermission(ADMIN);
 	}

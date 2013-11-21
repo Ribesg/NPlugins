@@ -327,4 +327,10 @@ public enum MessageId {
 
 	general_nicknameFilter_invalid,
 
+	general_itemnetwork_youNeedToBeCreator,
+	general_itemnetwork_alreadyExists,
+	general_itemnetwork_unknown,
+	general_itemnetwork_created,
+	general_itemnetwork_deleted,
+
 }
