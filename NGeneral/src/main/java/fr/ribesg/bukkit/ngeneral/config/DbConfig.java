@@ -45,18 +45,22 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		// #################
 
 		if (plugin.getPluginConfig().hasItemNetworkFeature()) {
-			final ConfigurationSection inetSection = config.getConfigurationSection("itemnetworks");
-			for (String networkName : inetSection.getKeys(false)) {
-				final ConfigurationSection networkSection = inetSection.getConfigurationSection(networkName);
-				final String networkCreator = networkSection.getString("creator");
-				final ItemNetwork network = new ItemNetwork(plugin.getItemNetwork(), networkName, networkCreator);
-				final ConfigurationSection receiversSection = networkSection.getConfigurationSection("receivers");
-				for (String key : receiversSection.getKeys(false)) {
-					final ConfigurationSection receiverSection = receiversSection.getConfigurationSection(key);
-					final NLocation location = NLocation.toNLocation(receiverSection.getString("location"));
-					final String acceptsString = receiverSection.getString("accepts");
-					final ReceiverSign receiverSign = new ReceiverSign(location, acceptsString);
-					network.getReceivers().add(receiverSign);
+			if (config.isConfigurationSection("itemnetworks")) {
+				final ConfigurationSection inetSection = config.getConfigurationSection("itemnetworks");
+				for (String networkName : inetSection.getKeys(false)) {
+					final ConfigurationSection networkSection = inetSection.getConfigurationSection(networkName);
+					final String networkCreator = networkSection.getString("creator");
+					final ItemNetwork network = new ItemNetwork(plugin.getItemNetwork(), networkName, networkCreator);
+					if (networkSection.isConfigurationSection("receivers")) {
+						final ConfigurationSection receiversSection = networkSection.getConfigurationSection("receivers");
+						for (String key : receiversSection.getKeys(false)) {
+							final ConfigurationSection receiverSection = receiversSection.getConfigurationSection(key);
+							final NLocation location = NLocation.toNLocation(receiverSection.getString("location"));
+							final String acceptsString = receiverSection.getString("accepts");
+							final ReceiverSign receiverSign = new ReceiverSign(location, acceptsString);
+							network.getReceivers().add(receiverSign);
+						}
+					}
 				}
 			}
 		}
