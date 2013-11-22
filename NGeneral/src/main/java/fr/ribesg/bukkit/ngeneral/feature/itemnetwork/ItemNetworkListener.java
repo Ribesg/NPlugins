@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -209,7 +210,18 @@ public class ItemNetworkListener implements Listener {
 					feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_itemnetwork_youNeedToBeCreator);
 					event.setCancelled(true);
 				} else if (line1.equals(ITEMNETWORK_RECEIVER)) {
-					// TODO Remove the receiver
+					final String networkName = ColorUtils.stripColorCodes(sign.getLine(1));
+					final NLocation location = new NLocation(event.getBlock().getLocation());
+					final ItemNetwork network = feature.getNetworks().get(networkName);
+					if (network != null) {
+						final Iterator<ReceiverSign> it = network.getReceivers().iterator();
+						while (it.hasNext()) {
+							if (it.next().getLocation().equals(location)) {
+								it.remove();
+								break;
+							}
+						}
+					}
 				}
 			}
 		}

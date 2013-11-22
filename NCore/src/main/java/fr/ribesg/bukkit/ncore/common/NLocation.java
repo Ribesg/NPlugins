@@ -146,6 +146,32 @@ public class NLocation {
 
 		NLocation nLocation = (NLocation) o;
 
+		if (Double.compare(nLocation.x, x) != 0) {
+			return false;
+		}
+		if (Double.compare(nLocation.y, y) != 0) {
+			return false;
+		}
+		if (Double.compare(nLocation.z, z) != 0) {
+			return false;
+		}
+		if (!worldName.equals(nLocation.worldName)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean equalsPlus(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+
+		NLocation nLocation = (NLocation) o;
+
 		if (Float.compare(nLocation.pitch, pitch) != 0) {
 			return false;
 		}
