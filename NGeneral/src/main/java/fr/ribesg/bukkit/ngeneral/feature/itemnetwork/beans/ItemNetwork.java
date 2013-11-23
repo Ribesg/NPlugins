@@ -38,7 +38,7 @@ public class ItemNetwork {
 	}
 
 	public void destroy() {
-		this.task.cancel();
+		this.task.cancelTask();
 	}
 
 	/**
