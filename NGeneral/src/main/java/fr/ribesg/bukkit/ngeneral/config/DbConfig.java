@@ -122,12 +122,11 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 				for (ReceiverSign receiver : network.getReceivers()) {
 					content.append("      receiver" + i++ + ":\n");
 					content.append("        location: " + receiver.getLocation().toString() + "\n");
-					content.append("        accepts: " + receiver.getAcceptsString() + "\n");
+					content.append("        accepts: \"" + receiver.getAcceptsString() + "\"\n");
 				}
 			}
 			content.append('\n');
 		}
-		// TODO Limitation de distance
 
 		return content.toString();
 	}
