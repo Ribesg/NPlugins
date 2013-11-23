@@ -20,6 +20,8 @@ public class Config extends AbstractConfig<NGeneral> {
 	private boolean protectionSignFeature;
 	private boolean itemNetworkFeature;
 
+	private int itemNetworkMaxDistance;
+
 	private static final String DEFAULT_protectionSignNoPermMsgLine1 = "&4You don't";
 	private static final String DEFAULT_protectionSignNoPermMsgLine2 = "&4have the";
 	private static final String DEFAULT_protectionSignNoPermMsgLine3 = "&4permission!";
@@ -62,6 +64,13 @@ public class Config extends AbstractConfig<NGeneral> {
 	private String itemNetworkSignInvalidMaterialsMsgLine2;
 	private String itemNetworkSignInvalidMaterialsMsgLine3;
 
+	private static final String DEFAULT_itemNetworkSignTooFarMsgLine1 = "&4Too";
+	private static final String DEFAULT_itemNetworkSignTooFarMsgLine2 = "&4far!";
+	private static final String DEFAULT_itemNetworkSignTooFarMsgLine3 = "";
+	private String itemNetworkSignTooFarMsgLine1;
+	private String itemNetworkSignTooFarMsgLine2;
+	private String itemNetworkSignTooFarMsgLine3;
+
 	// Misc options
 	private boolean broadCastOnAfk;
 
@@ -75,6 +84,8 @@ public class Config extends AbstractConfig<NGeneral> {
 		flyModeFeature = true;
 		protectionSignFeature = true;
 		itemNetworkFeature = true;
+
+		itemNetworkMaxDistance = 100;
 
 		broadCastOnAfk = true;
 
@@ -101,6 +112,10 @@ public class Config extends AbstractConfig<NGeneral> {
 		itemNetworkSignInvalidMaterialsMsgLine1 = DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1;
 		itemNetworkSignInvalidMaterialsMsgLine2 = DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2;
 		itemNetworkSignInvalidMaterialsMsgLine3 = DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3;
+
+		itemNetworkSignTooFarMsgLine1 = DEFAULT_itemNetworkSignTooFarMsgLine1;
+		itemNetworkSignTooFarMsgLine2 = DEFAULT_itemNetworkSignTooFarMsgLine2;
+		itemNetworkSignTooFarMsgLine3 = DEFAULT_itemNetworkSignTooFarMsgLine3;
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
@@ -130,6 +145,10 @@ public class Config extends AbstractConfig<NGeneral> {
 		// itemNetworkFeature. Default: true.
 		// Possible values: true, false
 		setItemNetworkFeature(config.getBoolean("itemNetworkFeature", true));
+
+		// itemNetworkMaxDistance. Default: 100
+		// Possible values: any positive int
+		setItemNetworkMaxDistance(config.getInt("itemNetworkMaxDistance", 100));
 
 		// protectionSignNoPermMsgLines.
 		setProtectionSignNoPermMsgLine1(config.getString("protectionSignNoPermMsgLine1", DEFAULT_protectionSignNoPermMsgLine1));
@@ -314,6 +333,34 @@ public class Config extends AbstractConfig<NGeneral> {
 			setItemNetworkSignInvalidMaterialsMsgLine3(DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3);
 		}
 
+		// itemNetworkSignTooFarMsgLines.
+		setItemNetworkSignTooFarMsgLine1(config.getString("itemNetworkSignTooFarMsgLine1", DEFAULT_itemNetworkSignTooFarMsgLine1));
+		if (getItemNetworkSignTooFarMsgLine1().length() > 15) {
+			wrongValue("config.yml",
+			           "itemNetworkSignTooFarMsgLine1",
+			           getItemNetworkSignTooFarMsgLine1(),
+			           DEFAULT_itemNetworkSignTooFarMsgLine1);
+			setItemNetworkSignTooFarMsgLine1(DEFAULT_itemNetworkSignTooFarMsgLine1);
+		}
+
+		setItemNetworkSignTooFarMsgLine2(config.getString("itemNetworkSignTooFarMsgLine2", DEFAULT_itemNetworkSignTooFarMsgLine2));
+		if (getItemNetworkSignTooFarMsgLine2().length() > 15) {
+			wrongValue("config.yml",
+			           "itemNetworkSignTooFarMsgLine2",
+			           getItemNetworkSignTooFarMsgLine2(),
+			           DEFAULT_itemNetworkSignTooFarMsgLine2);
+			setItemNetworkSignTooFarMsgLine2(DEFAULT_itemNetworkSignTooFarMsgLine2);
+		}
+
+		setItemNetworkSignTooFarMsgLine3(config.getString("itemNetworkSignTooFarMsgLine3", DEFAULT_itemNetworkSignTooFarMsgLine3));
+		if (getItemNetworkSignTooFarMsgLine3().length() > 15) {
+			wrongValue("config.yml",
+			           "itemNetworkSignTooFarMsgLine3",
+			           getItemNetworkSignTooFarMsgLine3(),
+			           DEFAULT_itemNetworkSignTooFarMsgLine3);
+			setItemNetworkSignTooFarMsgLine3(DEFAULT_itemNetworkSignTooFarMsgLine3);
+		}
+
 		// ##################
 		// ## Misc options ##
 		// ##################
@@ -375,6 +422,11 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("# Defines if the ItemNetwork feature is enabled or not\n");
 		content.append("itemNetworkFeature: " + hasItemNetworkFeature() + "\n\n");
 
+		// Item Network Max Distance
+		content.append("# Maximum allowed distance between an Emitter sign and any\n");
+		content.append("# Receiver sign of the same network\n");
+		content.append("itemNetworkMaxDistance: " + getItemNetworkMaxDistance() + "\n\n");
+
 		// No Permission for Protection Signs message
 		content.append("# Message written on Error signs when player is not allowed to\n");
 		content.append("# place a Protection sign. Maximum length 15 characters!\n");
@@ -430,16 +482,27 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("itemNetworkSignNotAllowedMsgLine2: \"" + getItemNetworkSignNotAllowedMsgLine2() + "\"\n");
 		content.append("itemNetworkSignNotAllowedMsgLine3: \"" + getItemNetworkSignNotAllowedMsgLine3() + "\"\n\n");
 
-		// Not Allowed Item Network Signs message
-		content.append("# Message written on Error signs when the User is not owner of the provided\n");
-		content.append("# Item Network. Maximum length 15 characters!\n");
+		// Invalid Materials Item Network Signs message
+		content.append("# Message written on Error signs when the 3rd line defining\n");
+		content.append("# accepted materials is wrong. Maximum length 15 characters!\n");
 		content.append("# Default values:\n");
-		content.append("#   \"" + DEFAULT_itemNetworkSignNotAllowedMsgLine1 + "\"\n");
-		content.append("#   \"" + DEFAULT_itemNetworkSignNotAllowedMsgLine2 + "\"\n");
-		content.append("#   \"" + DEFAULT_itemNetworkSignNotAllowedMsgLine3 + "\"\n");
-		content.append("itemNetworkSignNotAllowedMsgLine1: \"" + getItemNetworkSignNotAllowedMsgLine1() + "\"\n");
-		content.append("itemNetworkSignNotAllowedMsgLine2: \"" + getItemNetworkSignNotAllowedMsgLine2() + "\"\n");
-		content.append("itemNetworkSignNotAllowedMsgLine3: \"" + getItemNetworkSignNotAllowedMsgLine3() + "\"\n\n");
+		content.append("#   \"" + DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1 + "\"\n");
+		content.append("#   \"" + DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2 + "\"\n");
+		content.append("#   \"" + DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3 + "\"\n");
+		content.append("itemNetworkSignInvalidMaterialsMsgLine1: \"" + getItemNetworkSignInvalidMaterialsMsgLine1() + "\"\n");
+		content.append("itemNetworkSignInvalidMaterialsMsgLine2: \"" + getItemNetworkSignInvalidMaterialsMsgLine2() + "\"\n");
+		content.append("itemNetworkSignInvalidMaterialsMsgLine3: \"" + getItemNetworkSignInvalidMaterialsMsgLine3() + "\"\n\n");
+
+		// Too Far Item Network Signs message
+		content.append("# Message written on Error signs when the User tries to create a\n");
+		content.append("# sign too far from other signs of the network. Maximum length 15 characters!\n");
+		content.append("# Default values:\n");
+		content.append("#   \"" + DEFAULT_itemNetworkSignTooFarMsgLine1 + "\"\n");
+		content.append("#   \"" + DEFAULT_itemNetworkSignTooFarMsgLine2 + "\"\n");
+		content.append("#   \"" + DEFAULT_itemNetworkSignTooFarMsgLine3 + "\"\n");
+		content.append("itemNetworkSignTooFarMsgLine1: \"" + getItemNetworkSignTooFarMsgLine1() + "\"\n");
+		content.append("itemNetworkSignTooFarMsgLine2: \"" + getItemNetworkSignTooFarMsgLine2() + "\"\n");
+		content.append("itemNetworkSignTooFarMsgLine3: \"" + getItemNetworkSignTooFarMsgLine3() + "\"\n\n");
 
 		// ##################
 		// ## Misc options ##
@@ -492,6 +555,14 @@ public class Config extends AbstractConfig<NGeneral> {
 
 	public void setItemNetworkFeature(boolean itemNetworkFeature) {
 		this.itemNetworkFeature = itemNetworkFeature;
+	}
+
+	public int getItemNetworkMaxDistance() {
+		return itemNetworkMaxDistance;
+	}
+
+	public void setItemNetworkMaxDistance(int itemNetworkMaxDistance) {
+		this.itemNetworkMaxDistance = itemNetworkMaxDistance;
 	}
 
 	public boolean hasBroadCastOnAfk() {
@@ -604,6 +675,30 @@ public class Config extends AbstractConfig<NGeneral> {
 
 	public void setItemNetworkSignInvalidMaterialsMsgLine3(String itemNetworkSignInvalidMaterialsMsgLine3) {
 		this.itemNetworkSignInvalidMaterialsMsgLine3 = itemNetworkSignInvalidMaterialsMsgLine3;
+	}
+
+	public String getItemNetworkSignTooFarMsgLine1() {
+		return itemNetworkSignTooFarMsgLine1;
+	}
+
+	public void setItemNetworkSignTooFarMsgLine1(String itemNetworkSignTooFarMsgLine1) {
+		this.itemNetworkSignTooFarMsgLine1 = itemNetworkSignTooFarMsgLine1;
+	}
+
+	public String getItemNetworkSignTooFarMsgLine2() {
+		return itemNetworkSignTooFarMsgLine2;
+	}
+
+	public void setItemNetworkSignTooFarMsgLine2(String itemNetworkSignTooFarMsgLine2) {
+		this.itemNetworkSignTooFarMsgLine2 = itemNetworkSignTooFarMsgLine2;
+	}
+
+	public String getItemNetworkSignTooFarMsgLine3() {
+		return itemNetworkSignTooFarMsgLine3;
+	}
+
+	public void setItemNetworkSignTooFarMsgLine3(String itemNetworkSignTooFarMsgLine3) {
+		this.itemNetworkSignTooFarMsgLine3 = itemNetworkSignTooFarMsgLine3;
 	}
 
 	public String getItemNetworkSignNotAllowedMsgLine1() {

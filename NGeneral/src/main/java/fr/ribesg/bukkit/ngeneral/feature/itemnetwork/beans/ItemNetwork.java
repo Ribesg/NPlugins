@@ -115,6 +115,26 @@ public class ItemNetwork {
 		}
 	}
 
+	/**
+	 * Checks if the privided location is too far from other signs to be a
+	 * valid Sign location.
+	 *
+	 * @param loc the location to check
+	 *
+	 * @return true if the location is too far, false otherwise
+	 */
+	public boolean isTooFar(final Location loc) {
+		final int maxDistance = feature.getPlugin().getPluginConfig().getItemNetworkMaxDistance();
+		final int squaredMaxDistance = maxDistance * maxDistance;
+		final NLocation nLoc = new NLocation(loc);
+		for (final ReceiverSign r : getReceivers()) {
+			if (r.getLocation().distanceSquared(nLoc) > squaredMaxDistance) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public ItemNetworkFeature getFeature() {
 		return feature;
 	}

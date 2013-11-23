@@ -158,6 +158,11 @@ public class ItemNetworkListener implements Listener {
 				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine1()));
 				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine2()));
 				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine3()));
+			} else if (network.isTooFar(event.getBlock().getLocation())) {
+				event.setLine(0, ERROR);
+				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine1()));
+				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine2()));
+				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine3()));
 			} else {
 				event.setLine(0, ITEMNETWORK_EMITTER);
 				event.setLine(1, SECONDARY_PREFIX + network.getName());
@@ -177,6 +182,11 @@ public class ItemNetworkListener implements Listener {
 				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine1()));
 				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine2()));
 				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine3()));
+			} else if (network.isTooFar(event.getBlock().getLocation())) {
+				event.setLine(0, ERROR);
+				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine1()));
+				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine2()));
+				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine3()));
 			} else {
 				final String acceptedString = event.getLine(2);
 				try {
