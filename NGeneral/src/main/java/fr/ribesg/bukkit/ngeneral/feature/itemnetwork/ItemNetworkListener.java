@@ -177,7 +177,7 @@ public class ItemNetworkListener implements Listener {
 				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignUnknownNetworkMsgLine1()));
 				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignUnknownNetworkMsgLine2()));
 				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignUnknownNetworkMsgLine3()));
-			} else if (!player.getName().equalsIgnoreCase(network.getCreator())) {
+			} else if (!Perms.hasItemNetworkAll(player) && !player.getName().equalsIgnoreCase(network.getCreator())) {
 				event.setLine(0, ERROR);
 				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine1()));
 				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine2()));
