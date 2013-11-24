@@ -120,19 +120,23 @@ public class ItemNetworkListener implements Listener {
 					if (sign.getLine(0).equals(ITEMNETWORK_EMITTER)) {
 						final String networkName = ColorUtils.stripColorCodes(sign.getLine(1));
 						final ItemNetwork network = feature.getNetworks().get(networkName.toLowerCase());
-						final List<ItemStack> items = new ArrayList<>();
-						for (final ItemStack is : inventory.getContents()) {
-							if (is != null) {
-								items.add(is);
+						if (network != null) {
+							final List<ItemStack> items = new ArrayList<>();
+							for (final ItemStack is : inventory.getContents()) {
+								if (is != null) {
+									items.add(is);
+								}
 							}
+							if (!items.isEmpty()) {
+								network.queue(new InventoryContent(loc, items));
+								inventory.clear();
+								feature.lock(loc);
+								return;
+							}
+							break;
+						} else {
+							sign.getBlock().breakNaturally();
 						}
-						if (!items.isEmpty()) {
-							network.queue(new InventoryContent(loc, items));
-							inventory.clear();
-							feature.lock(loc);
-							return;
-						}
-						break;
 					}
 				}
 				feature.unlock(loc);

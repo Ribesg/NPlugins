@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.common.collection.MultiMap;
 import fr.ribesg.bukkit.ncore.common.collection.Pair;
+import fr.ribesg.bukkit.ncore.common.collection.PairList;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -64,14 +64,15 @@ public class ItemNetwork {
 	 *
 	 * @param toBeSent the map of Items
 	 */
-	/* package */ void send(final Map<NLocation, MultiMap<ItemStack, List<ReceiverSign>>> toBeSent,
+	/* package */ void send(final Map<NLocation, PairList<ItemStack, List<ReceiverSign>>> toBeSent,
 	                        final Map<NLocation, List<ItemStack>> notSendable) {
 		for (final NLocation origin : toBeSent.keySet()) {
-			final MultiMap<ItemStack, List<ReceiverSign>> items = toBeSent.get(origin);
+			final PairList<ItemStack, List<ReceiverSign>> items = toBeSent.get(origin);
 			for (final Pair<ItemStack, List<ReceiverSign>> p : items) {
 				boolean sent = false;
+				ItemStack toSend = p.getKey();
 				for (final ReceiverSign rs : p.getValue()) {
-					if (rs.send(p.getKey())) {
+					if ((toSend = rs.send(toSend)) == null) {
 						sent = true;
 						break;
 					}

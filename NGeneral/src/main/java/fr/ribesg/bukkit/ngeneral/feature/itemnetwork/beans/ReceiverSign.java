@@ -7,7 +7,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -84,37 +83,22 @@ public class ReceiverSign {
 		return this.acceptsAll;
 	}
 
-	public boolean send(final ItemStack is) {
+	public ItemStack send(final ItemStack is) {
 		if ((System.currentTimeMillis() - lastUpdateDate) > 1000L) {
 			this.chests = SignUtils.getBlocksForLocation(this.location.toBukkitLocation(), getChestMaterials());
 		}
 
-		for (final Block b : this.chests) {
-			final InventoryHolder holder = (InventoryHolder) b.getState();
-			if (holder.getInventory().addItem(is).isEmpty()) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public List<ItemStack> send(final List<ItemStack> items) {
-		if ((System.currentTimeMillis() - lastUpdateDate) > 1000L) {
-			this.chests = SignUtils.getBlocksForLocation(this.location.toBukkitLocation(), getChestMaterials());
-		}
-
-		List<ItemStack> result = new ArrayList<>(items);
+		ItemStack[] result = new ItemStack[] {is};
 
 		for (final Block b : this.chests) {
 			final InventoryHolder holder = (InventoryHolder) b.getState();
-			result = new ArrayList<>(holder.getInventory().addItem(result.toArray(new ItemStack[result.size()])).values());
-			if (result.isEmpty()) {
+			result = holder.getInventory().addItem(is).values().toArray(new ItemStack[1]);
+			if (result[0] == null) {
 				break;
 			}
 		}
 
-		return result;
+		return result[0];
 	}
 
 	public NLocation getLocation() {

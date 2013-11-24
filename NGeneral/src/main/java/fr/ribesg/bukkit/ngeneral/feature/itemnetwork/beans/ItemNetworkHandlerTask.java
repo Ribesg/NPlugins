@@ -1,6 +1,6 @@
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.common.collection.MultiMap;
+import fr.ribesg.bukkit.ncore.common.collection.PairList;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
@@ -33,7 +33,7 @@ public class ItemNetworkHandlerTask extends BukkitRunnable {
 		if (!this.network.getBuffer().isEmpty()) {
 
 			// This map will link origin locations to itemstack to send and their possible destinations
-			final Map<NLocation, MultiMap<ItemStack, List<ReceiverSign>>> toBeSent = new HashMap<>(this.network.getBuffer().size());
+			final Map<NLocation, PairList<ItemStack, List<ReceiverSign>>> toBeSent = new HashMap<>(this.network.getBuffer().size());
 
 			// This map will contain what cannot be sent over this Network
 			final Map<NLocation, List<ItemStack>> notSendable = new HashMap<>();
@@ -42,7 +42,7 @@ public class ItemNetworkHandlerTask extends BukkitRunnable {
 			do {
 
 				// Map of what will be sent and the possible destinations
-				final MultiMap<ItemStack, List<ReceiverSign>> contentMap = new MultiMap<>();
+				final PairList<ItemStack, List<ReceiverSign>> contentMap = new PairList<>();
 
 				// Get the InventoryContent to sent
 				final InventoryContent content = this.network.getBuffer().poll();
