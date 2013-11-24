@@ -245,7 +245,10 @@ public class TeleportCommands implements CommandExecutor {
 					loc.setYaw(player.getLocation().getYaw());
 					backMap.put(player.getName(), new NLocation(player.getLocation()));
 					player.teleport(loc);
-					plugin.sendMessage(player, MessageId.general_tp_youToLocation);
+					plugin.sendMessage(player, MessageId.general_tp_youToLocation, "<" + loc.getX() +
+					                                                               ";" + loc.getY() +
+					                                                               ";" + loc.getZ() +
+					                                                               ">");
 					return true;
 				}
 			}
@@ -275,7 +278,10 @@ public class TeleportCommands implements CommandExecutor {
 							loc.setYaw(toTeleport.getLocation().getYaw());
 							toTeleport.teleport(loc);
 							plugin.sendMessage(toTeleport, MessageId.general_tp_somebodyToLocation, sender.getName());
-							plugin.sendMessage(sender, MessageId.general_tp_youSomebodyToLocation, toTeleport.getName());
+							plugin.sendMessage(sender, MessageId.general_tp_youSomebodyToLocation, toTeleport.getName(), "<" + loc.getX() +
+							                                                                                             ";" + loc.getY() +
+							                                                                                             ";" + loc.getZ() +
+							                                                                                             ">");
 						}
 					}
 					return true;
