@@ -61,6 +61,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 							network.getReceivers().add(receiverSign);
 						}
 					}
+					plugin.getItemNetwork().getNetworks().put(networkName.toLowerCase(), network);
 				}
 			}
 		}
