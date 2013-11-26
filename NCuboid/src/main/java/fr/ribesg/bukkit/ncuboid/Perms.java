@@ -19,8 +19,8 @@ public class Perms {
 	private static final String CMD_DELETE           = "ncuboid.cmd.delete";
 	private static final String CMD_FLAG             = "ncuboid.cmd.flag";
 	private static final String CMD_FLAGATTRIBUTE    = "ncuboid.cmd.flagattribute";
-	private static final String CMD_ALLOW            = "ncuboid.cmd.allow";
-	private static final String CMD_DENY             = "ncuboid.cmd.deny";
+	private static final String CMD_ADMIN            = "ncuboid.cmd.admin";
+	private static final String CMD_USER             = "ncuboid.cmd.user";
 
 	// Flag permissions
 	private static Map<Flag, String> flagPermissions;
@@ -153,10 +153,10 @@ public class Perms {
 	}
 
 	public static boolean hasAdmin(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_ALLOW) || sender.hasPermission(USER);
+		return isAdmin(sender) || sender.hasPermission(CMD_ADMIN) || sender.hasPermission(USER);
 	}
 
 	public static boolean hasUser(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_DENY) || sender.hasPermission(USER);
+		return isAdmin(sender) || sender.hasPermission(CMD_USER) || sender.hasPermission(USER);
 	}
 }
