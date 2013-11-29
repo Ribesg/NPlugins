@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.ncore.common.collection;
+package fr.ribesg.bukkit.ncore.common.collection.pairlist;
 public class Pair<K, V> {
 
 	private K key;

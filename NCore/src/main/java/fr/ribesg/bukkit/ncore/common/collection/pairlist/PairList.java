@@ -1,4 +1,4 @@
-package fr.ribesg.bukkit.ncore.common.collection;
+package fr.ribesg.bukkit.ncore.common.collection.pairlist;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

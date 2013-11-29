@@ -1,7 +1,7 @@
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.common.collection.Pair;
-import fr.ribesg.bukkit.ncore.common.collection.PairList;
+import fr.ribesg.bukkit.ncore.common.collection.pairlist.Pair;
+import fr.ribesg.bukkit.ncore.common.collection.pairlist.PairList;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
 import org.bukkit.Location;
 import org.bukkit.Material;
