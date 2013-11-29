@@ -2,6 +2,7 @@ package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.common.AsyncPermAccessor;
 import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
+import fr.ribesg.bukkit.ntalk.filter.ChatFilter;
 import fr.ribesg.bukkit.ntalk.format.Formater;
 import fr.ribesg.bukkit.ntalk.lang.Messages;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -20,6 +21,9 @@ public class NTalk extends TalkNode {
 
 	// Formater
 	private Formater formater;
+
+	// Chat Filter
+	private ChatFilter chatFilter;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -52,6 +56,18 @@ public class NTalk extends TalkNode {
 			getLogger().severe("This error occured when NTalk tried to load config.yml");
 			return false;
 		}
+
+		// Chat filter
+		try {
+			chatFilter = new ChatFilter(this);
+			chatFilter.loadConfig("filters.yml");
+		} catch (final IOException | InvalidConfigurationException e) {
+			getLogger().severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			getLogger().severe("This error occured when NTalk tried to load filters.yml");
+			return false;
+		}
+
 		formater = new Formater(this);
 
 		// Listeners
@@ -88,6 +104,10 @@ public class NTalk extends TalkNode {
 
 	public Formater getFormater() {
 		return formater;
+	}
+
+	public ChatFilter getChatFilter() {
+		return chatFilter;
 	}
 
 	@Override
