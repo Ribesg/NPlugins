@@ -1,3 +1,12 @@
+/***************************************************************************
+ * Project file:    NPlugins - NTheEndAgain - NTheEndAgain.java            *
+ * Full Class name: fr.ribesg.bukkit.ntheendagain.NTheEndAgain             *
+ *                                                                         *
+ *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
+ *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
+ ***************************************************************************/
+
 package fr.ribesg.bukkit.ntheendagain;
 
 import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;

@@ -1,3 +1,12 @@
+/***************************************************************************
+ * Project file:    NPlugins - NCore - InventorySorter.java                *
+ * Full Class name: fr.ribesg.bukkit.ncore.utils.InventorySorter           *
+ *                                                                         *
+ *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
+ *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
+ ***************************************************************************/
+
 package fr.ribesg.bukkit.ncore.utils;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;

@@ -1,3 +1,12 @@
+/***************************************************************************
+ * Project file:    NPlugins - NEnchantingEgg - ActiveToEggProvidedTransition.java
+ * Full Class name: fr.ribesg.bukkit.nenchantingegg.altar.transition.ActiveToEggProvidedTransition
+ *                                                                         *
+ *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
+ *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
+ ***************************************************************************/
+
 package fr.ribesg.bukkit.nenchantingegg.altar.transition;
 
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;

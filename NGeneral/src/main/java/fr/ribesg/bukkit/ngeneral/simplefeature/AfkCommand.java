@@ -1,3 +1,12 @@
+/***************************************************************************
+ * Project file:    NPlugins - NGeneral - AfkCommand.java                  *
+ * Full Class name: fr.ribesg.bukkit.ngeneral.simplefeature.AfkCommand     *
+ *                                                                         *
+ *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
+ *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
+ ***************************************************************************/
+
 package fr.ribesg.bukkit.ngeneral.simplefeature;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
