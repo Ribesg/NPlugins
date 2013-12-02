@@ -16,8 +16,8 @@ import org.bukkit.util.Vector;
 import java.util.logging.Logger;
 
 /**
- * It's more or less like OfflinePlayer for Player
- * It's a Location with the World's name instead of a World Object.
+ * Represents a Location, without reference to Bukkit's World.
+ * It stores the world name as a String instead of the reference.
  */
 public class NLocation {
 
@@ -240,9 +240,8 @@ public class NLocation {
 	/**
 	 * @param loc a Location
 	 *
-	 * @return A human-readable String representation of this Location
+	 * @return a human-readable String representation of this Location
 	 */
-
 	public static String toString(final Location loc) {
 		if (loc == null) {
 			return "null";
@@ -281,7 +280,7 @@ public class NLocation {
 	/**
 	 * @param loc a Location
 	 *
-	 * @return A human-readable String representation of this Location, including Yaw and Pitch
+	 * @return a human-readable String representation of this Location, including Yaw and Pitch
 	 */
 	public static String toStringPlus(final Location loc) {
 		if (loc == null) {
@@ -364,7 +363,7 @@ public class NLocation {
 	/**
 	 * @param string A String representing a location, returned by {@link #toString(Location)} or {@link #toStringPlus(Location)}
 	 *
-	 * @return The actual NLocation or null if the string was malformed
+	 * @return the actual NLocation or null if the string was malformed
 	 */
 	public static NLocation toNLocation(final String string) {
 		if (string == null || "null".equals(string)) {

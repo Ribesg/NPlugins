@@ -13,6 +13,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 
+/**
+ * Basically stores a String and 2 integers:
+ * World name and 2D chunk coordinates.
+ */
 public class ChunkCoord {
 
 	private static final String SEPARATOR = "##";
@@ -43,6 +47,7 @@ public class ChunkCoord {
 		return worldName + SEPARATOR + x + SEPARATOR + z;
 	}
 
+	/** Yeah it's a deserialization method. */
 	public static ChunkCoord fromString(final String string) {
 		final String[] split = string.split(SEPARATOR);
 		return new ChunkCoord(Integer.parseInt(split[1]), Integer.parseInt(split[2]), split[0]);

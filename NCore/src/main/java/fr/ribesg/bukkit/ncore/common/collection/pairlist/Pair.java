@@ -43,7 +43,7 @@ public class Pair<K, V> {
 			return false;
 		}
 
-		Pair pair = (Pair) o;
+		final Pair pair = (Pair) o;
 
 		if (key != null ? !key.equals(pair.key) : pair.key != null) {
 			return false;
