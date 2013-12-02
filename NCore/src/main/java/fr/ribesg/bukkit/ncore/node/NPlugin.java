@@ -40,20 +40,7 @@ public abstract class NPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		FrameBuilder frame;
-		if (isCoreMissing()) {
-			frame = new FrameBuilder();
-			frame.addLine("This plugin requires NCore", FrameBuilder.Option.CENTER);
-			frame.addLine("It is an additional Plugin you");
-			frame.addLine("should put in you /plugins folder.");
-			frame.addLine("See " + NCORE_WEBSITE);
-			frame.addLine("Disabling plugin...");
-
-			for (final String s : frame.build()) {
-				getLogger().severe(s);
-			}
-
-			getPluginLoader().disablePlugin(this);
-		} else if (badCoreVersion()) {
+		if (badCoreVersion()) {
 
 			frame = new FrameBuilder();
 			frame.addLine("This plugin requires NCore v" + getMinCoreVersion(), FrameBuilder.Option.CENTER);
@@ -122,22 +109,6 @@ public abstract class NPlugin extends JavaPlugin {
 	 * Only here for compliance
 	 */
 	protected abstract void onNodeDisable();
-
-	/**
-	 * Check if the Core exists, if yes, connect to it.
-	 *
-	 * @return If the Core was found
-	 */
-
-	private boolean isCoreMissing() {
-		if (!Bukkit.getPluginManager().isPluginEnabled(NCORE)) {
-			return true;
-		} else {
-			core = (NCore) Bukkit.getPluginManager().getPlugin(NCORE);
-			linkCore();
-			return false;
-		}
-	}
 
 	private boolean badCoreVersion() {
 		return getCoreVersion().compareTo(getMinCoreVersion()) < 0;
