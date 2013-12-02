@@ -67,14 +67,16 @@ public class NTalk extends TalkNode {
 		}
 
 		// Chat filter
-		try {
-			chatFilter = new ChatFilter(this);
-			chatFilter.loadConfig("filters.yml");
-		} catch (final IOException | InvalidConfigurationException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NTalk tried to load filters.yml");
-			return false;
+		if (pluginConfig.isChatFiltersEnabled()) {
+			try {
+				chatFilter = new ChatFilter(this);
+				chatFilter.loadConfig("filters.yml");
+			} catch (final IOException | InvalidConfigurationException e) {
+				getLogger().severe("An error occured, stacktrace follows:");
+				e.printStackTrace();
+				getLogger().severe("This error occured when NTalk tried to load filters.yml");
+				return false;
+			}
 		}
 
 		formater = new Formater(this);

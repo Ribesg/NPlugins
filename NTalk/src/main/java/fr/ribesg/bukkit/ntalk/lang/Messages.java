@@ -81,6 +81,11 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            true));
 
+		// Chat Filter reasons
+		newMessages.add(new Message(MessageId.talk_filterMutedReason, "Use of word '%word%'", new String[] {"%word%"}, null, false));
+		newMessages.add(new Message(MessageId.talk_filterMutedReason, "Use of word '%word%'", new String[] {"%word%"}, null, false));
+		newMessages.add(new Message(MessageId.talk_filterMutedReason, "Use of word '%word%'", new String[] {"%word%"}, null, false));
+
 		return newMessages;
 	}
 }

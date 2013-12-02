@@ -185,6 +185,10 @@ public enum MessageId {
 	talk_youWereNickNamed,
 	talk_youWereDeNickNamed,
 
+	talk_filterMutedReason,
+	talk_filterBannedReason,
+	talk_filterJailedReason,
+
 	// ##################### //
 	// ## NPlayer related ## //
 	// ##################### //

@@ -25,9 +25,12 @@ import java.util.Set;
 
 public class Config extends AbstractConfig<NTalk> {
 
-	private static final String defaultTemplate   = "&f<[prefix][name][suffix]&f> [message]";
-	private static final String defaultPmTemplate = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> " +
-	                                                "[message]";
+	private static final String defaultTemplate        = "&f<[prefix][name][suffix]&f> [message]";
+	private static final String defaultPmTemplate      = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> " +
+	                                                     "[message]";
+	private static final String defaultTempMuteCommand = "/mute %player% %duration%s %reason%";
+	private static final String defaultTempBanCommand  = "/ban %player% %duration%s %reason%";
+	private static final String defaultTempJailCommand = "/jail %player% %duration% %jailName% %reason%";
 
 	private String template;
 	private String pmTemplate;
@@ -40,6 +43,12 @@ public class Config extends AbstractConfig<NTalk> {
 
 	// GroupName;Format
 	private Map<String, Format> groupFormats;
+
+	// Filters
+	private boolean chatFiltersEnabled;
+	private String  tempMuteCommand;
+	private String  tempBanCommand;
+	private String  tempJailCommand;
 
 	public Config(final NTalk instance) {
 		super(instance);
@@ -60,6 +69,10 @@ public class Config extends AbstractConfig<NTalk> {
 		getGroupFormats().put("admin", new Format(FormatType.GROUP, "admin", "&c[Admin]&f", ""));
 		getGroupFormats().put("user", new Format(FormatType.GROUP, "user", "&c[User]&f", ""));
 
+		setChatFiltersEnabled(true);
+		setTempMuteCommand(defaultTempMuteCommand);
+		setTempBanCommand(defaultTempBanCommand);
+		setTempJailCommand(defaultTempJailCommand);
 	}
 
 	/** @see AbstractConfig#handleValues(YamlConfiguration) */
@@ -153,6 +166,46 @@ public class Config extends AbstractConfig<NTalk> {
 			                   "opGroup",
 			                   "admin");
 		}
+
+		// Chat filter
+		setChatFiltersEnabled(config.getBoolean("enableChatFilter", true));
+
+		setTempMuteCommand(config.getString("tempMuteCommand", defaultTempMuteCommand));
+		if (!getTempMuteCommand().contains("%player%") ||
+		    !getTempMuteCommand().contains("%duration%") ||
+		    !getTempMuteCommand().contains("%reason%")) {
+			setTempMuteCommand(defaultTempMuteCommand);
+			plugin.sendMessage(plugin.getServer().getConsoleSender(),
+			                   MessageId.incorrectValueInConfiguration,
+			                   "config.yml",
+			                   "tempMuteCommand",
+			                   defaultTempMuteCommand);
+		}
+
+		setTempBanCommand(config.getString("tempBanCommand", defaultTempBanCommand));
+		if (!getTempBanCommand().contains("%player%") ||
+		    !getTempBanCommand().contains("%duration%") ||
+		    !getTempBanCommand().contains("%reason%")) {
+			setTempBanCommand(defaultTempBanCommand);
+			plugin.sendMessage(plugin.getServer().getConsoleSender(),
+			                   MessageId.incorrectValueInConfiguration,
+			                   "config.yml",
+			                   "tempBanCommand",
+			                   defaultTempBanCommand);
+		}
+
+		setTempJailCommand(config.getString("tempJailCommand", defaultTempJailCommand));
+		if (!getTempJailCommand().contains("%player%") ||
+		    !getTempJailCommand().contains("%duration%") ||
+		    !getTempJailCommand().contains("%jailName%") ||
+		    !getTempJailCommand().contains("%reason%")) {
+			setTempJailCommand(defaultTempJailCommand);
+			plugin.sendMessage(plugin.getServer().getConsoleSender(),
+			                   MessageId.incorrectValueInConfiguration,
+			                   "config.yml",
+			                   "tempJailCommand",
+			                   defaultTempJailCommand);
+		}
 	}
 
 	/** @see AbstractConfig#getConfigString() */
@@ -231,6 +284,32 @@ public class Config extends AbstractConfig<NTalk> {
 		}
 		content.append("\n");
 
+		// Chat filter
+		content.append("# Globally toggle the Chat Filter system.\n");
+		content.append("enableChatFilter: " + isChatFiltersEnabled() + "\n\n");
+
+		content.append("# The tempmute command that will be used to mute people\n");
+		content.append("# It should contain:\n");
+		content.append("# - %player% : will be replaced by the player's name\n");
+		content.append("# - %duration% : will be replaced by the duration, in seconds\n");
+		content.append("# - %reason% : will be replaced by the reason\n");
+		content.append("tempMuteCommand: " + getTempMuteCommand());
+
+		content.append("# The tempban command that will be used to ban people\n");
+		content.append("# It should contain:\n");
+		content.append("# - %player% : will be replaced by the player's name\n");
+		content.append("# - %duration% : will be replaced by the duration, in seconds\n");
+		content.append("# - %reason% : will be replaced by the reason\n");
+		content.append("tempBanCommand: " + getTempBanCommand());
+
+		content.append("# The tempjail command that will be used to mute people\n");
+		content.append("# It should contain:\n");
+		content.append("# - %player% : will be replaced by the player's name\n");
+		content.append("# - %duration% : will be replaced by the duration, in seconds\n");
+		content.append("# - %jailName% : will be replaced by the jail name\n");
+		content.append("# - %reason% : will be replaced by the reason\n");
+		content.append("tempJailCommand: " + getTempJailCommand());
+
 		return content.toString();
 	}
 
@@ -238,7 +317,7 @@ public class Config extends AbstractConfig<NTalk> {
 		return groupFormats;
 	}
 
-	public void setGroupFormats(Map<String, Format> groupFormats) {
+	public void setGroupFormats(final Map<String, Format> groupFormats) {
 		this.groupFormats = groupFormats;
 	}
 
@@ -246,7 +325,7 @@ public class Config extends AbstractConfig<NTalk> {
 		return opGroup;
 	}
 
-	public void setOpGroup(String opGroup) {
+	public void setOpGroup(final String opGroup) {
 		this.opGroup = opGroup;
 	}
 
@@ -254,7 +333,7 @@ public class Config extends AbstractConfig<NTalk> {
 		return playerFormats;
 	}
 
-	public void setPlayerFormats(Map<String, Format> playerFormats) {
+	public void setPlayerFormats(final Map<String, Format> playerFormats) {
 		this.playerFormats = playerFormats;
 	}
 
@@ -262,7 +341,7 @@ public class Config extends AbstractConfig<NTalk> {
 		return playerNicknames;
 	}
 
-	public void setPlayerNicknames(Map<String, String> playerNicknames) {
+	public void setPlayerNicknames(final Map<String, String> playerNicknames) {
 		this.playerNicknames = playerNicknames;
 	}
 
@@ -270,7 +349,7 @@ public class Config extends AbstractConfig<NTalk> {
 		return pmTemplate;
 	}
 
-	public void setPmTemplate(String pmTemplate) {
+	public void setPmTemplate(final String pmTemplate) {
 		this.pmTemplate = pmTemplate;
 	}
 
@@ -278,7 +357,7 @@ public class Config extends AbstractConfig<NTalk> {
 		return template;
 	}
 
-	public void setTemplate(String template) {
+	public void setTemplate(final String template) {
 		this.template = template;
 	}
 
@@ -286,7 +365,64 @@ public class Config extends AbstractConfig<NTalk> {
 		return defaultFormat;
 	}
 
-	public void setDefaultFormat(Format defaultFormat) {
+	public void setDefaultFormat(final Format defaultFormat) {
 		this.defaultFormat = defaultFormat;
+	}
+
+	public boolean isChatFiltersEnabled() {
+		return chatFiltersEnabled;
+	}
+
+	public void setChatFiltersEnabled(final boolean chatFiltersEnabled) {
+		this.chatFiltersEnabled = chatFiltersEnabled;
+	}
+
+	public String getTempMuteCommand() {
+		return tempMuteCommand;
+	}
+
+	public String getTempMuteCommand(final String playerName, final long duration, final String reason) {
+		String result = getTempMuteCommand();
+		result = result.replace("%player%", playerName);
+		result = result.replace("%duration%", Long.toString(duration));
+		result = result.replace("%reason%", reason);
+		return result.substring(1);
+	}
+
+	public void setTempMuteCommand(final String tempMuteCommand) {
+		this.tempMuteCommand = tempMuteCommand;
+	}
+
+	public String getTempBanCommand() {
+		return tempBanCommand;
+	}
+
+	public String getTempBanCommand(final String playerName, final long duration, final String reason) {
+		String result = getTempMuteCommand();
+		result = result.replace("%player%", playerName);
+		result = result.replace("%duration%", Long.toString(duration));
+		result = result.replace("%reason%", reason);
+		return result.substring(1);
+	}
+
+	public void setTempBanCommand(final String tempBanCommand) {
+		this.tempBanCommand = tempBanCommand;
+	}
+
+	public String getTempJailCommand() {
+		return tempJailCommand;
+	}
+
+	public String getTempJailCommand(final String playerName, final long duration, final String jailName, final String reason) {
+		String result = getTempMuteCommand();
+		result = result.replace("%player%", playerName);
+		result = result.replace("%duration%", Long.toString(duration));
+		result = result.replace("%jailName%", jailName);
+		result = result.replace("%reason%", reason);
+		return result.substring(1);
+	}
+
+	public void setTempJailCommand(final String tempJailCommand) {
+		this.tempJailCommand = tempJailCommand;
 	}
 }
