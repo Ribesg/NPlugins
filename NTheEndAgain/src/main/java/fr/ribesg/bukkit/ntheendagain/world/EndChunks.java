@@ -114,7 +114,7 @@ public class EndChunks implements Iterable<EndChunk> {
 		}
 	}
 
-	public void load(final Path pathEndChunks) throws IOException {
+	public void load(final Path pathEndChunks) {
 		if (Files.exists(pathEndChunks)) {
 			final YamlConfiguration config = new YamlConfiguration();
 			try (BufferedReader reader = Files.newBufferedReader(pathEndChunks, CHARSET)) {

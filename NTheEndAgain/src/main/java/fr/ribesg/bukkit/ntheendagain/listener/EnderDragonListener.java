@@ -205,7 +205,7 @@ public class EnderDragonListener implements Listener {
 						totalDamages += e.getValue();
 					}
 					for (final Entry<String, Double> e : handler.getDragons().get(event.getEntity().getUniqueId()).entrySet()) {
-						ratioMap.put((float) ((double) e.getValue() / (double) totalDamages), e.getKey());
+						ratioMap.put((float) (e.getValue() / (double) totalDamages), e.getKey());
 					}
 
 					// Remove entries for Players whom done less damages than threshold

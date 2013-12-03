@@ -41,7 +41,7 @@ public class ActiveToEggProvidedTransition extends Transition {
 	@Override
 	protected Set<Step> createSteps() {
 
-		final Set<Step> steps = new HashSet<Step>(); // Result
+		final Set<Step> steps = new HashSet<>(); // Result
 
 		final int t = 42; // Time between block changes
 
@@ -154,9 +154,7 @@ public class ActiveToEggProvidedTransition extends Transition {
 
 		for (int x = -1; x <= 1; x++) {
 			for (int z = -2; z <= 2; z++) {
-				if (x == 0 && z == 0) {
-					continue;
-				} else {
+				if (x != 0 || z != 0) {
 					steps.add(new BlockStep(5 * t, new RelativeBlock(x, 0, z, Material.ENDER_PORTAL)));
 				}
 			}

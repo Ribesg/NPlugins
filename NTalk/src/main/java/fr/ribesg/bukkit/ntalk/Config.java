@@ -257,7 +257,7 @@ public class Config extends AbstractConfig<NTalk> {
 		// player prefixes and suffixes
 		content.append("# Player prefixes, nicknames and suffixes. Use exact player names\n");
 		content.append("playerFormats:\n");
-		final Set<String> playerNames = new HashSet<String>();
+		final Set<String> playerNames = new HashSet<>();
 		playerNames.addAll(getPlayerFormats().keySet());
 		playerNames.addAll(getPlayerNicknames().keySet());
 		for (final String playerName : playerNames) {

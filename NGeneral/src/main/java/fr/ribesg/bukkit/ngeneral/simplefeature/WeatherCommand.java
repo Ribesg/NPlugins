@@ -38,7 +38,7 @@ public class WeatherCommand implements CommandExecutor {
 				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 				return true;
 			} else {
-				World world = null;
+				World world;
 				String type;
 				int duration = new Random().nextInt(1000) + 500;
 				if (args.length == 1) {

@@ -40,7 +40,7 @@ public class InactiveToActiveTransition extends Transition {
 	@Override
 	protected Set<Step> createSteps() {
 
-		final Set<Step> steps = new HashSet<Step>(); // Result
+		final Set<Step> steps = new HashSet<>(); // Result
 
 		final int t = 10; // Time between block changes
 

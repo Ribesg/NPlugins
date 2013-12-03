@@ -9,8 +9,8 @@
 
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
+import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.ThrownPotion;

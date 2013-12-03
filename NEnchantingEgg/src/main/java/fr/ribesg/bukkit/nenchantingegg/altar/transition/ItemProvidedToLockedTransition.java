@@ -42,7 +42,7 @@ public class ItemProvidedToLockedTransition extends Transition {
 	@Override
 	protected Set<Step> createSteps() {
 
-		final Set<Step> steps = new HashSet<Step>(); // Result
+		final Set<Step> steps = new HashSet<>(); // Result
 
 		final int t = 30; // Time between block changes
 

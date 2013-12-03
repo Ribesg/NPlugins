@@ -103,13 +103,14 @@ public class PunishmentDb {
 						break;
 					case MUTE:
 						p = new Mute(punished, reason, endDate);
+						break;
 					case JAIL:
 						final String jailPointName = pSection.getString("jailPointName");
 						p = new Jail(punished, reason, jailPointName, endDate);
 						break;
 				}
 
-				Map<String, Set<Punishment>> relatedMap = null;
+				Map<String, Set<Punishment>> relatedMap;
 				if (p.isPermanent()) {
 					relatedMap = getPermPunishments();
 				} else {

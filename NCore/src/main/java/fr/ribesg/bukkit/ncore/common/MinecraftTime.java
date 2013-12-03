@@ -119,10 +119,10 @@ public enum MinecraftTime {
 		return this.end;
 	}
 
-	/**Checks if the provided time corresponds to this Enum value
+	/**
+	 * Checks if the provided time corresponds to this Enum value
 	 *
 	 * @param time some absolute or relative time
-	 * @return
 	 */
 	private boolean is(final long time) {
 		final long notFullTime = time % DAY_LENGTH;

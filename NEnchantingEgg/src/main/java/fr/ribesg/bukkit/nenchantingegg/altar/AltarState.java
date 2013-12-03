@@ -80,7 +80,7 @@ public enum AltarState {
 
 	public static Set<RelativeBlock> getInactiveStateBlocks() {
 		if (inactiveStateBlocks == null) {
-			inactiveStateBlocks = new HashSet<RelativeBlock>();
+			inactiveStateBlocks = new HashSet<>();
 
 			// Y = 0
 			//

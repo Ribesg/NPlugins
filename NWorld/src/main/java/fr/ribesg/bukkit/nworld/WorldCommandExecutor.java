@@ -563,7 +563,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 		}
 		final Player player = (Player) sender;
 		int spawnBehaviour = plugin.getPluginConfig().getSpawnCommandBehaviour();
-		String worldName = null;
+		String worldName;
 		if (spawnBehaviour == 0) {
 			worldName = player.getWorld().getName();
 		} else {

@@ -27,7 +27,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		TMPSTATE1,
 
 		/** All points selected, waiting for "/cuboid create" command */
-		TMPSTATE2;
+		TMPSTATE2
 	}
 
 	private String          regionName;

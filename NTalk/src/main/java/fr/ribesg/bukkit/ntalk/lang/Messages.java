@@ -32,7 +32,7 @@ public class Messages extends AbstractMessages {
 	/** @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#createMessage() */
 	@Override
 	protected Set<Message> createMessage() {
-		final Set<Message> newMessages = new HashSet<Message>();
+		final Set<Message> newMessages = new HashSet<>();
 
 		// General plugin messages
 		newMessages.add(new Message(MessageId.incorrectValueInConfiguration,

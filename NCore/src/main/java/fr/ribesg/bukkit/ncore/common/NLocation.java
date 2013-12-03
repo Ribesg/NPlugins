@@ -155,20 +155,11 @@ public class NLocation {
 
 		NLocation nLocation = (NLocation) o;
 
-		if (Double.compare(nLocation.x, x) != 0) {
-			return false;
-		}
-		if (Double.compare(nLocation.y, y) != 0) {
-			return false;
-		}
-		if (Double.compare(nLocation.z, z) != 0) {
-			return false;
-		}
-		if (!worldName.equals(nLocation.worldName)) {
-			return false;
-		}
+		return Double.compare(nLocation.x, x) == 0 &&
+		       Double.compare(nLocation.y, y) == 0 &&
+		       Double.compare(nLocation.z, z) == 0 &&
+		       worldName.equals(nLocation.worldName);
 
-		return true;
 	}
 
 	public boolean equalsPlus(Object o) {
@@ -181,26 +172,13 @@ public class NLocation {
 
 		NLocation nLocation = (NLocation) o;
 
-		if (Float.compare(nLocation.pitch, pitch) != 0) {
-			return false;
-		}
-		if (Double.compare(nLocation.x, x) != 0) {
-			return false;
-		}
-		if (Double.compare(nLocation.y, y) != 0) {
-			return false;
-		}
-		if (Float.compare(nLocation.yaw, yaw) != 0) {
-			return false;
-		}
-		if (Double.compare(nLocation.z, z) != 0) {
-			return false;
-		}
-		if (!worldName.equals(nLocation.worldName)) {
-			return false;
-		}
+		return Float.compare(nLocation.pitch, pitch) == 0 &&
+		       Double.compare(nLocation.x, x) == 0 &&
+		       Double.compare(nLocation.y, y) == 0 &&
+		       Float.compare(nLocation.yaw, yaw) == 0 &&
+		       Double.compare(nLocation.z, z) == 0 &&
+		       worldName.equals(nLocation.worldName);
 
-		return true;
 	}
 
 	@Override

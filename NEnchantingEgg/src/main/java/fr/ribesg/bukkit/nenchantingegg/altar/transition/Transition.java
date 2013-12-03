@@ -37,13 +37,13 @@ public abstract class Transition {
 		this.plugin = plugin;
 		final Set<Step> steps = createSteps();
 
-		stepsPerDelay = new HashMap<Integer, Set<Step>>();
+		stepsPerDelay = new HashMap<>();
 
 		for (final Step step : steps) {
 			if (stepsPerDelay.containsKey(step.getDelay())) {
 				stepsPerDelay.get(step.getDelay()).add(step);
 			} else {
-				final Set<Step> stepsForThisDelay = new HashSet<Step>();
+				final Set<Step> stepsForThisDelay = new HashSet<>();
 				stepsForThisDelay.add(step);
 				stepsPerDelay.put(step.getDelay(), stepsForThisDelay);
 			}

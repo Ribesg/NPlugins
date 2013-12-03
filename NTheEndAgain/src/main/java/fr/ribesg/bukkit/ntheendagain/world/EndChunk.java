@@ -178,8 +178,7 @@ public class EndChunk {
 			chunk.crystals = crystals;
 		}
 
-		final int savedDragons = chunkSection.getInt("savedDragons", 0);
-		chunk.savedDragons = savedDragons;
+		chunk.savedDragons = chunkSection.getInt("savedDragons", 0);
 		return chunk;
 	}
 

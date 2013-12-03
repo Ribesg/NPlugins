@@ -39,7 +39,7 @@ public class EggProvidedToItemProvidedTransition extends Transition {
 
 	private static Map<Integer, Float> getZeldaSound() {
 		if (zeldaSound == null) {
-			zeldaSound = new HashMap<Integer, Float>();
+			zeldaSound = new HashMap<>();
 			zeldaSound.put(0, 1.06f); // High G     13
 			zeldaSound.put(1, 1.00f); // High F#    12
 			zeldaSound.put(2, 0.84f); // High D#    9
@@ -70,7 +70,7 @@ public class EggProvidedToItemProvidedTransition extends Transition {
 	@Override
 	protected Set<Step> createSteps() {
 
-		final Set<Step> steps = new HashSet<Step>(); // Result
+		final Set<Step> steps = new HashSet<>(); // Result
 
 		final int t = 10; // Time between block changes
 
