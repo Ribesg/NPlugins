@@ -27,12 +27,19 @@ public class ItemNetworkHandlerTask extends BukkitRunnable {
 
 	private final ItemNetworkFeature feature;
 	private final ItemNetwork        network;
-	private final BukkitTask         task;
+	private       BukkitTask         task;
 
 	public ItemNetworkHandlerTask(final ItemNetwork network) {
 		this.feature = network.getFeature();
 		this.network = network;
+	}
+
+	public void initialize() {
 		this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(network.getFeature().getPlugin(), this, 5 * 20L, 5L);
+	}
+
+	public void terminate() {
+		this.task.cancel();
 	}
 
 	@Override
@@ -103,9 +110,5 @@ public class ItemNetworkHandlerTask extends BukkitRunnable {
 				}
 			});
 		}
-	}
-
-	public void cancelTask() {
-		this.task.cancel();
 	}
 }

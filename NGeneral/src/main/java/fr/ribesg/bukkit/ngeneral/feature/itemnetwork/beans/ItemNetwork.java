@@ -46,8 +46,12 @@ public class ItemNetwork {
 		this.creator = creatorName;
 	}
 
-	public void destroy() {
-		this.task.cancelTask();
+	public void initialize() {
+		this.task.initialize();
+	}
+
+	public void terminate() {
+		this.task.terminate();
 	}
 
 	/**

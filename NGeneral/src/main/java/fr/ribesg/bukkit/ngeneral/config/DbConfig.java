@@ -13,6 +13,9 @@ import fr.ribesg.bukkit.ncore.AbstractConfig;
 import fr.ribesg.bukkit.ncore.common.FrameBuilder;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
+import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
+import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
+import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ItemNetwork;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ReceiverSign;
 import org.bukkit.configuration.ConfigurationSection;
@@ -32,46 +35,45 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
 		// #############
-		// ## GodMode ##
-		// #############
-
-		if (plugin.getPluginConfig().hasGodModeFeature() && config.isList("godModePlayers")) {
-			List<String> godModePlayers = config.getStringList("godModePlayers");
-			plugin.getGodMode().getGodPlayers().addAll(godModePlayers);
-		}
-
-		// #############
 		// ## FlyMode ##
 		// #############
 
-		if (plugin.getPluginConfig().hasFlyModeFeature() && config.isList("flyModePlayers")) {
-			List<String> flyModePlayers = config.getStringList("flyModePlayers");
-			plugin.getFlyMode().getFlyPlayers().addAll(flyModePlayers);
+		if (config.isList("flyModePlayers")) {
+			final List<String> flyModePlayers = config.getStringList("flyModePlayers");
+			plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers().addAll(flyModePlayers);
+		}
+
+		// #############
+		// ## GodMode ##
+		// #############
+
+		if (config.isList("godModePlayers")) {
+			final List<String> godModePlayers = config.getStringList("godModePlayers");
+			plugin.getFeatures().get(GodModeFeature.class).getGodPlayers().addAll(godModePlayers);
 		}
 
 		// #################
 		// ## ItemNetwork ##
 		// #################
 
-		if (plugin.getPluginConfig().hasItemNetworkFeature()) {
-			if (config.isConfigurationSection("itemnetworks")) {
-				final ConfigurationSection inetSection = config.getConfigurationSection("itemnetworks");
-				for (String networkName : inetSection.getKeys(false)) {
-					final ConfigurationSection networkSection = inetSection.getConfigurationSection(networkName);
-					final String networkCreator = networkSection.getString("creator");
-					final ItemNetwork network = new ItemNetwork(plugin.getItemNetwork(), networkName, networkCreator);
-					if (networkSection.isConfigurationSection("receivers")) {
-						final ConfigurationSection receiversSection = networkSection.getConfigurationSection("receivers");
-						for (String key : receiversSection.getKeys(false)) {
-							final ConfigurationSection receiverSection = receiversSection.getConfigurationSection(key);
-							final NLocation location = NLocation.toNLocation(receiverSection.getString("location"));
-							final String acceptsString = receiverSection.getString("accepts");
-							final ReceiverSign receiverSign = new ReceiverSign(location, acceptsString);
-							network.getReceivers().add(receiverSign);
-						}
+		if (config.isConfigurationSection("itemnetworks")) {
+			final ItemNetworkFeature feature = plugin.getFeatures().get(ItemNetworkFeature.class);
+			final ConfigurationSection inetSection = config.getConfigurationSection("itemnetworks");
+			for (String networkName : inetSection.getKeys(false)) {
+				final ConfigurationSection networkSection = inetSection.getConfigurationSection(networkName);
+				final String networkCreator = networkSection.getString("creator");
+				final ItemNetwork network = new ItemNetwork(feature, networkName, networkCreator);
+				if (networkSection.isConfigurationSection("receivers")) {
+					final ConfigurationSection receiversSection = networkSection.getConfigurationSection("receivers");
+					for (String key : receiversSection.getKeys(false)) {
+						final ConfigurationSection receiverSection = receiversSection.getConfigurationSection(key);
+						final NLocation location = NLocation.toNLocation(receiverSection.getString("location"));
+						final String acceptsString = receiverSection.getString("accepts");
+						final ReceiverSign receiverSign = new ReceiverSign(location, acceptsString);
+						network.getReceivers().add(receiverSign);
 					}
-					plugin.getItemNetwork().getNetworks().put(networkName.toLowerCase(), network);
 				}
+				feature.getNetworks().put(networkName.toLowerCase(), network);
 			}
 		}
 	}
@@ -95,24 +97,24 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		content.append('\n');
 
 		// #############
-		// ## GodMode ##
+		// ## FlyMode ##
 		// #############
 
-		if (plugin.getPluginConfig().hasGodModeFeature()) {
-			content.append("godModePlayers:\n");
-			for (String playerName : plugin.getGodMode().getGodPlayers()) {
+		if (plugin.getPluginConfig().hasFlyModeFeature()) {
+			content.append("flyModePlayers:\n");
+			for (String playerName : plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers()) {
 				content.append("- " + playerName + "\n");
 			}
 			content.append('\n');
 		}
 
 		// #############
-		// ## FlyMode ##
+		// ## GodMode ##
 		// #############
 
-		if (plugin.getPluginConfig().hasFlyModeFeature()) {
-			content.append("flyModePlayers:\n");
-			for (String playerName : plugin.getFlyMode().getFlyPlayers()) {
+		if (plugin.getPluginConfig().hasGodModeFeature()) {
+			content.append("godModePlayers:\n");
+			for (String playerName : plugin.getFeatures().get(GodModeFeature.class).getGodPlayers()) {
 				content.append("- " + playerName + "\n");
 			}
 			content.append('\n');
@@ -124,7 +126,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 
 		if (plugin.getPluginConfig().hasItemNetworkFeature()) {
 			content.append("itemnetworks:\n");
-			for (ItemNetwork network : plugin.getItemNetwork().getNetworks().values()) {
+			for (ItemNetwork network : plugin.getFeatures().get(ItemNetworkFeature.class).getNetworks().values()) {
 				content.append("  " + network.getName() + ":\n");
 				content.append("    creator: " + network.getCreator() + "\n");
 				content.append("    receivers:\n");

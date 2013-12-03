@@ -9,29 +9,28 @@
 
 package fr.ribesg.bukkit.ngeneral.feature.godmode;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
-import fr.ribesg.bukkit.ngeneral.feature.GeneralFeature;
+import fr.ribesg.bukkit.ngeneral.feature.Feature;
+import fr.ribesg.bukkit.ngeneral.feature.FeatureType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class GodModeFeature extends GeneralFeature {
-
-	private final GodModeListener        listener;
-	private final GodModeCommandExecutor executor;
+public class GodModeFeature extends Feature {
 
 	private Set<String> godPlayers;
 
 	public GodModeFeature(final NGeneral instance) {
-		super(instance);
-		listener = new GodModeListener(this);
-		executor = new GodModeCommandExecutor(this);
+		super(instance, FeatureType.GOD_MODE, instance.getPluginConfig().hasGodModeFeature());
 		godPlayers = new HashSet<>();
 	}
 
 	@Override
-	public void init() {
+	public void initialize() {
+		final GodModeListener listener = new GodModeListener(this);
+		final GodModeCommandExecutor executor = new GodModeCommandExecutor(this);
+
 		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
 		getPlugin().getCommand("god").setExecutor(executor);
 	}

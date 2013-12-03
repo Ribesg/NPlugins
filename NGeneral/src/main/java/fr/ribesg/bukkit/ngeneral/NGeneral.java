@@ -12,10 +12,7 @@ package fr.ribesg.bukkit.ngeneral;
 import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
 import fr.ribesg.bukkit.ngeneral.config.Config;
 import fr.ribesg.bukkit.ngeneral.config.DbConfig;
-import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
-import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
-import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
-import fr.ribesg.bukkit.ngeneral.feature.protectionsign.ProtectionSignFeature;
+import fr.ribesg.bukkit.ngeneral.feature.Features;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
 import fr.ribesg.bukkit.ngeneral.simplefeature.AfkCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.FlySpeedCommand;
@@ -37,10 +34,7 @@ public class NGeneral extends GeneralNode {
 	private DbConfig dbConfig;
 
 	// Features
-	private GodModeFeature        godMode;
-	private FlyModeFeature        flyMode;
-	private ProtectionSignFeature protectionSign;
-	private ItemNetworkFeature    itemNetwork;
+	private Features features;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -79,18 +73,7 @@ public class NGeneral extends GeneralNode {
 		}
 
 		// Features
-		if (pluginConfig.hasGodModeFeature()) {
-			godMode = new GodModeFeature(this);
-		}
-		if (pluginConfig.hasFlyModeFeature()) {
-			flyMode = new FlyModeFeature(this);
-		}
-		if (pluginConfig.hasProtectionSignFeature()) {
-			protectionSign = new ProtectionSignFeature(this);
-		}
-		if (pluginConfig.hasItemNetworkFeature()) {
-			itemNetwork = new ItemNetworkFeature(this);
-		}
+		this.features = new Features(this);
 
 		// Db
 		try {
@@ -104,18 +87,7 @@ public class NGeneral extends GeneralNode {
 		}
 
 		// Feature init
-		if (pluginConfig.hasGodModeFeature()) {
-			godMode.init();
-		}
-		if (pluginConfig.hasFlyModeFeature()) {
-			flyMode.init();
-		}
-		if (pluginConfig.hasProtectionSignFeature()) {
-			protectionSign.init();
-		}
-		if (pluginConfig.hasItemNetworkFeature()) {
-			itemNetwork.init();
-		}
+		this.features.initialize();
 
 		// Simple commands - Self-registered
 		new FlySpeedCommand(this);
@@ -132,9 +104,8 @@ public class NGeneral extends GeneralNode {
 
 	@Override
 	protected void onNodeDisable() {
-		if (pluginConfig.hasFlyModeFeature()) {
-			flyMode.disable();
-		}
+		this.features.terminate();
+
 		try {
 			getPluginConfig().writeConfig();
 		} catch (final IOException e) {
@@ -170,17 +141,7 @@ public class NGeneral extends GeneralNode {
 		return dbConfig;
 	}
 
-	// Feature Getters
-
-	public GodModeFeature getGodMode() {
-		return godMode;
-	}
-
-	public FlyModeFeature getFlyMode() {
-		return flyMode;
-	}
-
-	public ItemNetworkFeature getItemNetwork() {
-		return itemNetwork;
+	public Features getFeatures() {
+		return features;
 	}
 }

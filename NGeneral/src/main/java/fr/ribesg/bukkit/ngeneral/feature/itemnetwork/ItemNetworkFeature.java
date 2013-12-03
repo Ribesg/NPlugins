@@ -10,7 +10,8 @@
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
-import fr.ribesg.bukkit.ngeneral.feature.GeneralFeature;
+import fr.ribesg.bukkit.ngeneral.feature.Feature;
+import fr.ribesg.bukkit.ngeneral.feature.FeatureType;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ItemNetwork;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -22,27 +23,24 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ItemNetworkFeature extends GeneralFeature {
+public class ItemNetworkFeature extends Feature {
 
-	private final Map<String, ItemNetwork>   networks;
-	private final ItemNetworkListener        listener;
-	private final ItemNetworkCommandExecutor executor;
-
-	private final Set<NLocation> lockedChestLocations;
+	private final Map<String, ItemNetwork> networks;
+	private final Set<NLocation>           lockedChestLocations;
 
 	public ItemNetworkFeature(final NGeneral instance) {
-		super(instance);
+		super(instance, FeatureType.ITEM_NETWORK, instance.getPluginConfig().hasItemNetworkFeature());
 		this.networks = new HashMap<>();
-		this.listener = new ItemNetworkListener(this);
-		this.executor = new ItemNetworkCommandExecutor(this);
-
 		this.lockedChestLocations = new HashSet<>();
 	}
 
 	@Override
-	public void init() {
-		Bukkit.getPluginManager().registerEvents(this.listener, getPlugin());
-		getPlugin().getCommand("itemnetwork").setExecutor(this.executor);
+	public void initialize() {
+		final ItemNetworkListener listener = new ItemNetworkListener(this);
+		final ItemNetworkCommandExecutor executor = new ItemNetworkCommandExecutor(this);
+
+		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
+		getPlugin().getCommand("itemnetwork").setExecutor(executor);
 	}
 
 	public void lock(final NLocation loc) {

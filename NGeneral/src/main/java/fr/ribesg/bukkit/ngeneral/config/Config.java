@@ -15,11 +15,7 @@ import fr.ribesg.bukkit.ngeneral.NGeneral;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.util.logging.Logger;
-
 public class Config extends AbstractConfig<NGeneral> {
-
-	private final Logger log;
 
 	// Features control
 	private String initialMessage;
@@ -85,7 +81,6 @@ public class Config extends AbstractConfig<NGeneral> {
 
 	public Config(NGeneral instance) {
 		super(instance);
-		log = instance.getLogger();
 
 		initialMessage = "";
 

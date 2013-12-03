@@ -53,7 +53,7 @@ public class ItemNetworkCommandExecutor implements CommandExecutor {
 								feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_unknown, networkName);
 								return true;
 							} else if (network.getCreator().equals(sender.getName()) || Perms.isAdmin(sender)) {
-								network.destroy();
+								network.terminate();
 								feature.getNetworks().remove(networkName.toLowerCase());
 								feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_deleted, networkName);
 								return true;

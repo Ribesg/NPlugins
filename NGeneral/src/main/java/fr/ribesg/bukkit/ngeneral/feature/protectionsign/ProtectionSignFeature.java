@@ -13,7 +13,8 @@ import fr.ribesg.bukkit.ncore.utils.SignUtils;
 import fr.ribesg.bukkit.ncore.utils.UsernameUtils;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
-import fr.ribesg.bukkit.ngeneral.feature.GeneralFeature;
+import fr.ribesg.bukkit.ngeneral.feature.Feature;
+import fr.ribesg.bukkit.ngeneral.feature.FeatureType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -27,7 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ProtectionSignFeature extends GeneralFeature {
+public class ProtectionSignFeature extends Feature {
 
 	// ############### //
 	// ## Constants ## //
@@ -51,8 +52,7 @@ public class ProtectionSignFeature extends GeneralFeature {
 	private static Set<String> protectionStrings;
 
 	/** Static lazy getter for {@link #protectionStrings} */
-	/* package */
-	static Set<String> getProtectionStrings() {
+	public static Set<String> getProtectionStrings() {
 		if (protectionStrings == null) {
 			protectionStrings = new HashSet<>(5);
 			protectionStrings.add("protection");
@@ -68,8 +68,7 @@ public class ProtectionSignFeature extends GeneralFeature {
 	private static Set<Material> protectedMaterials;
 
 	/** Static lazy getter for {@link #protectedMaterials} */
-	/* package */
-	static Set<Material> getProtectedMaterials() {
+	public static Set<Material> getProtectedMaterials() {
 		if (protectedMaterials == null) {
 			protectedMaterials = new HashSet<>(11);
 			protectedMaterials.add(Material.BEACON);
@@ -87,19 +86,18 @@ public class ProtectionSignFeature extends GeneralFeature {
 		return protectedMaterials;
 	}
 
-	// ############ //
-	// ## Fields ## //
-	// ############ //
-
-	private final ProtectionSignListener listener;
+	// ############################## //
+	// ## Non-static class content ## //
+	// ############################## //
 
 	public ProtectionSignFeature(final NGeneral instance) {
-		super(instance);
-		listener = new ProtectionSignListener(this);
+		super(instance, FeatureType.PROTECTION_SIGNS, instance.getPluginConfig().hasProtectionSignFeature());
 	}
 
 	@Override
-	public void init() {
+	public void initialize() {
+		final ProtectionSignListener listener = new ProtectionSignListener(this);
+
 		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
 	}
 

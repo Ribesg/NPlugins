@@ -10,35 +10,34 @@
 package fr.ribesg.bukkit.ngeneral.feature.flymode;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
-import fr.ribesg.bukkit.ngeneral.feature.GeneralFeature;
+import fr.ribesg.bukkit.ngeneral.feature.Feature;
+import fr.ribesg.bukkit.ngeneral.feature.FeatureType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class FlyModeFeature extends GeneralFeature {
-
-	private final FlyModeListener        listener;
-	private final FlyModeCommandExecutor executor;
+public class FlyModeFeature extends Feature {
 
 	private Set<String> flyPlayers;
 
 	public FlyModeFeature(final NGeneral instance) {
-		super(instance);
-		listener = new FlyModeListener(this);
-		executor = new FlyModeCommandExecutor(this);
+		super(instance, FeatureType.FLY_MODE, instance.getPluginConfig().hasFlyModeFeature());
 		flyPlayers = new HashSet<>();
 	}
 
 	@Override
-	public void init() {
+	public void initialize() {
+		final FlyModeListener listener = new FlyModeListener(this);
+		final FlyModeCommandExecutor executor = new FlyModeCommandExecutor(this);
+
 		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
 		getPlugin().getCommand("fly").setExecutor(executor);
 	}
 
 	@Override
-	public void disable() {
+	public void terminate() {
 		for (final Player player : Bukkit.getOnlinePlayers()) {
 			if (!Perms.hasFly(player) && this.hasFlyMode(player.getName())) {
 				player.setAllowFlight(false);
