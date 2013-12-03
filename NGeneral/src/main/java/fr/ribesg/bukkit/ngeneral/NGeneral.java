@@ -42,16 +42,6 @@ public class NGeneral extends GeneralNode {
 	private ProtectionSignFeature protectionSign;
 	private ItemNetworkFeature    itemNetwork;
 
-	// Simple features
-	private FlySpeedCommand    flySpeedCommand;
-	private WalkSpeedCommand   walkSpeedCommand;
-	private AfkCommand         afkCommand;
-	private TimeCommand        timeCommand;
-	private WeatherCommand     weatherCommand;
-	private SignColorsListener signColorsListener;
-	private TeleportCommands   teleportCommands;
-	private WelcomeListener    welcomeListener;
-
 	@Override
 	protected String getMinCoreVersion() {
 		return "0.5.0";
@@ -128,14 +118,14 @@ public class NGeneral extends GeneralNode {
 		}
 
 		// Simple commands - Self-registered
-		flySpeedCommand = new FlySpeedCommand(this);
-		walkSpeedCommand = new WalkSpeedCommand(this);
-		afkCommand = new AfkCommand(this);
-		timeCommand = new TimeCommand(this);
-		weatherCommand = new WeatherCommand(this);
-		signColorsListener = new SignColorsListener(this);
-		teleportCommands = new TeleportCommands(this);
-		welcomeListener = new WelcomeListener(this);
+		new FlySpeedCommand(this);
+		new WalkSpeedCommand(this);
+		new AfkCommand(this);
+		new TimeCommand(this);
+		new WeatherCommand(this);
+		new SignColorsListener(this);
+		new TeleportCommands(this);
+		new WelcomeListener(this);
 
 		return true;
 	}
