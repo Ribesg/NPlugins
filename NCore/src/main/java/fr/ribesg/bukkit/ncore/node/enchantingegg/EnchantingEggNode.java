@@ -9,18 +9,12 @@
 
 package fr.ribesg.bukkit.ncore.node.enchantingegg;
 
-import fr.ribesg.bukkit.ncore.node.NPlugin;
-
 /**
- * Represents the NEnchantingEgg plugin
+ * API for the NEnchantingEgg plugin.
+ * Want something to be added here? Just ask me!
  *
  * @author Ribesg
  */
-public abstract class EnchantingEggNode extends NPlugin {
+public interface EnchantingEggNode {
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-	@Override
-	protected void linkCore() {
-		getCore().setEnchantingEggNode(this);
-	}
 }

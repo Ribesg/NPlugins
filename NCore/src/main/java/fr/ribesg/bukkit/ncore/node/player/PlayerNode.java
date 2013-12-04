@@ -9,13 +9,12 @@
 
 package fr.ribesg.bukkit.ncore.node.player;
 
-import fr.ribesg.bukkit.ncore.node.NPlugin;
-
 /**
- * Represents the NPlayer plugin
+ * API for the NPlayer plugin.
+ * Want something to be added here? Just ask me!
  *
  * @author Ribesg
  */
-public abstract class PlayerNode extends NPlugin {
+public interface PlayerNode {
 
 }

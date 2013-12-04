@@ -9,8 +9,9 @@
 
 package fr.ribesg.bukkit.ntalk;
 
-import fr.ribesg.bukkit.ncore.utils.AsyncPermAccessor;
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
+import fr.ribesg.bukkit.ncore.utils.AsyncPermAccessor;
 import fr.ribesg.bukkit.ntalk.filter.ChatFilter;
 import fr.ribesg.bukkit.ntalk.format.Formater;
 import fr.ribesg.bukkit.ntalk.lang.Messages;
@@ -19,7 +20,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
 
-public class NTalk extends TalkNode {
+public class NTalk extends NPlugin implements TalkNode {
 
 	// Configs
 	private Messages messages;
@@ -98,6 +99,18 @@ public class NTalk extends TalkNode {
 		return true;
 	}
 
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
+	@Override
+	protected void linkCore() {
+		getCore().setTalkNode(this);
+	}
+
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	@Override
+	protected void handleOtherNodes() {
+		// Nothing to do here for now
+	}
+
 	@Override
 	public void onNodeDisable() {
 		try {
@@ -105,12 +118,6 @@ public class NTalk extends TalkNode {
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
-	@Override
-	protected void handleOtherNodes() {
-		// Nothing to do here for now
 	}
 
 	public Formater getFormater() {

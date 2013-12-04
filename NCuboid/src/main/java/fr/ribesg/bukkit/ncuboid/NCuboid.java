@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncuboid;
 
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDbPersistenceHandler;
@@ -35,7 +36,7 @@ import java.util.List;
  *
  * @author Ribesg
  */
-public class NCuboid extends CuboidNode {
+public class NCuboid extends NPlugin implements CuboidNode {
 
 	// Configs
 	private Messages messages;
@@ -149,6 +150,12 @@ public class NCuboid extends CuboidNode {
 		});
 
 		return true;
+	}
+
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
+	@Override
+	protected void linkCore() {
+		getCore().setCuboidNode(this);
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */

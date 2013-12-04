@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.nenchantingegg;
 
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.enchantingegg.EnchantingEggNode;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altars;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.ActiveToEggProvidedTransition;
@@ -27,7 +28,7 @@ import org.mcstats.Metrics;
 
 import java.io.IOException;
 
-public class NEnchantingEgg extends EnchantingEggNode {
+public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	// Configs
 	private Messages messages;
@@ -119,6 +120,18 @@ public class NEnchantingEgg extends EnchantingEggNode {
 		return true;
 	}
 
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
+	@Override
+	protected void linkCore() {
+		getCore().setEnchantingEggNode(this);
+	}
+
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	@Override
+	protected void handleOtherNodes() {
+		// Nothing to do here for now
+	}
+
 	@Override
 	public void onNodeDisable() {
 		try {
@@ -132,12 +145,6 @@ public class NEnchantingEgg extends EnchantingEggNode {
 		altars = null;
 
 		Bukkit.getScheduler().cancelTasks(this);
-	}
-
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
-	@Override
-	protected void handleOtherNodes() {
-		// Nothing to do here for now
 	}
 
 	public ActiveToEggProvidedTransition getActiveToEggProvidedTransition() {

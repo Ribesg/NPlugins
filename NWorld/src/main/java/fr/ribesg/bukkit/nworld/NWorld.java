@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.nworld;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.world.WorldNode;
 import fr.ribesg.bukkit.nworld.config.Config;
 import fr.ribesg.bukkit.nworld.lang.Messages;
@@ -32,7 +33,7 @@ import java.io.IOException;
  *
  * @author Ribesg
  */
-public class NWorld extends WorldNode {
+public class NWorld extends NPlugin implements WorldNode {
 
 	// Configs
 	private Messages messages;
@@ -211,6 +212,18 @@ public class NWorld extends WorldNode {
 		return true;
 	}
 
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
+	@Override
+	protected void linkCore() {
+		getCore().setWorldNode(this);
+	}
+
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	@Override
+	protected void handleOtherNodes() {
+		// Nothing to do here for now
+	}
+
 	@Override
 	public void onNodeDisable() {
 		try {
@@ -218,12 +231,6 @@ public class NWorld extends WorldNode {
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
-	@Override
-	protected void handleOtherNodes() {
-		// Nothing to do here for now
 	}
 
 	@Override

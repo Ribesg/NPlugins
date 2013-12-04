@@ -9,28 +9,21 @@
 
 package fr.ribesg.bukkit.ncore.node.cuboid;
 
-import fr.ribesg.bukkit.ncore.node.NPlugin;
-
 import java.util.List;
 
 /**
- * Represents the NCuboid plugin
+ * API for the NCuboid plugin.
+ * Want something to be added here? Just ask me!
  *
  * @author Ribesg
  */
-public abstract class CuboidNode extends NPlugin {
+public interface CuboidNode {
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-	@Override
-	protected void linkCore() {
-		getCore().setCuboidNode(this);
-	}
+	public boolean isJailed(String playerName);
 
-	public abstract boolean isJailed(String playerName);
+	public boolean jail(String playerName, String jailName);
 
-	public abstract boolean jail(String playerName, String jailName);
+	public boolean unJail(String playerName);
 
-	public abstract boolean unJail(String playerName);
-
-	public abstract List<String> getJailList();
+	public List<String> getJailList();
 }

@@ -9,13 +9,12 @@
 
 package fr.ribesg.bukkit.ncore.node.general;
 
-import fr.ribesg.bukkit.ncore.node.NPlugin;
-
 /**
- * Represents the NGeneral plugin
+ * API for the NGeneral plugin.
+ * Want something to be added here? Just ask me!
  *
  * @author Ribesg
  */
-public abstract class GeneralNode extends NPlugin {
+public interface GeneralNode {
 
 }

@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ntheendagain;
 
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.lang.Messages;
@@ -27,7 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-public class NTheEndAgain extends TheEndAgainNode {
+public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
 	// Configs
 	private Messages messages;
@@ -186,6 +187,12 @@ public class NTheEndAgain extends TheEndAgainNode {
 		});
 
 		return true;
+	}
+
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
+	@Override
+	protected void linkCore() {
+		getCore().setTheEndAgainNode(this);
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */

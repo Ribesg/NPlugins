@@ -9,13 +9,12 @@
 
 package fr.ribesg.bukkit.ncore.node.dodgeball;
 
-import fr.ribesg.bukkit.ncore.node.NPlugin;
-
 /**
- * Represents the NDodgeBall plugin
+ * API for the NDodgeBall plugin.
+ * Want something to be added here? Just ask me!
  *
  * @author Ribesg
  */
-public abstract class DodgeBallNode extends NPlugin {
+public interface DodgeBallNode {
 
 }

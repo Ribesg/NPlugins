@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.nplayer;
 
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
 import fr.ribesg.bukkit.nplayer.lang.Messages;
 import fr.ribesg.bukkit.nplayer.punishment.PunishmentDb;
@@ -21,7 +22,7 @@ import org.mcstats.Metrics;
 
 import java.io.IOException;
 
-public class NPlayer extends PlayerNode {
+public class NPlayer extends NPlugin implements PlayerNode {
 
 	// Configs
 	private Messages messages;
@@ -139,6 +140,18 @@ public class NPlayer extends PlayerNode {
 		return true;
 	}
 
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
+	@Override
+	protected void linkCore() {
+		getCore().setPlayerNode(this);
+	}
+
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	@Override
+	protected void handleOtherNodes() {
+		// Nothing to do here for now
+	}
+
 	@Override
 	public void onNodeDisable() {
 		try {
@@ -160,17 +173,6 @@ public class NPlayer extends PlayerNode {
 			e.printStackTrace();
 			getLogger().severe("This error occured when NPlayer tried to save punishmentDB.yml");
 		}
-	}
-
-	@Override
-	protected void linkCore() {
-		getCore().setPlayerNode(this);
-	}
-
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
-	@Override
-	protected void handleOtherNodes() {
-		// Nothing to do here for now
 	}
 
 	@Override

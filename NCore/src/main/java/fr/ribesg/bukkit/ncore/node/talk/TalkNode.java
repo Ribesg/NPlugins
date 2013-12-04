@@ -9,18 +9,12 @@
 
 package fr.ribesg.bukkit.ncore.node.talk;
 
-import fr.ribesg.bukkit.ncore.node.NPlugin;
-
 /**
- * Represents the NTalk plugin
+ * API for the NTalk plugin.
+ * Want something to be added here? Just ask me!
  *
  * @author Ribesg
  */
-public abstract class TalkNode extends NPlugin {
+public interface TalkNode {
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-	@Override
-	protected void linkCore() {
-		getCore().setTalkNode(this);
-	}
 }

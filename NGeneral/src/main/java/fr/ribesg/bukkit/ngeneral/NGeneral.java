@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ngeneral;
 
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
 import fr.ribesg.bukkit.ngeneral.config.Config;
 import fr.ribesg.bukkit.ngeneral.config.DbConfig;
@@ -26,7 +27,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
 
-public class NGeneral extends GeneralNode {
+public class NGeneral extends NPlugin implements GeneralNode {
 
 	// Configs
 	private Messages messages;
@@ -102,6 +103,18 @@ public class NGeneral extends GeneralNode {
 		return true;
 	}
 
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
+	@Override
+	protected void linkCore() {
+		getCore().setGeneralNode(this);
+	}
+
+	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	@Override
+	protected void handleOtherNodes() {
+		// NOP
+	}
+
 	@Override
 	protected void onNodeDisable() {
 		this.features.terminate();
@@ -116,16 +129,6 @@ public class NGeneral extends GeneralNode {
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	protected void handleOtherNodes() {
-		// NOP
-	}
-
-	@Override
-	protected void linkCore() {
-		getCore().setGeneralNode(this);
 	}
 
 	@Override

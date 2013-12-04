@@ -9,18 +9,12 @@
 
 package fr.ribesg.bukkit.ncore.node.world;
 
-import fr.ribesg.bukkit.ncore.node.NPlugin;
-
 /**
- * Represents the NWorld plugin
+ * API for the NWorld plugin.
+ * Want something to be added here? Just ask me!
  *
  * @author Ribesg
  */
-public abstract class WorldNode extends NPlugin {
+public interface WorldNode {
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-	@Override
-	protected void linkCore() {
-		getCore().setWorldNode(this);
-	}
 }

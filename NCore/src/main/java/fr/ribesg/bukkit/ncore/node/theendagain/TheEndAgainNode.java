@@ -9,19 +9,12 @@
 
 package fr.ribesg.bukkit.ncore.node.theendagain;
 
-import fr.ribesg.bukkit.ncore.node.NPlugin;
-
 /**
- * Represents the NTheEngAgain plugin
+ * API for the NTheEngAgain plugin.
+ * Want something to be added here? Just ask me!
  *
  * @author Ribesg
  */
-public abstract class TheEndAgainNode extends NPlugin {
-
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-	@Override
-	protected void linkCore() {
-		getCore().setTheEndAgainNode(this);
-	}
+public interface TheEndAgainNode {
 
 }
