@@ -10,7 +10,7 @@
 package fr.ribesg.bukkit.nplayer;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.common.FrameBuilder;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import org.bukkit.configuration.file.YamlConfiguration;
 

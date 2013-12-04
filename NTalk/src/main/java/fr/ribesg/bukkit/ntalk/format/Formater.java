@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ntalk.format;
 
-import fr.ribesg.bukkit.ncore.common.AsyncPermAccessor;
+import fr.ribesg.bukkit.ncore.utils.AsyncPermAccessor;
 import fr.ribesg.bukkit.ntalk.Config;
 import fr.ribesg.bukkit.ntalk.NTalk;
 import org.bukkit.ChatColor;

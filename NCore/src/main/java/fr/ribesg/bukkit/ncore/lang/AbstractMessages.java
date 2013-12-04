@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ncore.lang;
 
-import fr.ribesg.bukkit.ncore.common.FrameBuilder;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;

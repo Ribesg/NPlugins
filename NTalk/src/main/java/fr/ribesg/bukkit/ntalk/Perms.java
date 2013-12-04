@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ntalk;
 
-import fr.ribesg.bukkit.ncore.common.AsyncPermAccessor;
+import fr.ribesg.bukkit.ncore.utils.AsyncPermAccessor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

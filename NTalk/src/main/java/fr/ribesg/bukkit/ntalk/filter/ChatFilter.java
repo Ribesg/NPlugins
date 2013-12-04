@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ntalk.filter;
 import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.common.FrameBuilder;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ntalk.NTalk;
 import fr.ribesg.bukkit.ntalk.filter.bean.Filter;
 import org.bukkit.configuration.InvalidConfigurationException;
