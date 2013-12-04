@@ -10,6 +10,11 @@
 package fr.ribesg.bukkit.ncore.utils;
 import java.util.regex.Pattern;
 
+/**
+ * Utility class to validate IPs.
+ *
+ * @author Ribesg
+ */
 public class IPValidator {
 
 	/** This Regex recognize any valid IPv4 between 0.0.0.0 and 255.255.255.255 */

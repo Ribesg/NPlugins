@@ -18,7 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/** Some tools to play with Signs */
+/**
+ * Utility class containing some tools to play with Signs.
+ *
+ * @author
+ */
 public class SignUtils {
 
 	/**

@@ -10,6 +10,11 @@
 package fr.ribesg.bukkit.ncore.utils;
 import org.bukkit.ChatColor;
 
+/**
+ * Utility class to handle both Bukkit's and custom color codes.
+ *
+ * @author Ribesg
+ */
 public class ColorUtils {
 
 	public static final char   ALTERNATE_COLOR_CHAR        = '&';

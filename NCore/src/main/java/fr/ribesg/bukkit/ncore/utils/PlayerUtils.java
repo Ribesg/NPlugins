@@ -18,7 +18,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-/** @author Ribesg */
+/**
+ * Utility class containing various methods related to players.
+ *
+ * @author Ribesg
+ */
 public class PlayerUtils {
 
 	private static final int LINEOFSIGHT_MAXDISTANCE = 120;

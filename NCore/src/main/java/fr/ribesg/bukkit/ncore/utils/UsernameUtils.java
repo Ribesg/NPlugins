@@ -10,6 +10,12 @@
 package fr.ribesg.bukkit.ncore.utils;
 import java.math.BigInteger;
 
+/**
+ * Utility class that allows to create 13-chars player ids
+ * with a very low chance of collision.
+ *
+ * @author Ribesg
+ */
 public class UsernameUtils {
 
 	/**

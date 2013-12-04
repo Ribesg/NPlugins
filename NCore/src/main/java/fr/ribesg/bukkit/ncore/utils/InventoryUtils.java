@@ -22,6 +22,8 @@ import java.util.Map;
 /**
  * Utility class to handle Inventories.
  * Allows to stack and sort Inventories.
+ *
+ * @author Ribesg
  */
 public class InventoryUtils {
 
