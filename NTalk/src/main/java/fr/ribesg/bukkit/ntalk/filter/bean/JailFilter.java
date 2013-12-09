@@ -10,6 +10,8 @@
 package fr.ribesg.bukkit.ntalk.filter.bean;
 import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
+import java.util.Map;
+
 /** @author Ribesg */
 public class JailFilter extends TimedFilter {
 
@@ -22,5 +24,31 @@ public class JailFilter extends TimedFilter {
 
 	public String getJailName() {
 		return jailName;
+	}
+
+	// ############ //
+	// ## Saving ## //
+	// ############ //
+
+	@Override
+	public Map<String, Object> getConfigMap() {
+		final Map<String, Object> map = super.getConfigMap();
+		map.put("jailName", jailName);
+		return map;
+	}
+
+	// ############# //
+	// ## Loading ## //
+	// ############# //
+
+	public static JailFilter loadFromConfig(final String key, final Map<String, Object> values) {
+		try {
+			final boolean regex = (boolean) values.get("isRegex");
+			final long duration = (long) values.get("duration");
+			final String jailName = (String) values.get("jailName");
+			return new JailFilter(key, regex, duration, jailName);
+		} catch (final NullPointerException | ClassCastException e) {
+			throw new IllegalArgumentException("Missing value", e);
+		}
 	}
 }

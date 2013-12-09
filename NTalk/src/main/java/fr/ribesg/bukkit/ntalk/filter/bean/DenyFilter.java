@@ -10,10 +10,25 @@
 package fr.ribesg.bukkit.ntalk.filter.bean;
 import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
+import java.util.Map;
+
 /** @author Ribesg */
 public class DenyFilter extends Filter {
 
 	public DenyFilter(final String filteredString, final boolean regex) {
 		super(filteredString, regex, ChatFilterResult.DENY);
+	}
+
+	// ############# //
+	// ## Loading ## //
+	// ############# //
+
+	public static DenyFilter loadFromConfig(final String key, final Map<String, Object> values) {
+		try {
+			final boolean regex = (boolean) values.get("isRegex");
+			return new DenyFilter(key, regex);
+		} catch (final NullPointerException e) {
+			throw new IllegalArgumentException("Missing value", e);
+		}
 	}
 }

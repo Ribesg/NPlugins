@@ -10,10 +10,26 @@
 package fr.ribesg.bukkit.ntalk.filter.bean;
 import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
+import java.util.Map;
+
 /** @author Ribesg */
 public class BanFilter extends TimedFilter {
 
 	public BanFilter(final String filteredString, final boolean regex, final long duration) {
 		super(filteredString, regex, ChatFilterResult.TEMPORARY_BAN, duration);
+	}
+
+	// ############# //
+	// ## Loading ## //
+	// ############# //
+
+	public static BanFilter loadFromConfig(final String key, final Map<String, Object> values) {
+		try {
+			final boolean regex = (boolean) values.get("isRegex");
+			final long duration = (long) values.get("duration");
+			return new BanFilter(key, regex, duration);
+		} catch (final NullPointerException e) {
+			throw new IllegalArgumentException("Missing value", e);
+		}
 	}
 }

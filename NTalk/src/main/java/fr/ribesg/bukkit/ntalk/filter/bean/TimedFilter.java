@@ -10,6 +10,8 @@
 package fr.ribesg.bukkit.ntalk.filter.bean;
 import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
+import java.util.Map;
+
 /** @author Ribesg */
 public abstract class TimedFilter extends Filter {
 
@@ -22,5 +24,16 @@ public abstract class TimedFilter extends Filter {
 
 	public long getDuration() {
 		return duration;
+	}
+
+	// ############ //
+	// ## Saving ## //
+	// ############ //
+
+	@Override
+	public Map<String, Object> getConfigMap() {
+		final Map<String, Object> map = super.getConfigMap();
+		map.put("duration", duration);
+		return map;
 	}
 }

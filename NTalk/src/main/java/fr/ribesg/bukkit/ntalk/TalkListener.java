@@ -24,7 +24,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.logging.Logger;
+
 public class TalkListener implements Listener {
+
+	private static final Logger LOG = Logger.getLogger(TalkListener.class.getName());
 
 	private final NTalk      plugin;
 	private final ChatFilter filter;
@@ -106,7 +110,8 @@ public class TalkListener implements Listener {
 					event.setCancelled(true);
 					break;
 				case DIVINE_PUNISHMENT:
-					// TODO Handle Special Punishment filters
+					// TODO
+					LOG.severe("Divine Punishment has not yet been implemented! Please don't use it!");
 					break;
 				default:
 					break;
