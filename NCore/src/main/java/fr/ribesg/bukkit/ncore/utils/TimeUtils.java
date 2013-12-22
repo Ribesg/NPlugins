@@ -173,7 +173,7 @@ public class TimeUtils {
 
 		if (builder == null) {
 			builder = new StringBuilder(leftOver + " second" + (leftOver == 1 ? "" : "s"));
-		} else {
+		} else if (leftOver != 0) {
 			builder.append(", ").append(leftOver).append(" second").append(leftOver == 1 ? "" : "s");
 		}
 
