@@ -293,14 +293,14 @@ public class Config extends AbstractConfig<NTalk> {
 		content.append("# - %player% : will be replaced by the player's name\n");
 		content.append("# - %duration% : will be replaced by the duration, in seconds\n");
 		content.append("# - %reason% : will be replaced by the reason\n");
-		content.append("tempMuteCommand: " + getTempMuteCommand());
+		content.append("tempMuteCommand: " + getTempMuteCommand() + "\n\n");
 
 		content.append("# The tempban command that will be used to ban people\n");
 		content.append("# It should contain:\n");
 		content.append("# - %player% : will be replaced by the player's name\n");
 		content.append("# - %duration% : will be replaced by the duration, in seconds\n");
 		content.append("# - %reason% : will be replaced by the reason\n");
-		content.append("tempBanCommand: " + getTempBanCommand());
+		content.append("tempBanCommand: " + getTempBanCommand() + "\n\n");
 
 		content.append("# The tempjail command that will be used to mute people\n");
 		content.append("# It should contain:\n");
@@ -308,7 +308,7 @@ public class Config extends AbstractConfig<NTalk> {
 		content.append("# - %duration% : will be replaced by the duration, in seconds\n");
 		content.append("# - %jailName% : will be replaced by the jail name\n");
 		content.append("# - %reason% : will be replaced by the reason\n");
-		content.append("tempJailCommand: " + getTempJailCommand());
+		content.append("tempJailCommand: " + getTempJailCommand() + "\n\n");
 
 		return content.toString();
 	}
@@ -398,7 +398,7 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public String getTempBanCommand(final String playerName, final long duration, final String reason) {
-		String result = getTempMuteCommand();
+		String result = getTempBanCommand();
 		result = result.replace("%player%", playerName);
 		result = result.replace("%duration%", Long.toString(duration));
 		result = result.replace("%reason%", reason);
@@ -414,7 +414,7 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public String getTempJailCommand(final String playerName, final long duration, final String jailName, final String reason) {
-		String result = getTempMuteCommand();
+		String result = getTempJailCommand();
 		result = result.replace("%player%", playerName);
 		result = result.replace("%duration%", Long.toString(duration));
 		result = result.replace("%jailName%", jailName);

@@ -62,59 +62,63 @@ public class TalkListener implements Listener {
 			final String message = event.getMessage();
 			final String uncoloredMessage = ColorUtils.stripColorCodes(message);
 			final Filter result = filter.check(uncoloredMessage);
-			switch (result.getResponseType()) {
-				case DENY:
-					event.setCancelled(true);
-					break;
-				case REPLACE:
-					final ReplaceFilter replaceFilter = (ReplaceFilter) result;
-					String newMessage;
-					if (replaceFilter.isRegex()) {
-						newMessage = message.replaceAll(replaceFilter.getFilteredString(), replaceFilter.getReplacement());
-					} else {
-						newMessage = message;
-						while (newMessage.contains(replaceFilter.getFilteredString())) {
-							newMessage = newMessage.replace(replaceFilter.getFilteredString(), replaceFilter.getReplacement());
+			if (result != null) {
+				switch (result.getResponseType()) {
+					case DENY:
+						event.setCancelled(true);
+						break;
+					case REPLACE:
+						final ReplaceFilter replaceFilter = (ReplaceFilter) result;
+						String newMessage;
+						if (replaceFilter.isRegex()) {
+							newMessage = message.replaceAll(replaceFilter.getFilteredString(), replaceFilter.getReplacement());
+						} else {
+							newMessage = message;
+							while (newMessage.contains(replaceFilter.getFilteredString())) {
+								newMessage = newMessage.replace(replaceFilter.getFilteredString(), replaceFilter.getReplacement());
+							}
 						}
-					}
-					event.setMessage(newMessage);
-					break;
-				case TEMPORARY_MUTE:
-					final MuteFilter muteFilter = (MuteFilter) result;
-					final String mutePlayerName = event.getPlayer().getName();
-					final long muteDuration = muteFilter.getDuration();
-					final String muteReason = plugin.getMessages().get(MessageId.talk_filterMutedReason, muteFilter.getFilteredString())[0];
-					final String muteCommand = plugin.getPluginConfig().getTempMuteCommand(mutePlayerName, muteDuration, muteReason);
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), muteCommand);
-					event.setCancelled(true);
-					break;
-				case TEMPORARY_BAN:
-					final BanFilter banFilter = (BanFilter) result;
-					final String banPlayerName = event.getPlayer().getName();
-					final long banDuration = banFilter.getDuration();
-					final String banReason = plugin.getMessages().get(MessageId.talk_filterBannedReason, banFilter.getFilteredString())[0];
-					final String banCommand = plugin.getPluginConfig().getTempBanCommand(banPlayerName, banDuration, banReason);
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), banCommand);
-					event.setCancelled(true);
-					break;
-				case TEMPORARY_JAIL:
-					final JailFilter jailFilter = (JailFilter) result;
-					final String jailPlayerName = event.getPlayer().getName();
-					final long jailDuration = jailFilter.getDuration();
-					final String jailName = jailFilter.getJailName();
-					final String jailReason = plugin.getMessages()
-					                                .get(MessageId.talk_filterJailedReason, jailFilter.getFilteredString())[0];
-					final String jailCommand = plugin.getPluginConfig()
-					                                 .getTempJailCommand(jailPlayerName, jailDuration, jailName, jailReason);
-					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), jailCommand);
-					event.setCancelled(true);
-					break;
-				case DIVINE_PUNISHMENT:
-					// TODO
-					LOG.severe("Divine Punishment has not yet been implemented! Please don't use it!");
-					break;
-				default:
-					break;
+						event.setMessage(newMessage);
+						break;
+					case TEMPORARY_MUTE:
+						final MuteFilter muteFilter = (MuteFilter) result;
+						final String mutePlayerName = event.getPlayer().getName();
+						final long muteDuration = muteFilter.getDuration();
+						final String muteReason = plugin.getMessages()
+						                                .get(MessageId.talk_filterMutedReason, muteFilter.getOutputString())[0];
+						final String muteCommand = plugin.getPluginConfig().getTempMuteCommand(mutePlayerName, muteDuration, muteReason);
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), muteCommand);
+						event.setCancelled(true);
+						break;
+					case TEMPORARY_BAN:
+						final BanFilter banFilter = (BanFilter) result;
+						final String banPlayerName = event.getPlayer().getName();
+						final long banDuration = banFilter.getDuration();
+						final String banReason = plugin.getMessages()
+						                               .get(MessageId.talk_filterBannedReason, banFilter.getOutputString())[0];
+						final String banCommand = plugin.getPluginConfig().getTempBanCommand(banPlayerName, banDuration, banReason);
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), banCommand);
+						event.setCancelled(true);
+						break;
+					case TEMPORARY_JAIL:
+						final JailFilter jailFilter = (JailFilter) result;
+						final String jailPlayerName = event.getPlayer().getName();
+						final long jailDuration = jailFilter.getDuration();
+						final String jailName = jailFilter.getJailName();
+						final String jailReason = plugin.getMessages()
+						                                .get(MessageId.talk_filterJailedReason, jailFilter.getOutputString())[0];
+						final String jailCommand = plugin.getPluginConfig()
+						                                 .getTempJailCommand(jailPlayerName, jailDuration, jailName, jailReason);
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), jailCommand);
+						event.setCancelled(true);
+						break;
+					case DIVINE_PUNISHMENT:
+						// TODO
+						LOG.severe("Divine Punishment has not yet been implemented! Please don't use it!");
+						break;
+					default:
+						break;
+				}
 			}
 		}
 	}

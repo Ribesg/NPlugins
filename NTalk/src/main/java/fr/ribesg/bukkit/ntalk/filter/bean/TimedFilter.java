@@ -17,8 +17,12 @@ public abstract class TimedFilter extends Filter {
 
 	private final long duration;
 
-	protected TimedFilter(final String filteredString, final boolean regex, final ChatFilterResult responseType, final long duration) {
-		super(filteredString, regex, responseType);
+	protected TimedFilter(final String outputString,
+	                      final String filteredString,
+	                      final boolean regex,
+	                      final ChatFilterResult responseType,
+	                      final long duration) {
+		super(outputString, filteredString, regex, responseType);
 		this.duration = duration;
 	}
 

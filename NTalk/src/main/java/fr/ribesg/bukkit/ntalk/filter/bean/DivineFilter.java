@@ -18,12 +18,13 @@ public class DivineFilter extends TimedFilter {
 	private final int minHealth;
 	private final int entityAmount;
 
-	public DivineFilter(final String filteredString,
+	public DivineFilter(final String outputString,
+	                    final String filteredString,
 	                    final boolean regex,
 	                    final long duration,
 	                    final int minHealth,
 	                    final int entityAmount) {
-		super(filteredString, regex, ChatFilterResult.DIVINE_PUNISHMENT, duration);
+		super(outputString, filteredString, regex, ChatFilterResult.DIVINE_PUNISHMENT, duration);
 		this.minHealth = minHealth;
 		this.entityAmount = entityAmount;
 	}
@@ -54,11 +55,12 @@ public class DivineFilter extends TimedFilter {
 
 	public static DivineFilter loadFromConfig(final String key, final Map<String, Object> values) {
 		try {
+			final String filteredString = (String) values.get("filteredString");
 			final boolean regex = (boolean) values.get("isRegex");
-			final long duration = (long) values.get("duration");
+			final long duration = (int) values.get("duration");
 			final int minHealth = (int) values.get("minHealth");
 			final int entityAmount = (int) values.get("entityAmount");
-			return new DivineFilter(key, regex, duration, minHealth, entityAmount);
+			return new DivineFilter(key, filteredString, regex, duration, minHealth, entityAmount);
 		} catch (final NullPointerException e) {
 			throw new IllegalArgumentException("Missing value", e);
 		}

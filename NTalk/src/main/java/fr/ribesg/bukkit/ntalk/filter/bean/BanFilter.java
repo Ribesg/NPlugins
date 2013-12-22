@@ -15,8 +15,8 @@ import java.util.Map;
 /** @author Ribesg */
 public class BanFilter extends TimedFilter {
 
-	public BanFilter(final String filteredString, final boolean regex, final long duration) {
-		super(filteredString, regex, ChatFilterResult.TEMPORARY_BAN, duration);
+	public BanFilter(final String outputString, final String filteredString, final boolean regex, final long duration) {
+		super(outputString, filteredString, regex, ChatFilterResult.TEMPORARY_BAN, duration);
 	}
 
 	// ############# //
@@ -25,9 +25,10 @@ public class BanFilter extends TimedFilter {
 
 	public static BanFilter loadFromConfig(final String key, final Map<String, Object> values) {
 		try {
+			final String filteredString = (String) values.get("filteredString");
 			final boolean regex = (boolean) values.get("isRegex");
-			final long duration = (long) values.get("duration");
-			return new BanFilter(key, regex, duration);
+			final long duration = (int) values.get("duration");
+			return new BanFilter(key, filteredString, regex, duration);
 		} catch (final NullPointerException e) {
 			throw new IllegalArgumentException("Missing value", e);
 		}

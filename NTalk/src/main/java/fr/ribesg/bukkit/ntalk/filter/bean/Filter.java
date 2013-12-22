@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntalk.filter.bean;
+import fr.ribesg.bukkit.ncore.common.collection.trie.TrieElement;
 import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -16,20 +17,33 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /** @author Ribesg */
-public abstract class Filter {
+public abstract class Filter implements TrieElement {
 
+	private final String           outputString;
 	private final String           filteredString;
 	private final boolean          regex;
 	private final ChatFilterResult responseType;
 
-	protected Filter(final String filteredString, final boolean regex, final ChatFilterResult responseType) {
+	protected Filter(final String outputString, final String filteredString, final boolean regex, final ChatFilterResult responseType) {
+		this.outputString = outputString;
 		this.filteredString = filteredString;
 		this.regex = regex;
 		this.responseType = responseType;
 	}
 
+	public String getOutputString() {
+		return this.outputString;
+	}
+
 	public String getFilteredString() {
 		return filteredString;
+	}
+
+	public char[] getCharSequence() {
+		if (isRegex()) {
+			throw new IllegalStateException("A regex can't be used in a Trie");
+		}
+		return getFilteredString().toCharArray();
 	}
 
 	public boolean isRegex() {
@@ -47,6 +61,7 @@ public abstract class Filter {
 	/** May be overriden to add stuff */
 	public Map<String, Object> getConfigMap() {
 		final Map<String, Object> map = new LinkedHashMap<>();
+		map.put("filteredString", filteredString);
 		map.put("type", responseType.name());
 		map.put("isRegex", regex);
 		return map;

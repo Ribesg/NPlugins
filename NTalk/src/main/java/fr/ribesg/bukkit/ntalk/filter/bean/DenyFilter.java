@@ -15,8 +15,8 @@ import java.util.Map;
 /** @author Ribesg */
 public class DenyFilter extends Filter {
 
-	public DenyFilter(final String filteredString, final boolean regex) {
-		super(filteredString, regex, ChatFilterResult.DENY);
+	public DenyFilter(final String outputString, final String filteredString, final boolean regex) {
+		super(outputString, filteredString, regex, ChatFilterResult.DENY);
 	}
 
 	// ############# //
@@ -25,8 +25,9 @@ public class DenyFilter extends Filter {
 
 	public static DenyFilter loadFromConfig(final String key, final Map<String, Object> values) {
 		try {
+			final String filteredString = (String) values.get("filteredString");
 			final boolean regex = (boolean) values.get("isRegex");
-			return new DenyFilter(key, regex);
+			return new DenyFilter(key, filteredString, regex);
 		} catch (final NullPointerException e) {
 			throw new IllegalArgumentException("Missing value", e);
 		}

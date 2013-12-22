@@ -17,8 +17,8 @@ public class ReplaceFilter extends Filter {
 
 	private final String replacement;
 
-	public ReplaceFilter(final String filteredString, final boolean regex, final String replacement) {
-		super(filteredString, regex, ChatFilterResult.REPLACE);
+	public ReplaceFilter(final String outputString, final String filteredString, final boolean regex, final String replacement) {
+		super(outputString, filteredString, regex, ChatFilterResult.REPLACE);
 		this.replacement = replacement;
 	}
 
@@ -43,9 +43,10 @@ public class ReplaceFilter extends Filter {
 
 	public static ReplaceFilter loadFromConfig(final String key, final Map<String, Object> values) {
 		try {
+			final String filteredString = (String) values.get("filteredString");
 			final boolean regex = (boolean) values.get("isRegex");
 			final String replacement = (String) values.get("replacement");
-			return new ReplaceFilter(key, regex, replacement);
+			return new ReplaceFilter(key, filteredString, regex, replacement);
 		} catch (final NullPointerException | ClassCastException e) {
 			throw new IllegalArgumentException("Missing value", e);
 		}

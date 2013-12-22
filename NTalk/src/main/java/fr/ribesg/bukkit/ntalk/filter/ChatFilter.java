@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ntalk.filter;
 import fr.ribesg.bukkit.ncore.AbstractConfig;
+import fr.ribesg.bukkit.ncore.common.collection.trie.Trie;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ntalk.NTalk;
 import fr.ribesg.bukkit.ntalk.filter.bean.BanFilter;
@@ -21,42 +22,55 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 /** @author Ribesg */
 public class ChatFilter extends AbstractConfig<NTalk> {
 
-	private final Map<String, Filter> filters;
+	private final Set<Filter>  regexes;
+	private final Trie<Filter> strings;
 
 	public ChatFilter(final NTalk plugin) {
 		super(plugin);
-		this.filters = new ConcurrentHashMap<>();
+		this.regexes = Collections.newSetFromMap(new ConcurrentHashMap<Filter, Boolean>());
+		this.strings = new Trie<>();
 
-		final BanFilter banFilter = new BanFilter("ohai", false, 3600);
-		this.filters.put(banFilter.getFilteredString(), banFilter);
+		final BanFilter banFilter = new BanFilter("ohai", "ohai", false, 3600);
+		this.add(banFilter);
 
-		final DenyFilter denyFilter = new DenyFilter("nope", false);
-		this.filters.put(denyFilter.getFilteredString(), denyFilter);
+		final DenyFilter denyFilter = new DenyFilter("nope", "nope", false);
+		this.add(denyFilter);
 
 		/* TODO Not Implemented Yet
-		final DivineFilter divineFilter = new DivineFilter("hitme", false, 120, 1, 7);
-		this.filters.put(divineFilter.getFilteredString(), divineFilter);
+		final DivineFilter divineFilter = new DivineFilter("hitme", "hitme", false, 120, 1, 7);
+		this.add(divineFilter);
 		*/
 
-		final JailFilter jailFilter = new JailFilter("you can't jail me", false, 3600, "theBadWordJail");
-		this.filters.put(jailFilter.getFilteredString(), jailFilter);
+		final JailFilter jailFilter = new JailFilter("you can't jail me", "you can't jail me", false, 3600, "theBadWordJail");
+		this.add(jailFilter);
 
-		final MuteFilter muteFilter = new MuteFilter("l+[\\s]*o+[\\s]*l+", true, 3600);
-		this.filters.put(muteFilter.getFilteredString(), muteFilter);
+		final MuteFilter muteFilter = new MuteFilter("lol", "l+[\\s]*o+[\\s]*l+", true, 3600);
+		this.add(muteFilter);
 
-		final ReplaceFilter replacerFilter = new ReplaceFilter("admins sucks", false, "admins rocks");
-		this.filters.put(replacerFilter.getFilteredString(), replacerFilter);
+		final ReplaceFilter replacerFilter = new ReplaceFilter("admins sucks", "admins sucks", false, "admins rocks");
+		this.add(replacerFilter);
+	}
+
+	private void add(final Filter filter) {
+		if (filter.isRegex()) {
+			this.regexes.add(filter);
+		} else {
+			this.strings.insert(filter);
+		}
 	}
 
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
-		filters.clear();
+		regexes.clear();
 
 		if (!config.isConfigurationSection("filters")) {
 			throw new InvalidConfigurationException("Unable to find 'filters' configuration section.");
@@ -67,7 +81,7 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 					throw new InvalidConfigurationException("Config for key '" + key + "' is invalid");
 				} else {
 					final Filter filter = Filter.loadFromConfig(key, filtersSection.getConfigurationSection(key));
-					filters.put(filter.getFilteredString(), filter);
+					this.add(filter);
 				}
 			}
 		}
@@ -95,18 +109,21 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 		content.append("# Here are all the available Filter types and examples of use:\n");
 		content.append("# - TempBan the player\n");
 		content.append("#   \"ohai\":\n");
+		content.append("#     filteredString: \"ohai\"\n");
 		content.append("#     type: \"TEMPORARY_BAN\"\n");
 		content.append("#     isRegex: false\n");
 		content.append("#     duration: 3600\n");
 		content.append("#\n");
 		content.append("# - Deny the message\n");
 		content.append("#   \"nope\":\n");
+		content.append("#     filteredString: \"nope\"\n");
 		content.append("#     type: \"DENY\"\n");
 		content.append("#     isRegex: false\n");
 		content.append("#\n");
 		/* TODO Not Implemented Yet
 		content.append("# - The Divine Punishment\n");
 		content.append("#   \"hitme\":\n");
+		content.append("#     filteredString: \"hitme\"\n");
 		content.append("#     type: \"DIVINE_PUNISHMENT\"\n");
 		content.append("#     isRegex: false\n");
 		content.append("#     duration: 120\n");
@@ -116,19 +133,22 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 		*/
 		content.append("# - TempJail the player\n");
 		content.append("#   \"you can't jail me\":\n");
+		content.append("#     filteredString: \"you can't jail me\"\n");
 		content.append("#     type: \"TEMPORARY_JAIL\"\n");
 		content.append("#     isRegex: false\n");
 		content.append("#     duration: 3600\n");
 		content.append("#     jailName: theBadWordJail\n");
 		content.append("#\n");
 		content.append("# - TempMute the player (This example matches all kind of 'lol', 'l ooo l', etc)\n");
-		content.append("#   \"l+[\\s]*o+[\\s]*l+\":\n");
+		content.append("#   \"lol\":\n");
+		content.append("#     filteredString: \"l+[\\\\s]*o+[\\\\s]*l+\"\n");
 		content.append("#     type: \"TEMPORARY_MUTE\"\n");
 		content.append("#     isRegex: true\n");
 		content.append("#     duration: 3600\n");
 		content.append("#\n");
 		content.append("# - Replace the occurence in the message\n");
 		content.append("#   \"admins sucks\":\n");
+		content.append("#     filteredString: \"admins sucks\"\n");
 		content.append("#     type: \"REPLACE\"\n");
 		content.append("#     isRegex: false\n");
 		content.append("#     replacement: \"admins rocks\"\n");
@@ -137,29 +157,34 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 		content.append("# to load. Remember, use only spaces, no tabs!\n");
 		content.append("filters:\n");
 
-		for (final Filter filter : filters.values()) {
-			content.append("  \"" + filter.getFilteredString() + "\":\n");
+		for (final Filter filter : this.getAll()) {
+			content.append("  \"" + filter.getOutputString() + "\":\n");
 			for (final Map.Entry<String, Object> e : filter.getConfigMap().entrySet()) {
-				content.append("    " + e.getKey() + ": \"" + e.getValue().toString() + "\"\n");
+				if (e.getValue() instanceof String) {
+					content.append("    " + e.getKey() + ": \"" + e.getValue().toString().replaceAll("\\\\", "\\\\\\\\") + "\"\n");
+				} else {
+					content.append("    " + e.getKey() + ": " + e.getValue().toString() + "\n");
+				}
 			}
 		}
 
 		return content.toString();
 	}
 
+	public Set<Filter> getAll() {
+		final Set<Filter> result = this.strings.getAll();
+		result.addAll(this.regexes);
+		return result;
+	}
+
 	public Filter check(final String message) {
-		final String[] split = message.split(" ");
-		for (final String word : split) {
-			for (final Map.Entry<String, Filter> e : filters.entrySet()) {
-				if (e.getValue().isRegex()) {
-					if (word.matches(e.getKey())) {
-						return e.getValue();
-					}
-				} else {
-					if (e.getKey().equals(word)) {
-						return e.getValue();
-					}
-				}
+		final Filter filter = this.strings.check(message);
+		if (filter != null) {
+			return filter;
+		}
+		for (final Filter regexFilter : this.regexes) {
+			if (Pattern.compile(regexFilter.getFilteredString()).matcher(message).matches()) {
+				return regexFilter;
 			}
 		}
 		return null;

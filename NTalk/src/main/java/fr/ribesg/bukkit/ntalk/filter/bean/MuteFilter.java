@@ -15,8 +15,8 @@ import java.util.Map;
 /** @author Ribesg */
 public class MuteFilter extends TimedFilter {
 
-	public MuteFilter(final String filteredString, final boolean regex, final long duration) {
-		super(filteredString, regex, ChatFilterResult.TEMPORARY_MUTE, duration);
+	public MuteFilter(final String outputString, final String filteredString, final boolean regex, final long duration) {
+		super(outputString, filteredString, regex, ChatFilterResult.TEMPORARY_MUTE, duration);
 	}
 
 	// ############# //
@@ -25,9 +25,10 @@ public class MuteFilter extends TimedFilter {
 
 	public static MuteFilter loadFromConfig(final String key, final Map<String, Object> values) {
 		try {
+			final String filteredString = (String) values.get("filteredString");
 			final boolean regex = (boolean) values.get("isRegex");
-			final long duration = (long) values.get("duration");
-			return new MuteFilter(key, regex, duration);
+			final long duration = (int) values.get("duration");
+			return new MuteFilter(key, filteredString, regex, duration);
 		} catch (final NullPointerException e) {
 			throw new IllegalArgumentException("Missing value", e);
 		}
