@@ -34,6 +34,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 
 		setMinimumDistanceBetweenTwoAltars(500);
 		setRepairBoostMultiplier(1.0);
+		setEnchantmentBoostMultiplier(1.0);
 	}
 
 	/** @see AbstractConfig#handleValues(YamlConfiguration) */
