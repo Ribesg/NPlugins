@@ -10,9 +10,9 @@
 package fr.ribesg.bukkit.ncore.node;
 
 import fr.ribesg.bukkit.ncore.NCore;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.lang.AbstractMessages;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,6 +40,7 @@ public abstract class NPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		FrameBuilder frame;
+		core = (NCore) Bukkit.getPluginManager().getPlugin("NCore");
 		if (badCoreVersion()) {
 
 			frame = new FrameBuilder();
@@ -111,6 +112,7 @@ public abstract class NPlugin extends JavaPlugin {
 	protected abstract void onNodeDisable();
 
 	private boolean badCoreVersion() {
+		linkCore();
 		return getCoreVersion().compareTo(getMinCoreVersion()) < 0;
 	}
 
