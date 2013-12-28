@@ -9,8 +9,8 @@
 
 package fr.ribesg.bukkit.ncore.lang;
 
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -86,18 +86,9 @@ public abstract class AbstractMessages {
 				try {
 					final MessageId id = MessageId.valueOf(idString);
 					final Message def = messagesMap.get(id);
-					String value;
-					boolean useHeader;
-					if (!messagesConfig.isConfigurationSection(idString)) {
-						// Pre 0.4.0
-						value = messagesConfig.getString(idString, def.getDefaultMessage());
-						useHeader = true;
-					} else {
-						// 0.4.0 and post 0.4.0
-						final ConfigurationSection section = messagesConfig.getConfigurationSection(idString);
-						value = section.getString("value", def.getDefaultMessage());
-						useHeader = section.getBoolean("useHeader", true);
-					}
+					final ConfigurationSection section = messagesConfig.getConfigurationSection(idString);
+					String value = section.getString("value", def.getDefaultMessage());
+					boolean useHeader = section.getBoolean("useHeader", true);
 					messagesMap.put(id, new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), value, useHeader));
 				} catch (final IllegalArgumentException e) {
 					plugin.getLogger().warning(idString + " is not / no longer used, removing it from messages config file.");
