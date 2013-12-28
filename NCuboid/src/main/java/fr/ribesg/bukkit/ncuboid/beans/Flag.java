@@ -79,6 +79,7 @@ public enum Flag {
 				case "TEL":
 					f = TELEPORT;
 					break;
+				case "WG":
 				case "WARP":
 					f = WARPGATE;
 					break;
