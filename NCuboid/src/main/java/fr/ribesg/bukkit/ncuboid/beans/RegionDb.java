@@ -325,19 +325,25 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		}
 
 		// Amount of regions
-		final int nbRegion = getByOwner(playerName) == null ? 0 : getByOwner(playerName).size();
-		if (nbRegion >= config.getMaxRegionNb()) {
-			return new CreationResult(CreationResultEnum.DENIED_TOO_MUCH, config.getMaxRegionNb(), nbRegion);
+		if (config.getMaxRegionNb() != -1) {
+			final int nbRegion = getByOwner(playerName) == null ? 0 : getByOwner(playerName).size();
+			if (nbRegion >= config.getMaxRegionNb()) {
+				return new CreationResult(CreationResultEnum.DENIED_TOO_MUCH, config.getMaxRegionNb(), nbRegion);
+			}
 		}
 
 		// Length of each dimension
-		if (r.getMaxLength() >= config.getMaxRegion1DSize()) {
-			return new CreationResult(CreationResultEnum.DENIED_TOO_LONG, config.getMaxRegion1DSize(), r.getMaxLength());
+		if (config.getMaxRegion1DSize() != -1) {
+			if (r.getMaxLength() >= config.getMaxRegion1DSize()) {
+				return new CreationResult(CreationResultEnum.DENIED_TOO_LONG, config.getMaxRegion1DSize(), r.getMaxLength());
+			}
 		}
 
 		// Total size
-		if (r.getTotalSize() >= config.getMaxRegion3DSize()) {
-			return new CreationResult(CreationResultEnum.DENIED_TOO_BIG, config.getMaxRegion3DSize(), r.getTotalSize());
+		if (config.getMaxRegion3DSize() != -1) {
+			if (r.getTotalSize() >= config.getMaxRegion3DSize()) {
+				return new CreationResult(CreationResultEnum.DENIED_TOO_BIG, config.getMaxRegion3DSize(), r.getTotalSize());
+			}
 		}
 
 		// Overlaping with other cuboids
