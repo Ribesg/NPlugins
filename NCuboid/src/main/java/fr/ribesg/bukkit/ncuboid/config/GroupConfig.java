@@ -16,7 +16,7 @@ public class GroupConfig {
 	private final int    maxRegion1DSize;
 	private final int    maxRegion3DSize;
 
-	public GroupConfig(String groupName, int maxRegionNb, int maxRegion1DSize, int maxRegion3DSize) {
+	public GroupConfig(final String groupName, final int maxRegionNb, final int maxRegion1DSize, final int maxRegion3DSize) {
 		this.groupName = groupName;
 		this.maxRegionNb = maxRegionNb;
 		this.maxRegion1DSize = maxRegion1DSize;
