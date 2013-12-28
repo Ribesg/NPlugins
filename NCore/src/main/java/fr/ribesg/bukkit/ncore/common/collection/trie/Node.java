@@ -55,6 +55,8 @@ public class Node<T extends TrieElement> {
 	public T check(final char[] chars, final int startIndex) {
 		if (this.isFinal) {
 			return this.element;
+		} else if (chars.length >= startIndex + 1) {
+			return null;
 		} else {
 			char c = chars[startIndex + 1];
 			if (c >= 'A' && c <= 'Z') {
