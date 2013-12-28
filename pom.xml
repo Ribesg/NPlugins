@@ -18,7 +18,7 @@
 	<artifactId>NPlugins</artifactId>
 	<packaging>pom</packaging>
 
-	<version>0.5.0</version>
+	<version>0.5.1-SNAPSHOT</version>
 
 	<name>NPlugins</name>
 	<url>https://github.com/Ribesg/NPlugins</url>

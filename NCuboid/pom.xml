@@ -17,13 +17,13 @@
 	<parent>
 		<groupId>fr.ribesg.bukkit.nplugins</groupId>
 		<artifactId>NPlugins</artifactId>
-		<version>0.5.0</version>
+		<version>0.5.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>fr.ribesg.bukkit.ncuboid</groupId>
 	<artifactId>NCuboid</artifactId>
 	<name>NCuboid</name>
-	<version>0.5.0</version>
+	<version>0.5.1-SNAPSHOT</version>
 
 	<url>https://github.com/Ribesg/NPlugins/tree/master/NCuboid</url>
 
@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>fr.ribesg.bukkit.ncore</groupId>
 			<artifactId>NCore</artifactId>
-			<version>0.5.0</version>
+			<version>0.5.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.dynmap</groupId>
