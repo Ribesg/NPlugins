@@ -24,6 +24,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 public class TalkListener implements Listener {
@@ -87,8 +88,14 @@ public class TalkListener implements Listener {
 						final String muteReason = plugin.getMessages()
 						                                .get(MessageId.talk_filterMutedReason, muteFilter.getOutputString())[0];
 						final String muteCommand = plugin.getPluginConfig().getTempMuteCommand(mutePlayerName, muteDuration, muteReason);
-						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), muteCommand);
-						event.setCancelled(true);
+						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
+
+							@Override
+							public Object call() throws Exception {
+								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), muteCommand);
+								return null;
+							}
+						});
 						break;
 					case TEMPORARY_BAN:
 						final BanFilter banFilter = (BanFilter) result;
@@ -97,8 +104,14 @@ public class TalkListener implements Listener {
 						final String banReason = plugin.getMessages()
 						                               .get(MessageId.talk_filterBannedReason, banFilter.getOutputString())[0];
 						final String banCommand = plugin.getPluginConfig().getTempBanCommand(banPlayerName, banDuration, banReason);
-						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), banCommand);
-						event.setCancelled(true);
+						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
+
+							@Override
+							public Object call() throws Exception {
+								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), banCommand);
+								return null;
+							}
+						});
 						break;
 					case TEMPORARY_JAIL:
 						final JailFilter jailFilter = (JailFilter) result;
@@ -109,8 +122,14 @@ public class TalkListener implements Listener {
 						                                .get(MessageId.talk_filterJailedReason, jailFilter.getOutputString())[0];
 						final String jailCommand = plugin.getPluginConfig()
 						                                 .getTempJailCommand(jailPlayerName, jailDuration, jailName, jailReason);
-						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), jailCommand);
-						event.setCancelled(true);
+						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
+
+							@Override
+							public Object call() throws Exception {
+								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), jailCommand);
+								return null;
+							}
+						});
 						break;
 					case DIVINE_PUNISHMENT:
 						// TODO
