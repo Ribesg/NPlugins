@@ -29,7 +29,7 @@ import java.io.IOException;
  */
 public abstract class NPlugin extends JavaPlugin {
 
-	private static final String CORE          = "Core";
+	private static final String CORE          = "NCore";
 	private static final String NCORE_WEBSITE = "http://www.ribesg.fr/";
 
 	private NCore core;
