@@ -215,7 +215,7 @@ public class NWorld extends NPlugin implements WorldNode {
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
 	@Override
 	protected void linkCore() {
-		getCore().setWorldNode(this);
+		getCore().set(WORLD, this);
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */

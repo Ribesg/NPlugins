@@ -102,7 +102,7 @@ public class NTalk extends NPlugin implements TalkNode {
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
 	@Override
 	protected void linkCore() {
-		getCore().setTalkNode(this);
+		getCore().set(TALK, this);
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */

@@ -10,20 +10,16 @@
 package fr.ribesg.bukkit.ncore;
 
 import fr.ribesg.bukkit.ncore.common.event.NEventsListener;
-import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
-import fr.ribesg.bukkit.ncore.node.dodgeball.DodgeBallNode;
-import fr.ribesg.bukkit.ncore.node.enchantingegg.EnchantingEggNode;
-import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
-import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
-import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
-import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
-import fr.ribesg.bukkit.ncore.node.world.WorldNode;
+import fr.ribesg.bukkit.ncore.node.Node;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.mcstats.Metrics;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Core of the N Plugin Suite
@@ -32,14 +28,7 @@ import java.io.IOException;
  */
 public class NCore extends JavaPlugin {
 
-	private CuboidNode        cuboidNode;
-	private DodgeBallNode     dodgeBallNode;
-	private EnchantingEggNode enchantingEggNode;
-	private GeneralNode       generalNode;
-	private PlayerNode        playerNode;
-	private TalkNode          talkNode;
-	private TheEndAgainNode   theEndAgainNode;
-	private WorldNode         worldNode;
+	private Map<String, Node> nodes;
 
 	private Metrics metrics;
 
@@ -50,6 +39,9 @@ public class NCore extends JavaPlugin {
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
+
+		this.nodes = new HashMap<>();
+
 		Bukkit.getScheduler().runTaskLaterAsynchronously(this, new BukkitRunnable() {
 
 			@Override
@@ -69,10 +61,9 @@ public class NCore extends JavaPlugin {
 	private void afterNodesLoad() {
 		boolean noNodeFound = true;
 		Metrics.Graph nodesUsedGraph = metrics.createGraph("Nodes used");
-		
-		/* Cuboid Node */
-		if (cuboidNode != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter("Cuboid") {
+
+		if (get(Node.CUBOID) != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.CUBOID) {
 
 				@Override
 				public int getValue() {
@@ -81,10 +72,9 @@ public class NCore extends JavaPlugin {
 			});
 			noNodeFound = false;
 		}
-		
-		/* DodgeBall Node */
-		if (dodgeBallNode != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter("DodgeBall") {
+
+		if (get(Node.ENCHANTING_EGG) != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.ENCHANTING_EGG) {
 
 				@Override
 				public int getValue() {
@@ -93,10 +83,9 @@ public class NCore extends JavaPlugin {
 			});
 			noNodeFound = false;
 		}
-		
-		/* EnchantingEgg Node */
-		if (enchantingEggNode != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter("EnchantingEgg") {
+
+		if (get(Node.GENERAL) != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.GENERAL) {
 
 				@Override
 				public int getValue() {
@@ -105,10 +94,9 @@ public class NCore extends JavaPlugin {
 			});
 			noNodeFound = false;
 		}
-		
-		/* General Node */
-		if (generalNode != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter("General") {
+
+		if (get(Node.PLAYER) != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PLAYER) {
 
 				@Override
 				public int getValue() {
@@ -117,10 +105,9 @@ public class NCore extends JavaPlugin {
 			});
 			noNodeFound = false;
 		}
-		
-		/* Player Node */
-		if (playerNode != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter("Player") {
+
+		if (get(Node.TALK) != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.TALK) {
 
 				@Override
 				public int getValue() {
@@ -129,10 +116,9 @@ public class NCore extends JavaPlugin {
 			});
 			noNodeFound = false;
 		}
-		
-		/* Talk Node */
-		if (talkNode != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter("Talk") {
+
+		if (get(Node.THE_END_AGAIN) != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.THE_END_AGAIN) {
 
 				@Override
 				public int getValue() {
@@ -141,22 +127,9 @@ public class NCore extends JavaPlugin {
 			});
 			noNodeFound = false;
 		}
-		
-		/* TheEndAgain Node */
-		if (theEndAgainNode != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter("TheEndAgain") {
 
-				@Override
-				public int getValue() {
-					return 1;
-				}
-			});
-			noNodeFound = false;
-		}
-		
-		/* World Node */
-		if (worldNode != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter("World") {
+		if (get(Node.WORLD) != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.WORLD) {
 
 				@Override
 				public int getValue() {
@@ -169,71 +142,30 @@ public class NCore extends JavaPlugin {
 		metrics.start();
 
 		if (noNodeFound) {
-			// TODO
+			final FrameBuilder frame = new FrameBuilder();
+			frame.addLine("This plugin can be safely removed", FrameBuilder.Option.CENTER);
+			frame.addLine("It seems that you are using this plugin, NCore, while note using any");
+			frame.addLine("node of the NPlugins suite. Maybe you forgot to add the Node(s) you");
+			frame.addLine("wanted to use, or you forgot to remove NCore after removing all nodes.");
+			frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
+
+			for (final String s : frame.build()) {
+				getLogger().severe(s);
+			}
+
+			getPluginLoader().disablePlugin(this);
 		}
 	}
 
-	public TalkNode getTalkNode() {
-		return talkNode;
+	public Node get(final String nodeName) {
+		return this.nodes.get(nodeName);
 	}
 
-	public void setTalkNode(TalkNode talkNode) {
-		this.talkNode = talkNode;
-	}
-
-	public CuboidNode getCuboidNode() {
-		return cuboidNode;
-	}
-
-	public void setCuboidNode(CuboidNode cuboidNode) {
-		this.cuboidNode = cuboidNode;
-	}
-
-	public DodgeBallNode getDodgeBallNode() {
-		return dodgeBallNode;
-	}
-
-	public void setDodgeBallNode(DodgeBallNode dodgeBallNode) {
-		this.dodgeBallNode = dodgeBallNode;
-	}
-
-	public EnchantingEggNode getEnchantingEggNode() {
-		return enchantingEggNode;
-	}
-
-	public void setEnchantingEggNode(EnchantingEggNode enchantingEggNode) {
-		this.enchantingEggNode = enchantingEggNode;
-	}
-
-	public GeneralNode getGeneralNode() {
-		return generalNode;
-	}
-
-	public void setGeneralNode(GeneralNode generalNode) {
-		this.generalNode = generalNode;
-	}
-
-	public PlayerNode getPlayerNode() {
-		return playerNode;
-	}
-
-	public void setPlayerNode(PlayerNode playerNode) {
-		this.playerNode = playerNode;
-	}
-
-	public TheEndAgainNode getTheEndAgainNode() {
-		return theEndAgainNode;
-	}
-
-	public void setTheEndAgainNode(TheEndAgainNode theEndAgainNode) {
-		this.theEndAgainNode = theEndAgainNode;
-	}
-
-	public WorldNode getWorldNode() {
-		return worldNode;
-	}
-
-	public void setWorldNode(WorldNode worldNode) {
-		this.worldNode = worldNode;
+	public void set(final String nodeName, final Node node) {
+		if (this.nodes.containsKey(nodeName)) {
+			throw new IllegalStateException("Registering the same node twice!");
+		} else {
+			this.nodes.put(nodeName, node);
+		}
 	}
 }

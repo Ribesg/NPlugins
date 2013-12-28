@@ -123,7 +123,7 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
 	@Override
 	protected void linkCore() {
-		getCore().setEnchantingEggNode(this);
+		getCore().set(ENCHANTING_EGG, this);
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */

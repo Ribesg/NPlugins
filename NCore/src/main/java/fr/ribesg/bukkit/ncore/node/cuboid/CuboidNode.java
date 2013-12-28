@@ -9,6 +9,8 @@
 
 package fr.ribesg.bukkit.ncore.node.cuboid;
 
+import fr.ribesg.bukkit.ncore.node.Node;
+
 import java.util.List;
 
 /**
@@ -17,7 +19,7 @@ import java.util.List;
  *
  * @author Ribesg
  */
-public interface CuboidNode {
+public interface CuboidNode extends Node {
 
 	public boolean isJailed(String playerName);
 

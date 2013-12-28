@@ -106,7 +106,7 @@ public class NGeneral extends NPlugin implements GeneralNode {
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
 	@Override
 	protected void linkCore() {
-		getCore().setGeneralNode(this);
+		getCore().set(GENERAL, this);
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */

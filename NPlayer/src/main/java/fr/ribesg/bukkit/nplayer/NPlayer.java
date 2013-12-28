@@ -143,7 +143,7 @@ public class NPlayer extends NPlugin implements PlayerNode {
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
 	@Override
 	protected void linkCore() {
-		getCore().setPlayerNode(this);
+		getCore().set(PLAYER, this);
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */

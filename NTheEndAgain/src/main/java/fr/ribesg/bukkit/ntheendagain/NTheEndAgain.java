@@ -192,7 +192,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
 	@Override
 	protected void linkCore() {
-		getCore().setTheEndAgainNode(this);
+		getCore().set(THE_END_AGAIN, this);
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */

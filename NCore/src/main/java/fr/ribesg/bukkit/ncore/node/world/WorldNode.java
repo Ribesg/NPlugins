@@ -9,12 +9,14 @@
 
 package fr.ribesg.bukkit.ncore.node.world;
 
+import fr.ribesg.bukkit.ncore.node.Node;
+
 /**
  * API for the NWorld plugin.
  * Want something to be added here? Just ask me!
  *
  * @author Ribesg
  */
-public interface WorldNode {
+public interface WorldNode extends Node {
 
 }

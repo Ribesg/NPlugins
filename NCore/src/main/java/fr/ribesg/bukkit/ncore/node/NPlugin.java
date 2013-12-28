@@ -29,7 +29,7 @@ import java.io.IOException;
  */
 public abstract class NPlugin extends JavaPlugin {
 
-	private static final String NCORE         = "NCore";
+	private static final String CORE          = "Core";
 	private static final String NCORE_WEBSITE = "http://www.ribesg.fr/";
 
 	private NCore core;
@@ -40,12 +40,12 @@ public abstract class NPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		FrameBuilder frame;
-		core = (NCore) Bukkit.getPluginManager().getPlugin("NCore");
+		core = (NCore) Bukkit.getPluginManager().getPlugin(CORE);
 		if (badCoreVersion()) {
 
 			frame = new FrameBuilder();
-			frame.addLine("This plugin requires NCore v" + getMinCoreVersion(), FrameBuilder.Option.CENTER);
-			frame.addLine("NCore plugin was found but the");
+			frame.addLine("This plugin requires " + CORE + " v" + getMinCoreVersion(), FrameBuilder.Option.CENTER);
+			frame.addLine(CORE + " plugin was found but the");
 			frame.addLine("current version (v" + getCoreVersion() + ") is too low.");
 			frame.addLine("See " + NCORE_WEBSITE);
 			frame.addLine("Disabling plugin...");

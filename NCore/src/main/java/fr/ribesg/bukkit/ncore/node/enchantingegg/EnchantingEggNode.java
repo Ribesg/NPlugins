@@ -9,12 +9,14 @@
 
 package fr.ribesg.bukkit.ncore.node.enchantingegg;
 
+import fr.ribesg.bukkit.ncore.node.Node;
+
 /**
  * API for the NEnchantingEgg plugin.
  * Want something to be added here? Just ask me!
  *
  * @author Ribesg
  */
-public interface EnchantingEggNode {
+public interface EnchantingEggNode extends Node {
 
 }

@@ -155,7 +155,7 @@ public class NCuboid extends NPlugin implements CuboidNode {
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
 	@Override
 	protected void linkCore() {
-		getCore().setCuboidNode(this);
+		getCore().set(CUBOID, this);
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
