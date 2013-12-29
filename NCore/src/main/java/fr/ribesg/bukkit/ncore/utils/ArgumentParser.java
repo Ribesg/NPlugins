@@ -22,7 +22,7 @@ public class ArgumentParser {
 	 *
 	 * @param args The original Bukkit command args array
 	 */
-	public static String[] joinArgsWithQuotes(String[] args) {
+	public static String[] joinArgsWithQuotes(final String[] args) {
 		return new ArgumentParser(args).joinArgsWithQuotes();
 	}
 
@@ -63,7 +63,7 @@ public class ArgumentParser {
 	 *
 	 * @param args The arguments to parse.
 	 */
-	private ArgumentParser(String[] args) {
+	private ArgumentParser(final String[] args) {
 		this.initialArgs = args;
 		parsedArgs = new ArrayList<>(initialArgs.length);
 		fallBackBuffer = new ArrayList<>(initialArgs.length);
@@ -78,7 +78,7 @@ public class ArgumentParser {
 	private String[] joinArgsWithQuotes() {
 		quoteState = QuoteState.NO_QUOTES;
 
-		for (String arg : initialArgs) {
+		for (final String arg : initialArgs) {
 			parseSingleArg(arg);
 		}
 
@@ -92,7 +92,7 @@ public class ArgumentParser {
 	 *
 	 * @param arg the arg to parse.
 	 */
-	private void parseSingleArg(String arg) {
+	private void parseSingleArg(final String arg) {
 		if (arg.isEmpty()) {
 			return;
 		}
@@ -115,7 +115,7 @@ public class ArgumentParser {
 	 * @param arg the arg to parse
 	 */
 	private void parseUnquotedArg(String arg) {
-		char firstChar = arg.charAt(0);
+		final char firstChar = arg.charAt(0);
 		if (firstChar == '\'') {
 			quoteState = QuoteState.SINGLE_QUOTES;
 			arg = removeInitialQuote(arg);
@@ -136,7 +136,7 @@ public class ArgumentParser {
 	 *
 	 * @return the same arg without the first char.
 	 */
-	private String removeInitialQuote(String arg) {
+	private String removeInitialQuote(final String arg) {
 		if (arg.length() > 1) {
 			return arg.substring(1);
 		}
@@ -153,7 +153,7 @@ public class ArgumentParser {
 			return;
 		}
 
-		char lastChar = arg.charAt(arg.length() - 1);
+		final char lastChar = arg.charAt(arg.length() - 1);
 		if (charIsQuoteMatchingState(lastChar) && endQuoteIsNotEscaped(arg)) {
 			arg = removeFinalQuote(arg);
 			quotedArgsBuffer.append(arg);
@@ -171,7 +171,7 @@ public class ArgumentParser {
 	 *
 	 * @return True if this char matches the char that opened the current quoted String, false otherwise.
 	 */
-	private boolean charIsQuoteMatchingState(char c) {
+	private boolean charIsQuoteMatchingState(final char c) {
 		return (c == '\'' && quoteState == QuoteState.SINGLE_QUOTES) || (c == '\"' && quoteState == QuoteState.DOUBLE_QUOTES);
 	}
 
@@ -182,7 +182,7 @@ public class ArgumentParser {
 	 *
 	 * @return True if we should consider this final quote, false otherwise.
 	 */
-	private boolean endQuoteIsNotEscaped(String arg) {
+	private boolean endQuoteIsNotEscaped(final String arg) {
 		return arg.length() <= 1 || arg.charAt(arg.length() - 2) != '\\';
 	}
 
@@ -193,7 +193,7 @@ public class ArgumentParser {
 	 *
 	 * @return the same arg without the last char.
 	 */
-	private String removeFinalQuote(String arg) {
+	private String removeFinalQuote(final String arg) {
 		if (arg.length() > 1) {
 			return arg.substring(0, arg.length() - 1);
 		}

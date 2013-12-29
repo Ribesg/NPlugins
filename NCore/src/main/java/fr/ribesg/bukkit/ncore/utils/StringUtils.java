@@ -90,31 +90,31 @@ public class StringUtils {
 		return result.substring(0, 1).toLowerCase() + result.substring(1);
 	}
 
-	public static String joinStrings(String[] array, int start) {
+	public static String joinStrings(final String[] array, final int start) {
 		return joinStrings(array, start, array.length);
 	}
 
-	public static String joinStrings(String[] array, int start, int end) {
+	public static String joinStrings(final String[] array, final int start, final int end) {
 		return joinStrings(" ", array, start, end);
 	}
 
-	public static String joinStrings(String joinString, String[] array, int start) {
+	public static String joinStrings(final String joinString, final String[] array, final int start) {
 		return joinStrings(joinString, array, start, array.length);
 	}
 
-	public static String joinStrings(String joinString, String[] array, int start, int end) {
+	public static String joinStrings(final String joinString, final String[] array, final int start, final int end) {
 		return joinStrings(joinString, Arrays.copyOfRange(array, start, end));
 	}
 
-	public static String joinStrings(String... strings) {
+	public static String joinStrings(final String... strings) {
 		return joinStrings(" ", strings);
 	}
 
-	public static String joinStrings(String joinString, String... strings) {
+	public static String joinStrings(final String joinString, final String... strings) {
 		if (strings.length == 0) {
 			return "";
 		} else {
-			StringBuilder builder = new StringBuilder(strings[0]);
+			final StringBuilder builder = new StringBuilder(strings[0]);
 			for (int i = 1; i < strings.length; i++) {
 				builder.append(joinString);
 				builder.append(strings[i]);

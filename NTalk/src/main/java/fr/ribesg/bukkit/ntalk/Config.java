@@ -10,8 +10,8 @@
 package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ntalk.format.Format;
 import fr.ribesg.bukkit.ntalk.format.Format.FormatType;
 import org.bukkit.configuration.ConfigurationSection;
@@ -212,7 +212,7 @@ public class Config extends AbstractConfig<NTalk> {
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
-		FrameBuilder frame;
+		final FrameBuilder frame;
 
 		// Header
 		frame = new FrameBuilder();

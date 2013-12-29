@@ -18,7 +18,7 @@ public class RelativeFirework extends RelativeLocation {
 
 	private final Set<FireworkEffect> effects;
 	private final Vector              velocity;
-	boolean hasVelocity;
+	final         boolean             hasVelocity;
 
 	public RelativeFirework(final double x, final double y, final double z, final Set<FireworkEffect> effects) {
 		this(x, y, z, effects, null);

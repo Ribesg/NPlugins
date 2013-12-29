@@ -34,7 +34,7 @@ public class InventoryUtils {
 			comparator = new Comparator<ItemStack>() {
 
 				@Override
-				public int compare(ItemStack o1, ItemStack o2) {
+				public int compare(final ItemStack o1, final ItemStack o2) {
 					if (o2 == null) {
 						return -1;
 					} else if (o1 == null) {

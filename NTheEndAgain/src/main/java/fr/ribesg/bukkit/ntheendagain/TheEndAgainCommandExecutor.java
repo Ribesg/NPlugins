@@ -277,7 +277,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 	 *         sender did not provide a World (as a ConsoleSender)
 	 */
 	private String[] checkWorldArgument(final CommandSender sender, final String[] args) {
-		String[] result;
+		final String[] result;
 
 		final boolean senderIsAPlayer = sender instanceof Player;
 		if (args.length == 0) {

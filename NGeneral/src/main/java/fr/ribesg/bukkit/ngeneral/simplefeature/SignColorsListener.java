@@ -29,7 +29,7 @@ public class SignColorsListener implements Listener {
 			s.append("^.*");
 			s.append(ColorUtils.ALTERNATE_COLOR_CHAR_STRING);
 			s.append('[');
-			for (ChatColor c : ChatColor.values()) {
+			for (final ChatColor c : ChatColor.values()) {
 				s.append(c.getChar());
 			}
 			s.append("].*$");
@@ -40,15 +40,15 @@ public class SignColorsListener implements Listener {
 
 	private final NGeneral plugin;
 
-	public SignColorsListener(NGeneral instance) {
+	public SignColorsListener(final NGeneral instance) {
 		this.plugin = instance;
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onSignChange(SignChangeEvent event) {
+	public void onSignChange(final SignChangeEvent event) {
 		boolean containsColors = false;
-		for (String line : event.getLines()) {
+		for (final String line : event.getLines()) {
 			if (line.matches(getColorsRegex())) {
 				containsColors = true;
 				break;

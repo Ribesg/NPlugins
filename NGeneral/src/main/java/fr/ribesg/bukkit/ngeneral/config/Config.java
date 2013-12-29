@@ -79,7 +79,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	// Misc options
 	private boolean broadCastOnAfk;
 
-	public Config(NGeneral instance) {
+	public Config(final NGeneral instance) {
 		super(instance);
 
 		initialMessage = "";
@@ -533,7 +533,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return flyModeFeature;
 	}
 
-	public void setFlyModeFeature(boolean flyModeFeature) {
+	public void setFlyModeFeature(final boolean flyModeFeature) {
 		this.flyModeFeature = flyModeFeature;
 	}
 
@@ -541,7 +541,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return godModeFeature;
 	}
 
-	public void setGodModeFeature(boolean godModeFeature) {
+	public void setGodModeFeature(final boolean godModeFeature) {
 		this.godModeFeature = godModeFeature;
 	}
 
@@ -549,7 +549,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return protectionSignFeature;
 	}
 
-	public void setProtectionSignFeature(boolean protectionSignFeature) {
+	public void setProtectionSignFeature(final boolean protectionSignFeature) {
 		this.protectionSignFeature = protectionSignFeature;
 	}
 
@@ -557,7 +557,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkFeature;
 	}
 
-	public void setItemNetworkFeature(boolean itemNetworkFeature) {
+	public void setItemNetworkFeature(final boolean itemNetworkFeature) {
 		this.itemNetworkFeature = itemNetworkFeature;
 	}
 
@@ -565,7 +565,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkMaxDistance;
 	}
 
-	public void setItemNetworkMaxDistance(int itemNetworkMaxDistance) {
+	public void setItemNetworkMaxDistance(final int itemNetworkMaxDistance) {
 		this.itemNetworkMaxDistance = itemNetworkMaxDistance;
 	}
 
@@ -573,7 +573,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return broadCastOnAfk;
 	}
 
-	public void setBroadCastOnAfk(boolean broadCastOnAfk) {
+	public void setBroadCastOnAfk(final boolean broadCastOnAfk) {
 		this.broadCastOnAfk = broadCastOnAfk;
 	}
 
@@ -581,7 +581,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return protectionSignNoPermMsgLine1;
 	}
 
-	public void setProtectionSignNoPermMsgLine1(String protectionSignNoPermMsgLine1) {
+	public void setProtectionSignNoPermMsgLine1(final String protectionSignNoPermMsgLine1) {
 		this.protectionSignNoPermMsgLine1 = protectionSignNoPermMsgLine1;
 	}
 
@@ -589,7 +589,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return protectionSignNoPermMsgLine2;
 	}
 
-	public void setProtectionSignNoPermMsgLine2(String protectionSignNoPermMsgLine2) {
+	public void setProtectionSignNoPermMsgLine2(final String protectionSignNoPermMsgLine2) {
 		this.protectionSignNoPermMsgLine2 = protectionSignNoPermMsgLine2;
 	}
 
@@ -597,7 +597,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return protectionSignNoPermMsgLine3;
 	}
 
-	public void setProtectionSignNoPermMsgLine3(String protectionSignNoPermMsgLine3) {
+	public void setProtectionSignNoPermMsgLine3(final String protectionSignNoPermMsgLine3) {
 		this.protectionSignNoPermMsgLine3 = protectionSignNoPermMsgLine3;
 	}
 
@@ -605,7 +605,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return protectionSignNothingToProtectMsgLine1;
 	}
 
-	public void setProtectionSignNothingToProtectMsgLine1(String protectionSignNothingToProtectMsgLine1) {
+	public void setProtectionSignNothingToProtectMsgLine1(final String protectionSignNothingToProtectMsgLine1) {
 		this.protectionSignNothingToProtectMsgLine1 = protectionSignNothingToProtectMsgLine1;
 	}
 
@@ -613,7 +613,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return protectionSignNothingToProtectMsgLine2;
 	}
 
-	public void setProtectionSignNothingToProtectMsgLine2(String protectionSignNothingToProtectMsgLine2) {
+	public void setProtectionSignNothingToProtectMsgLine2(final String protectionSignNothingToProtectMsgLine2) {
 		this.protectionSignNothingToProtectMsgLine2 = protectionSignNothingToProtectMsgLine2;
 	}
 
@@ -621,7 +621,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return protectionSignNothingToProtectMsgLine3;
 	}
 
-	public void setProtectionSignNothingToProtectMsgLine3(String protectionSignNothingToProtectMsgLine3) {
+	public void setProtectionSignNothingToProtectMsgLine3(final String protectionSignNothingToProtectMsgLine3) {
 		this.protectionSignNothingToProtectMsgLine3 = protectionSignNothingToProtectMsgLine3;
 	}
 
@@ -629,7 +629,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return protectionSignAlreadyProtectedMsgLine1;
 	}
 
-	public void setProtectionSignAlreadyProtectedMsgLine1(String protectionSignAlreadyProtectedMsgLine1) {
+	public void setProtectionSignAlreadyProtectedMsgLine1(final String protectionSignAlreadyProtectedMsgLine1) {
 		this.protectionSignAlreadyProtectedMsgLine1 = protectionSignAlreadyProtectedMsgLine1;
 	}
 
@@ -637,7 +637,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return protectionSignAlreadyProtectedMsgLine2;
 	}
 
-	public void setProtectionSignAlreadyProtectedMsgLine2(String protectionSignAlreadyProtectedMsgLine2) {
+	public void setProtectionSignAlreadyProtectedMsgLine2(final String protectionSignAlreadyProtectedMsgLine2) {
 		this.protectionSignAlreadyProtectedMsgLine2 = protectionSignAlreadyProtectedMsgLine2;
 	}
 
@@ -645,7 +645,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return protectionSignAlreadyProtectedMsgLine3;
 	}
 
-	public void setProtectionSignAlreadyProtectedMsgLine3(String protectionSignAlreadyProtectedMsgLine3) {
+	public void setProtectionSignAlreadyProtectedMsgLine3(final String protectionSignAlreadyProtectedMsgLine3) {
 		this.protectionSignAlreadyProtectedMsgLine3 = protectionSignAlreadyProtectedMsgLine3;
 	}
 
@@ -653,7 +653,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return initialMessage;
 	}
 
-	public void setInitialMessage(String initialMessage) {
+	public void setInitialMessage(final String initialMessage) {
 		this.initialMessage = initialMessage;
 	}
 
@@ -661,7 +661,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignInvalidMaterialsMsgLine1;
 	}
 
-	public void setItemNetworkSignInvalidMaterialsMsgLine1(String itemNetworkSignInvalidMaterialsMsgLine1) {
+	public void setItemNetworkSignInvalidMaterialsMsgLine1(final String itemNetworkSignInvalidMaterialsMsgLine1) {
 		this.itemNetworkSignInvalidMaterialsMsgLine1 = itemNetworkSignInvalidMaterialsMsgLine1;
 	}
 
@@ -669,7 +669,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignInvalidMaterialsMsgLine2;
 	}
 
-	public void setItemNetworkSignInvalidMaterialsMsgLine2(String itemNetworkSignInvalidMaterialsMsgLine2) {
+	public void setItemNetworkSignInvalidMaterialsMsgLine2(final String itemNetworkSignInvalidMaterialsMsgLine2) {
 		this.itemNetworkSignInvalidMaterialsMsgLine2 = itemNetworkSignInvalidMaterialsMsgLine2;
 	}
 
@@ -677,7 +677,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignInvalidMaterialsMsgLine3;
 	}
 
-	public void setItemNetworkSignInvalidMaterialsMsgLine3(String itemNetworkSignInvalidMaterialsMsgLine3) {
+	public void setItemNetworkSignInvalidMaterialsMsgLine3(final String itemNetworkSignInvalidMaterialsMsgLine3) {
 		this.itemNetworkSignInvalidMaterialsMsgLine3 = itemNetworkSignInvalidMaterialsMsgLine3;
 	}
 
@@ -685,7 +685,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignTooFarMsgLine1;
 	}
 
-	public void setItemNetworkSignTooFarMsgLine1(String itemNetworkSignTooFarMsgLine1) {
+	public void setItemNetworkSignTooFarMsgLine1(final String itemNetworkSignTooFarMsgLine1) {
 		this.itemNetworkSignTooFarMsgLine1 = itemNetworkSignTooFarMsgLine1;
 	}
 
@@ -693,7 +693,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignTooFarMsgLine2;
 	}
 
-	public void setItemNetworkSignTooFarMsgLine2(String itemNetworkSignTooFarMsgLine2) {
+	public void setItemNetworkSignTooFarMsgLine2(final String itemNetworkSignTooFarMsgLine2) {
 		this.itemNetworkSignTooFarMsgLine2 = itemNetworkSignTooFarMsgLine2;
 	}
 
@@ -701,7 +701,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignTooFarMsgLine3;
 	}
 
-	public void setItemNetworkSignTooFarMsgLine3(String itemNetworkSignTooFarMsgLine3) {
+	public void setItemNetworkSignTooFarMsgLine3(final String itemNetworkSignTooFarMsgLine3) {
 		this.itemNetworkSignTooFarMsgLine3 = itemNetworkSignTooFarMsgLine3;
 	}
 
@@ -709,7 +709,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignNotAllowedMsgLine1;
 	}
 
-	public void setItemNetworkSignNotAllowedMsgLine1(String itemNetworkSignNotAllowedMsgLine1) {
+	public void setItemNetworkSignNotAllowedMsgLine1(final String itemNetworkSignNotAllowedMsgLine1) {
 		this.itemNetworkSignNotAllowedMsgLine1 = itemNetworkSignNotAllowedMsgLine1;
 	}
 
@@ -717,7 +717,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignNotAllowedMsgLine2;
 	}
 
-	public void setItemNetworkSignNotAllowedMsgLine2(String itemNetworkSignNotAllowedMsgLine2) {
+	public void setItemNetworkSignNotAllowedMsgLine2(final String itemNetworkSignNotAllowedMsgLine2) {
 		this.itemNetworkSignNotAllowedMsgLine2 = itemNetworkSignNotAllowedMsgLine2;
 	}
 
@@ -725,7 +725,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignNotAllowedMsgLine3;
 	}
 
-	public void setItemNetworkSignNotAllowedMsgLine3(String itemNetworkSignNotAllowedMsgLine3) {
+	public void setItemNetworkSignNotAllowedMsgLine3(final String itemNetworkSignNotAllowedMsgLine3) {
 		this.itemNetworkSignNotAllowedMsgLine3 = itemNetworkSignNotAllowedMsgLine3;
 	}
 
@@ -733,7 +733,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignUnknownNetworkMsgLine1;
 	}
 
-	public void setItemNetworkSignUnknownNetworkMsgLine1(String itemNetworkSignUnknownNetworkMsgLine1) {
+	public void setItemNetworkSignUnknownNetworkMsgLine1(final String itemNetworkSignUnknownNetworkMsgLine1) {
 		this.itemNetworkSignUnknownNetworkMsgLine1 = itemNetworkSignUnknownNetworkMsgLine1;
 	}
 
@@ -741,7 +741,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignUnknownNetworkMsgLine2;
 	}
 
-	public void setItemNetworkSignUnknownNetworkMsgLine2(String itemNetworkSignUnknownNetworkMsgLine2) {
+	public void setItemNetworkSignUnknownNetworkMsgLine2(final String itemNetworkSignUnknownNetworkMsgLine2) {
 		this.itemNetworkSignUnknownNetworkMsgLine2 = itemNetworkSignUnknownNetworkMsgLine2;
 	}
 
@@ -749,7 +749,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		return itemNetworkSignUnknownNetworkMsgLine3;
 	}
 
-	public void setItemNetworkSignUnknownNetworkMsgLine3(String itemNetworkSignUnknownNetworkMsgLine3) {
+	public void setItemNetworkSignUnknownNetworkMsgLine3(final String itemNetworkSignUnknownNetworkMsgLine3) {
 		this.itemNetworkSignUnknownNetworkMsgLine3 = itemNetworkSignUnknownNetworkMsgLine3;
 	}
 }

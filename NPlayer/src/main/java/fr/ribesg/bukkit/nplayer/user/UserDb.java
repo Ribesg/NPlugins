@@ -33,38 +33,38 @@ public class UserDb {
 	private final Map<String, User>       usersPerName;
 	private final Map<String, List<User>> usersPerIp;
 
-	public UserDb(NPlayer plugin) {
+	public UserDb(final NPlayer plugin) {
 		this.plugin = plugin;
 		this.usersPerName = new HashMap<>();
 		this.usersPerIp = new HashMap<>();
 	}
 
-	public boolean isUserKnown(String userName) {
+	public boolean isUserKnown(final String userName) {
 		return usersPerName.containsKey(userName);
 	}
 
-	public boolean isIpKnown(String ip) {
+	public boolean isIpKnown(final String ip) {
 		return usersPerIp.containsKey(ip);
 	}
 
-	public User get(String userName) {
+	public User get(final String userName) {
 		return usersPerName.get(userName);
 	}
 
-	public List<User> getByIp(String ip) {
-		List<User> res = usersPerIp.get(ip);
+	public List<User> getByIp(final String ip) {
+		final List<User> res = usersPerIp.get(ip);
 		return res == null ? new ArrayList<User>() : res;
 	}
 
-	public User newUser(String userName, String passwordHash, String currentIp) {
-		Date date = new Date();
-		User user = new User(plugin.getLoggedOutUserHandler(), userName, passwordHash, currentIp, date);
+	public User newUser(final String userName, final String passwordHash, final String currentIp) {
+		final Date date = new Date();
+		final User user = new User(plugin.getLoggedOutUserHandler(), userName, passwordHash, currentIp, date);
 		usersPerName.put(userName, user);
 		addPerIp(currentIp, user);
 		return user;
 	}
 
-	private void addPerIp(String ip, User user) {
+	private void addPerIp(final String ip, final User user) {
 		List<User> usersWithSameIp = usersPerIp.get(ip);
 		if (usersWithSameIp == null) {
 			usersWithSameIp = new ArrayList<>();
@@ -93,17 +93,17 @@ public class UserDb {
 		saveConfig(Paths.get(plugin.getDataFolder().getPath(), "userDB.yml"));
 	}
 
-	private void saveConfig(Path filePath) throws IOException {
+	private void saveConfig(final Path filePath) throws IOException {
 		if (!Files.exists(filePath.getParent())) {
 			Files.createDirectories(filePath.getParent());
 		}
 		if (!Files.exists(filePath)) {
 			Files.createFile(filePath);
 		}
-		YamlConfiguration config = new YamlConfiguration();
-		for (String userName : usersPerName.keySet()) {
-			User user = usersPerName.get(userName);
-			ConfigurationSection userSection = config.createSection(userName);
+		final YamlConfiguration config = new YamlConfiguration();
+		for (final String userName : usersPerName.keySet()) {
+			final User user = usersPerName.get(userName);
+			final ConfigurationSection userSection = config.createSection(userName);
 			userSection.set("passwordHash", user.getPasswordHash());
 			userSection.set("lastIp", user.getLastIp());
 			userSection.set("knownIps", user.getKnownIps());
@@ -119,32 +119,32 @@ public class UserDb {
 		loadConfig(Paths.get(plugin.getDataFolder().getPath(), "userDB.yml"));
 	}
 
-	private void loadConfig(Path filePath) throws IOException, InvalidConfigurationException {
+	private void loadConfig(final Path filePath) throws IOException, InvalidConfigurationException {
 		if (!Files.exists(filePath)) {
 			return; // Nothing to load
 		}
-		YamlConfiguration config = new YamlConfiguration();
+		final YamlConfiguration config = new YamlConfiguration();
 		config.load(filePath.toFile());
-		for (String userName : config.getKeys(false)) {
-			ConfigurationSection userSection = config.getConfigurationSection(userName);
-			String passwordHash = userSection.getString("passwordHash");
-			String lastIp = userSection.getString("lastIp");
-			List<String> knownIps = userSection.getStringList("knownIps");
-			Date firstJoin = new Date(userSection.getLong("firstJoin"));
-			Date lastSeen = new Date(userSection.getLong("lastSeen"));
-			boolean autoLogout = userSection.getBoolean("autoLogout");
-			Location home = NLocation.toLocation(userSection.getString("home"));
-			User user = new User(plugin.getLoggedOutUserHandler(),
-			                     lastIp,
-			                     firstJoin,
-			                     knownIps,
-			                     lastSeen,
-			                     passwordHash,
-			                     userName,
-			                     autoLogout,
-			                     home);
+		for (final String userName : config.getKeys(false)) {
+			final ConfigurationSection userSection = config.getConfigurationSection(userName);
+			final String passwordHash = userSection.getString("passwordHash");
+			final String lastIp = userSection.getString("lastIp");
+			final List<String> knownIps = userSection.getStringList("knownIps");
+			final Date firstJoin = new Date(userSection.getLong("firstJoin"));
+			final Date lastSeen = new Date(userSection.getLong("lastSeen"));
+			final boolean autoLogout = userSection.getBoolean("autoLogout");
+			final Location home = NLocation.toLocation(userSection.getString("home"));
+			final User user = new User(plugin.getLoggedOutUserHandler(),
+			                           lastIp,
+			                           firstJoin,
+			                           knownIps,
+			                           lastSeen,
+			                           passwordHash,
+			                           userName,
+			                           autoLogout,
+			                           home);
 			usersPerName.put(userName, user);
-			for (String ip : user.getKnownIps()) {
+			for (final String ip : user.getKnownIps()) {
 				addPerIp(ip, user);
 			}
 		}

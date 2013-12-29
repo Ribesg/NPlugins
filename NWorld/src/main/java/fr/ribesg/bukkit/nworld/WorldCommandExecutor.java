@@ -93,13 +93,13 @@ public class WorldCommandExecutor implements CommandExecutor {
 		}
 	}
 
-	private boolean cmdWorld(final CommandSender sender, String[] args) {
+	private boolean cmdWorld(final CommandSender sender, final String[] args) {
 		String[] parsedArgs = ArgumentParser.joinArgsWithQuotes(args);
 		if (parsedArgs.length == 0) {
 			// Lists available worlds
 			plugin.sendMessage(sender, MessageId.world_availableWorlds);
 			for (final GeneralWorld world : plugin.getWorlds()) {
-				boolean hasPermission = Perms.hasRequiredPermission(sender, world.getRequiredPermission());
+				final boolean hasPermission = Perms.hasRequiredPermission(sender, world.getRequiredPermission());
 				if (world.isEnabled()) {
 					if (hasPermission) {
 						sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + world.getWorldName());
@@ -224,7 +224,15 @@ public class WorldCommandExecutor implements CommandExecutor {
 				}
 			}
 
-			AdditionalWorld nWorld = new AdditionalWorld(plugin, worldName, seed, null, requiredPermission, true, hidden, false, false);
+			final AdditionalWorld nWorld = new AdditionalWorld(plugin,
+			                                                   worldName,
+			                                                   seed,
+			                                                   null,
+			                                                   requiredPermission,
+			                                                   true,
+			                                                   hidden,
+			                                                   false,
+			                                                   false);
 
 			if (plugin.getPluginConfig().getBroadcastOnWorldCreate() == 1) {
 				plugin.broadcastMessage(MessageId.world_creatingWorldMayBeLaggy);
@@ -272,7 +280,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			if (world == null) { // Load a never-loaded world
 				wasKnown = false;
 				final World newLoaded = new WorldCreator(realWorldName).createWorld();
-				long seed = newLoaded.getSeed();
+				final long seed = newLoaded.getSeed();
 				final NLocation spawn = new NLocation(newLoaded.getSpawnLocation());
 				final String requiredPermission = plugin.getPluginConfig().getDefaultRequiredPermission();
 				final boolean hidden = plugin.getPluginConfig().isDefaultHidden();
@@ -414,10 +422,10 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (args.length != 2) {
 			return false;
 		}
-		String worldName = args[0];
-		boolean hidden = Boolean.parseBoolean(args[1]);
+		final String worldName = args[0];
+		final boolean hidden = Boolean.parseBoolean(args[1]);
 		final Player player = (Player) sender;
-		GeneralWorld world = plugin.getWorlds().get(worldName);
+		final GeneralWorld world = plugin.getWorlds().get(worldName);
 		if (world != null) {
 			world.setHidden(hidden);
 			if (hidden) {
@@ -440,13 +448,13 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (args.length != 2) {
 			return false;
 		}
-		String worldName = args[0];
+		final String worldName = args[0];
 		String permission = args[1];
 		if (plugin.getPluginConfig().getPermissionShortcuts().containsKey(permission.toLowerCase())) {
 			permission = plugin.getPluginConfig().getPermissionShortcuts().get(permission.toLowerCase());
 		}
 		final Player player = (Player) sender;
-		GeneralWorld world = plugin.getWorlds().get(worldName);
+		final GeneralWorld world = plugin.getWorlds().get(worldName);
 		if (world != null) {
 			world.setRequiredPermission(permission);
 			plugin.sendMessage(sender, MessageId.world_changedWorldRequiredPermission, worldName, permission);
@@ -465,9 +473,9 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (args.length != 2) {
 			return false;
 		}
-		String worldName = args[0];
-		boolean value = Boolean.parseBoolean(args[1]);
-		AdditionalWorld world = plugin.getWorlds().getAdditional().get(worldName);
+		final String worldName = args[0];
+		final boolean value = Boolean.parseBoolean(args[1]);
+		final AdditionalWorld world = plugin.getWorlds().getAdditional().get(worldName);
 		if (world != null) {
 			if (world.hasNether()) {
 				if (value) {
@@ -515,9 +523,9 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (args.length != 2) {
 			return false;
 		}
-		String worldName = args[0];
-		boolean value = Boolean.parseBoolean(args[1]);
-		AdditionalWorld world = plugin.getWorlds().getAdditional().get(worldName);
+		final String worldName = args[0];
+		final boolean value = Boolean.parseBoolean(args[1]);
+		final AdditionalWorld world = plugin.getWorlds().getAdditional().get(worldName);
 		if (world != null) {
 			if (world.hasEnd()) {
 				if (value) {
@@ -562,14 +570,14 @@ public class WorldCommandExecutor implements CommandExecutor {
 			return true;
 		}
 		final Player player = (Player) sender;
-		int spawnBehaviour = plugin.getPluginConfig().getSpawnCommandBehaviour();
-		String worldName;
+		final int spawnBehaviour = plugin.getPluginConfig().getSpawnCommandBehaviour();
+		final String worldName;
 		if (spawnBehaviour == 0) {
 			worldName = player.getWorld().getName();
 		} else {
 			worldName = Bukkit.getWorlds().get(0).getName();
 		}
-		GeneralWorld world = plugin.getWorlds().get(worldName);
+		final GeneralWorld world = plugin.getWorlds().get(worldName);
 		player.teleport(world.getSpawnLocation().toBukkitLocation());
 		plugin.sendMessage(player, MessageId.world_teleportingToSpawn);
 		return true;
@@ -581,7 +589,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			return true;
 		}
 		final Player player = (Player) sender;
-		GeneralWorld world = plugin.getWorlds().get(player.getWorld().getName());
+		final GeneralWorld world = plugin.getWorlds().get(player.getWorld().getName());
 		world.setSpawnLocation(player.getLocation());
 		plugin.sendMessage(player, MessageId.world_settingSpawnPoint, player.getWorld().getName());
 		return true;
@@ -591,10 +599,11 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (args.length == 0) {
 			// Lists available warps
 			plugin.sendMessage(sender, MessageId.world_availableWarps);
-			StringBuilder builder = new StringBuilder();
+			final StringBuilder builder = new StringBuilder();
 			for (final Warp warp : plugin.getWarps()) {
 				if (warp.isEnabled()) {
-					boolean hasPermission = Perms.hasRequiredPermission(sender, warp.getRequiredPermission()) || Perms.hasWarpAll(sender);
+					final boolean hasPermission = Perms.hasRequiredPermission(sender, warp.getRequiredPermission()) ||
+					                              Perms.hasWarpAll(sender);
 					if (hasPermission) {
 						builder.append(ChatColor.GRAY + ", " + ChatColor.GREEN + warp.getName());
 					} else if (!warp.isHidden()) {
@@ -605,9 +614,9 @@ public class WorldCommandExecutor implements CommandExecutor {
 			if (builder.length() == 0) {
 				sender.sendMessage(ChatColor.RED + "No warps");
 			} else {
-				String warps = builder.toString().substring((ChatColor.GRAY + ", ").length());
-				String[] messages = ChatPaginator.wordWrap(warps, ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH);
-				for (String message : messages) {
+				final String warps = builder.toString().substring((ChatColor.GRAY + ", ").length());
+				final String[] messages = ChatPaginator.wordWrap(warps, ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH);
+				for (final String message : messages) {
 					sender.sendMessage(message);
 				}
 			}
@@ -638,7 +647,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 		}
 		final Player player = (Player) sender;
 		final String warpName = givenWarpName.toLowerCase();
-		Warp warp = plugin.getWarps().get(warpName);
+		final Warp warp = plugin.getWarps().get(warpName);
 		if (warp != null) {
 			if (Perms.hasRequiredPermission(player, warp.getRequiredPermission()) || Perms.hasWarpAll(player)) {
 				final Location loc = warp.getLocation().toBukkitLocation();
@@ -673,10 +682,10 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (args.length != 2) {
 			return false;
 		}
-		String warpName = args[0];
-		boolean hidden = Boolean.parseBoolean(args[1]);
+		final String warpName = args[0];
+		final boolean hidden = Boolean.parseBoolean(args[1]);
 		final Player player = (Player) sender;
-		Warp warp = plugin.getWarps().get(warpName);
+		final Warp warp = plugin.getWarps().get(warpName);
 		if (warp != null) {
 			warp.setHidden(hidden);
 			if (hidden) {
@@ -699,13 +708,13 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (args.length != 2) {
 			return false;
 		}
-		String warpName = args[0];
+		final String warpName = args[0];
 		String permission = args[1];
 		if (plugin.getPluginConfig().getPermissionShortcuts().containsKey(permission.toLowerCase())) {
 			permission = plugin.getPluginConfig().getPermissionShortcuts().get(permission.toLowerCase());
 		}
 		final Player player = (Player) sender;
-		Warp warp = plugin.getWarps().get(warpName);
+		final Warp warp = plugin.getWarps().get(warpName);
 		if (warp != null) {
 			warp.setRequiredPermission(permission);
 			plugin.sendMessage(sender, MessageId.world_changedWarpRequiredPermission, warpName, permission);
@@ -716,7 +725,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 		}
 	}
 
-	private boolean cmdSetWarp(final CommandSender sender, String[] args) {
+	private boolean cmdSetWarp(final CommandSender sender, final String[] args) {
 		if (!(sender instanceof Player)) {
 			plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			return true;
@@ -725,7 +734,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			return false;
 		}
 		final Player player = (Player) sender;
-		String warpName = args[0];
+		final String warpName = args[0];
 		boolean requiredPermissionProvided = false;
 		String requiredPermission = plugin.getPluginConfig().getDefaultRequiredPermission();
 		boolean hiddenProvided = false;
@@ -740,7 +749,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 		}
 
 		if (plugin.getWarps().containsKey(warpName)) {
-			Warp warp = plugin.getWarps().get(warpName);
+			final Warp warp = plugin.getWarps().get(warpName);
 			warp.setLocation(player.getLocation());
 			if (requiredPermissionProvided) {
 				warp.setRequiredPermission(requiredPermission);
@@ -749,14 +758,14 @@ public class WorldCommandExecutor implements CommandExecutor {
 				warp.setHidden(hiddenProvided);
 			}
 		} else {
-			Warp warp = new Warp(warpName, new NLocation(player.getLocation()), true, requiredPermission, hidden);
+			final Warp warp = new Warp(warpName, new NLocation(player.getLocation()), true, requiredPermission, hidden);
 			plugin.getWarps().put(warpName, warp);
 		}
 		plugin.sendMessage(player, MessageId.world_settingWarpPoint, warpName);
 		return true;
 	}
 
-	private boolean cmdDelWarp(CommandSender sender, String[] args) {
+	private boolean cmdDelWarp(final CommandSender sender, final String[] args) {
 		if (!Perms.hasDelWarp(sender)) {
 			plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
@@ -764,8 +773,8 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (args.length != 1) {
 			return false;
 		}
-		String warpName = args[0];
-		Warp warp = plugin.getWarps().get(warpName);
+		final String warpName = args[0];
+		final Warp warp = plugin.getWarps().get(warpName);
 		if (warp == null) {
 			plugin.sendMessage(sender, MessageId.world_unknownWarp, warpName);
 		} else {

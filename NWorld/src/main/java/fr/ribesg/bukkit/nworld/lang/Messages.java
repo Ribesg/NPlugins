@@ -37,7 +37,11 @@ public class Messages extends AbstractMessages {
 		// General plugin messages
 		newMessages.add(new Message(MessageId.incorrectValueInConfiguration,
 		                            "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)",
-		                            new String[] {"%filename%", "%value%", "%default%"},
+		                            new String[] {
+				                            "%filename%",
+				                            "%value%",
+				                            "%default%"
+		                            },
 		                            null,
 		                            true));
 
@@ -116,7 +120,10 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.world_changedWorldRequiredPermission,
 		                            "&aYou changed the required permissions for the world %worldName% to &c%requiredPermission%",
-		                            new String[] {"%worldName%", "%requiredPermission%"},
+		                            new String[] {
+				                            "%worldName%",
+				                            "%requiredPermission%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.world_worldNetherEnabled,
@@ -213,7 +220,10 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.world_changedWarpRequiredPermission,
 		                            "&aYou changed the required permission for the warp %warpName% to &c%requiredPermission%",
-		                            new String[] {"%warpName%", "%requiredPermission%"},
+		                            new String[] {
+				                            "%warpName%",
+				                            "%requiredPermission%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.world_settingWarpPoint,

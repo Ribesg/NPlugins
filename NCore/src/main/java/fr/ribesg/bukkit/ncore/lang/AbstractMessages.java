@@ -39,10 +39,12 @@ public abstract class AbstractMessages {
 	/** Separator used in config to define if you want to send multiple messages to player */
 	public static final String LINE_SEPARATOR = "##";
 
-	private String nodeName;
+	private static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+	private final String nodeName;
 
 	/** Header of each messages sent to player */
-	private String messageHeader;
+	private final String messageHeader;
 
 	/** Charset used for reading/writing config file */
 	private static final Charset CHARSET = StandardCharsets.UTF_8;
@@ -87,8 +89,8 @@ public abstract class AbstractMessages {
 					final MessageId id = MessageId.valueOf(idString);
 					final Message def = messagesMap.get(id);
 					final ConfigurationSection section = messagesConfig.getConfigurationSection(idString);
-					String value = section.getString("value", def.getDefaultMessage());
-					boolean useHeader = section.getBoolean("useHeader", true);
+					final String value = section.getString("value", def.getDefaultMessage());
+					final boolean useHeader = section.getBoolean("useHeader", true);
 					messagesMap.put(id, new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), value, useHeader));
 				} catch (final IllegalArgumentException e) {
 					plugin.getLogger().warning(idString + " is not / no longer used, removing it from messages config file.");
@@ -141,7 +143,7 @@ public abstract class AbstractMessages {
 		frame.addLine("List of N" + nodeName + " messages. You're free to change text/colors/language here.");
 		frame.addLine("Supports both '§' and '&' characters for colors.");
 		frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
-		for (String line : frame.build()) {
+		for (final String line : frame.build()) {
 			content.append(line).append('\n');
 		}
 		content.append('\n');
@@ -177,7 +179,7 @@ public abstract class AbstractMessages {
 
 			// Handle empty-string as "do not send anything"
 			if (res.isEmpty()) {
-				return new String[0];
+				return EMPTY_STRING_ARRAY;
 			}
 
 			// Replacing args by there values

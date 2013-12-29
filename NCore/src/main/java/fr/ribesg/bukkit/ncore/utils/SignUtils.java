@@ -21,7 +21,7 @@ import java.util.Set;
 /**
  * Utility class containing some tools to play with Signs.
  *
- * @author
+ * @author Ribesg
  */
 public class SignUtils {
 
@@ -48,7 +48,7 @@ public class SignUtils {
 	 */
 	public static List<Sign> getSigns(final World w, final int x, final int y, final int z) {
 
-		List<Sign> result = new ArrayList<>(6);
+		final List<Sign> result = new ArrayList<>(6);
 
 		// Relative < -1 ; 0 ; 0 >
 		checkAddSign(result, w, x, y, z, -1, 0, 0);
@@ -112,7 +112,7 @@ public class SignUtils {
 		final int y = b.getLocation().getBlockY();
 		final int z = b.getLocation().getBlockZ();
 
-		List<Sign> result = new ArrayList<>(10);
+		final List<Sign> result = new ArrayList<>(10);
 
 		// Relative < -1 ; 0 ; 0 >
 		if (checkAddSignChest(result, w, x, y, z, -1, 0, 0, blockMat)) {

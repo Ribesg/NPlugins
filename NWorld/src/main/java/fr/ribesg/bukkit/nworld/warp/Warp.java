@@ -20,7 +20,7 @@ public class Warp implements Comparable<Warp> {
 	private String    requiredPermission;
 	private boolean   hidden;
 
-	public Warp(String name, NLocation location, boolean enabled, String requiredPermission, boolean hidden) {
+	public Warp(final String name, final NLocation location, final boolean enabled, final String requiredPermission, final boolean hidden) {
 		this.name = name;
 		this.location = location;
 		this.enabled = enabled;
@@ -32,7 +32,7 @@ public class Warp implements Comparable<Warp> {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -40,11 +40,11 @@ public class Warp implements Comparable<Warp> {
 		return location;
 	}
 
-	public void setLocation(NLocation location) {
+	public void setLocation(final NLocation location) {
 		this.location = location;
 	}
 
-	public void setLocation(Location location) {
+	public void setLocation(final Location location) {
 		setLocation(new NLocation(location));
 	}
 
@@ -52,7 +52,7 @@ public class Warp implements Comparable<Warp> {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -60,7 +60,7 @@ public class Warp implements Comparable<Warp> {
 		return requiredPermission;
 	}
 
-	public void setRequiredPermission(String requiredPermission) {
+	public void setRequiredPermission(final String requiredPermission) {
 		this.requiredPermission = requiredPermission;
 	}
 
@@ -68,12 +68,12 @@ public class Warp implements Comparable<Warp> {
 		return hidden;
 	}
 
-	public void setHidden(boolean hidden) {
+	public void setHidden(final boolean hidden) {
 		this.hidden = hidden;
 	}
 
 	@Override
-	public int compareTo(Warp o) {
+	public int compareTo(final Warp o) {
 		return name.compareTo(o.name);
 	}
 }

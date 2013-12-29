@@ -93,8 +93,8 @@ public enum MinecraftTime {
 		return null;
 	}
 
-	private long start;
-	private long end;
+	private final long start;
+	private final long end;
 
 	private MinecraftTime(final long start, final long end) {
 		this.start = start;

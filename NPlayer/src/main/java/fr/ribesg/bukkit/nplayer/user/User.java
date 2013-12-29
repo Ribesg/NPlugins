@@ -32,7 +32,11 @@ public class User {
 	private boolean loggedIn;
 	private boolean autoLogout;
 
-	public User(LoggedOutUserHandler handler, String userName, String passwordHash, String currentIp, Date firstJoin) {
+	public User(final LoggedOutUserHandler handler,
+	            final String userName,
+	            final String passwordHash,
+	            final String currentIp,
+	            final Date firstJoin) {
 		this.handler = handler;
 		this.userName = userName;
 		this.passwordHash = passwordHash;
@@ -46,15 +50,15 @@ public class User {
 		this.home = null;
 	}
 
-	public User(LoggedOutUserHandler handler,
-	            String lastIp,
-	            Date firstJoin,
-	            List<String> knownIps,
-	            Date lastSeen,
-	            String passwordHash,
-	            String userName,
-	            boolean autoLogout,
-	            Location home) {
+	public User(final LoggedOutUserHandler handler,
+	            final String lastIp,
+	            final Date firstJoin,
+	            final List<String> knownIps,
+	            final Date lastSeen,
+	            final String passwordHash,
+	            final String userName,
+	            final boolean autoLogout,
+	            final Location home) {
 		this.handler = handler;
 		this.lastIp = lastIp;
 		this.firstJoin = firstJoin;
@@ -71,7 +75,7 @@ public class User {
 		return lastIp;
 	}
 
-	public void newIp(String currentIp) {
+	public void newIp(final String currentIp) {
 		this.lastIp = currentIp;
 		if (!this.knownIps.contains(currentIp)) {
 			this.knownIps.add(currentIp);
@@ -90,7 +94,7 @@ public class User {
 		return lastSeen;
 	}
 
-	public void setLastSeen(Date lastSeen) {
+	public void setLastSeen(final Date lastSeen) {
 		this.lastSeen = lastSeen;
 	}
 
@@ -98,7 +102,7 @@ public class User {
 		return loggedIn;
 	}
 
-	public void setLoggedIn(boolean loggedIn) {
+	public void setLoggedIn(final boolean loggedIn) {
 		this.loggedIn = loggedIn;
 		if (loggedIn) {
 			handler.notifyLogin(this);
@@ -111,7 +115,7 @@ public class User {
 		return passwordHash;
 	}
 
-	public void setPasswordHash(String passwordHash) {
+	public void setPasswordHash(final String passwordHash) {
 		this.passwordHash = passwordHash;
 	}
 
@@ -123,7 +127,7 @@ public class User {
 		return autoLogout;
 	}
 
-	public void setAutoLogout(boolean autoLogout) {
+	public void setAutoLogout(final boolean autoLogout) {
 		this.autoLogout = autoLogout;
 	}
 
@@ -131,7 +135,7 @@ public class User {
 		return home;
 	}
 
-	public void setHome(Location home) {
+	public void setHome(final Location home) {
 		this.home = home;
 	}
 }

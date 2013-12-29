@@ -43,5 +43,6 @@ public abstract class Feature {
 	 * Should be overridden by Features that have to do something
 	 * onDisable.
 	 */
-	public void terminate() {}
+	public void terminate() {
+	}
 }

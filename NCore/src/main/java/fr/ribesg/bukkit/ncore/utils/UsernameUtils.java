@@ -25,13 +25,13 @@ public class UsernameUtils {
 	 *
 	 * @return a 3-13 chars String
 	 */
-	public static String getId(String username) {
+	public static String getId(final String username) {
 		if (username == null) {
 			return null;
 		} else if (username.length() <= 13) {
 			return username;
 		} else {
-			StringBuilder result = new StringBuilder(13);
+			final StringBuilder result = new StringBuilder(13);
 			result.append(username.substring(0, 10));
 			final BigInteger hash = BigInteger.valueOf(username.hashCode());
 			final String hashString = new String(hash.toByteArray());

@@ -43,8 +43,8 @@ public class PlayerListener implements Listener {
 		final Block block = event.getBlockPlaced();
 		final Material mat = block.getType();
 		final Location loc = block.getLocation();
-		ChunkCoord coord;
-		Altar altar;
+		final ChunkCoord coord;
+		final Altar altar;
 		switch (mat) {
 			case DRAGON_EGG: // Placing a Dragon Egg on the center of an activated Altar
 				coord = new ChunkCoord(event.getBlockPlaced().getLocation().getChunk());
@@ -70,9 +70,10 @@ public class PlayerListener implements Listener {
 						if (skullState.getSkullType() == SkullType.WITHER) {
 							// Create the altar, then check if it's valid
 							final Altar altar = new Altar(plugin, Altar.getCenterFromSkullLocation(loc));
-							boolean minimumDistanceCheck = plugin.getAltars()
-							                                     .canAdd(altar,
-							                                             plugin.getPluginConfig().getMinimumDistanceBetweenTwoAltars());
+							final boolean minimumDistanceCheck = plugin.getAltars()
+							                                           .canAdd(altar,
+							                                                   plugin.getPluginConfig()
+							                                                         .getMinimumDistanceBetweenTwoAltars());
 							if (altar.isInactiveAltarValid() && minimumDistanceCheck) {
 								if (player.isOnline()) {
 									plugin.sendMessage(player, MessageId.egg_altarCreated);

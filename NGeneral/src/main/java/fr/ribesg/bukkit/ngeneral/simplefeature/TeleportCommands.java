@@ -164,9 +164,9 @@ public class TeleportCommands implements CommandExecutor {
 			return true;
 		} else if (args.length == 2 || args.length == 4) {
 			final Player player = (Player) sender;
-			double x;
-			double y;
-			double z;
+			final double x;
+			final double y;
+			final double z;
 			if (args.length == 2) {
 				try {
 					final String[] split = args[1].split(";");

@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class FlyModeFeature extends Feature {
 
-	private Set<String> flyPlayers;
+	private final Set<String> flyPlayers;
 
 	public FlyModeFeature(final NGeneral instance) {
 		super(instance, FeatureType.FLY_MODE, instance.getPluginConfig().hasFlyModeFeature());
@@ -51,11 +51,11 @@ public class FlyModeFeature extends Feature {
 		return flyPlayers;
 	}
 
-	public boolean hasFlyMode(String playerName) {
+	public boolean hasFlyMode(final String playerName) {
 		return flyPlayers.contains(playerName);
 	}
 
-	public void setFlyMode(Player player, boolean value) {
+	public void setFlyMode(final Player player, final boolean value) {
 		if (value) {
 			flyPlayers.add(player.getName());
 			player.setAllowFlight(true);

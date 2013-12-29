@@ -33,16 +33,16 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 	private final Map<String, Integer> loginAttempts;
 
-	public PlayerCommandHandler(NPlayer plugin) {
+	public PlayerCommandHandler(final NPlayer plugin) {
 		this.plugin = plugin;
 		this.loginAttempts = new HashMap<>();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerCommandPreProcess(PlayerCommandPreprocessEvent event) {
-		String firstWord = event.getMessage().contains(" ")
-		                   ? event.getMessage().split(" ")[0].toLowerCase()
-		                   : event.getMessage().toLowerCase();
+	public void onPlayerCommandPreProcess(final PlayerCommandPreprocessEvent event) {
+		final String firstWord = event.getMessage().contains(" ")
+		                         ? event.getMessage().split(" ")[0].toLowerCase()
+		                         : event.getMessage().toLowerCase();
 		switch (firstWord) {
 			case "/login":
 				event.setCancelled(true);
@@ -102,7 +102,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		switch (command.getName()) {
 			case "login":
 				if (sender instanceof Player) {
@@ -183,13 +183,13 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 	}
 
 	private boolean loginCommand(final Player player, final String[] args) {
-		User user = plugin.getUserDb().get(player.getName());
+		final User user = plugin.getUserDb().get(player.getName());
 		if (user == null) {
 			plugin.sendMessage(player, MessageId.player_registerFirst);
 			return true;
 		} else {
-			String password = StringUtils.joinStrings(args);
-			boolean isCorrect = Security.isUserPassword(password, user);
+			final String password = StringUtils.joinStrings(args);
+			final boolean isCorrect = Security.isUserPassword(password, user);
 			if (isCorrect) {
 				plugin.sendMessage(player, MessageId.player_welcomeBack);
 				user.setLoggedIn(true);
@@ -204,10 +204,9 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 	private boolean registerCommand(final Player player, final String[] args) {
 		User user = plugin.getUserDb().get(player.getName());
-		String password = StringUtils.joinStrings(args);
+		final String password = StringUtils.joinStrings(args);
 		if (user == null) {
-			user = plugin.getUserDb().newUser(player.getName(), Security.hash(password), player.getAddress().getAddress().getHostAddress
-					());
+			user = plugin.getUserDb().newUser(player.getName(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
 			user.setLoggedIn(true);
 			plugin.sendMessage(player, MessageId.player_welcomeToTheServer);
 			return true;
@@ -222,7 +221,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 	}
 
 	private boolean logoutCommand(final Player player, final String[] args) {
-		User user = plugin.getUserDb().get(player.getName());
+		final User user = plugin.getUserDb().get(player.getName());
 		if (user == null) {
 			plugin.sendMessage(player, MessageId.player_registerFirst);
 			return true;
@@ -276,7 +275,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 	}
 
 	private boolean infoCommand(final CommandSender sender, final String[] args) {
-		boolean isAdmin = Perms.hasInfoAdmin(sender);
+		final boolean isAdmin = Perms.hasInfoAdmin(sender);
 		sender.sendMessage("/info command STILL TODO");
 		return false; // TODO
 	}
@@ -398,7 +397,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private void loginAttempt(String userName) {
+	private void loginAttempt(final String userName) {
 		int nb = 0;
 		if (loginAttempts.containsKey(userName)) {
 			nb = loginAttempts.get(userName);

@@ -93,7 +93,7 @@ public class RegionDbPersistenceHandler {
 		if (!Files.exists(cuboidDBConfigFile)) {
 			return db;
 		} else {
-			String configString;
+			final String configString;
 
 			try (BufferedReader reader = Files.newBufferedReader(cuboidDBConfigFile, CHARSET)) {
 				final StringBuilder s = new StringBuilder();

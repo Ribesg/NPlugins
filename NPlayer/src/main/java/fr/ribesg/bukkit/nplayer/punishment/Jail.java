@@ -12,12 +12,12 @@ public class Jail extends Punishment {
 
 	private final String jailPointName;
 
-	public Jail(String jailed, String reason, String jailPointName) {
+	public Jail(final String jailed, final String reason, final String jailPointName) {
 		super(jailed, PunishmentType.JAIL, reason);
 		this.jailPointName = jailPointName;
 	}
 
-	public Jail(String jailed, String reason, String jailPointName, long endDate) {
+	public Jail(final String jailed, final String reason, final String jailPointName, final long endDate) {
 		super(jailed, PunishmentType.JAIL, reason, endDate);
 		this.jailPointName = jailPointName;
 	}

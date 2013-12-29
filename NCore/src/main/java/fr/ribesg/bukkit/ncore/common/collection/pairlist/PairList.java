@@ -36,7 +36,7 @@ public class PairList<K, V> implements Iterable<Pair<K, V>> {
 		return this.pairList.isEmpty();
 	}
 
-	public void put(K key, V value) {
+	public void put(final K key, final V value) {
 		this.pairList.add(new Pair<>(key, value));
 	}
 }

@@ -47,7 +47,7 @@ public class ProtectionSignListener implements Listener {
 	// ## Constructor ## //
 	// ################# //
 
-	public ProtectionSignListener(ProtectionSignFeature feature) {
+	public ProtectionSignListener(final ProtectionSignFeature feature) {
 		this.feature = feature;
 	}
 
@@ -56,8 +56,8 @@ public class ProtectionSignListener implements Listener {
 	// #################### //
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onSignChange(SignChangeEvent event) {
-		String[] lines = event.getLines();
+	public void onSignChange(final SignChangeEvent event) {
+		final String[] lines = event.getLines();
 		if (ProtectionSignFeature.getProtectionStrings().contains(ColorUtils.stripColorCodes(lines[0]).toLowerCase())) {
 			// This is a Protection sign
 			if (!Perms.hasProtectionSign(event.getPlayer())) {
@@ -90,7 +90,7 @@ public class ProtectionSignListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerBreakBlock(BlockBreakEvent event) {
+	public void onPlayerBreakBlock(final BlockBreakEvent event) {
 		if (!feature.canBreak(event.getBlock(), event.getPlayer())) {
 			feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_breakDenied);
 			event.setCancelled(true);
@@ -98,7 +98,7 @@ public class ProtectionSignListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerInteract(PlayerInteractEvent event) {
+	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (!feature.canUse(event.getPlayer(), event.getClickedBlock())) {
 				feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_accessDenied);
@@ -108,7 +108,7 @@ public class ProtectionSignListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onEntityExplode(EntityExplodeEvent event) {
+	public void onEntityExplode(final EntityExplodeEvent event) {
 		final Iterator<Block> it = event.blockList().iterator();
 		while (it.hasNext()) {
 			if (!feature.canBreak(it.next(), null)) {
@@ -118,10 +118,10 @@ public class ProtectionSignListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
+	public void onInventoryMoveItemEvent(final InventoryMoveItemEvent event) {
 		final InventoryType type = event.getSource().getType();
 		final InventoryHolder holder = event.getSource().getHolder();
-		Block b;
+		final Block b;
 		switch (type) {
 			case HOPPER:
 				b = ((Hopper) holder).getBlock();

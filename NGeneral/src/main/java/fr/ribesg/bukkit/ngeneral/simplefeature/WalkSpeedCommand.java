@@ -28,19 +28,19 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 
 	private final NGeneral plugin;
 
-	public WalkSpeedCommand(NGeneral instance) {
+	public WalkSpeedCommand(final NGeneral instance) {
 		this.plugin = instance;
 		plugin.getCommand(COMMAND).setExecutor(this);
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerQuit(PlayerQuitEvent event) {
+	public void onPlayerQuit(final PlayerQuitEvent event) {
 		event.getPlayer().setWalkSpeed(DEFAULT_BUKKIT_WALKSPEED);
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		if (command.getName().equals(COMMAND)) {
 			if (!Perms.hasWalkSpeed(sender)) {
 				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -48,9 +48,9 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 				if (!(sender instanceof Player)) {
 					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 				} else {
-					Player player = (Player) sender;
+					final Player player = (Player) sender;
 					try {
-						float value = Float.parseFloat(args[0]);
+						final float value = Float.parseFloat(args[0]);
 						if (value < -1 || value > 1) {
 							return false;
 						}
@@ -65,7 +65,7 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 				if (!Perms.hasWalkSpeedOthers(sender)) {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 				} else {
-					String arg0 = args[0].toLowerCase();
+					final String arg0 = args[0].toLowerCase();
 					float value = DEFAULT_BUKKIT_WALKSPEED;
 					try {
 						value = Float.parseFloat(arg0);
@@ -74,8 +74,8 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 						}
 					} catch (NumberFormatException ignored) {
 					}
-					String arg1 = args[1].toLowerCase();
-					String[] names = arg1.split(",");
+					final String arg1 = args[1].toLowerCase();
+					final String[] names = arg1.split(",");
 					setAll(sender, names, value);
 				}
 				return true;
@@ -94,9 +94,9 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 	 * @param playerNames Names of players
 	 * @param value       Null for toggle, actual value for a set
 	 */
-	private void setAll(CommandSender sender, String[] playerNames, float value) {
-		for (String name : playerNames) {
-			Player p = Bukkit.getPlayer(name);
+	private void setAll(final CommandSender sender, final String[] playerNames, final float value) {
+		for (final String name : playerNames) {
+			final Player p = Bukkit.getPlayer(name);
 			if (p == null) {
 				plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 			} else {

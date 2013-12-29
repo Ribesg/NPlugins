@@ -26,20 +26,20 @@ public class WeatherCommand implements CommandExecutor {
 
 	private final NGeneral plugin;
 
-	public WeatherCommand(NGeneral instance) {
+	public WeatherCommand(final NGeneral instance) {
 		this.plugin = instance;
 		plugin.getCommand(COMMAND).setExecutor(this);
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		if (command.getName().equals(COMMAND)) {
 			if (!Perms.hasWeather(sender)) {
 				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 				return true;
 			} else {
 				World world;
-				String type;
+				final String type;
 				int duration = new Random().nextInt(1000) + 500;
 				if (args.length == 1) {
 					type = args[0];

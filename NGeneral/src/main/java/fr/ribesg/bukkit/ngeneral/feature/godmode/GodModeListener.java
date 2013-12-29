@@ -22,12 +22,12 @@ public class GodModeListener implements Listener {
 
 	private final GodModeFeature feature;
 
-	public GodModeListener(GodModeFeature feature) {
+	public GodModeListener(final GodModeFeature feature) {
 		this.feature = feature;
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerDamage(EntityDamageEvent event) {
+	public void onPlayerDamage(final EntityDamageEvent event) {
 		if (event.getEntityType() == EntityType.PLAYER) {
 			final Player player = (Player) event.getEntity();
 			if (feature.hasGodMode(player.getName())) {
@@ -40,7 +40,7 @@ public class GodModeListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerStarve(FoodLevelChangeEvent event) {
+	public void onPlayerStarve(final FoodLevelChangeEvent event) {
 		if (event.getEntityType() == EntityType.PLAYER) {
 			final Player p = (Player) event.getEntity();
 			event.setCancelled(p.getFoodLevel() > event.getFoodLevel() && feature.hasGodMode(p.getName()));
@@ -48,7 +48,7 @@ public class GodModeListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerQuit(PlayerQuitEvent event) {
+	public void onPlayerQuit(final PlayerQuitEvent event) {
 		if (!Perms.hasGod(event.getPlayer()) && feature.hasGodMode(event.getPlayer().getName())) {
 			feature.setGodMode(event.getPlayer(), false);
 		}

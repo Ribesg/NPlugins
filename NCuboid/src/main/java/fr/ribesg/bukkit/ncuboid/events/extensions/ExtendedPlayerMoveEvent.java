@@ -37,7 +37,7 @@ public class ExtendedPlayerMoveEvent extends AbstractExtendedEvent {
 		return customCancelled;
 	}
 
-	public void setCustomCancelled(boolean customCancelled) {
+	public void setCustomCancelled(final boolean customCancelled) {
 		this.customCancelled = customCancelled;
 	}
 

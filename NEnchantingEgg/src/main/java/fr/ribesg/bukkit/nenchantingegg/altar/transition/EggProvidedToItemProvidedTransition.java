@@ -52,7 +52,7 @@ public class EggProvidedToItemProvidedTransition extends Transition {
 		return zeldaSound;
 	}
 
-	public EggProvidedToItemProvidedTransition(NEnchantingEgg plugin) {
+	public EggProvidedToItemProvidedTransition(final NEnchantingEgg plugin) {
 		super(plugin);
 	}
 

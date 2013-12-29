@@ -41,7 +41,7 @@ public class NListener implements Listener {
 		final World.Environment to = event.getTo().getWorld().getEnvironment();
 
 		// Build a fake TeleportCause based on From and To locations
-		PlayerTeleportEvent.TeleportCause cause;
+		final PlayerTeleportEvent.TeleportCause cause;
 		switch (event.getFrom().getBlock().getType()) {
 			case PORTAL:
 				cause = PlayerTeleportEvent.TeleportCause.NETHER_PORTAL;
@@ -94,7 +94,7 @@ public class NListener implements Listener {
 		public final boolean  useTravelAgent;
 		public final boolean  cancelEvent;
 
-		private PortalEventResult(Location destination, boolean useTravelAgent, boolean cancelEvent) {
+		private PortalEventResult(final Location destination, final boolean useTravelAgent, final boolean cancelEvent) {
 			this.destination = destination;
 			this.useTravelAgent = useTravelAgent;
 			this.cancelEvent = cancelEvent;
@@ -182,7 +182,7 @@ public class NListener implements Listener {
 	 *
 	 * @return The destination Location
 	 */
-	private Location normalToNetherLocation(World netherWorld, Location originalLocation) {
+	private Location normalToNetherLocation(final World netherWorld, final Location originalLocation) {
 		if (originalLocation == null || netherWorld == null) {
 			return null;
 		}
@@ -210,7 +210,7 @@ public class NListener implements Listener {
 	 *
 	 * @return The destination Location
 	 */
-	private Location netherToNormalLocation(World normalWorld, Location originalLocation) {
+	private Location netherToNormalLocation(final World normalWorld, final Location originalLocation) {
 		if (normalWorld == null || originalLocation == null) {
 			return null;
 		}
@@ -239,7 +239,7 @@ public class NListener implements Listener {
 	 *
 	 * @return The spawn / warp Location
 	 */
-	private Location getEndLocation(World endWorld) {
+	private Location getEndLocation(final World endWorld) {
 		return endWorld == null ? null : new Location(endWorld, 100, 50, 0);
 	}
 }

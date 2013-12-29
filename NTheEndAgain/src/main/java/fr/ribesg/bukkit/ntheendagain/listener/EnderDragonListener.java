@@ -76,7 +76,7 @@ public class EnderDragonListener implements Listener {
 						break;
 					case 1:
 						event.setDroppedExp(0);
-						HashMap<String, Double> dmgMap;
+						final HashMap<String, Double> dmgMap;
 						try {
 							dmgMap = new HashMap<>(handler.getDragons().get(event.getEntity().getUniqueId()));
 						} catch (final NullPointerException e) {
@@ -334,7 +334,7 @@ public class EnderDragonListener implements Listener {
 			                                                                                    .getWorld()
 			                                                                                    .getName()));
 			if (handler != null) {
-				float rate = handler.getConfig().getEcHealthRegainRate();
+				final float rate = handler.getConfig().getEcHealthRegainRate();
 				if (rate < 1.0) {
 					if (rand.nextFloat() >= rate) {
 						event.setCancelled(true);

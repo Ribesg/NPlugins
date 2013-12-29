@@ -34,7 +34,7 @@ public class PunishmentDb {
 
 	private final Map<String, String> leaveMessages;
 
-	public PunishmentDb(NPlayer instance) {
+	public PunishmentDb(final NPlayer instance) {
 		this.plugin = instance;
 		this.permPunishments = new HashMap<>();
 		this.tempPunishments = new HashMap<>();
@@ -49,7 +49,7 @@ public class PunishmentDb {
 		saveConfig(Paths.get(plugin.getDataFolder().getPath(), "punishmentDB.yml"));
 	}
 
-	private void saveConfig(Path filePath) throws IOException {
+	private void saveConfig(final Path filePath) throws IOException {
 		if (!Files.exists(filePath.getParent())) {
 			Files.createDirectories(filePath.getParent());
 		}
@@ -79,7 +79,7 @@ public class PunishmentDb {
 		loadConfig(Paths.get(plugin.getDataFolder().getPath(), "punishmentDB.yml"));
 	}
 
-	private void loadConfig(Path filePath) throws IOException, InvalidConfigurationException {
+	private void loadConfig(final Path filePath) throws IOException, InvalidConfigurationException {
 		if (!Files.exists(filePath)) {
 			return; // Nothing to load
 		}
@@ -110,7 +110,7 @@ public class PunishmentDb {
 						break;
 				}
 
-				Map<String, Set<Punishment>> relatedMap;
+				final Map<String, Set<Punishment>> relatedMap;
 				if (p.isPermanent()) {
 					relatedMap = getPermPunishments();
 				} else {
@@ -140,7 +140,7 @@ public class PunishmentDb {
 	private static List<Punishment> getAllPunishmentsFromMaps(final Map<String, Set<Punishment>>... maps) {
 		final List<Punishment> result = new ArrayList<>();
 		for (final Map<String, Set<Punishment>> map : maps) {
-			for (Set<Punishment> set : map.values()) {
+			for (final Set<Punishment> set : map.values()) {
 				result.addAll(set);
 			}
 		}

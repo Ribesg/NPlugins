@@ -97,7 +97,7 @@ public class Perms {
 
 	public static boolean hasFlag(final CommandSender sender, final Flag f) {
 		final String perm = getFlagPermission(f);
-		boolean user;
+		final boolean user;
 		switch (f) {
 			case BUILD:
 			case CHEST:
@@ -121,7 +121,7 @@ public class Perms {
 
 	public static boolean hasFlagAttribute(final CommandSender sender, final FlagAtt fa) {
 		final String perm = getFlagAttributePermission(fa);
-		boolean user;
+		final boolean user;
 		switch (fa) {
 			case EXPLOSION_BLOCK_DROP:
 				user = true;

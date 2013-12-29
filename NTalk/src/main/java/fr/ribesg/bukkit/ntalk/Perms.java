@@ -24,7 +24,7 @@ public class Perms {
 	private static final String CMD_PR   = "ntalk.cmd.pr";
 	private static final String CMD_NICK = "ntalk.cmd.nick";
 
-	public static boolean hasAdmin(CommandSender sender, boolean async) {
+	public static boolean hasAdmin(final CommandSender sender, final boolean async) {
 		if (async) {
 			if (!(sender instanceof Player)) {
 				throw new UnsupportedOperationException();
@@ -35,23 +35,23 @@ public class Perms {
 		}
 	}
 
-	public static boolean hasPrivateMessage(CommandSender sender) {
+	public static boolean hasPrivateMessage(final CommandSender sender) {
 		return hasAdmin(sender, false) || sender.hasPermission(CMD_PM) || sender.hasPermission(USER);
 	}
 
-	public static boolean hasPrivateResponse(CommandSender sender) {
+	public static boolean hasPrivateResponse(final CommandSender sender) {
 		return hasAdmin(sender, false) || sender.hasPermission(CMD_PR) || sender.hasPermission(USER);
 	}
 
-	public static boolean hasNick(CommandSender sender) {
+	public static boolean hasNick(final CommandSender sender) {
 		return hasAdmin(sender, false) || sender.hasPermission(CMD_NICK);
 	}
 
-	public static boolean hasSpy(CommandSender sender) {
+	public static boolean hasSpy(final CommandSender sender) {
 		return hasAdmin(sender, false) || sender.hasPermission(SPY);
 	}
 
-	public static boolean hasColor(CommandSender sender, boolean async) {
+	public static boolean hasColor(final CommandSender sender, final boolean async) {
 		if (async) {
 			if (!(sender instanceof Player)) {
 				throw new UnsupportedOperationException();

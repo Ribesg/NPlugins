@@ -20,7 +20,7 @@ import java.util.TreeMap;
  */
 public class Trie<T extends TrieElement> {
 
-	private Map<Character, Node<T>> roots;
+	private final Map<Character, Node<T>> roots;
 
 	public Trie() {
 		this.roots = new TreeMap<>();

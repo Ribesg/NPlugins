@@ -28,7 +28,7 @@ import java.util.Set;
 // TODO
 public class ActiveToEggProvidedTransition extends Transition {
 
-	public ActiveToEggProvidedTransition(NEnchantingEgg plugin) {
+	public ActiveToEggProvidedTransition(final NEnchantingEgg plugin) {
 		super(plugin);
 	}
 

@@ -34,12 +34,12 @@ public class FrameBuilder {
 		public final String      line;
 		public final Set<Option> options;
 
-		public Line(String line, Set<Option> options) {
+		public Line(final String line, final Set<Option> options) {
 			this.line = line;
 			this.options = options;
 		}
 
-		public String parse(int toSize) {
+		public String parse(final int toSize) {
 			if (options.contains(Option.CENTER)) {
 				return center(line, toSize);
 			} else if (options.contains(Option.RIGHT)) {
@@ -52,7 +52,7 @@ public class FrameBuilder {
 
 	private final List<Line> lines;
 	private       int        maxLength;
-	private       char       frameChar;
+	private final char       frameChar;
 	private final String     doubleFrameChar;
 
 	public FrameBuilder() {
@@ -72,7 +72,7 @@ public class FrameBuilder {
 	 * @param content line to add
 	 * @param options options about this line
 	 */
-	public void addLine(String content, Option... options) {
+	public void addLine(final String content, final Option... options) {
 		final Set<Option> optionSet = new HashSet<>(Arrays.asList(options));
 		final Line line = new Line(content, optionSet);
 		this.lines.add(line);
@@ -102,10 +102,10 @@ public class FrameBuilder {
 	 *
 	 * @return the resized String
 	 */
-	private String center(String aString, int toSize) {
-		int stringLength = aString.length();
-		int left = (toSize - stringLength) / 2;
-		int right = toSize - stringLength - left;
+	private String center(final String aString, final int toSize) {
+		final int stringLength = aString.length();
+		final int left = (toSize - stringLength) / 2;
+		final int right = toSize - stringLength - left;
 		return spaces(left) + aString + spaces(right);
 	}
 
@@ -117,8 +117,8 @@ public class FrameBuilder {
 	 *
 	 * @return the resized String
 	 */
-	private String right(String aString, int toSize) {
-		int stringLength = aString.length();
+	private String right(final String aString, final int toSize) {
+		final int stringLength = aString.length();
 		return spaces(toSize - stringLength) + aString;
 	}
 
@@ -130,8 +130,8 @@ public class FrameBuilder {
 	 *
 	 * @return the resized String
 	 */
-	private String left(String aString, int toSize) {
-		int stringLength = aString.length();
+	private String left(final String aString, final int toSize) {
+		final int stringLength = aString.length();
 		return aString + spaces(toSize - stringLength);
 	}
 

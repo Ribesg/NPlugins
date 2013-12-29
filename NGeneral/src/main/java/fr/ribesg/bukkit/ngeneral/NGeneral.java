@@ -47,7 +47,7 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		// Messages first !
 		try {
 			if (!getDataFolder().isDirectory()) {
-				boolean res = getDataFolder().mkdir();
+				final boolean res = getDataFolder().mkdir();
 				if (!res) {
 					getLogger().severe("Unable to create subfolder in /plugins/");
 					return false;

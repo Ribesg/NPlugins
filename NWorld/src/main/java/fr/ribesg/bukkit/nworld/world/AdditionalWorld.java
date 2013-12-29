@@ -20,15 +20,15 @@ public class AdditionalWorld extends GeneralWorld {
 	private       boolean            hasEnd;
 	private       AdditionalSubWorld endWorld;
 
-	public AdditionalWorld(NWorld instance,
-	                       String worldName,
-	                       long seed,
-	                       NLocation spawnLocation,
-	                       String requiredPermission,
-	                       boolean enabled,
-	                       boolean hidden,
-	                       boolean hasNether,
-	                       boolean hasEnd) {
+	public AdditionalWorld(final NWorld instance,
+	                       final String worldName,
+	                       final long seed,
+	                       final NLocation spawnLocation,
+	                       final String requiredPermission,
+	                       final boolean enabled,
+	                       final boolean hidden,
+	                       final boolean hasNether,
+	                       final boolean hasEnd) {
 		super(instance, worldName, spawnLocation, requiredPermission, enabled, hidden);
 		this.seed = seed;
 		this.hasNether = hasNether;
@@ -46,7 +46,7 @@ public class AdditionalWorld extends GeneralWorld {
 		return hasNether;
 	}
 
-	public void setNether(boolean hasNether) {
+	public void setNether(final boolean hasNether) {
 		this.hasNether = hasNether;
 	}
 
@@ -54,7 +54,7 @@ public class AdditionalWorld extends GeneralWorld {
 		return hasEnd;
 	}
 
-	public void setEnd(boolean hasEnd) {
+	public void setEnd(final boolean hasEnd) {
 		this.hasEnd = hasEnd;
 	}
 
@@ -62,7 +62,7 @@ public class AdditionalWorld extends GeneralWorld {
 		return endWorld;
 	}
 
-	public void setEndWorld(AdditionalSubWorld endWorld) {
+	public void setEndWorld(final AdditionalSubWorld endWorld) {
 		this.endWorld = endWorld;
 	}
 
@@ -70,7 +70,7 @@ public class AdditionalWorld extends GeneralWorld {
 		return netherWorld;
 	}
 
-	public void setNetherWorld(AdditionalSubWorld netherWorld) {
+	public void setNetherWorld(final AdditionalSubWorld netherWorld) {
 		this.netherWorld = netherWorld;
 	}
 

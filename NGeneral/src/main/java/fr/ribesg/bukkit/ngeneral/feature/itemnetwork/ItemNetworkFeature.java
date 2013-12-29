@@ -49,9 +49,9 @@ public class ItemNetworkFeature extends Feature {
 
 		final Material chest = w.getBlockAt(loc.toBukkitLocation()).getType();
 
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
+		final int x = loc.getBlockX();
+		final int y = loc.getBlockY();
+		final int z = loc.getBlockZ();
 
 		if (w.getBlockAt(x - 1, y, z).getType() == chest) {
 			this.lockedChestLocations.add(new NLocation(w.getName(), x - 1, y, z));
@@ -82,9 +82,9 @@ public class ItemNetworkFeature extends Feature {
 
 			final Material chest = w.getBlockAt(loc.toBukkitLocation()).getType();
 
-			int x = loc.getBlockX();
-			int y = loc.getBlockY();
-			int z = loc.getBlockZ();
+			final int x = loc.getBlockX();
+			final int y = loc.getBlockY();
+			final int z = loc.getBlockZ();
 
 			if (w.getBlockAt(x - 1, y, z).getType() == chest) {
 				this.lockedChestLocations.remove(new NLocation(w.getName(), x - 1, y, z));

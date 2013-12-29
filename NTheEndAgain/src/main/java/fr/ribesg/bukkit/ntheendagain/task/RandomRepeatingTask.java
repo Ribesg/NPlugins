@@ -19,7 +19,7 @@ public abstract class RandomRepeatingTask extends BukkitRunnable {
 
 	protected final EndWorldHandler worldHandler;
 
-	protected RandomRepeatingTask(EndWorldHandler worldHandler) {
+	protected RandomRepeatingTask(final EndWorldHandler worldHandler) {
 		this.worldHandler = worldHandler;
 	}
 
@@ -28,14 +28,14 @@ public abstract class RandomRepeatingTask extends BukkitRunnable {
 	 *
 	 * @param plugin the plugin to attach the task
 	 */
-	public BukkitTask schedule(JavaPlugin plugin) {
+	public BukkitTask schedule(final JavaPlugin plugin) {
 		return Bukkit.getScheduler().runTaskLater(plugin, this, getInitialDelay());
 	}
 
 	@Override
 	public void run() {
 		exec();
-		long delay = getDelay();
+		final long delay = getDelay();
 		Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), this, delay * 20);
 		worldHandler.getConfig().setNextRespawnTaskTime(System.nanoTime() + delay * 1_000_000_000);
 	}
@@ -60,7 +60,7 @@ public abstract class RandomRepeatingTask extends BukkitRunnable {
 	 *
 	 * @return the initial delay, in seconds
 	 */
-	protected long buildInitialDelay(long nextTaskTime) {
+	protected long buildInitialDelay(final long nextTaskTime) {
 		long initialDelay = nextTaskTime - System.nanoTime();
 		if (initialDelay < 0) {
 			initialDelay = 0;

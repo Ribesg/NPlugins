@@ -22,7 +22,7 @@ public class WelcomeListener implements Listener {
 
 	private final NGeneral plugin;
 
-	public WelcomeListener(NGeneral instance) {
+	public WelcomeListener(final NGeneral instance) {
 		this.plugin = instance;
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}

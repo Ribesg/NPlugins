@@ -10,9 +10,9 @@
 package fr.ribesg.bukkit.nworld.config;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.nworld.warp.Warp;
 import fr.ribesg.bukkit.nworld.warp.Warps;
 import fr.ribesg.bukkit.nworld.world.AdditionalSubWorld;
@@ -35,10 +35,10 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 	private final Logger log;
 
 	// General
-	private int                 spawnCommandBehaviour;
-	private String              defaultRequiredPermission;
-	private boolean             defaultHidden;
-	private Map<String, String> permissionShortcuts;
+	private       int                 spawnCommandBehaviour;
+	private       String              defaultRequiredPermission;
+	private       boolean             defaultHidden;
+	private final Map<String, String> permissionShortcuts;
 
 	// Messages
 	private int broadcastOnWorldCreate;
@@ -46,10 +46,10 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 	private int broadcastOnWorldUnload;
 
 	// Worlds
-	private Worlds worlds;
+	private final Worlds worlds;
 
 	// Warps
-	private Warps warps;
+	private final Warps warps;
 
 	public Config(final fr.ribesg.bukkit.nworld.NWorld instance) {
 		super(instance);
@@ -137,10 +137,10 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		// ## Worlds ##
 		// ############
 
-		Map<String, GeneralWorld> worldsMap = new HashMap<>();
+		final Map<String, GeneralWorld> worldsMap = new HashMap<>();
 		if (config.isConfigurationSection("stockWorlds")) {
 			final ConfigurationSection stockWorldsSection = config.getConfigurationSection("stockWorlds");
-			for (String worldName : stockWorldsSection.getKeys(false)) {
+			for (final String worldName : stockWorldsSection.getKeys(false)) {
 				final ConfigurationSection worldSection = stockWorldsSection.getConfigurationSection(worldName);
 				final GeneralWorld.WorldType type = worldName.endsWith("_the_end")
 				                                    ? GeneralWorld.WorldType.STOCK_END
@@ -150,7 +150,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 				boolean malformedWorldSection = false;
 				NLocation spawnLocation = null;
 				String requiredPermission = null;
-				boolean enabled = Bukkit.getWorld(worldName) != null;
+				final boolean enabled = Bukkit.getWorld(worldName) != null;
 				Boolean hidden = null;
 				if (!worldSection.isConfigurationSection("spawnLocation")) {
 					malformedWorldSection = true;
@@ -201,9 +201,9 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 			}
 		}
 		if (config.isConfigurationSection("additionalWorlds")) {
-			ConfigurationSection additionalWorldsSection = config.getConfigurationSection("additionalWorlds");
-			for (String worldName : additionalWorldsSection.getKeys(false)) {
-				ConfigurationSection worldSection = additionalWorldsSection.getConfigurationSection(worldName);
+			final ConfigurationSection additionalWorldsSection = config.getConfigurationSection("additionalWorlds");
+			for (final String worldName : additionalWorldsSection.getKeys(false)) {
+				final ConfigurationSection worldSection = additionalWorldsSection.getConfigurationSection(worldName);
 
 				// If an error is found in the config
 				boolean malformedWorldSection = false;
@@ -235,7 +235,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 					malformedWorldSection = true;
 					log.severe("Missing or invalid configuration value: additionalWorlds." + worldName + ".spawnLocation");
 				} else {
-					ConfigurationSection spawnSection = worldSection.getConfigurationSection("spawnLocation");
+					final ConfigurationSection spawnSection = worldSection.getConfigurationSection("spawnLocation");
 					if (!spawnSection.isDouble("x")) {
 						malformedWorldSection = true;
 						log.severe("Missing or invalid configuration value: additionalWorlds." + worldName + ".spawnLocation.x");
@@ -252,11 +252,11 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 						malformedWorldSection = true;
 						log.severe("Missing or invalid configuration value: additionalWorlds." + worldName + ".spawnLocation.pitch");
 					} else {
-						double x = spawnSection.getDouble("x");
-						double y = spawnSection.getDouble("y");
-						double z = spawnSection.getDouble("z");
-						float yaw = (float) spawnSection.getDouble("yaw");
-						float pitch = (float) spawnSection.getDouble("pitch");
+						final double x = spawnSection.getDouble("x");
+						final double y = spawnSection.getDouble("y");
+						final double z = spawnSection.getDouble("z");
+						final float yaw = (float) spawnSection.getDouble("yaw");
+						final float pitch = (float) spawnSection.getDouble("pitch");
 						spawnLocation = new NLocation(worldName, x, y, z, yaw, pitch);
 					}
 				}
@@ -294,12 +294,12 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 					malformedWorldSection = true;
 					log.severe("Missing or invalid configuration section: additionalWorlds." + worldName + ".netherWorld");
 				} else {
-					ConfigurationSection netherSection = worldSection.getConfigurationSection("netherWorld");
+					final ConfigurationSection netherSection = worldSection.getConfigurationSection("netherWorld");
 					if (!netherSection.isConfigurationSection("spawnLocation")) {
 						malformedWorldSection = true;
 						log.severe("Missing or invalid configuration value: additionalWorlds." + worldName + ".netherWorld.spawnLocation");
 					} else {
-						ConfigurationSection spawnSection = netherSection.getConfigurationSection("spawnLocation");
+						final ConfigurationSection spawnSection = netherSection.getConfigurationSection("spawnLocation");
 						if (!spawnSection.isDouble("x")) {
 							malformedWorldSection = true;
 							log.severe("Missing or invalid configuration value: additionalWorlds." +
@@ -326,11 +326,11 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 							           worldName +
 							           ".netherWorld.spawnLocation.pitch");
 						} else {
-							double x = spawnSection.getDouble("x");
-							double y = spawnSection.getDouble("y");
-							double z = spawnSection.getDouble("z");
-							float yaw = (float) spawnSection.getDouble("yaw");
-							float pitch = (float) spawnSection.getDouble("pitch");
+							final double x = spawnSection.getDouble("x");
+							final double y = spawnSection.getDouble("y");
+							final double z = spawnSection.getDouble("z");
+							final float yaw = (float) spawnSection.getDouble("yaw");
+							final float pitch = (float) spawnSection.getDouble("pitch");
 							netherSpawnLocation = new NLocation(worldName, x, y, z, yaw, pitch);
 						}
 					}
@@ -365,12 +365,12 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 					malformedWorldSection = true;
 					log.severe("Missing or invalid configuration section: additionalWorlds." + worldName + ".endWorld");
 				} else {
-					ConfigurationSection endSection = worldSection.getConfigurationSection("endWorld");
+					final ConfigurationSection endSection = worldSection.getConfigurationSection("endWorld");
 					if (!endSection.isConfigurationSection("spawnLocation")) {
 						malformedWorldSection = true;
 						log.severe("Missing or invalid configuration value: additionalWorlds." + worldName + ".endWorld.spawnLocation");
 					} else {
-						ConfigurationSection spawnSection = endSection.getConfigurationSection("spawnLocation");
+						final ConfigurationSection spawnSection = endSection.getConfigurationSection("spawnLocation");
 						if (!spawnSection.isDouble("x")) {
 							malformedWorldSection = true;
 							log.severe("Missing or invalid configuration value: additionalWorlds." +
@@ -397,11 +397,11 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 							           worldName +
 							           ".endWorld.spawnLocation.pitch");
 						} else {
-							double x = spawnSection.getDouble("x");
-							double y = spawnSection.getDouble("y");
-							double z = spawnSection.getDouble("z");
-							float yaw = (float) spawnSection.getDouble("yaw");
-							float pitch = (float) spawnSection.getDouble("pitch");
+							final double x = spawnSection.getDouble("x");
+							final double y = spawnSection.getDouble("y");
+							final double z = spawnSection.getDouble("z");
+							final float yaw = (float) spawnSection.getDouble("yaw");
+							final float pitch = (float) spawnSection.getDouble("pitch");
 							endSpawnLocation = new NLocation(worldName, x, y, z, yaw, pitch);
 						}
 					}
@@ -427,35 +427,35 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 					}
 				}
 				if (!malformedWorldSection) {
-					AdditionalWorld world = new AdditionalWorld(plugin,
-					                                            worldName,
-					                                            seed,
-					                                            spawnLocation,
-					                                            requiredPermission,
-					                                            enabled,
-					                                            hidden,
-					                                            hasNether,
-					                                            hasEnd);
+					final AdditionalWorld world = new AdditionalWorld(plugin,
+					                                                  worldName,
+					                                                  seed,
+					                                                  spawnLocation,
+					                                                  requiredPermission,
+					                                                  enabled,
+					                                                  hidden,
+					                                                  hasNether,
+					                                                  hasEnd);
 					worldsMap.put(worldName, world);
 					if (hasNether) {
-						AdditionalSubWorld nether = new AdditionalSubWorld(plugin,
-						                                                   world,
-						                                                   netherSpawnLocation,
-						                                                   netherRequiredPermission,
-						                                                   netherEnabled,
-						                                                   netherHidden,
-						                                                   World.Environment.NETHER);
+						final AdditionalSubWorld nether = new AdditionalSubWorld(plugin,
+						                                                         world,
+						                                                         netherSpawnLocation,
+						                                                         netherRequiredPermission,
+						                                                         netherEnabled,
+						                                                         netherHidden,
+						                                                         World.Environment.NETHER);
 						worldsMap.put(worldName + "_nether", nether);
 					}
 
 					if (hasEnd) {
-						AdditionalSubWorld end = new AdditionalSubWorld(plugin,
-						                                                world,
-						                                                endSpawnLocation,
-						                                                endRequiredPermission,
-						                                                endEnabled,
-						                                                endHidden,
-						                                                World.Environment.THE_END);
+						final AdditionalSubWorld end = new AdditionalSubWorld(plugin,
+						                                                      world,
+						                                                      endSpawnLocation,
+						                                                      endRequiredPermission,
+						                                                      endEnabled,
+						                                                      endHidden,
+						                                                      World.Environment.THE_END);
 						worldsMap.put(worldName + "_the_end", end);
 					}
 				} else {
@@ -469,11 +469,11 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		// ## Warps ##
 		// ###########
 
-		Map<String, Warp> warpsMap = new HashMap<>();
+		final Map<String, Warp> warpsMap = new HashMap<>();
 		if (config.isConfigurationSection("warps")) {
-			ConfigurationSection warpsSection = config.getConfigurationSection("warps");
-			for (String warpName : warpsSection.getKeys(false)) {
-				ConfigurationSection warpSection = warpsSection.getConfigurationSection(warpName);
+			final ConfigurationSection warpsSection = config.getConfigurationSection("warps");
+			for (final String warpName : warpsSection.getKeys(false)) {
+				final ConfigurationSection warpSection = warpsSection.getConfigurationSection(warpName);
 				boolean malformedWarpSection = false;
 				NLocation location = null;
 				String requiredPermission = null;
@@ -482,7 +482,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 					malformedWarpSection = true;
 					log.severe("Missing or invalid configuration value: warps." + warpName + ".location");
 				} else {
-					ConfigurationSection locationSection = warpSection.getConfigurationSection("location");
+					final ConfigurationSection locationSection = warpSection.getConfigurationSection("location");
 					if (!locationSection.isString("worldName")) {
 						malformedWarpSection = true;
 						log.severe("Missing or invalid configuration value: warps." + warpName + ".location.worldName");
@@ -508,12 +508,12 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 						log.severe("Missing or invalid configuration value: warps." + warpName + ".location.pitch");
 					}
 					if (!malformedWarpSection) {
-						String worldName = locationSection.getString("worldName");
-						double x = locationSection.getDouble("x");
-						double y = locationSection.getDouble("y");
-						double z = locationSection.getDouble("z");
-						float yaw = (float) locationSection.getDouble("yaw");
-						float pitch = (float) locationSection.getDouble("pitch");
+						final String worldName = locationSection.getString("worldName");
+						final double x = locationSection.getDouble("x");
+						final double y = locationSection.getDouble("y");
+						final double z = locationSection.getDouble("z");
+						final float yaw = (float) locationSection.getDouble("yaw");
+						final float pitch = (float) locationSection.getDouble("pitch");
 						location = new NLocation(worldName, x, y, z, yaw, pitch);
 					}
 				}
@@ -597,7 +597,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		if (!permissionShortcuts.containsKey("admin")) {
 			content.append("  admin: \"nworld.admin\"\n");
 		}
-		for (Map.Entry<String, String> e : permissionShortcuts.entrySet()) {
+		for (final Map.Entry<String, String> e : permissionShortcuts.entrySet()) {
 			content.append("  " + e.getKey() + ": \"" + e.getValue() + "\"\n");
 		}
 
@@ -645,7 +645,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		content.append("# - Required Permission for direct warp to this world's spawn point\n");
 		content.append("# - If this world will be hidden to those that are not allowed to directly warp to it\n");
 		content.append("stockWorlds:\n");
-		for (StockWorld w : worlds.getStock().values()) {
+		for (final StockWorld w : worlds.getStock().values()) {
 			content.append("  \"" + w.getWorldName() + "\":\n");
 			content.append("    spawnLocation:\n");
 			content.append("      x: " + w.getSpawnLocation().getX() + "\n");
@@ -668,7 +668,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		content.append("# - If this world has an associated Nether world, and the associated parameters\n");
 		content.append("# - If this world has an associated End world, and the associated parameters\n");
 		content.append("additionalWorlds:\n");
-		for (AdditionalWorld w : worlds.getAdditional().values()) {
+		for (final AdditionalWorld w : worlds.getAdditional().values()) {
 			content.append("  \"" + w.getWorldName() + "\":\n");
 			content.append("    spawnLocation:\n");
 			content.append("      x: " + w.getSpawnLocation().getX() + "\n");
@@ -721,7 +721,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		content.append("# - Required Permission to warp\n");
 		content.append("# - If it is hidden to those who do not have the required permission\n");
 		content.append("warps:\n");
-		for (Warp w : warps) {
+		for (final Warp w : warps) {
 			content.append("  \"" + w.getName() + "\":\n");
 			content.append("    location:\n");
 			content.append("      worldName: " + w.getLocation().getWorldName() + "\n");
@@ -743,7 +743,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		return spawnCommandBehaviour;
 	}
 
-	public void setSpawnCommandBehaviour(int spawnCommandBehaviour) {
+	public void setSpawnCommandBehaviour(final int spawnCommandBehaviour) {
 		this.spawnCommandBehaviour = spawnCommandBehaviour;
 	}
 
@@ -751,7 +751,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		return defaultHidden;
 	}
 
-	public void setDefaultHidden(boolean defaultHidden) {
+	public void setDefaultHidden(final boolean defaultHidden) {
 		this.defaultHidden = defaultHidden;
 	}
 
@@ -759,7 +759,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		return defaultRequiredPermission;
 	}
 
-	public void setDefaultRequiredPermission(String defaultRequiredPermission) {
+	public void setDefaultRequiredPermission(final String defaultRequiredPermission) {
 		this.defaultRequiredPermission = defaultRequiredPermission;
 	}
 
@@ -767,7 +767,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		return broadcastOnWorldCreate;
 	}
 
-	private void setBroadcastOnWorldCreate(int broadcastOnWorldCreate) {
+	private void setBroadcastOnWorldCreate(final int broadcastOnWorldCreate) {
 		this.broadcastOnWorldCreate = broadcastOnWorldCreate;
 	}
 
@@ -775,7 +775,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		return broadcastOnWorldLoad;
 	}
 
-	private void setBroadcastOnWorldLoad(int broadcastOnWorldLoad) {
+	private void setBroadcastOnWorldLoad(final int broadcastOnWorldLoad) {
 		this.broadcastOnWorldLoad = broadcastOnWorldLoad;
 	}
 
@@ -783,7 +783,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		return broadcastOnWorldUnload;
 	}
 
-	private void setBroadcastOnWorldUnload(int broadcastOnWorldUnload) {
+	private void setBroadcastOnWorldUnload(final int broadcastOnWorldUnload) {
 		this.broadcastOnWorldUnload = broadcastOnWorldUnload;
 	}
 

@@ -45,12 +45,12 @@ public class FlyModeCommandExecutor implements CommandExecutor {
 
 	private final FlyModeFeature feature;
 
-	public FlyModeCommandExecutor(FlyModeFeature feature) {
+	public FlyModeCommandExecutor(final FlyModeFeature feature) {
 		this.feature = feature;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		if (command.getName().equals("fly")) {
 			if (!Perms.hasFly(sender)) {
 				feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
@@ -67,7 +67,7 @@ public class FlyModeCommandExecutor implements CommandExecutor {
 				}
 				return true;
 			} else if (args.length == 1) {
-				String arg0 = args[0].toLowerCase();
+				final String arg0 = args[0].toLowerCase();
 				if (getEnabled().contains(arg0)) {
 					if (!(sender instanceof Player)) {
 						feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
@@ -83,7 +83,7 @@ public class FlyModeCommandExecutor implements CommandExecutor {
 						feature.getPlugin().sendMessage(sender, MessageId.general_fly_disabled);
 					}
 				} else if (Perms.hasFlyOthers(sender)) {
-					String[] names = arg0.split(",");
+					final String[] names = arg0.split(",");
 					setAll(sender, names, null);
 				} else {
 					feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
@@ -93,9 +93,9 @@ public class FlyModeCommandExecutor implements CommandExecutor {
 				if (!Perms.hasFlyOthers(sender)) {
 					feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 				} else {
-					String arg0 = args[0].toLowerCase();
-					Boolean value;
-					String arg1 = args[1].toLowerCase();
+					final String arg0 = args[0].toLowerCase();
+					final Boolean value;
+					final String arg1 = args[1].toLowerCase();
 					if (getEnabled().contains(arg0)) {
 						value = true;
 					} else if (getDisabled().contains(arg0)) {
@@ -103,7 +103,7 @@ public class FlyModeCommandExecutor implements CommandExecutor {
 					} else {
 						return false;
 					}
-					String[] names = arg1.split(",");
+					final String[] names = arg1.split(",");
 					setAll(sender, names, value);
 				}
 				return true;
@@ -121,13 +121,13 @@ public class FlyModeCommandExecutor implements CommandExecutor {
 	 * @param playerNames Names of players
 	 * @param value       Null for toggle, actual value for a set
 	 */
-	private void setAll(CommandSender sender, String[] playerNames, Boolean value) {
-		for (String name : playerNames) {
-			Player p = Bukkit.getPlayer(name);
+	private void setAll(final CommandSender sender, final String[] playerNames, final Boolean value) {
+		for (final String name : playerNames) {
+			final Player p = Bukkit.getPlayer(name);
 			if (p == null) {
 				feature.getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 			} else {
-				boolean actualValue = value == null ? !feature.hasFlyMode(p.getName()) : value;
+				final boolean actualValue = value == null ? !feature.hasFlyMode(p.getName()) : value;
 				feature.setFlyMode(p, actualValue);
 				if (actualValue) {
 					feature.getPlugin().sendMessage(sender, MessageId.general_fly_enabledFor, p.getName());

@@ -33,7 +33,7 @@ public abstract class Transition {
 	private final Map<Integer, Set<Step>> stepsPerDelay;
 	private final int                     maxDelay;
 
-	protected Transition(NEnchantingEgg plugin) {
+	protected Transition(final NEnchantingEgg plugin) {
 		this.plugin = plugin;
 		final Set<Step> steps = createSteps();
 

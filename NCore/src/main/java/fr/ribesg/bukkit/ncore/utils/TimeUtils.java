@@ -60,7 +60,7 @@ public class TimeUtils {
 		 *
 		 * @return the corresponding TimeUnits enum value or null if not found
 		 */
-		public static TimeUnits get(String representation) {
+		public static TimeUnits get(final String representation) {
 			return getMapping().get(representation);
 		}
 
@@ -112,16 +112,16 @@ public class TimeUtils {
 	/** Message of the exception thrown when the provided String is invalid */
 	private static final String MALFORMED_STRING_MSG = "String was not correctly formatted";
 
-	public static String toString(long seconds) {
+	public static String toString(final long seconds) {
 		StringBuilder builder = null;
 
-		long years = seconds / TimeUnits.YEAR.getMultiplier();
+		final long years = seconds / TimeUnits.YEAR.getMultiplier();
 		if (years != 0) {
 			builder = new StringBuilder(years + " year" + (years == 1 ? "" : "s"));
 		}
 		long leftOver = seconds % TimeUnits.YEAR.getMultiplier();
 
-		long months = leftOver / TimeUnits.MONTH.getMultiplier();
+		final long months = leftOver / TimeUnits.MONTH.getMultiplier();
 		if (months != 0) {
 			if (builder == null) {
 				builder = new StringBuilder(months + " month" + (months == 1 ? "" : "s"));
@@ -131,7 +131,7 @@ public class TimeUtils {
 		}
 		leftOver = leftOver % TimeUnits.MONTH.getMultiplier();
 
-		long weeks = leftOver / TimeUnits.WEEK.getMultiplier();
+		final long weeks = leftOver / TimeUnits.WEEK.getMultiplier();
 		if (weeks != 0) {
 			if (builder == null) {
 				builder = new StringBuilder(weeks + " week" + (weeks == 1 ? "" : "s"));
@@ -141,7 +141,7 @@ public class TimeUtils {
 		}
 		leftOver = leftOver % TimeUnits.WEEK.getMultiplier();
 
-		long days = leftOver / TimeUnits.DAY.getMultiplier();
+		final long days = leftOver / TimeUnits.DAY.getMultiplier();
 		if (days != 0) {
 			if (builder == null) {
 				builder = new StringBuilder(days + " day" + (days == 1 ? "" : "s"));
@@ -151,7 +151,7 @@ public class TimeUtils {
 		}
 		leftOver = leftOver % TimeUnits.DAY.getMultiplier();
 
-		long hours = leftOver / TimeUnits.HOUR.getMultiplier();
+		final long hours = leftOver / TimeUnits.HOUR.getMultiplier();
 		if (hours != 0) {
 			if (builder == null) {
 				builder = new StringBuilder(hours + " hour" + (hours == 1 ? "" : "s"));
@@ -161,7 +161,7 @@ public class TimeUtils {
 		}
 		leftOver = leftOver % TimeUnits.HOUR.getMultiplier();
 
-		long minutes = leftOver / TimeUnits.MINUTE.getMultiplier();
+		final long minutes = leftOver / TimeUnits.MINUTE.getMultiplier();
 		if (minutes != 0) {
 			if (builder == null) {
 				builder = new StringBuilder(minutes + " minute" + (minutes == 1 ? "" : "s"));
@@ -198,7 +198,7 @@ public class TimeUtils {
 
 		// Check that the whole String was correct. How? Rebuild it!
 		final StringBuilder reBuilder = new StringBuilder(stringRepresentation.length());
-		for (String[] s : parsed) {
+		for (final String[] s : parsed) {
 			reBuilder.append(s[0]).append(s[1]);
 		}
 		if (!stringRepresentation.equals(reBuilder.toString())) {
@@ -234,7 +234,10 @@ public class TimeUtils {
 		final Pattern pattern = Pattern.compile("(\\d+)([A-Za-z]+)");
 		final Matcher matcher = pattern.matcher(stringRepresentation);
 		while (matcher.find()) {
-			final String[] matched = new String[] {matcher.group(1), matcher.group(2)};
+			final String[] matched = new String[] {
+					matcher.group(1),
+					matcher.group(2)
+			};
 			result.add(matched);
 		}
 		return result.toArray(new String[result.size()][2]);

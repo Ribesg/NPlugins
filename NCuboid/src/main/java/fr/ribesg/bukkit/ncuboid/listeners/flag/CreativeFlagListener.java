@@ -68,7 +68,7 @@ public class CreativeFlagListener extends AbstractListener {
 	public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
 		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
 		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.CREATIVE)) {
-			Player p = event.getPlayer();
+			final Player p = event.getPlayer();
 			switch (event.getRightClicked().getType()) {
 				case ITEM_FRAME:
 				case MINECART_CHEST:

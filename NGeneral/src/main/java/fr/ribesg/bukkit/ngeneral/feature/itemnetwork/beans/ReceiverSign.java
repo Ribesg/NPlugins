@@ -120,12 +120,12 @@ public class ReceiverSign {
 		} else {
 			final StringBuilder result = new StringBuilder();
 			if (acceptedMaterials != null) {
-				for (Material m : acceptedMaterials) {
+				for (final Material m : acceptedMaterials) {
 					result.append(m.getId()).append(';');
 				}
 			}
 			if (acceptedMaterialDatas != null) {
-				for (MaterialData md : acceptedMaterialDatas) {
+				for (final MaterialData md : acceptedMaterialDatas) {
 					result.append(md.getItemTypeId()).append(':').append(md.getData()).append(';');
 				}
 			}

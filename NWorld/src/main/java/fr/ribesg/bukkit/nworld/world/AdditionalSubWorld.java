@@ -15,15 +15,15 @@ import org.bukkit.World.Environment;
 /** @author Ribesg */
 public class AdditionalSubWorld extends GeneralWorld {
 
-	private AdditionalWorld parentWorld;
+	private final AdditionalWorld parentWorld;
 
-	public AdditionalSubWorld(NWorld instance,
-	                          AdditionalWorld parentWorld,
-	                          NLocation spawnLocation,
-	                          String requiredPermission,
-	                          boolean enabled,
-	                          boolean hidden,
-	                          Environment type) {
+	public AdditionalSubWorld(final NWorld instance,
+	                          final AdditionalWorld parentWorld,
+	                          final NLocation spawnLocation,
+	                          final String requiredPermission,
+	                          final boolean enabled,
+	                          final boolean hidden,
+	                          final Environment type) {
 		super(instance);
 		this.parentWorld = parentWorld;
 		String worldName = parentWorld.getWorldName();

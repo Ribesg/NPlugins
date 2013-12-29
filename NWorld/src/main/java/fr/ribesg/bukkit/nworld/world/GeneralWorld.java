@@ -65,12 +65,12 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	protected boolean   hidden;
 	protected WorldType type;
 
-	public GeneralWorld(NWorld instance,
-	                    String worldName,
-	                    NLocation spawnLocation,
-	                    String requiredPermission,
-	                    boolean enabled,
-	                    boolean hidden) {
+	public GeneralWorld(final NWorld instance,
+	                    final String worldName,
+	                    final NLocation spawnLocation,
+	                    final String requiredPermission,
+	                    final boolean enabled,
+	                    final boolean hidden) {
 		this.plugin = instance;
 		this.worldName = worldName;
 		this.spawnLocation = spawnLocation;
@@ -89,7 +89,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	 * <p/>
 	 * Don't forget to initialize fields after the call to super()
 	 */
-	protected GeneralWorld(NWorld instance) {
+	protected GeneralWorld(final NWorld instance) {
 		this.plugin = instance;
 	}
 
@@ -162,7 +162,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 
 		// Teleport players to another world
 		final Location spawn = plugin.getWorlds().get(Bukkit.getWorlds().get(0).getName()).getSpawnLocation().toBukkitLocation();
-		for (Player p : Bukkit.getWorld(getWorldName()).getPlayers()) {
+		for (final Player p : Bukkit.getWorld(getWorldName()).getPlayers()) {
 			plugin.sendMessage(p, MessageId.world_teleportedBecauseOfWorldUnload);
 			p.teleport(spawn);
 		}
@@ -199,7 +199,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		return worldName;
 	}
 
-	public void setWorldName(String worldName) {
+	public void setWorldName(final String worldName) {
 		this.worldName = worldName;
 	}
 
@@ -207,11 +207,11 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		return spawnLocation;
 	}
 
-	public void setSpawnLocation(NLocation spawnLocation) {
+	public void setSpawnLocation(final NLocation spawnLocation) {
 		this.spawnLocation = spawnLocation;
 	}
 
-	public void setSpawnLocation(Location spawnLocation) {
+	public void setSpawnLocation(final Location spawnLocation) {
 		setSpawnLocation(new NLocation(spawnLocation));
 	}
 
@@ -219,7 +219,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		return requiredPermission;
 	}
 
-	public void setRequiredPermission(String requiredPermission) {
+	public void setRequiredPermission(final String requiredPermission) {
 		this.requiredPermission = requiredPermission;
 	}
 
@@ -227,7 +227,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
 
@@ -235,7 +235,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		return hidden;
 	}
 
-	public void setHidden(boolean hidden) {
+	public void setHidden(final boolean hidden) {
 		this.hidden = hidden;
 	}
 
@@ -243,12 +243,12 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		return type;
 	}
 
-	public void setType(WorldType type) {
+	public void setType(final WorldType type) {
 		this.type = type;
 	}
 
 	@Override
-	public int compareTo(GeneralWorld o) {
+	public int compareTo(final GeneralWorld o) {
 		return worldName.compareTo(o.worldName);
 	}
 

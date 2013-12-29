@@ -23,13 +23,13 @@ public class AfkCommand implements CommandExecutor {
 
 	private final NGeneral plugin;
 
-	public AfkCommand(NGeneral instance) {
+	public AfkCommand(final NGeneral instance) {
 		this.plugin = instance;
 		plugin.getCommand("afk").setExecutor(this);
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		if (command.getName().equals("afk")) {
 			if (!Perms.hasAfk(sender)) {
 				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -38,7 +38,7 @@ public class AfkCommand implements CommandExecutor {
 			} else {
 				final Player player = (Player) sender;
 				String reason = "";
-				for (String arg : args) {
+				for (final String arg : args) {
 					reason += arg + ' ';
 				}
 				if (reason.length() > 0) {

@@ -27,7 +27,7 @@ public class RespawnHandler {
 
 	private final EndWorldHandler worldHandler;
 
-	public RespawnHandler(EndWorldHandler worldHandler) {
+	public RespawnHandler(final EndWorldHandler worldHandler) {
 		this.worldHandler = worldHandler;
 	}
 
