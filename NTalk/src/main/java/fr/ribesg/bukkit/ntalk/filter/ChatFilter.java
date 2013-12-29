@@ -22,6 +22,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -72,9 +73,7 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 		regexes.clear();
 
-		if (!config.isConfigurationSection("filters")) {
-			throw new InvalidConfigurationException("Unable to find 'filters' configuration section.");
-		} else {
+		if (config.isConfigurationSection("filters")) {
 			final ConfigurationSection filtersSection = config.getConfigurationSection("filters");
 			for (final String key : filtersSection.getKeys(false)) {
 				if (!filtersSection.isConfigurationSection(key)) {
@@ -83,6 +82,14 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 					final Filter filter = Filter.loadFromConfig(key, filtersSection.getConfigurationSection(key));
 					this.add(filter);
 				}
+			}
+		} else {
+			plugin.getPluginConfig().setChatFiltersEnabled(false);
+			try {
+				plugin.getPluginConfig().writeConfig();
+			} catch (IOException e) {
+				plugin.getLogger().warning("The following error occured, but it's not really a problem.");
+				e.printStackTrace();
 			}
 		}
 	}
