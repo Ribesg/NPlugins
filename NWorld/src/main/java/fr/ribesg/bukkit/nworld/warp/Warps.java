@@ -28,21 +28,21 @@ public class Warps implements Iterable<Warp> {
 
 	@Override
 	public Iterator<Warp> iterator() {
-		List<Warp> list = new ArrayList<>(warps.values());
+		final List<Warp> list = new ArrayList<>(warps.values());
 		Collections.sort(list);
 		return list.iterator();
 	}
 
-	public void worldEnabled(String worldName) {
-		for (Warp warp : this) {
+	public void worldEnabled(final String worldName) {
+		for (final Warp warp : this.warps.values()) {
 			if (!warp.isEnabled() && warp.getLocation().getWorldName().equals(worldName)) {
 				warp.setEnabled(true);
 			}
 		}
 	}
 
-	public void worldDisabled(String worldName) {
-		for (Warp warp : this) {
+	public void worldDisabled(final String worldName) {
+		for (final Warp warp : this.warps.values()) {
 			if (warp.isEnabled() && warp.getLocation().getWorldName().equals(worldName)) {
 				warp.setEnabled(false);
 			}
@@ -61,11 +61,11 @@ public class Warps implements Iterable<Warp> {
 		return warps.values();
 	}
 
-	public Warp remove(String key) {
+	public Warp remove(final String key) {
 		return warps.remove(key.toLowerCase());
 	}
 
-	public Warp get(String key) {
+	public Warp get(final String key) {
 		return warps.get(key.toLowerCase());
 	}
 
@@ -73,7 +73,7 @@ public class Warps implements Iterable<Warp> {
 		return warps.keySet();
 	}
 
-	public boolean containsKey(String key) {
+	public boolean containsKey(final String key) {
 		return warps.containsKey(key.toLowerCase());
 	}
 
@@ -81,7 +81,7 @@ public class Warps implements Iterable<Warp> {
 		warps.clear();
 	}
 
-	public boolean containsValue(Warp value) {
+	public boolean containsValue(final Warp value) {
 		return warps.containsValue(value);
 	}
 
@@ -93,11 +93,13 @@ public class Warps implements Iterable<Warp> {
 		return warps.entrySet();
 	}
 
-	public Warp put(String key, Warp value) {
+	public Warp put(final String key, final Warp value) {
 		return warps.put(key.toLowerCase(), value);
 	}
 
-	public void putAll(Map<? extends String, ? extends Warp> m) {
-		warps.putAll(m);
+	public void putAll(final Map<String, Warp> map) {
+		for (final Map.Entry<String, Warp> e : map.entrySet()) {
+			put(e.getKey(), e.getValue());
+		}
 	}
 }
