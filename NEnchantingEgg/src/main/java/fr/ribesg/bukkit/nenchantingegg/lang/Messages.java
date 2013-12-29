@@ -32,7 +32,11 @@ public class Messages extends AbstractMessages {
 		// General plugin messages
 		newMessages.add(new Message(MessageId.incorrectValueInConfiguration,
 		                            "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)",
-		                            new String[] {"%filename%", "%value%", "%default%"},
+		                            new String[] {
+				                            "%filename%",
+				                            "%value%",
+				                            "%default%"
+		                            },
 		                            null,
 		                            true));
 

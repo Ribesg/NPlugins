@@ -10,9 +10,9 @@
 package fr.ribesg.bukkit.nenchantingegg;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altars;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,7 +25,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 	private double repairBoostMultiplier;
 	private double enchantmentBoostMultiplier;
 
-	private Altars altars;
+	private final Altars altars;
 
 	public Config(final NEnchantingEgg instance) {
 		super(instance);
@@ -78,14 +78,14 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		}
 
 		if (config.isList("altars")) {
-			List<String> list = config.getStringList("altars");
-			for (String s : list) {
-				NLocation loc = NLocation.toNLocation(s);
+			final List<String> list = config.getStringList("altars");
+			for (final String s : list) {
+				final NLocation loc = NLocation.toNLocation(s);
 				if (loc == null) {
 					plugin.getLogger().severe("Incorrect altar location (Malformed): \"" + s + "\"");
 					break;
 				}
-				Altar a = new Altar(plugin, loc);
+				final Altar a = new Altar(plugin, loc);
 				if (!altars.canAdd(a, getMinimumDistanceBetweenTwoAltars())) {
 					plugin.getLogger().severe("Incorrect altar location (Too close): \"" + s + "\"");
 					break;
@@ -99,7 +99,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
-		FrameBuilder frame;
+		final FrameBuilder frame;
 
 		// Header
 		frame = new FrameBuilder();
@@ -130,7 +130,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		// Altars
 		content.append("# This stores created altars\n");
 		content.append("altars:\n");
-		for (Altar a : altars.getAltars()) {
+		for (final Altar a : altars.getAltars()) {
 			content.append("- " + a.getCenterLocation().toString() + '\n');
 		}
 
@@ -141,7 +141,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		return minimumDistanceBetweenTwoAltars;
 	}
 
-	public void setMinimumDistanceBetweenTwoAltars(int minimumDistanceBetweenTwoAltars) {
+	public void setMinimumDistanceBetweenTwoAltars(final int minimumDistanceBetweenTwoAltars) {
 		this.minimumDistanceBetweenTwoAltars = minimumDistanceBetweenTwoAltars;
 	}
 
@@ -149,7 +149,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		return repairBoostMultiplier;
 	}
 
-	public void setRepairBoostMultiplier(double repairBoostMultiplier) {
+	public void setRepairBoostMultiplier(final double repairBoostMultiplier) {
 		this.repairBoostMultiplier = repairBoostMultiplier;
 	}
 
@@ -157,7 +157,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		return enchantmentBoostMultiplier;
 	}
 
-	public void setEnchantmentBoostMultiplier(double enchantmentBoostMultiplier) {
+	public void setEnchantmentBoostMultiplier(final double enchantmentBoostMultiplier) {
 		this.enchantmentBoostMultiplier = enchantmentBoostMultiplier;
 	}
 }

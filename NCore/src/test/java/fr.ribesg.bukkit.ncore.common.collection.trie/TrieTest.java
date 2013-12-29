@@ -18,10 +18,10 @@ public class TrieTest {
 
 	private class Elem implements TrieElement {
 
-		public int  a;
-		public char b;
+		public final int  a;
+		public final char b;
 
-		private Elem(int a, char b) {
+		private Elem(final int a, final char b) {
 			this.a = a;
 			this.b = b;
 		}
@@ -32,7 +32,7 @@ public class TrieTest {
 		}
 
 		@Override
-		public boolean equals(Object o) {
+		public boolean equals(final Object o) {
 			if (this == o) {
 				return true;
 			}
@@ -40,7 +40,7 @@ public class TrieTest {
 				return false;
 			}
 
-			Elem elem = (Elem) o;
+			final Elem elem = (Elem) o;
 
 			return a == elem.a && b == elem.b;
 		}

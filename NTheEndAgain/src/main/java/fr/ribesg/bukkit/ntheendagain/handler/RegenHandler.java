@@ -31,7 +31,7 @@ public class RegenHandler {
 
 	private final EndWorldHandler worldHandler;
 
-	public RegenHandler(EndWorldHandler worldHandler) {
+	public RegenHandler(final EndWorldHandler worldHandler) {
 		this.worldHandler = worldHandler;
 	}
 
@@ -97,7 +97,7 @@ public class RegenHandler {
 			if (c.hasToBeRegen()) {
 				c.cleanCrystalLocations();
 				c.resetSavedDragons();
-				for (Entity e : endWorld.getChunkAt(c.getX(), c.getZ()).getEntities()) {
+				for (final Entity e : endWorld.getChunkAt(c.getX(), c.getZ()).getEntities()) {
 					if (e.getType() == EntityType.ENDER_DRAGON) {
 						worldHandler.getDragons().remove(e.getUniqueId());
 						worldHandler.getLoadedDragons().remove(e.getUniqueId());

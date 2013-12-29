@@ -29,7 +29,7 @@ import java.util.Set;
 // TODO
 public class ItemProvidedToLockedTransition extends Transition {
 
-	public ItemProvidedToLockedTransition(NEnchantingEgg plugin) {
+	public ItemProvidedToLockedTransition(final NEnchantingEgg plugin) {
 		super(plugin);
 	}
 

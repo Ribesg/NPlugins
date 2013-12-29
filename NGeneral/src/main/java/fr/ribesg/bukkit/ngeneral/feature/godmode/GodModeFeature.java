@@ -19,7 +19,7 @@ import java.util.Set;
 
 public class GodModeFeature extends Feature {
 
-	private Set<String> godPlayers;
+	private final Set<String> godPlayers;
 
 	public GodModeFeature(final NGeneral instance) {
 		super(instance, FeatureType.GOD_MODE, instance.getPluginConfig().hasGodModeFeature());
@@ -39,11 +39,11 @@ public class GodModeFeature extends Feature {
 		return godPlayers;
 	}
 
-	public boolean hasGodMode(String playerName) {
+	public boolean hasGodMode(final String playerName) {
 		return godPlayers.contains(playerName);
 	}
 
-	public void setGodMode(Player player, boolean value) {
+	public void setGodMode(final Player player, final boolean value) {
 		if (value) {
 			godPlayers.add(player.getName());
 			player.setHealth(player.getMaxHealth());

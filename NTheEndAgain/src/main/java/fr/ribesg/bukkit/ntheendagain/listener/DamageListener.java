@@ -55,7 +55,7 @@ public class DamageListener implements Listener {
 	public void onEntityDamageByEntity(final EntityDamageByEntityEvent event) {
 		// EnderDragon damaged by Player
 		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-			Player player;
+			final Player player;
 			if (event.getDamager().getType() == EntityType.PLAYER) {
 				player = (Player) event.getDamager();
 			} else if (event.getDamager() instanceof Projectile &&

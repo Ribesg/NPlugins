@@ -78,7 +78,7 @@ public class TalkCommandExecutor implements CommandExecutor {
 					plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, target);
 				}
 			}
-			for (Player p : plugin.getServer().getOnlinePlayers()) {
+			for (final Player p : plugin.getServer().getOnlinePlayers()) {
 				if (Perms.hasSpy(p)) {
 					spies.add(p);
 				}
@@ -103,7 +103,7 @@ public class TalkCommandExecutor implements CommandExecutor {
 			return false;
 		} else if (lastReceivedPmMap.containsKey(sender.getName())) {
 			final String targetName = lastReceivedPmMap.get(sender.getName());
-			CommandSender target;
+			final CommandSender target;
 			if (CONSOLE_NAME.equals(targetName)) {
 				target = plugin.getServer().getConsoleSender();
 			} else {
@@ -114,8 +114,8 @@ public class TalkCommandExecutor implements CommandExecutor {
 				for (int i = 1; i < args.length; i++) {
 					messageBuilder.append(' ').append(args[i]);
 				}
-				String formattedMessage = sendMessage(sender, target, messageBuilder.toString());
-				for (Player p : plugin.getServer().getOnlinePlayers()) {
+				final String formattedMessage = sendMessage(sender, target, messageBuilder.toString());
+				for (final Player p : plugin.getServer().getOnlinePlayers()) {
 					if (Perms.hasSpy(p) && p != target && p != sender) {
 						p.sendMessage(formattedMessage);
 					}
@@ -162,8 +162,8 @@ public class TalkCommandExecutor implements CommandExecutor {
 	                          final Set<CommandSender> spySet,
 	                          final String message) {
 		for (final CommandSender to : toSet) {
-			String formattedMessage = sendMessage(from, to, message);
-			for (CommandSender spy : spySet) {
+			final String formattedMessage = sendMessage(from, to, message);
+			for (final CommandSender spy : spySet) {
 				if (spy != from && spy != to) {
 					spy.sendMessage(formattedMessage);
 				}

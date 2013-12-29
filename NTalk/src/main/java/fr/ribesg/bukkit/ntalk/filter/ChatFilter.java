@@ -90,7 +90,7 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
-		FrameBuilder frame;
+		final FrameBuilder frame;
 
 		// Header
 		frame = new FrameBuilder();

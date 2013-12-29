@@ -16,7 +16,7 @@ import java.util.UUID;
 public class Security {
 
 	public static boolean isUserPassword(final String enteredPassword, final User user) {
-		String realPasswordHash = user.getPasswordHash();
+		final String realPasswordHash = user.getPasswordHash();
 		final int saltPos = enteredPassword.length() >= realPasswordHash.length()
 		                    ? realPasswordHash.length() - 1
 		                    : enteredPassword.length();

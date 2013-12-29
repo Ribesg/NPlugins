@@ -24,7 +24,7 @@ public class PunishmentListener implements Listener {
 	private final NPlayer      plugin;
 	private final PunishmentDb punishmentDb;
 
-	public PunishmentListener(NPlayer instance) {
+	public PunishmentListener(final NPlayer instance) {
 		this.plugin = instance;
 		this.punishmentDb = plugin.getPunishmentDb();
 	}
@@ -36,7 +36,7 @@ public class PunishmentListener implements Listener {
 			final String playerIp = event.getAddress().getHostAddress();
 			if (punishmentDb.isNickBanned(playerName)) {
 				final Punishment ban = punishmentDb.get(playerName, PunishmentType.BAN);
-				String playerBannedMessage;
+				final String playerBannedMessage;
 				if (ban.isPermanent()) {
 					playerBannedMessage = plugin.getMessages().get(MessageId.player_deniedPermBanned, ban.getReason())[0];
 				} else {
@@ -48,7 +48,7 @@ public class PunishmentListener implements Listener {
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, playerBannedMessage);
 			} else if (punishmentDb.isIpBanned(playerIp)) {
 				final Punishment ipBan = punishmentDb.get(playerName, PunishmentType.IPBAN);
-				String ipBannedMessage;
+				final String ipBannedMessage;
 				if (ipBan.isPermanent()) {
 					ipBannedMessage = plugin.getMessages().get(MessageId.player_deniedPermIpBanned, ipBan.getReason())[0];
 				} else {
@@ -65,7 +65,7 @@ public class PunishmentListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerChat(final AsyncPlayerChatEvent event) {
 		final String playerName = event.getPlayer().getName();
-		Punishment mute;
+		final Punishment mute;
 		synchronized (this.punishmentDb) {
 			mute = punishmentDb.get(playerName, PunishmentType.MUTE);
 		}

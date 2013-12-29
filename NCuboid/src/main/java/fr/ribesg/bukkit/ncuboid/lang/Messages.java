@@ -70,7 +70,10 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_secondPointSelected,
 		                            "&aSecond point selected: %coords%" + LINE_SEPARATOR + "&aSelection Size : %size%",
-		                            new String[] {"%coords%", "%size%"},
+		                            new String[] {
+				                            "%coords%",
+				                            "%size%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_blockInSelection, "&aThis block is in your selection", null, null, true));
@@ -83,7 +86,10 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_blockProtectedMultipleRegions,
 		                            "&cThis block is protected by %nb% regions:" + LINE_SEPARATOR + "%regionsInfos%",
-		                            new String[] {"%nb%", "%regionsInfos%"},
+		                            new String[] {
+				                            "%nb%",
+				                            "%regionsInfos%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_selectionReset, "&aYour selection has been reset", null, null, true));
@@ -118,17 +124,26 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdCreateTooMuchRegions,
 		                            "&cYou are only allowed to have %max% regions, and you currently have %value% regions!",
-		                            new String[] {"%max%", "%value%"},
+		                            new String[] {
+				                            "%max%",
+				                            "%value%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdCreateRegionTooLong,
 		                            "&cYour selection is too long (%value%), your maximum allowed length is %max%!",
-		                            new String[] {"%max%", "%value%"},
+		                            new String[] {
+				                            "%max%",
+				                            "%value%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdCreateRegionTooBig,
 		                            "&cYour selection is too big (%value% blocks), your maximum allowed size is %max% blocks!",
-		                            new String[] {"%max%", "%value%"},
+		                            new String[] {
+				                            "%max%",
+				                            "%value%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdCreateOverlap,
@@ -162,12 +177,20 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagAlreadySet,
 		                            "&6The flag '%flag%' is already '%value%' for region '%region%'",
-		                            new String[] {"%flag%", "%value%", "%region%"},
+		                            new String[] {
+				                            "%flag%",
+				                            "%value%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagSet,
 		                            "&aThe flag '%flag%' is now '%value%' for region '%region%'",
-		                            new String[] {"%flag%", "%value%", "%region%"},
+		                            new String[] {
+				                            "%flag%",
+				                            "%value%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagNoPermission,
@@ -177,7 +200,11 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagValue,
 		                            "&aThe flag '%flag%' is '%value%' for region '%region%'",
-		                            new String[] {"%flag%", "%value%", "%region%"},
+		                            new String[] {
+				                            "%flag%",
+				                            "%value%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 
@@ -194,56 +221,88 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttValue,
 		                            "&aThe flag attribute '%flagAtt%' is currently set to '%value%' for region '%region%'",
-		                            new String[] {"%flagAtt%", "%value%", "%region%"},
+		                            new String[] {
+				                            "%flagAtt%",
+				                            "%value%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttSet,
 		                            "&aThe flag attribute '%flagAtt%' is now set to '%value%' for region '%region%'",
-		                            new String[] {"%flagAtt%", "%value%", "%region%"},
+		                            new String[] {
+				                            "%flagAtt%",
+				                            "%value%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 
 		// Command - ADMIN
 		newMessages.add(new Message(MessageId.cuboid_cmdAdminAdded,
 		                            "&a%player% has been added to admins of '%region%'",
-		                            new String[] {"%player%", "%region%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdAdminAlreadyAdmin,
 		                            "&c%player% is already admin of '%region%'",
-		                            new String[] {"%player%", "%region%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdAdminRemoved,
 		                            "&a%player% is no longer admin of '%region%'",
-		                            new String[] {"%player%", "%region%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdAdminRemoved,
 		                            "&c%player% is not admin of '%region%'",
-		                            new String[] {"%player%", "%region%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 
 		// Command - USER
 		newMessages.add(new Message(MessageId.cuboid_cmdUserAdded,
 		                            "&a%player% has been added to users of '%region%'",
-		                            new String[] {"%player%", "%region%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdUserAlreadyUser,
 		                            "&c%player% is already user of '%region%'",
-		                            new String[] {"%player%", "%region%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdUserRemoved,
 		                            "&a%player% is no longer user of '%region%'",
-		                            new String[] {"%player%", "%region%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.cuboid_cmdUserRemoved,
 		                            "&c%player% is not user of '%region%'",
-		                            new String[] {"%player%", "%region%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%region%"
+		                            },
 		                            null,
 		                            true));
 

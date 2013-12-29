@@ -56,7 +56,7 @@ public class NWorld extends NPlugin implements WorldNode {
 		// Messages first !
 		try {
 			if (!getDataFolder().isDirectory()) {
-				boolean res = getDataFolder().mkdir();
+				final boolean res = getDataFolder().mkdir();
 				if (!res) {
 					getLogger().severe("Unable to create subfolder in /plugins/");
 					return false;
@@ -91,7 +91,7 @@ public class NWorld extends NPlugin implements WorldNode {
 		// This loop will detect newly created worlds
 		// - Default main World, at first plugin start
 		// - Nether & End when activated
-		for (World w : Bukkit.getWorlds()) {
+		for (final World w : Bukkit.getWorlds()) {
 			warps.worldEnabled(w.getName());
 			if (!worlds.containsKey(w.getName())) {
 				WorldType type = null;
@@ -118,16 +118,16 @@ public class NWorld extends NPlugin implements WorldNode {
 		}
 
 		// This loop will create/load additional worlds
-		for (AdditionalWorld w : worlds.getAdditional().values()) {
+		for (final AdditionalWorld w : worlds.getAdditional().values()) {
 			if (w.isEnabled()) {
 				// Create (Load) the world
-				WorldCreator creator = new WorldCreator(w.getWorldName());
+				final WorldCreator creator = new WorldCreator(w.getWorldName());
 				creator.environment(World.Environment.NORMAL);
 				creator.seed(w.getSeed());
-				World world = Bukkit.createWorld(creator);
+				final World world = Bukkit.createWorld(creator);
 
 				// Re-set spawn location
-				NLocation loc = w.getSpawnLocation();
+				final NLocation loc = w.getSpawnLocation();
 				world.setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 
 				// Check if some warps should be enabled
@@ -135,10 +135,10 @@ public class NWorld extends NPlugin implements WorldNode {
 
 				// Load Nether if needed
 				if (w.hasNether()) {
-					String netherName = w.getWorldName() + "_nether";
+					final String netherName = w.getWorldName() + "_nether";
 
 					// Create (Load) the world
-					WorldCreator netherCreator = new WorldCreator(netherName);
+					final WorldCreator netherCreator = new WorldCreator(netherName);
 					netherCreator.environment(World.Environment.NETHER);
 					netherCreator.seed(w.getSeed());
 					Bukkit.createWorld(netherCreator);
@@ -148,10 +148,10 @@ public class NWorld extends NPlugin implements WorldNode {
 				}
 				// Load End if needed
 				if (w.hasEnd()) {
-					String endName = w.getWorldName() + "_the_end";
+					final String endName = w.getWorldName() + "_the_end";
 
 					// Create (Load) the world
-					WorldCreator endCreator = new WorldCreator(endName);
+					final WorldCreator endCreator = new WorldCreator(endName);
 					endCreator.environment(World.Environment.THE_END);
 					endCreator.seed(w.getSeed());
 					Bukkit.createWorld(endCreator);
@@ -242,11 +242,11 @@ public class NWorld extends NPlugin implements WorldNode {
 		return pluginConfig;
 	}
 
-	private boolean isMainWorld(World world) {
+	private boolean isMainWorld(final World world) {
 		return world != null && isMainWorld(world.getName());
 	}
 
-	private boolean isMainWorld(String worldName) {
+	private boolean isMainWorld(final String worldName) {
 		return Bukkit.getWorlds().get(0).getName().equals(worldName);
 	}
 

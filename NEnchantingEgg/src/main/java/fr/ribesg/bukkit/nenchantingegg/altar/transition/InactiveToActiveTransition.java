@@ -27,7 +27,7 @@ import java.util.Set;
 
 public class InactiveToActiveTransition extends Transition {
 
-	public InactiveToActiveTransition(NEnchantingEgg plugin) {
+	public InactiveToActiveTransition(final NEnchantingEgg plugin) {
 		super(plugin);
 	}
 

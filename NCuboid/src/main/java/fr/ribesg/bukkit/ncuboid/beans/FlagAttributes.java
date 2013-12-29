@@ -85,10 +85,12 @@ public class FlagAttributes {
 		} else if (getIntFlagAtt(FlagAtt.FEED_AMOUNT) != null && getIntFlagAtt(FlagAtt.FEED_AMOUNT) > 20) {
 			setIntFlagAttNoCheck(FlagAtt.FEED_AMOUNT, 20);
 		}
-		for (final FlagAtt f : new FlagAtt[] {FlagAtt.HEAL_MIN_HEALTH,
-		                                      FlagAtt.HEAL_MAX_HEALTH,
-		                                      FlagAtt.FEED_MIN_FOOD,
-		                                      FlagAtt.FEED_MAX_FOOD}) {
+		for (final FlagAtt f : new FlagAtt[] {
+				FlagAtt.HEAL_MIN_HEALTH,
+				FlagAtt.HEAL_MAX_HEALTH,
+				FlagAtt.FEED_MIN_FOOD,
+				FlagAtt.FEED_MAX_FOOD
+		}) {
 			if (getIntFlagAtt(f) != null && getIntFlagAtt(f) < 0) {
 				setIntFlagAttNoCheck(f, 0);
 			} else if (getIntFlagAtt(f) != null && getIntFlagAtt(f) > 20) {

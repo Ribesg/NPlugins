@@ -30,13 +30,13 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 	private final NPlayer      plugin;
 	private final PunishmentDb db;
 
-	public PunishmentCommandHandler(NPlayer instance) {
+	public PunishmentCommandHandler(final NPlayer instance) {
 		this.plugin = instance;
 		this.db = plugin.getPunishmentDb();
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String commandLabel, final String[] args) {
 		switch (cmd.getName()) {
 			case "ban":
 				if (Perms.hasBan(sender)) {
@@ -106,7 +106,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean cmdBan(CommandSender sender, String[] args) {
+	private boolean cmdBan(final CommandSender sender, final String[] args) {
 		final Result res = get(PunishmentType.BAN, args);
 		if (res == null) {
 			return false;
@@ -158,13 +158,13 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean cmdBanIp(CommandSender sender, String[] args) {
+	private boolean cmdBanIp(final CommandSender sender, final String[] args) {
 		final Result res = get(PunishmentType.IPBAN, args);
 		if (res == null) {
 			return false;
 		}
-		boolean isIp = IPValidator.isValidIp(res.punished);
-		String ip;
+		final boolean isIp = IPValidator.isValidIp(res.punished);
+		final String ip;
 		if (isIp) {
 			ip = res.punished;
 			if (!plugin.getUserDb().isIpKnown(ip)) {
@@ -222,12 +222,12 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean cmdJail(CommandSender sender, String[] args) {
+	private boolean cmdJail(final CommandSender sender, final String[] args) {
 		sender.sendMessage(ChatColor.RED + "Not yet implemented");
 		return true;  // TODO Implement method
 	}
 
-	private boolean cmdMute(CommandSender sender, String[] args) {
+	private boolean cmdMute(final CommandSender sender, final String[] args) {
 		final Result res = get(PunishmentType.MUTE, args);
 		if (res == null) {
 			return false;
@@ -266,7 +266,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean cmdUnBan(CommandSender sender, String[] args) {
+	private boolean cmdUnBan(final CommandSender sender, final String[] args) {
 		if (args.length != 1) {
 			return false;
 		}
@@ -284,7 +284,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean cmdUnBanIp(CommandSender sender, String[] args) {
+	private boolean cmdUnBanIp(final CommandSender sender, final String[] args) {
 		if (args.length != 1) {
 			return false;
 		}
@@ -302,11 +302,11 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean cmdUnJail(CommandSender sender, String[] args) {
+	private boolean cmdUnJail(final CommandSender sender, final String[] args) {
 		return false; // TODO
 	}
 
-	private boolean cmdUnMute(CommandSender sender, String[] args) {
+	private boolean cmdUnMute(final CommandSender sender, final String[] args) {
 		if (args.length != 1) {
 			return false;
 		}
@@ -328,7 +328,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private boolean cmdKick(CommandSender sender, String[] args) {
+	private boolean cmdKick(final CommandSender sender, final String[] args) {
 		if (args.length < 2) {
 			return false;
 		}
@@ -357,7 +357,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		public final long   duration;
 		public final String jailPointName;
 
-		private Result(String punished, String reason, long duration, String jailPointName) {
+		private Result(final String punished, final String reason, final long duration, final String jailPointName) {
 			this.punished = punished;
 			this.reason = reason;
 			this.duration = duration;
@@ -371,7 +371,8 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 		final Player player = Bukkit.getPlayer(cmdArgs[0]);
 		final String punished = player == null ? cmdArgs[0] : player.getName();
-		boolean permanent = false, jail = type == PunishmentType.JAIL;
+		boolean permanent = false;
+		final boolean jail = type == PunishmentType.JAIL;
 		long duration = -1;
 		try {
 			duration = TimeUtils.getInSeconds(cmdArgs[1]);

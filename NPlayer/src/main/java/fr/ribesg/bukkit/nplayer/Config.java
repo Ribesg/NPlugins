@@ -10,8 +10,8 @@
 package fr.ribesg.bukkit.nplayer;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NPlayer> {
@@ -72,7 +72,7 @@ public class Config extends AbstractConfig<NPlayer> {
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
-		FrameBuilder frame;
+		final FrameBuilder frame;
 
 		// Header
 		frame = new FrameBuilder();
@@ -135,7 +135,7 @@ public class Config extends AbstractConfig<NPlayer> {
 		return maximumLoginAttempts;
 	}
 
-	public void setMaximumLoginAttempts(int maximumLoginAttempts) {
+	public void setMaximumLoginAttempts(final int maximumLoginAttempts) {
 		this.maximumLoginAttempts = maximumLoginAttempts;
 	}
 
@@ -143,7 +143,7 @@ public class Config extends AbstractConfig<NPlayer> {
 		return tooManyAttemptsPunishment;
 	}
 
-	public void setTooManyAttemptsPunishment(int tooManyAttemptsPunishment) {
+	public void setTooManyAttemptsPunishment(final int tooManyAttemptsPunishment) {
 		this.tooManyAttemptsPunishment = tooManyAttemptsPunishment;
 	}
 
@@ -151,7 +151,7 @@ public class Config extends AbstractConfig<NPlayer> {
 		return tooManyAttemptsPunishmentDuration;
 	}
 
-	public void setTooManyAttemptsPunishmentDuration(int tooManyAttemptsPunishmentDuration) {
+	public void setTooManyAttemptsPunishmentDuration(final int tooManyAttemptsPunishmentDuration) {
 		this.tooManyAttemptsPunishmentDuration = tooManyAttemptsPunishmentDuration;
 	}
 }

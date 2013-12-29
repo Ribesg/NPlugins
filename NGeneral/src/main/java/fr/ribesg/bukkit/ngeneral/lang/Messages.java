@@ -39,7 +39,11 @@ public class Messages extends AbstractMessages {
 		// General plugin messages
 		newMessages.add(new Message(MessageId.incorrectValueInConfiguration,
 		                            "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)",
-		                            new String[] {"%filename%", "%value%", "%default%"},
+		                            new String[] {
+				                            "%filename%",
+				                            "%value%",
+				                            "%default%"
+		                            },
 		                            null,
 		                            true));
 
@@ -144,12 +148,18 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.general_flySpeed_reset, "&aFly Speed reset", null, null, true));
 		newMessages.add(new Message(MessageId.general_flySpeed_setFor,
 		                            "&aFly Speed set to %value% for %playerName%",
-		                            new String[] {"%value%", "%playerName%"},
+		                            new String[] {
+				                            "%value%",
+				                            "%playerName%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_flySpeed_setBy,
 		                            "&aFly Speed set to %value% by %playerName%",
-		                            new String[] {"%value%", "%playerName%"},
+		                            new String[] {
+				                            "%value%",
+				                            "%playerName%"
+		                            },
 		                            null,
 		                            true));
 
@@ -158,12 +168,18 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.general_walkSpeed_reset, "&aWalk Speed reset", null, null, true));
 		newMessages.add(new Message(MessageId.general_walkSpeed_setFor,
 		                            "&aWalk Speed set to %value% for %playerName%",
-		                            new String[] {"%value%", "%playerName%"},
+		                            new String[] {
+				                            "%value%",
+				                            "%playerName%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_walkSpeed_setBy,
 		                            "&aWalk Speed set to %value% by %playerName%",
-		                            new String[] {"%value%", "%playerName%"},
+		                            new String[] {
+				                            "%value%",
+				                            "%playerName%"
+		                            },
 		                            null,
 		                            true));
 
@@ -180,26 +196,41 @@ public class Messages extends AbstractMessages {
 		                            false));
 		newMessages.add(new Message(MessageId.general_afk_nowAfkBroadcastReason,
 		                            "&e%playerName% is now AFK (%reason%)",
-		                            new String[] {"%playerName%", "%reason%"},
+		                            new String[] {
+				                            "%playerName%",
+				                            "%reason%"
+		                            },
 		                            null,
 		                            false));
 		newMessages.add(new Message(MessageId.general_afk_noLongerAfkBroadcastReason,
 		                            "&e%playerName% is no longer AFK (%reason%)",
-		                            new String[] {"%playerName%", "%reason%"},
+		                            new String[] {
+				                            "%playerName%",
+				                            "%reason%"
+		                            },
 		                            null,
 		                            false));
 
 		// Command - TIME
 		newMessages.add(new Message(MessageId.general_timeSet,
 		                            "&aTime set to %value% in world %world% by %changer%",
-		                            new String[] {"%value%", "%world%", "%changer%"},
+		                            new String[] {
+				                            "%value%",
+				                            "%world%",
+				                            "%changer%"
+		                            },
 		                            null,
 		                            true));
 
 		// Command - WEATHER
 		newMessages.add(new Message(MessageId.general_weatherSet,
 		                            "&aWeather changed to %value% in world %world% by %changer% for %duration% seconds",
-		                            new String[] {"%value%", "%world%", "%changer%", "%duration%"},
+		                            new String[] {
+				                            "%value%",
+				                            "%world%",
+				                            "%changer%",
+				                            "%duration%"
+		                            },
 		                            null,
 		                            true));
 
@@ -211,12 +242,18 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_somebodyToTarget,
 		                            "&a%teleporter% teleported you to %target%",
-		                            new String[] {"%teleporter%", "%target%"},
+		                            new String[] {
+				                            "%teleporter%",
+				                            "%target%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_youSomebodyToTarget,
 		                            "&aYou teleported %player% to %target%",
-		                            new String[] {"%player%", "%target%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%target%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_somebodyToHim,
@@ -232,7 +269,7 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.general_tp_noTarget, "&cCould not find a correct location to teleport", null, null, true));
 		newMessages.add(new Message(MessageId.general_tp_youToLocation,
 		                            "&aYou teleported yourself to location %location%",
-		                            new String[]{"%location%"},
+		                            new String[] {"%location%"},
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_somebodyToLocation,
@@ -242,7 +279,10 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_youSomebodyToLocation,
 		                            "&aYou teleported %player% to location %location%",
-		                            new String[] {"%player%", "%location%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%location%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_youNoKnownBack, "&cCould not find a location to go back to", null, null, true));
@@ -263,7 +303,10 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_somebodyBackWorldUnloaded,
 		                            "&cThe back location of %player% is in an unloaded world, '%worldName%'",
-		                            new String[] {"%player%", "%worldName%"},
+		                            new String[] {
+				                            "%player%",
+				                            "%worldName%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.general_tp_somebodyTeleportedYouBack,
@@ -285,8 +328,7 @@ public class Messages extends AbstractMessages {
 		                            true));
 
 		// Feature - PROTECTION SIGNS
-		newMessages.add(new Message(MessageId.general_protectionsign_accessDenied, "&cAccess denied by a Private sign.", null, null,
-		                            true));
+		newMessages.add(new Message(MessageId.general_protectionsign_accessDenied, "&cAccess denied by a Private sign.", null, null, true));
 		newMessages.add(new Message(MessageId.general_protectionsign_breakDenied,
 		                            "&cThis bloc is protected by a Private sign.",
 		                            null,

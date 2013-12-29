@@ -43,7 +43,7 @@ public class Altar {
 	private String      playerName;
 	private ItemBuilder builder;
 
-	public Altar(NEnchantingEgg plugin, final NLocation loc) {
+	public Altar(final NEnchantingEgg plugin, final NLocation loc) {
 		this.plugin = plugin;
 
 		centerLocation = loc.getBlockLocation();
@@ -292,7 +292,7 @@ public class Altar {
 		return playerName;
 	}
 
-	public void setPlayerName(String playerName) {
+	public void setPlayerName(final String playerName) {
 		this.playerName = playerName;
 	}
 
@@ -304,7 +304,7 @@ public class Altar {
 		return state;
 	}
 
-	public void setPreviousState(AltarState previousState) {
+	public void setPreviousState(final AltarState previousState) {
 		this.previousState = previousState;
 	}
 

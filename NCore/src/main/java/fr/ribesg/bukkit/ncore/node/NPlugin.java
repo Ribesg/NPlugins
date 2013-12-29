@@ -39,7 +39,7 @@ public abstract class NPlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		FrameBuilder frame;
+		final FrameBuilder frame;
 		core = (NCore) Bukkit.getPluginManager().getPlugin(CORE);
 		if (badCoreVersion()) {
 
@@ -62,7 +62,7 @@ public abstract class NPlugin extends JavaPlugin {
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
-			boolean activationResult = onNodeEnable();
+			final boolean activationResult = onNodeEnable();
 			if (activationResult) {
 				enabled = true;
 				afterEnable();

@@ -25,35 +25,35 @@ public class Perms {
 	private static final String CMD_CHUNKPROTECT   = "ntheendagain.cmd.chunkprotect";
 	private static final String CMD_CHUNKUNPROTECT = "ntheendagain.cmd.chunkunprotect";
 
-	public static boolean hasHelp(CommandSender sender) {
+	public static boolean hasHelp(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_HELP) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasReload(CommandSender sender) {
+	public static boolean hasReload(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_RELOAD) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasRegen(CommandSender sender) {
+	public static boolean hasRegen(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_REGEN) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasRespawn(CommandSender sender) {
+	public static boolean hasRespawn(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_RESPAWN) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasNb(CommandSender sender) {
+	public static boolean hasNb(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_NB) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasChunkInfo(CommandSender sender) {
+	public static boolean hasChunkInfo(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_CHUNKINFO) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasChunkProtect(CommandSender sender) {
+	public static boolean hasChunkProtect(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_CHUNKPROTECT) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasChunkUnprotect(CommandSender sender) {
+	public static boolean hasChunkUnprotect(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_CHUNKUNPROTECT) || sender.hasPermission(ADMIN);
 	}
 }

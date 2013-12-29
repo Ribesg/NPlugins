@@ -66,7 +66,7 @@ public class FarmFlagListener extends AbstractListener {
 	public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
 		if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
 			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
-			Player p;
+			final Player p;
 			if (event.getDamager().getType() == EntityType.PLAYER) {
 				p = (Player) event.getDamager();
 			} else if (event.getDamager() instanceof Projectile) {

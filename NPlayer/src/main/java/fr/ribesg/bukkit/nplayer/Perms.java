@@ -40,95 +40,95 @@ public class Perms {
 	private static final String CMD_UNMUTE          = "nplayer.cmd.unmute";
 	private static final String CMD_KICK            = "nplayer.cmd.kick";
 
-	public static boolean hasForceLogin(CommandSender sender) {
+	public static boolean hasForceLogin(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_FORCELOGIN) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasLogin(CommandSender sender) {
+	public static boolean hasLogin(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_LOGIN) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasLogout(CommandSender sender) {
+	public static boolean hasLogout(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_LOGOUT) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasRegister(CommandSender sender) {
+	public static boolean hasRegister(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_REGISTER) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasInfo(CommandSender sender) {
+	public static boolean hasInfo(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_INFO) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasInfoAdmin(CommandSender sender) {
+	public static boolean hasInfoAdmin(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_INFO_ADMIN) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasHome(CommandSender sender) {
+	public static boolean hasHome(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_HOME) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasHomeOthers(CommandSender sender) {
+	public static boolean hasHomeOthers(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_HOME_OTHERS) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasSetHome(CommandSender sender) {
+	public static boolean hasSetHome(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_SETHOME) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasSetHomeOthers(CommandSender sender) {
+	public static boolean hasSetHomeOthers(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_SETHOME_OTHERS) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasBan(CommandSender sender) {
+	public static boolean hasBan(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_BAN) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasBanPermanent(CommandSender sender) {
+	public static boolean hasBanPermanent(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_BAN_PERMANENT) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasUnBan(CommandSender sender) {
+	public static boolean hasUnBan(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_UNBAN) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasBanIp(CommandSender sender) {
+	public static boolean hasBanIp(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_BANIP) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasBanIpPermanent(CommandSender sender) {
+	public static boolean hasBanIpPermanent(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_BANIP_PERMANENT) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasUnBanIp(CommandSender sender) {
+	public static boolean hasUnBanIp(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_UNBANIP) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasJail(CommandSender sender) {
+	public static boolean hasJail(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_JAIL) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasJailPermanent(CommandSender sender) {
+	public static boolean hasJailPermanent(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_JAIL_PERMANENT) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasUnJail(CommandSender sender) {
+	public static boolean hasUnJail(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_UNJAIL) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasMute(CommandSender sender) {
+	public static boolean hasMute(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_MUTE) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasMutePermanent(CommandSender sender) {
+	public static boolean hasMutePermanent(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_MUTE_PERMANENT) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasUnMute(CommandSender sender) {
+	public static boolean hasUnMute(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_UNMUTE) || sender.hasPermission(ADMIN);
 	}
 
-	public static boolean hasKick(CommandSender sender) {
+	public static boolean hasKick(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_KICK) || sender.hasPermission(ADMIN);
 	}
 }

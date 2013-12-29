@@ -83,7 +83,7 @@ public class EndWorldHandler {
 		config.loadConfig(camelCaseWorldName + "Config.yml");
 	}
 
-	public void loadChunks() throws IOException {
+	public void loadChunks() {
 		chunks.load(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
 	}
 
@@ -140,7 +140,7 @@ public class EndWorldHandler {
 	 * - Make scheduled tasks persistent
 	 * - Save configs
 	 */
-	public void unload(boolean pluginDisabled) throws InvalidConfigurationException {
+	public void unload(final boolean pluginDisabled) throws InvalidConfigurationException {
 		cancelTasks();
 		if (pluginDisabled && config.getHardRegenOnStop() == 1) {
 			getRegenHandler().hardRegenOnStop();
@@ -215,7 +215,7 @@ public class EndWorldHandler {
 	 * @param dmg           the amount of damages done
 	 */
 	public void playerHitED(final UUID enderDragonID, final String playerName, final double dmg) {
-		Map<String, Double> dragonMap;
+		final Map<String, Double> dragonMap;
 		if (!dragons.containsKey(enderDragonID)) {
 			dragonMap = new HashMap<>();
 			dragons.put(enderDragonID, dragonMap);
@@ -277,7 +277,7 @@ public class EndWorldHandler {
 		return slowSoftRegeneratorTaskHandler;
 	}
 
-	public void setSlowSoftRegeneratorTaskHandler(SlowSoftRegeneratorTaskHandler slowSoftRegeneratorTaskHandler) {
+	public void setSlowSoftRegeneratorTaskHandler(final SlowSoftRegeneratorTaskHandler slowSoftRegeneratorTaskHandler) {
 		this.slowSoftRegeneratorTaskHandler = slowSoftRegeneratorTaskHandler;
 	}
 }

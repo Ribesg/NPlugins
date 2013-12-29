@@ -37,7 +37,11 @@ public class Messages extends AbstractMessages {
 		// General plugin messages
 		newMessages.add(new Message(MessageId.incorrectValueInConfiguration,
 		                            "&cIncorrect value in configuration %filename% : '%value%' " + "was restored to default (%default%)",
-		                            new String[] {"%filename%", "%value%", "%default%"},
+		                            new String[] {
+				                            "%filename%",
+				                            "%value%",
+				                            "%default%"
+		                            },
 		                            null,
 		                            true));
 
@@ -117,7 +121,10 @@ public class Messages extends AbstractMessages {
 		                            false));
 		newMessages.add(new Message(MessageId.player_broadcastedKickMessage,
 		                            "&e%userName% has been kicked (%reason%)",
-		                            new String[] {"%userName%", "%reason%"},
+		                            new String[] {
+				                            "%userName%",
+				                            "%reason%"
+		                            },
 		                            null,
 		                            false));
 
@@ -128,17 +135,27 @@ public class Messages extends AbstractMessages {
 		                            false));
 		newMessages.add(new Message(MessageId.player_permBannedBroadcast,
 		                            "&e%userName% has been permanently banned (%reason%)",
-		                            new String[] {"%userName%", "%reason%"},
+		                            new String[] {
+				                            "%userName%",
+				                            "%reason%"
+		                            },
 		                            null,
 		                            false));
 		newMessages.add(new Message(MessageId.player_kickTempBanned,
 		                            "&cYou have been banned for %duration%: %reason%",
-		                            new String[] {"%reason%", "%duration%"},
+		                            new String[] {
+				                            "%reason%",
+				                            "%duration%"
+		                            },
 		                            null,
 		                            false));
 		newMessages.add(new Message(MessageId.player_tempBannedBroadcast,
 		                            "&e%userName% has been banned for %duration% (%reason%)",
-		                            new String[] {"%userName%", "%duration%", "%reason%"},
+		                            new String[] {
+				                            "%userName%",
+				                            "%duration%",
+				                            "%reason%"
+		                            },
 		                            null,
 		                            false));
 
@@ -150,17 +167,27 @@ public class Messages extends AbstractMessages {
 		                            false));
 		newMessages.add(new Message(MessageId.player_permIpBannedBroadcast,
 		                            "&eThe IP %ip% has been permanently banned (%reason%)",
-		                            new String[] {"%ip%", "%reason%"},
+		                            new String[] {
+				                            "%ip%",
+				                            "%reason%"
+		                            },
 		                            null,
 		                            false));
 		newMessages.add(new Message(MessageId.player_kickTempIpBanned,
 		                            "&cYour IP has been banned for %duration%: %reason%",
-		                            new String[] {"%reason%", "%duration%"},
+		                            new String[] {
+				                            "%reason%",
+				                            "%duration%"
+		                            },
 		                            null,
 		                            false));
 		newMessages.add(new Message(MessageId.player_tempIpBannedBroadcast,
 		                            "&eThe IP %ip% has been banned for %duration% (%reason%)",
-		                            new String[] {"%ip%", "%duration%", "%reason%"},
+		                            new String[] {
+				                            "%ip%",
+				                            "%duration%",
+				                            "%reason%"
+		                            },
 		                            null,
 		                            false));
 
@@ -171,17 +198,27 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.player_permMutedBroadcast,
 		                            "&e%userName% has been permanently muted (%reason%)",
-		                            new String[] {"%userName%", "%reason%"},
+		                            new String[] {
+				                            "%userName%",
+				                            "%reason%"
+		                            },
 		                            null,
 		                            false));
 		newMessages.add(new Message(MessageId.player_tempMuted,
 		                            "&cYou have been muted for %duration%: %reason%",
-		                            new String[] {"%reason%", "%duration%"},
+		                            new String[] {
+				                            "%reason%",
+				                            "%duration%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.player_tempMutedBroadcast,
 		                            "&e%userName% has been muted for %duration% (%reason%)",
-		                            new String[] {"%userName%", "%duration%", "%reason%"},
+		                            new String[] {
+				                            "%userName%",
+				                            "%duration%",
+				                            "%reason%"
+		                            },
 		                            null,
 		                            false));
 
@@ -216,7 +253,10 @@ public class Messages extends AbstractMessages {
 		                            false));
 		newMessages.add(new Message(MessageId.player_deniedTempBanned,
 		                            "&cYou are banned for %duration%: %reason%",
-		                            new String[] {"%reason%", "%duration%"},
+		                            new String[] {
+				                            "%reason%",
+				                            "%duration%"
+		                            },
 		                            null,
 		                            false));
 		newMessages.add(new Message(MessageId.player_deniedPermIpBanned,
@@ -226,7 +266,10 @@ public class Messages extends AbstractMessages {
 		                            false));
 		newMessages.add(new Message(MessageId.player_deniedTempIpBanned,
 		                            "&cYour IP is banned for %duration%: %reason%",
-		                            new String[] {"%reason%", "%duration%"},
+		                            new String[] {
+				                            "%reason%",
+				                            "%duration%"
+		                            },
 		                            null,
 		                            false));
 		newMessages.add(new Message(MessageId.player_deniedPermMuted,
@@ -236,7 +279,10 @@ public class Messages extends AbstractMessages {
 		                            false));
 		newMessages.add(new Message(MessageId.player_deniedTempMuted,
 		                            "&cYou are muted for %duration%: %reason%",
-		                            new String[] {"%reason%", "%duration%"},
+		                            new String[] {
+				                            "%reason%",
+				                            "%duration%"
+		                            },
 		                            null,
 		                            false));
 
@@ -280,7 +326,10 @@ public class Messages extends AbstractMessages {
 		                            false));
 		newMessages.add(new Message(MessageId.player_loginAttemptsBroadcastedTempBanMessage,
 		                            "&e%userName% has been banned for %duration% (Too many login attempts)",
-		                            new String[] {"%userName%", "%duration%"},
+		                            new String[] {
+				                            "%userName%",
+				                            "%duration%"
+		                            },
 		                            null,
 		                            false));
 		newMessages.add(new Message(MessageId.player_loginAttemptsPermBanMessage,
@@ -290,7 +339,10 @@ public class Messages extends AbstractMessages {
 		                            false));
 		newMessages.add(new Message(MessageId.player_loginAttemptsBroadcastedPermBanMessage,
 		                            "&e%userName% has been permanently banned (Too many login attempts)",
-		                            new String[] {"%userName%", "%duration%"},
+		                            new String[] {
+				                            "%userName%",
+				                            "%duration%"
+		                            },
 		                            null,
 		                            false));
 
@@ -300,11 +352,7 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%admin%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.player_youForcedLogin,
-		                            "&6You logged in %player%",
-		                            new String[] {"%player%"},
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.player_youForcedLogin, "&6You logged in %player%", new String[] {"%player%"}, null, true));
 		return newMessages;
 	}
 }

@@ -32,7 +32,7 @@ public class Config extends AbstractConfig<NCuboid> {
 	private static final Logger LOG = Logger.getLogger(Config.class.getName());
 
 	private       Material                 selectionItemMaterial;
-	private       Map<String, GroupConfig> groupConfigs;
+	private final Map<String, GroupConfig> groupConfigs;
 	private final GroupConfig              defaultGroupConfig;
 
 	/**
@@ -40,7 +40,7 @@ public class Config extends AbstractConfig<NCuboid> {
 	 *
 	 * @param instance Linked plugin instance
 	 */
-	public Config(NCuboid instance) {
+	public Config(final NCuboid instance) {
 		super(instance);
 		setSelectionItemMaterial(Material.STICK);
 		this.groupConfigs = new HashMap<>();
@@ -94,7 +94,7 @@ public class Config extends AbstractConfig<NCuboid> {
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
-		FrameBuilder frame;
+		final FrameBuilder frame;
 
 		// Header
 		frame = new FrameBuilder();

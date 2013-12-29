@@ -33,7 +33,7 @@ public class LoggedOutUserHandler implements Listener {
 	private final NPlayer               plugin;
 	private final Map<String, Location> loggedOutPlayers;
 
-	public LoggedOutUserHandler(NPlayer plugin) {
+	public LoggedOutUserHandler(final NPlayer plugin) {
 		this.plugin = plugin;
 		this.loggedOutPlayers = new HashMap<>();
 
@@ -46,50 +46,50 @@ public class LoggedOutUserHandler implements Listener {
 		}, 20 * 5, 20 * 5);
 	}
 
-	public void notifyConnect(String userName) {
-		Player player = Bukkit.getPlayerExact(userName);
+	public void notifyConnect(final String userName) {
+		final Player player = Bukkit.getPlayerExact(userName);
 		loggedOutPlayers.put(userName, player == null ? null : player.getLocation());
 		lockPlayer(userName);
 	}
 
-	public void notifyDisconnect(String userName) {
+	public void notifyDisconnect(final String userName) {
 		unlockPlayer(userName);
 		loggedOutPlayers.remove(userName);
 	}
 
-	public void notifyLogin(User user) {
+	public void notifyLogin(final User user) {
 		loggedOutPlayers.remove(user.getUserName());
 		unlockPlayer(user.getUserName());
 	}
 
-	public void notifyLogout(User user) {
-		Player player = Bukkit.getPlayerExact(user.getUserName());
+	public void notifyLogout(final User user) {
+		final Player player = Bukkit.getPlayerExact(user.getUserName());
 		loggedOutPlayers.put(user.getUserName(), player == null ? null : player.getLocation());
 		lockPlayer(user.getUserName());
 	}
 
 	public void poisonLoggedOutPlayers() {
-		for (String userName : loggedOutPlayers.keySet()) {
+		for (final String userName : loggedOutPlayers.keySet()) {
 			lockPlayer(userName);
 		}
 	}
 
-	public void lockPlayer(String userName) {
-		Player player = plugin.getServer().getPlayerExact(userName);
+	public void lockPlayer(final String userName) {
+		final Player player = plugin.getServer().getPlayerExact(userName);
 		if (player != null) {
 			player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(1337, 42)); // TODO Think about values
 		}
 	}
 
-	public void unlockPlayer(String userName) {
-		Player player = plugin.getServer().getPlayerExact(userName);
+	public void unlockPlayer(final String userName) {
+		final Player player = plugin.getServer().getPlayerExact(userName);
 		if (player != null) {
 			player.removePotionEffect(PotionEffectType.BLINDNESS);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerJoined(PlayerJoinedEvent event) {
+	public void onPlayerJoined(final PlayerJoinedEvent event) {
 		final Player player = event.getPlayer();
 		final String userName = player.getName();
 		notifyConnect(userName);
@@ -109,9 +109,9 @@ public class LoggedOutUserHandler implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		String userName = event.getPlayer().getName();
-		User user = plugin.getUserDb().get(userName);
+	public void onPlayerQuit(final PlayerQuitEvent event) {
+		final String userName = event.getPlayer().getName();
+		final User user = plugin.getUserDb().get(userName);
 		if (user != null && user.hasAutoLogout()) {
 			user.setLoggedIn(false);
 			notifyLogout(user);
@@ -120,7 +120,7 @@ public class LoggedOutUserHandler implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerMove(PlayerMoveEvent event) {
+	public void onPlayerMove(final PlayerMoveEvent event) {
 		final Location from = event.getFrom();
 		final Location to = event.getTo();
 		if (loggedOutPlayers.containsKey(event.getPlayer().getName()) && isGridMove(from, to)) {
@@ -134,19 +134,19 @@ public class LoggedOutUserHandler implements Listener {
 		}
 	}
 
-	private boolean isGridMove(Location from, Location to) {
+	private boolean isGridMove(final Location from, final Location to) {
 		return from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ() || from.getBlockY() != to.getBlockY();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerInteract(PlayerInteractEvent event) {
+	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerChat(AsyncPlayerChatEvent event) {
+	public void onPlayerChat(final AsyncPlayerChatEvent event) {
 		synchronized (loggedOutPlayers) {
 			if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
 				event.setCancelled(true);
@@ -155,7 +155,7 @@ public class LoggedOutUserHandler implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
 		if (loggedOutPlayers.containsKey(event.getPlayer().getName()) &&
 		    !event.getMessage().startsWith("/login") &&
 		    !event.getMessage().startsWith("/register")) {
@@ -164,63 +164,63 @@ public class LoggedOutUserHandler implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerDropItem(PlayerDropItemEvent event) {
+	public void onPlayerDropItem(final PlayerDropItemEvent event) {
 		if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+	public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
 		if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerPortal(PlayerPortalEvent event) {
+	public void onPlayerPortal(final PlayerPortalEvent event) {
 		if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+	public void onPlayerInteractEntity(final PlayerInteractEntityEvent event) {
 		if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerInventoryClick(InventoryClickEvent event) {
+	public void onPlayerInventoryClick(final InventoryClickEvent event) {
 		if (loggedOutPlayers.containsKey(event.getWhoClicked().getName())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerInventoryOpen(InventoryOpenEvent event) {
+	public void onPlayerInventoryOpen(final InventoryOpenEvent event) {
 		if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerExpChange(PlayerExpChangeEvent event) {
+	public void onPlayerExpChange(final PlayerExpChangeEvent event) {
 		if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
 			event.setAmount(0);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerEditBook(PlayerEditBookEvent event) {
+	public void onPlayerEditBook(final PlayerEditBookEvent event) {
 		if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
 			event.setCancelled(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerDamage(EntityDamageEvent event) {
+	public void onPlayerDamage(final EntityDamageEvent event) {
 		if (event.getEntityType() == EntityType.PLAYER && loggedOutPlayers.containsKey(((Player) event.getEntity()).getName())) {
 			event.setCancelled(true);
 		}

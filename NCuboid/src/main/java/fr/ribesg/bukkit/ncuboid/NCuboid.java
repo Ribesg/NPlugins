@@ -205,17 +205,17 @@ public class NCuboid extends NPlugin implements CuboidNode {
 	// API for other nodes
 
 	@Override
-	public boolean isJailed(String playerName) {
+	public boolean isJailed(final String playerName) {
 		return jailHandler.isJailed(playerName);
 	}
 
 	@Override
-	public boolean jail(String playerName, String jailName) {
+	public boolean jail(final String playerName, final String jailName) {
 		return jailHandler.jail(playerName, jailName);
 	}
 
 	@Override
-	public boolean unJail(String playerName) {
+	public boolean unJail(final String playerName) {
 		return jailHandler.unJail(playerName);
 	}
 

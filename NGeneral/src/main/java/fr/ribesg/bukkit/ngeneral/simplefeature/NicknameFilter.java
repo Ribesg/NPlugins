@@ -22,7 +22,7 @@ public class NicknameFilter implements Listener {
 	private final NGeneral plugin;
 	private final Pattern  pattern;
 
-	public NicknameFilter(NGeneral plugin) {
+	public NicknameFilter(final NGeneral plugin) {
 		this.plugin = plugin;
 		this.pattern = Pattern.compile("^[\\w]{3,16}$");
 	}

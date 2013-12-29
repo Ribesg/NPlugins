@@ -28,7 +28,7 @@ public class UnexpectedDragonDeathHandlerTask extends BukkitRunnable {
 
 	public UnexpectedDragonDeathHandlerTask(final EndWorldHandler handler) {
 		this.handler = handler;
-		FrameBuilder frame = new FrameBuilder();
+		final FrameBuilder frame = new FrameBuilder();
 		frame.addLine("An EnderDragon has been lost!", FrameBuilder.Option.CENTER);
 		frame.addLine("Maybe it was removed by another plugin/command?");
 		frame.addLine("If you had respawnType set to \"after death\", you will");
@@ -42,7 +42,7 @@ public class UnexpectedDragonDeathHandlerTask extends BukkitRunnable {
 	 *
 	 * @param plugin the plugin to attach the task
 	 */
-	public BukkitTask schedule(JavaPlugin plugin) {
+	public BukkitTask schedule(final JavaPlugin plugin) {
 		return Bukkit.getScheduler().runTaskTimer(plugin, this, 0L, 20L);
 	}
 
@@ -64,7 +64,7 @@ public class UnexpectedDragonDeathHandlerTask extends BukkitRunnable {
 				// This EnderDragon was deleted some other way than after his death, forget about him
 				handler.getDragons().remove(id);
 				it.remove();
-				for (String line : message) {
+				for (final String line : message) {
 					handler.getPlugin().getLogger().warning(line);
 				}
 			}

@@ -37,7 +37,11 @@ public class Messages extends AbstractMessages {
 		// General plugin messages
 		newMessages.add(new Message(MessageId.incorrectValueInConfiguration,
 		                            "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)",
-		                            new String[] {"%filename%", "%value%", "%default%"},
+		                            new String[] {
+				                            "%filename%",
+				                            "%value%",
+				                            "%default%"
+		                            },
 		                            null,
 		                            true));
 
@@ -62,7 +66,10 @@ public class Messages extends AbstractMessages {
 		// Command - NICK
 		newMessages.add(new Message(MessageId.talk_youNickNamed,
 		                            "&aYou renamed %realName% %nickName%",
-		                            new String[] {"%realName%", "%nickName%"},
+		                            new String[] {
+				                            "%realName%",
+				                            "%nickName%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.talk_youDeNickNamed,
@@ -72,7 +79,10 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.talk_youWereNickNamed,
 		                            "&aYou were renamed %nickName% by %playerName%",
-		                            new String[] {"%nickName%", "%playerName%"},
+		                            new String[] {
+				                            "%nickName%",
+				                            "%playerName%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.talk_youWereDeNickNamed,

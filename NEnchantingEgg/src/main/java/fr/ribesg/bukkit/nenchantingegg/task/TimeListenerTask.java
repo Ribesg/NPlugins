@@ -21,7 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class TimeListenerTask extends BukkitRunnable {
 
-	private final NEnchantingEgg    plugin;
+	private final NEnchantingEgg plugin;
 
 	public TimeListenerTask(final NEnchantingEgg instance) {
 		plugin = instance;

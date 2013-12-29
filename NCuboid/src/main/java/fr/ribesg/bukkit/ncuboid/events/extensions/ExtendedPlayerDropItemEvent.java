@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class ExtendedPlayerDropItemEvent extends AbstractExtendedEvent {
 
-	private GeneralRegion region;
+	private final GeneralRegion region;
 
 	public ExtendedPlayerDropItemEvent(final RegionDb db, final PlayerDropItemEvent event) {
 		super(event);

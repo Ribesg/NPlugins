@@ -25,13 +25,13 @@ public class TimeCommand implements CommandExecutor {
 
 	private final NGeneral plugin;
 
-	public TimeCommand(NGeneral instance) {
+	public TimeCommand(final NGeneral instance) {
 		this.plugin = instance;
 		plugin.getCommand(COMMAND).setExecutor(this);
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		if (command.getName().equals(COMMAND)) {
 			if (!Perms.hasTime(sender)) {
 				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
@@ -81,7 +81,7 @@ public class TimeCommand implements CommandExecutor {
 				return MinecraftTime.NIGHT.start();
 			default:
 				try {
-					long l = Long.parseLong(value);
+					final long l = Long.parseLong(value);
 					return l % MinecraftTime.DAY_LENGTH;
 				} catch (NumberFormatException e) {
 					return -1;

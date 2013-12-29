@@ -63,7 +63,7 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 			} else {
 				// Get provided value
 				final String valueString = args[2].toLowerCase();
-				boolean value;
+				final boolean value;
 				if (enable.matcher(valueString).matches()) {
 					value = true;
 				} else if (disable.matcher(valueString).matches()) {

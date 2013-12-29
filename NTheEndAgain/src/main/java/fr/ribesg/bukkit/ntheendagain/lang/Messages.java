@@ -35,7 +35,11 @@ public class Messages extends AbstractMessages {
 		// General plugin messages
 		newMessages.add(new Message(MessageId.incorrectValueInConfiguration,
 		                            "&cIncorrect value in configuration %filename% : '%value%' was restored to default (%default%)",
-		                            new String[] {"%filename%", "%value%", "%default%"},
+		                            new String[] {
+				                            "%filename%",
+				                            "%value%",
+				                            "%default%"
+		                            },
 		                            null,
 		                            true));
 
@@ -72,7 +76,10 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.theEndAgain_respawnedX,
 		                            "&a%nb% EnderDragons have been respawned in world %world%",
-		                            new String[] {"%nb%", "%world%"},
+		                            new String[] {
+				                            "%nb%",
+				                            "%world%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.theEndAgain_nbAlive0,
@@ -87,7 +94,10 @@ public class Messages extends AbstractMessages {
 		                            true));
 		newMessages.add(new Message(MessageId.theEndAgain_nbAliveX,
 		                            "&aThere are %nb% EnderDragons alive in world %world%",
-		                            new String[] {"%nb%", "%world%"},
+		                            new String[] {
+				                            "%nb%",
+				                            "%world%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.theEndAgain_notInAnEndWorld,
@@ -98,33 +108,57 @@ public class Messages extends AbstractMessages {
 
 		newMessages.add(new Message(MessageId.theEndAgain_protectedChunkInfo,
 		                            "&aChunk (&6%x%&a,&6%z%&a) in world &6%world% &ais protected",
-		                            new String[] {"%x%", "%z%", "%world%"},
+		                            new String[] {
+				                            "%x%",
+				                            "%z%",
+				                            "%world%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.theEndAgain_protectedChunkProtect,
 		                            "&cChunk (&6%x%&c,&6%z%&c) in world &6%world% &cis already protected",
-		                            new String[] {"%x%", "%z%", "%world%"},
+		                            new String[] {
+				                            "%x%",
+				                            "%z%",
+				                            "%world%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.theEndAgain_protectedChunkUnprotect,
 		                            "&aChunk (&6%x%&a,&6%z%&a) in world &6%world% &ais no longer protected",
-		                            new String[] {"%x%", "%z%", "%world%"},
+		                            new String[] {
+				                            "%x%",
+				                            "%z%",
+				                            "%world%"
+		                            },
 		                            null,
 		                            true));
 
 		newMessages.add(new Message(MessageId.theEndAgain_unprotectedChunkInfo,
 		                            "&aChunk (&6%x%&a,&6%z%&a) in world &6%world% &ais not protected",
-		                            new String[] {"%x%", "%z%", "%world%"},
+		                            new String[] {
+				                            "%x%",
+				                            "%z%",
+				                            "%world%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.theEndAgain_unprotectedChunkProtect,
 		                            "&aChunk (&6%x%&a,&6%z%&a) in world &6%world% &ais now protected",
-		                            new String[] {"%x%", "%z%", "%world%"},
+		                            new String[] {
+				                            "%x%",
+				                            "%z%",
+				                            "%world%"
+		                            },
 		                            null,
 		                            true));
 		newMessages.add(new Message(MessageId.theEndAgain_unprotectedChunkUnprotect,
 		                            "&cChunk (&6%x%&c,&6%z%&c) in world &6%world% &cis already not protected",
-		                            new String[] {"%x%", "%z%", "%world%"},
+		                            new String[] {
+				                            "%x%",
+				                            "%z%",
+				                            "%world%"
+		                            },
 		                            null,
 		                            true));
 

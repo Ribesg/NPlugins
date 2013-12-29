@@ -34,7 +34,7 @@ public class JailHandler {
 	// JailName, Region
 	private final Map<String, GeneralRegion> jailsMap;
 
-	public JailHandler(NCuboid instance) {
+	public JailHandler(final NCuboid instance) {
 		this.plugin = instance;
 		jailedMap = new HashMap<>();
 		jailsMap = new HashMap<>();
@@ -42,7 +42,7 @@ public class JailHandler {
 	}
 
 	public void loadJails() {
-		for (GeneralRegion cuboid : plugin.getDb()) {
+		for (final GeneralRegion cuboid : plugin.getDb()) {
 			// TODO Fill jails & jailsMap
 		}
 	}
@@ -51,15 +51,15 @@ public class JailHandler {
 		this.jailedMap.putAll(jailedMap);
 	}
 
-	public boolean isJailed(String playerName) {
+	public boolean isJailed(final String playerName) {
 		return jailedMap.containsKey(playerName);
 	}
 
-	public boolean jail(String playerName, String jailName) {
+	public boolean jail(final String playerName, final String jailName) {
 		return false;  // TODO Implement method
 	}
 
-	public boolean unJail(String playerName) {
+	public boolean unJail(final String playerName) {
 		return jailedMap.remove(playerName) != null;
 	}
 

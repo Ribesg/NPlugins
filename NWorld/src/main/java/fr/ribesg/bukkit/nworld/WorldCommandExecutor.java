@@ -99,7 +99,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			// Lists available worlds
 			plugin.sendMessage(sender, MessageId.world_availableWorlds);
 			for (final GeneralWorld world : plugin.getWorlds()) {
-				boolean hasPermission = Perms.hasRequiredPermission(sender, world.getRequiredPermission());
+				final boolean hasPermission = Perms.hasRequiredPermission(sender, world.getRequiredPermission());
 				if (world.isEnabled()) {
 					if (hasPermission) {
 						sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + world.getWorldName());
@@ -571,7 +571,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 		}
 		final Player player = (Player) sender;
 		final int spawnBehaviour = plugin.getPluginConfig().getSpawnCommandBehaviour();
-		String worldName;
+		final String worldName;
 		if (spawnBehaviour == 0) {
 			worldName = player.getWorld().getName();
 		} else {
@@ -602,7 +602,8 @@ public class WorldCommandExecutor implements CommandExecutor {
 			final StringBuilder builder = new StringBuilder();
 			for (final Warp warp : plugin.getWarps()) {
 				if (warp.isEnabled()) {
-					boolean hasPermission = Perms.hasRequiredPermission(sender, warp.getRequiredPermission()) || Perms.hasWarpAll(sender);
+					final boolean hasPermission = Perms.hasRequiredPermission(sender, warp.getRequiredPermission()) ||
+					                              Perms.hasWarpAll(sender);
 					if (hasPermission) {
 						builder.append(ChatColor.GRAY + ", " + ChatColor.GREEN + warp.getName());
 					} else if (!warp.isHidden()) {
@@ -615,7 +616,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			} else {
 				final String warps = builder.toString().substring((ChatColor.GRAY + ", ").length());
 				final String[] messages = ChatPaginator.wordWrap(warps, ChatPaginator.GUARANTEED_NO_WRAP_CHAT_PAGE_WIDTH);
-				for (String message : messages) {
+				for (final String message : messages) {
 					sender.sendMessage(message);
 				}
 			}
@@ -724,7 +725,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 		}
 	}
 
-	private boolean cmdSetWarp(final CommandSender sender, String[] args) {
+	private boolean cmdSetWarp(final CommandSender sender, final String[] args) {
 		if (!(sender instanceof Player)) {
 			plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			return true;
@@ -764,7 +765,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 		return true;
 	}
 
-	private boolean cmdDelWarp(CommandSender sender, String[] args) {
+	private boolean cmdDelWarp(final CommandSender sender, final String[] args) {
 		if (!Perms.hasDelWarp(sender)) {
 			plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;

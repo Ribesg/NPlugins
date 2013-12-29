@@ -28,7 +28,7 @@ public class Altars {
 	private final Map<String, Set<Altar>> perWorld;
 	private final Map<ChunkCoord, Altar>  perChunk;
 
-	public Altars(NEnchantingEgg plugin) {
+	public Altars(final NEnchantingEgg plugin) {
 		this.plugin = plugin;
 
 		perWorld = new HashMap<>();
@@ -36,13 +36,13 @@ public class Altars {
 	}
 
 	public void onEnable() {
-		for (Altar altar : getAltars()) {
+		for (final Altar altar : getAltars()) {
 			altar.setState(AltarState.INACTIVE);
 		}
 	}
 
 	public void onDisable() {
-		for (Altar altar : getAltars()) {
+		for (final Altar altar : getAltars()) {
 			altar.hardResetToInactive();
 		}
 	}
@@ -67,7 +67,7 @@ public class Altars {
 
 	public void add(final Altar altar) {
 		final World w = altar.getCenterLocation().getWorld();
-		Set<Altar> set;
+		final Set<Altar> set;
 		if (perWorld.containsKey(w.getName())) {
 			set = perWorld.get(w.getName());
 		} else {

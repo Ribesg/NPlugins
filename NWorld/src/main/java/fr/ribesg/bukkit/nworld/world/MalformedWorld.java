@@ -20,7 +20,7 @@ import java.util.Random;
  */
 public class MalformedWorld extends GeneralWorld {
 
-	public MalformedWorld(NWorld instance, String worldName) {
+	public MalformedWorld(final NWorld instance, final String worldName) {
 		super(instance, worldName, new NLocation(worldName, 0, 0, 0, 0, 0), "random.permission." + new Random().nextLong(), false, true);
 		setType(WorldType.UNKNOWN);
 	}

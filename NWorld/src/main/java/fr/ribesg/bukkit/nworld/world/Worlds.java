@@ -23,14 +23,14 @@ public class Worlds implements Iterable<GeneralWorld> {
 
 	@Override
 	public Iterator<GeneralWorld> iterator() {
-		List<GeneralWorld> list = new ArrayList<>(worlds.values());
+		final List<GeneralWorld> list = new ArrayList<>(worlds.values());
 		Collections.sort(list);
 		return list.iterator();
 	}
 
 	public SortedMap<String, StockWorld> getStock() {
-		SortedMap<String, StockWorld> result = new TreeMap<>();
-		for (GeneralWorld world : this) {
+		final SortedMap<String, StockWorld> result = new TreeMap<>();
+		for (final GeneralWorld world : this) {
 			if (WorldType.isStock(world)) {
 				result.put(world.getWorldName(), (StockWorld) world);
 			}
@@ -39,8 +39,8 @@ public class Worlds implements Iterable<GeneralWorld> {
 	}
 
 	public SortedMap<String, AdditionalWorld> getAdditional() {
-		SortedMap<String, AdditionalWorld> result = new TreeMap<>();
-		for (GeneralWorld world : this) {
+		final SortedMap<String, AdditionalWorld> result = new TreeMap<>();
+		for (final GeneralWorld world : this) {
 			if (world.getType() == WorldType.ADDITIONAL) {
 				result.put(world.getWorldName(), (AdditionalWorld) world);
 			}
@@ -49,8 +49,8 @@ public class Worlds implements Iterable<GeneralWorld> {
 	}
 
 	public SortedMap<String, AdditionalSubWorld> getAdditionalSub() {
-		SortedMap<String, AdditionalSubWorld> result = new TreeMap<>();
-		for (GeneralWorld world : this) {
+		final SortedMap<String, AdditionalSubWorld> result = new TreeMap<>();
+		for (final GeneralWorld world : this) {
 			if (world.getType() == WorldType.ADDITIONAL_SUB_NETHER || world.getType() == WorldType.ADDITIONAL_SUB_END) {
 				result.put(world.getWorldName(), (AdditionalSubWorld) world);
 			}
@@ -100,27 +100,27 @@ public class Worlds implements Iterable<GeneralWorld> {
 		return worlds.isEmpty();
 	}
 
-	public boolean containsKey(String key) {
+	public boolean containsKey(final String key) {
 		return worlds.containsKey(key);
 	}
 
-	public boolean containsValue(GeneralWorld value) {
+	public boolean containsValue(final GeneralWorld value) {
 		return worlds.containsValue(value);
 	}
 
-	public GeneralWorld get(String key) {
+	public GeneralWorld get(final String key) {
 		return worlds.get(key);
 	}
 
-	public GeneralWorld put(String key, GeneralWorld value) {
+	public GeneralWorld put(final String key, final GeneralWorld value) {
 		return worlds.put(key, value);
 	}
 
-	public void putAll(Map<? extends String, ? extends GeneralWorld> m) {
+	public void putAll(final Map<? extends String, ? extends GeneralWorld> m) {
 		worlds.putAll(m);
 	}
 
-	public GeneralWorld remove(String key) {
+	public GeneralWorld remove(final String key) {
 		return worlds.remove(key);
 	}
 

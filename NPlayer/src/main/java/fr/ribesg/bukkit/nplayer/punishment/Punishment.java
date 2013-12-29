@@ -15,11 +15,11 @@ public abstract class Punishment {
 	private final long           endDate;
 	private final String         reason;
 
-	protected Punishment(String punished, PunishmentType type, String reason) {
+	protected Punishment(final String punished, final PunishmentType type, final String reason) {
 		this(punished, type, reason, -1);
 	}
 
-	protected Punishment(String punished, PunishmentType type, String reason, long endDate) {
+	protected Punishment(final String punished, final PunishmentType type, final String reason, final long endDate) {
 		this.endDate = endDate;
 		this.punished = punished;
 		this.type = type;

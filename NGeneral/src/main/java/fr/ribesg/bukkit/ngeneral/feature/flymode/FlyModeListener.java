@@ -24,19 +24,19 @@ public class FlyModeListener implements Listener {
 
 	private final FlyModeFeature feature;
 
-	public FlyModeListener(FlyModeFeature feature) {
+	public FlyModeListener(final FlyModeFeature feature) {
 		this.feature = feature;
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerJoin(PlayerJoinEvent event) {
+	public void onPlayerJoin(final PlayerJoinEvent event) {
 		if (feature.hasFlyMode(event.getPlayer().getName())) {
 			event.getPlayer().setAllowFlight(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerQuit(PlayerQuitEvent event) {
+	public void onPlayerQuit(final PlayerQuitEvent event) {
 		if (!Perms.hasFly(event.getPlayer()) && feature.hasFlyMode(event.getPlayer().getName())) {
 			event.getPlayer().setAllowFlight(false);
 			feature.setFlyMode(event.getPlayer(), false);
@@ -45,7 +45,7 @@ public class FlyModeListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerQuitCreative(PlayerGameModeChangeEvent event) {
+	public void onPlayerQuitCreative(final PlayerGameModeChangeEvent event) {
 		if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
 			final boolean wasFlying = event.getPlayer().isFlying();
 			final Player player = event.getPlayer();

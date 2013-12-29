@@ -64,7 +64,7 @@ public class FlagAttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 			} else {
 				// Parse and set value
 				if (FlagAtt.isIntFlagAtt(fa)) {
-					int value;
+					final int value;
 					try {
 						value = Integer.parseInt(args[2]);
 					} catch (final NumberFormatException e) {
@@ -110,7 +110,7 @@ public class FlagAttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 	}
 
 	private Vector parseVector(final String input) {
-		String splitChar;
+		final String splitChar;
 		if (input.contains(";")) {
 			splitChar = ";";
 		} else if (input.contains(",")) {

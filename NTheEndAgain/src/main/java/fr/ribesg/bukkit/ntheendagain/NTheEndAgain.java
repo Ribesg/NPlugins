@@ -79,7 +79,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 			}
 		}
 		if (!res) {
-			for (EndWorldHandler handler : worldHandlers.values()) {
+			for (final EndWorldHandler handler : worldHandlers.values()) {
 				handler.cancelTasks();
 			}
 			return false;
@@ -218,7 +218,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 		return Paths.get(getDataFolder().getPath(), fileName + ".yml");
 	}
 
-	public boolean loadWorld(World endWorld) throws InvalidConfigurationException {
+	public boolean loadWorld(final World endWorld) throws InvalidConfigurationException {
 		final EndWorldHandler handler = new EndWorldHandler(this, endWorld);
 		try {
 			handler.loadConfig();

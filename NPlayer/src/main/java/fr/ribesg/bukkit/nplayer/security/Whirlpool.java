@@ -96,8 +96,8 @@ public class Whirlpool {
 	                                   "\u2ABB\uc153\udc0B\u9d6c\u3174\uF646\uAc89\u14E1" +
 	                                   "\u163A\u6909\u70B6\ud0Ed\ucc42\u98A4\u285c\uF886";
 
-	private static long[][] C  = new long[8][256];
-	private static long[]   rc = new long[Whirlpool.R + 1];
+	private static final long[][] C  = new long[8][256];
+	private static final long[]   rc = new long[Whirlpool.R + 1];
 
 	static {
 		for (int x = 0; x < 256; x++) {
@@ -121,7 +121,7 @@ public class Whirlpool {
 		 * build the circulant table C[0][x] = S[x].[1, 1, 4, 1, 8, 5, 2, 9]:
          */
 			Whirlpool.C[0][x] = v1 << 56 | v1 << 48 | v4 << 40 | v1 << 32 | v8 << 24 | v5 << 16 | v2 << 8 | v9;
-	    /*
+		/*
          * build the remaining circulant tables C[t][x] = C[0][x] rotr t
          */
 			for (int t = 1; t < 8; t++) {
@@ -174,10 +174,10 @@ public class Whirlpool {
 	}
 
 	/** Global number of hashed bits (256-bit counter). */
-	protected byte[] bitLength = new byte[32];
+	protected final byte[] bitLength = new byte[32];
 
 	/** Buffer of data to hash. */
-	protected byte[] buffer = new byte[64];
+	protected final byte[] buffer = new byte[64];
 
 	/** Current number of bits on the buffer. */
 	protected int bufferBits = 0;
@@ -186,11 +186,11 @@ public class Whirlpool {
 	protected int bufferPos = 0;
 
 	/** The hashing state. */
-	protected long[] hash  = new long[8];
-	protected long[] K     = new long[8];                                               // the round key
-	protected long[] L     = new long[8];
-	protected long[] block = new long[8];                                               // mu(buffer)
-	protected long[] state = new long[8];                                               // the cipher state
+	protected final long[] hash  = new long[8];
+	protected final long[] K     = new long[8];                                               // the round key
+	protected final long[] L     = new long[8];
+	protected final long[] block = new long[8];                                               // mu(buffer)
+	protected final long[] state = new long[8];                                               // the cipher state
 
 	public Whirlpool() {
 	}

@@ -30,12 +30,32 @@ public class ItemBuilder {
 	private static final Random        rand              = new Random();
 	private static       Set<Material> possibleMainItems = null;
 
-	private static final double[][] boostValues = new double[][] {new double[] {1.3f, -0.05f},
-	                                                              new double[] {1.1f, -0.15f},
-	                                                              new double[] {1.2f, -0.37f},
-	                                                              new double[] {1.4f, -0.68f},
-	                                                              new double[] {1.7f, -1.09f},
-	                                                              new double[] {1.9f, -1.42f}};
+	private static final double[][] boostValues = new double[][] {
+			new double[] {
+					1.3f,
+					-0.05f
+			},
+			new double[] {
+					1.1f,
+					-0.15f
+			},
+			new double[] {
+					1.2f,
+					-0.37f
+			},
+			new double[] {
+					1.4f,
+					-0.68f
+			},
+			new double[] {
+					1.7f,
+					-1.09f
+			},
+			new double[] {
+					1.9f,
+					-1.42f
+			}
+	};
 	private static final double     enchReduce  = 0.1f;
 
 	/** List of items that can be boosted */
@@ -93,7 +113,7 @@ public class ItemBuilder {
 	}
 
 	/** The amount of base material needed based on the type of item */
-	private int getBaseRessourceAmount(Material material) {
+	private int getBaseRessourceAmount(final Material material) {
 		switch (material) {
 			case LEATHER_CHESTPLATE:
 			case CHAINMAIL_CHESTPLATE:
@@ -275,12 +295,14 @@ public class ItemBuilder {
 			final double coef = Math.exp(-(1f - (weightedTotal / 128f)));
 
 			// Compute probabilities
-			final double[] probabilities = new double[] {coef * boostValues[0][0] + boostValues[0][1] - enchReduce * enchantments,
-			                                             coef * boostValues[1][0] + boostValues[1][1] - enchReduce * enchantments,
-			                                             coef * boostValues[2][0] + boostValues[2][1] - enchReduce * enchantments,
-			                                             coef * boostValues[3][0] + boostValues[3][1] - enchReduce * enchantments,
-			                                             coef * boostValues[4][0] + boostValues[4][1] - enchReduce * enchantments,
-			                                             coef * boostValues[5][0] + boostValues[5][1] - enchReduce * enchantments};
+			final double[] probabilities = new double[] {
+					coef * boostValues[0][0] + boostValues[0][1] - enchReduce * enchantments,
+					coef * boostValues[1][0] + boostValues[1][1] - enchReduce * enchantments,
+					coef * boostValues[2][0] + boostValues[2][1] - enchReduce * enchantments,
+					coef * boostValues[3][0] + boostValues[3][1] - enchReduce * enchantments,
+					coef * boostValues[4][0] + boostValues[4][1] - enchReduce * enchantments,
+					coef * boostValues[5][0] + boostValues[5][1] - enchReduce * enchantments
+			};
 
 			// Apply configurable coef and fix out-of-scope values
 			final double configurableCoef = plugin.getPluginConfig().getEnchantmentBoostMultiplier();

@@ -10,8 +10,8 @@
 package fr.ribesg.bukkit.ngeneral.config;
 
 import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.common.NLocation;
+import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
@@ -26,7 +26,7 @@ import java.util.List;
 
 public class DbConfig extends AbstractConfig<NGeneral> {
 
-	public DbConfig(NGeneral instance) {
+	public DbConfig(final NGeneral instance) {
 		super(instance);
 	}
 
@@ -59,13 +59,13 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		if (config.isConfigurationSection("itemnetworks")) {
 			final ItemNetworkFeature feature = plugin.getFeatures().get(ItemNetworkFeature.class);
 			final ConfigurationSection inetSection = config.getConfigurationSection("itemnetworks");
-			for (String networkName : inetSection.getKeys(false)) {
+			for (final String networkName : inetSection.getKeys(false)) {
 				final ConfigurationSection networkSection = inetSection.getConfigurationSection(networkName);
 				final String networkCreator = networkSection.getString("creator");
 				final ItemNetwork network = new ItemNetwork(feature, networkName, networkCreator);
 				if (networkSection.isConfigurationSection("receivers")) {
 					final ConfigurationSection receiversSection = networkSection.getConfigurationSection("receivers");
-					for (String key : receiversSection.getKeys(false)) {
+					for (final String key : receiversSection.getKeys(false)) {
 						final ConfigurationSection receiverSection = receiversSection.getConfigurationSection(key);
 						final NLocation location = NLocation.toNLocation(receiverSection.getString("location"));
 						final String acceptsString = receiverSection.getString("accepts");
@@ -82,7 +82,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
-		FrameBuilder frame;
+		final FrameBuilder frame;
 
 		// Header
 		frame = new FrameBuilder();
@@ -102,7 +102,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 
 		if (plugin.getPluginConfig().hasFlyModeFeature()) {
 			content.append("flyModePlayers:\n");
-			for (String playerName : plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers()) {
+			for (final String playerName : plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers()) {
 				content.append("- " + playerName + "\n");
 			}
 			content.append('\n');
@@ -114,7 +114,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 
 		if (plugin.getPluginConfig().hasGodModeFeature()) {
 			content.append("godModePlayers:\n");
-			for (String playerName : plugin.getFeatures().get(GodModeFeature.class).getGodPlayers()) {
+			for (final String playerName : plugin.getFeatures().get(GodModeFeature.class).getGodPlayers()) {
 				content.append("- " + playerName + "\n");
 			}
 			content.append('\n');
@@ -126,12 +126,12 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 
 		if (plugin.getPluginConfig().hasItemNetworkFeature()) {
 			content.append("itemnetworks:\n");
-			for (ItemNetwork network : plugin.getFeatures().get(ItemNetworkFeature.class).getNetworks().values()) {
+			for (final ItemNetwork network : plugin.getFeatures().get(ItemNetworkFeature.class).getNetworks().values()) {
 				content.append("  " + network.getName() + ":\n");
 				content.append("    creator: " + network.getCreator() + "\n");
 				content.append("    receivers:\n");
 				int i = 1;
-				for (ReceiverSign receiver : network.getReceivers()) {
+				for (final ReceiverSign receiver : network.getReceivers()) {
 					content.append("      receiver" + i++ + ":\n");
 					content.append("        location: " + receiver.getLocation().toString() + "\n");
 					content.append("        accepts: \"" + receiver.getAcceptsString() + "\"\n");

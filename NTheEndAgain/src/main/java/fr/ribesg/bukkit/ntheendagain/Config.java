@@ -585,7 +585,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return filterMovedTooQuicklySpam;
 	}
 
-	private void setFilterMovedTooQuicklySpam(int filterMovedTooQuicklySpam) {
+	private void setFilterMovedTooQuicklySpam(final int filterMovedTooQuicklySpam) {
 		this.filterMovedTooQuicklySpam = filterMovedTooQuicklySpam;
 	}
 
@@ -595,7 +595,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return edDamageMultiplier;
 	}
 
-	private void setEdDamageMultiplier(float edDamageMultiplier) {
+	private void setEdDamageMultiplier(final float edDamageMultiplier) {
 		this.edDamageMultiplier = edDamageMultiplier;
 	}
 
@@ -603,7 +603,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return edEggHandling;
 	}
 
-	private void setEdEggHandling(int edEggHandling) {
+	private void setEdEggHandling(final int edEggHandling) {
 		this.edEggHandling = edEggHandling;
 	}
 
@@ -611,7 +611,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return edExpHandling;
 	}
 
-	private void setEdExpHandling(int edExpHandling) {
+	private void setEdExpHandling(final int edExpHandling) {
 		this.edExpHandling = edExpHandling;
 	}
 
@@ -619,7 +619,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return edExpReward;
 	}
 
-	private void setEdExpReward(int edExpReward) {
+	private void setEdExpReward(final int edExpReward) {
 		this.edExpReward = edExpReward;
 	}
 
@@ -627,7 +627,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return edHealth;
 	}
 
-	private void setEdHealth(int edHealth) {
+	private void setEdHealth(final int edHealth) {
 		this.edHealth = edHealth;
 	}
 
@@ -635,7 +635,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return edPortalSpawn;
 	}
 
-	private void setEdPortalSpawn(int edPortalSpawn) {
+	private void setEdPortalSpawn(final int edPortalSpawn) {
 		this.edPortalSpawn = edPortalSpawn;
 	}
 
@@ -643,7 +643,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return edPushesPlayers;
 	}
 
-	private void setEdPushesPlayers(int edPushesPlayers) {
+	private void setEdPushesPlayers(final int edPushesPlayers) {
 		this.edPushesPlayers = edPushesPlayers;
 	}
 
@@ -653,7 +653,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return ecHealthRegainRate;
 	}
 
-	public void setEcHealthRegainRate(float ecHealthRegainRate) {
+	public void setEcHealthRegainRate(final float ecHealthRegainRate) {
 		this.ecHealthRegainRate = ecHealthRegainRate;
 	}
 
@@ -663,7 +663,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return hardRegenOnStop;
 	}
 
-	private void setHardRegenOnStop(int hardRegenOnStop) {
+	private void setHardRegenOnStop(final int hardRegenOnStop) {
 		this.hardRegenOnStop = hardRegenOnStop;
 	}
 
@@ -671,7 +671,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return regenAction;
 	}
 
-	private void setRegenAction(int regenAction) {
+	private void setRegenAction(final int regenAction) {
 		this.regenAction = regenAction;
 	}
 
@@ -679,7 +679,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return regenMethod;
 	}
 
-	private void setRegenMethod(int regenMethod) {
+	private void setRegenMethod(final int regenMethod) {
 		this.regenMethod = regenMethod;
 	}
 
@@ -687,7 +687,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return regenTimer;
 	}
 
-	private void setRegenTimer(int regenTimer) {
+	private void setRegenTimer(final int regenTimer) {
 		this.regenTimer = regenTimer;
 	}
 
@@ -695,7 +695,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return regenType;
 	}
 
-	private void setRegenType(int regenType) {
+	private void setRegenType(final int regenType) {
 		this.regenType = regenType;
 	}
 
@@ -703,7 +703,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return slowSoftRegenChunks;
 	}
 
-	public void setSlowSoftRegenChunks(int slowSoftRegenChunks) {
+	public void setSlowSoftRegenChunks(final int slowSoftRegenChunks) {
 		this.slowSoftRegenChunks = slowSoftRegenChunks;
 	}
 
@@ -711,7 +711,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return slowSoftRegenTimer;
 	}
 
-	public void setSlowSoftRegenTimer(int slowSoftRegenTimer) {
+	public void setSlowSoftRegenTimer(final int slowSoftRegenTimer) {
 		this.slowSoftRegenTimer = slowSoftRegenTimer;
 	}
 
@@ -721,7 +721,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return respawnNumber;
 	}
 
-	private void setRespawnNumber(int respawnNumber) {
+	private void setRespawnNumber(final int respawnNumber) {
 		this.respawnNumber = respawnNumber;
 	}
 
@@ -729,7 +729,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return respawnTimerMax;
 	}
 
-	private void setRespawnTimerMax(int respawnTimerMax) {
+	private void setRespawnTimerMax(final int respawnTimerMax) {
 		this.respawnTimerMax = respawnTimerMax;
 	}
 
@@ -737,7 +737,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return respawnTimerMin;
 	}
 
-	private void setRespawnTimerMin(int respawnTimerMin) {
+	private void setRespawnTimerMin(final int respawnTimerMin) {
 		this.respawnTimerMin = respawnTimerMin;
 	}
 
@@ -749,7 +749,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return respawnType;
 	}
 
-	private void setRespawnType(int respawnType) {
+	private void setRespawnType(final int respawnType) {
 		this.respawnType = respawnType;
 	}
 
@@ -759,7 +759,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return nextRegenTaskTime;
 	}
 
-	public void setNextRegenTaskTime(long nextRegenTaskTime) {
+	public void setNextRegenTaskTime(final long nextRegenTaskTime) {
 		this.nextRegenTaskTime = nextRegenTaskTime;
 	}
 
@@ -767,7 +767,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		return nextRespawnTaskTime;
 	}
 
-	public void setNextRespawnTaskTime(long nextRespawnTaskTime) {
+	public void setNextRespawnTaskTime(final long nextRespawnTaskTime) {
 		this.nextRespawnTaskTime = nextRespawnTaskTime;
 	}
 

@@ -60,7 +60,7 @@ public class NCore extends JavaPlugin {
 
 	private void afterNodesLoad() {
 		boolean noNodeFound = true;
-		Metrics.Graph nodesUsedGraph = metrics.createGraph("Nodes used");
+		final Metrics.Graph nodesUsedGraph = metrics.createGraph("Nodes used");
 
 		if (get(Node.CUBOID) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.CUBOID) {

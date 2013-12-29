@@ -45,7 +45,7 @@ public class EndChunks implements Iterable<EndChunk> {
 
 	private int totalSavedDragons;
 
-	public EndChunks(String worldName) {
+	public EndChunks(final String worldName) {
 		chunks = new HashMap<>();
 		totalSavedDragons = 0;
 		this.worldName = worldName;
@@ -67,12 +67,12 @@ public class EndChunks implements Iterable<EndChunk> {
 		return get(new ChunkCoord(x, z, world));
 	}
 
-	public EndChunk getChunk(Chunk bukkitChunk) {
+	public EndChunk getChunk(final Chunk bukkitChunk) {
 		checkWorld(bukkitChunk.getWorld().getName());
 		return get(new ChunkCoord(bukkitChunk));
 	}
 
-	private EndChunk get(ChunkCoord coord) {
+	private EndChunk get(final ChunkCoord coord) {
 		EndChunk res = chunks.get(coord);
 		if (res == null) {
 			res = new EndChunk(this, coord);
@@ -81,7 +81,7 @@ public class EndChunks implements Iterable<EndChunk> {
 		return res;
 	}
 
-	private void checkWorld(String worldName) {
+	private void checkWorld(final String worldName) {
 		if (!worldName.equals(this.worldName)) {
 			throw new IllegalArgumentException("Wrong world, this EndChunks object handles world \"" + this.worldName + "\", " +
 			                                   "not world \"" + worldName + "\"");
@@ -176,7 +176,7 @@ public class EndChunks implements Iterable<EndChunk> {
 		totalSavedDragons++;
 	}
 
-	/*package*/ void decrementTotalSavedDragons(int quantity) {
+	/*package*/ void decrementTotalSavedDragons(final int quantity) {
 		totalSavedDragons -= quantity;
 		if (totalSavedDragons < 0) {
 			totalSavedDragons = 0;

@@ -109,7 +109,7 @@ public class ProtectionSignFeature extends Feature {
 	 *
 	 * @return true if the block can be broken [by the Player], false otherwise
 	 */
-	public boolean canBreak(Block b, Player player) {
+	public boolean canBreak(final Block b, final Player player) {
 		final Material blockType = b.getType();
 		final String userId = player != null ? UsernameUtils.getId(player.getName()) : null;
 		if (blockType == Material.SIGN_POST || blockType == Material.WALL_SIGN) {
@@ -118,7 +118,7 @@ public class ProtectionSignFeature extends Feature {
 			       player != null && ColorUtils.stripColorCodes(sign.getLine(3)).equals(userId) ||
 			       player != null && Perms.hasProtectionSignBreak(player);
 		} else {
-			List<Sign> signLines;
+			final List<Sign> signLines;
 			if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
 				signLines = SignUtils.getSignsForChest(b);
 			} else if (getProtectedMaterials().contains(blockType)) {
@@ -126,7 +126,7 @@ public class ProtectionSignFeature extends Feature {
 			} else {
 				return true;
 			}
-			for (Sign sign : signLines) {
+			for (final Sign sign : signLines) {
 				if (sign.getLine(0).equals(PROTECTION)) {
 					return false;
 				}
@@ -149,7 +149,7 @@ public class ProtectionSignFeature extends Feature {
 		}
 		final Material blockType = b.getType();
 		final String userId = UsernameUtils.getId(player.getName());
-		List<Sign> signLines;
+		final List<Sign> signLines;
 		if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
 			signLines = SignUtils.getSignsForChest(b);
 		} else if (getProtectedMaterials().contains(blockType)) {
@@ -159,7 +159,7 @@ public class ProtectionSignFeature extends Feature {
 		}
 		boolean protectedBySign = false;
 		boolean explicitlyAllowed = false;
-		for (Sign sign : signLines) {
+		for (final Sign sign : signLines) {
 			if (sign.getLine(0).equals(PROTECTION)) {
 				protectedBySign = true;
 				if (ColorUtils.stripColorCodes(sign.getLine(1)).equals(userId) ||
@@ -181,7 +181,7 @@ public class ProtectionSignFeature extends Feature {
 	 *
 	 * @return True if there is a protectable block, otherwise false
 	 */
-	public boolean protectsSomething(Location l) {
+	public boolean protectsSomething(final Location l) {
 		final World w = l.getWorld();
 		final int x = l.getBlockX();
 		final int y = l.getBlockY();
@@ -205,7 +205,7 @@ public class ProtectionSignFeature extends Feature {
 	 */
 	public String isProtected(final Block b) {
 		final Material blockType = b.getType();
-		List<Sign> signLines;
+		final List<Sign> signLines;
 		if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
 			signLines = SignUtils.getSignsForChest(b);
 		} else if (getProtectedMaterials().contains(blockType)) {
@@ -213,7 +213,7 @@ public class ProtectionSignFeature extends Feature {
 		} else {
 			return null;
 		}
-		for (Sign sign : signLines) {
+		for (final Sign sign : signLines) {
 			if (PROTECTION.equals(sign.getLine(0))) {
 				return ColorUtils.stripColorCodes(sign.getLine(3));
 			}
