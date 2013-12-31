@@ -30,6 +30,7 @@ public class WarpgateFlagListener extends AbstractListener {
 		if (!ext.isCustomCancelled()) {
 			if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.WARPGATE)) {
 				event.getPlayer().teleport(ext.getToRegion().getLocFlagAtt(FlagAtt.EXTERNAL_POINT));
+				ext.setCustomCancelled(true);
 				event.setCancelled(true);
 			}
 		}
