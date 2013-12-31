@@ -191,7 +191,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		if (users != null) {
 			result.addAll(users);
 		}
-		result.add(getOwnerName());
+		result.add(getOwnerName().toLowerCase());
 		return result;
 	}
 
@@ -202,7 +202,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		if (admins != null) {
 			result.addAll(admins);
 		}
-		result.add(getOwnerName());
+		result.add(getOwnerName().toLowerCase());
 		return result;
 	}
 }
