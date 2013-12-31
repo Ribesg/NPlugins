@@ -87,7 +87,7 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	}
 
 	public void addByWorld(final WorldRegion region) {
-		byWorld.put(region.getWorldName(), region);
+		byWorld.put("world_" + region.getWorldName(), region);
 	}
 
 	// ###################### //
