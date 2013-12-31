@@ -54,6 +54,8 @@ public class UseFlagListener extends AbstractListener {
 			denyUseMaterials.add(Material.FENCE_GATE);
 			denyUseMaterials.add(Material.FLOWER_POT);
 			denyUseMaterials.add(Material.GLOWING_REDSTONE_ORE);
+			denyUseMaterials.add(Material.GOLD_PLATE);
+			denyUseMaterials.add(Material.IRON_PLATE);
 			denyUseMaterials.add(Material.JUKEBOX);
 			denyUseMaterials.add(Material.LEVER);
 			denyUseMaterials.add(Material.NOTE_BLOCK);
@@ -61,10 +63,12 @@ public class UseFlagListener extends AbstractListener {
 			denyUseMaterials.add(Material.SIGN_POST);
 			denyUseMaterials.add(Material.SOIL);
 			denyUseMaterials.add(Material.STONE_BUTTON);
+			denyUseMaterials.add(Material.STONE_PLATE);
 			denyUseMaterials.add(Material.TRAP_DOOR);
 			denyUseMaterials.add(Material.WALL_SIGN);
 			denyUseMaterials.add(Material.WOOD_BUTTON);
 			denyUseMaterials.add(Material.WOOD_DOOR);
+			denyUseMaterials.add(Material.WOOD_PLATE);
 			denyUseMaterials.add(Material.WOODEN_DOOR);
 			denyUseMaterials.add(Material.WORKBENCH);
 		}
