@@ -159,7 +159,7 @@ public class FlagAttributes {
 	private void checkVectFlagAttCorrectness() {
 		if (getVectFlagAtt(FlagAtt.BOOSTER_VECTOR) != null && getVectFlagAtt(FlagAtt.BOOSTER_VECTOR).lengthSquared() > 100) {
 			// XXX: Bukkit does not allow > 10 m/s Velocity
-			setVectFlagAtt(FlagAtt.BOOSTER_VECTOR, getVectFlagAtt(FlagAtt.BOOSTER_VECTOR).normalize().multiply(10));
+			setVectFlagAtt(FlagAtt.BOOSTER_VECTOR, getVectFlagAtt(FlagAtt.BOOSTER_VECTOR).normalize().multiply(9.95D));
 		}
 	}
 
