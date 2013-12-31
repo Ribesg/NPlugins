@@ -170,28 +170,27 @@ public class RegionDb implements Iterable<GeneralRegion> {
 					final Iterator<GeneralRegion> it = regions.iterator();
 					final GeneralRegion region1 = it.next();
 					final GeneralRegion region2 = it.next();
-					switch (Integer.compare(region1.getPriority(), region2.getPriority())) {
-						// Check priority
-						case -1:
-							return region2;
-						case 1:
+					final int priorityCompare = Integer.compare(region1.getPriority(), region2.getPriority());
+					// Check priority
+					if (priorityCompare < 0) {
+						return region2;
+					} else if (priorityCompare > 0) {
+						return region1;
+					} else {
+						final int sizeCompare = Long.compare(region1.getTotalSize(), region2.getTotalSize());
+						if (sizeCompare < 0) {
 							return region1;
-						case 0:
-							switch (Long.compare(region1.getTotalSize(), region2.getTotalSize())) {
-								// Check size
-								case -1:
-									return region2;
-								case 1:
-									return region1;
-								case 0:
-									// Wtf ! Well, we should always return the same one.
-									// So let's return in alphabetic order
-									if (region1.getRegionName().compareTo(region2.getRegionName()) < 0) {
-										return region1;
-									} else { // This can't return 0 as names are unique, so it's < or >
-										return region2;
-									}
+						} else if (sizeCompare > 0) {
+							return region2;
+						} else {
+							// Wtf ! Well, we should always return the same one.
+							// So let's return in alphabetic order
+							if (region1.getRegionName().compareTo(region2.getRegionName()) < 0) {
+								return region1;
+							} else { // This can't return 0 as names are unique, so it's < or >
+								return region2;
 							}
+						}
 					}
 				default: // Let's compare them all in O(n) time
 					final int maxPriority = 0; // "current" max priority in regions Set
