@@ -101,6 +101,11 @@ public class BuildFlagListener extends AbstractListener {
 						event.setCancelled(true);
 					}
 				}
+			} else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+				// Fire block
+				if (event.getClickedBlock().getRelative(event.getBlockFace()).getType() == Material.FIRE) {
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
