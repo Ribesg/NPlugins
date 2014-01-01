@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NCuboid - NCuboid.java                      *
  * Full Class name: fr.ribesg.bukkit.ncuboid.NCuboid                       *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -163,7 +163,7 @@ public class NCuboid extends NPlugin implements CuboidNode {
 	protected void handleOtherNodes() {
 		// See if there are new worlds
 		for (final World world : getServer().getWorlds()) {
-			if (db.getByWorld(world.getName()) == null) {
+			if (db.getByWorld("world_" + world.getName()) == null) {
 				db.addByWorld(new WorldRegion(world.getName()));
 			}
 		}
