@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NCuboid - RegionDb.java                     *
  * Full Class name: fr.ribesg.bukkit.ncuboid.beans.RegionDb                *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -143,9 +143,7 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	}
 
 	public void removeByWorld(final String worldName) {
-		if (byWorld.containsKey(worldName)) {
-			byWorld.remove(worldName);
-		}
+		byWorld.remove("world_" + worldName);
 	}
 
 	// ##################### //
@@ -193,11 +191,12 @@ public class RegionDb implements Iterable<GeneralRegion> {
 						}
 					}
 				default: // Let's compare them all in O(n) time
-					final int maxPriority = 0; // "current" max priority in regions Set
+					int maxPriority = Integer.MIN_VALUE; // "current" max priority in regions Set
 					final SortedMap<Long, GeneralRegion> sizeMap = new TreeMap<>(); // TotalSize ; Region
 					for (final GeneralRegion region : regions) {
 						if (region.getPriority() > maxPriority) {
 							// Higher priority spotted, all previous regions are less interesting
+							maxPriority = region.getPriority();
 							sizeMap.clear();
 							sizeMap.put(region.getTotalSize(), region);
 						} else if (region.getPriority() == maxPriority) {
@@ -217,8 +216,8 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	public Set<GeneralRegion> getAllByLocation(final NLocation loc) {
 		final ChunkCoord chunkKey = new ChunkCoord(loc);
 		final Set<GeneralRegion> regions = new HashSet<>();
-		if (byWorld.containsKey(loc.getWorldName())) {
-			regions.add(byWorld.get(loc.getWorldName()));
+		if (byWorld.containsKey("world_" + loc.getWorldName())) {
+			regions.add(byWorld.get("world_" + loc.getWorldName()));
 		}
 		if (!byChunks.containsKey(chunkKey)) {
 			return regions.isEmpty() ? null : regions;
