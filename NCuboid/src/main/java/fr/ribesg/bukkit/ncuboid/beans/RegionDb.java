@@ -235,7 +235,11 @@ public class RegionDb implements Iterable<GeneralRegion> {
 
 	public GeneralRegion getByName(final String regionName) {
 		final GeneralRegion r = byName.get(regionName);
-		return r == null ? getByWorld(regionName) : r;
+		if (r == null && regionName.startsWith("world_")) {
+			return getByWorld(regionName.substring(6));
+		} else {
+			return null;
+		}
 	}
 
 	public Set<PlayerRegion> getByOwner(final String ownerName) {
@@ -246,8 +250,8 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		return tmpRegions.get(ownerName);
 	}
 
-	public WorldRegion getByWorld(final String worldRegionName) {
-		return byWorld.get(worldRegionName);
+	public WorldRegion getByWorld(final String worldName) {
+		return byWorld.get("world_" + worldName);
 	}
 
 	public int size() {

@@ -163,7 +163,7 @@ public class NCuboid extends NPlugin implements CuboidNode {
 	protected void handleOtherNodes() {
 		// See if there are new worlds
 		for (final World world : getServer().getWorlds()) {
-			if (db.getByWorld("world_" + world.getName()) == null) {
+			if (db.getByWorld(world.getName()) == null) {
 				db.addByWorld(new WorldRegion(world.getName()));
 			}
 		}
