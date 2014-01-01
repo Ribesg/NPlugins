@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NCuboid - RegionDbPersistenceHandler.java   *
  * Full Class name: fr.ribesg.bukkit.ncuboid.beans.RegionDbPersistenceHandler
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -183,7 +183,7 @@ public class RegionDbPersistenceHandler {
 		if (sec.isList(FLAGS)) {
 			final List<String> trueFlags = sec.getStringList(FLAGS);
 			for (final Flag f : Flag.values()) {
-				flags.setFlag(f, trueFlags.contains(f.toString()));
+				flags.setFlag(f, trueFlags.contains(f.name()));
 			}
 		}
 		return flags;
@@ -267,7 +267,6 @@ public class RegionDbPersistenceHandler {
 		while (worldRegionIterator.hasNext()) {
 			final WorldRegion region = worldRegionIterator.next();
 			writeWorldRegion(worldRegionsSection, region);
-
 		}
 
 		final ConfigurationSection playerRegionsSection = config.createSection(PLAYER_SECTION);
