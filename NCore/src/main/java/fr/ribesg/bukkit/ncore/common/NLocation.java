@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NCore - NLocation.java                      *
  * Full Class name: fr.ribesg.bukkit.ncore.common.NLocation                *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -388,11 +388,19 @@ public class NLocation {
 	}
 
 	public double distanceSquared(final NLocation o) {
+		return distance2DSquared(o) + Math.pow(y - o.y, 2);
+	}
+
+	public double distance2D(final NLocation o) {
+		return Math.sqrt(distance2DSquared(o));
+	}
+
+	public double distance2DSquared(final NLocation o) {
 		if (o == null) {
 			throw new IllegalArgumentException("Cannot measure distance to a null location");
 		} else if (!o.getWorldName().equals(getWorldName())) {
 			throw new IllegalArgumentException("Cannot measure distance between " + getWorldName() + " and " + o.getWorldName());
 		}
-		return Math.pow(x - o.x, 2) + Math.pow(y - o.y, 2) + Math.pow(z - o.z, 2);
+		return Math.pow(x - o.x, 2) + Math.pow(z - o.z, 2);
 	}
 }

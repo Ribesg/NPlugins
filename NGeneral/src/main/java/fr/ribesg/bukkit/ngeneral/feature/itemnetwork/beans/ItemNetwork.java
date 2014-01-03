@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NGeneral - ItemNetwork.java                 *
  * Full Class name: fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ItemNetwork
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -142,7 +142,7 @@ public class ItemNetwork {
 		final int squaredMaxDistance = maxDistance * maxDistance;
 		final NLocation nLoc = new NLocation(loc);
 		for (final ReceiverSign r : getReceivers()) {
-			if (r.getLocation().distanceSquared(nLoc) > squaredMaxDistance) {
+			if (r.getLocation().distance2DSquared(nLoc) > squaredMaxDistance) {
 				return true;
 			}
 		}
