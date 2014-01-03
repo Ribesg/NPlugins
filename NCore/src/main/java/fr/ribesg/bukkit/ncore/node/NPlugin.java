@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NCore - NPlugin.java                        *
  * Full Class name: fr.ribesg.bukkit.ncore.node.NPlugin                    *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -27,7 +27,7 @@ import java.io.IOException;
  *
  * @author Ribesg
  */
-public abstract class NPlugin extends JavaPlugin {
+public abstract class NPlugin extends JavaPlugin implements Node {
 
 	private static final String CORE          = "NCore";
 	private static final String NCORE_WEBSITE = "http://www.ribesg.fr/";
@@ -145,7 +145,9 @@ public abstract class NPlugin extends JavaPlugin {
 	 * Call the Core's Setter for this Node type
 	 * Basically: core.set[THIS]Node(this);
 	 */
-	protected abstract void linkCore();
+	private void linkCore() {
+		getCore().set(getNodeName(), this);
+	}
 
 	protected abstract String getMinCoreVersion();
 
