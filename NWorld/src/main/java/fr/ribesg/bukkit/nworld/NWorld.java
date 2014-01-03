@@ -48,7 +48,7 @@ public class NWorld extends NPlugin implements WorldNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.5.0";
+		return "0.5.1";
 	}
 
 	@Override

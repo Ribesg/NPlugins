@@ -56,7 +56,7 @@ public class NCuboid extends NPlugin implements CuboidNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.5.0";
+		return "0.5.1";
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeEnable() */
