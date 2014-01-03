@@ -238,7 +238,7 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		if (r == null && regionName.startsWith("world_")) {
 			return getByWorld(regionName.substring(6));
 		} else {
-			return null;
+			return r;
 		}
 	}
 
