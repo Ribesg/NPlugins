@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NEnchantingEgg - NEnchantingEgg.java        *
  * Full Class name: fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg         *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -53,7 +53,7 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.5.0";
+		return "0.5.1";
 	}
 
 	@Override
@@ -120,12 +120,6 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 		return true;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-	@Override
-	protected void linkCore() {
-		getCore().set(ENCHANTING_EGG, this);
-	}
-
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
 	@Override
 	protected void handleOtherNodes() {
@@ -186,5 +180,12 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	public Config getPluginConfig() {
 		return pluginConfig;
+	}
+
+	// API for other nodes
+
+	@Override
+	public String getNodeName() {
+		return ENCHANTING_EGG;
 	}
 }

@@ -2,14 +2,14 @@
  * Project file:    NPlugins - NCore - NCore.java                          *
  * Full Class name: fr.ribesg.bukkit.ncore.NCore                           *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore;
 
-import fr.ribesg.bukkit.ncore.common.event.NEventsListener;
+import fr.ribesg.bukkit.ncore.event.NEventsListener;
 import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.Bukkit;
@@ -50,7 +50,7 @@ public class NCore extends JavaPlugin {
 			}
 		}, 5 * 20L /* ~5 seconds */);
 
-		Bukkit.getPluginManager().registerEvents(new NEventsListener(), this);
+		Bukkit.getPluginManager().registerEvents(new NEventsListener(this), this);
 	}
 
 	@Override

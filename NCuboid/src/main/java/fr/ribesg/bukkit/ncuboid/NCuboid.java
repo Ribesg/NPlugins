@@ -56,7 +56,7 @@ public class NCuboid extends NPlugin implements CuboidNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.5.0";
+		return "0.5.1";
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeEnable() */
@@ -152,12 +152,6 @@ public class NCuboid extends NPlugin implements CuboidNode {
 		return true;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-	@Override
-	protected void linkCore() {
-		getCore().set(CUBOID, this);
-	}
-
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
 	@Override
 	protected void handleOtherNodes() {
@@ -203,6 +197,11 @@ public class NCuboid extends NPlugin implements CuboidNode {
 	}
 
 	// API for other nodes
+
+	@Override
+	public String getNodeName() {
+		return CUBOID;
+	}
 
 	@Override
 	public boolean isJailed(final String playerName) {

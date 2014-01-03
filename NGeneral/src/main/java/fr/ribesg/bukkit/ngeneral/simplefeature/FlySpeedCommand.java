@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NGeneral - FlySpeedCommand.java             *
  * Full Class name: fr.ribesg.bukkit.ngeneral.simplefeature.FlySpeedCommand*
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -101,8 +101,8 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
 				plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 			} else {
 				p.setFlySpeed(value);
-				plugin.sendMessage(sender, MessageId.general_flySpeed_setFor, p.getName(), Float.toString(value));
-				plugin.sendMessage(p, MessageId.general_flySpeed_setBy, sender.getName(), Float.toString(value));
+				plugin.sendMessage(sender, MessageId.general_flySpeed_setFor, Float.toString(value), p.getName());
+				plugin.sendMessage(p, MessageId.general_flySpeed_setBy, Float.toString(value), sender.getName());
 			}
 		}
 	}

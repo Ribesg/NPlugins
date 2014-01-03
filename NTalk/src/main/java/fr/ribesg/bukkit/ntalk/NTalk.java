@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NTalk - NTalk.java                          *
  * Full Class name: fr.ribesg.bukkit.ntalk.NTalk                           *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -37,7 +37,7 @@ public class NTalk extends NPlugin implements TalkNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.5.0";
+		return "0.5.1";
 	}
 
 	@Override
@@ -99,12 +99,6 @@ public class NTalk extends NPlugin implements TalkNode {
 		return true;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-	@Override
-	protected void linkCore() {
-		getCore().set(TALK, this);
-	}
-
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
 	@Override
 	protected void handleOtherNodes() {
@@ -135,5 +129,12 @@ public class NTalk extends NPlugin implements TalkNode {
 
 	public Config getPluginConfig() {
 		return pluginConfig;
+	}
+
+	// API for other nodes
+
+	@Override
+	public String getNodeName() {
+		return TALK;
 	}
 }

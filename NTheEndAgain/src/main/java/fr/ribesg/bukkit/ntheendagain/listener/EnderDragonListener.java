@@ -2,13 +2,14 @@
  * Project file:    NPlugins - NTheEndAgain - EnderDragonListener.java     *
  * Full Class name: fr.ribesg.bukkit.ntheendagain.listener.EnderDragonListener
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntheendagain.listener;
 
+import fr.ribesg.bukkit.ncore.event.theendagain.XPDistributionEvent;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.ntheendagain.Config;
@@ -34,6 +35,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeMap;
@@ -99,12 +101,24 @@ public class EnderDragonListener implements Listener {
 							totalDamages += v;
 						}
 
-						// Give exp to players
+						// Create map of XP to give
+						final Map<String, Integer> xpMap = new HashMap<>(dmgMap.size());
 						for (final Entry<String, Double> entry : dmgMap.entrySet()) {
-							final Player p = plugin.getServer().getPlayerExact(entry.getKey());
 							final int reward = (int) (config.getEdExpReward() * entry.getValue() / totalDamages);
-							p.giveExp(reward);
-							plugin.sendMessage(p, MessageId.theEndAgain_receivedXP, Integer.toString(reward));
+							xpMap.put(entry.getKey(), reward);
+						}
+
+						// Call event for external plugins to be able to play with this map
+						final XPDistributionEvent xpDistributionEvent = new XPDistributionEvent(xpMap, config.getEdExpReward());
+						Bukkit.getPluginManager().callEvent(xpDistributionEvent);
+
+						if (!xpDistributionEvent.isCancelled()) {
+							// Give exp to players
+							for (final Entry<String, Integer> entry : xpDistributionEvent.getXpMap().entrySet()) {
+								final Player p = plugin.getServer().getPlayerExact(entry.getKey());
+								p.giveExp(entry.getValue());
+								plugin.sendMessage(p, MessageId.theEndAgain_receivedXP, Integer.toString(entry.getValue()));
+							}
 						}
 						break;
 					default:

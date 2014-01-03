@@ -2,12 +2,13 @@
  * Project file:    NPlugins - NTheEndAgain - ChunkListener.java           *
  * Full Class name: fr.ribesg.bukkit.ntheendagain.listener.ChunkListener   *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntheendagain.listener;
+import fr.ribesg.bukkit.ncore.event.theendagain.ChunkRegenEvent;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
@@ -64,27 +65,31 @@ public class ChunkListener implements Listener {
                  *   - Schedule a refresh
                  */
 				if (endChunk != null && endChunk.hasToBeRegen()) {
-					for (final Entity e : chunk.getEntities()) {
-						if (e.getType() == EntityType.ENDER_DRAGON) {
-							final EnderDragon ed = (EnderDragon) e;
-							if (handler.getDragons().containsKey(ed.getUniqueId())) {
-								handler.getDragons().remove(ed.getUniqueId());
-								handler.getLoadedDragons().remove(ed.getUniqueId());
+					final ChunkRegenEvent regenEvent = new ChunkRegenEvent(chunk);
+					Bukkit.getPluginManager().callEvent(regenEvent);
+					if (!regenEvent.isCancelled()) {
+						for (final Entity e : chunk.getEntities()) {
+							if (e.getType() == EntityType.ENDER_DRAGON) {
+								final EnderDragon ed = (EnderDragon) e;
+								if (handler.getDragons().containsKey(ed.getUniqueId())) {
+									handler.getDragons().remove(ed.getUniqueId());
+									handler.getLoadedDragons().remove(ed.getUniqueId());
+								}
 							}
+							e.remove();
 						}
-						e.remove();
-					}
-					endChunk.cleanCrystalLocations();
-					final int x = endChunk.getX(), z = endChunk.getZ();
-					event.getWorld().regenerateChunk(x, z);
-					endChunk.setToBeRegen(false);
-					Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+						endChunk.cleanCrystalLocations();
+						final int x = endChunk.getX(), z = endChunk.getZ();
+						event.getWorld().regenerateChunk(x, z);
+						Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
 
-						@Override
-						public void run() {
-							event.getWorld().refreshChunk(x, z);
-						}
-					}, 100L);
+							@Override
+							public void run() {
+								event.getWorld().refreshChunk(x, z);
+							}
+						}, 100L);
+					}
+					endChunk.setToBeRegen(false);
 				}
 
                 /*

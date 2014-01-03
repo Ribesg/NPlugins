@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NGeneral - NGeneral.java                    *
  * Full Class name: fr.ribesg.bukkit.ngeneral.NGeneral                     *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -39,7 +39,7 @@ public class NGeneral extends NPlugin implements GeneralNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.5.0";
+		return "0.5.1";
 	}
 
 	@Override
@@ -103,12 +103,6 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		return true;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-	@Override
-	protected void linkCore() {
-		getCore().set(GENERAL, this);
-	}
-
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
 	@Override
 	protected void handleOtherNodes() {
@@ -146,5 +140,12 @@ public class NGeneral extends NPlugin implements GeneralNode {
 
 	public Features getFeatures() {
 		return features;
+	}
+
+	// API for other nodes
+
+	@Override
+	public String getNodeName() {
+		return GENERAL;
 	}
 }

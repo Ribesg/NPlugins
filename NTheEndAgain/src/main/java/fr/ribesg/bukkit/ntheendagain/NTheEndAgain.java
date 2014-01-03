@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NTheEndAgain - NTheEndAgain.java            *
  * Full Class name: fr.ribesg.bukkit.ntheendagain.NTheEndAgain             *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -41,7 +41,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.5.0";
+		return "0.5.1";
 	}
 
 	@Override
@@ -189,12 +189,6 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 		return true;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#linkCore() */
-	@Override
-	protected void linkCore() {
-		getCore().set(THE_END_AGAIN, this);
-	}
-
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
 	@Override
 	protected void handleOtherNodes() {
@@ -267,5 +261,12 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
 	public HashMap<String, EndWorldHandler> getWorldHandlers() {
 		return worldHandlers;
+	}
+
+	// API for other nodes
+
+	@Override
+	public String getNodeName() {
+		return THE_END_AGAIN;
 	}
 }
