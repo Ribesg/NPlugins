@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ncore;
 
-import fr.ribesg.bukkit.ncore.common.event.NEventsListener;
+import fr.ribesg.bukkit.ncore.event.NEventsListener;
 import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.Bukkit;

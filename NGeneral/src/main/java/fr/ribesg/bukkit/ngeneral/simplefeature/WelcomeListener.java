@@ -2,13 +2,13 @@
  * Project file:    NPlugins - NGeneral - WelcomeListener.java             *
  * Full Class name: fr.ribesg.bukkit.ngeneral.simplefeature.WelcomeListener*
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
-import fr.ribesg.bukkit.ncore.common.event.PlayerJoinedEvent;
+import fr.ribesg.bukkit.ncore.event.core.PlayerJoinedEvent;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
