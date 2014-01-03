@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NPlayer - NPlayer.java                      *
  * Full Class name: fr.ribesg.bukkit.nplayer.NPlayer                       *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -194,5 +194,12 @@ public class NPlayer extends NPlugin implements PlayerNode {
 
 	public PunishmentDb getPunishmentDb() {
 		return punishmentDb;
+	}
+
+	// API for other nodes
+
+	@Override
+	public String getNodeName() {
+		return PLAYER;
 	}
 }

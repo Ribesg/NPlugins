@@ -23,4 +23,6 @@ public interface Node {
 	public static final String TALK           = "Talk";
 	public static final String THE_END_AGAIN  = "TheEndAgain";
 	public static final String WORLD          = "World";
+
+	public String getNodeName();
 }

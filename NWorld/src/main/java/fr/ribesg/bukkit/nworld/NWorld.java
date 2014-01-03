@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NWorld - NWorld.java                        *
  * Full Class name: fr.ribesg.bukkit.nworld.NWorld                         *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -256,5 +256,12 @@ public class NWorld extends NPlugin implements WorldNode {
 
 	public Worlds getWorlds() {
 		return worlds;
+	}
+
+	// API for other nodes
+
+	@Override
+	public String getNodeName() {
+		return WORLD;
 	}
 }
