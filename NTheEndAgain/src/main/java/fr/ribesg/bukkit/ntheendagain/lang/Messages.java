@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NTheEndAgain - Messages.java                *
  * Full Class name: fr.ribesg.bukkit.ntheendagain.lang.Messages            *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -92,14 +92,10 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%world%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.theEndAgain_nbAliveX,
-		                            "&aThere are %nb% EnderDragons alive in world %world%",
-		                            new String[] {
-				                            "%nb%",
-				                            "%world%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.theEndAgain_nbAliveX, "&aThere are %nb% EnderDragons alive in world %world%", new String[] {
+				"%nb%",
+				"%world%"
+		}, null, true));
 		newMessages.add(new Message(MessageId.theEndAgain_notInAnEndWorld,
 		                            "&cYou're not in an End world, please provide an End world name.",
 		                            null,

@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NCuboid - Messages.java                     *
  * Full Class name: fr.ribesg.bukkit.ncuboid.lang.Messages                 *
  *                                                                         *
- *                Copyright (c) 2014 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -198,15 +198,11 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%flagName%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.cuboid_cmdFlagValue,
-		                            "&aThe flag '%flag%' is '%value%' for region '%region%'",
-		                            new String[] {
-				                            "%flag%",
-				                            "%value%",
-				                            "%region%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagValue, "&aThe flag '%flag%' is '%value%' for region '%region%'", new String[] {
+				"%flag%",
+				"%value%",
+				"%region%"
+		}, null, true));
 
 		// Command - FLAG ATTRIBUTE
 		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttUnknownFlagAtt,
@@ -239,72 +235,40 @@ public class Messages extends AbstractMessages {
 		                            true));
 
 		// Command - ADMIN
-		newMessages.add(new Message(MessageId.cuboid_cmdAdminAdded,
-		                            "&a%player% has been added to admins of '%region%'",
-		                            new String[] {
-				                            "%player%",
-				                            "%region%"
-		                            },
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.cuboid_cmdAdminAlreadyAdmin,
-		                            "&c%player% is already admin of '%region%'",
-		                            new String[] {
-				                            "%player%",
-				                            "%region%"
-		                            },
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.cuboid_cmdAdminRemoved,
-		                            "&a%player% is no longer admin of '%region%'",
-		                            new String[] {
-				                            "%player%",
-				                            "%region%"
-		                            },
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.cuboid_cmdAdminRemoved,
-		                            "&c%player% is not admin of '%region%'",
-		                            new String[] {
-				                            "%player%",
-				                            "%region%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdAdminAdded, "&a%player% has been added to admins of '%region%'", new String[] {
+				"%player%",
+				"%region%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdAdminAlreadyAdmin, "&c%player% is already admin of '%region%'", new String[] {
+				"%player%",
+				"%region%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdAdminRemoved, "&a%player% is no longer admin of '%region%'", new String[] {
+				"%player%",
+				"%region%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdAdminRemoved, "&c%player% is not admin of '%region%'", new String[] {
+				"%player%",
+				"%region%"
+		}, null, true));
 
 		// Command - USER
-		newMessages.add(new Message(MessageId.cuboid_cmdUserAdded,
-		                            "&a%player% has been added to users of '%region%'",
-		                            new String[] {
-				                            "%player%",
-				                            "%region%"
-		                            },
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.cuboid_cmdUserAlreadyUser,
-		                            "&c%player% is already user of '%region%'",
-		                            new String[] {
-				                            "%player%",
-				                            "%region%"
-		                            },
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.cuboid_cmdUserRemoved,
-		                            "&a%player% is no longer user of '%region%'",
-		                            new String[] {
-				                            "%player%",
-				                            "%region%"
-		                            },
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.cuboid_cmdUserRemoved,
-		                            "&c%player% is not user of '%region%'",
-		                            new String[] {
-				                            "%player%",
-				                            "%region%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.cuboid_cmdUserAdded, "&a%player% has been added to users of '%region%'", new String[] {
+				"%player%",
+				"%region%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdUserAlreadyUser, "&c%player% is already user of '%region%'", new String[] {
+				"%player%",
+				"%region%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdUserRemoved, "&a%player% is no longer user of '%region%'", new String[] {
+				"%player%",
+				"%region%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdUserRemoved, "&c%player% is not user of '%region%'", new String[] {
+				"%player%",
+				"%region%"
+		}, null, true));
 
 		return newMessages;
 	}

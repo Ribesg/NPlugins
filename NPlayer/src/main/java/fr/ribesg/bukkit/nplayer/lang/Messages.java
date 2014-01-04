@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NPlayer - Messages.java                     *
  * Full Class name: fr.ribesg.bukkit.nplayer.lang.Messages                 *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -119,14 +119,10 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%reason%"},
 		                            null,
 		                            false));
-		newMessages.add(new Message(MessageId.player_broadcastedKickMessage,
-		                            "&e%userName% has been kicked (%reason%)",
-		                            new String[] {
-				                            "%userName%",
-				                            "%reason%"
-		                            },
-		                            null,
-		                            false));
+		newMessages.add(new Message(MessageId.player_broadcastedKickMessage, "&e%userName% has been kicked (%reason%)", new String[] {
+				"%userName%",
+				"%reason%"
+		}, null, false));
 
 		newMessages.add(new Message(MessageId.player_kickPermBanned,
 		                            "&cYou have been permanently banned: %reason%",
@@ -141,14 +137,10 @@ public class Messages extends AbstractMessages {
 		                            },
 		                            null,
 		                            false));
-		newMessages.add(new Message(MessageId.player_kickTempBanned,
-		                            "&cYou have been banned for %duration%: %reason%",
-		                            new String[] {
-				                            "%reason%",
-				                            "%duration%"
-		                            },
-		                            null,
-		                            false));
+		newMessages.add(new Message(MessageId.player_kickTempBanned, "&cYou have been banned for %duration%: %reason%", new String[] {
+				"%reason%",
+				"%duration%"
+		}, null, false));
 		newMessages.add(new Message(MessageId.player_tempBannedBroadcast,
 		                            "&e%userName% has been banned for %duration% (%reason%)",
 		                            new String[] {
@@ -173,14 +165,10 @@ public class Messages extends AbstractMessages {
 		                            },
 		                            null,
 		                            false));
-		newMessages.add(new Message(MessageId.player_kickTempIpBanned,
-		                            "&cYour IP has been banned for %duration%: %reason%",
-		                            new String[] {
-				                            "%reason%",
-				                            "%duration%"
-		                            },
-		                            null,
-		                            false));
+		newMessages.add(new Message(MessageId.player_kickTempIpBanned, "&cYour IP has been banned for %duration%: %reason%", new String[] {
+				"%reason%",
+				"%duration%"
+		}, null, false));
 		newMessages.add(new Message(MessageId.player_tempIpBannedBroadcast,
 		                            "&eThe IP %ip% has been banned for %duration% (%reason%)",
 		                            new String[] {
@@ -204,14 +192,10 @@ public class Messages extends AbstractMessages {
 		                            },
 		                            null,
 		                            false));
-		newMessages.add(new Message(MessageId.player_tempMuted,
-		                            "&cYou have been muted for %duration%: %reason%",
-		                            new String[] {
-				                            "%reason%",
-				                            "%duration%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.player_tempMuted, "&cYou have been muted for %duration%: %reason%", new String[] {
+				"%reason%",
+				"%duration%"
+		}, null, true));
 		newMessages.add(new Message(MessageId.player_tempMutedBroadcast,
 		                            "&e%userName% has been muted for %duration% (%reason%)",
 		                            new String[] {
@@ -251,40 +235,28 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%reason%"},
 		                            null,
 		                            false));
-		newMessages.add(new Message(MessageId.player_deniedTempBanned,
-		                            "&cYou are banned for %duration%: %reason%",
-		                            new String[] {
-				                            "%reason%",
-				                            "%duration%"
-		                            },
-		                            null,
-		                            false));
+		newMessages.add(new Message(MessageId.player_deniedTempBanned, "&cYou are banned for %duration%: %reason%", new String[] {
+				"%reason%",
+				"%duration%"
+		}, null, false));
 		newMessages.add(new Message(MessageId.player_deniedPermIpBanned,
 		                            "&cYour IP is permanently banned: %reason%",
 		                            new String[] {"%reason%"},
 		                            null,
 		                            false));
-		newMessages.add(new Message(MessageId.player_deniedTempIpBanned,
-		                            "&cYour IP is banned for %duration%: %reason%",
-		                            new String[] {
-				                            "%reason%",
-				                            "%duration%"
-		                            },
-		                            null,
-		                            false));
+		newMessages.add(new Message(MessageId.player_deniedTempIpBanned, "&cYour IP is banned for %duration%: %reason%", new String[] {
+				"%reason%",
+				"%duration%"
+		}, null, false));
 		newMessages.add(new Message(MessageId.player_deniedPermMuted,
 		                            "&cYou are permanently muted: %reason%",
 		                            new String[] {"%reason%"},
 		                            null,
 		                            false));
-		newMessages.add(new Message(MessageId.player_deniedTempMuted,
-		                            "&cYou are muted for %duration%: %reason%",
-		                            new String[] {
-				                            "%reason%",
-				                            "%duration%"
-		                            },
-		                            null,
-		                            false));
+		newMessages.add(new Message(MessageId.player_deniedTempMuted, "&cYou are muted for %duration%: %reason%", new String[] {
+				"%reason%",
+				"%duration%"
+		}, null, false));
 
 		newMessages.add(new Message(MessageId.player_alreadyBanned,
 		                            "&c%userName% is already banned",

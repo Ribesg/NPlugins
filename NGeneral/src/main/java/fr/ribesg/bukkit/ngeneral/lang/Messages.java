@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NGeneral - Messages.java                    *
  * Full Class name: fr.ribesg.bukkit.ngeneral.lang.Messages                *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -146,42 +146,26 @@ public class Messages extends AbstractMessages {
 		// Command - FLYSPEED
 		newMessages.add(new Message(MessageId.general_flySpeed_set, "&aFly Speed set to %value%", new String[] {"%value%"}, null, true));
 		newMessages.add(new Message(MessageId.general_flySpeed_reset, "&aFly Speed reset", null, null, true));
-		newMessages.add(new Message(MessageId.general_flySpeed_setFor,
-		                            "&aFly Speed set to %value% for %playerName%",
-		                            new String[] {
-				                            "%value%",
-				                            "%playerName%"
-		                            },
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.general_flySpeed_setBy,
-		                            "&aFly Speed set to %value% by %playerName%",
-		                            new String[] {
-				                            "%value%",
-				                            "%playerName%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.general_flySpeed_setFor, "&aFly Speed set to %value% for %playerName%", new String[] {
+				"%value%",
+				"%playerName%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.general_flySpeed_setBy, "&aFly Speed set to %value% by %playerName%", new String[] {
+				"%value%",
+				"%playerName%"
+		}, null, true));
 
 		// Command - WALKSPEED
 		newMessages.add(new Message(MessageId.general_walkSpeed_set, "&aWalk Speed set to %value%", new String[] {"%value%"}, null, true));
 		newMessages.add(new Message(MessageId.general_walkSpeed_reset, "&aWalk Speed reset", null, null, true));
-		newMessages.add(new Message(MessageId.general_walkSpeed_setFor,
-		                            "&aWalk Speed set to %value% for %playerName%",
-		                            new String[] {
-				                            "%value%",
-				                            "%playerName%"
-		                            },
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.general_walkSpeed_setBy,
-		                            "&aWalk Speed set to %value% by %playerName%",
-		                            new String[] {
-				                            "%value%",
-				                            "%playerName%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.general_walkSpeed_setFor, "&aWalk Speed set to %value% for %playerName%", new String[] {
+				"%value%",
+				"%playerName%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.general_walkSpeed_setBy, "&aWalk Speed set to %value% by %playerName%", new String[] {
+				"%value%",
+				"%playerName%"
+		}, null, true));
 
 		// Command - AFK
 		newMessages.add(new Message(MessageId.general_afk_nowAfkBroadcast,
@@ -194,14 +178,10 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%playerName%"},
 		                            null,
 		                            false));
-		newMessages.add(new Message(MessageId.general_afk_nowAfkBroadcastReason,
-		                            "&e%playerName% is now AFK (%reason%)",
-		                            new String[] {
-				                            "%playerName%",
-				                            "%reason%"
-		                            },
-		                            null,
-		                            false));
+		newMessages.add(new Message(MessageId.general_afk_nowAfkBroadcastReason, "&e%playerName% is now AFK (%reason%)", new String[] {
+				"%playerName%",
+				"%reason%"
+		}, null, false));
 		newMessages.add(new Message(MessageId.general_afk_noLongerAfkBroadcastReason,
 		                            "&e%playerName% is no longer AFK (%reason%)",
 		                            new String[] {
@@ -212,15 +192,11 @@ public class Messages extends AbstractMessages {
 		                            false));
 
 		// Command - TIME
-		newMessages.add(new Message(MessageId.general_timeSet,
-		                            "&aTime set to %value% in world %world% by %changer%",
-		                            new String[] {
-				                            "%value%",
-				                            "%world%",
-				                            "%changer%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.general_timeSet, "&aTime set to %value% in world %world% by %changer%", new String[] {
+				"%value%",
+				"%world%",
+				"%changer%"
+		}, null, true));
 
 		// Command - WEATHER
 		newMessages.add(new Message(MessageId.general_weatherSet,
@@ -240,22 +216,14 @@ public class Messages extends AbstractMessages {
 		                            new String[] {"%target%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.general_tp_somebodyToTarget,
-		                            "&a%teleporter% teleported you to %target%",
-		                            new String[] {
-				                            "%teleporter%",
-				                            "%target%"
-		                            },
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.general_tp_youSomebodyToTarget,
-		                            "&aYou teleported %player% to %target%",
-		                            new String[] {
-				                            "%player%",
-				                            "%target%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.general_tp_somebodyToTarget, "&a%teleporter% teleported you to %target%", new String[] {
+				"%teleporter%",
+				"%target%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.general_tp_youSomebodyToTarget, "&aYou teleported %player% to %target%", new String[] {
+				"%player%",
+				"%target%"
+		}, null, true));
 		newMessages.add(new Message(MessageId.general_tp_somebodyToHim,
 		                            "&a%teleporter% teleported you to him",
 		                            new String[] {"%teleporter%"},

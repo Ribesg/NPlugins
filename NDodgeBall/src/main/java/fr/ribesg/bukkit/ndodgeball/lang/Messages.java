@@ -1,3 +1,12 @@
+/***************************************************************************
+ * Project file:    NPlugins - NPlugins - Messages.java                    *
+ * Full Class name: fr.ribesg.bukkit.ndodgeball.lang.Messages              *
+ *                                                                         *
+ *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
+ *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
+ *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
+ ***************************************************************************/
+
 package fr.ribesg.bukkit.ndodgeball.lang;
 
 import lombok.Getter;
