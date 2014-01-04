@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NTalk - Messages.java                       *
  * Full Class name: fr.ribesg.bukkit.ntalk.lang.Messages                   *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -64,27 +64,19 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null, true));
 
 		// Command - NICK
-		newMessages.add(new Message(MessageId.talk_youNickNamed,
-		                            "&aYou renamed %realName% %nickName%",
-		                            new String[] {
-				                            "%realName%",
-				                            "%nickName%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.talk_youNickNamed, "&aYou renamed %realName% %nickName%", new String[] {
+				"%realName%",
+				"%nickName%"
+		}, null, true));
 		newMessages.add(new Message(MessageId.talk_youDeNickNamed,
 		                            "&aYou reseted the name of %realName%",
 		                            new String[] {"%realName%"},
 		                            null,
 		                            true));
-		newMessages.add(new Message(MessageId.talk_youWereNickNamed,
-		                            "&aYou were renamed %nickName% by %playerName%",
-		                            new String[] {
-				                            "%nickName%",
-				                            "%playerName%"
-		                            },
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.talk_youWereNickNamed, "&aYou were renamed %nickName% by %playerName%", new String[] {
+				"%nickName%",
+				"%playerName%"
+		}, null, true));
 		newMessages.add(new Message(MessageId.talk_youWereDeNickNamed,
 		                            "&aYour name was reseted by %playerName%",
 		                            new String[] {"%playerName%"},

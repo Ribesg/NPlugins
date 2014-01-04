@@ -2,7 +2,7 @@
   ~ Project file:    NPlugins - NTheEndAgain - pom.xml
   ~ Full Class name: D:/Users/Ribesg/DropBox/workspace/NPlugins/NTheEndAgain/pom.xml
   ~
-  ~                Copyright (c) 2013 Ribesg - www.ribesg.fr
+  ~                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr
   ~   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt
   ~    Please contact me at ribesg[at]yahoo.fr if you improve this file!
   -->
@@ -17,13 +17,13 @@
 	<parent>
 		<groupId>fr.ribesg.bukkit.nplugins</groupId>
 		<artifactId>NPlugins</artifactId>
-		<version>0.5.1-SNAPSHOT</version>
+		<version>0.5.1</version>
 	</parent>
 
 	<groupId>fr.ribesg.bukkit.ntheendagain</groupId>
 	<artifactId>NTheEndAgain</artifactId>
 	<name>NTheEndAgain</name>
-	<version>0.5.1-SNAPSHOT</version>
+	<version>0.5.1</version>
 
 	<url>https://github.com/Ribesg/NPlugins/tree/master/NTheEndAgain</url>
 
@@ -33,7 +33,7 @@
 		<dependency>
 			<groupId>fr.ribesg.bukkit.ncore</groupId>
 			<artifactId>NCore</artifactId>
-			<version>0.5.1-SNAPSHOT</version>
+			<version>0.5.1</version>
 		</dependency>
 	</dependencies>
 

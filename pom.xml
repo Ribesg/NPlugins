@@ -2,7 +2,7 @@
   ~ Project file:    NPlugins - NPlugins - pom.xml
   ~ Full Class name: D:/Users/Ribesg/DropBox/workspace/NPlugins/pom.xml
   ~
-  ~                Copyright (c) 2013 Ribesg - www.ribesg.fr
+  ~                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr
   ~   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt
   ~    Please contact me at ribesg[at]yahoo.fr if you improve this file!
   -->
@@ -18,7 +18,7 @@
 	<artifactId>NPlugins</artifactId>
 	<packaging>pom</packaging>
 
-	<version>0.5.1-SNAPSHOT</version>
+	<version>0.5.1</version>
 
 	<name>NPlugins</name>
 	<url>https://github.com/Ribesg/NPlugins</url>

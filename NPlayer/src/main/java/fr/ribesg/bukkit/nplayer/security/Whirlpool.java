@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NPlayer - Whirlpool.java                    *
  * Full Class name: fr.ribesg.bukkit.nplayer.security.Whirlpool            *
  *                                                                         *
- *                Copyright (c) 2013 Ribesg - www.ribesg.fr                *
+ *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -122,7 +122,7 @@ public class Whirlpool {
          */
 			Whirlpool.C[0][x] = v1 << 56 | v1 << 48 | v4 << 40 | v1 << 32 | v8 << 24 | v5 << 16 | v2 << 8 | v9;
 		/*
-         * build the remaining circulant tables C[t][x] = C[0][x] rotr t
+	     * build the remaining circulant tables C[t][x] = C[0][x] rotr t
          */
 			for (int t = 1; t < 8; t++) {
 				Whirlpool.C[t][x] = Whirlpool.C[t - 1][x] >>> 8 | Whirlpool.C[t - 1][x] << 56;
