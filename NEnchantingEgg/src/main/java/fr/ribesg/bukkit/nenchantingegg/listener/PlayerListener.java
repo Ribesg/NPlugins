@@ -27,6 +27,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -153,6 +154,18 @@ public class PlayerListener implements Listener {
 			teleportLocation.setYaw(90f);
 			event.getPlayer().teleport(teleportLocation);
 			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+	public void onPlayerInteract(final PlayerInteractEvent event) {
+		if (event.hasBlock() && event.getClickedBlock().getType() == Material.DRAGON_EGG) {
+			final Location eggLocation = event.getClickedBlock().getLocation();
+			final ChunkCoord chunkCoord = new ChunkCoord(eggLocation.getChunk());
+			final Altar altar = plugin.getAltars().get(chunkCoord);
+			if (altar != null && altar.isEggPosition(eggLocation)) {
+				event.setCancelled(true);
+			}
 		}
 	}
 }
