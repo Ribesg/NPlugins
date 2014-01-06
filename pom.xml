@@ -78,7 +78,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.6.4-R2.0</version>
+			<version>1.7.2-R0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mcstats.bukkit</groupId>
@@ -104,7 +104,7 @@
 			</resource>
 		</resources>
 		<finalName>${project.name}</finalName>
-		<defaultGoal>clean package</defaultGoal>
+		<defaultGoal>clean install</defaultGoal>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -143,14 +143,14 @@
 					<version>1.1</version>
 					<executions>
 						<execution>
-							<id>remove-a-file</id>
+							<id>remove-META-INF</id>
 							<goals>
 								<goal>remove</goal>
 							</goals>
-							<phase>package</phase>
+							<phase>verify</phase>
 							<configuration>
 								<fileset>
-									<directory>target/${project.name}.jar</directory>
+									<directory>${project.build.directory}/${project.name}.jar</directory>
 									<includes>
 										<include>META-INF</include>
 									</includes>
@@ -158,11 +158,11 @@
 							</configuration>
 						</execution>
 						<execution>
-							<id>copy-into</id>
+							<id>include-sources</id>
 							<goals>
 								<goal>copy</goal>
 							</goals>
-							<phase>package</phase>
+							<phase>verify</phase>
 							<configuration>
 								<fileset>
 									<directory>${basedir}/src/main/java</directory>
@@ -178,7 +178,7 @@
 							<goals>
 								<goal>copy</goal>
 							</goals>
-							<phase>package</phase>
+							<phase>verify</phase>
 							<configuration>
 								<files>
 									<file>
@@ -191,7 +191,6 @@
 					</executions>
 				</plugin>
 			</plugins>
-
 		</pluginManagement>
 	</build>
 
