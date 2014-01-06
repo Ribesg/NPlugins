@@ -24,6 +24,9 @@
 *.war
 *.ear
 
+# Maven #
+*/target/
+
 # Others #
 *.class
 
