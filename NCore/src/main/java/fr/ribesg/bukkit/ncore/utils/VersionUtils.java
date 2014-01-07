@@ -9,6 +9,8 @@
 
 package fr.ribesg.bukkit.ncore.utils;
 
+import java.util.regex.Pattern;
+
 /**
  * Utility class to play with Plugin versions
  *
@@ -16,7 +18,8 @@ package fr.ribesg.bukkit.ncore.utils;
  */
 public class VersionUtils {
 
-	private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
+	private static final Pattern RELEASE_REGEX  = Pattern.compile("^v\\d+.\\d+.\\d+$");
+	private static final Pattern SNAPSHOT_REGEX = Pattern.compile("^v\\d+.\\d+.\\d+-SNAPSHOT$");
 
 	/**
 	 * Check if a version represents a Snapshot version or not.
@@ -25,6 +28,17 @@ public class VersionUtils {
 	 *         false otherwise
 	 */
 	public static boolean isSnapshot(final String versionString) {
-		return versionString.endsWith(SNAPSHOT_SUFFIX);
+		return SNAPSHOT_REGEX.matcher(versionString).matches();
 	}
+
+	/**
+	 * Check if a version represents a Release version or not.
+	 *
+	 * @return true if the provided String represents a Release version,
+	 *         false otherwise
+	 */
+	public static boolean isRelease(final String versionString) {
+		return RELEASE_REGEX.matcher(versionString).matches();
+	}
+
 }

@@ -1,17 +1,17 @@
 /***************************************************************************
  * Project file:    NPlugins - NCore - AbstractConfig.java                 *
- * Full Class name: fr.ribesg.bukkit.ncore.AbstractConfig                  *
+ * Full Class name: fr.ribesg.bukkit.ncore.config.AbstractConfig           *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore;
+package fr.ribesg.bukkit.ncore.config;
 
-import fr.ribesg.bukkit.ncore.node.NPlugin;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -31,7 +31,7 @@ import java.nio.file.StandardOpenOption;
  *
  * @author Ribesg
  */
-public abstract class AbstractConfig<T extends NPlugin> {
+public abstract class AbstractConfig<T extends JavaPlugin> {
 
 	/** The Charset used for reading/writing files */
 	public static final Charset CHARSET = StandardCharsets.UTF_8;

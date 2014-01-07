@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 /** @author Ribesg */
 public class NListener implements Listener {
 
-	private static final Logger LOG = Logger.getLogger(NListener.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(NListener.class.getName());
 
 	private final NWorld plugin;
 

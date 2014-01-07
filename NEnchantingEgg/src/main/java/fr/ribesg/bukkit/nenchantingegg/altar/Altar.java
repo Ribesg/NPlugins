@@ -82,7 +82,7 @@ public class Altar {
 	}
 
 	/** This is called on server stops, prevents Altars from being save with an invalid state */
-	public void hardResetToInactive() {
+	public void hardResetToInactive(final boolean hurt) {
 		this.state = AltarState.INACTIVE;
 		final Location loc = getCenterLocation().toBukkitLocation();
 		for (final RelativeBlock r : AltarState.getInactiveStateBlocks()) {
@@ -93,7 +93,7 @@ public class Altar {
 				r.setAdditionalData(b);
 			}
 		}
-		loc.getWorld().createExplosion(loc, 0f, false);
+		loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), hurt ? 5f : 0f, false, false);
 	}
 
 	public void buildItem(final ItemStack is, final List<ItemStack> items) {
@@ -159,6 +159,10 @@ public class Altar {
 		}
 
 		return true;
+	}
+
+	public Location getEggLocation() {
+		return this.centerLocation.toBukkitLocation().add(0, 1, 0);
 	}
 
 	/**

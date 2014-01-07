@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncuboid.listeners;
 
+import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.events.extensions.*;
 import org.bukkit.Bukkit;
@@ -24,7 +25,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class EventExtensionListener extends AbstractListener {
@@ -35,11 +35,8 @@ public class EventExtensionListener extends AbstractListener {
 
 	// PlayerMoveEvent
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerMove(final PlayerMoveEvent event) {
-		final Location from = event.getFrom(), to = event.getTo();
-		if (from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY() || from.getBlockZ() != to.getBlockZ()) {
-			Bukkit.getPluginManager().callEvent(new ExtendedPlayerMoveEvent(getPlugin().getDb(), event));
-		}
+	public void onPlayerGridMove(final PlayerGridMoveEvent event) {
+		Bukkit.getPluginManager().callEvent(new ExtendedPlayerGridMoveEvent(getPlugin().getDb(), event));
 	}
 
 	// PlayerTeleportEvent

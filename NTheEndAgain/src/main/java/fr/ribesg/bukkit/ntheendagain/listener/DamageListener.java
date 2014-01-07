@@ -33,7 +33,7 @@ import java.util.Random;
  */
 public class DamageListener implements Listener {
 
-	private final static Random rand = new Random();
+	private final static Random RANDOM = new Random();
 
 	private final NTheEndAgain plugin;
 
@@ -87,7 +87,7 @@ public class DamageListener implements Listener {
 					if (velocity.getY() < 0.05f) {
 						velocity.setY(0.05f);
 					}
-					if (rand.nextFloat() < 0.025f) {
+					if (RANDOM.nextFloat() < 0.025f) {
 						velocity.setY(10);
 					}
 					velocity.normalize().multiply(1.75f);

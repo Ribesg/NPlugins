@@ -186,6 +186,8 @@ public class TimeUtils {
 	 * <p/>
 	 * Example input: "4d5hours8s" will return the number of seconds representing
 	 * 4 days + 5 hours + 8 seconds = 363608 seconds
+	 * <p/>
+	 * This is the base method for all "getIn***(...)" methods.
 	 *
 	 * @param stringRepresentation a string representation of an amount of time
 	 *
@@ -193,7 +195,7 @@ public class TimeUtils {
 	 *
 	 * @throws IllegalArgumentException when the provided String is malformed
 	 */
-	public static long getInSeconds(final String stringRepresentation) throws IllegalArgumentException {
+	public static long getInSeconds(final String stringRepresentation) {
 		final String[][] parsed = split(stringRepresentation);
 
 		// Check that the whole String was correct. How? Rebuild it!
@@ -218,6 +220,41 @@ public class TimeUtils {
 		}
 
 		return time;
+	}
+
+	/** @see #getInSeconds(String) */
+	public static long getInMilliseconds(final String stringRepresentation) {
+		return getInSeconds(stringRepresentation) * 1000;
+	}
+
+	/** @see #getInSeconds(String) */
+	public static double getInMinutes(final String stringRepresentation) {
+		return getInSeconds(stringRepresentation) / (double) TimeUnits.MINUTE.getMultiplier();
+	}
+
+	/** @see #getInSeconds(String) */
+	public static double getInHours(final String stringRepresentation) {
+		return getInSeconds(stringRepresentation) / (double) TimeUnits.HOUR.getMultiplier();
+	}
+
+	/** @see #getInSeconds(String) */
+	public static double getInDays(final String stringRepresentation) {
+		return getInSeconds(stringRepresentation) / (double) TimeUnits.DAY.getMultiplier();
+	}
+
+	/** @see #getInSeconds(String) */
+	public static double getInWeeks(final String stringRepresentation) {
+		return getInSeconds(stringRepresentation) / (double) TimeUnits.WEEK.getMultiplier();
+	}
+
+	/** @see #getInSeconds(String) */
+	public static double getInMonths(final String stringRepresentation) {
+		return getInSeconds(stringRepresentation) / (double) TimeUnits.MONTH.getMultiplier();
+	}
+
+	/** @see #getInSeconds(String) */
+	public static double getInYears(final String stringRepresentation) {
+		return getInSeconds(stringRepresentation) / (double) TimeUnits.YEAR.getMultiplier();
 	}
 
 	/**

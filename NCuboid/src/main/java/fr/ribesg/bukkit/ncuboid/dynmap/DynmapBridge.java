@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 public class DynmapBridge {
 
-	private static final Logger LOG = Logger.getLogger(DynmapBridge.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(DynmapBridge.class.getName());
 
 	private static final String DYNMAP_PLUGIN_NAME = "dynmap";
 	private static final String MARKERSET_ID       = "ncuboids";
@@ -46,7 +46,7 @@ public class DynmapBridge {
 				markerSet = markerApi.createMarkerSet(MARKERSET_ID, MARKERSET_NAME, null, false);
 			}
 			if (markerSet == null) {
-				LOG.warning("Failed to initialize DynmapBridge!");
+				LOGGER.warning("Failed to initialize DynmapBridge!");
 			}
 		}
 		this.markerSet = markerSet;
@@ -91,7 +91,7 @@ public class DynmapBridge {
 				case CUBOID:
 					return showCuboidRegion((CuboidRegion) region);
 				default:
-					LOG.severe("Unable to dynmapize a region of type '" + region.getType() + "'!");
+					LOGGER.severe("Unable to dynmapize a region of type '" + region.getType() + "'!");
 					return false;
 			}
 		}
@@ -152,7 +152,7 @@ public class DynmapBridge {
 		final AreaMarker marker = this.markerSet.createAreaMarker(id, lbl, markup, world, x, z, persistent);
 
 		if (marker == null) {
-			LOG.warning("Failed to create marker for region " + region.getRegionName());
+			LOGGER.warning("Failed to create marker for region " + region.getRegionName());
 			return false;
 		}
 

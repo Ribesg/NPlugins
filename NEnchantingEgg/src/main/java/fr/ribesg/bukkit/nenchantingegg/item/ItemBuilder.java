@@ -27,36 +27,36 @@ import java.util.Set;
 /** Based on a main item and some ingredients, builds a new boosted item. */
 public class ItemBuilder {
 
-	private static final Random        rand              = new Random();
+	private static final Random        RANDOM            = new Random();
 	private static       Set<Material> possibleMainItems = null;
 
-	private static final double[][] boostValues = new double[][] {
-			new double[] {
-					1.3f,
-					-0.05f
+	private static final double[][] BOOST_VALUES = new double[][] {
+			{
+					1.3d,
+					-0.05d
 			},
-			new double[] {
-					1.1f,
-					-0.15f
+			{
+					1.1d,
+					-0.15d
 			},
-			new double[] {
-					1.2f,
-					-0.37f
+			{
+					1.2d,
+					-0.37d
 			},
-			new double[] {
-					1.4f,
-					-0.68f
+			{
+					1.4d,
+					-0.68d
 			},
-			new double[] {
-					1.7f,
-					-1.09f
+			{
+					1.7d,
+					-1.09d
 			},
-			new double[] {
-					1.9f,
-					-1.42f
+			{
+					1.9d,
+					-1.42d
 			}
 	};
-	private static final double     enchReduce  = 0.1f;
+	private static final double     ENCH_REDUCE  = 0.1f;
 
 	/** List of items that can be boosted */
 	private static Set<Material> getPossibleMainItems() {
@@ -182,7 +182,12 @@ public class ItemBuilder {
 	public void addItem(final ItemStack is) {
 		if (getPossibleMainItems().contains(is.getType()) && is.getEnchantments().size() != 0) {
 			mainItem = is;
-			plugin.getEggProvidedToItemProvidedTransition().doTransition(altar);
+			if (altar.getEggLocation().getBlock().getType() != Material.DRAGON_EGG) {
+				items.clear();
+				altar.hardResetToInactive(true);
+			} else {
+				plugin.getEggProvidedToItemProvidedTransition().doTransition(altar);
+			}
 		} else {
 			items.add(is);
 		}
@@ -235,7 +240,7 @@ public class ItemBuilder {
 		double boost = configurableCoef * repairCount / totalEnchantmentLevel;
 
 		// Add some randomness: boost = 80%*boost + [0-40%]*boost; => boost = [80-120%]*boost;
-		boost = boost - 0.2 * boost + rand.nextFloat() * 0.4 * boost;
+		boost = boost - 0.2 * boost + RANDOM.nextFloat() * 0.4 * boost;
 
 		// Apply durability
 		double finalDurability = mainItem.getDurability() - boost * maxDurability;
@@ -296,12 +301,12 @@ public class ItemBuilder {
 
 			// Compute probabilities
 			final double[] probabilities = new double[] {
-					coef * boostValues[0][0] + boostValues[0][1] - enchReduce * enchantments,
-					coef * boostValues[1][0] + boostValues[1][1] - enchReduce * enchantments,
-					coef * boostValues[2][0] + boostValues[2][1] - enchReduce * enchantments,
-					coef * boostValues[3][0] + boostValues[3][1] - enchReduce * enchantments,
-					coef * boostValues[4][0] + boostValues[4][1] - enchReduce * enchantments,
-					coef * boostValues[5][0] + boostValues[5][1] - enchReduce * enchantments
+					coef * BOOST_VALUES[0][0] + BOOST_VALUES[0][1] - ENCH_REDUCE * enchantments,
+					coef * BOOST_VALUES[1][0] + BOOST_VALUES[1][1] - ENCH_REDUCE * enchantments,
+					coef * BOOST_VALUES[2][0] + BOOST_VALUES[2][1] - ENCH_REDUCE * enchantments,
+					coef * BOOST_VALUES[3][0] + BOOST_VALUES[3][1] - ENCH_REDUCE * enchantments,
+					coef * BOOST_VALUES[4][0] + BOOST_VALUES[4][1] - ENCH_REDUCE * enchantments,
+					coef * BOOST_VALUES[5][0] + BOOST_VALUES[5][1] - ENCH_REDUCE * enchantments
 			};
 
 			// Apply configurable coef and fix out-of-scope values
@@ -320,7 +325,7 @@ public class ItemBuilder {
 			for (final Map.Entry<Enchantment, Integer> e : mainItem.getEnchantments().entrySet()) {
 				int result = 0;
 				for (int i = 6; i > 0; i--) {
-					if (rand.nextFloat() <= probabilities[i - 1]) {
+					if (RANDOM.nextFloat() <= probabilities[i - 1]) {
 						result = i;
 						break;
 					}

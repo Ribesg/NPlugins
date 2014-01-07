@@ -43,7 +43,7 @@ public class Altars {
 
 	public void onDisable() {
 		for (final Altar altar : getAltars()) {
-			altar.hardResetToInactive();
+			altar.hardResetToInactive(false);
 		}
 	}
 
@@ -109,7 +109,7 @@ public class Altars {
 			} else {
 				for (final Altar a : perWorld.get(worldName)) {
 					if (a.getState() == AltarState.ACTIVE) {
-						a.hardResetToInactive();
+						a.hardResetToInactive(false);
 					} else if (a.getState() == AltarState.LOCKED) {
 						a.setState(AltarState.INACTIVE);
 					}
@@ -125,7 +125,7 @@ public class Altars {
 			if (altar.getState() == AltarState.INACTIVE && MinecraftTime.isNightTime(world.getTime())) {
 				plugin.getInactiveToActiveTransition().doTransition(altar);
 			} else if (altar.getState() != AltarState.INACTIVE && MinecraftTime.isNightTime(world.getTime())) {
-				altar.hardResetToInactive();
+				altar.hardResetToInactive(false);
 			}
 		}
 	}

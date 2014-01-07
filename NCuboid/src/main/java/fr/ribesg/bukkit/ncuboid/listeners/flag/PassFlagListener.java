@@ -9,9 +9,10 @@
 
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
+import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
@@ -25,8 +26,8 @@ public class PassFlagListener extends AbstractListener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerMoveBlock(final ExtendedPlayerMoveEvent ext) {
-		final PlayerMoveEvent event = (PlayerMoveEvent) ext.getBaseEvent();
+	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
+		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			if (ext.getFromRegion() != null && ext.getFromRegion().getFlag(Flag.PASS) && !ext.getFromRegion().equals(ext.getToRegion())) {
 				event.setTo(new Location(event.getFrom().getWorld(),

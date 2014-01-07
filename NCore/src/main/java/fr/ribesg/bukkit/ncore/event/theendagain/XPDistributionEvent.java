@@ -23,10 +23,10 @@ import java.util.Map;
 public class XPDistributionEvent extends Event implements Cancellable {
 
 	// Handlers
-	private static final HandlerList handlers = new HandlerList();
+	private static final HandlerList HANDLERS = new HandlerList();
 
 	public static HandlerList getHandlerList() {
-		return handlers;
+		return HANDLERS;
 	}
 
 	private final Map<String, Integer> xpMap;
@@ -41,7 +41,7 @@ public class XPDistributionEvent extends Event implements Cancellable {
 
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
+		return HANDLERS;
 	}
 
 	/**

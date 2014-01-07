@@ -27,8 +27,6 @@ public enum MessageId {
 	cmdReloadMessages,
 	cmdReloadError,
 
-	incorrectValueInConfiguration,
-
 	// ##################### //
 	// ## NCuboid related ## //
 	// ##################### //

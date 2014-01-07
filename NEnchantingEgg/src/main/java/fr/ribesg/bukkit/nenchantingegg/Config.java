@@ -9,9 +9,8 @@
 
 package fr.ribesg.bukkit.nenchantingegg;
 
-import fr.ribesg.bukkit.ncore.AbstractConfig;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altars;
@@ -45,36 +44,24 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		// Possible values: Positive integer >= 35
 		setMinimumDistanceBetweenTwoAltars(config.getInt("minimumDistanceBetweenTwoAltars", 500));
 		if (getMinimumDistanceBetweenTwoAltars() < 35) {
+			wrongValue("config.yml", "minimumDistanceBetweenTwoAltars", getMinimumDistanceBetweenTwoAltars(), 500);
 			setMinimumDistanceBetweenTwoAltars(500);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "minimumDistanceBetweenTwoAltars",
-			                   "500");
 		}
 
 		// repairBoostMultiplier. Default: 1.0.
 		// Possible values: Positive double
 		setRepairBoostMultiplier(config.getDouble("repairBoostMultiplier", 1.0));
 		if (getRepairBoostMultiplier() <= 0.0) {
+			wrongValue("config.yml", "repairBoostMultiplier", getRepairBoostMultiplier(), 1.0);
 			setRepairBoostMultiplier(1.0);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "repairBoostMultiplier",
-			                   "1.0");
 		}
 
 		// enchantmentBoostMultiplier. Default: 1.0.
 		// Possible values: Positive double
 		setEnchantmentBoostMultiplier(config.getDouble("enchantmentBoostMultiplier", 1.0));
 		if (getEnchantmentBoostMultiplier() <= 0.0) {
+			wrongValue("config.yml", "enchantmentBoostMultiplier", getEnchantmentBoostMultiplier(), 1.0);
 			setEnchantmentBoostMultiplier(1.0);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "enchantmentBoostMultiplier",
-			                   "1.0");
 		}
 
 		if (config.isList("altars")) {
