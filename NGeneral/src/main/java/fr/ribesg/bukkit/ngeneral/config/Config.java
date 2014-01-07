@@ -15,7 +15,7 @@ import fr.ribesg.bukkit.ngeneral.NGeneral;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class Config extends AbstractConfig {
+public class Config extends AbstractConfig<NGeneral> {
 
 	// Features control
 	private String initialMessage;

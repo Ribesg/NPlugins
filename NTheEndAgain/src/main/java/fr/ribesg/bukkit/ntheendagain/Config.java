@@ -16,7 +16,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.Random;
 
-public class Config extends AbstractConfig {
+public class Config extends AbstractConfig<NTheEndAgain> {
 
 	private final static Random rand = new Random();
 

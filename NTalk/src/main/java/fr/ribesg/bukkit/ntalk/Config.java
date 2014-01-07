@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class Config extends AbstractConfig {
+public class Config extends AbstractConfig<NTalk> {
 
 	private static final String defaultTemplate        = "&f<[prefix][name][suffix]&f> [message]";
 	private static final String defaultPmTemplate      = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> " +

@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  *
  * @author Ribesg
  */
-public class Config extends AbstractConfig {
+public class Config extends AbstractConfig<NCuboid> {
 
 	private static final Logger LOG = Logger.getLogger(Config.class.getName());
 
