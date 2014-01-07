@@ -23,10 +23,10 @@ import org.bukkit.event.HandlerList;
 public class ChunkRegenEvent extends Event implements Cancellable {
 
 	// Handlers
-	private static final HandlerList handlers = new HandlerList();
+	private static final HandlerList HANDLERS = new HandlerList();
 
 	public static HandlerList getHandlerList() {
-		return handlers;
+		return HANDLERS;
 	}
 
 	private final Chunk   chunk;
@@ -39,7 +39,7 @@ public class ChunkRegenEvent extends Event implements Cancellable {
 
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
+		return HANDLERS;
 	}
 
 	/** The chunk that is about to be regen (or not) */

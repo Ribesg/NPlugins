@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  */
 public class Config extends AbstractConfig<NCuboid> {
 
-	private static final Logger LOG = Logger.getLogger(Config.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(Config.class.getName());
 
 	private       Material                 selectionItemMaterial;
 	private final Map<String, GroupConfig> groupConfigs;
@@ -75,16 +75,16 @@ public class Config extends AbstractConfig<NCuboid> {
 						final int maxRegion1DSize = groupSection.getInt("maxRegion1DSize", def);
 						final int maxRegion3DSize = groupSection.getInt("maxRegion3DSize", def);
 						if (maxRegionNb == def || maxRegion1DSize == def || maxRegion3DSize == def) {
-							LOG.severe("Missing config value for '" + groupName + "' in config");
+							LOGGER.severe("Missing config value for '" + groupName + "' in config");
 						} else {
 							groupConfigs.put(groupName.toLowerCase(),
 							                 new GroupConfig(groupName.toLowerCase(), maxRegionNb, maxRegion1DSize, maxRegion3DSize));
 						}
 					} else {
-						LOG.severe("Invalid config value '" + groupName + "' ignored in config");
+						LOGGER.severe("Invalid config value '" + groupName + "' ignored in config");
 					}
 				} catch (final NumberFormatException e) {
-					LOG.severe("Failed to load group " + groupName + ", invalid value set in config");
+					LOGGER.severe("Failed to load group " + groupName + ", invalid value set in config");
 				}
 			}
 		}
@@ -150,7 +150,7 @@ public class Config extends AbstractConfig<NCuboid> {
 				return gc;
 			}
 		}
-		LOG.warning("Player '" + player.getName() + "' doesn't have any associated group, he will not be able to make cuboids!");
+		LOGGER.warning("Player '" + player.getName() + "' doesn't have any associated group, he will not be able to make cuboids!");
 		return defaultGroupConfig;
 	}
 }

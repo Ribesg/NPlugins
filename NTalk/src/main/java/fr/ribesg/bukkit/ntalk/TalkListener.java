@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 public class TalkListener implements Listener {
 
-	private static final Logger LOG = Logger.getLogger(TalkListener.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(TalkListener.class.getName());
 
 	private final NTalk      plugin;
 	private final ChatFilter filter;
@@ -133,7 +133,7 @@ public class TalkListener implements Listener {
 						break;
 					case DIVINE_PUNISHMENT:
 						// TODO
-						LOG.severe("Divine Punishment has not yet been implemented! Please don't use it!");
+						LOGGER.severe("Divine Punishment has not yet been implemented! Please don't use it!");
 						break;
 					default:
 						break;

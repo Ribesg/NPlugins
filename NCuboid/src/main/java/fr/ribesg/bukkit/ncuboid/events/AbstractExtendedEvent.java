@@ -20,15 +20,15 @@ import org.bukkit.event.HandlerList;
 public abstract class AbstractExtendedEvent extends Event {
 
 	// Handlers
-	private static final HandlerList handlers = new HandlerList();
+	private static final HandlerList HANDLERS = new HandlerList();
 
 	public static HandlerList getHandlerList() {
-		return handlers;
+		return HANDLERS;
 	}
 
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
+		return HANDLERS;
 	}
 
 	// Actual Event Extension

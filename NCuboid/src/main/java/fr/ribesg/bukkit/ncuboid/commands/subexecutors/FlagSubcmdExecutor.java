@@ -22,8 +22,8 @@ import java.util.regex.Pattern;
 
 public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private static final Pattern enable  = Pattern.compile("^(on|enabled?|true|1)$");
-	private static final Pattern disable = Pattern.compile("^(off|disabled?|false|0)$");
+	private static final Pattern ENABLE_REGEX  = Pattern.compile("^(on|enabled?|true|1)$");
+	private static final Pattern DISABLE_REGEX = Pattern.compile("^(off|disabled?|false|0)$");
 
 	public FlagSubcmdExecutor(final NCuboid instance) {
 		super(instance);
@@ -64,9 +64,9 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 				// Get provided value
 				final String valueString = args[2].toLowerCase();
 				final boolean value;
-				if (enable.matcher(valueString).matches()) {
+				if (ENABLE_REGEX.matcher(valueString).matches()) {
 					value = true;
-				} else if (disable.matcher(valueString).matches()) {
+				} else if (DISABLE_REGEX.matcher(valueString).matches()) {
 					value = false;
 				} else {
 					getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagUnknownValue, args[2]);

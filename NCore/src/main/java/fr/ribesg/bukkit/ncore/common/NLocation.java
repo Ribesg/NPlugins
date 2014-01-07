@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class NLocation {
 
-	private static final Logger LOG = Logger.getLogger(NLocation.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(NLocation.class.getName());
 
 	private static final char   SEPARATOR_CHAR        = ';';
 	private static final String SEPARATOR_CHAR_STRING = Character.toString(SEPARATOR_CHAR);
@@ -298,8 +298,8 @@ public class NLocation {
 			final String worldName = split[0];
 			final World world = Bukkit.getWorld(worldName);
 			if (world == null) {
-				LOG.warning("Unable to convert the provided String to Location, world '" + worldName + "' not found");
-				LOG.warning("String was: " + string);
+				LOGGER.warning("Unable to convert the provided String to Location, world '" + worldName + "' not found");
+				LOGGER.warning("String was: " + string);
 				return null;
 			} else {
 				try {
@@ -308,8 +308,8 @@ public class NLocation {
 					final Double z = Double.parseDouble(split[3]);
 					return new Location(world, x, y, z);
 				} catch (final NumberFormatException e) {
-					LOG.warning("Unable to convert the provided String to Location, caught NumberFormatException while parsing x,y,z");
-					LOG.warning("String was: " + string);
+					LOGGER.warning("Unable to convert the provided String to Location, caught NumberFormatException while parsing x,y,z");
+					LOGGER.warning("String was: " + string);
 					return null;
 				}
 			}
@@ -327,9 +327,9 @@ public class NLocation {
 					final Float pitch = Float.parseFloat(split[5]);
 					return new Location(world, x, y, z, yaw, pitch);
 				} catch (final NumberFormatException e) {
-					LOG.warning("Unable to convert the provided String to Location, " +
+					LOGGER.warning("Unable to convert the provided String to Location, " +
 					            "caught NumberFormatException while parsing x,y,z,yaw,pitch");
-					LOG.warning("String was: " + string);
+					LOGGER.warning("String was: " + string);
 					return null;
 				}
 			}
@@ -359,8 +359,8 @@ public class NLocation {
 				final Double z = Double.parseDouble(split[3]);
 				return new NLocation(worldName, x, y, z);
 			} catch (final NumberFormatException e) {
-				LOG.warning("Unable to convert the provided String to NLocation, caught NumberFormatException while parsing x,y,z");
-				LOG.warning("String was: " + string);
+				LOGGER.warning("Unable to convert the provided String to NLocation, caught NumberFormatException while parsing x,y,z");
+				LOGGER.warning("String was: " + string);
 				return null;
 			}
 		} else if (split.length == 6) {
@@ -373,9 +373,9 @@ public class NLocation {
 				final Float pitch = Float.parseFloat(split[5]);
 				return new NLocation(worldName, x, y, z, yaw, pitch);
 			} catch (final NumberFormatException e) {
-				LOG.warning("Unable to convert the provided String to NLocation, " +
+				LOGGER.warning("Unable to convert the provided String to NLocation, " +
 				            "caught NumberFormatException while parsing x,y,z,yaw,pitch");
-				LOG.warning("String was: " + string);
+				LOGGER.warning("String was: " + string);
 				return null;
 			}
 		} else {

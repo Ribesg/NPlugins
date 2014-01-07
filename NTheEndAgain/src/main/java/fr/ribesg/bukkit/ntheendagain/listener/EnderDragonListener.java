@@ -51,8 +51,8 @@ public class EnderDragonListener implements Listener {
 	 * Players that did less than threshold % of total damages
 	 * have no chance to receive the Egg with custom handling
 	 */
-	private static final float  threshold = 0.15f;
-	private static final Random rand      = new Random();
+	private static final float  THRESHOLD = 0.15f;
+	private static final Random RANDOM    = new Random();
 
 	private final NTheEndAgain plugin;
 
@@ -226,7 +226,7 @@ public class EnderDragonListener implements Listener {
 					final Iterator<Entry<Float, String>> it = ratioMap.entrySet().iterator();
 					while (it.hasNext()) {
 						final Entry<Float, String> e = it.next();
-						if (e.getKey() <= threshold) {
+						if (e.getKey() <= THRESHOLD) {
 							it.remove();
 						}
 					}
@@ -350,7 +350,7 @@ public class EnderDragonListener implements Listener {
 			if (handler != null) {
 				final float rate = handler.getConfig().getEcHealthRegainRate();
 				if (rate < 1.0) {
-					if (rand.nextFloat() >= rate) {
+					if (RANDOM.nextFloat() >= rate) {
 						event.setCancelled(true);
 					}
 				} else if (rate > 1.0) {

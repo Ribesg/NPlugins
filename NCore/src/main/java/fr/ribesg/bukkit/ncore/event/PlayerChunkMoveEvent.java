@@ -21,10 +21,10 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class PlayerChunkMoveEvent extends PlayerMoveEvent {
 
 	// Handlers
-	private static final HandlerList handlers = new HandlerList();
+	private static final HandlerList HANDLERS = new HandlerList();
 
 	public static HandlerList getHandlerList() {
-		return handlers;
+		return HANDLERS;
 	}
 
 	public PlayerChunkMoveEvent(final Player player, final Location from, final Location to) {
@@ -33,6 +33,6 @@ public class PlayerChunkMoveEvent extends PlayerMoveEvent {
 
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
+		return HANDLERS;
 	}
 }

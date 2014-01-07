@@ -20,10 +20,10 @@ import org.bukkit.event.player.PlayerEvent;
 public class PlayerJoinedEvent extends PlayerEvent {
 
 	// Handlers
-	private static final HandlerList handlers = new HandlerList();
+	private static final HandlerList HANDLERS = new HandlerList();
 
 	public static HandlerList getHandlerList() {
-		return handlers;
+		return HANDLERS;
 	}
 
 	public PlayerJoinedEvent(final Player who) {
@@ -32,6 +32,6 @@ public class PlayerJoinedEvent extends PlayerEvent {
 
 	@Override
 	public HandlerList getHandlers() {
-		return handlers;
+		return HANDLERS;
 	}
 }

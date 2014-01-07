@@ -28,7 +28,7 @@ public enum FeatureType {
 	PROTECTION_SIGNS(ProtectionSignFeature.class);
 
 	/** Maps Feature classes to appropriate FeatureType enum value */
-	private static final Map<Class<? extends Feature>, FeatureType> reverseMap = new HashMap<>();
+	private static final Map<Class<? extends Feature>, FeatureType> REVERSE_MAP = new HashMap<>();
 
 	/**
 	 * From a Feature class, returns the appropriate FeatureType enum value.
@@ -38,12 +38,12 @@ public enum FeatureType {
 	 * @return the appropriate enum value
 	 */
 	public static FeatureType fromClass(final Class<? extends Feature> clazz) {
-		if (reverseMap.isEmpty()) {
+		if (REVERSE_MAP.isEmpty()) {
 			for (final FeatureType type : FeatureType.values()) {
-				reverseMap.put(type.toClass(), type);
+				REVERSE_MAP.put(type.toClass(), type);
 			}
 		}
-		return reverseMap.get(clazz);
+		return REVERSE_MAP.get(clazz);
 	}
 
 	/** The Feature class linked to this FeatureType enum value */

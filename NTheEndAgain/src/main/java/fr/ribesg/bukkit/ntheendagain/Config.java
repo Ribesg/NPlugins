@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class Config extends AbstractConfig<NTheEndAgain> {
 
-	private final static Random rand = new Random();
+	private final static Random RANDOM = new Random();
 
 	private final String worldName;
 
@@ -742,7 +742,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getRandomRespawnTimer() {
-		return rand.nextInt(getRespawnTimerMax() - getRespawnTimerMin()) + getRespawnTimerMin();
+		return RANDOM.nextInt(getRespawnTimerMax() - getRespawnTimerMin()) + getRespawnTimerMin();
 	}
 
 	public int getRespawnType() {

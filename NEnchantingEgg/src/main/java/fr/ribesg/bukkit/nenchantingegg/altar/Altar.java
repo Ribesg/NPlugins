@@ -82,7 +82,7 @@ public class Altar {
 	}
 
 	/** This is called on server stops, prevents Altars from being save with an invalid state */
-	public void hardResetToInactive(boolean hurt) {
+	public void hardResetToInactive(final boolean hurt) {
 		this.state = AltarState.INACTIVE;
 		final Location loc = getCenterLocation().toBukkitLocation();
 		for (final RelativeBlock r : AltarState.getInactiveStateBlocks()) {
