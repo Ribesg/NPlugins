@@ -31,29 +31,29 @@ public class ItemBuilder {
 	private static       Set<Material> possibleMainItems = null;
 
 	private static final double[][] boostValues = new double[][] {
-			new double[] {
-					1.3f,
-					-0.05f
+			{
+					1.3d,
+					-0.05d
 			},
-			new double[] {
-					1.1f,
-					-0.15f
+			{
+					1.1d,
+					-0.15d
 			},
-			new double[] {
-					1.2f,
-					-0.37f
+			{
+					1.2d,
+					-0.37d
 			},
-			new double[] {
-					1.4f,
-					-0.68f
+			{
+					1.4d,
+					-0.68d
 			},
-			new double[] {
-					1.7f,
-					-1.09f
+			{
+					1.7d,
+					-1.09d
 			},
-			new double[] {
-					1.9f,
-					-1.42f
+			{
+					1.9d,
+					-1.42d
 			}
 	};
 	private static final double     enchReduce  = 0.1f;
@@ -182,7 +182,12 @@ public class ItemBuilder {
 	public void addItem(final ItemStack is) {
 		if (getPossibleMainItems().contains(is.getType()) && is.getEnchantments().size() != 0) {
 			mainItem = is;
-			plugin.getEggProvidedToItemProvidedTransition().doTransition(altar);
+			if (altar.getEggLocation().getBlock().getType() != Material.DRAGON_EGG) {
+				items.clear();
+				altar.hardResetToInactive(true);
+			} else {
+				plugin.getEggProvidedToItemProvidedTransition().doTransition(altar);
+			}
 		} else {
 			items.add(is);
 		}
