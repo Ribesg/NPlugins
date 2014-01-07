@@ -9,17 +9,26 @@
 
 package fr.ribesg.bukkit.ncore;
 
+import fr.ribesg.bukkit.ncore.common.updater.FileDescription;
+import fr.ribesg.bukkit.ncore.common.updater.Updater;
+import fr.ribesg.bukkit.ncore.config.Config;
 import fr.ribesg.bukkit.ncore.event.NEventsListener;
 import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.utils.VersionUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.mcstats.Metrics;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 /**
  * The Core of the N Plugin Suite
@@ -28,9 +37,12 @@ import java.util.Map;
  */
 public class NCore extends JavaPlugin {
 
-	private Map<String, Node> nodes;
+	private final static Logger LOGGER = Logger.getLogger(NCore.class.getName());
 
-	private Metrics metrics;
+	private Map<String, Node> nodes;
+	private Metrics           metrics;
+	private Config            pluginConfig;
+	private Updater           updater;
 
 	@Override
 	public void onEnable() {
@@ -38,6 +50,16 @@ public class NCore extends JavaPlugin {
 			metrics = new Metrics(this);
 		} catch (final IOException e) {
 			e.printStackTrace();
+		}
+
+		// Config
+		try {
+			pluginConfig = new Config(this);
+			pluginConfig.loadConfig();
+		} catch (final IOException | InvalidConfigurationException e) {
+			LOGGER.severe("An error occured, stacktrace follows:");
+			e.printStackTrace();
+			LOGGER.severe("This error occured when NCore tried to load config.yml");
 		}
 
 		this.nodes = new HashMap<>();
@@ -61,6 +83,8 @@ public class NCore extends JavaPlugin {
 	private void afterNodesLoad() {
 		boolean noNodeFound = true;
 		final Metrics.Graph nodesUsedGraph = metrics.createGraph("Nodes used");
+		final List<JavaPlugin> plugins = new LinkedList<>();
+		plugins.add(this);
 
 		if (get(Node.CUBOID) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.CUBOID) {
@@ -71,6 +95,7 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
+			plugins.add((JavaPlugin) get(Node.CUBOID));
 		}
 
 		if (get(Node.ENCHANTING_EGG) != null) {
@@ -82,6 +107,7 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
+			plugins.add((JavaPlugin) get(Node.ENCHANTING_EGG));
 		}
 
 		if (get(Node.GENERAL) != null) {
@@ -93,6 +119,7 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
+			plugins.add((JavaPlugin) get(Node.GENERAL));
 		}
 
 		if (get(Node.PLAYER) != null) {
@@ -104,6 +131,7 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
+			plugins.add((JavaPlugin) get(Node.PLAYER));
 		}
 
 		if (get(Node.TALK) != null) {
@@ -115,6 +143,7 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
+			plugins.add((JavaPlugin) get(Node.TALK));
 		}
 
 		if (get(Node.THE_END_AGAIN) != null) {
@@ -126,6 +155,7 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
+			plugins.add((JavaPlugin) get(Node.THE_END_AGAIN));
 		}
 
 		if (get(Node.WORLD) != null) {
@@ -137,6 +167,7 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
+			plugins.add((JavaPlugin) get(Node.WORLD));
 		}
 
 		metrics.start();
@@ -150,10 +181,12 @@ public class NCore extends JavaPlugin {
 			frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
 
 			for (final String s : frame.build()) {
-				getLogger().severe(s);
+				LOGGER.severe(s);
 			}
 
 			getPluginLoader().disablePlugin(this);
+		} else {
+			checkForUpdates(plugins.toArray(new JavaPlugin[plugins.size()]));
 		}
 	}
 
@@ -166,6 +199,59 @@ public class NCore extends JavaPlugin {
 			throw new IllegalStateException("Registering the same node twice!");
 		} else {
 			this.nodes.put(nodeName, node);
+		}
+	}
+
+	public void checkForUpdates(final JavaPlugin... plugins) {
+		if (this.updater != null) {
+			this.updater = new Updater('v' + getDescription().getVersion(), null);
+		}
+		Bukkit.getScheduler().runTaskAsynchronously(this, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				for (final JavaPlugin plugin : plugins) {
+					if (plugin != null && VersionUtils.isRelease(plugin.getDescription().getVersion())) {
+						Boolean result = null;
+						FileDescription latestFile = null;
+						try {
+							if (!updater.isUpToDate(plugin.getName(), 'v' + plugin.getDescription().getVersion())) {
+								latestFile = updater.getLatestVersion(plugin.getName());
+								result = false;
+							} else {
+								result = true;
+							}
+						} catch (final IOException e) {
+							e.printStackTrace();
+						}
+
+						final Boolean finalResult = result;
+						final FileDescription finalLatestFile = latestFile;
+						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
+
+							@Override
+							public Object call() throws Exception {
+								checkedForUpdates(plugin, finalResult, finalLatestFile);
+								return null;
+							}
+						});
+					}
+				}
+			}
+		});
+	}
+
+	public void checkedForUpdates(final JavaPlugin plugin, final Boolean result, final FileDescription fileDescription) {
+		if (result == null) {
+			LOGGER.warning("Failed to check for updates for plugin " + plugin.getName());
+		} else if (!result) {
+			LOGGER.warning("A new version of " + plugin.getName() + " is available!");
+			LOGGER.warning("Current version:   v" + plugin.getDescription().getVersion());
+			LOGGER.warning("Available version: " + fileDescription.getVersion());
+			LOGGER.warning("Find all updated from the NCore homepage!");
+			LOGGER.warning("http://dev.bukkit.org/bukkit-plugins/ncore/");
+		} else {
+			LOGGER.info(plugin.getName() + " is up to date (v" + plugin.getDescription().getVersion() + ")");
 		}
 	}
 }
