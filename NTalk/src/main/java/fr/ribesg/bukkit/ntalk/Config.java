@@ -9,8 +9,7 @@
 
 package fr.ribesg.bukkit.ntalk;
 
-import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ntalk.format.Format;
 import fr.ribesg.bukkit.ntalk.format.Format.FormatType;
@@ -23,7 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public class Config extends AbstractConfig<NTalk> {
+public class Config extends AbstractConfig {
 
 	private static final String defaultTemplate        = "&f<[prefix][name][suffix]&f> [message]";
 	private static final String defaultPmTemplate      = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> " +
@@ -87,24 +86,16 @@ public class Config extends AbstractConfig<NTalk> {
 		// Possible values: Any String containing at least "[name]" and "[message]"
 		setTemplate(config.getString("template", defaultTemplate));
 		if (!getTemplate().contains("[name]") || !getTemplate().contains("[message]")) {
+			wrongValue("config.yml", "template", getTemplate(), defaultTemplate);
 			setTemplate(defaultTemplate);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "template",
-			                   defaultTemplate);
 		}
 
 		// pmTemplate. Default: "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> [message]".
 		// Possible values: Any String containing at least "[nameFrom]", "[nameTo]" and "[message]"
 		setPmTemplate(config.getString("pmTemplate", defaultPmTemplate));
 		if (!getPmTemplate().contains("[nameFrom]") || !getPmTemplate().contains("[nameTo]") || !getPmTemplate().contains("[message]")) {
+			wrongValue("config.yml", "pmTemplate", getPmTemplate(), defaultPmTemplate);
 			setPmTemplate(defaultPmTemplate);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "pmTemplate",
-			                   defaultPmTemplate);
 		}
 
 		// opGroup. Default: "admin".
@@ -159,12 +150,8 @@ public class Config extends AbstractConfig<NTalk> {
 			if (!getGroupFormats().containsKey("admin")) {
 				getGroupFormats().put("admin", new Format(FormatType.GROUP, "admin", "&c[Admin]&f", ""));
 			}
+			wrongValue("config.yml", "opGroup", getOpGroup(), "admin");
 			setOpGroup("admin");
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "opGroup",
-			                   "admin");
 		}
 
 		// Chat filter
@@ -174,24 +161,16 @@ public class Config extends AbstractConfig<NTalk> {
 		if (!getTempMuteCommand().contains("%player%") ||
 		    !getTempMuteCommand().contains("%duration%") ||
 		    !getTempMuteCommand().contains("%reason%")) {
+			wrongValue("config.yml", "tempMuteCommand", getTempMuteCommand(), defaultTempMuteCommand);
 			setTempMuteCommand(defaultTempMuteCommand);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "tempMuteCommand",
-			                   defaultTempMuteCommand);
 		}
 
 		setTempBanCommand(config.getString("tempBanCommand", defaultTempBanCommand));
 		if (!getTempBanCommand().contains("%player%") ||
 		    !getTempBanCommand().contains("%duration%") ||
 		    !getTempBanCommand().contains("%reason%")) {
+			wrongValue("config.yml", "tempBanCommand", getTempBanCommand(), defaultTempBanCommand);
 			setTempBanCommand(defaultTempBanCommand);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "tempBanCommand",
-			                   defaultTempBanCommand);
 		}
 
 		setTempJailCommand(config.getString("tempJailCommand", defaultTempJailCommand));
@@ -199,12 +178,8 @@ public class Config extends AbstractConfig<NTalk> {
 		    !getTempJailCommand().contains("%duration%") ||
 		    !getTempJailCommand().contains("%jailName%") ||
 		    !getTempJailCommand().contains("%reason%")) {
+			wrongValue("config.yml", "tempJailCommand", getTempJailCommand(), defaultTempJailCommand);
 			setTempJailCommand(defaultTempJailCommand);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "tempJailCommand",
-			                   defaultTempJailCommand);
 		}
 	}
 

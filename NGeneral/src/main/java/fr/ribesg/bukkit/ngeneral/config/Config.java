@@ -9,13 +9,13 @@
 
 package fr.ribesg.bukkit.ngeneral.config;
 
-import fr.ribesg.bukkit.ncore.AbstractConfig;
+import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class Config extends AbstractConfig<NGeneral> {
+public class Config extends AbstractConfig {
 
 	// Features control
 	private String initialMessage;
@@ -122,7 +122,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		itemNetworkSignTooFarMsgLine3 = DEFAULT_itemNetworkSignTooFarMsgLine3;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
+	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
@@ -375,7 +375,7 @@ public class Config extends AbstractConfig<NGeneral> {
 
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.AbstractConfig#getConfigString() */
+	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString() */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();

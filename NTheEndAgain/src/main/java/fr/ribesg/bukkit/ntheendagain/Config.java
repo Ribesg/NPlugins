@@ -9,14 +9,14 @@
 
 package fr.ribesg.bukkit.ntheendagain;
 
-import fr.ribesg.bukkit.ncore.AbstractConfig;
+import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.Random;
 
-public class Config extends AbstractConfig<NTheEndAgain> {
+public class Config extends AbstractConfig {
 
 	private final static Random rand = new Random();
 

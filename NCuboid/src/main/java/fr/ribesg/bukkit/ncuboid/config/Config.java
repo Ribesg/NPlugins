@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ncuboid.config;
 
-import fr.ribesg.bukkit.ncore.AbstractConfig;
+import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import org.bukkit.Material;
@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  *
  * @author Ribesg
  */
-public class Config extends AbstractConfig<NCuboid> {
+public class Config extends AbstractConfig {
 
 	private static final Logger LOG = Logger.getLogger(Config.class.getName());
 

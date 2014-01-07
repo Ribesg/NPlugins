@@ -9,12 +9,11 @@
 
 package fr.ribesg.bukkit.nplayer;
 
-import fr.ribesg.bukkit.ncore.AbstractConfig;
-import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class Config extends AbstractConfig<NPlayer> {
+public class Config extends AbstractConfig {
 
 	private int maximumLoginAttempts;
 	private int tooManyAttemptsPunishment;
@@ -27,7 +26,7 @@ public class Config extends AbstractConfig<NPlayer> {
 		setTooManyAttemptsPunishmentDuration(300);
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
+	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 
@@ -35,40 +34,28 @@ public class Config extends AbstractConfig<NPlayer> {
 		// Possible values: positive integers
 		setMaximumLoginAttempts(config.getInt("maximumLoginAttempts", 3));
 		if (getMaximumLoginAttempts() < 1) {
-			setMaximumLoginAttempts(1);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "maximumLoginAttempts",
-			                   "1");
+			wrongValue("config.yml", "maximumLoginAttempts", getMaximumLoginAttempts(), 3);
+			setMaximumLoginAttempts(3);
 		}
 
 		// tooManyAttemptsPunishment. Default: 1.
 		// Possible values: 0, 1, 2
 		setTooManyAttemptsPunishment(config.getInt("tooManyAttemptsPunishment", 1));
 		if (getTooManyAttemptsPunishment() < 0 || getTooManyAttemptsPunishment() > 2) {
+			wrongValue("config.yml", "tooManyAttemptsPunishment", getTooManyAttemptsPunishment(), 1);
 			setTooManyAttemptsPunishment(1);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "tooManyAttemptsPunishment",
-			                   "1");
 		}
 
 		// tooManyAttemptsPunishmentDuration. Default: 300.
 		// Possible values: positive integers
 		setTooManyAttemptsPunishmentDuration(config.getInt("tooManyAttemptsPunishmentDuration", 300));
 		if (getTooManyAttemptsPunishmentDuration() < 1) {
+			wrongValue("config.yml", "tooManyAttemptsPunishmentDuration", getTooManyAttemptsPunishmentDuration(), 300);
 			setTooManyAttemptsPunishmentDuration(300);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "tooManyAttemptsPunishmentDuration",
-			                   "300");
 		}
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.AbstractConfig#getConfigString() */
+	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString() */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();

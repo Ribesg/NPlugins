@@ -9,10 +9,10 @@
 
 package fr.ribesg.bukkit.nworld.config;
 
-import fr.ribesg.bukkit.ncore.AbstractConfig;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.nworld.NWorld;
 import fr.ribesg.bukkit.nworld.warp.Warp;
 import fr.ribesg.bukkit.nworld.warp.Warps;
 import fr.ribesg.bukkit.nworld.world.AdditionalSubWorld;
@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
+public class Config extends AbstractConfig<NWorld> {
 
 	private final Logger log;
 
@@ -67,7 +67,7 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		broadcastOnWorldUnload = 0;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
+	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
@@ -79,12 +79,8 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		// Possible values: 0,1
 		setSpawnCommandBehaviour(config.getInt("spawnCommandBehaviour", 1));
 		if (getSpawnCommandBehaviour() < 0 || getSpawnCommandBehaviour() > 1) {
+			wrongValue("config.yml", "spawnCommandBehaviour", getSpawnCommandBehaviour(), 0);
 			setSpawnCommandBehaviour(0);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "spawnCommandBehaviour",
-			                   "0");
 		}
 
 		// defaultRequiredPermission. Default: nworld.admin
@@ -101,36 +97,24 @@ public class Config extends AbstractConfig<fr.ribesg.bukkit.nworld.NWorld> {
 		// Possible values: 0,1
 		setBroadcastOnWorldCreate(config.getInt("broadcastOnWorldCreate", 0));
 		if (getBroadcastOnWorldCreate() < 0 || getBroadcastOnWorldCreate() > 1) {
+			wrongValue("config.yml", "broadcastOnWorldCreate", getBroadcastOnWorldCreate(), 0);
 			setBroadcastOnWorldCreate(0);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "broadcastOnWorldCreate",
-			                   "0");
 		}
 
 		// broadcastOnWorldLoad. Default: 0.
 		// Possible values: 0,1
 		setBroadcastOnWorldLoad(config.getInt("broadcastOnWorldLoad", 0));
 		if (getBroadcastOnWorldLoad() < 0 || getBroadcastOnWorldLoad() > 1) {
+			wrongValue("config.yml", "broadcastOnWorldLoad", getBroadcastOnWorldLoad(), 0);
 			setBroadcastOnWorldLoad(0);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "broadcastOnWorldLoad",
-			                   "0");
 		}
 
 		// broadcastOnWorldUnload. Default: 0.
 		// Possible values: 0,1
 		setBroadcastOnWorldUnload(config.getInt("broadcastOnWorldUnload", 0));
 		if (getBroadcastOnWorldUnload() < 0 || getBroadcastOnWorldUnload() > 1) {
+			wrongValue("config.yml", "broadcastOnWorldUnload", getBroadcastOnWorldUnload(), 0);
 			setBroadcastOnWorldUnload(0);
-			plugin.sendMessage(plugin.getServer().getConsoleSender(),
-			                   MessageId.incorrectValueInConfiguration,
-			                   "config.yml",
-			                   "broadcastOnWorldUnload",
-			                   "0");
 		}
 
 		// ############
