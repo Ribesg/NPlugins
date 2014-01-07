@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
-import fr.ribesg.bukkit.ncore.event.core.PlayerJoinedEvent;
+import fr.ribesg.bukkit.ncore.event.PlayerJoinedEvent;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;

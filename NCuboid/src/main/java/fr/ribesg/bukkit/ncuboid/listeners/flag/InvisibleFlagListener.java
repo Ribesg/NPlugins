@@ -9,11 +9,12 @@
 
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
+import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerJoinEvent;
-import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerMoveEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,8 +37,8 @@ public class InvisibleFlagListener extends AbstractListener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPlayerMove(final ExtendedPlayerMoveEvent ext) {
-		final PlayerMoveEvent event = (PlayerMoveEvent) ext.getBaseEvent();
+	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
+		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			if (invisiblePlayers.contains(event.getPlayer().getName())) {
 				if (ext.getToRegion() == null || ext.getToRegion() != null && !ext.getToRegion().getFlag(Flag.INVISIBLE)) {

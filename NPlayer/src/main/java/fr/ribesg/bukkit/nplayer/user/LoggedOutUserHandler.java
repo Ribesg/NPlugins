@@ -8,7 +8,8 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.user;
-import fr.ribesg.bukkit.ncore.event.core.PlayerJoinedEvent;
+import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
+import fr.ribesg.bukkit.ncore.event.PlayerJoinedEvent;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.Bukkit;
@@ -120,10 +121,10 @@ public class LoggedOutUserHandler implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerMove(final PlayerMoveEvent event) {
+	public void onPlayerGridMove(final PlayerGridMoveEvent event) {
 		final Location from = event.getFrom();
 		final Location to = event.getTo();
-		if (loggedOutPlayers.containsKey(event.getPlayer().getName()) && isGridMove(from, to)) {
+		if (loggedOutPlayers.containsKey(event.getPlayer().getName())) {
 			final double x = from.getBlockX() + 0.5;
 			final double y = from.getBlockY();
 			final double z = from.getBlockZ() + 0.5;
@@ -132,10 +133,6 @@ public class LoggedOutUserHandler implements Listener {
 			event.getPlayer().teleport(new Location(from.getWorld(), x, y, z, yaw, pitch));
 			lockPlayer(event.getPlayer().getName());
 		}
-	}
-
-	private boolean isGridMove(final Location from, final Location to) {
-		return from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ() || from.getBlockY() != to.getBlockY();
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
