@@ -202,8 +202,8 @@ public class NCore extends JavaPlugin {
 		}
 	}
 
-	public void checkForUpdates(final JavaPlugin... plugins) {
-		if (this.updater != null) {
+	private void checkForUpdates(final JavaPlugin... plugins) {
+		if (this.updater == null) {
 			this.updater = new Updater('v' + getDescription().getVersion(), null);
 		}
 		Bukkit.getScheduler().runTaskAsynchronously(this, new BukkitRunnable() {
@@ -241,7 +241,7 @@ public class NCore extends JavaPlugin {
 		});
 	}
 
-	public void checkedForUpdates(final JavaPlugin plugin, final Boolean result, final FileDescription fileDescription) {
+	private void checkedForUpdates(final JavaPlugin plugin, final Boolean result, final FileDescription fileDescription) {
 		if (result == null) {
 			LOGGER.warning("Failed to check for updates for plugin " + plugin.getName());
 		} else if (!result) {
