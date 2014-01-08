@@ -204,7 +204,7 @@ public class NCore extends JavaPlugin {
 
 	private void checkForUpdates(final JavaPlugin... plugins) {
 		if (this.updater == null) {
-			this.updater = new Updater('v' + getDescription().getVersion(), null);
+			this.updater = new Updater('v' + getDescription().getVersion(), pluginConfig.getProxy(), pluginConfig.getApiKey());
 		}
 		Bukkit.getScheduler().runTaskAsynchronously(this, new BukkitRunnable() {
 

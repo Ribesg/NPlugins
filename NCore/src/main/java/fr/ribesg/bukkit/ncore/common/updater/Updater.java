@@ -54,22 +54,20 @@ public class Updater {
 
 	private final String pluginVersion;
 	private final Proxy  proxy;
+	private final String apiKey;
 
 	private final Map<String, Collection<FileDescription>> cache;
 	private final Map<String, Long>                        cacheTimeout;
 	private final long                                     cacheDuration;
 
-	public Updater(final String pluginVersion, @Nullable final Proxy proxy) {
-		this.pluginVersion = pluginVersion;
-		this.proxy = proxy;
-		this.cache = new HashMap<>();
-		this.cacheTimeout = new HashMap<>();
-		this.cacheDuration = TimeUtils.getInMilliseconds("15min");
+	public Updater(final String pluginVersion, @Nullable final Proxy proxy, @Nullable final String apiKey) {
+		this(pluginVersion, proxy, apiKey, "15min");
 	}
 
-	public Updater(final String pluginVersion, @Nullable final Proxy proxy, final String cacheDuration) {
+	public Updater(final String pluginVersion, @Nullable final Proxy proxy, @Nullable final String apiKey, final String cacheDuration) {
 		this.pluginVersion = pluginVersion;
 		this.proxy = proxy;
+		this.apiKey = apiKey;
 		this.cache = new HashMap<>();
 		this.cacheTimeout = new HashMap<>();
 		this.cacheDuration = TimeUtils.getInMilliseconds(cacheDuration);
@@ -191,6 +189,9 @@ public class Updater {
 				connection = url.openConnection(proxy);
 			}
 			connection.setConnectTimeout(1337); // "Low enough" timeout in case somebody has the good idea to call this sync...
+			if (this.apiKey != null) {
+				connection.addRequestProperty("X-API-Key", apiKey);
+			}
 			connection.addRequestProperty("User-Agent", "NPlugins v" + this.pluginVersion + " Updater by Ribesg");
 			connection.setDoOutput(true);
 			return connection;
