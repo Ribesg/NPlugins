@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncore.utils;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -30,7 +31,7 @@ public class MaterialParser {
 	private static final Logger LOGGER = Logger.getLogger(MaterialParser.class.getName());
 
 	/**
-	 * Gets an ItemStack from a Item Description String.
+	 * Gets an ItemStack from an Item Description String.
 	 * <p/>
 	 * Item Description String format: [field][;;field]*
 	 * Every field is mandatory but can be empty. First field obviously
@@ -64,11 +65,10 @@ public class MaterialParser {
 	 *
 	 * @return an ItemStack matching the provided itemString, or null
 	 */
-	public static ItemStack get(final String itemString) {
+	public static ItemStack fromString(final String itemString) throws MaterialParserException {
 		final String[] parts = itemString.split(";;");
 		if (parts.length != 6) {
-			error(itemString, "Invalid amount of fields");
-			return null;
+			throw new MaterialParserException(itemString, "Invalid amount of fields");
 		}
 
 		final String idString = parts[0];
@@ -86,13 +86,11 @@ public class MaterialParser {
 		List<String> lore = null;
 
 		if (idString.isEmpty()) {
-			error(itemString, "Id is mandatory");
-			return null;
+			throw new MaterialParserException(itemString, "Id is mandatory");
 		} else {
 			id = getMaterial(idString);
 			if (id == null) {
-				error(itemString, "Unknown id '" + idString + "'");
-				return null;
+				throw new MaterialParserException(itemString, "Unknown id '" + idString + "'");
 			}
 		}
 
@@ -102,8 +100,7 @@ public class MaterialParser {
 			try {
 				data = Short.parseShort(dataString);
 			} catch (final NumberFormatException e) {
-				error(itemString, "Invalid data value '" + dataString + "'");
-				return null;
+				throw new MaterialParserException(itemString, "Invalid data value '" + dataString + "'");
 			}
 		}
 
@@ -113,8 +110,7 @@ public class MaterialParser {
 			try {
 				amount = Integer.parseInt(amountString);
 			} catch (final NumberFormatException e) {
-				error(itemString, "Invalid amount value '" + amountString + "'");
-				return null;
+				throw new MaterialParserException(itemString, "Invalid amount value '" + amountString + "'");
 			}
 		}
 
@@ -124,26 +120,30 @@ public class MaterialParser {
 			for (final String enchantmentPair : enchantmentsPairs) {
 				final String[] enchantmentPairSplit = enchantmentPair.split(":");
 				if (enchantmentPairSplit.length != 2) {
-					error(itemString, "Malformed Enchantments field '" + enchantmentsString + "'");
-					return null;
+					throw new MaterialParserException(itemString, "Malformed Enchantments field '" + enchantmentsString + "'");
 				} else {
 					final String enchantmentName = enchantmentPairSplit[0];
 					final String enchantmentLevel = enchantmentPairSplit[1];
 					final Enchantment enchantment = getEnchantment(enchantmentName);
 					if (enchantment == null) {
-						error(itemString, "Unknown Enchantment '" + enchantmentName + "'");
-						return null;
+						throw new MaterialParserException(itemString, "Unknown Enchantment '" + enchantmentName + "'");
 					}
 					try {
 						final int level = Integer.parseInt(enchantmentLevel);
 						if (level < 1) {
-							error(itemString, "Invalid enchantment level '" + level + "' for enchantment '" + enchantment.getName() + "'");
-							return null;
+							throw new MaterialParserException(itemString, "Invalid enchantment level '" +
+							                                              level +
+							                                              "' for enchantment '" +
+							                                              enchantment.getName() +
+							                                              "'");
 						}
 						enchantments.put(enchantment, level);
 					} catch (final NumberFormatException e) {
-						error(itemString, "Invalid level value '" + enchantmentLevel + "' for enchantment '" + enchantment.getName() + "'");
-						return null;
+						throw new MaterialParserException(itemString, "Invalid level value '" +
+						                                              enchantmentLevel +
+						                                              "' for enchantment '" +
+						                                              enchantment.getName() +
+						                                              "'");
 					}
 				}
 			}
@@ -161,7 +161,7 @@ public class MaterialParser {
 
 		final ItemStack is = new ItemStack(id, amount, data);
 		if (enchantments != null) {
-			is.getEnchantments().putAll(enchantments);
+			is.addUnsafeEnchantments(enchantments);
 		}
 		final ItemMeta meta = is.getItemMeta();
 		if (name != null) {
@@ -171,6 +171,95 @@ public class MaterialParser {
 			meta.setLore(lore);
 		}
 		is.setItemMeta(meta);
+
+		return is;
+	}
+
+	/**
+	 * TODO
+	 * Javadoc
+	 */
+	public static void saveToConfigSection(final ConfigurationSection parentSection, final String key, final ItemStack is) {
+		final ConfigurationSection itemSection = parentSection.createSection(key);
+
+		itemSection.set("id", is.getType().name());
+		itemSection.set("data", is.getDurability());
+		itemSection.set("amount", is.getAmount());
+
+		if (!is.getEnchantments().isEmpty()) {
+			final ConfigurationSection enchantmentsSection = itemSection.createSection("enchantments");
+			for (final Map.Entry<Enchantment, Integer> e : is.getEnchantments().entrySet()) {
+				enchantmentsSection.set(e.getKey().getName(), e.getValue());
+			}
+		}
+
+		if (is.hasItemMeta()) {
+			final ItemMeta meta = is.getItemMeta();
+			if (meta.hasDisplayName()) {
+				itemSection.set("displayName", meta.getDisplayName());
+			}
+			if (meta.hasLore()) {
+				itemSection.set("lore", meta.getLore());
+			}
+		}
+	}
+
+	/**
+	 * TODO
+	 * Javadoc
+	 */
+	public static ItemStack loadFromConfig(final ConfigurationSection parentSection, final String key) throws MaterialParserException {
+		final ConfigurationSection itemSection = parentSection.getConfigurationSection(key);
+		final String parsed = "Configuration file, under " + parentSection.getCurrentPath() + '.' + key;
+
+		final Material id = getMaterial(itemSection.getString("id", ""));
+		if (id == null) {
+			throw new MaterialParserException(parsed, "Id is mandatory");
+		}
+
+		final short data = (short) itemSection.getInt("data", 0);
+
+		final int amount = itemSection.getInt("amount", 1);
+
+		Map<Enchantment, Integer> enchantmentsMap = null;
+		if (itemSection.isConfigurationSection("enchantments")) {
+			final ConfigurationSection enchantmentsSection = itemSection.getConfigurationSection("enchantments");
+			enchantmentsMap = new HashMap<>();
+			for (final String enchantmentName : enchantmentsSection.getKeys(false)) {
+				final Enchantment enchantment = getEnchantment(enchantmentName);
+				final int level = enchantmentsSection.getInt(enchantmentName, -1);
+				if (level < 1) {
+					throw new MaterialParserException(parsed, "Invalid enchantment level '" +
+					                                          level +
+					                                          "' for enchantment '" +
+					                                          enchantment.getName() +
+					                                          "'");
+				} else {
+					enchantmentsMap.put(enchantment, level);
+				}
+			}
+		}
+
+		final String displayName = itemSection.getString("displayName", null);
+
+		final List<String> lore = itemSection.getStringList("lore");
+
+		final ItemStack is = new ItemStack(id, amount, data);
+
+		if (enchantmentsMap != null) {
+			is.addUnsafeEnchantments(enchantmentsMap);
+		}
+
+		final ItemMeta meta = is.getItemMeta();
+		if (displayName != null) {
+			meta.setDisplayName(displayName);
+		}
+		if (lore != null && !lore.isEmpty()) {
+			meta.setLore(lore);
+		}
+		if (meta.hasDisplayName() || meta.hasLore()) {
+			is.setItemMeta(meta);
+		}
 
 		return is;
 	}
@@ -199,9 +288,29 @@ public class MaterialParser {
 		return result;
 	}
 
-	private static void error(final String itemString, final String reason) {
-		LOGGER.severe("Error while parsing itemString:");
-		LOGGER.severe(itemString);
-		LOGGER.severe(reason);
+	public static class MaterialParserException extends Exception {
+
+		private final String parsed;
+		private final String reason;
+
+		public MaterialParserException(final String parsed, final String reason) {
+			super("Error while parsing '" + parsed + "', " + reason);
+			this.parsed = parsed;
+			this.reason = reason;
+		}
+
+		public MaterialParserException(final String parsed, final String reason, final Throwable origin) {
+			super("Error while parsing '" + parsed + "', " + reason, origin);
+			this.parsed = parsed;
+			this.reason = reason;
+		}
+
+		public String getParsed() {
+			return parsed;
+		}
+
+		public String getReason() {
+			return reason;
+		}
 	}
 }
