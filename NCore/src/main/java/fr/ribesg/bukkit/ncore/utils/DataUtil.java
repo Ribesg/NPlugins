@@ -1,6 +1,6 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - MaterialParser.java                 *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.MaterialParser            *
+ * Project file:    NPlugins - NCore - DataUtil.java                       *
+ * Full Class name: fr.ribesg.bukkit.ncore.utils.DataUtil                  *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
@@ -16,24 +16,47 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 /**
- * This little lib is used to get an ItemStack from a String.
+ * This lib is used to get some Bukkit Enum / standard values from Strings.
  *
  * @author Ribesg
  */
-public class MaterialParser {
+public class DataUtil {
 
-	private static final Logger LOGGER = Logger.getLogger(MaterialParser.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(DataUtil.class.getName());
+
+	/** A comparator to sort Enchantments by name */
+	private static final Comparator<Enchantment> ENCHANTMENT_COMPARATOR = new Comparator<Enchantment>() {
+
+		@Override
+		public int compare(final Enchantment a, final Enchantment b) {
+			return a.getName().compareTo(b.getName());
+		}
+	};
 
 	/**
-	 * Gets an ItemStack from an Item Description String.
+	 * An arbitrary list of possible separator characters.
+	 * Used to save Lore to String. Two of them are randomly chosen randomly
+	 * and the combination of both is used as separator.
+	 * The only way to break it would be to have Lore Strings contain every
+	 * single possible 2-length combination of those characters.
+	 */
+	private static final CharSequence SEPARATOR_CHARS = ",;:!?§/.*+-=@_-|#~&$£¤°<>()[]{}";
+
+	private static final Random RANDOM = new Random();
+
+	/**
+	 * Create an ItemStack description String from an ItemStack.
 	 * <p/>
-	 * Item Description String format: [field][;;field]*
+	 * Item Description String format: [field][;;field]{5}
 	 * Every field is mandatory but can be empty. First field obviously
 	 * cannot be empty.
 	 * <p/>
@@ -61,14 +84,78 @@ public class MaterialParser {
 	 * Sixth field:
 	 * - Item Lore, list separated by the first 2 chars in the field's String
 	 *
+	 * @param is the ItemStack to convert
+	 *
+	 * @return a String matching the provided ItemStack
+	 *
+	 * @see #fromString(String) to get an ItemStack from the provided String
+	 */
+	public static String toString(final ItemStack is) {
+		final String idString = is.getType().name();
+		final String dataString = Short.toString(is.getDurability());
+		final String amountString = Integer.toString(is.getAmount());
+
+		final String enchantmentsString;
+		if (is.getEnchantments().isEmpty()) {
+			enchantmentsString = "";
+		} else {
+			final StringBuilder enchantmentsStringBuilder = new StringBuilder();
+			final Map<Enchantment, Integer> sortedEnchantmentMap = new TreeMap<>(ENCHANTMENT_COMPARATOR);
+			sortedEnchantmentMap.putAll(is.getEnchantments());
+			for (final Map.Entry<Enchantment, Integer> e : sortedEnchantmentMap.entrySet()) {
+				enchantmentsStringBuilder.append(e.getKey().getName());
+				enchantmentsStringBuilder.append(':');
+				enchantmentsStringBuilder.append(e.getValue());
+				enchantmentsStringBuilder.append(',');
+			}
+			enchantmentsString = enchantmentsStringBuilder.substring(0, enchantmentsStringBuilder.length() - 1);
+		}
+
+		final ItemMeta meta = is.getItemMeta();
+		final String nameString;
+		if (meta.hasDisplayName()) {
+			nameString = meta.getDisplayName();
+		} else {
+			nameString = "";
+		}
+
+		final String loreString;
+		if (meta.hasLore()) {
+			final List<String> lore = meta.getLore();
+			final String separator = getPossibleSeparator(lore);
+			final StringBuilder loreStringBuilder = new StringBuilder();
+			for (final String loreLine : lore) {
+				loreStringBuilder.append(separator).append(loreLine);
+			}
+			loreString = loreStringBuilder.toString();
+		} else {
+			loreString = "";
+		}
+
+		final StringBuilder resultBuilder = new StringBuilder();
+		resultBuilder.append(idString).append(";;");
+		resultBuilder.append(dataString).append(";;");
+		resultBuilder.append(amountString).append(";;");
+		resultBuilder.append(enchantmentsString).append(";;");
+		resultBuilder.append(nameString).append(";;");
+		resultBuilder.append(loreString);
+
+		return resultBuilder.toString();
+	}
+
+	/**
+	 * Gets an ItemStack from an Item Description String.
+	 *
 	 * @param itemString the String representing the ItemStack
 	 *
 	 * @return an ItemStack matching the provided itemString, or null
+	 *
+	 * @see #toString(ItemStack) for format
 	 */
-	public static ItemStack fromString(final String itemString) throws MaterialParserException {
+	public static ItemStack fromString(final String itemString) throws DataUtilParserException {
 		final String[] parts = itemString.split(";;");
 		if (parts.length != 6) {
-			throw new MaterialParserException(itemString, "Invalid amount of fields");
+			throw new DataUtilParserException(itemString, "Invalid amount of fields");
 		}
 
 		final String idString = parts[0];
@@ -86,11 +173,11 @@ public class MaterialParser {
 		List<String> lore = null;
 
 		if (idString.isEmpty()) {
-			throw new MaterialParserException(itemString, "Id is mandatory");
+			throw new DataUtilParserException(itemString, "Id is mandatory");
 		} else {
 			id = getMaterial(idString);
 			if (id == null) {
-				throw new MaterialParserException(itemString, "Unknown id '" + idString + "'");
+				throw new DataUtilParserException(itemString, "Unknown id '" + idString + "'");
 			}
 		}
 
@@ -100,7 +187,7 @@ public class MaterialParser {
 			try {
 				data = Short.parseShort(dataString);
 			} catch (final NumberFormatException e) {
-				throw new MaterialParserException(itemString, "Invalid data value '" + dataString + "'");
+				throw new DataUtilParserException(itemString, "Invalid data value '" + dataString + "'");
 			}
 		}
 
@@ -110,28 +197,28 @@ public class MaterialParser {
 			try {
 				amount = Integer.parseInt(amountString);
 			} catch (final NumberFormatException e) {
-				throw new MaterialParserException(itemString, "Invalid amount value '" + amountString + "'");
+				throw new DataUtilParserException(itemString, "Invalid amount value '" + amountString + "'");
 			}
 		}
 
 		if (!enchantmentsString.isEmpty()) {
-			enchantments = new HashMap<>();
+			enchantments = new TreeMap<>(ENCHANTMENT_COMPARATOR);
 			final String[] enchantmentsPairs = enchantmentsString.split(",");
 			for (final String enchantmentPair : enchantmentsPairs) {
 				final String[] enchantmentPairSplit = enchantmentPair.split(":");
 				if (enchantmentPairSplit.length != 2) {
-					throw new MaterialParserException(itemString, "Malformed Enchantments field '" + enchantmentsString + "'");
+					throw new DataUtilParserException(itemString, "Malformed Enchantments field '" + enchantmentsString + "'");
 				} else {
 					final String enchantmentName = enchantmentPairSplit[0];
 					final String enchantmentLevel = enchantmentPairSplit[1];
 					final Enchantment enchantment = getEnchantment(enchantmentName);
 					if (enchantment == null) {
-						throw new MaterialParserException(itemString, "Unknown Enchantment '" + enchantmentName + "'");
+						throw new DataUtilParserException(itemString, "Unknown Enchantment '" + enchantmentName + "'");
 					}
 					try {
 						final int level = Integer.parseInt(enchantmentLevel);
 						if (level < 1) {
-							throw new MaterialParserException(itemString, "Invalid enchantment level '" +
+							throw new DataUtilParserException(itemString, "Invalid enchantment level '" +
 							                                              level +
 							                                              "' for enchantment '" +
 							                                              enchantment.getName() +
@@ -139,7 +226,7 @@ public class MaterialParser {
 						}
 						enchantments.put(enchantment, level);
 					} catch (final NumberFormatException e) {
-						throw new MaterialParserException(itemString, "Invalid level value '" +
+						throw new DataUtilParserException(itemString, "Invalid level value '" +
 						                                              enchantmentLevel +
 						                                              "' for enchantment '" +
 						                                              enchantment.getName() +
@@ -183,6 +270,8 @@ public class MaterialParser {
 	 * @param key           the key for the section of the ItemStack
 	 *                      description
 	 * @param is            the ItemStack to save
+	 *
+	 * @see #loadFromConfig(ConfigurationSection, String)
 	 */
 	public static void saveToConfigSection(final ConfigurationSection parentSection, final String key, final ItemStack is) {
 		final ConfigurationSection itemSection = parentSection.createSection(key);
@@ -219,15 +308,17 @@ public class MaterialParser {
 	 *
 	 * @return the ItemStack saved under parentSection.key
 	 *
-	 * @throws MaterialParserException if the ItemStack description is malformed
+	 * @throws fr.ribesg.bukkit.ncore.utils.DataUtil.DataUtilParserException
+	 *          if the ItemStack description is malformed
+	 * @see #saveToConfigSection(ConfigurationSection, String, ItemStack)
 	 */
-	public static ItemStack loadFromConfig(final ConfigurationSection parentSection, final String key) throws MaterialParserException {
+	public static ItemStack loadFromConfig(final ConfigurationSection parentSection, final String key) throws DataUtilParserException {
 		final ConfigurationSection itemSection = parentSection.getConfigurationSection(key);
 		final String parsed = "Configuration file, under " + parentSection.getCurrentPath() + '.' + key;
 
 		final Material id = getMaterial(itemSection.getString("id", ""));
 		if (id == null) {
-			throw new MaterialParserException(parsed, "Id is mandatory");
+			throw new DataUtilParserException(parsed, "Id is mandatory");
 		}
 
 		final short data = (short) itemSection.getInt("data", 0);
@@ -242,7 +333,7 @@ public class MaterialParser {
 				final Enchantment enchantment = getEnchantment(enchantmentName);
 				final int level = enchantmentsSection.getInt(enchantmentName, -1);
 				if (level < 1) {
-					throw new MaterialParserException(parsed, "Invalid enchantment level '" +
+					throw new DataUtilParserException(parsed, "Invalid enchantment level '" +
 					                                          level +
 					                                          "' for enchantment '" +
 					                                          enchantment.getName() +
@@ -319,18 +410,50 @@ public class MaterialParser {
 		return result;
 	}
 
-	public static class MaterialParserException extends Exception {
+	private static String getPossibleSeparator(final List<String> lore) {
+		int i = 1337; // Maximum tries
+		String separator;
+		boolean notContained;
+		while (i-- > 0) {
+			notContained = true;
+			separator = getRandomSeparator();
+			for (final String s : lore) {
+				if (s.contains(separator)) {
+					notContained = false;
+					break;
+				}
+			}
+			if (notContained) {
+				return separator;
+			}
+		}
+		throw new IllegalStateException("Cannot find a separator for provided list of Strings, it's a trap!");
+	}
+
+	private static String getRandomSeparator() {
+		String result;
+		do {
+			result = Character.toString(getRandomCharacterSeparator()) + getRandomCharacterSeparator();
+		} while (result.equals(";;"));
+		return result;
+	}
+
+	private static char getRandomCharacterSeparator() {
+		return SEPARATOR_CHARS.charAt(RANDOM.nextInt(SEPARATOR_CHARS.length()));
+	}
+
+	public static class DataUtilParserException extends Exception {
 
 		private final String parsed;
 		private final String reason;
 
-		public MaterialParserException(final String parsed, final String reason) {
+		public DataUtilParserException(final String parsed, final String reason) {
 			super("Error while parsing '" + parsed + "', " + reason);
 			this.parsed = parsed;
 			this.reason = reason;
 		}
 
-		public MaterialParserException(final String parsed, final String reason, final Throwable origin) {
+		public DataUtilParserException(final String parsed, final String reason, final Throwable origin) {
 			super("Error while parsing '" + parsed + "', " + reason, origin);
 			this.parsed = parsed;
 			this.reason = reason;
