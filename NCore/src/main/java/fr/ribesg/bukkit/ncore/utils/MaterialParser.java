@@ -277,7 +277,17 @@ public class MaterialParser {
 		return is;
 	}
 
-	private static Material getMaterial(final String idString) {
+	/**
+	 * Gets a Material from a String, if able to recognize anything in the
+	 * String. For now, only checks for ID and Material enum value.
+	 * Note: For now, there is no real gain of this over using
+	 * {@link Material#matchMaterial(String)}.
+	 *
+	 * @param idString the String representing a Material
+	 *
+	 * @return the associated Material or null if not found
+	 */
+	public static Material getMaterial(final String idString) {
 		Material result = Material.matchMaterial(idString);
 		if (result == null) {
 			try {
@@ -289,7 +299,15 @@ public class MaterialParser {
 		return result;
 	}
 
-	private static Enchantment getEnchantment(final String enchantmentName) {
+	/**
+	 * Gets an Enchantment from a String, if able to recognize anything in
+	 * the String. Checks for ID and Enchantment name value.
+	 *
+	 * @param enchantmentName the String representing an Enchantment
+	 *
+	 * @return the associated Enchantment or null if not found
+	 */
+	public static Enchantment getEnchantment(final String enchantmentName) {
 		Enchantment result = Enchantment.getByName(enchantmentName);
 		if (result == null) {
 			try {
