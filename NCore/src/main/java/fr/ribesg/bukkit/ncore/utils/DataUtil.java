@@ -14,6 +14,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -379,15 +380,34 @@ public class DataUtil {
 	 * @return the associated Material or null if not found
 	 */
 	public static Material getMaterial(final String idString) {
-		Material result = Material.matchMaterial(idString);
-		if (result == null) {
-			try {
-				result = Material.getMaterial(Integer.parseInt(idString));
-			} catch (final NumberFormatException e) {
-				return null;
+		try {
+			final int id = Integer.parseInt(idString);
+			for (final Material m : Material.values()) {
+				if (m.getId() == id && !isMaterialDeprecated(m)) {
+					return m;
+				}
 			}
+			return null;
+		} catch (final NumberFormatException e) {
+			final String filtered = idString.toUpperCase().replaceAll("\\s+", "_").replaceAll("\\W", "");
+			return Material.getMaterial(filtered);
 		}
-		return result;
+	}
+
+	/**
+	 * Checks if a Material is deprecated.
+	 *
+	 * @param material the Material to check
+	 *
+	 * @return true if deprecated, false otherwise
+	 */
+	public static boolean isMaterialDeprecated(final Material material) {
+		try {
+			final Field f = Material.class.getField(material.name());
+			return f.isAnnotationPresent(Deprecated.class);
+		} catch (NoSuchFieldException e) {
+			throw new IllegalArgumentException("Material not found: " + material.name(), e);
+		}
 	}
 
 	/**
