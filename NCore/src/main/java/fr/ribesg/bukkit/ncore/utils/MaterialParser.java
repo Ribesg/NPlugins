@@ -176,8 +176,13 @@ public class MaterialParser {
 	}
 
 	/**
-	 * TODO
-	 * Javadoc
+	 * Saves an ItemStack description under the provided configuration
+	 * section, with the provided key.
+	 *
+	 * @param parentSection the parent section of the ItemStack description
+	 * @param key           the key for the section of the ItemStack
+	 *                      description
+	 * @param is            the ItemStack to save
 	 */
 	public static void saveToConfigSection(final ConfigurationSection parentSection, final String key, final ItemStack is) {
 		final ConfigurationSection itemSection = parentSection.createSection(key);
@@ -205,8 +210,16 @@ public class MaterialParser {
 	}
 
 	/**
-	 * TODO
-	 * Javadoc
+	 * Loads an ItemStack from a parent configuration section and the key
+	 * for the ItemStack under this parent configuration section.
+	 *
+	 * @param parentSection the parent section of the ItemStack description
+	 * @param key           the key for the section of the ItemStack
+	 *                      description
+	 *
+	 * @return the ItemStack saved under parentSection.key
+	 *
+	 * @throws MaterialParserException if the ItemStack description is malformed
 	 */
 	public static ItemStack loadFromConfig(final ConfigurationSection parentSection, final String key) throws MaterialParserException {
 		final ConfigurationSection itemSection = parentSection.getConfigurationSection(key);
