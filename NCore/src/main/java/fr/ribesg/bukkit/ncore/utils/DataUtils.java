@@ -1,6 +1,6 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - DataUtil.java                       *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.DataUtil                  *
+ * Project file:    NPlugins - NCore - DataUtils.java                      *
+ * Full Class name: fr.ribesg.bukkit.ncore.utils.DataUtils                 *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
@@ -29,9 +29,9 @@ import java.util.logging.Logger;
  *
  * @author Ribesg
  */
-public class DataUtil {
+public class DataUtils {
 
-	private static final Logger LOGGER = Logger.getLogger(DataUtil.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(DataUtils.class.getName());
 
 	/** A comparator to sort Enchantments by name */
 	private static final Comparator<Enchantment> ENCHANTMENT_COMPARATOR = new Comparator<Enchantment>() {
@@ -316,7 +316,7 @@ public class DataUtil {
 	 *
 	 * @return the ItemStack saved under parentSection.key
 	 *
-	 * @throws fr.ribesg.bukkit.ncore.utils.DataUtil.DataUtilParserException
+	 * @throws DataUtils.DataUtilParserException
 	 *          if the ItemStack description is malformed
 	 * @see #saveToConfigSection(ConfigurationSection, String, ItemStack)
 	 */

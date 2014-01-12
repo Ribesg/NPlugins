@@ -34,7 +34,7 @@ public class DataUtilMaterialTest {
 	public void testGetMaterial() {
 		final String awaitedMaterialName = awaitedMaterial.name();
 
-		final Material foundMaterial = DataUtil.getMaterial(idString);
+		final Material foundMaterial = DataUtils.getMaterial(idString);
 		final String foundMaterialName = foundMaterial == null ? "null" : foundMaterial.name();
 		Assert.assertEquals("Expected Material '" + awaitedMaterialName + "' but found '" + foundMaterialName + "'",
 		                    awaitedMaterialName,
@@ -45,7 +45,7 @@ public class DataUtilMaterialTest {
 	public static Collection<Object[]> data() {
 		final Collection<Object[]> data = new ArrayList<>();
 		for (final Material m : Material.values()) {
-			if (!DataUtil.isMaterialDeprecated(m)) {
+			if (!DataUtils.isMaterialDeprecated(m)) {
 				data.add(new Object[] {
 						m,
 						m.name()

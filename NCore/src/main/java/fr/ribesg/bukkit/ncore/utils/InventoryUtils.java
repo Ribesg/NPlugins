@@ -146,8 +146,8 @@ public class InventoryUtils {
 				strings.add((""));
 			} else {
 				try {
-					strings.add(DataUtil.toString(is));
-				} catch (final DataUtil.DataUtilParserException e) {
+					strings.add(DataUtils.toString(is));
+				} catch (final DataUtils.DataUtilParserException e) {
 					throw new InventoryUtilParserException(itemStacks, "Invalid item in provided array", e);
 				}
 			}
@@ -176,8 +176,8 @@ public class InventoryUtils {
 		final ItemStack[] result = new ItemStack[items.length];
 		for (int i = 0; i < items.length; i++) {
 			try {
-				result[i] = DataUtil.fromString(items[i].isEmpty() ? null : items[i]);
-			} catch (final DataUtil.DataUtilParserException e) {
+				result[i] = DataUtils.fromString(items[i].isEmpty() ? null : items[i]);
+			} catch (final DataUtils.DataUtilParserException e) {
 				throw new InventoryUtilParserException(string, "Invalid item string provided", e);
 			}
 		}
