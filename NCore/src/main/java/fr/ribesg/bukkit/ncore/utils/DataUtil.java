@@ -105,7 +105,7 @@ public class DataUtil {
 	public static String toString(final ItemStack is) {
 		final String idString = is.getType().name();
 		final String dataString = Short.toString(is.getDurability());
-		final String amountString = Integer.toString(is.getAmount());
+		final String amountString = Integer.toString(Math.min(Math.max(is.getAmount(), 1), 64));
 
 		final String enchantmentsString;
 		if (is.getEnchantments().isEmpty()) {
@@ -207,7 +207,7 @@ public class DataUtil {
 			amount = 1;
 		} else {
 			try {
-				amount = Integer.parseInt(amountString);
+				amount = Math.min(Math.max(Integer.parseInt(amountString), 1), 64);
 			} catch (final NumberFormatException e) {
 				throw new DataUtilParserException(itemString, "Invalid amount value '" + amountString + "'");
 			}
@@ -290,7 +290,7 @@ public class DataUtil {
 
 		itemSection.set("id", is.getType().name());
 		itemSection.set("data", is.getDurability());
-		itemSection.set("amount", is.getAmount());
+		itemSection.set("amount", Math.min(Math.max(is.getAmount(), 1), 64));
 
 		if (!is.getEnchantments().isEmpty()) {
 			final ConfigurationSection enchantmentsSection = itemSection.createSection("enchantments");
@@ -335,7 +335,7 @@ public class DataUtil {
 
 		final short data = (short) itemSection.getInt("data", 0);
 
-		final int amount = itemSection.getInt("amount", 1);
+		final int amount = Math.min(Math.max(itemSection.getInt("amount", 1), 1), 64);
 
 		Map<Enchantment, Integer> enchantmentsMap = null;
 		if (itemSection.isConfigurationSection("enchantments")) {
