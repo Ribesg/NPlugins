@@ -156,9 +156,9 @@ public class InventoryUtils {
 		final String separator = StringUtils.getPossibleSeparator(strings, 4);
 		final StringBuilder builder = new StringBuilder();
 		for (final String s : strings) {
-			builder.append(s).append(separator);
+			builder.append(separator).append(s);
 		}
-		return builder.substring(0, builder.length() - separator.length());
+		return builder.toString();
 	}
 
 	/**
