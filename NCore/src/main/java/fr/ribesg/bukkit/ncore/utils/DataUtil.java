@@ -52,6 +52,17 @@ public class DataUtil {
 	 */
 	private static final CharSequence SEPARATOR_CHARS = ",;:!?§/.*+-=@_-|#~&$£¤°<>()[]{}";
 
+	/**
+	 * Different levels of Separators used for the String representation.
+	 * Do not use 2-length separators as it's the length of Random
+	 * Separators.
+	 */
+	private static final String[] SEPARATORS = {
+			";|;",
+			",",
+			":"
+	};
+
 	private static final Random RANDOM = new Random();
 
 	/**
@@ -105,9 +116,9 @@ public class DataUtil {
 			sortedEnchantmentMap.putAll(is.getEnchantments());
 			for (final Map.Entry<Enchantment, Integer> e : sortedEnchantmentMap.entrySet()) {
 				enchantmentsStringBuilder.append(e.getKey().getName());
-				enchantmentsStringBuilder.append(':');
+				enchantmentsStringBuilder.append(SEPARATORS[2]);
 				enchantmentsStringBuilder.append(e.getValue());
-				enchantmentsStringBuilder.append(',');
+				enchantmentsStringBuilder.append(SEPARATORS[1]);
 			}
 			enchantmentsString = enchantmentsStringBuilder.substring(0, enchantmentsStringBuilder.length() - 1);
 		}
@@ -134,11 +145,11 @@ public class DataUtil {
 		}
 
 		final StringBuilder resultBuilder = new StringBuilder();
-		resultBuilder.append(idString).append(";;");
-		resultBuilder.append(dataString).append(";;");
-		resultBuilder.append(amountString).append(";;");
-		resultBuilder.append(enchantmentsString).append(";;");
-		resultBuilder.append(nameString).append(";;");
+		resultBuilder.append(idString).append(SEPARATORS[0]);
+		resultBuilder.append(dataString).append(SEPARATORS[0]);
+		resultBuilder.append(amountString).append(SEPARATORS[0]);
+		resultBuilder.append(enchantmentsString).append(SEPARATORS[0]);
+		resultBuilder.append(nameString).append(SEPARATORS[0]);
 		resultBuilder.append(loreString);
 
 		return resultBuilder.toString();
@@ -154,7 +165,7 @@ public class DataUtil {
 	 * @see #toString(ItemStack) for format
 	 */
 	public static ItemStack fromString(final String itemString) throws DataUtilParserException {
-		final String[] parts = itemString.split(";;");
+		final String[] parts = itemString.split(SEPARATORS[0]);
 		if (parts.length != 6) {
 			throw new DataUtilParserException(itemString, "Invalid amount of fields");
 		}
@@ -204,9 +215,9 @@ public class DataUtil {
 
 		if (!enchantmentsString.isEmpty()) {
 			enchantments = new TreeMap<>(ENCHANTMENT_COMPARATOR);
-			final String[] enchantmentsPairs = enchantmentsString.split(",");
+			final String[] enchantmentsPairs = enchantmentsString.split(SEPARATORS[1]);
 			for (final String enchantmentPair : enchantmentsPairs) {
-				final String[] enchantmentPairSplit = enchantmentPair.split(":");
+				final String[] enchantmentPairSplit = enchantmentPair.split(SEPARATORS[3]);
 				if (enchantmentPairSplit.length != 2) {
 					throw new DataUtilParserException(itemString, "Malformed Enchantments field '" + enchantmentsString + "'");
 				} else {
@@ -451,11 +462,7 @@ public class DataUtil {
 	}
 
 	private static String getRandomSeparator() {
-		String result;
-		do {
-			result = Character.toString(getRandomCharacterSeparator()) + getRandomCharacterSeparator();
-		} while (result.equals(";;"));
-		return result;
+		return Character.toString(getRandomCharacterSeparator()) + getRandomCharacterSeparator();
 	}
 
 	private static char getRandomCharacterSeparator() {
