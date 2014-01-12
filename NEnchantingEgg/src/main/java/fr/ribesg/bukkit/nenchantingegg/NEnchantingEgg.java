@@ -128,17 +128,17 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	@Override
 	public void onNodeDisable() {
+		Bukkit.getScheduler().cancelTasks(this);
+
+		altars.onDisable();
+
 		try {
 			getPluginConfig().writeConfig();
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
-		altars.onDisable();
-
 		altars = null;
-
-		Bukkit.getScheduler().cancelTasks(this);
 	}
 
 	public ActiveToEggProvidedTransition getActiveToEggProvidedTransition() {

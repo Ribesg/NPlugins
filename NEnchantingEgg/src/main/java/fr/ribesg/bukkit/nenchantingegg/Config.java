@@ -76,8 +76,9 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 				if (!altars.canAdd(a, getMinimumDistanceBetweenTwoAltars())) {
 					plugin.getLogger().severe("Incorrect altar location (Too close): \"" + s + "\"");
 					break;
+				} else if (a.isInactiveAltarValid()) {
+					altars.add(a);
 				}
-				altars.add(a);
 			}
 		}
 	}
