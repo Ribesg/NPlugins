@@ -83,6 +83,9 @@ public class DataUtils {
 	 * <p/>
 	 * Sixth field:
 	 * - Item Lore, list separated by the first 2 chars in the field's String
+	 * <p/>
+	 * Seventh field:
+	 * - Stored enchantments, same as 4th
 	 *
 	 * @param is the ItemStack to convert
 	 *
@@ -111,7 +114,7 @@ public class DataUtils {
 				enchantmentsStringBuilder.append(e.getValue());
 				enchantmentsStringBuilder.append(SEPARATORS[1]);
 			}
-			enchantmentsString = enchantmentsStringBuilder.substring(0, enchantmentsStringBuilder.length() - 1);
+			enchantmentsString = enchantmentsStringBuilder.substring(0, enchantmentsStringBuilder.length() - SEPARATORS[1].length());
 		}
 
 		final ItemMeta meta = is.getItemMeta();
@@ -135,6 +138,8 @@ public class DataUtils {
 			loreString = "";
 		}
 
+		// TODO Other Meta
+
 		final StringBuilder resultBuilder = new StringBuilder();
 		resultBuilder.append(idString).append(SEPARATORS[0]);
 		resultBuilder.append(dataString).append(SEPARATORS[0]);
@@ -157,7 +162,7 @@ public class DataUtils {
 	 */
 	public static ItemStack fromString(final String itemString) throws DataUtilParserException {
 		final String[] parts = StringUtils.splitKeepEmpty(itemString, SEPARATORS[0]);
-		if (parts.length != 6) {
+		if (parts.length != 6) { // TODO 7 with Custom Meta
 			throw new DataUtilParserException(itemString, "Invalid amount of fields");
 		}
 
@@ -167,6 +172,7 @@ public class DataUtils {
 		final String enchantmentsString = parts[3];
 		final String nameString = parts[4];
 		final String loreString = parts[5];
+		final String storedEnchantmentsString = parts[6];
 
 		final Material id;
 		final Short data;
@@ -174,6 +180,7 @@ public class DataUtils {
 		Map<Enchantment, Integer> enchantments = null;
 		String name = null;
 		List<String> lore = null;
+		Map<Enchantment, Integer> storedEnchantments = null;
 
 		if (idString.isEmpty()) {
 			throw new DataUtilParserException(itemString, "Id is mandatory");
@@ -208,7 +215,7 @@ public class DataUtils {
 			enchantments = new TreeMap<>(ENCHANTMENT_COMPARATOR);
 			final String[] enchantmentsPairs = StringUtils.splitKeepEmpty(enchantmentsString, SEPARATORS[1]);
 			for (final String enchantmentPair : enchantmentsPairs) {
-				final String[] enchantmentPairSplit = StringUtils.splitKeepEmpty(enchantmentPair, SEPARATORS[3]);
+				final String[] enchantmentPairSplit = StringUtils.splitKeepEmpty(enchantmentPair, SEPARATORS[2]);
 				if (enchantmentPairSplit.length != 2) {
 					throw new DataUtilParserException(itemString, "Malformed Enchantments field '" + enchantmentsString + "'");
 				} else {
@@ -246,7 +253,7 @@ public class DataUtils {
 		if (loreString.length() > 1) {
 			lore = new ArrayList<>();
 			final String separator = loreString.substring(0, 2);
-			Collections.addAll(lore, loreString.split(separator));
+			Collections.addAll(lore, StringUtils.splitKeepEmpty(loreString.substring(2), separator));
 		}
 
 		final ItemStack is = new ItemStack(id, amount, data);
@@ -260,6 +267,7 @@ public class DataUtils {
 		if (lore != null) {
 			meta.setLore(lore);
 		}
+		// TODO Other Metas
 		is.setItemMeta(meta);
 
 		return is;
@@ -303,6 +311,7 @@ public class DataUtils {
 			if (meta.hasLore()) {
 				itemSection.set("lore", meta.getLore());
 			}
+			// TODO Other Meta
 		}
 	}
 
@@ -356,6 +365,8 @@ public class DataUtils {
 
 		final List<String> lore = itemSection.getStringList("lore");
 
+		// TODO Other Meta
+
 		final ItemStack is = new ItemStack(id, amount, data);
 
 		if (enchantmentsMap != null) {
@@ -369,6 +380,7 @@ public class DataUtils {
 		if (lore != null && !lore.isEmpty()) {
 			meta.setLore(lore);
 		}
+		// TODO Other Meta
 		if (meta.hasDisplayName() || meta.hasLore()) {
 			is.setItemMeta(meta);
 		}

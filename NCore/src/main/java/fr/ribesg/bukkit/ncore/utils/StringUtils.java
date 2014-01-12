@@ -14,6 +14,7 @@ import org.bukkit.util.Vector;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 
 /**
  * Some simple methods that could be used in every plugin
@@ -21,6 +22,8 @@ import java.util.Random;
  * @author Ribesg
  */
 public class StringUtils {
+
+	private static final Logger LOGGER = Logger.getLogger(StringUtils.class.getName());
 
 	private static final char   SEPARATOR_CHAR        = ';';
 	private static final String SEPARATOR_CHAR_STRING = Character.toString(SEPARATOR_CHAR);

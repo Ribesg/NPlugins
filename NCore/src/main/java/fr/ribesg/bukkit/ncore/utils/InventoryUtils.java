@@ -172,11 +172,11 @@ public class InventoryUtils {
 	 */
 	public static ItemStack[] fromString(final String string) throws InventoryUtilParserException {
 		final String separator = string.substring(0, 4);
-		final String[] items = string.split(separator);
-		final ItemStack[] result = new ItemStack[items.length];
-		for (int i = 0; i < items.length; i++) {
+		final String[] items = StringUtils.splitKeepEmpty(string, separator);
+		final ItemStack[] result = new ItemStack[items.length - 1];
+		for (int i = 1; i < items.length; i++) {
 			try {
-				result[i] = DataUtils.fromString(items[i].isEmpty() ? null : items[i]);
+				result[i - 1] = items[i].isEmpty() ? null : DataUtils.fromString(items[i]);
 			} catch (final DataUtils.DataUtilParserException e) {
 				throw new InventoryUtilParserException(string, "Invalid item string provided", e);
 			}
