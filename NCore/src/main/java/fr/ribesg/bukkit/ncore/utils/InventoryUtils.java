@@ -53,6 +53,10 @@ public class InventoryUtils {
 		return comparator;
 	}
 
+	// #################
+	// ## ItemStack[] ##
+	// #################
+
 	/**
 	 * Stack and sort an array of ItemStacks.
 	 * Note: The size of the returned array is guaranteed to be
@@ -127,6 +131,64 @@ public class InventoryUtils {
 	}
 
 	/**
+	 * Serializes this array of ItemStacks to a single String.
+	 * The first 4 chars of the String have to represent the separator
+	 * between the different ItemStacks
+	 *
+	 * @param itemStacks the ItemStack array to serialize
+	 *
+	 * @return a single String representing this ItemStack array
+	 */
+	public static String toString(final ItemStack[] itemStacks) throws InventoryUtilParserException {
+		final List<String> strings = new ArrayList<>(itemStacks.length);
+		for (final ItemStack is : itemStacks) {
+			if (is == null) {
+				strings.add((""));
+			} else {
+				try {
+					strings.add(DataUtil.toString(is));
+				} catch (final DataUtil.DataUtilParserException e) {
+					throw new InventoryUtilParserException(itemStacks, "Invalid item in provided array", e);
+				}
+			}
+		}
+
+		final String separator = StringUtils.getPossibleSeparator(strings, 4);
+		final StringBuilder builder = new StringBuilder();
+		for (final String s : strings) {
+			builder.append(s).append(separator);
+		}
+		return builder.substring(0, builder.length() - separator.length());
+	}
+
+	/**
+	 * Deserializes this Sring as an array of ItemStacks.
+	 *
+	 * @param string the String to deserialize
+	 *
+	 * @return an array of ItemStacks
+	 *
+	 * @see #toString(org.bukkit.inventory.ItemStack[])
+	 */
+	public static ItemStack[] fromString(final String string) throws InventoryUtilParserException {
+		final String separator = string.substring(0, 4);
+		final String[] items = string.split(separator);
+		final ItemStack[] result = new ItemStack[items.length];
+		for (int i = 0; i < items.length; i++) {
+			try {
+				result[i] = DataUtil.fromString(items[i].isEmpty() ? null : items[i]);
+			} catch (final DataUtil.DataUtilParserException e) {
+				throw new InventoryUtilParserException(string, "Invalid item string provided", e);
+			}
+		}
+		return result;
+	}
+
+	// ###############
+	// ## Inventory ##
+	// ###############
+
+	/**
 	 * Stack and sort the ItemStacks in an Inventory.
 	 *
 	 * @param inventory the Inventory to handle
@@ -156,5 +218,64 @@ public class InventoryUtils {
 		final ItemStack[] content = inventory.getContents();
 		Arrays.sort(content, getComparator());
 		inventory.setContents(content);
+	}
+
+	/**
+	 * Gets a String representing the provided inventory's content.
+	 *
+	 * @param inventory the inventory to serialize
+	 *
+	 * @return a String representing the provided inventory
+	 */
+	public static String toString(final Inventory inventory) throws InventoryUtilParserException {
+		return toString(inventory.getContents());
+	}
+
+	/**
+	 * Sets the provided inventory's content to the provided Inventory String
+	 * representation.
+	 *
+	 * @param inventoryToSet the inventory to modify
+	 * @param string         the inventory representation to deserialize
+	 *
+	 * @throws IllegalArgumentException if the provided String deserialization does not match the provided
+	 *                                  Inventory's size
+	 */
+	public static void setFromString(final Inventory inventoryToSet, final String string) throws InventoryUtilParserException {
+		final ItemStack[] fromString = fromString(string);
+		if (inventoryToSet.getSize() != fromString.length) {
+			throw new IllegalArgumentException("String size (" +
+			                                   fromString.length +
+			                                   ") does not match inventory size (" +
+			                                   inventoryToSet.getSize() +
+			                                   ")");
+		}
+		inventoryToSet.setContents(fromString);
+	}
+
+	public static class InventoryUtilParserException extends Exception {
+
+		private final String parsed;
+		private final String reason;
+
+		public InventoryUtilParserException(final Object parsed, final String reason) {
+			super("Error while parsing '" + (parsed == null ? "null" : parsed.toString()) + "', " + reason);
+			this.parsed = parsed == null ? "null" : parsed.toString();
+			this.reason = reason;
+		}
+
+		public InventoryUtilParserException(final Object parsed, final String reason, final Throwable origin) {
+			super("Error while parsing '" + (parsed == null ? "null" : parsed.toString()) + "', " + reason, origin);
+			this.parsed = parsed == null ? "null" : parsed.toString();
+			this.reason = reason;
+		}
+
+		public String getParsed() {
+			return parsed;
+		}
+
+		public String getReason() {
+			return reason;
+		}
 	}
 }

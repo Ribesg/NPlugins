@@ -12,6 +12,8 @@ package fr.ribesg.bukkit.ncore.utils;
 import org.bukkit.util.Vector;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Some simple methods that could be used in every plugin
@@ -22,6 +24,17 @@ public class StringUtils {
 
 	private static final char   SEPARATOR_CHAR        = ';';
 	private static final String SEPARATOR_CHAR_STRING = Character.toString(SEPARATOR_CHAR);
+
+	/**
+	 * An arbitrary list of possible separator characters.
+	 * Used to save Lore to String. Two of them are randomly chosen randomly
+	 * and the combination of both is used as separator.
+	 * The only way to break it would be to have Lore Strings contain every
+	 * single possible 2-length combination of those characters.
+	 */
+	private static final CharSequence SEPARATOR_CHARS = ",;:!?§/.*+-=@_-|#~&$£¤°<>()[]{}";
+
+	private static final Random RANDOM = new Random();
 
 	/**
 	 * @param vect a Vector
@@ -121,5 +134,82 @@ public class StringUtils {
 			}
 			return builder.toString();
 		}
+	}
+
+	public static String getPossibleSeparator(final List<String> strings, final int size) {
+		int i = 1337; // Maximum tries
+		String separator;
+		boolean notContained;
+		while (i-- > 0) {
+			notContained = true;
+			separator = getRandomSeparator(size);
+			for (final String s : strings) {
+				if (s.contains(separator)) {
+					notContained = false;
+					break;
+				}
+			}
+			if (notContained) {
+				return separator;
+			}
+		}
+		throw new IllegalStateException("Cannot find a separator for provided list of Strings, it's a trap!");
+	}
+
+	private static String getRandomSeparator(final int size) {
+		assert size > 0;
+		final StringBuilder builder = new StringBuilder(size);
+		for (int i = 0; i < size; i++) {
+			builder.append(getRandomCharacterSeparator());
+		}
+		return builder.toString();
+	}
+
+	private static char getRandomCharacterSeparator() {
+		return SEPARATOR_CHARS.charAt(RANDOM.nextInt(SEPARATOR_CHARS.length()));
+	}
+
+	/**
+	 * Better split method than String.split(...)
+	 * <p/>
+	 * Example:
+	 * ";;;".split(";"); => {}
+	 * splitEmpty(";;;", ";") => {"","","",""}
+	 *
+	 * @param string the String to be splitted
+	 * @param split  the separator on which we want to split. Not a regex.
+	 *
+	 * @return an array of resulting Strings
+	 */
+	public static String[] splitKeepEmpty(final String string, final String split) {
+		final String[] result = new String[count(string, split) + 1];
+		int from, index = -split.length();
+		for (int i = 0; i < result.length; i++) {
+			from = index + split.length();
+			index = string.indexOf(split, from);
+			if (index == -1) {
+				index = string.length();
+			}
+			result[i] = string.substring(from, index);
+		}
+		return result;
+	}
+
+	/**
+	 * Count the number of occurence of substring in inString.
+	 *
+	 * @param substring the substring to count
+	 * @param inString  the String in which we count
+	 *
+	 * @return the number of occurences of substring in inString
+	 */
+	public static int count(final String inString, final String substring) {
+		int result = 0;
+		int index = inString.indexOf(substring);
+		while (index != -1) {
+			result++;
+			index = inString.indexOf(substring, index + substring.length());
+		}
+		return result;
 	}
 }

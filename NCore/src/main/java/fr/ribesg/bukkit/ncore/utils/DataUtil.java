@@ -21,7 +21,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
@@ -44,15 +43,6 @@ public class DataUtil {
 	};
 
 	/**
-	 * An arbitrary list of possible separator characters.
-	 * Used to save Lore to String. Two of them are randomly chosen randomly
-	 * and the combination of both is used as separator.
-	 * The only way to break it would be to have Lore Strings contain every
-	 * single possible 2-length combination of those characters.
-	 */
-	private static final CharSequence SEPARATOR_CHARS = ",;:!?§/.*+-=@_-|#~&$£¤°<>()[]{}";
-
-	/**
 	 * Different levels of Separators used for the String representation.
 	 * Do not use 2-length separators as it's the length of Random
 	 * Separators.
@@ -62,8 +52,6 @@ public class DataUtil {
 			",",
 			":"
 	};
-
-	private static final Random RANDOM = new Random();
 
 	/**
 	 * Create an ItemStack description String from an ItemStack.
@@ -102,7 +90,10 @@ public class DataUtil {
 	 *
 	 * @see #fromString(String) to get an ItemStack from the provided String
 	 */
-	public static String toString(final ItemStack is) {
+	public static String toString(final ItemStack is) throws DataUtilParserException {
+		if (is == null) {
+			throw new DataUtilParserException(is, "Null ItemStack");
+		}
 		final String idString = is.getType().name();
 		final String dataString = Short.toString(is.getDurability());
 		final String amountString = Integer.toString(Math.min(Math.max(is.getAmount(), 1), 64));
@@ -134,7 +125,7 @@ public class DataUtil {
 		final String loreString;
 		if (meta.hasLore()) {
 			final List<String> lore = meta.getLore();
-			final String separator = getPossibleSeparator(lore);
+			final String separator = StringUtils.getPossibleSeparator(lore, 2);
 			final StringBuilder loreStringBuilder = new StringBuilder();
 			for (final String loreLine : lore) {
 				loreStringBuilder.append(separator).append(loreLine);
@@ -165,7 +156,7 @@ public class DataUtil {
 	 * @see #toString(ItemStack) for format
 	 */
 	public static ItemStack fromString(final String itemString) throws DataUtilParserException {
-		final String[] parts = itemString.split(SEPARATORS[0]);
+		final String[] parts = StringUtils.splitKeepEmpty(itemString, SEPARATORS[0]);
 		if (parts.length != 6) {
 			throw new DataUtilParserException(itemString, "Invalid amount of fields");
 		}
@@ -215,9 +206,9 @@ public class DataUtil {
 
 		if (!enchantmentsString.isEmpty()) {
 			enchantments = new TreeMap<>(ENCHANTMENT_COMPARATOR);
-			final String[] enchantmentsPairs = enchantmentsString.split(SEPARATORS[1]);
+			final String[] enchantmentsPairs = StringUtils.splitKeepEmpty(enchantmentsString, SEPARATORS[1]);
 			for (final String enchantmentPair : enchantmentsPairs) {
-				final String[] enchantmentPairSplit = enchantmentPair.split(SEPARATORS[3]);
+				final String[] enchantmentPairSplit = StringUtils.splitKeepEmpty(enchantmentPair, SEPARATORS[3]);
 				if (enchantmentPairSplit.length != 2) {
 					throw new DataUtilParserException(itemString, "Malformed Enchantments field '" + enchantmentsString + "'");
 				} else {
@@ -285,7 +276,12 @@ public class DataUtil {
 	 *
 	 * @see #loadFromConfig(ConfigurationSection, String)
 	 */
-	public static void saveToConfigSection(final ConfigurationSection parentSection, final String key, final ItemStack is) {
+	public static void saveToConfigSection(final ConfigurationSection parentSection, final String key, final ItemStack is) throws
+	                                                                                                                       DataUtilParserException {
+		if (is == null) {
+			throw new DataUtilParserException(is, "Null ItemStack");
+		}
+
 		final ConfigurationSection itemSection = parentSection.createSection(key);
 
 		itemSection.set("id", is.getType().name());
@@ -441,48 +437,20 @@ public class DataUtil {
 		return result;
 	}
 
-	private static String getPossibleSeparator(final List<String> lore) {
-		int i = 1337; // Maximum tries
-		String separator;
-		boolean notContained;
-		while (i-- > 0) {
-			notContained = true;
-			separator = getRandomSeparator();
-			for (final String s : lore) {
-				if (s.contains(separator)) {
-					notContained = false;
-					break;
-				}
-			}
-			if (notContained) {
-				return separator;
-			}
-		}
-		throw new IllegalStateException("Cannot find a separator for provided list of Strings, it's a trap!");
-	}
-
-	private static String getRandomSeparator() {
-		return Character.toString(getRandomCharacterSeparator()) + getRandomCharacterSeparator();
-	}
-
-	private static char getRandomCharacterSeparator() {
-		return SEPARATOR_CHARS.charAt(RANDOM.nextInt(SEPARATOR_CHARS.length()));
-	}
-
 	public static class DataUtilParserException extends Exception {
 
 		private final String parsed;
 		private final String reason;
 
-		public DataUtilParserException(final String parsed, final String reason) {
-			super("Error while parsing '" + parsed + "', " + reason);
-			this.parsed = parsed;
+		public DataUtilParserException(final Object parsed, final String reason) {
+			super("Error while parsing '" + (parsed == null ? "null" : parsed.toString()) + "', " + reason);
+			this.parsed = parsed == null ? "null" : parsed.toString();
 			this.reason = reason;
 		}
 
-		public DataUtilParserException(final String parsed, final String reason, final Throwable origin) {
-			super("Error while parsing '" + parsed + "', " + reason, origin);
-			this.parsed = parsed;
+		public DataUtilParserException(final Object parsed, final String reason, final Throwable origin) {
+			super("Error while parsing '" + (parsed == null ? "null" : parsed.toString()) + "', " + reason, origin);
+			this.parsed = parsed == null ? "null" : parsed.toString();
 			this.reason = reason;
 		}
 
