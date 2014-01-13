@@ -73,7 +73,11 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 					break;
 				}
 				final Altar a = new Altar(plugin, loc);
-				if (!altars.canAdd(a, getMinimumDistanceBetweenTwoAltars())) {
+				if (a.getCenterLocation().getWorld() == null) {
+					plugin.getLogger().severe("Incorrect altar location (Unknown world '" + loc.getWorldName() + "'): \"" + s + "\"");
+					plugin.getLogger().severe("Has this world been disabled?");
+					break;
+				} else if (!altars.canAdd(a, getMinimumDistanceBetweenTwoAltars())) {
 					plugin.getLogger().severe("Incorrect altar location (Too close): \"" + s + "\"");
 					break;
 				} else if (a.isInactiveAltarValid()) {
