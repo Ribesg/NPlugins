@@ -29,7 +29,7 @@ public class Config extends AbstractConfig<NTalk> {
 	                                                     "[message]";
 	private static final String defaultTempMuteCommand = "/mute %player% %duration%s %reason%";
 	private static final String defaultTempBanCommand  = "/ban %player% %duration%s %reason%";
-	private static final String defaultTempJailCommand = "/jail %player% %duration% %jailName% %reason%";
+	private static final String defaultTempJailCommand = "/jail %player% %duration%s %jailName% %reason%";
 
 	private String template;
 	private String pmTemplate;
