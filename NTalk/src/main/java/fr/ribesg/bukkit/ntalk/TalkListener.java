@@ -62,7 +62,7 @@ public class TalkListener implements Listener {
 		if (filter != null) {
 			final String message = event.getMessage();
 			final String uncoloredMessage = ColorUtils.stripColorCodes(message);
-			final Filter result = filter.check(uncoloredMessage);
+			final Filter result = filter.check(' ' + uncoloredMessage + ' ');
 			if (result != null) {
 				switch (result.getResponseType()) {
 					case DENY:
