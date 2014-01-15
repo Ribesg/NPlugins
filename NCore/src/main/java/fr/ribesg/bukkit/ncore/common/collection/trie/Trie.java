@@ -62,4 +62,8 @@ public class Trie<T extends TrieElement> {
 		}
 		return result;
 	}
+
+	public void clear() {
+		this.roots.clear();
+	}
 }

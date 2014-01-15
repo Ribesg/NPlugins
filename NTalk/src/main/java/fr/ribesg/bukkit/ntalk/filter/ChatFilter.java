@@ -72,6 +72,7 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 		regexes.clear();
+		strings.clear();
 
 		if (config.isConfigurationSection("filters")) {
 			final ConfigurationSection filtersSection = config.getConfigurationSection("filters");
