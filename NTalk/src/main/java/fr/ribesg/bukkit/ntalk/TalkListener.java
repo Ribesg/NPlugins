@@ -74,7 +74,7 @@ public class TalkListener implements Listener {
 						if (replaceFilter.isRegex()) {
 							newMessage = message.replaceAll(replaceFilter.getFilteredString(), replaceFilter.getReplacement());
 						} else {
-							final String filtered = replaceFilter.getFilteredString();
+							final String filtered = replaceFilter.getFilteredString().trim();
 							final String replacement = replaceFilter.getReplacement();
 							newMessage = message;
 							int i = newMessage.indexOf(filtered);

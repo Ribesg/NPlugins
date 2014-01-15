@@ -8,8 +8,8 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntalk.filter;
-import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.common.collection.trie.Trie;
+import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ntalk.NTalk;
 import fr.ribesg.bukkit.ntalk.filter.bean.BanFilter;
@@ -191,7 +191,7 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 			return filter;
 		}
 		for (final Filter regexFilter : this.regexes) {
-			if (Pattern.compile(regexFilter.getFilteredString()).matcher(message).matches()) {
+			if (Pattern.compile(regexFilter.getFilteredString()).matcher(message).find()) {
 				return regexFilter;
 			}
 		}
