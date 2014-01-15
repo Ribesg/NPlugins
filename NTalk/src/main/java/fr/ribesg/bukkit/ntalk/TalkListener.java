@@ -74,14 +74,15 @@ public class TalkListener implements Listener {
 						if (replaceFilter.isRegex()) {
 							newMessage = message.replaceAll(replaceFilter.getFilteredString(), replaceFilter.getReplacement());
 						} else {
+							final String filtered = replaceFilter.getFilteredString();
 							final String replacement = replaceFilter.getReplacement();
 							newMessage = message;
-							int i = newMessage.indexOf(replaceFilter.getFilteredString());
+							int i = newMessage.indexOf(filtered);
 							while (i != -1) {
 								newMessage = newMessage.substring(0, i) +
-								             replaceFilter.getReplacement() +
-								             newMessage.substring((i += replacement.length()));
-								i = newMessage.indexOf(replaceFilter.getFilteredString(), i);
+								             replacement +
+								             newMessage.substring((i += filtered.length()));
+								i = newMessage.indexOf(filtered, i);
 							}
 						}
 						event.setMessage(newMessage);
