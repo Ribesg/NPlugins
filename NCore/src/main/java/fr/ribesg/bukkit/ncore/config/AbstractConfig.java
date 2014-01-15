@@ -69,6 +69,7 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 	public void loadConfig(final String fileName) throws IOException, InvalidConfigurationException {
 		final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + fileName);
 		if (!Files.exists(path)) {
+			path.toFile().getParentFile().mkdirs();
 			Files.createFile(path);
 			writeConfig(path);
 		} else {

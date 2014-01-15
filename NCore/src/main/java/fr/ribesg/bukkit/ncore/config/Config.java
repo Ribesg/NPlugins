@@ -64,7 +64,7 @@ public class Config extends AbstractConfig<NCore> {
 		// proxyAddress
 		final String proxyHost = config.getString("proxyHost", null);
 		final int proxyPort = config.getInt("proxyPort", -1);
-		if (proxyHost == null || proxyPort == -1) {
+		if (proxyHost != null && !proxyHost.isEmpty() && proxyPort != -1) {
 			setProxyAddress(new InetSocketAddress(proxyHost, proxyPort));
 		}
 	}
@@ -109,8 +109,13 @@ public class Config extends AbstractConfig<NCore> {
 
 		// proxyAddress. Default: empty
 		content.append("# Proxy informations for the Updater. Default: empty\n");
-		content.append("proxyHost: \"" + this.proxyAddress.getHostName() + "\"\n");
-		content.append("proxyPort: " + this.proxyAddress.getPort() + "\n");
+		if (this.proxyAddress == null) {
+			content.append("proxyHost: \"\"\n");
+			content.append("proxyPort: \"\"\n");
+		} else {
+			content.append("proxyHost: \"" + this.proxyAddress.getHostName() + "\"\n");
+			content.append("proxyPort: " + this.proxyAddress.getPort() + "\n");
+		}
 
 		return content.toString();
 	}
