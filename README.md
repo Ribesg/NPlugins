@@ -1,7 +1,7 @@
 NPlugins
 =====
-Informations about the project:
-	http://www.ribesg.fr/
+Informations about the project:  
+	http://dev.bukkit.org/bukkit-plugins/ncore/
 
-Jenkins server:
+Jenkins server:  
 	http://ci.ribesg.fr/
