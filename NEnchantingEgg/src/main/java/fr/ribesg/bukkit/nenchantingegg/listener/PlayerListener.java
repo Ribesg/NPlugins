@@ -63,7 +63,7 @@ public class PlayerListener implements Listener {
 				break;
 			case SKULL: // Creating an Altar by placing the Wither Skull last
 				final Player player = event.getPlayer();
-				Bukkit.getScheduler().runTask(plugin, new BukkitRunnable() {
+				Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
 
 					@Override
 					public void run() {
@@ -96,7 +96,7 @@ public class PlayerListener implements Listener {
 							}
 						}
 					}
-				});
+				}, 1L);
 				break;
 			default:
 				coord = new ChunkCoord(event.getBlockPlaced().getLocation().getChunk());

@@ -57,7 +57,7 @@ public class Altars {
 			final double minDistanceSquared = minDistance * minDistance;
 			final Set<Altar> set = perWorld.get(l.getWorldName());
 			for (final Altar other : set) {
-				if (l.distanceSquared(other.getCenterLocation()) < minDistanceSquared) {
+				if (l.distance2DSquared(other.getCenterLocation()) < minDistanceSquared) {
 					return false;
 				}
 			}

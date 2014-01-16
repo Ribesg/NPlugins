@@ -151,6 +151,11 @@ public class DataUtils {
 		return resultBuilder.toString();
 	}
 
+	private static String customMetaToString(final ItemMeta meta) {
+		// TODO
+		return null;
+	}
+
 	/**
 	 * Gets an ItemStack from an Item Description String.
 	 *
@@ -271,6 +276,11 @@ public class DataUtils {
 		is.setItemMeta(meta);
 
 		return is;
+	}
+
+	private static ItemMeta customMetaFromString(final String string) {
+		// TODO
+		return null;
 	}
 
 	/**

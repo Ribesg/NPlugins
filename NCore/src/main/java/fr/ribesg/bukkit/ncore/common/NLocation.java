@@ -328,7 +328,7 @@ public class NLocation {
 					return new Location(world, x, y, z, yaw, pitch);
 				} catch (final NumberFormatException e) {
 					LOGGER.warning("Unable to convert the provided String to Location, " +
-					            "caught NumberFormatException while parsing x,y,z,yaw,pitch");
+					               "caught NumberFormatException while parsing x,y,z,yaw,pitch");
 					LOGGER.warning("String was: " + string);
 					return null;
 				}
@@ -374,7 +374,7 @@ public class NLocation {
 				return new NLocation(worldName, x, y, z, yaw, pitch);
 			} catch (final NumberFormatException e) {
 				LOGGER.warning("Unable to convert the provided String to NLocation, " +
-				            "caught NumberFormatException while parsing x,y,z,yaw,pitch");
+				               "caught NumberFormatException while parsing x,y,z,yaw,pitch");
 				LOGGER.warning("String was: " + string);
 				return null;
 			}
@@ -388,7 +388,8 @@ public class NLocation {
 	}
 
 	public double distanceSquared(final NLocation o) {
-		return distance2DSquared(o) + Math.pow(y - o.y, 2);
+		final double dy = y - o.y;
+		return distance2DSquared(o) + dy * dy;
 	}
 
 	public double distance2D(final NLocation o) {
@@ -401,6 +402,8 @@ public class NLocation {
 		} else if (!o.getWorldName().equals(getWorldName())) {
 			throw new IllegalArgumentException("Cannot measure distance between " + getWorldName() + " and " + o.getWorldName());
 		}
-		return Math.pow(x - o.x, 2) + Math.pow(z - o.z, 2);
+		final double dx = x - o.x;
+		final double dz = z - o.z;
+		return dx * dx + dz * dz;
 	}
 }
