@@ -62,6 +62,9 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 			getPluginLoader().disablePlugin(this);
 		} else /* Everything's ok */ {
 			debugEnabled = core.getPluginConfig().isDebugEnabled(this.getName());
+			if (debugEnabled) {
+				getLogger().info("DEBUG MODE ENABLED!");
+			}
 			try {
 				metrics = new Metrics(this);
 				metrics.start();
