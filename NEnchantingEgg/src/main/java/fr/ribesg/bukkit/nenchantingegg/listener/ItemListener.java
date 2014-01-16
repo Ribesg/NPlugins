@@ -37,25 +37,38 @@ public class ItemListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onItemPortal(final EntityPortalEvent event) {
+		plugin.entering(getClass(), "onItemPortal");
 		if (event.getEntityType() == EntityType.DROPPED_ITEM) {
+			plugin.debug("Teleporting entity is a Dropped Item, trying to handle it...");
 			final Location loc = event.getEntity().getLocation();
 			final Altar altar = plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
 			if (altar != null && altar.getState() == AltarState.EGG_PROVIDED && event.getEntity().isValid()) {
 				altar.getBuilder().addItem(((Item) event.getEntity()).getItemStack());
 				event.setCancelled(true);
 				event.getEntity().remove();
+				plugin.debug("Entity handled by an Altar. Location=" + altar.getCenterLocation().toString());
+			} else {
+				plugin.debug("Entity not handled");
 			}
 		}
+		plugin.exiting(getClass(), "onItemPortal");
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
+		plugin.entering(getClass(), "onPlayerPickupItem");
 		final Item i = event.getItem();
 		if (itemMap.containsKey(i)) {
+			plugin.debug("Item is handled by an Altar");
+			final String playerName = event.getPlayer().getName();
 			final String awaitedPlayerName = itemMap.get(i);
-			if (!event.getPlayer().getName().equals(awaitedPlayerName)) {
+			if (!playerName.equals(awaitedPlayerName)) {
+				if (plugin.isDebugEnabled()) {
+					plugin.debug("Not the right player (" + playerName + "), cancel pickup. Awaited '" + awaitedPlayerName + "'");
+				}
 				event.setCancelled(true);
 			} else {
+				plugin.debug("Right player, allow pickup");
 				itemMap.remove(i);
 				final Altar altar = plugin.getAltars().get(new ChunkCoord(i.getLocation().getChunk()));
 				if (altar != null) {
@@ -63,6 +76,7 @@ public class ItemListener implements Listener {
 				}
 			}
 		}
+		plugin.exiting(getClass(), "onPlayerPickupItem");
 	}
 
 	public Map<Item, String> getItemMap() {

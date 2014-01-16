@@ -29,10 +29,12 @@ public class TimeListenerTask extends BukkitRunnable {
 
 	@Override
 	public void run() {
+		plugin.entering(getClass(), "run");
 		for (final World w : Bukkit.getWorlds()) {
 			final long actualTime = w.getTime();
 			final MinecraftTime time = MinecraftTime.get(actualTime);
 			plugin.getAltars().time(w.getName(), time);
 		}
+		plugin.exiting(getClass(), "run");
 	}
 }

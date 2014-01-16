@@ -36,15 +36,23 @@ public class Altars {
 	}
 
 	public void onEnable() {
+		plugin.entering(getClass(), "onEnable");
+
 		for (final Altar altar : getAltars()) {
 			altar.setState(AltarState.INACTIVE);
 		}
+
+		plugin.exiting(getClass(), "onEnable");
 	}
 
 	public void onDisable() {
+		plugin.entering(getClass(), "onDisable");
+
 		for (final Altar altar : getAltars()) {
 			altar.hardResetToInactive(false);
 		}
+
+		plugin.exiting(getClass(), "onDisable");
 	}
 
 	public Set<Altar> getAltars() {
@@ -52,20 +60,39 @@ public class Altars {
 	}
 
 	public boolean canAdd(final Altar altar, final double minDistance) {
+		plugin.entering(getClass(), "canAdd");
+
+		boolean result = true;
 		final NLocation l = altar.getCenterLocation();
+		plugin.debug("Trying to add Altar at location " + l.toString());
+
 		if (perWorld.containsKey(l.getWorldName())) {
 			final double minDistanceSquared = minDistance * minDistance;
+			if (plugin.isDebugEnabled()) {
+				plugin.debug("There are already altars in this world");
+				plugin.debug("Required minimal distance: " + minDistance + " (squared: " + minDistanceSquared + ")");
+			}
 			final Set<Altar> set = perWorld.get(l.getWorldName());
 			for (final Altar other : set) {
-				if (l.distance2DSquared(other.getCenterLocation()) < minDistanceSquared) {
-					return false;
+				final double distanceSquared = l.distance2DSquared(other.getCenterLocation());
+				if (plugin.isDebugEnabled()) {
+					plugin.debug("Distance (squared) with " + other.getCenterLocation() + ": " + distanceSquared);
+				}
+				if (distanceSquared < minDistanceSquared) {
+					plugin.debug("Too close, can't add");
+					result = false;
+					break;
 				}
 			}
 		}
-		return true;
+
+		plugin.exiting(getClass(), "canAdd");
+		return result;
 	}
 
 	public void add(final Altar altar) {
+		plugin.entering(getClass(), "add");
+
 		final World w = altar.getCenterLocation().getWorld();
 		final Set<Altar> set;
 		if (perWorld.containsKey(w.getName())) {
@@ -78,9 +105,13 @@ public class Altars {
 		for (final ChunkCoord c : altar.getChunks()) {
 			perChunk.put(c, altar);
 		}
+
+		plugin.exiting(getClass(), "add");
 	}
 
 	public void remove(final Altar altar) {
+		plugin.entering(getClass(), "remove");
+
 		final World w = altar.getCenterLocation().getWorld();
 		if (perWorld.containsKey(w.getName())) {
 			final Set<Altar> set = perWorld.get(w.getName());
@@ -92,6 +123,8 @@ public class Altars {
 		for (final ChunkCoord c : altar.getChunks()) {
 			perChunk.remove(c);
 		}
+
+		plugin.exiting(getClass(), "remove");
 	}
 
 	public Altar get(final ChunkCoord coord) {

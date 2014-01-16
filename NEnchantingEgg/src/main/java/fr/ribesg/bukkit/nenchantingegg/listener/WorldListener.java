@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.nenchantingegg.listener;
 
 import fr.ribesg.bukkit.ncore.common.ChunkCoord;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import org.bukkit.Chunk;
@@ -34,12 +35,17 @@ public class WorldListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityExplode(final EntityExplodeEvent event) {
+		plugin.entering(getClass(), "onEntityExplode");
+
 		// Get the chunks considered in this event
 		final Set<Chunk> chunks = new HashSet<>();
 		Chunk c;
 		for (final Block b : event.blockList()) {
 			c = b.getLocation().getChunk();
 			if (!chunks.contains(c)) {
+				if (plugin.isDebugEnabled()) {
+					plugin.debug("Considering chunk (" + c.getX() + ";" + c.getZ() + ")");
+				}
 				chunks.add(c);
 			}
 		}
@@ -52,6 +58,9 @@ public class WorldListener implements Listener {
 			coord = new ChunkCoord(chunk);
 			altar = plugin.getAltars().get(coord);
 			if (altar != null) {
+				if (plugin.isDebugEnabled()) {
+					plugin.debug("Considering altar at location " + altar.getCenterLocation().toString());
+				}
 				altars.add(altar);
 			}
 		}
@@ -65,11 +74,16 @@ public class WorldListener implements Listener {
 				if (a.isAltarXYZ(b.getX() - a.getCenterLocation().getBlockX(),
 				                 b.getY() - a.getCenterLocation().getBlockY(),
 				                 b.getZ() - a.getCenterLocation().getBlockZ())) {
+					if (plugin.isDebugEnabled()) {
+						plugin.debug("Protecting block at location " + NLocation.toString(b.getLocation()));
+					}
 					it.remove();
 					break;
 				}
 			}
 		}
+
+		plugin.exiting(getClass(), "onEntityExplode");
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)

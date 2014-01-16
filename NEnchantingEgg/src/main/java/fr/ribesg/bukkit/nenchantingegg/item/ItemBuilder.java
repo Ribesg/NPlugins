@@ -16,6 +16,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -180,21 +181,33 @@ public class ItemBuilder {
 
 	/** Handles the reception of an item */
 	public void addItem(final ItemStack is) {
+		plugin.entering(getClass(), "addItem");
+
 		if (getPossibleMainItems().contains(is.getType()) && is.getEnchantments().size() != 0) {
+			plugin.debug("Main item detected");
 			mainItem = is;
 			if (altar.getEggLocation().getBlock().getType() != Material.DRAGON_EGG) {
+				plugin.debug("The Dragon Egg is no longer here, cancel everything");
 				items.clear();
 				altar.hardResetToInactive(true);
 			} else {
+				plugin.debug("The Dragon Egg is still here, proceed to next step");
 				plugin.getEggProvidedToItemProvidedTransition().doTransition(altar);
 			}
 		} else {
+			plugin.debug("Secondary item detected");
 			items.add(is);
 		}
+
+		plugin.exiting(getClass(), "addItem");
 	}
 
 	public void computeItem() {
+		plugin.entering(getClass(), "computeItem");
+
 		if (!items.isEmpty() && mainItem != null) {
+			plugin.debug("Starting item computation process");
+
 			// Step 1: repair
 			repair();
 
@@ -206,14 +219,23 @@ public class ItemBuilder {
 			// Output the item
 			altar.buildItem(mainItem, items);
 		} else {
+			plugin.debug("Something is missing, just give back all items");
 			altar.buildItem(mainItem, items);
 			plugin.getItemProvidedToLockedTransition().doTransition(altar);
 		}
+
+		plugin.exiting(getClass(), "computeItem");
 	}
 
 	private void repair() {
+		plugin.entering(getClass(), "repair");
+
 		final Material mat = mainItem.getType();
 		final short maxDurability = mat.getMaxDurability();
+
+		if (plugin.isDebugEnabled()) {
+			plugin.debug("Repairing item " + mat.name() + " with max durability " + maxDurability);
+		}
 
 		// Get the total durability points sacrificed, in %
 		double repairCount = 0;
@@ -227,7 +249,14 @@ public class ItemBuilder {
 			}
 		}
 
-		repairCount *= getBaseRessourceAmount(mat);
+		final int baseRessourceAmount = getBaseRessourceAmount(mat);
+
+		plugin.debug("repairCount=" + repairCount);
+		plugin.debug("baseRessourceAmount=" + baseRessourceAmount);
+
+		repairCount *= baseRessourceAmount;
+
+		plugin.debug("repairCount*baseRessourceAmount=" + repairCount);
 
 		// Get the number of enchantment levels
 		int totalEnchantmentLevel = 0;
@@ -235,12 +264,19 @@ public class ItemBuilder {
 			totalEnchantmentLevel += i;
 		}
 
+		plugin.debug("totalEnchantmentLevel=" + totalEnchantmentLevel);
+
 		// Compute base durability boost
 		final double configurableCoef = plugin.getPluginConfig().getRepairBoostMultiplier();
 		double boost = configurableCoef * repairCount / totalEnchantmentLevel;
 
+		plugin.debug("configurableCoef=" + configurableCoef);
+		plugin.debug("boost=" + boost);
+
 		// Add some randomness: boost = 80%*boost + [0-40%]*boost; => boost = [80-120%]*boost;
 		boost = boost - 0.2 * boost + RANDOM.nextFloat() * 0.4 * boost;
+
+		plugin.debug("randomizedBoost=" + boost);
 
 		// Apply durability
 		double finalDurability = mainItem.getDurability() - boost * maxDurability;
@@ -248,10 +284,23 @@ public class ItemBuilder {
 			finalDurability = 0;
 		}
 
+		plugin.debug("finalDurability=" + finalDurability);
+
 		mainItem.setDurability((short) finalDurability);
+
+		plugin.exiting(getClass(), "repair");
 	}
 
 	private void boost() {
+		plugin.entering(getClass(), "boost");
+
+		if (plugin.isDebugEnabled()) {
+			plugin.debug("Original list of Enchantments:");
+			for (final Map.Entry<Enchantment, Integer> e : mainItem.getEnchantments().entrySet()) {
+				plugin.debug("\t" + e.getKey().getName() + ", level " + e.getValue());
+			}
+		}
+
 		// Count the amount of Magma Cream and Eye of Ender sacrificed
 		int magmaCream = 0;
 		int eyeOfEnder = 0;
@@ -267,12 +316,16 @@ public class ItemBuilder {
 				it.remove();
 			}
 		}
+		plugin.debug("Found " + magmaCream + " Magma Cream(s)");
+		plugin.debug("Found " + eyeOfEnder + " Eye(s) of Ender");
 
 		// Reduce amounts to max allowed quantity
 		if (magmaCream > 64) {
+			plugin.debug("Fixing Magma Cream amount to 64");
 			magmaCream = 64;
 		}
 		if (eyeOfEnder > 64) {
+			plugin.debug("Fixing Eye of Ender amount to 64");
 			eyeOfEnder = 64;
 		}
 
@@ -284,8 +337,12 @@ public class ItemBuilder {
 				enchantments += 0.75f + 0.25f * i;
 			}
 
+			plugin.debug("enchantments=" + enchantments);
+
 			// Get the total amount of ingredients
 			final int total = magmaCream + eyeOfEnder;
+
+			plugin.debug("total=" + total);
 
 			// Get a ratio between 0 and 1 of the total of ingredients
 			double ratio = magmaCream == 0 ? 0 : eyeOfEnder / magmaCream;
@@ -293,11 +350,17 @@ public class ItemBuilder {
 				ratio = 1 / ratio;
 			}
 
+			plugin.debug("ratio=" + ratio);
+
 			// Weight the total with the ratio
 			final double weightedTotal = total / 2 + ratio * (total / 2);
 
+			plugin.debug("weightedTotal=" + weightedTotal);
+
 			// Get a coef between 0 and 1 from the weightedTotal (Math.exp(something between -1 and 0))
 			final double coef = Math.exp(-(1f - (weightedTotal / 128f)));
+
+			plugin.debug("coef=" + coef);
 
 			// Compute probabilities
 			final double[] probabilities = new double[] {
@@ -309,6 +372,8 @@ public class ItemBuilder {
 					coef * BOOST_VALUES[5][0] + BOOST_VALUES[5][1] - ENCH_REDUCE * enchantments
 			};
 
+			plugin.debug("probabilities=" + Arrays.toString(probabilities));
+
 			// Apply configurable coef and fix out-of-scope values
 			final double configurableCoef = plugin.getPluginConfig().getEnchantmentBoostMultiplier();
 			for (int i = 0; i < probabilities.length; i++) {
@@ -319,6 +384,9 @@ public class ItemBuilder {
 					probabilities[i] = 0;
 				}
 			}
+
+			plugin.debug("configurableCoef=" + configurableCoef);
+			plugin.debug("fixedProbabilities=" + Arrays.toString(probabilities));
 
 			// Roll dice
 			final Map<Enchantment, Integer> newEnchantmentsMap = new HashMap<>();
@@ -333,6 +401,13 @@ public class ItemBuilder {
 				newEnchantmentsMap.put(e.getKey(), Math.min(10, e.getValue() + result));
 			}
 
+			if (plugin.isDebugEnabled()) {
+				plugin.debug("Final list of Enchantments:");
+				for (final Map.Entry<Enchantment, Integer> e : newEnchantmentsMap.entrySet()) {
+					plugin.debug("\t" + e.getKey().getName() + ", level " + e.getValue());
+				}
+			}
+
 			// Clear enchantments
 			for (final Enchantment e : Enchantment.values()) {
 				mainItem.removeEnchantment(e);
@@ -341,5 +416,7 @@ public class ItemBuilder {
 			// Apply enchantments
 			mainItem.addUnsafeEnchantments(newEnchantmentsMap);
 		}
+
+		plugin.exiting(getClass(), "boost");
 	}
 }

@@ -58,7 +58,9 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	@Override
 	public boolean onNodeEnable() {
-		// Messages first !
+		entering(getClass(), "onNodeEnable");
+
+		debug("Loading plugin Messages...");
 		try {
 			if (!getDataFolder().isDirectory()) {
 				getDataFolder().mkdir();
@@ -66,48 +68,48 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 			messages = new Messages();
 			messages.loadMessages(this);
 		} catch (final IOException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NEnchantingEgg tried to load messages.yml");
+			error("An error occured when NEnchantingEgg tried to load messages.yml", e);
 			return false;
 		}
 
+		debug("Initializing transitions...");
 		inactiveToActiveTransition = new InactiveToActiveTransition(this);
 		activeToEggProvidedTransition = new ActiveToEggProvidedTransition(this);
 		eggProvidedToItemProvidedTransition = new EggProvidedToItemProvidedTransition(this);
 		itemProvidedToLockedTransition = new ItemProvidedToLockedTransition(this);
 
+		debug("Creating altars handler...");
 		altars = new Altars(this);
 
-		// Config
+		debug("Loading plugin config...");
 		try {
 			pluginConfig = new Config(this);
 			pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NEnchantingEgg tried to load config.yml");
+			error("An error occured when NEnchantingEgg tried to load config.yml", e);
 			return false;
 		}
 
+		debug("Enabling altars...");
 		altars.onEnable();
 
-		// Listener
 		final PluginManager pm = getServer().getPluginManager();
+		debug("Creating listeners...");
 		worldListener = new WorldListener(this);
 		itemListener = new ItemListener(this);
 		playerListener = new PlayerListener(this);
+		debug("Registering listeners...");
 		pm.registerEvents(worldListener, this);
 		pm.registerEvents(itemListener, this);
 		pm.registerEvents(playerListener, this);
 
-		// Commands
-		//getCommand("theCommand").setExecutor(new NCommandExecutor(this));
+		// debug("Registering commands...");
+		// getCommand("theCommand").setExecutor(new NCommandExecutor(this));
 
-		// Tasks
+		debug("Starting TimeListenerTask...");
 		Bukkit.getScheduler().runTaskTimer(this, new TimeListenerTask(this), 100L, 50);
 
-		// Metrics
+		debug("Handling Metrics...");
 		final Metrics.Graph g = getMetrics().createGraph("Amount of Altars");
 		g.addPlotter(new Metrics.Plotter() {
 
@@ -117,6 +119,7 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 			}
 		});
 
+		exiting(getClass(), "onNodeEnable");
 		return true;
 	}
 
@@ -128,17 +131,23 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	@Override
 	public void onNodeDisable() {
+		entering(getClass(), "onNodeDisable");
+
+		debug("Cancelling tasks...");
 		Bukkit.getScheduler().cancelTasks(this);
 
+		debug("Disbaling altars...");
 		altars.onDisable();
 
+		debug("Saving plugin config...");
 		try {
 			getPluginConfig().writeConfig();
 		} catch (final IOException e) {
-			e.printStackTrace();
+			error("An error occured when NEnchantingEgg tried to save config.yml", e);
 		}
 
 		altars = null;
+		exiting(getClass(), "onNodeDisable");
 	}
 
 	public ActiveToEggProvidedTransition getActiveToEggProvidedTransition() {

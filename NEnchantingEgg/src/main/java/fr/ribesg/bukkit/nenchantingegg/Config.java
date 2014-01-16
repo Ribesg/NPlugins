@@ -39,6 +39,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 	/** @see AbstractConfig#handleValues(YamlConfiguration) */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
+		plugin.entering(getClass(), "handleValues");
 
 		// minimumDistanceBetweenTwoAltars. Default: 500.
 		// Possible values: Positive integer >= 35
@@ -69,27 +70,31 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 			for (final String s : list) {
 				final NLocation loc = NLocation.toNLocation(s);
 				if (loc == null) {
-					plugin.getLogger().severe("Incorrect altar location (Malformed): \"" + s + "\"");
+					plugin.error("Incorrect altar location (Malformed): \"" + s + "\"");
 					break;
 				}
 				final Altar a = new Altar(plugin, loc);
 				if (a.getCenterLocation().getWorld() == null) {
-					plugin.getLogger().severe("Incorrect altar location (Unknown world '" + loc.getWorldName() + "'): \"" + s + "\"");
-					plugin.getLogger().severe("Has this world been disabled?");
+					plugin.error("Incorrect altar location (Unknown world '" + loc.getWorldName() + "'): \"" + s + "\"");
+					plugin.error("Has this world been disabled?");
 					break;
 				} else if (!altars.canAdd(a, getMinimumDistanceBetweenTwoAltars())) {
-					plugin.getLogger().severe("Incorrect altar location (Too close): \"" + s + "\"");
+					plugin.error("Incorrect altar location (Too close): \"" + s + "\"");
 					break;
 				} else if (a.isInactiveAltarValid()) {
 					altars.add(a);
 				}
 			}
 		}
+
+		plugin.exiting(getClass(), "handleValues");
 	}
 
 	/** @see AbstractConfig#getConfigString() */
 	@Override
 	protected String getConfigString() {
+		plugin.entering(getClass(), "getConfigString");
+
 		final StringBuilder content = new StringBuilder();
 		final FrameBuilder frame;
 
@@ -126,6 +131,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 			content.append("- " + a.getCenterLocation().toString() + '\n');
 		}
 
+		plugin.exiting(getClass(), "getConfigString");
 		return content.toString();
 	}
 

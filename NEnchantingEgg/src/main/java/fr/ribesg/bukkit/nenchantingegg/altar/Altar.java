@@ -97,6 +97,8 @@ public class Altar {
 	}
 
 	public void buildItem(final ItemStack is, final List<ItemStack> items) {
+		plugin.entering(getClass(), "buildItem");
+
 		if (state != AltarState.ITEM_PROVIDED) {
 			throw new IllegalStateException();
 		} else {
@@ -107,8 +109,9 @@ public class Altar {
 					i.setPickupDelay(80);
 					i.setVelocity(new Vector(0, -0.25, 0));
 					plugin.getItemListener().getItemMap().put(i, playerName);
+					plugin.debug("Item spawned!");
 				} else {
-					plugin.getLogger().severe("Unable to spawn the Item!");
+					plugin.error("Unable to spawn the Item!");
 				}
 			}
 			builder = null;
@@ -120,6 +123,8 @@ public class Altar {
 				}
 			}
 		}
+
+		plugin.exiting(getClass(), "buildItem");
 	}
 
 	/**
@@ -130,35 +135,42 @@ public class Altar {
 	 * @return If the altar that may have been constructed at this location is valid
 	 */
 	public boolean isInactiveAltarValid() {
+		plugin.entering(getClass(), "isInactiveAltarValid");
+
+		boolean result = true;
+
 		// First check: if all blocks are here
 		for (final RelativeBlock rb : AltarState.getInactiveStateBlocks()) {
 			final Location rbLoc = rb.getLocation(centerLocation.toBukkitLocation());
 			if ((rbLoc.getBlock().getType() != rb.getBlockMaterial() || rbLoc.getBlock().getData() != rb.getBlockData()) &&
 			    rb.getBlockMaterial() != Material.SKULL) {
-				return false;
+				result = false;
 			}
 		}
 
-		// Second check: if all top blocks are altar blocks
-		// TODO: Optimize this?
-		final int cX = centerLocation.getBlockX();
-		final int cY = centerLocation.getBlockY() + 1;
-		final int cZ = centerLocation.getBlockZ();
-		for (int x = -MAX_RADIUS; x <= MAX_RADIUS; x++) {
-			for (int z = -MAX_RADIUS; z <= MAX_RADIUS; z++) {
-				if (isAltarXZ(x, z) &&
-				    centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z) != getHighestAltarBlock(x, z, false) + cY) {
-					/** Debug
-					 System.out.println("Found:   " + centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z));
-					 System.out.println("Awaited: " + (getHighestAltarBlock(x, z, false) + cY));
-					 System.out.println("At: " + x + ";" + z + " (" + (cX + x) + ";" + (cZ + z) + ")");
-					 */
-					return false;
+		if (result) {
+			// Second check: if all top blocks are altar blocks
+			// TODO: Optimize this?
+			final int cX = centerLocation.getBlockX();
+			final int cY = centerLocation.getBlockY() + 1;
+			final int cZ = centerLocation.getBlockZ();
+			for (int x = -MAX_RADIUS; x <= MAX_RADIUS; x++) {
+				for (int z = -MAX_RADIUS; z <= MAX_RADIUS; z++) {
+					if (isAltarXZ(x, z) &&
+					    centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z) != getHighestAltarBlock(x, z, false) + cY) {
+						/** Debug
+						 System.out.println("Found:   " + centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z));
+						 System.out.println("Awaited: " + (getHighestAltarBlock(x, z, false) + cY));
+						 System.out.println("At: " + x + ";" + z + " (" + (cX + x) + ";" + (cZ + z) + ")");
+						 */
+						result = false;
+					}
 				}
 			}
 		}
 
-		return true;
+		plugin.exiting(getClass(), "isInactiveAltarValid");
+		return result;
 	}
 
 	public Location getEggLocation() {
