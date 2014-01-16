@@ -21,6 +21,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.mcstats.Metrics;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class represents a plugin node of the N plugin suite
@@ -32,8 +34,11 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 	private static final String CORE          = "NCore";
 	private static final String NCORE_WEBSITE = "http://www.ribesg.fr/";
 
+	private final Logger logger = this.getLogger();
+
 	private NCore core;
-	private boolean enabled = false;
+	private boolean enabled      = false;
+	private boolean debugEnabled = false;
 
 	private Metrics metrics;
 
@@ -56,6 +61,7 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 
 			getPluginLoader().disablePlugin(this);
 		} else /* Everything's ok */ {
+			debugEnabled = core.getPluginConfig().isDebugEnabled(this.getName());
 			try {
 				metrics = new Metrics(this);
 				metrics.start();
@@ -161,5 +167,65 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 
 	protected Metrics getMetrics() {
 		return metrics;
+	}
+
+	// ##################### //
+	// ## Debugging stuff ## //
+	// ##################### //
+
+	public boolean isDebugEnabled() {
+		return this.debugEnabled;
+	}
+
+	public void entering(final Class clazz, final String methodName) {
+		if (this.debugEnabled) {
+			logger.entering(clazz.getName(), methodName);
+		}
+	}
+
+	public void exiting(final Class clazz, final String methodName) {
+		if (this.debugEnabled) {
+			logger.exiting(clazz.getName(), methodName);
+		}
+	}
+
+	public void debug(final String message) {
+		if (this.debugEnabled) {
+			debug(Level.FINE, message);
+		}
+	}
+
+	public void debug(final Level level, final String message) {
+		if (this.debugEnabled) {
+			logger.log(level, '\t' + message);
+		}
+	}
+
+	public void debug(final String message, final Throwable e) {
+		if (this.debugEnabled) {
+			debug(Level.SEVERE, message, e);
+		}
+	}
+
+	public void debug(final Level level, final String message, final Throwable e) {
+		if (this.debugEnabled) {
+			logger.log(level, '\t' + message, e);
+		}
+	}
+
+	public void error(final String message) {
+		error(Level.SEVERE, message);
+	}
+
+	public void error(final Level level, final String message) {
+		logger.log(level, message);
+	}
+
+	public void error(final String message, final Throwable e) {
+		error(Level.SEVERE, message, e);
+	}
+
+	public void error(final Level level, final String message, final Throwable e) {
+		logger.log(level, message);
 	}
 }

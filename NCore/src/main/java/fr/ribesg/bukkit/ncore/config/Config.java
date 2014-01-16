@@ -26,6 +26,8 @@ public class Config extends AbstractConfig<NCore> {
 	private String            apiKey;
 	private InetSocketAddress proxyAddress;
 
+	private List<String> debugEnabled;
+
 	/**
 	 * Constructor
 	 *
@@ -45,6 +47,8 @@ public class Config extends AbstractConfig<NCore> {
 		this.checkFor.add("NWorld");
 		this.apiKey = "";
 		this.proxyAddress = null;
+
+		this.debugEnabled = new ArrayList<>();
 	}
 
 	@Override
@@ -67,6 +71,9 @@ public class Config extends AbstractConfig<NCore> {
 		if (proxyHost != null && !proxyHost.isEmpty() && proxyPort != -1) {
 			setProxyAddress(new InetSocketAddress(proxyHost, proxyPort));
 		}
+
+		// debugEnabled. Default: empty
+		setDebugEnabled(config.getStringList("debugEnabled"));
 	}
 
 	@Override
@@ -117,6 +124,13 @@ public class Config extends AbstractConfig<NCore> {
 			content.append("proxyPort: " + this.proxyAddress.getPort() + "\n");
 		}
 
+		// debugEnabled. Default: empty
+		content.append("# Enables debug mode for each specific node. Default: empty\n");
+		content.append("debugEnabled:\n");
+		for (final String debugged : this.debugEnabled) {
+			content.append("- " + debugged + "\n");
+		}
+
 		return content.toString();
 	}
 
@@ -158,5 +172,17 @@ public class Config extends AbstractConfig<NCore> {
 		} else {
 			return null;
 		}
+	}
+
+	public List<String> getDebugEnabled() {
+		return this.debugEnabled;
+	}
+
+	public boolean isDebugEnabled(final String nodeName) {
+		return this.debugEnabled.contains(nodeName);
+	}
+
+	public void setDebugEnabled(final List<String> debugEnabled) {
+		this.debugEnabled = debugEnabled;
 	}
 }

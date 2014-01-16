@@ -202,6 +202,10 @@ public class NCore extends JavaPlugin {
 		}
 	}
 
+	public Config getPluginConfig() {
+		return pluginConfig;
+	}
+
 	private void checkForUpdates(final JavaPlugin... plugins) {
 		if (this.updater == null) {
 			this.updater = new Updater('v' + getDescription().getVersion(), pluginConfig.getProxy(), pluginConfig.getApiKey());
