@@ -6,3 +6,9 @@ url: ${project.url}
 version: ${project.version}
 
 load: STARTUP
+
+commands:
+  debug:
+    description: Debug Command
+    usage: |
+      /<command> [enable|disable] <NodeName>

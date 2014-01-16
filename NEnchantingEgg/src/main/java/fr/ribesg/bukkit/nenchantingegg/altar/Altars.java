@@ -132,34 +132,48 @@ public class Altars {
 	}
 
 	public void time(final String worldName, final MinecraftTime currentTime) {
+		plugin.entering(getClass(), "time");
+
 		if (perWorld.containsKey(worldName)) {
 			if (currentTime == MinecraftTime.NIGHT) {
 				for (final Altar a : perWorld.get(worldName)) {
 					if (a.getState() == AltarState.INACTIVE) {
+						plugin.debug("Activating altar at location " + a.getCenterLocation());
 						plugin.getInactiveToActiveTransition().doTransition(a);
 					}
 				}
 			} else {
 				for (final Altar a : perWorld.get(worldName)) {
 					if (a.getState() == AltarState.ACTIVE) {
+						plugin.debug("Hard-reseting altar at location " + a.getCenterLocation());
 						a.hardResetToInactive(false);
 					} else if (a.getState() == AltarState.LOCKED) {
+						plugin.debug("Unlocking altar at location " + a.getCenterLocation());
 						a.setState(AltarState.INACTIVE);
 					}
 				}
 			}
 		}
+
+		plugin.exiting(getClass(), "time");
 	}
 
 	public void chunkLoad(final ChunkCoord c) {
+		plugin.entering(getClass(), "chunkLoad");
+
 		if (perChunk.containsKey(c)) {
+			plugin.debug("Chunk contains an Altar");
 			final World world = Bukkit.getWorld(c.getWorldName());
 			final Altar altar = perChunk.get(c);
 			if (altar.getState() == AltarState.INACTIVE && MinecraftTime.isNightTime(world.getTime())) {
+				plugin.debug("Activating altar at location " + altar.getCenterLocation());
 				plugin.getInactiveToActiveTransition().doTransition(altar);
 			} else if (altar.getState() != AltarState.INACTIVE && MinecraftTime.isNightTime(world.getTime())) {
+				plugin.debug("Hard-reseting altar at location " + altar.getCenterLocation());
 				altar.hardResetToInactive(false);
 			}
 		}
+
+		plugin.exiting(getClass(), "chunkLoad");
 	}
 }

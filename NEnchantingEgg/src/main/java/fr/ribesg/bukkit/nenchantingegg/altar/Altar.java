@@ -17,6 +17,7 @@ import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
 import fr.ribesg.bukkit.nenchantingegg.item.ItemBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -144,26 +145,35 @@ public class Altar {
 			final Location rbLoc = rb.getLocation(centerLocation.toBukkitLocation());
 			if ((rbLoc.getBlock().getType() != rb.getBlockMaterial() || rbLoc.getBlock().getData() != rb.getBlockData()) &&
 			    rb.getBlockMaterial() != Material.SKULL) {
+				if (plugin.isDebugEnabled()) {
+					plugin.debug("Invalid Altar: should be " + rb.getBlockMaterial() + ":" + rb.getBlockData() + " at location " +
+					             NLocation.toString(rbLoc) + ", is " + rbLoc.getBlock().getType() + ":" + rbLoc.getBlock().getData());
+				}
 				result = false;
+				break;
 			}
 		}
 
 		if (result) {
 			// Second check: if all top blocks are altar blocks
 			// TODO: Optimize this?
+			final World world = centerLocation.getWorld();
 			final int cX = centerLocation.getBlockX();
 			final int cY = centerLocation.getBlockY() + 1;
 			final int cZ = centerLocation.getBlockZ();
+			loop:
 			for (int x = -MAX_RADIUS; x <= MAX_RADIUS; x++) {
 				for (int z = -MAX_RADIUS; z <= MAX_RADIUS; z++) {
-					if (isAltarXZ(x, z) &&
-					    centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z) != getHighestAltarBlock(x, z, false) + cY) {
+					final int maxY = world.getHighestBlockYAt(cX + x, cZ + z);
+					if (isAltarXZ(x, z) && maxY != getHighestAltarBlock(x, z, false) + cY) {
 						/** Debug
 						 System.out.println("Found:   " + centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z));
 						 System.out.println("Awaited: " + (getHighestAltarBlock(x, z, false) + cY));
 						 System.out.println("At: " + x + ";" + z + " (" + (cX + x) + ";" + (cZ + z) + ")");
 						 */
+						plugin.debug("Invalid altar: obstructing block located at " + new NLocation(world.getName(), x, maxY, z));
 						result = false;
+						break loop;
 					}
 				}
 			}

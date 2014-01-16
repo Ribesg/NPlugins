@@ -13,11 +13,16 @@ import fr.ribesg.bukkit.ncore.common.updater.FileDescription;
 import fr.ribesg.bukkit.ncore.common.updater.Updater;
 import fr.ribesg.bukkit.ncore.config.Config;
 import fr.ribesg.bukkit.ncore.event.NEventsListener;
+import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.utils.VersionUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.mcstats.Metrics;
@@ -78,6 +83,49 @@ public class NCore extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		// Nothing yet
+	}
+
+	@Override
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+		if (cmd.getName().equals("debug")) {
+			if (args.length < 1 || args.length > 2) {
+				return false;
+			} else {
+				final String header = "" + ChatColor.DARK_GRAY + ChatColor.BOLD + "DEBUG " + ChatColor.RESET;
+				final String nodeName = args[args.length - 1];
+				final Plugin plugin = Bukkit.getPluginManager().getPlugin(nodeName);
+				if (plugin == null || !(plugin instanceof NPlugin)) {
+					sender.sendMessage(header + ChatColor.RED + "'" + nodeName + "' is unknown or unloaded!");
+				} else {
+					final NPlugin nPlugin = (NPlugin) plugin;
+					final boolean value;
+					if (args.length == 1) {
+						value = !nPlugin.isDebugEnabled();
+					} else {
+						value = Boolean.parseBoolean(args[0]);
+					}
+					nPlugin.setDebugEnabled(value);
+					sender.sendMessage(header + ChatColor.GREEN + "'" + nodeName + "' now has debug mode " + ChatColor.GOLD +
+					                   (value ? "enabled" : "disabled") + ChatColor.GREEN + "!");
+					try {
+						final List<String> debugEnabledList = pluginConfig.getDebugEnabled();
+						if (value) {
+							debugEnabledList.add(nPlugin.getName());
+						} else {
+							debugEnabledList.remove(nPlugin.getName());
+						}
+						pluginConfig.loadConfig();
+						pluginConfig.setDebugEnabled(debugEnabledList);
+						pluginConfig.writeConfig();
+					} catch (InvalidConfigurationException | IOException ignored) {
+						// Not a real problem
+					}
+				}
+				return true;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	private void afterNodesLoad() {

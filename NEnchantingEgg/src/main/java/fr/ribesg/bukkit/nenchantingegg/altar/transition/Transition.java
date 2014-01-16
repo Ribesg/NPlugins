@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Logger;
 
 public abstract class Transition {
 
@@ -67,15 +66,14 @@ public abstract class Transition {
 		if (plugin != null) {
 			if (!force && altar.getState() != fromState) {
 				// TODO Exception ?
-				final Logger log = plugin.getLogger();
-				log.severe("Unable to do Transition !");
-				log.severe("Altar Location: " + altar.getCenterLocation().toString());
-				log.severe("Altar state: " + altar.getState().toString());
-				log.severe("Transition to state " +
-				           toState.toString() +
-				           " failed because the Altar was not in state " +
-				           fromState.toString());
-				log.severe("Try to rebuild the Altar?");
+				plugin.error("Unable to do Transition !");
+				plugin.error("Altar Location: " + altar.getCenterLocation().toString());
+				plugin.error("Altar state: " + altar.getState().toString());
+				plugin.error("Transition to state " +
+				             toState.toString() +
+				             " failed because the Altar was not in state " +
+				             fromState.toString());
+				plugin.error("Try to rebuild the Altar?");
 			} else {
 				altar.setPreviousState(altar.getState());
 				altar.setState(AltarState.IN_TRANSITION);

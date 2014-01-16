@@ -176,43 +176,39 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 	// ## Debugging stuff ## //
 	// ##################### //
 
+	public void setDebugEnabled(final boolean value) {
+		this.debugEnabled = value;
+	}
+
 	public boolean isDebugEnabled() {
 		return this.debugEnabled;
 	}
 
 	public void entering(final Class clazz, final String methodName) {
 		if (this.debugEnabled) {
-			logger.entering(clazz.getName(), methodName);
+			logger.log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
 		}
 	}
 
 	public void exiting(final Class clazz, final String methodName) {
 		if (this.debugEnabled) {
-			logger.exiting(clazz.getName(), methodName);
+			logger.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
 		}
+	}
+
+	private String shortNPluginPackageName(final String packageName) {
+		return packageName.substring(17);
 	}
 
 	public void debug(final String message) {
 		if (this.debugEnabled) {
-			debug(Level.FINE, message);
-		}
-	}
-
-	public void debug(final Level level, final String message) {
-		if (this.debugEnabled) {
-			logger.log(level, '\t' + message);
+			logger.log(Level.INFO, "DEBUG         " + message);
 		}
 	}
 
 	public void debug(final String message, final Throwable e) {
 		if (this.debugEnabled) {
-			debug(Level.SEVERE, message, e);
-		}
-	}
-
-	public void debug(final Level level, final String message, final Throwable e) {
-		if (this.debugEnabled) {
-			logger.log(level, '\t' + message, e);
+			logger.log(Level.SEVERE, "DEBUG         " + message, e);
 		}
 	}
 
