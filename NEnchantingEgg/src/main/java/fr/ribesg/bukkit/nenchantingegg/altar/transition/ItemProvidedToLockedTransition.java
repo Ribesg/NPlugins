@@ -48,7 +48,7 @@ public class ItemProvidedToLockedTransition extends Transition {
 
 		// ##########################################
 		// Central falling pillar
-		steps.add(new BlockStep(t - 5, new RelativeBlock(0, 0, 0, Material.AIR)));
+		steps.add(new BlockStep(t - 5, new RelativeBlock(0, 0, 0, Material.AIR, (byte) 0)));
 		steps.add(new FallingBlockStep(t - 5, new RelativeBlock(0, 1, 0, Material.QUARTZ_BLOCK, BlockData.QUARTZ_PILLAR_VERTICAL), 0));
 
 		// ##########################################

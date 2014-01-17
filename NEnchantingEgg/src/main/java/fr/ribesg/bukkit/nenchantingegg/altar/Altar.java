@@ -143,8 +143,11 @@ public class Altar {
 		// First check: if all blocks are here
 		for (final RelativeBlock rb : AltarState.getInactiveStateBlocks()) {
 			final Location rbLoc = rb.getLocation(centerLocation.toBukkitLocation());
-			if ((rbLoc.getBlock().getType() != rb.getBlockMaterial() || rbLoc.getBlock().getData() != rb.getBlockData()) &&
-			    rb.getBlockMaterial() != Material.SKULL) {
+			final boolean sameMaterial = rbLoc.getBlock().getType() == rb.getBlockMaterial();
+			final boolean sameData = rbLoc.getBlock().getData() == rb.getBlockData();
+			final boolean isSkull = rb.getBlockMaterial() == Material.SKULL;
+			final boolean isAir = rb.getBlockMaterial() == Material.AIR;
+			if ((!sameMaterial || !sameData && !isAir) && !isSkull) {
 				if (plugin.isDebugEnabled()) {
 					plugin.debug("Invalid Altar: should be " + rb.getBlockMaterial() + ":" + rb.getBlockData() + " at location " +
 					             NLocation.toString(rbLoc) + ", is " + rbLoc.getBlock().getType() + ":" + rbLoc.getBlock().getData());

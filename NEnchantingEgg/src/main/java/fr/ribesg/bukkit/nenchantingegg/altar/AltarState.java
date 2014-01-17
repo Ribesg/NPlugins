@@ -165,7 +165,7 @@ public enum AltarState {
 			//
 			// O -> Obsidian
 
-			inactiveStateBlocks.add(new RelativeBlock(0, 1, 0, Material.AIR));
+			inactiveStateBlocks.add(new RelativeBlock(0, 1, 0, Material.AIR, (byte) 0));
 
 			inactiveStateBlocks.add(new RelativeBlock(-3, 1, 0, Material.OBSIDIAN));
 

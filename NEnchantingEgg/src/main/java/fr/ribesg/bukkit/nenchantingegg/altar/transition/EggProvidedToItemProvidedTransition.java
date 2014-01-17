@@ -78,7 +78,7 @@ public class EggProvidedToItemProvidedTransition extends Transition {
 
 		// ##########################################
 		// Egg
-		steps.add(new BlockStep(0, new RelativeBlock(0, 1, 0, Material.AIR)));
+		steps.add(new BlockStep(0, new RelativeBlock(0, 1, 0, Material.AIR, (byte) 0)));
 		steps.add(new EffectStep(0, new RelativeEffect(0, 1, 0, Effect.MOBSPAWNER_FLAMES)));
 		steps.add(new SoundStep(0, new RelativeSound(0, 1, 0, Sound.EXPLODE, 0.5f, 0.5f)));
 
