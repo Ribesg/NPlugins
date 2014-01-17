@@ -101,9 +101,7 @@ public class NListener implements Listener {
 		}
 	}
 
-	private PortalEventResult handlePortalEvent(final Location fromLocation,
-	                                            final PlayerTeleportEvent.TeleportCause teleportCause,
-	                                            final TravelAgent portalTravelAgent) {
+	private PortalEventResult handlePortalEvent(final Location fromLocation, final PlayerTeleportEvent.TeleportCause teleportCause, final TravelAgent portalTravelAgent) {
 		// In case of error or other good reasons
 		final PortalEventResult cancel = new PortalEventResult(null, false, true);
 

@@ -196,10 +196,7 @@ public class TeleportCommands implements CommandExecutor {
 					final Location dest = new Location(world, x, y, z, loc.getYaw(), loc.getPitch());
 					playerToTeleport.teleport(dest);
 					plugin.sendMessage(playerToTeleport, MessageId.general_tp_somebodyToLocation, sender.getName());
-					plugin.sendMessage(sender,
-					                   MessageId.general_tp_youSomebodyToLocation,
-					                   playerToTeleport.getName(),
-					                   "<" + x + ";" + y + ";" + z + ">");
+					plugin.sendMessage(sender, MessageId.general_tp_youSomebodyToLocation, playerToTeleport.getName(), "<" + x + ";" + y + ";" + z + ">");
 				}
 			}
 			return true;

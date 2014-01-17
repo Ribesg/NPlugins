@@ -77,8 +77,7 @@ public class Config extends AbstractConfig<NCuboid> {
 						if (maxRegionNb == def || maxRegion1DSize == def || maxRegion3DSize == def) {
 							LOGGER.severe("Missing config value for '" + groupName + "' in config");
 						} else {
-							groupConfigs.put(groupName.toLowerCase(),
-							                 new GroupConfig(groupName.toLowerCase(), maxRegionNb, maxRegion1DSize, maxRegion3DSize));
+							groupConfigs.put(groupName.toLowerCase(), new GroupConfig(groupName.toLowerCase(), maxRegionNb, maxRegion1DSize, maxRegion3DSize));
 						}
 					} else {
 						LOGGER.severe("Invalid config value '" + groupName + "' ignored in config");

@@ -62,10 +62,7 @@ public class RespawnHandler {
 			respawning++;
 		}
 		if (respawning > 1) {
-			worldHandler.getPlugin()
-			            .broadcastMessage(MessageId.theEndAgain_respawnedX,
-			                              Integer.toString(respawning),
-			                              worldHandler.getEndWorld().getName());
+			worldHandler.getPlugin().broadcastMessage(MessageId.theEndAgain_respawnedX, Integer.toString(respawning), worldHandler.getEndWorld().getName());
 		} else if (respawning == 1) {
 			worldHandler.getPlugin().broadcastMessage(MessageId.theEndAgain_respawned1, worldHandler.getEndWorld().getName());
 		}

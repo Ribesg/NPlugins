@@ -32,11 +32,7 @@ public class User {
 	private boolean loggedIn;
 	private boolean autoLogout;
 
-	public User(final LoggedOutUserHandler handler,
-	            final String userName,
-	            final String passwordHash,
-	            final String currentIp,
-	            final Date firstJoin) {
+	public User(final LoggedOutUserHandler handler, final String userName, final String passwordHash, final String currentIp, final Date firstJoin) {
 		this.handler = handler;
 		this.userName = userName;
 		this.passwordHash = passwordHash;
@@ -50,15 +46,7 @@ public class User {
 		this.home = null;
 	}
 
-	public User(final LoggedOutUserHandler handler,
-	            final String lastIp,
-	            final Date firstJoin,
-	            final List<String> knownIps,
-	            final Date lastSeen,
-	            final String passwordHash,
-	            final String userName,
-	            final boolean autoLogout,
-	            final Location home) {
+	public User(final LoggedOutUserHandler handler, final String lastIp, final Date firstJoin, final List<String> knownIps, final Date lastSeen, final String passwordHash, final String userName, final boolean autoLogout, final Location home) {
 		this.handler = handler;
 		this.lastIp = lastIp;
 		this.firstJoin = firstJoin;

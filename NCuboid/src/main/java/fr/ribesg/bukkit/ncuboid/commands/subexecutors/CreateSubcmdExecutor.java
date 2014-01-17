@@ -50,22 +50,13 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 						getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateNoValidSelection);
 						break;
 					case DENIED_TOO_MUCH:
-						getPlugin().sendMessage(player,
-						                        MessageId.cuboid_cmdCreateTooMuchRegions,
-						                        Integer.toString(result.getMaxValue()),
-						                        Long.toString(result.getValue()));
+						getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateTooMuchRegions, Integer.toString(result.getMaxValue()), Long.toString(result.getValue()));
 						break;
 					case DENIED_TOO_LONG:
-						getPlugin().sendMessage(player,
-						                        MessageId.cuboid_cmdCreateRegionTooLong,
-						                        Integer.toString(result.getMaxValue()),
-						                        Long.toString(result.getValue()));
+						getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateRegionTooLong, Integer.toString(result.getMaxValue()), Long.toString(result.getValue()));
 						break;
 					case DENIED_TOO_BIG:
-						getPlugin().sendMessage(player,
-						                        MessageId.cuboid_cmdCreateRegionTooBig,
-						                        Integer.toString(result.getMaxValue()),
-						                        Long.toString(result.getValue()));
+						getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateRegionTooBig, Integer.toString(result.getMaxValue()), Long.toString(result.getValue()));
 						break;
 					case DENIED_OVERLAP:
 						getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateOverlap, result.getRegion().getRegionName());

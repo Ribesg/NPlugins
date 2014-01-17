@@ -23,9 +23,7 @@ public class LightningStep extends Step {
 
 	@Override
 	public void doStep(final Altar altar) {
-		altar.getCenterLocation()
-		     .getWorld()
-		     .strikeLightningEffect(altar.getCenterLocation().toBukkitLocation().add(loc.getRelativeLocation()));
+		altar.getCenterLocation().getWorld().strikeLightningEffect(altar.getCenterLocation().toBukkitLocation().add(loc.getRelativeLocation()));
 	}
 
 }

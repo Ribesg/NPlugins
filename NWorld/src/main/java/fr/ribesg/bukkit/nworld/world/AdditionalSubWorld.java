@@ -17,13 +17,7 @@ public class AdditionalSubWorld extends GeneralWorld {
 
 	private final AdditionalWorld parentWorld;
 
-	public AdditionalSubWorld(final NWorld instance,
-	                          final AdditionalWorld parentWorld,
-	                          final NLocation spawnLocation,
-	                          final String requiredPermission,
-	                          final boolean enabled,
-	                          final boolean hidden,
-	                          final Environment type) {
+	public AdditionalSubWorld(final NWorld instance, final AdditionalWorld parentWorld, final NLocation spawnLocation, final String requiredPermission, final boolean enabled, final boolean hidden, final Environment type) {
 		super(instance);
 		this.parentWorld = parentWorld;
 		String worldName = parentWorld.getWorldName();

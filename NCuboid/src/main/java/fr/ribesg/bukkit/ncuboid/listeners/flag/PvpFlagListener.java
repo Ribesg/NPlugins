@@ -33,11 +33,8 @@ public class PvpFlagListener extends AbstractListener {
 	public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
 		if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
 			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
-			if (event.getEntityType() == EntityType.PLAYER &&
-			    (event.getDamager().getType() == EntityType.PLAYER ||
-			     ext.isDamagerProjectile() && ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER)) {
-				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.PVP) ||
-				    ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.PVP)) {
+			if (event.getEntityType() == EntityType.PLAYER && (event.getDamager().getType() == EntityType.PLAYER || ext.isDamagerProjectile() && ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER)) {
+				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.PVP) || ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.PVP)) {
 					event.setCancelled(true);
 				}
 			}

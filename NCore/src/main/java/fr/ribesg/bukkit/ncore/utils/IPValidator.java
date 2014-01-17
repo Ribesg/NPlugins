@@ -18,8 +18,7 @@ import java.util.regex.Pattern;
 public class IPValidator {
 
 	/** This Regex recognize any valid IPv4 between 0.0.0.0 and 255.255.255.255 */
-	private static final String IP_V4_REGEX = "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2" +
-	                                          "[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+	private static final String IP_V4_REGEX = "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2" + "[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
 	/** This Pattern recognize any valid IPv4 between 0.0.0.0 and 255.255.255.255 */
 	private static final Pattern IP_V4 = Pattern.compile(IP_V4_REGEX);

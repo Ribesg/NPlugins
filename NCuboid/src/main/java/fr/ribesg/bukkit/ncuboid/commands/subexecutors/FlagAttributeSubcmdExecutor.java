@@ -55,11 +55,7 @@ public class FlagAttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 
 			if (args.length == 2) {
 				// Show value
-				getPlugin().sendMessage(sender,
-				                        MessageId.cuboid_cmdFlagAttValue,
-				                        fa.name(),
-				                        c.getStringRepresentation(fa),
-				                        c.getRegionName());
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAttValue, fa.name(), c.getStringRepresentation(fa), c.getRegionName());
 				return true;
 			} else {
 				// Parse and set value
@@ -96,11 +92,7 @@ public class FlagAttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 				}
 
 				// Notice the new value (not necessarily the provided value)
-				getPlugin().sendMessage(sender,
-				                        MessageId.cuboid_cmdFlagAttSet,
-				                        fa.name(),
-				                        c.getStringRepresentation(fa),
-				                        c.getRegionName());
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAttSet, fa.name(), c.getStringRepresentation(fa), c.getRegionName());
 				return true;
 			}
 		} else {

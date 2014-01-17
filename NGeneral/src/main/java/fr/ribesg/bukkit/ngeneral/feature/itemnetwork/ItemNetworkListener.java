@@ -206,12 +206,9 @@ public class ItemNetworkListener implements Listener {
 					network.getReceivers().add(new ReceiverSign(new NLocation(event.getBlock().getLocation()), acceptedString));
 				} catch (IllegalArgumentException e) {
 					event.setLine(0, ERROR);
-					event.setLine(1,
-					              ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignInvalidMaterialsMsgLine1()));
-					event.setLine(2,
-					              ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignInvalidMaterialsMsgLine2()));
-					event.setLine(3,
-					              ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignInvalidMaterialsMsgLine3()));
+					event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignInvalidMaterialsMsgLine1()));
+					event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignInvalidMaterialsMsgLine2()));
+					event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignInvalidMaterialsMsgLine3()));
 					return;
 				}
 				event.setLine(0, ITEMNETWORK_RECEIVER);

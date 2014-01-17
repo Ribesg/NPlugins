@@ -159,211 +159,133 @@ public class Config extends AbstractConfig<NGeneral> {
 		// protectionSignNoPermMsgLines.
 		setProtectionSignNoPermMsgLine1(config.getString("protectionSignNoPermMsgLine1", DEFAULT_protectionSignNoPermMsgLine1));
 		if (getProtectionSignNoPermMsgLine1().length() > 15) {
-			wrongValue("config.yml",
-			           "protectionSignNoPermMsgLine1",
-			           getProtectionSignNoPermMsgLine1(),
-			           DEFAULT_protectionSignNoPermMsgLine1);
+			wrongValue("config.yml", "protectionSignNoPermMsgLine1", getProtectionSignNoPermMsgLine1(), DEFAULT_protectionSignNoPermMsgLine1);
 			setProtectionSignNoPermMsgLine1(DEFAULT_protectionSignNoPermMsgLine1);
 		}
 
 		setProtectionSignNoPermMsgLine2(config.getString("protectionSignNoPermMsgLine2", DEFAULT_protectionSignNoPermMsgLine2));
 		if (getProtectionSignNoPermMsgLine2().length() > 15) {
-			wrongValue("config.yml",
-			           "protectionSignNoPermMsgLine2",
-			           getProtectionSignNoPermMsgLine2(),
-			           DEFAULT_protectionSignNoPermMsgLine2);
+			wrongValue("config.yml", "protectionSignNoPermMsgLine2", getProtectionSignNoPermMsgLine2(), DEFAULT_protectionSignNoPermMsgLine2);
 			setProtectionSignNoPermMsgLine2(DEFAULT_protectionSignNoPermMsgLine2);
 		}
 
 		setProtectionSignNoPermMsgLine3(config.getString("protectionSignNoPermMsgLine3", DEFAULT_protectionSignNoPermMsgLine3));
 		if (getProtectionSignNoPermMsgLine3().length() > 15) {
-			wrongValue("config.yml",
-			           "protectionSignNoPermMsgLine3",
-			           getProtectionSignNoPermMsgLine3(),
-			           DEFAULT_protectionSignNoPermMsgLine3);
+			wrongValue("config.yml", "protectionSignNoPermMsgLine3", getProtectionSignNoPermMsgLine3(), DEFAULT_protectionSignNoPermMsgLine3);
 			setProtectionSignNoPermMsgLine3(DEFAULT_protectionSignNoPermMsgLine3);
 		}
 
 		// protectionSignNothingToProtectMsgLines.
-		setProtectionSignNothingToProtectMsgLine1(config.getString("protectionSignNothingToProtectMsgLine1",
-		                                                           DEFAULT_protectionSignNothingToProtectMsgLine1));
+		setProtectionSignNothingToProtectMsgLine1(config.getString("protectionSignNothingToProtectMsgLine1", DEFAULT_protectionSignNothingToProtectMsgLine1));
 		if (getProtectionSignNothingToProtectMsgLine1().length() > 15) {
-			wrongValue("config.yml",
-			           "protectionSignNothingToProtectMsgLine1",
-			           getProtectionSignNothingToProtectMsgLine1(),
-			           DEFAULT_protectionSignNothingToProtectMsgLine1);
+			wrongValue("config.yml", "protectionSignNothingToProtectMsgLine1", getProtectionSignNothingToProtectMsgLine1(), DEFAULT_protectionSignNothingToProtectMsgLine1);
 			setProtectionSignNothingToProtectMsgLine1(DEFAULT_protectionSignNothingToProtectMsgLine1);
 		}
 
-		setProtectionSignNothingToProtectMsgLine2(config.getString("protectionSignNothingToProtectMsgLine2",
-		                                                           DEFAULT_protectionSignNothingToProtectMsgLine2));
+		setProtectionSignNothingToProtectMsgLine2(config.getString("protectionSignNothingToProtectMsgLine2", DEFAULT_protectionSignNothingToProtectMsgLine2));
 		if (getProtectionSignNothingToProtectMsgLine2().length() > 15) {
-			wrongValue("config.yml",
-			           "protectionSignNothingToProtectMsgLine2",
-			           getProtectionSignNothingToProtectMsgLine2(),
-			           DEFAULT_protectionSignNothingToProtectMsgLine2);
+			wrongValue("config.yml", "protectionSignNothingToProtectMsgLine2", getProtectionSignNothingToProtectMsgLine2(), DEFAULT_protectionSignNothingToProtectMsgLine2);
 			setProtectionSignNothingToProtectMsgLine2(DEFAULT_protectionSignNothingToProtectMsgLine2);
 		}
 
-		setProtectionSignNothingToProtectMsgLine3(config.getString("protectionSignNothingToProtectMsgLine3",
-		                                                           DEFAULT_protectionSignNothingToProtectMsgLine3));
+		setProtectionSignNothingToProtectMsgLine3(config.getString("protectionSignNothingToProtectMsgLine3", DEFAULT_protectionSignNothingToProtectMsgLine3));
 		if (getProtectionSignNothingToProtectMsgLine3().length() > 15) {
-			wrongValue("config.yml",
-			           "protectionSignNothingToProtectMsgLine3",
-			           getProtectionSignNothingToProtectMsgLine3(),
-			           DEFAULT_protectionSignNothingToProtectMsgLine3);
+			wrongValue("config.yml", "protectionSignNothingToProtectMsgLine3", getProtectionSignNothingToProtectMsgLine3(), DEFAULT_protectionSignNothingToProtectMsgLine3);
 			setProtectionSignNothingToProtectMsgLine3(DEFAULT_protectionSignNothingToProtectMsgLine3);
 		}
 
 		// protectionSignAlreadyProtectedMsgLines.
-		setProtectionSignAlreadyProtectedMsgLine1(config.getString("protectionSignAlreadyProtectedMsgLine1",
-		                                                           DEFAULT_protectionSignAlreadyProtectedMsgLine1));
+		setProtectionSignAlreadyProtectedMsgLine1(config.getString("protectionSignAlreadyProtectedMsgLine1", DEFAULT_protectionSignAlreadyProtectedMsgLine1));
 		if (getProtectionSignAlreadyProtectedMsgLine1().length() > 15) {
-			wrongValue("config.yml",
-			           "protectionSignAlreadyProtectedMsgLine1",
-			           getProtectionSignAlreadyProtectedMsgLine1(),
-			           DEFAULT_protectionSignAlreadyProtectedMsgLine1);
+			wrongValue("config.yml", "protectionSignAlreadyProtectedMsgLine1", getProtectionSignAlreadyProtectedMsgLine1(), DEFAULT_protectionSignAlreadyProtectedMsgLine1);
 			setProtectionSignAlreadyProtectedMsgLine1(DEFAULT_protectionSignAlreadyProtectedMsgLine1);
 		}
 
-		setProtectionSignAlreadyProtectedMsgLine2(config.getString("protectionSignAlreadyProtectedMsgLine2",
-		                                                           DEFAULT_protectionSignAlreadyProtectedMsgLine2));
+		setProtectionSignAlreadyProtectedMsgLine2(config.getString("protectionSignAlreadyProtectedMsgLine2", DEFAULT_protectionSignAlreadyProtectedMsgLine2));
 		if (getProtectionSignAlreadyProtectedMsgLine2().length() > 15) {
-			wrongValue("config.yml",
-			           "protectionSignAlreadyProtectedMsgLine2",
-			           getProtectionSignAlreadyProtectedMsgLine2(),
-			           DEFAULT_protectionSignAlreadyProtectedMsgLine2);
+			wrongValue("config.yml", "protectionSignAlreadyProtectedMsgLine2", getProtectionSignAlreadyProtectedMsgLine2(), DEFAULT_protectionSignAlreadyProtectedMsgLine2);
 			setProtectionSignAlreadyProtectedMsgLine2(DEFAULT_protectionSignAlreadyProtectedMsgLine2);
 		}
 
-		setProtectionSignAlreadyProtectedMsgLine3(config.getString("protectionSignAlreadyProtectedMsgLine3",
-		                                                           DEFAULT_protectionSignAlreadyProtectedMsgLine3));
+		setProtectionSignAlreadyProtectedMsgLine3(config.getString("protectionSignAlreadyProtectedMsgLine3", DEFAULT_protectionSignAlreadyProtectedMsgLine3));
 		if (getProtectionSignAlreadyProtectedMsgLine3().length() > 15) {
-			wrongValue("config.yml",
-			           "protectionSignAlreadyProtectedMsgLine3",
-			           getProtectionSignAlreadyProtectedMsgLine3(),
-			           DEFAULT_protectionSignAlreadyProtectedMsgLine3);
+			wrongValue("config.yml", "protectionSignAlreadyProtectedMsgLine3", getProtectionSignAlreadyProtectedMsgLine3(), DEFAULT_protectionSignAlreadyProtectedMsgLine3);
 			setProtectionSignAlreadyProtectedMsgLine3(DEFAULT_protectionSignAlreadyProtectedMsgLine3);
 		}
 
 		// itemNetworkSignUnknownNetworkMsgLines.
-		setItemNetworkSignUnknownNetworkMsgLine1(config.getString("itemNetworkSignUnknownNetworkMsgLine1",
-		                                                          DEFAULT_itemNetworkSignUnknownNetworkMsgLine1));
+		setItemNetworkSignUnknownNetworkMsgLine1(config.getString("itemNetworkSignUnknownNetworkMsgLine1", DEFAULT_itemNetworkSignUnknownNetworkMsgLine1));
 		if (getItemNetworkSignUnknownNetworkMsgLine1().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignUnknownNetworkMsgLine1",
-			           getItemNetworkSignUnknownNetworkMsgLine1(),
-			           DEFAULT_itemNetworkSignUnknownNetworkMsgLine1);
+			wrongValue("config.yml", "itemNetworkSignUnknownNetworkMsgLine1", getItemNetworkSignUnknownNetworkMsgLine1(), DEFAULT_itemNetworkSignUnknownNetworkMsgLine1);
 			setItemNetworkSignUnknownNetworkMsgLine1(DEFAULT_itemNetworkSignUnknownNetworkMsgLine1);
 		}
 
-		setItemNetworkSignUnknownNetworkMsgLine2(config.getString("itemNetworkSignUnknownNetworkMsgLine2",
-		                                                          DEFAULT_itemNetworkSignUnknownNetworkMsgLine2));
+		setItemNetworkSignUnknownNetworkMsgLine2(config.getString("itemNetworkSignUnknownNetworkMsgLine2", DEFAULT_itemNetworkSignUnknownNetworkMsgLine2));
 		if (getItemNetworkSignUnknownNetworkMsgLine2().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignUnknownNetworkMsgLine2",
-			           getItemNetworkSignUnknownNetworkMsgLine2(),
-			           DEFAULT_itemNetworkSignUnknownNetworkMsgLine2);
+			wrongValue("config.yml", "itemNetworkSignUnknownNetworkMsgLine2", getItemNetworkSignUnknownNetworkMsgLine2(), DEFAULT_itemNetworkSignUnknownNetworkMsgLine2);
 			setItemNetworkSignUnknownNetworkMsgLine2(DEFAULT_itemNetworkSignUnknownNetworkMsgLine2);
 		}
 
-		setItemNetworkSignUnknownNetworkMsgLine3(config.getString("itemNetworkSignUnknownNetworkMsgLine3",
-		                                                          DEFAULT_itemNetworkSignUnknownNetworkMsgLine3));
+		setItemNetworkSignUnknownNetworkMsgLine3(config.getString("itemNetworkSignUnknownNetworkMsgLine3", DEFAULT_itemNetworkSignUnknownNetworkMsgLine3));
 		if (getItemNetworkSignUnknownNetworkMsgLine3().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignUnknownNetworkMsgLine3",
-			           getItemNetworkSignUnknownNetworkMsgLine3(),
-			           DEFAULT_itemNetworkSignUnknownNetworkMsgLine3);
+			wrongValue("config.yml", "itemNetworkSignUnknownNetworkMsgLine3", getItemNetworkSignUnknownNetworkMsgLine3(), DEFAULT_itemNetworkSignUnknownNetworkMsgLine3);
 			setItemNetworkSignUnknownNetworkMsgLine3(DEFAULT_itemNetworkSignUnknownNetworkMsgLine3);
 		}
 
 		// itemNetworkSignNotAllowedMsgLines.
-		setItemNetworkSignNotAllowedMsgLine1(config.getString("itemNetworkSignNotAllowedMsgLine1",
-		                                                      DEFAULT_itemNetworkSignNotAllowedMsgLine1));
+		setItemNetworkSignNotAllowedMsgLine1(config.getString("itemNetworkSignNotAllowedMsgLine1", DEFAULT_itemNetworkSignNotAllowedMsgLine1));
 		if (getItemNetworkSignNotAllowedMsgLine1().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignNotAllowedMsgLine1",
-			           getItemNetworkSignNotAllowedMsgLine1(),
-			           DEFAULT_itemNetworkSignNotAllowedMsgLine1);
+			wrongValue("config.yml", "itemNetworkSignNotAllowedMsgLine1", getItemNetworkSignNotAllowedMsgLine1(), DEFAULT_itemNetworkSignNotAllowedMsgLine1);
 			setItemNetworkSignNotAllowedMsgLine1(DEFAULT_itemNetworkSignNotAllowedMsgLine1);
 		}
 
-		setItemNetworkSignNotAllowedMsgLine2(config.getString("itemNetworkSignNotAllowedMsgLine2",
-		                                                      DEFAULT_itemNetworkSignNotAllowedMsgLine2));
+		setItemNetworkSignNotAllowedMsgLine2(config.getString("itemNetworkSignNotAllowedMsgLine2", DEFAULT_itemNetworkSignNotAllowedMsgLine2));
 		if (getItemNetworkSignNotAllowedMsgLine2().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignNotAllowedMsgLine2",
-			           getItemNetworkSignNotAllowedMsgLine2(),
-			           DEFAULT_itemNetworkSignNotAllowedMsgLine2);
+			wrongValue("config.yml", "itemNetworkSignNotAllowedMsgLine2", getItemNetworkSignNotAllowedMsgLine2(), DEFAULT_itemNetworkSignNotAllowedMsgLine2);
 			setItemNetworkSignNotAllowedMsgLine2(DEFAULT_itemNetworkSignNotAllowedMsgLine2);
 		}
 
-		setItemNetworkSignNotAllowedMsgLine3(config.getString("itemNetworkSignNotAllowedMsgLine3",
-		                                                      DEFAULT_itemNetworkSignNotAllowedMsgLine3));
+		setItemNetworkSignNotAllowedMsgLine3(config.getString("itemNetworkSignNotAllowedMsgLine3", DEFAULT_itemNetworkSignNotAllowedMsgLine3));
 		if (getItemNetworkSignNotAllowedMsgLine3().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignNotAllowedMsgLine3",
-			           getItemNetworkSignNotAllowedMsgLine3(),
-			           DEFAULT_itemNetworkSignNotAllowedMsgLine3);
+			wrongValue("config.yml", "itemNetworkSignNotAllowedMsgLine3", getItemNetworkSignNotAllowedMsgLine3(), DEFAULT_itemNetworkSignNotAllowedMsgLine3);
 			setItemNetworkSignNotAllowedMsgLine3(DEFAULT_itemNetworkSignNotAllowedMsgLine3);
 		}
 
 		// itemNetworkSignInvalidMaterialsMsgLines.
-		setItemNetworkSignInvalidMaterialsMsgLine1(config.getString("itemNetworkSignInvalidMaterialsMsgLine1",
-		                                                            DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1));
+		setItemNetworkSignInvalidMaterialsMsgLine1(config.getString("itemNetworkSignInvalidMaterialsMsgLine1", DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1));
 		if (getItemNetworkSignInvalidMaterialsMsgLine1().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignInvalidMaterialsMsgLine1",
-			           getItemNetworkSignInvalidMaterialsMsgLine1(),
-			           DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1);
+			wrongValue("config.yml", "itemNetworkSignInvalidMaterialsMsgLine1", getItemNetworkSignInvalidMaterialsMsgLine1(), DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1);
 			setItemNetworkSignInvalidMaterialsMsgLine1(DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1);
 		}
 
-		setItemNetworkSignInvalidMaterialsMsgLine2(config.getString("itemNetworkSignInvalidMaterialsMsgLine2",
-		                                                            DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2));
+		setItemNetworkSignInvalidMaterialsMsgLine2(config.getString("itemNetworkSignInvalidMaterialsMsgLine2", DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2));
 		if (getItemNetworkSignInvalidMaterialsMsgLine2().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignInvalidMaterialsMsgLine2",
-			           getItemNetworkSignInvalidMaterialsMsgLine2(),
-			           DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2);
+			wrongValue("config.yml", "itemNetworkSignInvalidMaterialsMsgLine2", getItemNetworkSignInvalidMaterialsMsgLine2(), DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2);
 			setItemNetworkSignInvalidMaterialsMsgLine2(DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2);
 		}
 
-		setItemNetworkSignInvalidMaterialsMsgLine3(config.getString("itemNetworkSignInvalidMaterialsMsgLine3",
-		                                                            DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3));
+		setItemNetworkSignInvalidMaterialsMsgLine3(config.getString("itemNetworkSignInvalidMaterialsMsgLine3", DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3));
 		if (getItemNetworkSignInvalidMaterialsMsgLine3().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignInvalidMaterialsMsgLine3",
-			           getItemNetworkSignInvalidMaterialsMsgLine3(),
-			           DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3);
+			wrongValue("config.yml", "itemNetworkSignInvalidMaterialsMsgLine3", getItemNetworkSignInvalidMaterialsMsgLine3(), DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3);
 			setItemNetworkSignInvalidMaterialsMsgLine3(DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3);
 		}
 
 		// itemNetworkSignTooFarMsgLines.
 		setItemNetworkSignTooFarMsgLine1(config.getString("itemNetworkSignTooFarMsgLine1", DEFAULT_itemNetworkSignTooFarMsgLine1));
 		if (getItemNetworkSignTooFarMsgLine1().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignTooFarMsgLine1",
-			           getItemNetworkSignTooFarMsgLine1(),
-			           DEFAULT_itemNetworkSignTooFarMsgLine1);
+			wrongValue("config.yml", "itemNetworkSignTooFarMsgLine1", getItemNetworkSignTooFarMsgLine1(), DEFAULT_itemNetworkSignTooFarMsgLine1);
 			setItemNetworkSignTooFarMsgLine1(DEFAULT_itemNetworkSignTooFarMsgLine1);
 		}
 
 		setItemNetworkSignTooFarMsgLine2(config.getString("itemNetworkSignTooFarMsgLine2", DEFAULT_itemNetworkSignTooFarMsgLine2));
 		if (getItemNetworkSignTooFarMsgLine2().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignTooFarMsgLine2",
-			           getItemNetworkSignTooFarMsgLine2(),
-			           DEFAULT_itemNetworkSignTooFarMsgLine2);
+			wrongValue("config.yml", "itemNetworkSignTooFarMsgLine2", getItemNetworkSignTooFarMsgLine2(), DEFAULT_itemNetworkSignTooFarMsgLine2);
 			setItemNetworkSignTooFarMsgLine2(DEFAULT_itemNetworkSignTooFarMsgLine2);
 		}
 
 		setItemNetworkSignTooFarMsgLine3(config.getString("itemNetworkSignTooFarMsgLine3", DEFAULT_itemNetworkSignTooFarMsgLine3));
 		if (getItemNetworkSignTooFarMsgLine3().length() > 15) {
-			wrongValue("config.yml",
-			           "itemNetworkSignTooFarMsgLine3",
-			           getItemNetworkSignTooFarMsgLine3(),
-			           DEFAULT_itemNetworkSignTooFarMsgLine3);
+			wrongValue("config.yml", "itemNetworkSignTooFarMsgLine3", getItemNetworkSignTooFarMsgLine3(), DEFAULT_itemNetworkSignTooFarMsgLine3);
 			setItemNetworkSignTooFarMsgLine3(DEFAULT_itemNetworkSignTooFarMsgLine3);
 		}
 

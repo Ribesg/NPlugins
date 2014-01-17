@@ -40,9 +40,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerCommandPreProcess(final PlayerCommandPreprocessEvent event) {
-		final String firstWord = event.getMessage().contains(" ")
-		                         ? event.getMessage().split(" ")[0].toLowerCase()
-		                         : event.getMessage().toLowerCase();
+		final String firstWord = event.getMessage().contains(" ") ? event.getMessage().split(" ")[0].toLowerCase() : event.getMessage().toLowerCase();
 		switch (firstWord) {
 			case "/login":
 				event.setCancelled(true);
@@ -315,9 +313,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		} else {
 			final User user = plugin.getUserDb().get(player.getName());
 			if (user == null) {
-				plugin.getLogger()
-				      .severe("Unknown error while executing command /home : user does not exists but still managed to use " +
-				              "the command.");
+				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use " + "the command.");
 				player.sendMessage("§cUnknown error, see console.");
 				return true;
 			}
@@ -362,9 +358,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		} else {
 			final User user = plugin.getUserDb().get(player.getName());
 			if (user == null) {
-				plugin.getLogger()
-				      .severe("Unknown error while executing command /home : user does not exists but still managed to use " +
-				              "the command.");
+				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use " + "the command.");
 				player.sendMessage("§cUnknown error, see console.");
 				return true;
 			}
@@ -408,24 +402,15 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			switch (plugin.getPluginConfig().getTooManyAttemptsPunishment()) {
 				case 0:
 					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsKickMessage)[0]);
-					plugin.getPunishmentDb()
-					      .getLeaveMessages()
-					      .put(target.getName(),
-					           plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedKickMessage, userName)[0]);
+					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedKickMessage, userName)[0]);
 					break;
 				case 1:
 					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsTempBanMessage)[0]);
-					plugin.getPunishmentDb()
-					      .getLeaveMessages()
-					      .put(target.getName(),
-					           plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName)[0]);
+					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName)[0]);
 					break;
 				case 2:
 					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsPermBanMessage)[0]);
-					plugin.getPunishmentDb()
-					      .getLeaveMessages()
-					      .put(target.getName(),
-					           plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedPermBanMessage, userName)[0]);
+					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedPermBanMessage, userName)[0]);
 					break;
 				default:
 					break;

@@ -34,19 +34,9 @@ public class ClosedFlagListener extends AbstractListener {
 			if (r != null && r.getFlag(Flag.CLOSED) && !r.equals(ext.getToRegion())) {
 				final Location loc = r.getLocFlagAtt(FlagAtt.INTERNAL_POINT);
 				if (loc == null) {
-					event.setTo(new Location(event.getFrom().getWorld(),
-					                         event.getFrom().getBlockX() + 0.5,
-					                         event.getFrom().getBlockY() + 0.1,
-					                         event.getFrom().getBlockZ() + 0.5,
-					                         event.getTo().getYaw(),
-					                         event.getTo().getPitch()));
+					event.setTo(new Location(event.getFrom().getWorld(), event.getFrom().getBlockX() + 0.5, event.getFrom().getBlockY() + 0.1, event.getFrom().getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
 				} else {
-					event.setTo(new Location(loc.getWorld(),
-					                         loc.getBlockX() + 0.5,
-					                         loc.getBlockY() + 0.1,
-					                         loc.getBlockZ() + 0.5,
-					                         event.getTo().getYaw(),
-					                         event.getTo().getPitch()));
+					event.setTo(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getBlockY() + 0.1, loc.getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
 				}
 				ext.setCustomCancelled(true);
 			}

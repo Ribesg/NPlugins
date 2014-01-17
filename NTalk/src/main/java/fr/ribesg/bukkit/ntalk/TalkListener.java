@@ -91,8 +91,7 @@ public class TalkListener implements Listener {
 						final MuteFilter muteFilter = (MuteFilter) result;
 						final String mutePlayerName = event.getPlayer().getName();
 						final long muteDuration = muteFilter.getDuration();
-						final String muteReason = plugin.getMessages()
-						                                .get(MessageId.talk_filterMutedReason, muteFilter.getOutputString())[0];
+						final String muteReason = plugin.getMessages().get(MessageId.talk_filterMutedReason, muteFilter.getOutputString())[0];
 						final String muteCommand = plugin.getPluginConfig().getTempMuteCommand(mutePlayerName, muteDuration, muteReason);
 						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
 
@@ -107,8 +106,7 @@ public class TalkListener implements Listener {
 						final BanFilter banFilter = (BanFilter) result;
 						final String banPlayerName = event.getPlayer().getName();
 						final long banDuration = banFilter.getDuration();
-						final String banReason = plugin.getMessages()
-						                               .get(MessageId.talk_filterBannedReason, banFilter.getOutputString())[0];
+						final String banReason = plugin.getMessages().get(MessageId.talk_filterBannedReason, banFilter.getOutputString())[0];
 						final String banCommand = plugin.getPluginConfig().getTempBanCommand(banPlayerName, banDuration, banReason);
 						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
 
@@ -124,10 +122,8 @@ public class TalkListener implements Listener {
 						final String jailPlayerName = event.getPlayer().getName();
 						final long jailDuration = jailFilter.getDuration();
 						final String jailName = jailFilter.getJailName();
-						final String jailReason = plugin.getMessages()
-						                                .get(MessageId.talk_filterJailedReason, jailFilter.getOutputString())[0];
-						final String jailCommand = plugin.getPluginConfig()
-						                                 .getTempJailCommand(jailPlayerName, jailDuration, jailName, jailReason);
+						final String jailReason = plugin.getMessages().get(MessageId.talk_filterJailedReason, jailFilter.getOutputString())[0];
+						final String jailCommand = plugin.getPluginConfig().getTempJailCommand(jailPlayerName, jailDuration, jailName, jailReason);
 						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
 
 							@Override

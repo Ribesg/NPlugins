@@ -17,9 +17,7 @@ public class Security {
 
 	public static boolean isUserPassword(final String enteredPassword, final User user) {
 		final String realPasswordHash = user.getPasswordHash();
-		final int saltPos = enteredPassword.length() >= realPasswordHash.length()
-		                    ? realPasswordHash.length() - 1
-		                    : enteredPassword.length();
+		final int saltPos = enteredPassword.length() >= realPasswordHash.length() ? realPasswordHash.length() - 1 : enteredPassword.length();
 		final String salt = realPasswordHash.substring(saltPos, saltPos + 12);
 		final String newHash = whirlpool(salt + enteredPassword);
 		final String enteredPasswordHash = newHash.substring(0, saltPos) + salt + newHash.substring(saltPos);

@@ -16,7 +16,6 @@ import org.json.simple.JSONValue;
 import java.util.Comparator;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.regex.Pattern;
 
 /** @author Ribesg */
 public class FileDescription {
@@ -57,11 +56,7 @@ public class FileDescription {
 	private final String type;
 	private final String bukkitVersion;
 
-	public FileDescription(final String fileName,
-	                       final String version,
-	                       final String downloadUrl,
-	                       final String type,
-	                       final String bukkitVersion) {
+	public FileDescription(final String fileName, final String version, final String downloadUrl, final String type, final String bukkitVersion) {
 		this.fileName = fileName;
 		this.version = version;
 		this.downloadUrl = downloadUrl;

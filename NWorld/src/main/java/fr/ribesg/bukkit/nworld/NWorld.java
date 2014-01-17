@@ -106,13 +106,7 @@ public class NWorld extends NPlugin implements WorldNode {
 						type = WorldType.STOCK_END;
 						break;
 				}
-				final StockWorld world = new StockWorld(this,
-				                                        w.getName(),
-				                                        type,
-				                                        new NLocation(w.getSpawnLocation()),
-				                                        pluginConfig.getDefaultRequiredPermission(),
-				                                        true,
-				                                        false);
+				final StockWorld world = new StockWorld(this, w.getName(), type, new NLocation(w.getSpawnLocation()), pluginConfig.getDefaultRequiredPermission(), true, false);
 				worlds.put(w.getName(), world);
 			}
 		}

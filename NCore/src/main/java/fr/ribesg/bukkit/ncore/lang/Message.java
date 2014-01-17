@@ -42,11 +42,7 @@ public class Message {
 	 * @param configMessage  The Message found in the configuration file
 	 * @param useHeader      Defines if we should prepend the header or not
 	 */
-	public Message(final MessageId id,
-	               final String defaultMessage,
-	               final String[] awaitedArgs,
-	               final String configMessage,
-	               final boolean useHeader) {
+	public Message(final MessageId id, final String defaultMessage, final String[] awaitedArgs, final String configMessage, final boolean useHeader) {
 		this.id = id;
 		this.defaultMessage = defaultMessage;
 		this.awaitedArgs = awaitedArgs;

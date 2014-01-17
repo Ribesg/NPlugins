@@ -40,8 +40,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent ext) {
-		final GeneralRegion region = getPlugin().getDb()
-				.getPriorByLocation(ext.getBlockClicked().getRelative(ext.getBlockFace()).getLocation());
+		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(ext.getBlockClicked().getRelative(ext.getBlockFace()).getLocation());
 		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(ext.getPlayer())) {
 			ext.setCancelled(true);
 		}
@@ -70,8 +69,7 @@ public class BuildFlagListener extends AbstractListener {
 				    event.getItem().getType() == Material.FIREBALL ||
 				    event.getItem().getType() == Material.MINECART ||
 				    event.getItem().getType() == Material.BOAT) {
-					final GeneralRegion region = getPlugin().getDb()
-							.getPriorByLocation(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
+					final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
 					if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(event.getPlayer())) {
 						event.setCancelled(true);
 						return;
@@ -91,10 +89,8 @@ public class BuildFlagListener extends AbstractListener {
 				// Repeater, Comparator
 				if (event.getAction() == Action.RIGHT_CLICK_BLOCK && (event.getClickedBlock().getType() == Material.DIODE_BLOCK_OFF ||
 				                                                      event.getClickedBlock().getType() == Material.DIODE_BLOCK_ON ||
-				                                                      event.getClickedBlock().getType() ==
-				                                                      Material.REDSTONE_COMPARATOR_OFF ||
-				                                                      event.getClickedBlock().getType() ==
-				                                                      Material.REDSTONE_COMPARATOR_ON)) {
+				                                                      event.getClickedBlock().getType() == Material.REDSTONE_COMPARATOR_OFF ||
+				                                                      event.getClickedBlock().getType() == Material.REDSTONE_COMPARATOR_ON)) {
 					if (ext.getRegion() != null &&
 					    ext.getRegion().getFlag(Flag.BUILD) &&
 					    !ext.getRegion().isUser(event.getPlayer())) {

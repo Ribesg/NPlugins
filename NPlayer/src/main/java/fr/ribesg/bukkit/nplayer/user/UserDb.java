@@ -134,15 +134,7 @@ public class UserDb {
 			final Date lastSeen = new Date(userSection.getLong("lastSeen"));
 			final boolean autoLogout = userSection.getBoolean("autoLogout");
 			final Location home = NLocation.toLocation(userSection.getString("home"));
-			final User user = new User(plugin.getLoggedOutUserHandler(),
-			                           lastIp,
-			                           firstJoin,
-			                           knownIps,
-			                           lastSeen,
-			                           passwordHash,
-			                           userName,
-			                           autoLogout,
-			                           home);
+			final User user = new User(plugin.getLoggedOutUserHandler(), lastIp, firstJoin, knownIps, lastSeen, passwordHash, userName, autoLogout, home);
 			usersPerName.put(userName, user);
 			for (final String ip : user.getKnownIps()) {
 				addPerIp(ip, user);

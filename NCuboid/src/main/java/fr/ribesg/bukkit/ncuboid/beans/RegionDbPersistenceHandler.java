@@ -160,19 +160,7 @@ public class RegionDbPersistenceHandler {
 			case CUBOID:
 				final NLocation minCorner = NLocation.toNLocation(playerSection.getString(MIN_CORNER));
 				final NLocation maxCorner = NLocation.toNLocation(playerSection.getString(MAX_CORNER));
-				return new CuboidRegion(name,
-				                        ownerName,
-				                        worldName,
-				                        PlayerRegion.RegionState.NORMAL,
-				                        totalSize,
-				                        welcomeMessage,
-				                        farewellMessage,
-				                        rights,
-				                        priority,
-				                        flags,
-				                        attributes,
-				                        minCorner,
-				                        maxCorner);
+				return new CuboidRegion(name, ownerName, worldName, PlayerRegion.RegionState.NORMAL, totalSize, welcomeMessage, farewellMessage, rights, priority, flags, attributes, minCorner, maxCorner);
 			default:
 				throw new UnsupportedOperationException();
 		}
@@ -277,10 +265,7 @@ public class RegionDbPersistenceHandler {
 		}
 
 		final String configString = config.saveToString();
-		try (BufferedWriter writer = Files.newBufferedWriter(regionDbConfigFile,
-		                                                     CHARSET,
-		                                                     StandardOpenOption.TRUNCATE_EXISTING,
-		                                                     StandardOpenOption.WRITE)) {
+		try (BufferedWriter writer = Files.newBufferedWriter(regionDbConfigFile, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
 			writer.write(configString);
 		}
 	}

@@ -288,8 +288,7 @@ public class Altar {
 		} else if (x == -2 && z == 0) {
 			return skullPlaced ? 2 : 1;
 		} else if (state == AltarState.EGG_PROVIDED || state == AltarState.ITEM_PROVIDED ||
-		           state == AltarState.IN_TRANSITION &&
-		           (previousState == AltarState.EGG_PROVIDED || previousState == AltarState.ITEM_PROVIDED)) {
+		           state == AltarState.IN_TRANSITION && (previousState == AltarState.EGG_PROVIDED || previousState == AltarState.ITEM_PROVIDED)) {
 			return 1;
 		} else {
 			return 0;

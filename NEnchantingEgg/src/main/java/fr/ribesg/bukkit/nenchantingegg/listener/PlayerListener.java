@@ -78,10 +78,7 @@ public class PlayerListener implements Listener {
 							// Create the altar, then check if it's valid
 							final Altar altar = new Altar(plugin, Altar.getCenterFromSkullLocation(loc));
 							final boolean altarValid = altar.isInactiveAltarValid();
-							final boolean minimumDistanceCheck = plugin.getAltars()
-							                                           .canAdd(altar,
-							                                                   plugin.getPluginConfig()
-							                                                         .getMinimumDistanceBetweenTwoAltars());
+							final boolean minimumDistanceCheck = plugin.getAltars().canAdd(altar, plugin.getPluginConfig().getMinimumDistanceBetweenTwoAltars());
 							plugin.debug("Altar validity: " + altarValid);
 							plugin.debug("Distance check: " + minimumDistanceCheck);
 							if (altar.isInactiveAltarValid() && minimumDistanceCheck) {

@@ -294,8 +294,7 @@ public class DataUtils {
 	 *
 	 * @see #loadFromConfig(ConfigurationSection, String)
 	 */
-	public static void saveToConfigSection(final ConfigurationSection parentSection, final String key, final ItemStack is) throws
-	                                                                                                                       DataUtilParserException {
+	public static void saveToConfigSection(final ConfigurationSection parentSection, final String key, final ItemStack is) throws DataUtilParserException {
 		if (is == null) {
 			throw new DataUtilParserException(is, "Null ItemStack");
 		}

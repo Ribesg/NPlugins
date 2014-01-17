@@ -126,11 +126,7 @@ public class Config extends AbstractConfig<NWorld> {
 			final ConfigurationSection stockWorldsSection = config.getConfigurationSection("stockWorlds");
 			for (final String worldName : stockWorldsSection.getKeys(false)) {
 				final ConfigurationSection worldSection = stockWorldsSection.getConfigurationSection(worldName);
-				final GeneralWorld.WorldType type = worldName.endsWith("_the_end")
-				                                    ? GeneralWorld.WorldType.STOCK_END
-				                                    : worldName.endsWith("_nether")
-				                                      ? GeneralWorld.WorldType.STOCK_NETHER
-				                                      : GeneralWorld.WorldType.STOCK;
+				final GeneralWorld.WorldType type = worldName.endsWith("_the_end") ? GeneralWorld.WorldType.STOCK_END : worldName.endsWith("_nether") ? GeneralWorld.WorldType.STOCK_NETHER : GeneralWorld.WorldType.STOCK;
 				boolean malformedWorldSection = false;
 				NLocation spawnLocation = null;
 				String requiredPermission = null;
@@ -411,35 +407,15 @@ public class Config extends AbstractConfig<NWorld> {
 					}
 				}
 				if (!malformedWorldSection) {
-					final AdditionalWorld world = new AdditionalWorld(plugin,
-					                                                  worldName,
-					                                                  seed,
-					                                                  spawnLocation,
-					                                                  requiredPermission,
-					                                                  enabled,
-					                                                  hidden,
-					                                                  hasNether,
-					                                                  hasEnd);
+					final AdditionalWorld world = new AdditionalWorld(plugin, worldName, seed, spawnLocation, requiredPermission, enabled, hidden, hasNether, hasEnd);
 					worldsMap.put(worldName, world);
 					if (hasNether) {
-						final AdditionalSubWorld nether = new AdditionalSubWorld(plugin,
-						                                                         world,
-						                                                         netherSpawnLocation,
-						                                                         netherRequiredPermission,
-						                                                         netherEnabled,
-						                                                         netherHidden,
-						                                                         World.Environment.NETHER);
+						final AdditionalSubWorld nether = new AdditionalSubWorld(plugin, world, netherSpawnLocation, netherRequiredPermission, netherEnabled, netherHidden, World.Environment.NETHER);
 						worldsMap.put(worldName + "_nether", nether);
 					}
 
 					if (hasEnd) {
-						final AdditionalSubWorld end = new AdditionalSubWorld(plugin,
-						                                                      world,
-						                                                      endSpawnLocation,
-						                                                      endRequiredPermission,
-						                                                      endEnabled,
-						                                                      endHidden,
-						                                                      World.Environment.THE_END);
+						final AdditionalSubWorld end = new AdditionalSubWorld(plugin, world, endSpawnLocation, endRequiredPermission, endEnabled, endHidden, World.Environment.THE_END);
 						worldsMap.put(worldName + "_the_end", end);
 					}
 				} else {

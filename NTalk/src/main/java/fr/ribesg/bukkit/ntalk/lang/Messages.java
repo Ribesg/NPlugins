@@ -35,16 +35,8 @@ public class Messages extends AbstractMessages {
 		final Set<Message> newMessages = new HashSet<>();
 
 		// General deny response
-		newMessages.add(new Message(MessageId.noPermissionForCommand,
-		                            "&cYou do not have the permission to use that command",
-		                            null,
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName,
-		                            "&cNo online player found for input %playerName%",
-		                            new String[] {"%playerName%"},
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null, true));
+		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", new String[] {"%playerName%"}, null, true));
 		newMessages.add(new Message(MessageId.talk_nobodyToRespond, "&cYou have nobody to respond to", null, null, true));
 		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null, true));
 
@@ -57,20 +49,12 @@ public class Messages extends AbstractMessages {
 				"%realName%",
 				"%nickName%"
 		}, null, true));
-		newMessages.add(new Message(MessageId.talk_youDeNickNamed,
-		                            "&aYou reseted the name of %realName%",
-		                            new String[] {"%realName%"},
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.talk_youDeNickNamed, "&aYou reseted the name of %realName%", new String[] {"%realName%"}, null, true));
 		newMessages.add(new Message(MessageId.talk_youWereNickNamed, "&aYou were renamed %nickName% by %playerName%", new String[] {
 				"%nickName%",
 				"%playerName%"
 		}, null, true));
-		newMessages.add(new Message(MessageId.talk_youWereDeNickNamed,
-		                            "&aYour name was reseted by %playerName%",
-		                            new String[] {"%playerName%"},
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.talk_youWereDeNickNamed, "&aYour name was reseted by %playerName%", new String[] {"%playerName%"}, null, true));
 
 		// Chat Filter reasons
 		newMessages.add(new Message(MessageId.talk_filterMutedReason, "Use of word '%word%'", new String[] {"%word%"}, null, false));

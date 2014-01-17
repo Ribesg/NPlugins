@@ -46,12 +46,7 @@ public abstract class GeneralRegion extends Region {
 		this(worldName, type, new Rights(), priority, new Flags(), new FlagAttributes());
 	}
 
-	public GeneralRegion(final String worldName,
-	                     final RegionType type,
-	                     final Rights rights,
-	                     final int priority,
-	                     final Flags flags,
-	                     final FlagAttributes flagAtts) {
+	public GeneralRegion(final String worldName, final RegionType type, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
 		setWorldName(worldName);
 		setType(type);
 		switch (type) {

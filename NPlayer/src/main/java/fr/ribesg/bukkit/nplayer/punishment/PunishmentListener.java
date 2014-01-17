@@ -40,10 +40,7 @@ public class PunishmentListener implements Listener {
 				if (ban.isPermanent()) {
 					playerBannedMessage = plugin.getMessages().get(MessageId.player_deniedPermBanned, ban.getReason())[0];
 				} else {
-					playerBannedMessage = plugin.getMessages()
-					                            .get(MessageId.player_deniedTempBanned,
-					                                 ban.getReason(),
-					                                 TimeUtils.toString((ban.getEndDate() - System.currentTimeMillis()) / 1000))[0];
+					playerBannedMessage = plugin.getMessages().get(MessageId.player_deniedTempBanned, ban.getReason(), TimeUtils.toString((ban.getEndDate() - System.currentTimeMillis()) / 1000))[0];
 				}
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, playerBannedMessage);
 			} else if (punishmentDb.isIpBanned(playerIp)) {
@@ -52,10 +49,7 @@ public class PunishmentListener implements Listener {
 				if (ipBan.isPermanent()) {
 					ipBannedMessage = plugin.getMessages().get(MessageId.player_deniedPermIpBanned, ipBan.getReason())[0];
 				} else {
-					ipBannedMessage = plugin.getMessages()
-					                        .get(MessageId.player_deniedTempIpBanned,
-					                             ipBan.getReason(),
-					                             TimeUtils.toString((ipBan.getEndDate() - System.currentTimeMillis()) / 1000))[0];
+					ipBannedMessage = plugin.getMessages().get(MessageId.player_deniedTempIpBanned, ipBan.getReason(), TimeUtils.toString((ipBan.getEndDate() - System.currentTimeMillis()) / 1000))[0];
 				}
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, ipBannedMessage);
 			}
@@ -73,10 +67,7 @@ public class PunishmentListener implements Listener {
 			if (mute.isPermanent()) {
 				plugin.sendMessage(event.getPlayer(), MessageId.player_deniedPermMuted, mute.getReason());
 			} else {
-				plugin.sendMessage(event.getPlayer(),
-				                   MessageId.player_deniedTempMuted,
-				                   mute.getReason(),
-				                   TimeUtils.toString((mute.getEndDate() - System.currentTimeMillis()) / 1000));
+				plugin.sendMessage(event.getPlayer(), MessageId.player_deniedTempMuted, mute.getReason(), TimeUtils.toString((mute.getEndDate() - System.currentTimeMillis()) / 1000));
 			}
 			event.setCancelled(true);
 		}

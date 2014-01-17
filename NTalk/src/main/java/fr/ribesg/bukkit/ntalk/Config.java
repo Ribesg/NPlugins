@@ -25,8 +25,7 @@ import java.util.Set;
 public class Config extends AbstractConfig<NTalk> {
 
 	private static final String defaultTemplate        = "&f<[prefix][name][suffix]&f> [message]";
-	private static final String defaultPmTemplate      = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> " +
-	                                                     "[message]";
+	private static final String defaultPmTemplate      = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> " + "[message]";
 	private static final String defaultTempMuteCommand = "/mute %player% %duration%s %reason%";
 	private static final String defaultTempBanCommand  = "/ban %player% %duration%s %reason%";
 	private static final String defaultTempJailCommand = "/jail %player% %duration%s %jailName% %reason%";
@@ -132,11 +131,7 @@ public class Config extends AbstractConfig<NTalk> {
 				final String nickName = playerFormat.getString("nick", "NONICK");
 				final String suffix = playerFormat.getString("suffix", "NOSUFFIX");
 				if (!prefix.equals("NOPREFIX") || !suffix.equals("NOSUFFIX")) {
-					getPlayerFormats().put(playerName,
-					                       new Format(FormatType.PLAYER,
-					                                  playerName,
-					                                  prefix.equals("NOPREFIX") ? "" : prefix,
-					                                  suffix.equals("NOSUFFIX") ? "" : suffix));
+					getPlayerFormats().put(playerName, new Format(FormatType.PLAYER, playerName, prefix.equals("NOPREFIX") ? "" : prefix, suffix.equals("NOSUFFIX") ? "" : suffix));
 				}
 				if (!nickName.equals("NONICK")) {
 					getPlayerNicknames().put(playerName, nickName);

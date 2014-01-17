@@ -18,12 +18,7 @@ public class DivineFilter extends TimedFilter {
 	private final int minHealth;
 	private final int entityAmount;
 
-	public DivineFilter(final String outputString,
-	                    final String filteredString,
-	                    final boolean regex,
-	                    final long duration,
-	                    final int minHealth,
-	                    final int entityAmount) {
+	public DivineFilter(final String outputString, final String filteredString, final boolean regex, final long duration, final int minHealth, final int entityAmount) {
 		super(outputString, filteredString, regex, ChatFilterResult.DIVINE_PUNISHMENT, duration);
 		this.minHealth = minHealth;
 		this.entityAmount = entityAmount;

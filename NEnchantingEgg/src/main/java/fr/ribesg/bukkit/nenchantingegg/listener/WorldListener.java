@@ -71,9 +71,7 @@ public class WorldListener implements Listener {
 		while (it.hasNext()) {
 			b = it.next();
 			for (final Altar a : altars) {
-				if (a.isAltarXYZ(b.getX() - a.getCenterLocation().getBlockX(),
-				                 b.getY() - a.getCenterLocation().getBlockY(),
-				                 b.getZ() - a.getCenterLocation().getBlockZ())) {
+				if (a.isAltarXYZ(b.getX() - a.getCenterLocation().getBlockX(), b.getY() - a.getCenterLocation().getBlockY(), b.getZ() - a.getCenterLocation().getBlockZ())) {
 					if (plugin.isDebugEnabled()) {
 						plugin.debug("Protecting block at location " + NLocation.toString(b.getLocation()));
 					}

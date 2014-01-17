@@ -99,10 +99,7 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 	}
 
 	private void writeConfig(final Path path) throws IOException {
-		try (BufferedWriter writer = Files.newBufferedWriter(path,
-		                                                     CHARSET,
-		                                                     StandardOpenOption.TRUNCATE_EXISTING,
-		                                                     StandardOpenOption.WRITE)) {
+		try (BufferedWriter writer = Files.newBufferedWriter(path, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
 			writer.write(getConfigString());
 		}
 	}

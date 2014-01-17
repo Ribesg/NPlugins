@@ -290,14 +290,7 @@ public class SignUtils {
 	 * @param rY   Y relative coordinate
 	 * @param rZ   Z relative coordinate
 	 */
-	private static void checkAddSign(final List<Sign> list,
-	                                 final World w,
-	                                 final int x,
-	                                 final int y,
-	                                 final int z,
-	                                 final int rX,
-	                                 final int rY,
-	                                 final int rZ) {
+	private static void checkAddSign(final List<Sign> list, final World w, final int x, final int y, final int z, final int rX, final int rY, final int rZ) {
 		final Material m = w.getBlockAt(x + rX, y + rY, z + rZ).getType();
 		if (m == Material.SIGN_POST || m == Material.WALL_SIGN) {
 			list.add((Sign) w.getBlockAt(x + rX, y + rY, z + rZ).getState());
@@ -323,15 +316,7 @@ public class SignUtils {
 	 *
 	 * @return True if block found was of provided type chestId, false otherwise
 	 */
-	private static boolean checkAddSignChest(final List<Sign> list,
-	                                         final World w,
-	                                         final int x,
-	                                         final int y,
-	                                         final int z,
-	                                         final int rX,
-	                                         final int rY,
-	                                         final int rZ,
-	                                         final Material blockMat) {
+	private static boolean checkAddSignChest(final List<Sign> list, final World w, final int x, final int y, final int z, final int rX, final int rY, final int rZ, final Material blockMat) {
 		final Material m = w.getBlockAt(x + rX, y + rY, z + rZ).getType();
 		if (m == Material.SIGN_POST || m == Material.WALL_SIGN) {
 			list.add((Sign) w.getBlockAt(x + rX, y + rY, z + rZ).getState());

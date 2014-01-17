@@ -25,10 +25,7 @@ public class Rights {
 	public Rights() {
 	}
 
-	public Rights(final Set<String> users,
-	              final Set<String> admins,
-	              final Set<String> allowedGroups,
-	              final Set<String> disallowedCommands) {
+	public Rights(final Set<String> users, final Set<String> admins, final Set<String> allowedGroups, final Set<String> disallowedCommands) {
 		this.users = users;
 		this.admins = admins;
 		this.allowedGroups = allowedGroups;

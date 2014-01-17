@@ -66,8 +66,7 @@ public class ReceiverSign {
 			this.acceptedMaterialDatas = new HashSet<>();
 			for (final String s : acceptsString.split(";")) {
 				if (s.contains(":")) {
-					acceptedMaterialDatas.add(new MaterialData(Integer.parseInt(s.split(":")[0]),
-					                                           (byte) Integer.parseInt(s.split(":")[1])));
+					acceptedMaterialDatas.add(new MaterialData(Integer.parseInt(s.split(":")[0]), (byte) Integer.parseInt(s.split(":")[1])));
 				} else {
 					acceptedMaterials.add(Material.getMaterial(Integer.parseInt(s)));
 				}

@@ -15,13 +15,7 @@ import org.bukkit.World;
 /** @author Ribesg */
 public class StockWorld extends GeneralWorld {
 
-	public StockWorld(final NWorld instance,
-	                  final String worldName,
-	                  final WorldType type,
-	                  final NLocation spawnLocation,
-	                  final String requiredPermission,
-	                  final boolean enabled,
-	                  final boolean hidden) {
+	public StockWorld(final NWorld instance, final String worldName, final WorldType type, final NLocation spawnLocation, final String requiredPermission, final boolean enabled, final boolean hidden) {
 		super(instance, worldName, spawnLocation, requiredPermission, enabled, hidden);
 		setType(type);
 	}

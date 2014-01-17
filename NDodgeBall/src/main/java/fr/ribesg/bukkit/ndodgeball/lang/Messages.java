@@ -67,11 +67,7 @@ public class Messages {
 				try {
 					final MessageId id = MessageId.valueOf(idString);
 					final Message def = messagesMap.get(id);
-					messagesMap.put(id,
-					                new Message(id,
-					                            def.getDefaultMessage(),
-					                            def.getAwaitedArgs(),
-					                            cMessages.getString(idString, def.getDefaultMessage())));
+					messagesMap.put(id, new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), cMessages.getString(idString, def.getDefaultMessage())));
 				} catch (final IllegalArgumentException e) {
 					e.printStackTrace();
 					continue;
@@ -85,10 +81,7 @@ public class Messages {
 		final Set<Message> newMessages = new HashSet<Message>();
 
 		// General plugin messages
-		newMessages.add(new Message(MessageId.errorWhileLoadingConfiguration,
-		                            "&cError while loading config file %filename%",
-		                            new String[] {"%filename%"},
-		                            null));
+		newMessages.add(new Message(MessageId.errorWhileLoadingConfiguration, "&cError while loading config file %filename%", new String[] {"%filename%"}, null));
 
 		// General deny response
 		newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null));
@@ -114,12 +107,7 @@ public class Messages {
 	}
 
 	private static void writeConfig(final Path pathMessages, final boolean overwrite) throws IOException {
-		try (BufferedWriter writer = Files.newBufferedWriter(pathMessages,
-		                                                     CHARSET,
-		                                                     overwrite
-		                                                     ? StandardOpenOption.TRUNCATE_EXISTING
-		                                                     : StandardOpenOption.CREATE_NEW,
-		                                                     StandardOpenOption.WRITE)) {
+		try (BufferedWriter writer = Files.newBufferedWriter(pathMessages, CHARSET, overwrite ? StandardOpenOption.TRUNCATE_EXISTING : StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
 			final StringBuilder content = new StringBuilder();
 			content.append("################################################################################\n");
 			content.append("# List of NChat messages. You're free to change text/colors/language here.     #\n");

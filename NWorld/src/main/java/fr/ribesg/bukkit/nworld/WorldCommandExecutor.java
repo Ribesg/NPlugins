@@ -163,9 +163,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 				plugin.sendMessage(sender, MessageId.world_teleportedToWorld, world.getWorldName());
 				return true;
 			} else if (!world.isHidden()) {
-				plugin.sendMessage(player,
-				                   MessageId.world_warpToThisWorldDisallowed,
-				                   plugin.getServer().getWorld(givenWorldName).getName());
+				plugin.sendMessage(player, MessageId.world_warpToThisWorldDisallowed, plugin.getServer().getWorld(givenWorldName).getName());
 				return true;
 			} else {
 				plugin.sendMessage(player, MessageId.unknownWorld, givenWorldName);
@@ -224,15 +222,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 				}
 			}
 
-			final AdditionalWorld nWorld = new AdditionalWorld(plugin,
-			                                                   worldName,
-			                                                   seed,
-			                                                   null,
-			                                                   requiredPermission,
-			                                                   true,
-			                                                   hidden,
-			                                                   false,
-			                                                   false);
+			final AdditionalWorld nWorld = new AdditionalWorld(plugin, worldName, seed, null, requiredPermission, true, hidden, false, false);
 
 			if (plugin.getPluginConfig().getBroadcastOnWorldCreate() == 1) {
 				plugin.broadcastMessage(MessageId.world_creatingWorldMayBeLaggy);
@@ -491,13 +481,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 					world.setNether(true);
 					AdditionalSubWorld nether = world.getNetherWorld();
 					if (nether == null) {
-						nether = new AdditionalSubWorld(plugin,
-						                                world,
-						                                null /* Will be affected by load() */,
-						                                plugin.getPluginConfig().getDefaultRequiredPermission(),
-						                                true,
-						                                plugin.getPluginConfig().isDefaultHidden(),
-						                                World.Environment.NETHER);
+						nether = new AdditionalSubWorld(plugin, world, null /* Will be affected by load() */, plugin.getPluginConfig().getDefaultRequiredPermission(), true, plugin.getPluginConfig().isDefaultHidden(), World.Environment.NETHER);
 					}
 					if (nether.exists()) {
 						nether.load();
@@ -540,13 +524,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 					world.setEnd(true);
 					AdditionalSubWorld end = world.getEndWorld();
 					if (end == null) {
-						end = new AdditionalSubWorld(plugin,
-						                             world,
-						                             null /* Will be affected by load() */,
-						                             plugin.getPluginConfig().getDefaultRequiredPermission(),
-						                             true,
-						                             plugin.getPluginConfig().isDefaultHidden(),
-						                             World.Environment.THE_END);
+						end = new AdditionalSubWorld(plugin, world, null /* Will be affected by load() */, plugin.getPluginConfig().getDefaultRequiredPermission(), true, plugin.getPluginConfig().isDefaultHidden(), World.Environment.THE_END);
 					}
 					if (end.exists()) {
 						end.load();
@@ -602,8 +580,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			final StringBuilder builder = new StringBuilder();
 			for (final Warp warp : plugin.getWarps()) {
 				if (warp.isEnabled()) {
-					final boolean hasPermission = Perms.hasRequiredPermission(sender, warp.getRequiredPermission()) ||
-					                              Perms.hasWarpAll(sender);
+					final boolean hasPermission = Perms.hasRequiredPermission(sender, warp.getRequiredPermission()) || Perms.hasWarpAll(sender);
 					if (hasPermission) {
 						builder.append(ChatColor.GRAY + ", " + ChatColor.GREEN + warp.getName());
 					} else if (!warp.isHidden()) {

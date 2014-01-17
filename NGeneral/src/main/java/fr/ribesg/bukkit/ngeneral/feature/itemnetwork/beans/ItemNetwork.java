@@ -77,8 +77,7 @@ public class ItemNetwork {
 	 *
 	 * @param toBeSent the map of Items
 	 */
-	/* package */ void send(final Map<NLocation, PairList<ItemStack, List<ReceiverSign>>> toBeSent,
-	                        final Map<NLocation, List<ItemStack>> notSendable) {
+	/* package */ void send(final Map<NLocation, PairList<ItemStack, List<ReceiverSign>>> toBeSent, final Map<NLocation, List<ItemStack>> notSendable) {
 		for (final NLocation origin : toBeSent.keySet()) {
 			final PairList<ItemStack, List<ReceiverSign>> items = toBeSent.get(origin);
 			for (final Pair<ItemStack, List<ReceiverSign>> p : items) {

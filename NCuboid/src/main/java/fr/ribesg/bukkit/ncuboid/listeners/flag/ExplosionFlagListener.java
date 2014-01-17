@@ -51,8 +51,7 @@ public class ExplosionFlagListener extends AbstractListener {
 	public void onEntityDamage(final ExtendedEntityDamageEvent ext) {
 		final EntityDamageEvent event = (EntityDamageEvent) ext.getBaseEvent();
 		if (event.getEntityType() == EntityType.DROPPED_ITEM && event.getCause() == DamageCause.ENTITY_EXPLOSION) {
-			if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.EXPLOSION_ITEM) ||
-			    ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.EXPLOSION_ITEM)) {
+			if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.EXPLOSION_ITEM) || ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.EXPLOSION_ITEM)) {
 				event.setCancelled(true);
 			}
 		}

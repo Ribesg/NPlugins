@@ -17,7 +17,6 @@ import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 public class PassFlagListener extends AbstractListener {
 
@@ -30,12 +29,7 @@ public class PassFlagListener extends AbstractListener {
 		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			if (ext.getFromRegion() != null && ext.getFromRegion().getFlag(Flag.PASS) && !ext.getFromRegion().equals(ext.getToRegion())) {
-				event.setTo(new Location(event.getFrom().getWorld(),
-				                         event.getFrom().getBlockX() + 0.5,
-				                         event.getFrom().getBlockY() + 0.25,
-				                         event.getFrom().getBlockZ() + 0.5,
-				                         event.getTo().getYaw(),
-				                         event.getTo().getPitch()));
+				event.setTo(new Location(event.getFrom().getWorld(), event.getFrom().getBlockX() + 0.5, event.getFrom().getBlockY() + 0.25, event.getFrom().getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
 				ext.setCustomCancelled(true);
 			}
 		}

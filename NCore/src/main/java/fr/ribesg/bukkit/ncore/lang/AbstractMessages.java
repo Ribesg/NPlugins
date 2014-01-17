@@ -125,12 +125,7 @@ public abstract class AbstractMessages {
 	}
 
 	private void writeMessages(final Path path, final boolean overwrite) throws IOException {
-		try (BufferedWriter writer = Files.newBufferedWriter(path,
-		                                                     CHARSET,
-		                                                     overwrite
-		                                                     ? StandardOpenOption.TRUNCATE_EXISTING
-		                                                     : StandardOpenOption.CREATE_NEW,
-		                                                     StandardOpenOption.WRITE)) {
+		try (BufferedWriter writer = Files.newBufferedWriter(path, CHARSET, overwrite ? StandardOpenOption.TRUNCATE_EXISTING : StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
 			writer.write(getConfigString());
 		}
 	}

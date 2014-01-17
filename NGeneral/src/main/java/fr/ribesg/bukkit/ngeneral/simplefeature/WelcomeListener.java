@@ -52,19 +52,6 @@ public class WelcomeListener implements Listener {
 		final String version = server.getVersion();
 		final String viewDistance = Integer.toString(server.getViewDistance());
 
-		plugin.sendMessage(event.getPlayer(),
-		                   MessageId.general_welcome,
-		                   bukkitVersion,
-		                   ip,
-		                   maxPlayers,
-		                   motd,
-		                   name,
-		                   onlineMode,
-		                   onlinePlayersCount,
-		                   port,
-		                   serverId,
-		                   serverName,
-		                   version,
-		                   viewDistance);
+		plugin.sendMessage(event.getPlayer(), MessageId.general_welcome, bukkitVersion, ip, maxPlayers, motd, name, onlineMode, onlinePlayersCount, port, serverId, serverName, version, viewDistance);
 	}
 }

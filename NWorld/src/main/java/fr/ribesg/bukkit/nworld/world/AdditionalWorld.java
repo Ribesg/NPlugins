@@ -20,15 +20,7 @@ public class AdditionalWorld extends GeneralWorld {
 	private       boolean            hasEnd;
 	private       AdditionalSubWorld endWorld;
 
-	public AdditionalWorld(final NWorld instance,
-	                       final String worldName,
-	                       final long seed,
-	                       final NLocation spawnLocation,
-	                       final String requiredPermission,
-	                       final boolean enabled,
-	                       final boolean hidden,
-	                       final boolean hasNether,
-	                       final boolean hasEnd) {
+	public AdditionalWorld(final NWorld instance, final String worldName, final long seed, final NLocation spawnLocation, final String requiredPermission, final boolean enabled, final boolean hidden, final boolean hasNether, final boolean hasEnd) {
 		super(instance, worldName, spawnLocation, requiredPermission, enabled, hidden);
 		this.seed = seed;
 		this.hasNether = hasNether;

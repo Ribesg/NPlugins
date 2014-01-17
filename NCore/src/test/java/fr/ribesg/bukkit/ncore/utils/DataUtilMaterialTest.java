@@ -36,9 +36,7 @@ public class DataUtilMaterialTest {
 
 		final Material foundMaterial = DataUtils.getMaterial(idString);
 		final String foundMaterialName = foundMaterial == null ? "null" : foundMaterial.name();
-		Assert.assertEquals("Expected Material '" + awaitedMaterialName + "' but found '" + foundMaterialName + "'",
-		                    awaitedMaterialName,
-		                    foundMaterialName);
+		Assert.assertEquals("Expected Material '" + awaitedMaterialName + "' but found '" + foundMaterialName + "'", awaitedMaterialName, foundMaterialName);
 	}
 
 	@Parameters

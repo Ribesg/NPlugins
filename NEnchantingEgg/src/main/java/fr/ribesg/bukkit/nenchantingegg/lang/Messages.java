@@ -30,16 +30,8 @@ public class Messages extends AbstractMessages {
 		final Set<Message> newMessages = new HashSet<>();
 
 		// General deny response
-		newMessages.add(new Message(MessageId.noPermissionForCommand,
-		                            "&cYou do not have the permission to use that command",
-		                            null,
-		                            null,
-		                            true));
-		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName,
-		                            "&cNo online player found for input %playerName%",
-		                            new String[] {"%playerName%"},
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null, true));
+		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", new String[] {"%playerName%"}, null, true));
 		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null, true));
 
 		// Command - RELOAD
@@ -52,11 +44,7 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.egg_altarProtectedSkullAtNight, "&cI am too powerful for you...", null, null, true));
 		newMessages.add(new Message(MessageId.egg_altarProtectedBlock, "&cDo not play with fire...", null, null, true));
 		newMessages.add(new Message(MessageId.egg_cantPlaceOnAltar, "&cAre you trying to provoke me?", null, null, true));
-		newMessages.add(new Message(MessageId.egg_altarTooClose,
-		                            "&cSomething already drain the dark powers of this area...",
-		                            null,
-		                            null,
-		                            true));
+		newMessages.add(new Message(MessageId.egg_altarTooClose, "&cSomething already drain the dark powers of this area...", null, null, true));
 		newMessages.add(new Message(MessageId.egg_altarEggProvided, "&6Aaaah... Power!", null, null, true));
 
 		return newMessages;

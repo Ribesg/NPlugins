@@ -45,18 +45,7 @@ public class CuboidRegion extends PlayerRegion {
 	                    final NLocation minCorner,
 	                    final NLocation maxCorner) {
 
-		super(cuboidName,
-		      ownerName,
-		      worldName,
-		      state,
-		      totalSize,
-		      welcomeMessage,
-		      farewellMessage,
-		      RegionType.CUBOID,
-		      rights,
-		      priority,
-		      flags,
-		      flagAtts);
+		super(cuboidName, ownerName, worldName, state, totalSize, welcomeMessage, farewellMessage, RegionType.CUBOID, rights, priority, flags, flagAtts);
 
 		setMinCorner(minCorner);
 		setMaxCorner(maxCorner);

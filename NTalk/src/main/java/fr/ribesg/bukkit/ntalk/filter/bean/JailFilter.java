@@ -17,11 +17,7 @@ public class JailFilter extends TimedFilter {
 
 	private final String jailName;
 
-	public JailFilter(final String outputString,
-	                  final String filteredString,
-	                  final boolean regex,
-	                  final long duration,
-	                  final String jailName) {
+	public JailFilter(final String outputString, final String filteredString, final boolean regex, final long duration, final String jailName) {
 		super(outputString, filteredString, regex, ChatFilterResult.TEMPORARY_JAIL, duration);
 		this.jailName = jailName;
 	}

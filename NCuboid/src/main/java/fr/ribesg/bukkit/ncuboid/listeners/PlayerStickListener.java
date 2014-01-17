@@ -47,18 +47,11 @@ public class PlayerStickListener extends AbstractListener {
 					final CuboidRegion selection = (CuboidRegion) getPlugin().getDb().getSelection(p.getName());
 					final Location clickedBlockLocation = event.getClickedBlock().getLocation();
 					if (selection == null) {
-						getPlugin().getDb()
-								.addSelection(new CuboidRegion("tmp" + p.getName(),
-								                               p.getName(),
-								                               clickedBlockLocation.getWorld().getName(),
-								                               new NLocation(clickedBlockLocation)));
+						getPlugin().getDb().addSelection(new CuboidRegion("tmp" + p.getName(), p.getName(), clickedBlockLocation.getWorld().getName(), new NLocation(clickedBlockLocation)));
 						getPlugin().sendMessage(p, MessageId.cuboid_firstPointSelected, NLocation.toString(clickedBlockLocation));
 					} else if (selection.getState() == PlayerRegion.RegionState.TMPSTATE1) {
 						selection.secondPoint(clickedBlockLocation);
-						getPlugin().sendMessage(p,
-						                        MessageId.cuboid_secondPointSelected,
-						                        NLocation.toString(clickedBlockLocation),
-						                        selection.getSizeString());
+						getPlugin().sendMessage(p, MessageId.cuboid_secondPointSelected, NLocation.toString(clickedBlockLocation), selection.getSizeString());
 					} else if (selection.getState() == PlayerRegion.RegionState.TMPSTATE2) {
 						if (selection.contains(clickedBlockLocation)) {
 							getPlugin().sendMessage(p, MessageId.cuboid_blockInSelection);
@@ -99,10 +92,7 @@ public class PlayerStickListener extends AbstractListener {
 								}
 							}
 							Arrays.sort(strings);
-							getPlugin().sendMessage(p,
-							                        MessageId.cuboid_blockProtectedMultipleRegions,
-							                        String.valueOf(strings.length),
-							                        Messages.merge(strings));
+							getPlugin().sendMessage(p, MessageId.cuboid_blockProtectedMultipleRegions, String.valueOf(strings.length), Messages.merge(strings));
 						}
 					}
 				}

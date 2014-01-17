@@ -45,8 +45,7 @@ public class Pair<K, V> {
 
 		final Pair pair = (Pair) o;
 
-		return !(key != null ? !key.equals(pair.key) : pair.key != null) &&
-		       !(value != null ? !value.equals(pair.value) : pair.value != null);
+		return !(key != null ? !key.equals(pair.key) : pair.key != null) && !(value != null ? !value.equals(pair.value) : pair.value != null);
 
 	}
 

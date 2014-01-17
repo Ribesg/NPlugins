@@ -72,10 +72,8 @@ public class MobFlagListener extends AbstractListener {
 	public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
 		if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
 			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
-			if (getMobs().contains(event.getDamager().getType()) ||
-			    ext.isDamagerProjectile() && getMobs().contains(((Projectile) event.getDamager()).getShooter().getType())) {
-				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.MOB) ||
-				    ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.MOB)) {
+			if (getMobs().contains(event.getDamager().getType()) || ext.isDamagerProjectile() && getMobs().contains(((Projectile) event.getDamager()).getShooter().getType())) {
+				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.MOB) || ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.MOB)) {
 					event.setCancelled(true);
 				}
 			}

@@ -65,12 +65,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	protected boolean   hidden;
 	protected WorldType type;
 
-	public GeneralWorld(final NWorld instance,
-	                    final String worldName,
-	                    final NLocation spawnLocation,
-	                    final String requiredPermission,
-	                    final boolean enabled,
-	                    final boolean hidden) {
+	public GeneralWorld(final NWorld instance, final String worldName, final NLocation spawnLocation, final String requiredPermission, final boolean enabled, final boolean hidden) {
 		this.plugin = instance;
 		this.worldName = worldName;
 		this.spawnLocation = spawnLocation;

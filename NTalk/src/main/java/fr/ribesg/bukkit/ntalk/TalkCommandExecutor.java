@@ -157,10 +157,7 @@ public class TalkCommandExecutor implements CommandExecutor {
 		}
 	}
 
-	private void sendMessages(final CommandSender from,
-	                          final Set<CommandSender> toSet,
-	                          final Set<CommandSender> spySet,
-	                          final String message) {
+	private void sendMessages(final CommandSender from, final Set<CommandSender> toSet, final Set<CommandSender> spySet, final String message) {
 		for (final CommandSender to : toSet) {
 			final String formattedMessage = sendMessage(from, to, message);
 			for (final CommandSender spy : spySet) {
