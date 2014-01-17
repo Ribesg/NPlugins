@@ -25,7 +25,7 @@ import java.util.Set;
 public class Config extends AbstractConfig<NTalk> {
 
 	private static final String defaultTemplate        = "&f<[prefix][name][suffix]&f> [message]";
-	private static final String defaultPmTemplate      = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> " + "[message]";
+	private static final String defaultPmTemplate      = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> [message]";
 	private static final String defaultTempMuteCommand = "/mute %player% %duration%s %reason%";
 	private static final String defaultTempBanCommand  = "/ban %player% %duration%s %reason%";
 	private static final String defaultTempJailCommand = "/jail %player% %duration%s %jailName% %reason%";

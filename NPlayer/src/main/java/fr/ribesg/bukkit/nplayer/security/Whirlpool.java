@@ -224,9 +224,7 @@ public class Whirlpool {
 					this.L[i] ^= Whirlpool.C[t][(int) (this.K[i - t & 7] >>> s) & 0xff];
 				}
 			}
-			for (int i = 0; i < 8; i++) {
-				this.K[i] = this.L[i];
-			}
+			System.arraycopy(this.L, 0, this.K, 0, 8);
 			this.K[0] ^= Whirlpool.rc[r];
             /*
              * apply the r-th round transformation:
@@ -237,9 +235,7 @@ public class Whirlpool {
 					this.L[i] ^= Whirlpool.C[t][(int) (this.state[i - t & 7] >>> s) & 0xff];
 				}
 			}
-			for (int i = 0; i < 8; i++) {
-				this.state[i] = this.L[i];
-			}
+			System.arraycopy(this.L, 0, this.state, 0, 8);
 		}
         /*
          * apply the Miyaguchi-Preneel compression function:

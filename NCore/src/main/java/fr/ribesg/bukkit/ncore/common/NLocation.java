@@ -327,7 +327,7 @@ public class NLocation {
 					final Float pitch = Float.parseFloat(split[5]);
 					return new Location(world, x, y, z, yaw, pitch);
 				} catch (final NumberFormatException e) {
-					LOGGER.warning("Unable to convert the provided String to Location, " + "caught NumberFormatException while parsing x,y,z,yaw,pitch");
+					LOGGER.warning("Unable to convert the provided String to Location, caught NumberFormatException while parsing x,y,z,yaw,pitch");
 					LOGGER.warning("String was: " + string);
 					return null;
 				}
@@ -372,7 +372,7 @@ public class NLocation {
 				final Float pitch = Float.parseFloat(split[5]);
 				return new NLocation(worldName, x, y, z, yaw, pitch);
 			} catch (final NumberFormatException e) {
-				LOGGER.warning("Unable to convert the provided String to NLocation, " + "caught NumberFormatException while parsing x,y,z,yaw,pitch");
+				LOGGER.warning("Unable to convert the provided String to NLocation, caught NumberFormatException while parsing x,y,z,yaw,pitch");
 				LOGGER.warning("String was: " + string);
 				return null;
 			}

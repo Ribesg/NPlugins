@@ -313,7 +313,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		} else {
 			final User user = plugin.getUserDb().get(player.getName());
 			if (user == null) {
-				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use " + "the command.");
+				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use the command.");
 				player.sendMessage("§cUnknown error, see console.");
 				return true;
 			}
@@ -358,7 +358,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		} else {
 			final User user = plugin.getUserDb().get(player.getName());
 			if (user == null) {
-				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use " + "the command.");
+				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use the command.");
 				player.sendMessage("§cUnknown error, see console.");
 				return true;
 			}
