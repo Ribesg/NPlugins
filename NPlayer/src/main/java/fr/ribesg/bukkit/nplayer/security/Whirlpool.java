@@ -128,7 +128,7 @@ public class Whirlpool {
 				Whirlpool.C[t][x] = Whirlpool.C[t - 1][x] >>> 8 | Whirlpool.C[t - 1][x] << 56;
 			}
 		}
-        /*
+	    /*
         for (int t = 0; t < 8; t++) {
             System.out.println("static const u64 C" + t + "[256] = {");
             for (int i = 0; i < 64; i++) {

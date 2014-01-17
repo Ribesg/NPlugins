@@ -31,19 +31,7 @@ public class CuboidRegion extends PlayerRegion {
 	}
 
 	/** Create a Cuboid Region from a save */
-	public CuboidRegion(final String cuboidName,
-	                    final String ownerName,
-	                    final String worldName,
-	                    final RegionState state,
-	                    final long totalSize,
-	                    final String welcomeMessage,
-	                    final String farewellMessage,
-	                    final Rights rights,
-	                    final int priority,
-	                    final Flags flags,
-	                    final FlagAttributes flagAtts,
-	                    final NLocation minCorner,
-	                    final NLocation maxCorner) {
+	public CuboidRegion(final String cuboidName, final String ownerName, final String worldName, final RegionState state, final long totalSize, final String welcomeMessage, final String farewellMessage, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts, final NLocation minCorner, final NLocation maxCorner) {
 
 		super(cuboidName, ownerName, worldName, state, totalSize, welcomeMessage, farewellMessage, RegionType.CUBOID, rights, priority, flags, flagAtts);
 

@@ -49,18 +49,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 	}
 
 	/** Create a Region from a save */
-	public PlayerRegion(final String regionName,
-	                    final String ownerName,
-	                    final String worldName,
-	                    final RegionState state,
-	                    final long totalSize,
-	                    final String welcomeMessage,
-	                    final String farewellMessage,
-	                    final RegionType type,
-	                    final Rights rights,
-	                    final int priority,
-	                    final Flags flags,
-	                    final FlagAttributes flagAtts) {
+	public PlayerRegion(final String regionName, final String ownerName, final String worldName, final RegionState state, final long totalSize, final String welcomeMessage, final String farewellMessage, final RegionType type, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
 
 		super(worldName, type, rights, priority, flags, flagAtts);
 		setRegionName(regionName);
