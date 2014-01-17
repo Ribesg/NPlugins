@@ -180,6 +180,30 @@ public class Messages extends AbstractMessages {
 		                            null,
 		                            false));
 
+		// Command - BUSY
+		newMessages.add(new Message(MessageId.general_busy_nowBusyBroadcast,
+		                            "&e%playerName% is now BUSY",
+		                            new String[] {"%playerName%"},
+		                            null,
+		                            false));
+		newMessages.add(new Message(MessageId.general_busy_noLongerBusyBroadcast,
+		                            "&e%playerName% is no longer BUSY",
+		                            new String[] {"%playerName%"},
+		                            null,
+		                            false));
+		newMessages.add(new Message(MessageId.general_busy_nowBusyBroadcastReason, "&e%playerName% is now BUSY (%reason%)", new String[] {
+				"%playerName%",
+				"%reason%"
+		}, null, false));
+		newMessages.add(new Message(MessageId.general_busy_noLongerBusyBroadcastReason,
+		                            "&e%playerName% is no longer BUSY (%reason%)",
+		                            new String[] {
+				                            "%playerName%",
+				                            "%reason%"
+		                            },
+		                            null,
+		                            false));
+
 		// Command - TIME
 		newMessages.add(new Message(MessageId.general_timeSet, "&aTime set to %value% in world %world% by %changer%", new String[] {
 				"%value%",

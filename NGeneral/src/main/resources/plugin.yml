@@ -32,6 +32,10 @@ commands:
     description: Afk Command
     usage: |
       /<command> [Reason]
+  busy:
+    description: Busy Command
+    usage: |
+      /<command> [Reason]
   time:
     description: Time Command
     aliases: [t]

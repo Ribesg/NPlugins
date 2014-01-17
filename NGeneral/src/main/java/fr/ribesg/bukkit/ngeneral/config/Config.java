@@ -78,6 +78,7 @@ public class Config extends AbstractConfig<NGeneral> {
 
 	// Misc options
 	private boolean broadCastOnAfk;
+	private boolean broadCastOnBusy;
 
 	public Config(final NGeneral instance) {
 		super(instance);
@@ -92,6 +93,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		itemNetworkMaxDistance = 100;
 
 		broadCastOnAfk = true;
+		broadCastOnBusy = true;
 
 		protectionSignNoPermMsgLine1 = DEFAULT_protectionSignNoPermMsgLine1;
 		protectionSignNoPermMsgLine2 = DEFAULT_protectionSignNoPermMsgLine2;
@@ -373,6 +375,10 @@ public class Config extends AbstractConfig<NGeneral> {
 		// Possible values: true, false
 		setBroadCastOnAfk(config.getBoolean("broadCastOnAfk", true));
 
+		// broadCastOnBusy. Default: true.
+		// Possible values: true, false
+		setBroadCastOnBusy(config.getBoolean("broadCastOnBusy", true));
+
 	}
 
 	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString() */
@@ -524,6 +530,10 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("# Defines if we broadcast a message when a player changes his AFK state\n");
 		content.append("broadCastOnAfk: " + hasBroadCastOnAfk() + "\n\n");
 
+		// Broadcast on BUSY
+		content.append("# Defines if we broadcast a message when a player changes his BUSY state\n");
+		content.append("broadCastOnBusy: " + hasBroadCastOnBusy() + "\n\n");
+
 		return content.toString();
 	}
 
@@ -575,6 +585,14 @@ public class Config extends AbstractConfig<NGeneral> {
 
 	public void setBroadCastOnAfk(final boolean broadCastOnAfk) {
 		this.broadCastOnAfk = broadCastOnAfk;
+	}
+
+	public boolean hasBroadCastOnBusy() {
+		return broadCastOnBusy;
+	}
+
+	public void setBroadCastOnBusy(final boolean broadCastOnBusy) {
+		this.broadCastOnBusy = broadCastOnBusy;
 	}
 
 	public String getProtectionSignNoPermMsgLine1() {

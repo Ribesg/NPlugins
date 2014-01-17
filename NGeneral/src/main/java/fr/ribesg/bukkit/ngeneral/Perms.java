@@ -26,6 +26,7 @@ public class Perms {
 	private static final String CMD_WALKSPEED         = "ngeneral.cmd.walkspeed";
 	private static final String CMD_WALKSPEED_OTHERS  = "ngeneral.cmd.walkspeed.others";
 	private static final String CMD_AFK               = "ngeneral.cmd.afk";
+	private static final String CMD_BUSY               = "ngeneral.cmd.busy";
 	private static final String CMD_TIME              = "ngeneral.cmd.time";
 	private static final String CMD_WEATHER           = "ngeneral.cmd.weather";
 	private static final String CMD_ITEMNETWORK       = "ngeneral.cmd.itemnetwork";
@@ -78,6 +79,10 @@ public class Perms {
 
 	public static boolean hasAfk(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_AFK) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasBusy(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_BUSY) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
 	}
 
 	public static boolean hasTime(final CommandSender sender) {

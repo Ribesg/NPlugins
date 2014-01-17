@@ -311,6 +311,11 @@ public enum MessageId {
 	general_afk_nowAfkBroadcastReason,
 	general_afk_noLongerAfkBroadcastReason,
 
+	general_busy_nowBusyBroadcast,
+	general_busy_noLongerBusyBroadcast,
+	general_busy_nowBusyBroadcastReason,
+	general_busy_noLongerBusyBroadcastReason,
+
 	general_tp_youToTarget,
 	general_tp_somebodyToTarget,
 	general_tp_youSomebodyToTarget,
