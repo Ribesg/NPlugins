@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ngeneral.feature;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
+import fr.ribesg.bukkit.ngeneral.feature.autoafk.AutoAfkFeature;
 import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
@@ -30,6 +31,7 @@ public class Features {
 		this.features.put(FeatureType.GOD_MODE, new GodModeFeature(plugin));
 		this.features.put(FeatureType.ITEM_NETWORK, new ItemNetworkFeature(plugin));
 		this.features.put(FeatureType.PROTECTION_SIGNS, new ProtectionSignFeature(plugin));
+		this.features.put(FeatureType.AUTO_AFK, new AutoAfkFeature(plugin));
 	}
 
 	public void initialize() {

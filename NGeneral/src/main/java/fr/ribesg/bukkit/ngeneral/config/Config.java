@@ -24,8 +24,10 @@ public class Config extends AbstractConfig<NGeneral> {
 	private boolean flyModeFeature;
 	private boolean protectionSignFeature;
 	private boolean itemNetworkFeature;
+	private boolean autoAfkFeature;
 
 	private int itemNetworkMaxDistance;
+	private int autoAfkDelay;
 
 	private static final String DEFAULT_protectionSignNoPermMsgLine1 = "&4You don't";
 	private static final String DEFAULT_protectionSignNoPermMsgLine2 = "&4have the";
@@ -89,8 +91,10 @@ public class Config extends AbstractConfig<NGeneral> {
 		flyModeFeature = true;
 		protectionSignFeature = true;
 		itemNetworkFeature = true;
+		autoAfkFeature=true;
 
 		itemNetworkMaxDistance = 100;
+		autoAfkDelay = 120;
 
 		broadCastOnAfk = true;
 		broadCastOnBusy = true;
@@ -152,9 +156,17 @@ public class Config extends AbstractConfig<NGeneral> {
 		// Possible values: true, false
 		setItemNetworkFeature(config.getBoolean("itemNetworkFeature", true));
 
+		// autoAfkFeature. Default: true.
+		// Possible values: true, false
+		setAutoAfkFeature(config.getBoolean("autoAfkFeature", true));
+
 		// itemNetworkMaxDistance. Default: 100
 		// Possible values: any positive int
 		setItemNetworkMaxDistance(config.getInt("itemNetworkMaxDistance", 100));
+
+		// autoAfkDelay. Default: 120
+		// Possible values: any positive int
+		setAutoAfkDelay(config.getInt("autoAfkDelay", 120));
 
 		// protectionSignNoPermMsgLines.
 		setProtectionSignNoPermMsgLine1(config.getString("protectionSignNoPermMsgLine1", DEFAULT_protectionSignNoPermMsgLine1));
@@ -354,10 +366,18 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("# Defines if the ItemNetwork feature is enabled or not\n");
 		content.append("itemNetworkFeature: " + hasItemNetworkFeature() + "\n\n");
 
+		// Auto AFK Feature
+		content.append("# Defines if the AutoAfk feature is enabled or not\n");
+		content.append("autoAfkFeature: " + hasAutoAfkFeature() + "\n\n");
+
 		// Item Network Max Distance
 		content.append("# Maximum allowed distance between an Emitter sign and any\n");
 		content.append("# Receiver sign of the same network\n");
 		content.append("itemNetworkMaxDistance: " + getItemNetworkMaxDistance() + "\n\n");
+
+		// Auto AFK Delay
+		content.append("# Time before a player is set to auto-afk\n");
+		content.append("autoAfkDelay: " + getAutoAfkDelay() + "\n\n");
 
 		// No Permission for Protection Signs message
 		content.append("# Message written on Error signs when player is not allowed to\n");
@@ -493,12 +513,28 @@ public class Config extends AbstractConfig<NGeneral> {
 		this.itemNetworkFeature = itemNetworkFeature;
 	}
 
+	public boolean hasAutoAfkFeature() {
+		return autoAfkFeature;
+	}
+
+	public void setAutoAfkFeature(final boolean autoAfkFeature) {
+		this.autoAfkFeature = autoAfkFeature;
+	}
+
 	public int getItemNetworkMaxDistance() {
 		return itemNetworkMaxDistance;
 	}
 
 	public void setItemNetworkMaxDistance(final int itemNetworkMaxDistance) {
 		this.itemNetworkMaxDistance = itemNetworkMaxDistance;
+	}
+
+	public int getAutoAfkDelay() {
+		return autoAfkDelay;
+	}
+
+	public void setAutoAfkDelay(final int autoAfkDelay) {
+		this.autoAfkDelay = autoAfkDelay;
 	}
 
 	public boolean hasBroadCastOnAfk() {

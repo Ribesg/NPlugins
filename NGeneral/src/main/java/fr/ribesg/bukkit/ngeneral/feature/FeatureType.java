@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature;
+import fr.ribesg.bukkit.ngeneral.feature.autoafk.AutoAfkFeature;
 import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
@@ -25,7 +26,9 @@ public enum FeatureType {
 
 	ITEM_NETWORK(ItemNetworkFeature.class),
 
-	PROTECTION_SIGNS(ProtectionSignFeature.class);
+	PROTECTION_SIGNS(ProtectionSignFeature.class),
+
+	AUTO_AFK(AutoAfkFeature.class);
 
 	/** Maps Feature classes to appropriate FeatureType enum value */
 	private static final Map<Class<? extends Feature>, FeatureType> REVERSE_MAP = new HashMap<>();

@@ -15,7 +15,6 @@ import fr.ribesg.bukkit.ngeneral.config.Config;
 import fr.ribesg.bukkit.ngeneral.config.DbConfig;
 import fr.ribesg.bukkit.ngeneral.feature.Features;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
-import fr.ribesg.bukkit.ngeneral.simplefeature.AfkCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.BusyCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.FlySpeedCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.SignColorsListener;
@@ -94,7 +93,6 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		// Simple commands - Self-registered
 		new FlySpeedCommand(this);
 		new WalkSpeedCommand(this);
-		new AfkCommand(this);
 		new BusyCommand(this);
 		new TimeCommand(this);
 		new WeatherCommand(this);
