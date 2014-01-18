@@ -1,12 +1,3 @@
-<!--
-  ~ Project file:    NPlugins - NGeneral - pom.xml
-  ~ Full Class name: D:/Users/Ribesg/DropBox/workspace/NPlugins/NGeneral/pom.xml
-  ~
-  ~                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr
-  ~   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt
-  ~    Please contact me at ribesg[at]yahoo.fr if you improve this file!
-  -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
