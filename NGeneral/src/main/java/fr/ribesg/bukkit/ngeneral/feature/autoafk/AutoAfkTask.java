@@ -32,16 +32,15 @@ public class AutoAfkTask extends BukkitRunnable {
 		while (it.hasNext()) {
 			final Map.Entry<String, Long> e = it.next();
 			final String playerName = e.getKey();
-			final String afkPlayerName = AutoAfkFeature.AFK_PREFIX + playerName;
 			final long lastUpdate = e.getValue();
 			final Player player = Bukkit.getPlayerExact(playerName);
 			if (player == null || !player.isOnline()) {
 				it.remove();
 			} else {
 				if (lastUpdate + delayMillis < System.currentTimeMillis()) {
-					final String playerDisplayName = player.getDisplayName();
-					if (playerDisplayName.equals(playerName)) {
-						// Not BUSY
+					final String playerListName = player.getPlayerListName();
+					if (playerName.startsWith(playerListName)) {
+						// Not BUSY, not already AFK
 						Bukkit.getScheduler().callSyncMethod(feature.getPlugin(), new Callable() {
 
 							@Override

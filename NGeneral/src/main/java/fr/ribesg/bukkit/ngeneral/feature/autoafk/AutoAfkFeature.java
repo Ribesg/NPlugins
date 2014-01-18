@@ -62,8 +62,8 @@ public class AutoAfkFeature extends Feature {
 		return lastUpdateMap;
 	}
 
-	public boolean isAfk(final String playerDisplayName) {
-		return playerDisplayName.startsWith(AFK_PREFIX);
+	public boolean isAfk(final Player player) {
+		return player.getPlayerListName().startsWith(AFK_PREFIX);
 	}
 
 	public void setAfk(final String playerName, final boolean value, @Nullable final String reason) {

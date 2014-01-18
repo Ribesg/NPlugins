@@ -28,7 +28,7 @@ public class AutoAfkListener implements Listener {
 	public void onPlayerMove(final PlayerMoveEvent event) {
 		final Player player = event.getPlayer();
 		feature.update(player.getName());
-		if (feature.isAfk(player.getDisplayName())) {
+		if (feature.isAfk(player)) {
 			feature.setAfk(player.getName(), false, null);
 		}
 	}
@@ -37,7 +37,7 @@ public class AutoAfkListener implements Listener {
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		final Player player = event.getPlayer();
 		feature.update(player.getName());
-		if (feature.isAfk(player.getDisplayName())) {
+		if (feature.isAfk(player)) {
 			feature.setAfk(player.getName(), false, null);
 		}
 	}
@@ -46,7 +46,7 @@ public class AutoAfkListener implements Listener {
 	public void onPlayerChat(final AsyncPlayerChatEvent event) {
 		final Player player = event.getPlayer();
 		feature.update(player.getName());
-		if (feature.isAfk(player.getDisplayName())) {
+		if (feature.isAfk(player)) {
 			feature.setAfkAsync(player.getName(), false, null);
 		}
 	}
@@ -56,7 +56,7 @@ public class AutoAfkListener implements Listener {
 		if (!event.getMessage().startsWith("afk")) {
 			final Player player = event.getPlayer();
 			feature.update(player.getName());
-			if (feature.isAfk(player.getDisplayName())) {
+			if (feature.isAfk(player)) {
 				feature.setAfk(player.getName(), false, null);
 			}
 		}

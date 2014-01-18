@@ -39,7 +39,7 @@ public class AutoAfkCommandExecutor implements CommandExecutor {
 				if (reason.length() > 0) {
 					reason = reason.substring(0, reason.length() - 1);
 				}
-				feature.setAfk(player.getName(), !feature.isAfk(player.getDisplayName()), reason);
+				feature.setAfk(player.getName(), !feature.isAfk(player), reason);
 			}
 			return true;
 		} else {
