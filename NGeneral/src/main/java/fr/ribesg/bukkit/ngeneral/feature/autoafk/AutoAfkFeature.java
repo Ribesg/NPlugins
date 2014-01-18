@@ -19,7 +19,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import javax.annotation.Nullable;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AutoAfkFeature extends Feature {
@@ -93,16 +92,5 @@ public class AutoAfkFeature extends Feature {
 				}
 			}
 		}
-	}
-
-	public void setAfkAsync(final String playerName, final boolean value, @Nullable final String reason) {
-		Bukkit.getScheduler().callSyncMethod(plugin, new Callable() {
-
-			@Override
-			public Object call() throws Exception {
-				setAfk(playerName, value, reason);
-				return null;
-			}
-		});
 	}
 }

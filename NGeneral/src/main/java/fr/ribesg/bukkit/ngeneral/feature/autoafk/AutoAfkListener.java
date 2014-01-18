@@ -47,15 +47,15 @@ public class AutoAfkListener implements Listener {
 		final Player player = event.getPlayer();
 		feature.update(player.getName());
 		if (feature.isAfk(player)) {
-			feature.setAfkAsync(player.getName(), false, null);
+			feature.setAfk(player.getName(), false, null);
 		}
 	}
 
 	@EventHandler
 	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
+		final Player player = event.getPlayer();
+		feature.update(player.getName());
 		if (!event.getMessage().startsWith("afk")) {
-			final Player player = event.getPlayer();
-			feature.update(player.getName());
 			if (feature.isAfk(player)) {
 				feature.setAfk(player.getName(), false, null);
 			}
