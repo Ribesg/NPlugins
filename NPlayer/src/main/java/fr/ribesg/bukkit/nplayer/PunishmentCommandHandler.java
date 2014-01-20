@@ -122,8 +122,8 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 				} else {
 					final Player target = Bukkit.getPlayerExact(res.punished);
 					if (target != null) {
-						target.kickPlayer(plugin.getMessages().get(MessageId.player_kickPermBanned, res.reason)[0]);
 						db.getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_permBannedBroadcast, res.punished, res.reason)[0]);
+						target.kickPlayer(plugin.getMessages().get(MessageId.player_kickPermBanned, res.reason)[0]);
 					} else {
 						plugin.broadcastMessage(MessageId.player_permBannedBroadcast, res.punished, res.reason);
 					}
@@ -139,8 +139,8 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 			} else {
 				final Player target = Bukkit.getPlayerExact(res.punished);
 				if (target != null) {
-					target.kickPlayer(plugin.getMessages().get(MessageId.player_kickTempBanned, res.reason, TimeUtils.toString(res.duration))[0]);
 					db.getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_tempBannedBroadcast, res.punished, TimeUtils.toString(res.duration), res.reason)[0]);
+					target.kickPlayer(plugin.getMessages().get(MessageId.player_kickTempBanned, res.reason, TimeUtils.toString(res.duration))[0]);
 				} else {
 					plugin.broadcastMessage(MessageId.player_tempBannedBroadcast, res.punished, TimeUtils.toString(res.duration), res.reason);
 				}
@@ -330,8 +330,8 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		} else {
 			if (args.length > 1) {
 				final String reason = StringUtils.joinStrings(args, 1);
-				player.kickPlayer(plugin.getMessages().get(MessageId.player_kickMessage, reason)[0]);
 				db.getLeaveMessages().put(player.getName(), plugin.getMessages().get(MessageId.player_broadcastedKickMessage, userName, reason)[0]);
+				player.kickPlayer(plugin.getMessages().get(MessageId.player_kickMessage, reason)[0]);
 				return true;
 			} else {
 				return false;

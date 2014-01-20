@@ -210,9 +210,9 @@ public class WorldCommandExecutor implements CommandExecutor {
 				}
 
 				if (additionalArguments.contains("public")) {
-					hidden = true;
-				} else if (additionalArguments.contains("private")) {
 					hidden = false;
+				} else if (additionalArguments.contains("private")) {
+					hidden = true;
 				}
 
 				if (additionalArguments.contains("flat")) {
