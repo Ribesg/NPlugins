@@ -46,6 +46,10 @@ commands:
     aliases: [w]
     usage: |
       /<command> <"c"|"clear"|"r"|"rain"|"t"|"thunder"> [duration] [world]
+  repair:
+    description: Repair Command
+    usage: |
+      /<command>
   tp:
     description: Teleport Command
     usage: |

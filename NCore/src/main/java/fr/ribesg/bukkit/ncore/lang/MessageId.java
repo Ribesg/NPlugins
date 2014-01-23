@@ -336,6 +336,9 @@ public enum MessageId {
 	general_timeSet,
 	general_weatherSet,
 
+	general_repair_cannot,
+	general_repair_done,
+
 	general_signcolors_permissionDenied,
 
 	general_protectionsign_accessDenied,

@@ -17,6 +17,7 @@ import fr.ribesg.bukkit.ngeneral.feature.Features;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
 import fr.ribesg.bukkit.ngeneral.simplefeature.BusyCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.FlySpeedCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.RepairCommand;
 import fr.ribesg.bukkit.ngeneral.simplefeature.SignColorsListener;
 import fr.ribesg.bukkit.ngeneral.simplefeature.TeleportCommands;
 import fr.ribesg.bukkit.ngeneral.simplefeature.TimeCommand;
@@ -96,6 +97,7 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		new BusyCommand(this);
 		new TimeCommand(this);
 		new WeatherCommand(this);
+		new RepairCommand(this);
 		new SignColorsListener(this);
 		new TeleportCommands(this);
 		new WelcomeListener(this);
