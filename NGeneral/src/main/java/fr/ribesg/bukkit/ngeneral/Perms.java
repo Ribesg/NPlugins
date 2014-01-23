@@ -30,6 +30,7 @@ public class Perms {
 	private static final String CMD_TIME              = "ngeneral.cmd.time";
 	private static final String CMD_WEATHER           = "ngeneral.cmd.weather";
 	private static final String CMD_REPAIR            = "ngeneral.cmd.repair";
+	private static final String CMD_NIGHT_VISION      = "ngeneral.cmd.nightvision";
 	private static final String CMD_ITEMNETWORK       = "ngeneral.cmd.itemnetwork";
 	private static final String CMD_ITEMNETWORK_ALL   = "ngeneral.cmd.itemnetwork.all";
 	private static final String CMD_TP                = "ngeneral.cmd.tp";
@@ -96,6 +97,10 @@ public class Perms {
 
 	public static boolean hasRepair(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_REPAIR) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasNightVision(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_NIGHT_VISION) || sender.hasPermission(ADMIN);
 	}
 
 	public static boolean hasItemNetwork(final CommandSender sender) {

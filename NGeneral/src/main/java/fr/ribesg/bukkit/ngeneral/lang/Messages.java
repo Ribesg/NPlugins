@@ -155,6 +155,10 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.general_repair_cannot, "&cYou need to have a repairable item in hand", null, null, true));
 		newMessages.add(new Message(MessageId.general_repair_done, "&aItem repaired!", null, null, true));
 
+		// Command - NIGHT VISION
+		newMessages.add(new Message(MessageId.general_nightvision_enabled, "&aNight Vision enabled", null, null, true));
+		newMessages.add(new Message(MessageId.general_nightvision_disabled, "&aNight Vision disabled", null, null, true));
+
 		// Commands - TP / TPHERE / TPTHERE / TPBACK
 		newMessages.add(new Message(MessageId.general_tp_youToTarget, "&aYou teleported yourself to %target%", new String[] {"%target%"}, null, true));
 		newMessages.add(new Message(MessageId.general_tp_somebodyToTarget, "&a%teleporter% teleported you to %target%", new String[] {

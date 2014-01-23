@@ -339,6 +339,9 @@ public enum MessageId {
 	general_repair_cannot,
 	general_repair_done,
 
+	general_nightvision_enabled,
+	general_nightvision_disabled,
+
 	general_signcolors_permissionDenied,
 
 	general_protectionsign_accessDenied,

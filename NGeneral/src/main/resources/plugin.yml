@@ -50,6 +50,11 @@ commands:
     description: Repair Command
     usage: |
       /<command>
+  nightvision:
+    description: Night Vision Command
+    aliases: [nv]
+    usage: |
+      /<command>
   tp:
     description: Teleport Command
     usage: |

@@ -15,15 +15,7 @@ import fr.ribesg.bukkit.ngeneral.config.Config;
 import fr.ribesg.bukkit.ngeneral.config.DbConfig;
 import fr.ribesg.bukkit.ngeneral.feature.Features;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
-import fr.ribesg.bukkit.ngeneral.simplefeature.BusyCommand;
-import fr.ribesg.bukkit.ngeneral.simplefeature.FlySpeedCommand;
-import fr.ribesg.bukkit.ngeneral.simplefeature.RepairCommand;
-import fr.ribesg.bukkit.ngeneral.simplefeature.SignColorsListener;
-import fr.ribesg.bukkit.ngeneral.simplefeature.TeleportCommands;
-import fr.ribesg.bukkit.ngeneral.simplefeature.TimeCommand;
-import fr.ribesg.bukkit.ngeneral.simplefeature.WalkSpeedCommand;
-import fr.ribesg.bukkit.ngeneral.simplefeature.WeatherCommand;
-import fr.ribesg.bukkit.ngeneral.simplefeature.WelcomeListener;
+import fr.ribesg.bukkit.ngeneral.simplefeature.*;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
@@ -98,6 +90,7 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		new TimeCommand(this);
 		new WeatherCommand(this);
 		new RepairCommand(this);
+		new NightVisionCommand(this);
 		new SignColorsListener(this);
 		new TeleportCommands(this);
 		new WelcomeListener(this);
