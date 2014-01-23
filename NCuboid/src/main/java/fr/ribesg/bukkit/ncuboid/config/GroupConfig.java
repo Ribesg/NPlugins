@@ -28,7 +28,7 @@ public class GroupConfig {
 	}
 
 	public String getGroupPerm() {
-		return "group." + groupName;
+		return "ncuboid." + groupName;
 	}
 
 	public int getMaxRegionNb() {
