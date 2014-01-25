@@ -159,6 +159,7 @@ public enum MessageId {
 	world_availableWarps,
 
 	world_warpToThisWarpDisallowed,
+	world_warpUnloadedWorld,
 
 	world_unknownWarp,
 

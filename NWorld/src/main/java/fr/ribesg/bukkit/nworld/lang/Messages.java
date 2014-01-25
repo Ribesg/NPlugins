@@ -84,6 +84,10 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.world_availableWarps, "&aList of existing warps:", null, null, true));
 		newMessages.add(new Message(MessageId.world_teleportedToWarp, "&aYou teleported yourself to the warp %warpName%", new String[] {"%warpName%"}, null, true));
 		newMessages.add(new Message(MessageId.world_warpToThisWarpDisallowed, "&cYou are not allowed to use the warp %warpName%", new String[] {"%warpName%"}, null, true));
+		newMessages.add(new Message(MessageId.world_warpUnloadedWorld, "&cThe world %worldName% containing the warp %warpName% is unloaded!", new String[] {
+				"%worldName%",
+				"%warpName%"
+		}, null, true));
 		newMessages.add(new Message(MessageId.world_unknownWarp, "&cUnknown warp: %warpName%", new String[] {"%warpName%"}, null, true));
 		newMessages.add(new Message(MessageId.world_warpHiddenTrue, "&aYou hid the warp %warpName%", new String[] {"%warpName%"}, null, true));
 		newMessages.add(new Message(MessageId.world_warpHiddenFalse, "&aYou stopped hidding the warp %warpName%", new String[] {"%warpName%"}, null, true));

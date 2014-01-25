@@ -628,15 +628,19 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (warp != null) {
 			if (Perms.hasRequiredPermission(player, warp.getRequiredPermission()) || Perms.hasWarpAll(player)) {
 				final Location loc = warp.getLocation().toBukkitLocation();
-				loc.getChunk().load();
-				Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+				if (loc == null) {
+					plugin.sendMessage(sender, MessageId.world_warpUnloadedWorld, warp.getLocation().getWorldName(), warp.getName());
+				} else {
+					loc.getChunk().load();
+					Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
 
-					@Override
-					public void run() {
-						player.teleport(loc);
-					}
-				}, 1L);
-				plugin.sendMessage(sender, MessageId.world_teleportedToWarp, warp.getName());
+						@Override
+						public void run() {
+							player.teleport(loc);
+						}
+					}, 1L);
+					plugin.sendMessage(sender, MessageId.world_teleportedToWarp, warp.getName());
+				}
 				return true;
 			} else if (!warp.isHidden()) {
 				plugin.sendMessage(player, MessageId.world_warpToThisWarpDisallowed, warp.getName());
