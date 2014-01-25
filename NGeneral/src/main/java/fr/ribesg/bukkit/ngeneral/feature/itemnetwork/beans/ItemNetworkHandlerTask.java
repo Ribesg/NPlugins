@@ -21,9 +21,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.Callable;
 
 public class ItemNetworkHandlerTask extends BukkitRunnable {
+
+	private static final Random RANDOM = new Random();
 
 	private final ItemNetworkFeature feature;
 	private final ItemNetwork        network;
@@ -35,7 +38,7 @@ public class ItemNetworkHandlerTask extends BukkitRunnable {
 	}
 
 	public void initialize() {
-		this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(network.getFeature().getPlugin(), this, 5 * 20L, 5L);
+		this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(network.getFeature().getPlugin(), this, RANDOM.nextInt(5 * 20), 5L);
 	}
 
 	public void terminate() {

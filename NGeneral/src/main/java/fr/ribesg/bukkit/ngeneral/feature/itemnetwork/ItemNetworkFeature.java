@@ -39,6 +39,10 @@ public class ItemNetworkFeature extends Feature {
 		final ItemNetworkListener listener = new ItemNetworkListener(this);
 		final ItemNetworkCommandExecutor executor = new ItemNetworkCommandExecutor(this);
 
+		for (final ItemNetwork in : networks.values()) {
+			in.initialize();
+		}
+
 		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
 		getPlugin().getCommand("itemnetwork").setExecutor(executor);
 	}

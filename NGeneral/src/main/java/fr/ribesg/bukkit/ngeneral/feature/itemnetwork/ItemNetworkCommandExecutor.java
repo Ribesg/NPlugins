@@ -42,7 +42,9 @@ public class ItemNetworkCommandExecutor implements CommandExecutor {
 								feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_alreadyExists, networkName);
 								return true;
 							} else {
-								feature.getNetworks().put(networkName.toLowerCase(), new ItemNetwork(feature, networkName, sender.getName()));
+								final ItemNetwork newItemNetwork = new ItemNetwork(feature, networkName, sender.getName());
+								feature.getNetworks().put(networkName.toLowerCase(), newItemNetwork);
+								newItemNetwork.initialize();
 								feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_created, networkName);
 								return true;
 							}
