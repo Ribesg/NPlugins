@@ -39,7 +39,9 @@ public class ItemNetworkHandlerTask extends BukkitRunnable {
 	}
 
 	public void terminate() {
-		this.task.cancel();
+		if (this.task != null) {
+			this.task.cancel();
+		}
 	}
 
 	@Override
