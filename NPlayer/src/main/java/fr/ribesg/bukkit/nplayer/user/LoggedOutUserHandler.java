@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.nplayer.user;
 import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncore.event.PlayerJoinedEvent;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.TimeUtils;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,6 +21,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.*;
@@ -78,7 +82,7 @@ public class LoggedOutUserHandler implements Listener {
 	public void lockPlayer(final String userName) {
 		final Player player = plugin.getServer().getPlayerExact(userName);
 		if (player != null) {
-			player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(1337, 42)); // TODO Think about values
+			player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect((int) TimeUtils.getInSeconds("1month"), 9));
 		}
 	}
 
@@ -218,6 +222,27 @@ public class LoggedOutUserHandler implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerDamage(final EntityDamageEvent event) {
+		if (event.getEntityType() == EntityType.PLAYER && loggedOutPlayers.containsKey(((Player) event.getEntity()).getName())) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onEntityTarget(final EntityTargetLivingEntityEvent event) {
+		if (event.getTarget().getType() == EntityType.PLAYER && loggedOutPlayers.containsKey(((Player) event.getTarget()).getName())) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onFoodLevelChange(final FoodLevelChangeEvent event) {
+		if (event.getEntityType() == EntityType.PLAYER && loggedOutPlayers.containsKey(event.getEntity().getName())) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onRegainHealth(final EntityRegainHealthEvent event) {
 		if (event.getEntityType() == EntityType.PLAYER && loggedOutPlayers.containsKey(((Player) event.getEntity()).getName())) {
 			event.setCancelled(true);
 		}
