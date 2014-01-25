@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.nplayer.user;
 import fr.ribesg.bukkit.ncore.common.NLocation;
+import fr.ribesg.bukkit.ncore.utils.TimeUtils;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -27,7 +28,7 @@ import java.util.Map;
 
 public class UserDb {
 
-	private final static long TWO_WEEKS = 2 * 7 * 24 * 60 * 60 * 1000;
+	private final static long TWO_WEEKS = TimeUtils.getInMilliseconds("2weeks");
 
 	private final NPlayer                 plugin;
 	private final Map<String, User>       usersPerName;
@@ -40,7 +41,7 @@ public class UserDb {
 	}
 
 	public boolean isUserKnown(final String userName) {
-		return usersPerName.containsKey(userName);
+		return usersPerName.containsKey(userName.toLowerCase());
 	}
 
 	public boolean isIpKnown(final String ip) {
@@ -48,7 +49,7 @@ public class UserDb {
 	}
 
 	public User get(final String userName) {
-		return usersPerName.get(userName);
+		return usersPerName.get(userName.toLowerCase());
 	}
 
 	public List<User> getByIp(final String ip) {
@@ -59,7 +60,7 @@ public class UserDb {
 	public User newUser(final String userName, final String passwordHash, final String currentIp) {
 		final Date date = new Date();
 		final User user = new User(plugin.getLoggedOutUserHandler(), userName, passwordHash, currentIp, date);
-		usersPerName.put(userName, user);
+		usersPerName.put(userName.toLowerCase(), user);
 		addPerIp(currentIp, user);
 		return user;
 	}
@@ -103,7 +104,7 @@ public class UserDb {
 		final YamlConfiguration config = new YamlConfiguration();
 		for (final String userName : usersPerName.keySet()) {
 			final User user = usersPerName.get(userName);
-			final ConfigurationSection userSection = config.createSection(userName);
+			final ConfigurationSection userSection = config.createSection(user.getUserName());
 			userSection.set("passwordHash", user.getPasswordHash());
 			userSection.set("lastIp", user.getLastIp());
 			userSection.set("knownIps", user.getKnownIps());
@@ -135,7 +136,7 @@ public class UserDb {
 			final boolean autoLogout = userSection.getBoolean("autoLogout");
 			final Location home = NLocation.toLocation(userSection.getString("home"));
 			final User user = new User(plugin.getLoggedOutUserHandler(), lastIp, firstJoin, knownIps, lastSeen, passwordHash, userName, autoLogout, home);
-			usersPerName.put(userName, user);
+			usersPerName.put(userName.toLowerCase(), user);
 			for (final String ip : user.getKnownIps()) {
 				addPerIp(ip, user);
 			}

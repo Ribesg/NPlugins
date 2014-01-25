@@ -166,6 +166,7 @@ public class Messages extends AbstractMessages {
 				"%userName%",
 				"%duration%"
 		}, null, false));
+		newMessages.add(new Message(MessageId.player_loginAttemptsTooMany, "&cToo many login attempts", null, null, false));
 
 		// Force Login
 		newMessages.add(new Message(MessageId.player_somebodyForcedLoginYou, "&6You have been logged in by %admin%", new String[] {"%admin%"}, null, true));

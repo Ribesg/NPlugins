@@ -195,6 +195,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				return true;
 			} else {
 				plugin.sendMessage(player, MessageId.player_wrongPassword);
+				loginAttempt(player.getName());
 				return true;
 			}
 		}
@@ -292,10 +293,10 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			}
 			final Location dest = user.getHome();
 			if (dest == null) {
-				plugin.sendMessage(player, MessageId.player_userHasNoHome, userName);
+				plugin.sendMessage(player, MessageId.player_userHasNoHome, user.getUserName());
 				return true;
 			} else {
-				plugin.sendMessage(player, MessageId.player_teleportingToUserHome, userName);
+				plugin.sendMessage(player, MessageId.player_teleportingToUserHome, user.getUserName());
 				dest.getChunk().load(true);
 				plugin.getServer().getScheduler().runTask(plugin, new BukkitRunnable() {
 
@@ -338,18 +339,14 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				plugin.sendMessage(player, MessageId.noPermissionForCommand);
 				return true;
 			}
-			String userName = args[0];
-			final Player p = plugin.getServer().getPlayer(userName);
-			if (p != null) {
-				userName = p.getName();
-			}
+			final String userName = args[0];
 			final User user = plugin.getUserDb().get(userName);
 			if (user == null) {
 				plugin.sendMessage(player, MessageId.player_unknownUser, userName);
 				return true;
 			}
 			user.setHome(player.getLocation());
-			plugin.sendMessage(player, MessageId.player_userHomeSet, userName);
+			plugin.sendMessage(player, MessageId.player_userHomeSet, user.getUserName());
 			return true;
 		} else {
 			final User user = plugin.getUserDb().get(player.getName());
@@ -397,16 +394,18 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			final Player target = Bukkit.getPlayerExact(userName);
 			switch (plugin.getPluginConfig().getTooManyAttemptsPunishment()) {
 				case 0:
-					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsKickMessage)[0]);
 					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedKickMessage, userName)[0]);
+					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsKickMessage)[0]);
 					break;
 				case 1:
-					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsTempBanMessage)[0]);
 					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName)[0]);
+					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsTempBanMessage)[0]);
+					plugin.getPunishmentDb().tempBanIp(target.getAddress().getAddress().getHostAddress(), plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration(), plugin.getMessages().get(MessageId.player_loginAttemptsTooMany)[0]);
 					break;
 				case 2:
-					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsPermBanMessage)[0]);
 					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedPermBanMessage, userName)[0]);
+					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsPermBanMessage)[0]);
+					plugin.getPunishmentDb().permBanIp(target.getAddress().getAddress().getHostAddress(), plugin.getMessages().get(MessageId.player_loginAttemptsTooMany)[0]);
 					break;
 				default:
 					break;

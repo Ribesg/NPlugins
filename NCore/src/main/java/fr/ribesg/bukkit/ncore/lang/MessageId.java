@@ -261,6 +261,7 @@ public enum MessageId {
 	player_loginAttemptsBroadcastedTempBanMessage,
 	player_loginAttemptsPermBanMessage,
 	player_loginAttemptsBroadcastedPermBanMessage,
+	player_loginAttemptsTooMany,
 
 	player_youForcedLogin,
 	player_somebodyForcedLoginYou,
