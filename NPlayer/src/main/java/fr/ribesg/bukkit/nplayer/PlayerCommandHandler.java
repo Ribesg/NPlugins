@@ -284,11 +284,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				plugin.sendMessage(player, MessageId.noPermissionForCommand);
 				return true;
 			}
-			String userName = args[0];
-			final Player p = plugin.getServer().getPlayer(userName);
-			if (p != null) {
-				userName = p.getName();
-			}
+			final String userName = args[0];
 			final User user = plugin.getUserDb().get(userName);
 			if (user == null) {
 				plugin.sendMessage(player, MessageId.player_unknownUser, userName);
