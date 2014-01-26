@@ -1,13 +1,14 @@
 /***************************************************************************
  * Project file:    NPlugins - NCore - InventoryUtils.java                 *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.InventoryUtils            *
+ * Full Class name: fr.ribesg.bukkit.ncore.utils.inventory.InventoryUtils  *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.utils.inventory;
+import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -139,16 +140,16 @@ public class InventoryUtils {
 	 *
 	 * @return a single String representing this ItemStack array
 	 */
-	public static String toString(final ItemStack[] itemStacks) throws InventoryUtilParserException {
+	public static String toString(final ItemStack[] itemStacks) throws InventoryUtilException {
 		final List<String> strings = new ArrayList<>(itemStacks.length);
 		for (final ItemStack is : itemStacks) {
 			if (is == null) {
 				strings.add((""));
 			} else {
 				try {
-					strings.add(DataUtils.toString(is));
-				} catch (final DataUtils.DataUtilParserException e) {
-					throw new InventoryUtilParserException(itemStacks, "Invalid item in provided array", e);
+					strings.add(ItemStackUtils.toString(is));
+				} catch (final InventoryUtilException e) {
+					throw new InventoryUtilException("Invalid item in provided array", e);
 				}
 			}
 		}
@@ -170,15 +171,15 @@ public class InventoryUtils {
 	 *
 	 * @see #toString(org.bukkit.inventory.ItemStack[])
 	 */
-	public static ItemStack[] fromString(final String string) throws InventoryUtilParserException {
+	public static ItemStack[] fromString(final String string) throws InventoryUtilException {
 		final String separator = string.substring(0, 4);
 		final String[] items = StringUtils.splitKeepEmpty(string, separator);
 		final ItemStack[] result = new ItemStack[items.length - 1];
 		for (int i = 1; i < items.length; i++) {
 			try {
-				result[i - 1] = items[i].isEmpty() ? null : DataUtils.fromString(items[i]);
-			} catch (final DataUtils.DataUtilParserException e) {
-				throw new InventoryUtilParserException(string, "Invalid item string provided", e);
+				result[i - 1] = items[i].isEmpty() ? null : ItemStackUtils.fromString(items[i]);
+			} catch (final InventoryUtilException e) {
+				throw new InventoryUtilException("Invalid item string provided ('" + string + "')", e);
 			}
 		}
 		return result;
@@ -227,7 +228,7 @@ public class InventoryUtils {
 	 *
 	 * @return a String representing the provided inventory
 	 */
-	public static String toString(final Inventory inventory) throws InventoryUtilParserException {
+	public static String toString(final Inventory inventory) throws InventoryUtilException {
 		return toString(inventory.getContents());
 	}
 
@@ -238,44 +239,14 @@ public class InventoryUtils {
 	 * @param inventoryToSet the inventory to modify
 	 * @param string         the inventory representation to deserialize
 	 *
-	 * @throws IllegalArgumentException if the provided String deserialization does not match the provided
-	 *                                  Inventory's size
+	 * @throws InventoryUtilException if the provided String deserialization does not match the provided
+	 *                                Inventory's size
 	 */
-	public static void setFromString(final Inventory inventoryToSet, final String string) throws InventoryUtilParserException {
+	public static void setFromString(final Inventory inventoryToSet, final String string) throws InventoryUtilException {
 		final ItemStack[] fromString = fromString(string);
 		if (inventoryToSet.getSize() != fromString.length) {
-			throw new IllegalArgumentException("String size (" +
-			                                   fromString.length +
-			                                   ") does not match inventory size (" +
-			                                   inventoryToSet.getSize() +
-			                                   ")");
+			throw new InventoryUtilException("String size (" + fromString.length + ") does not match inventory size (" + inventoryToSet.getSize() + ")");
 		}
 		inventoryToSet.setContents(fromString);
-	}
-
-	public static class InventoryUtilParserException extends Exception {
-
-		private final String parsed;
-		private final String reason;
-
-		public InventoryUtilParserException(final Object parsed, final String reason) {
-			super("Error while parsing '" + (parsed == null ? "null" : parsed.toString()) + "', " + reason);
-			this.parsed = parsed == null ? "null" : parsed.toString();
-			this.reason = reason;
-		}
-
-		public InventoryUtilParserException(final Object parsed, final String reason, final Throwable origin) {
-			super("Error while parsing '" + (parsed == null ? "null" : parsed.toString()) + "', " + reason, origin);
-			this.parsed = parsed == null ? "null" : parsed.toString();
-			this.reason = reason;
-		}
-
-		public String getParsed() {
-			return parsed;
-		}
-
-		public String getReason() {
-			return reason;
-		}
 	}
 }
