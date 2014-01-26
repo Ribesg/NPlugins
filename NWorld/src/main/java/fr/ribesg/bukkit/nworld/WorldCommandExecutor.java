@@ -414,7 +414,6 @@ public class WorldCommandExecutor implements CommandExecutor {
 		}
 		final String worldName = args[0];
 		final boolean hidden = Boolean.parseBoolean(args[1]);
-		final Player player = (Player) sender;
 		final GeneralWorld world = plugin.getWorlds().get(worldName);
 		if (world != null) {
 			world.setHidden(hidden);
@@ -425,7 +424,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			}
 			return true;
 		} else {
-			plugin.sendMessage(player, MessageId.unknownWorld, worldName);
+			plugin.sendMessage(sender, MessageId.unknownWorld, worldName);
 			return true;
 		}
 	}
@@ -443,14 +442,13 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (plugin.getPluginConfig().getPermissionShortcuts().containsKey(permission.toLowerCase())) {
 			permission = plugin.getPluginConfig().getPermissionShortcuts().get(permission.toLowerCase());
 		}
-		final Player player = (Player) sender;
 		final GeneralWorld world = plugin.getWorlds().get(worldName);
 		if (world != null) {
 			world.setRequiredPermission(permission);
 			plugin.sendMessage(sender, MessageId.world_changedWorldRequiredPermission, worldName, permission);
 			return true;
 		} else {
-			plugin.sendMessage(player, MessageId.unknownWorld, worldName);
+			plugin.sendMessage(sender, MessageId.unknownWorld, worldName);
 			return true;
 		}
 	}
@@ -665,7 +663,6 @@ public class WorldCommandExecutor implements CommandExecutor {
 		}
 		final String warpName = args[0];
 		final boolean hidden = Boolean.parseBoolean(args[1]);
-		final Player player = (Player) sender;
 		final Warp warp = plugin.getWarps().get(warpName);
 		if (warp != null) {
 			warp.setHidden(hidden);
@@ -676,7 +673,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			}
 			return true;
 		} else {
-			plugin.sendMessage(player, MessageId.world_unknownWarp, warpName);
+			plugin.sendMessage(sender, MessageId.world_unknownWarp, warpName);
 			return true;
 		}
 	}
@@ -694,14 +691,13 @@ public class WorldCommandExecutor implements CommandExecutor {
 		if (plugin.getPluginConfig().getPermissionShortcuts().containsKey(permission.toLowerCase())) {
 			permission = plugin.getPluginConfig().getPermissionShortcuts().get(permission.toLowerCase());
 		}
-		final Player player = (Player) sender;
 		final Warp warp = plugin.getWarps().get(warpName);
 		if (warp != null) {
 			warp.setRequiredPermission(permission);
 			plugin.sendMessage(sender, MessageId.world_changedWarpRequiredPermission, warpName, permission);
 			return true;
 		} else {
-			plugin.sendMessage(player, MessageId.world_unknownWarp, warpName);
+			plugin.sendMessage(sender, MessageId.world_unknownWarp, warpName);
 			return true;
 		}
 	}
