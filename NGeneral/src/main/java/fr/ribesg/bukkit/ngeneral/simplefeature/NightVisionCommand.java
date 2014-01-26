@@ -21,16 +21,18 @@ import org.bukkit.potion.PotionEffectType;
 
 public class NightVisionCommand implements CommandExecutor {
 
+	private static final String COMMAND = "nightvision";
+
 	private final NGeneral plugin;
 
 	public NightVisionCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.getCommand("nightvision").setExecutor(this);
+		plugin.setCommandExecutor(COMMAND, this);
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if (command.getName().equals("nightvision")) {
+		if (command.getName().equals(COMMAND)) {
 			if (!Perms.hasNightVision(sender)) {
 				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			} else if (!(sender instanceof Player)) {

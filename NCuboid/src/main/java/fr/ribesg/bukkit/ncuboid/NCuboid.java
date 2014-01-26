@@ -134,7 +134,7 @@ public class NCuboid extends NPlugin implements CuboidNode {
 		pm.registerEvents(new WarpgateFlagListener(this), this);
 
 		// Command
-		getCommand("cuboid").setExecutor(new MainCommandExecutor(this));
+		setCommandExecutor("cuboid", new MainCommandExecutor(this));
 
 		// Dynmap Bridge! After loading Regions!
 		this.dynmapBridge.initialize(this.db);

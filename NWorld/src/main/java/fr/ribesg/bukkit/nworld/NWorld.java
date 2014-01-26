@@ -162,12 +162,12 @@ public class NWorld extends NPlugin implements WorldNode {
 
 		// Commands
 		final WorldCommandExecutor executor = new WorldCommandExecutor(this);
-		getCommand("nworld").setExecutor(executor);
-		getCommand("spawn").setExecutor(executor);
-		getCommand("setspawn").setExecutor(executor);
-		getCommand("warp").setExecutor(executor);
-		getCommand("setwarp").setExecutor(executor);
-		getCommand("delwarp").setExecutor(executor);
+		setCommandExecutor("nworld", executor);
+		setCommandExecutor("spawn", executor);
+		setCommandExecutor("setspawn", executor);
+		setCommandExecutor("warp", executor);
+		setCommandExecutor("setwarp", executor);
+		setCommandExecutor("delwarp", executor);
 
 		// Metrics - Worlds
 		final Metrics.Graph g1 = getMetrics().createGraph("Amount of Worlds");

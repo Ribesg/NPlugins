@@ -88,9 +88,9 @@ public class NTalk extends NPlugin implements TalkNode {
 
 		// Command
 		final TalkCommandExecutor executor = new TalkCommandExecutor(this);
-		getCommand("pm").setExecutor(executor);
-		getCommand("pr").setExecutor(executor);
-		getCommand("nick").setExecutor(executor);
+		setCommandExecutor("pm", executor);
+		setCommandExecutor("pr", executor);
+		setCommandExecutor("nick", executor);
 
 		// We need to access permissions in the AsyncPlayerChatEvent handler
 		// For this purpose, we need to use the AsyncPermAccessor

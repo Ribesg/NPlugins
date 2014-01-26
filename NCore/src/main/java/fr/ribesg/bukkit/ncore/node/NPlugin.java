@@ -14,7 +14,9 @@ import fr.ribesg.bukkit.ncore.lang.AbstractMessages;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -111,6 +113,25 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 	public void onDisable() {
 		if (enabled) {
 			onNodeDisable();
+		}
+	}
+
+	/**
+	 * Associate commands to their executors with a nullcheck.
+	 *
+	 * @param commandName the name of the command
+	 * @param executor    the executor
+	 *
+	 * @return if the command was successfully registered
+	 */
+	public boolean setCommandExecutor(final String commandName, final CommandExecutor executor) {
+		final PluginCommand cuboidCmd = getCommand(commandName);
+		if (cuboidCmd != null) {
+			cuboidCmd.setExecutor(executor);
+			return true;
+		} else {
+			error("Command registered by another plugin: " + commandName);
+			return false;
 		}
 	}
 

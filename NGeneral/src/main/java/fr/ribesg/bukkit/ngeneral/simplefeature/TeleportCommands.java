@@ -29,51 +29,57 @@ import java.util.Map;
 /** @author Ribesg */
 public class TeleportCommands implements CommandExecutor {
 
+	private static final String COMMAND_TP      = "tp";
+	private static final String COMMAND_TPPOS   = "tppos";
+	private static final String COMMAND_TPHERE  = "tphere";
+	private static final String COMMAND_TPTHERE = "tpthere";
+	private static final String COMMAND_TPBACK  = "tpback";
+
 	private final NGeneral               plugin;
 	private final Map<String, NLocation> backMap;
 
 	public TeleportCommands(final NGeneral instance) {
 		this.plugin = instance;
 		this.backMap = new HashMap<>();
-		plugin.getCommand("tp").setExecutor(this);
-		plugin.getCommand("tppos").setExecutor(this);
-		plugin.getCommand("tphere").setExecutor(this);
-		plugin.getCommand("tpthere").setExecutor(this);
-		plugin.getCommand("tpback").setExecutor(this);
+		plugin.setCommandExecutor(COMMAND_TP, this);
+		plugin.setCommandExecutor(COMMAND_TPPOS, this);
+		plugin.setCommandExecutor(COMMAND_TPHERE, this);
+		plugin.setCommandExecutor(COMMAND_TPTHERE, this);
+		plugin.setCommandExecutor(COMMAND_TPBACK, this);
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 		switch (cmd.getName()) {
-			case "tp":
+			case COMMAND_TP:
 				if (Perms.hasTp(sender)) {
 					return execTpCommand(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
-			case "tppos":
+			case COMMAND_TPPOS:
 				if (Perms.hasTpPos(sender)) {
 					return execTpPosCommand(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
-			case "tphere":
+			case COMMAND_TPHERE:
 				if (Perms.hasTpHere(sender)) {
 					return execTpHereCommand(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
-			case "tpthere":
+			case COMMAND_TPTHERE:
 				if (Perms.hasTpThere(sender)) {
 					return execTpThereCommand(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
-			case "tpback":
+			case COMMAND_TPBACK:
 				if (Perms.hasTpBack(sender)) {
 					return execTpBackCommand(sender, args);
 				} else {

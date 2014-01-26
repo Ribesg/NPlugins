@@ -20,17 +20,18 @@ import org.bukkit.entity.Player;
 public class BusyCommand implements CommandExecutor {
 
 	private static final String BUSY_PREFIX = "" + ChatColor.DARK_RED + ChatColor.ITALIC;
+	private static final String COMMAND                 = "busy";
 
 	private final NGeneral plugin;
 
 	public BusyCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.getCommand("busy").setExecutor(this);
+		plugin.setCommandExecutor(COMMAND, this);
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if (command.getName().equals("busy")) {
+		if (command.getName().equals(COMMAND)) {
 			if (!Perms.hasBusy(sender)) {
 				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			} else if (!(sender instanceof Player)) {

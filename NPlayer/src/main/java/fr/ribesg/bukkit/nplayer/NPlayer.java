@@ -98,24 +98,24 @@ public class NPlayer extends NPlugin implements PlayerNode {
 		// Commands
 
 		final PlayerCommandHandler playerCommandHandler = new PlayerCommandHandler(this);
-		getCommand("login").setExecutor(playerCommandHandler);
-		getCommand("register").setExecutor(playerCommandHandler);
-		getCommand("logout").setExecutor(playerCommandHandler);
-		// TODO getCommand("info").setExecutor(playerCommandHandler);
-		getCommand("home").setExecutor(playerCommandHandler);
-		getCommand("sethome").setExecutor(playerCommandHandler);
-		getCommand("forcelogin").setExecutor(playerCommandHandler);
+		setCommandExecutor("login", playerCommandHandler);
+		setCommandExecutor("register", playerCommandHandler);
+		setCommandExecutor("logout", playerCommandHandler);
+		// TODO setCommandExecutor("info", playerCommandHandler);
+		setCommandExecutor("home", playerCommandHandler);
+		setCommandExecutor("sethome", playerCommandHandler);
+		setCommandExecutor("forcelogin", playerCommandHandler);
 
 		final PunishmentCommandHandler punishmentCommandHandler = new PunishmentCommandHandler(this);
-		getCommand("ban").setExecutor(punishmentCommandHandler);
-		getCommand("banip").setExecutor(punishmentCommandHandler);
-		getCommand("mute").setExecutor(punishmentCommandHandler);
-		getCommand("jail").setExecutor(punishmentCommandHandler);
-		getCommand("unban").setExecutor(punishmentCommandHandler);
-		getCommand("unbanip").setExecutor(punishmentCommandHandler);
-		getCommand("unmute").setExecutor(punishmentCommandHandler);
-		getCommand("unjail").setExecutor(punishmentCommandHandler);
-		getCommand("kick").setExecutor(punishmentCommandHandler);
+		setCommandExecutor("ban", punishmentCommandHandler);
+		setCommandExecutor("banip", punishmentCommandHandler);
+		setCommandExecutor("mute", punishmentCommandHandler);
+		setCommandExecutor("jail", punishmentCommandHandler);
+		setCommandExecutor("unban", punishmentCommandHandler);
+		setCommandExecutor("unbanip", punishmentCommandHandler);
+		setCommandExecutor("unmute", punishmentCommandHandler);
+		setCommandExecutor("unjail", punishmentCommandHandler);
+		setCommandExecutor("kick", punishmentCommandHandler);
 
 		// CommandHandler's Listeners
 		pm.registerEvents(playerCommandHandler, this);

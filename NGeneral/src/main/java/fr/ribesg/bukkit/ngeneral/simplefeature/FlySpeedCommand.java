@@ -30,7 +30,7 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
 
 	public FlySpeedCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.getCommand(COMMAND).setExecutor(this);
+		plugin.setCommandExecutor(COMMAND, this);
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 

@@ -28,7 +28,7 @@ public class WeatherCommand implements CommandExecutor {
 
 	public WeatherCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.getCommand(COMMAND).setExecutor(this);
+		plugin.setCommandExecutor(COMMAND, this);
 	}
 
 	@Override

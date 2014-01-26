@@ -31,8 +31,8 @@ public class GodModeFeature extends Feature {
 		final GodModeListener listener = new GodModeListener(this);
 		final GodModeCommandExecutor executor = new GodModeCommandExecutor(this);
 
-		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
-		getPlugin().getCommand("god").setExecutor(executor);
+		Bukkit.getPluginManager().registerEvents(listener, plugin);
+		plugin.setCommandExecutor("god", executor);
 	}
 
 	public Set<String> getGodPlayers() {

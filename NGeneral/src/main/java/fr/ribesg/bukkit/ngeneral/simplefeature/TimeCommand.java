@@ -27,7 +27,7 @@ public class TimeCommand implements CommandExecutor {
 
 	public TimeCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.getCommand(COMMAND).setExecutor(this);
+		plugin.setCommandExecutor(COMMAND, this);
 	}
 
 	@Override

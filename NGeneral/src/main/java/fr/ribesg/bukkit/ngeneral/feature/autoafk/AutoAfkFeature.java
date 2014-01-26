@@ -40,7 +40,7 @@ public class AutoAfkFeature extends Feature {
 		final AutoAfkCommandExecutor executor = new AutoAfkCommandExecutor(this);
 
 		Bukkit.getPluginManager().registerEvents(listener, plugin);
-		plugin.getCommand("afk").setExecutor(executor);
+		plugin.setCommandExecutor("afk", executor);
 
 		// The lack of *20 in the period is not a bug
 		// Example: for a daly of 120s, it's nice to check every 120 ticks (~6s)

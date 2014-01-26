@@ -44,7 +44,7 @@ public class ItemNetworkFeature extends Feature {
 		}
 
 		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
-		getPlugin().getCommand("itemnetwork").setExecutor(executor);
+		plugin.setCommandExecutor("itemnetwork", executor);
 	}
 
 	public void lock(final NLocation loc) {

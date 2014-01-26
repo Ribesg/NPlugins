@@ -32,8 +32,8 @@ public class FlyModeFeature extends Feature {
 		final FlyModeListener listener = new FlyModeListener(this);
 		final FlyModeCommandExecutor executor = new FlyModeCommandExecutor(this);
 
-		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
-		getPlugin().getCommand("fly").setExecutor(executor);
+		Bukkit.getPluginManager().registerEvents(listener, plugin);
+		plugin.setCommandExecutor("fly", executor);
 	}
 
 	@Override

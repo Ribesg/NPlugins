@@ -30,7 +30,7 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 
 	public WalkSpeedCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.getCommand(COMMAND).setExecutor(this);
+		plugin.setCommandExecutor(COMMAND, this);
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 

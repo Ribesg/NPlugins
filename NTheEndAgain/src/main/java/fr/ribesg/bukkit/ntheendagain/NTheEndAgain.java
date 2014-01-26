@@ -92,7 +92,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 		getServer().getPluginManager().registerEvents(new EnderDragonListener(this), this);
 		getServer().getPluginManager().registerEvents(new DamageListener(this), this);
 
-		getCommand("nend").setExecutor(new TheEndAgainCommandExecutor(this));
+		setCommandExecutor("nend", new TheEndAgainCommandExecutor(this));
 
 		// Metrics - Number of End Worlds handled
 		final Metrics.Graph g1 = getMetrics().createGraph("Amount of End Worlds handled");
