@@ -742,7 +742,8 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getRandomRespawnTimer() {
-		return RANDOM.nextInt(getRespawnTimerMax() - getRespawnTimerMin()) + getRespawnTimerMin();
+		final int respawnTimerDiff = getRespawnTimerMax() - getRespawnTimerMin();
+		return respawnTimerDiff == 0 ? 0 : RANDOM.nextInt(respawnTimerDiff) + getRespawnTimerMin();
 	}
 
 	public int getRespawnType() {
