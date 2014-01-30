@@ -121,20 +121,19 @@ public class ProtectionSignListener implements Listener {
 	public void onInventoryMoveItemEvent(final InventoryMoveItemEvent event) {
 		final InventoryType type = event.getSource().getType();
 		final InventoryHolder holder = event.getSource().getHolder();
-		final Block b;
+		Block b = null;
 		switch (type) {
 			case HOPPER:
-				b = ((Hopper) holder).getBlock();
+				if (holder instanceof Hopper) {
+					b = ((Hopper) holder).getBlock();
+				} // else Minecart Hopper
 				break;
 			case CHEST:
 				if (holder instanceof Chest) {
 					b = ((Chest) holder).getBlock();
 				} else if (holder instanceof DoubleChest) {
 					b = ((DoubleChest) holder).getLocation().getBlock();
-				} else {
-					// We may be in a case of MinecartChest, which cannot be protected
-					return;
-				}
+				} // else Minecart Chest
 				break;
 			case BEACON:
 				b = ((Beacon) holder).getBlock();
@@ -146,7 +145,9 @@ public class ProtectionSignListener implements Listener {
 				b = ((Furnace) holder).getBlock();
 				break;
 			case DISPENSER:
-				b = ((Dispenser) holder).getBlock();
+				if (holder instanceof Dispenser) {
+					b = ((Dispenser) holder).getBlock();
+				} // else Minecart Dispenser
 				break;
 			case DROPPER:
 				b = ((Dropper) holder).getBlock();
@@ -154,6 +155,8 @@ public class ProtectionSignListener implements Listener {
 			default:
 				return;
 		}
-		event.setCancelled(feature.isProtected(b) != null);
+		if (b != null) {
+			event.setCancelled(feature.isProtected(b) != null);
+		}
 	}
 }
