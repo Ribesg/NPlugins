@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
 import fr.ribesg.bukkit.ncore.utils.SignUtils;
 import fr.ribesg.bukkit.ncore.utils.UsernameUtils;
@@ -23,9 +24,14 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ProtectionSignFeature extends Feature {
@@ -90,8 +96,24 @@ public class ProtectionSignFeature extends Feature {
 	// ## Non-static class content ## //
 	// ############################## //
 
+	private final Map<NLocation, ProtectionState> isProtectedCache;
+
+	private class ProtectionState {
+
+		public final String protectedBy;
+		public final long   timeout;
+
+		private ProtectionState(final String protectedBy, final long timeout) {
+			this.protectedBy = protectedBy;
+			this.timeout = timeout;
+		}
+	}
+
+	private BukkitTask cacheFreeTask;
+
 	public ProtectionSignFeature(final NGeneral instance) {
 		super(instance, FeatureType.PROTECTION_SIGNS, instance.getPluginConfig().hasProtectionSignFeature());
+		this.isProtectedCache = new HashMap<>();
 	}
 
 	@Override
@@ -99,6 +121,27 @@ public class ProtectionSignFeature extends Feature {
 		final ProtectionSignListener listener = new ProtectionSignListener(this);
 
 		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
+
+		this.cacheFreeTask = new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				final long now = System.currentTimeMillis();
+				final Iterator<Map.Entry<NLocation, ProtectionState>> it = isProtectedCache.entrySet().iterator();
+				while (it.hasNext()) {
+					if (it.next().getValue().timeout <= now) {
+						it.remove();
+					}
+				}
+			}
+		}.runTaskTimer(plugin, 10 * 20L, 10 * 20L);
+	}
+
+	@Override
+	public void terminate() {
+		if (cacheFreeTask != null) {
+			cacheFreeTask.cancel();
+		}
 	}
 
 	/**
@@ -204,21 +247,30 @@ public class ProtectionSignFeature extends Feature {
 	 * @return the Sign owner name if protected, null otherwise
 	 */
 	public String isProtected(final Block b) {
-		final Material blockType = b.getType();
-		final List<Sign> signLines;
-		if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
-			signLines = SignUtils.getSignsForChest(b);
-		} else if (getProtectedMaterials().contains(blockType)) {
-			signLines = SignUtils.getSignsForBlock(b);
+		final NLocation loc = new NLocation(b.getLocation());
+		final ProtectionState state = isProtectedCache.get(loc);
+		if (state != null && state.timeout > System.currentTimeMillis()) {
+			return state.protectedBy;
 		} else {
-			return null;
-		}
-		for (final Sign sign : signLines) {
-			if (PROTECTION.equals(sign.getLine(0))) {
-				return ColorUtils.stripColorCodes(sign.getLine(3));
+			final Material blockType = b.getType();
+			String result = null;
+			List<Sign> signLines = null;
+			if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
+				signLines = SignUtils.getSignsForChest(b);
+			} else if (getProtectedMaterials().contains(blockType)) {
+				signLines = SignUtils.getSignsForBlock(b);
 			}
+			if (signLines != null) {
+				for (final Sign sign : signLines) {
+					if (PROTECTION.equals(sign.getLine(0))) {
+						result = ColorUtils.stripColorCodes(sign.getLine(3));
+						break;
+					}
+				}
+			}
+			isProtectedCache.put(loc, new ProtectionState(result, System.currentTimeMillis()));
+			return result;
 		}
-		return null;
 	}
 
 	/**
@@ -232,7 +284,7 @@ public class ProtectionSignFeature extends Feature {
 	 * @param playerName the name of the Player that is placing the Sign
 	 *
 	 * @return true if none of the considered Blocks is protected, false
-	 *         otherwise
+	 * otherwise
 	 */
 	public boolean canPlaceSign(final String playerName, final Location loc) {
 		final World w = loc.getWorld();
