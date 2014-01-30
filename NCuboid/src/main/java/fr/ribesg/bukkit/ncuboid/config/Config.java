@@ -113,7 +113,7 @@ public class Config extends AbstractConfig<NCuboid> {
 		content.append("#   - The maximum amount of regions a player can have;\n");
 		content.append("#   - The maximum length in any direction of a region a player can make, in cube-length;\n");
 		content.append("#   - The maximum volume of a region a player can make, in cubes.\n");
-		content.append("# Note: The group 'foo' is defined by 'anybody that has the permission ncuboid.foo'\n");
+		content.append("# Note: The group 'foo' is defined by 'anybody that has the permission ncuboid.group.foo'\n");
 		content.append("# Note: For any of those values, '-1' means 'unlimited'.\n");
 		content.append("groupConfigs:\n");
 		for (final GroupConfig gc : this.groupConfigs.values()) {
