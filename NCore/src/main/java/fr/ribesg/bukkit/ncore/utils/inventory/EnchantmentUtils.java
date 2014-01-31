@@ -21,7 +21,7 @@ import java.util.TreeMap;
 public class EnchantmentUtils {
 
 	/** A comparator to sort Enchantments by name */
-	private static final Comparator<Enchantment> ENCHANTMENT_COMPARATOR = new Comparator<Enchantment>() {
+	static final Comparator<Enchantment> ENCHANTMENT_COMPARATOR = new Comparator<Enchantment>() {
 
 		@Override
 		public int compare(final Enchantment a, final Enchantment b) {

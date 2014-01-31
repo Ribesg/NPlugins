@@ -86,7 +86,7 @@ public class ItemStackUtils {
 		final String enchantmentsString = EnchantmentUtils.toString(is, SEPARATORS);
 		final String nameString = ItemMetaUtils.getNameString(is);
 		final String loreString = ItemMetaUtils.getLoreString(is);
-		final String specialMetaString = ItemMetaUtils.getSpecialMetaString(is);
+		final String specialMetaString = ItemMetaUtils.getSpecialMetaString(is, SEPARATORS);
 
 		return idString + SEPARATORS[0] +
 		       dataString + SEPARATORS[0] +
@@ -159,7 +159,7 @@ public class ItemStackUtils {
 		is.addUnsafeEnchantments(enchantments);
 
 		final ItemMeta meta = is.getItemMeta();
-		final ItemMeta itemMeta = ItemMetaUtils.fromString(meta, nameString, loreString, specialMetaString);
+		final ItemMeta itemMeta = ItemMetaUtils.fromString(meta, nameString, loreString, specialMetaString, SEPARATORS);
 
 		is.setItemMeta(itemMeta);
 
