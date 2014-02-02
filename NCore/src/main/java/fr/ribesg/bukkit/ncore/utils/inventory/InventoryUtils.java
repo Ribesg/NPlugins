@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ncore.utils.inventory;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -185,6 +186,48 @@ public class InventoryUtils {
 		return result;
 	}
 
+	/**
+	 * Saves an array of ItemStacks to a Configuration file
+	 *
+	 * @param parent     the parent section under which another section for
+	 *                   the ItemStacks will be created
+	 * @param key        the key for the ItemStacks section
+	 * @param itemStacks the ItemStack array to save
+	 *
+	 * @throws InventoryUtilException if something goes wrong
+	 */
+	public static void saveToConfigSection(final ConfigurationSection parent, final String key, final ItemStack[] itemStacks) throws InventoryUtilException {
+		final ConfigurationSection itemsSection = parent.createSection(key);
+		itemsSection.set("size", itemStacks.length);
+		for (int i = 0; i < itemStacks.length; i++) {
+			final ItemStack is = itemStacks[i];
+			if (is != null) {
+				ItemStackUtils.saveToConfigSection(itemsSection, Integer.toString(i), is);
+			}
+		}
+	}
+
+	/**
+	 * Loads an array of ItemStacks from a Configuration File
+	 *
+	 * @param parent the parent section under which another section for
+	 *               the ItemStacks exists
+	 * @param key    the key of the ItemStacks section
+	 *
+	 * @return an array of ItemStacks found in this Configuration File
+	 *
+	 * @throws InventoryUtilException if something goes wrong
+	 */
+	public static ItemStack[] loadFromConfigSection(final ConfigurationSection parent, final String key) throws InventoryUtilException {
+		final ConfigurationSection itemsSection = parent.getConfigurationSection(key);
+		final ItemStack[] result = new ItemStack[itemsSection.getInt("size")];
+		for (final String isKey : itemsSection.getKeys(false)) {
+			final ItemStack is = ItemStackUtils.loadFromConfig(itemsSection, isKey);
+			result[Integer.parseInt(isKey)] = is;
+		}
+		return result;
+	}
+
 	// ###############
 	// ## Inventory ##
 	// ###############
@@ -248,5 +291,33 @@ public class InventoryUtils {
 			throw new InventoryUtilException("String size (" + fromString.length + ") does not match inventory size (" + inventoryToSet.getSize() + ")");
 		}
 		inventoryToSet.setContents(fromString);
+	}
+
+	/**
+	 * Saves an Inventory to a Configuration file
+	 *
+	 * @param parent    the parent section under which another section for
+	 *                  the Inventory will be created
+	 * @param key       the key for the Inventory section
+	 * @param inventory the Inventory to save
+	 *
+	 * @throws InventoryUtilException if something goes wrong
+	 */
+	public static void saveToConfigSection(final ConfigurationSection parent, final String key, final Inventory inventory) throws InventoryUtilException {
+		saveToConfigSection(parent, key, inventory.getContents());
+	}
+
+	/**
+	 * Loads an Inventory from a Configuration File
+	 *
+	 * @param parent the parent section under which another section for
+	 *               the Inventory exists
+	 * @param key    the key of the Inventory section
+	 *
+	 * @throws InventoryUtilException if something goes wrong
+	 */
+	public static void setFromConfigSection(final ConfigurationSection parent, final String key, final Inventory inventory) throws InventoryUtilException {
+		final ItemStack[] items = loadFromConfigSection(parent, key);
+		inventory.setContents(items);
 	}
 }
