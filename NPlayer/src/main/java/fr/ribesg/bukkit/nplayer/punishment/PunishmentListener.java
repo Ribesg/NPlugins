@@ -44,7 +44,7 @@ public class PunishmentListener implements Listener {
 				}
 				event.disallow(PlayerLoginEvent.Result.KICK_BANNED, playerBannedMessage);
 			} else if (punishmentDb.isIpBanned(playerIp)) {
-				final Punishment ipBan = punishmentDb.get(playerName, PunishmentType.IPBAN);
+				final Punishment ipBan = punishmentDb.get(playerIp, PunishmentType.IPBAN);
 				final String ipBannedMessage;
 				if (ipBan.isPermanent()) {
 					ipBannedMessage = plugin.getMessages().get(MessageId.player_deniedPermIpBanned, ipBan.getReason())[0];
