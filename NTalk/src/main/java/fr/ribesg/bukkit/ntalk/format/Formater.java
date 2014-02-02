@@ -39,7 +39,7 @@ public class Formater {
 			}
 		} else {
 			for (final String groupName : cfg.getGroupFormats().keySet()) {
-				if (async ? AsyncPermAccessor.has(player.getName(), "ntalk.group." + groupName) : player.hasPermission("ntalk.group." + groupName)) {
+				if (async ? AsyncPermAccessor.has(player.getName(), "group." + groupName.toLowerCase()) : player.hasPermission("group." + groupName.toLowerCase())) {
 					format = cfg.getGroupFormats().get(groupName);
 					break;
 				}
