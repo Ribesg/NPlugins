@@ -61,7 +61,7 @@ public class PunishmentDb {
 		final List<Punishment> punishments = getAllPunishmentsFromMaps(getPermPunishments(), getTempPunishments());
 
 		for (final Punishment p : punishments) {
-			final String key = p.getPunished().replaceAll(".", "-") + p.getType().toString(); // Shjould be unique
+			final String key = p.getPunished().replaceAll(".", "-") + p.getType().toString(); // Should be unique
 			final ConfigurationSection pSection = config.createSection(key);
 			pSection.set("punished", p.getPunished());
 			pSection.set("type", p.getType().toString());
@@ -99,7 +99,7 @@ public class PunishmentDb {
 						p = new Ban(punished, reason, endDate);
 						break;
 					case IPBAN:
-						p = new IpBan(punished, reason, endDate);
+						p = new IpBan(punished.toLowerCase(), reason, endDate);
 						break;
 					case MUTE:
 						p = new Mute(punished, reason, endDate);
@@ -117,12 +117,12 @@ public class PunishmentDb {
 					relatedMap = getTempPunishments();
 				}
 
-				Set<Punishment> set = relatedMap.get(p.getPunished());
+				Set<Punishment> set = relatedMap.get(p.getPunished().toLowerCase());
 				if (set == null) {
 					set = new HashSet<>();
 				}
 				set.add(p);
-				relatedMap.put(p.getPunished(), set);
+				relatedMap.put(p.getPunished().toLowerCase(), set);
 			}
 		}
 
@@ -164,12 +164,12 @@ public class PunishmentDb {
 			return false;
 		}
 		final Punishment newBan = new Ban(playerName, reason, System.currentTimeMillis() + duration * 1000);
-		Set<Punishment> playerPunishments = getTempPunishments().get(playerName);
+		Set<Punishment> playerPunishments = getTempPunishments().get(playerName.toLowerCase());
 		if (playerPunishments == null) {
 			playerPunishments = new HashSet<>();
 		}
 		playerPunishments.add(newBan);
-		getTempPunishments().put(playerName, playerPunishments);
+		getTempPunishments().put(playerName.toLowerCase(), playerPunishments);
 		return true;
 	}
 
@@ -178,12 +178,12 @@ public class PunishmentDb {
 			return false;
 		}
 		final Punishment newBan = new Ban(playerName, reason);
-		Set<Punishment> playerPunishments = getPermPunishments().get(playerName);
+		Set<Punishment> playerPunishments = getPermPunishments().get(playerName.toLowerCase());
 		if (playerPunishments == null) {
 			playerPunishments = new HashSet<>();
 		}
 		playerPunishments.add(newBan);
-		getPermPunishments().put(playerName, playerPunishments);
+		getPermPunishments().put(playerName.toLowerCase(), playerPunishments);
 		return true;
 	}
 
@@ -208,13 +208,13 @@ public class PunishmentDb {
 		if (get(ip, PunishmentType.IPBAN) != null) {
 			return false;
 		}
-		final Punishment newBan = new IpBan(ip, reason, System.currentTimeMillis() + duration * 1000);
-		Set<Punishment> ipPunishments = getTempPunishments().get(ip);
+		final Punishment newBan = new IpBan(ip.toLowerCase(), reason, System.currentTimeMillis() + duration * 1000);
+		Set<Punishment> ipPunishments = getTempPunishments().get(ip.toLowerCase());
 		if (ipPunishments == null) {
 			ipPunishments = new HashSet<>();
 		}
 		ipPunishments.add(newBan);
-		getTempPunishments().put(ip, ipPunishments);
+		getTempPunishments().put(ip.toLowerCase(), ipPunishments);
 		return true;
 	}
 
@@ -222,13 +222,13 @@ public class PunishmentDb {
 		if (get(ip, PunishmentType.IPBAN) != null) {
 			return false;
 		}
-		final Punishment newBan = new IpBan(ip, reason);
-		Set<Punishment> ipPunishments = getPermPunishments().get(ip);
+		final Punishment newBan = new IpBan(ip.toLowerCase(), reason);
+		Set<Punishment> ipPunishments = getPermPunishments().get(ip.toLowerCase());
 		if (ipPunishments == null) {
 			ipPunishments = new HashSet<>();
 		}
 		ipPunishments.add(newBan);
-		getPermPunishments().put(ip, ipPunishments);
+		getPermPunishments().put(ip.toLowerCase(), ipPunishments);
 		return true;
 	}
 
@@ -254,12 +254,12 @@ public class PunishmentDb {
 			return false;
 		}
 		final Punishment newMute = new Mute(playerName, reason, System.currentTimeMillis() + duration * 1000);
-		Set<Punishment> playerPunishments = getTempPunishments().get(playerName);
+		Set<Punishment> playerPunishments = getTempPunishments().get(playerName.toLowerCase());
 		if (playerPunishments == null) {
 			playerPunishments = new HashSet<>();
 		}
 		playerPunishments.add(newMute);
-		getTempPunishments().put(playerName, playerPunishments);
+		getTempPunishments().put(playerName.toLowerCase(), playerPunishments);
 		return true;
 	}
 
@@ -268,12 +268,12 @@ public class PunishmentDb {
 			return false;
 		}
 		final Punishment newMute = new Mute(playerName, reason);
-		Set<Punishment> playerPunishments = getPermPunishments().get(playerName);
+		Set<Punishment> playerPunishments = getPermPunishments().get(playerName.toLowerCase());
 		if (playerPunishments == null) {
 			playerPunishments = new HashSet<>();
 		}
 		playerPunishments.add(newMute);
-		getPermPunishments().put(playerName, playerPunishments);
+		getPermPunishments().put(playerName.toLowerCase(), playerPunishments);
 		return true;
 	}
 
@@ -295,7 +295,7 @@ public class PunishmentDb {
 	// ######################## //
 
 	public Punishment get(final String key, final PunishmentType type) {
-		final Set<Punishment> temporary = getTempPunishments().get(key);
+		final Set<Punishment> temporary = getTempPunishments().get(key.toLowerCase());
 		if (temporary != null) {
 			final Iterator<Punishment> it = temporary.iterator();
 			while (it.hasNext()) {
@@ -307,10 +307,10 @@ public class PunishmentDb {
 				}
 			}
 			if (temporary.isEmpty()) {
-				getTempPunishments().remove(key);
+				getTempPunishments().remove(key.toLowerCase());
 			}
 		}
-		final Set<Punishment> permanent = getPermPunishments().get(key);
+		final Set<Punishment> permanent = getPermPunishments().get(key.toLowerCase());
 		if (permanent != null) {
 			for (final Punishment p : permanent) {
 				if (p.getType() == type) {
@@ -324,11 +324,11 @@ public class PunishmentDb {
 	private Punishment remove(final Punishment toBeRemoved) {
 		final String key = toBeRemoved.getPunished();
 		if (toBeRemoved.isPermanent()) {
-			final Set<Punishment> permanent = getPermPunishments().get(key);
+			final Set<Punishment> permanent = getPermPunishments().get(key.toLowerCase());
 			if (permanent != null) {
 				if (permanent.remove(toBeRemoved)) {
 					if (permanent.isEmpty()) {
-						getPermPunishments().remove(key);
+						getPermPunishments().remove(key.toLowerCase());
 					}
 					return toBeRemoved;
 				} else {
@@ -336,11 +336,11 @@ public class PunishmentDb {
 				}
 			}
 		} else {
-			final Set<Punishment> temporary = getTempPunishments().get(key);
+			final Set<Punishment> temporary = getTempPunishments().get(key.toLowerCase());
 			if (temporary != null) {
 				if (temporary.remove(toBeRemoved)) {
 					if (temporary.isEmpty()) {
-						getTempPunishments().remove(key);
+						getTempPunishments().remove(key.toLowerCase());
 					}
 					return toBeRemoved;
 				} else {
