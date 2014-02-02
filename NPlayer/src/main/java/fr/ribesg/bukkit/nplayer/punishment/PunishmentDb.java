@@ -61,7 +61,7 @@ public class PunishmentDb {
 		final List<Punishment> punishments = getAllPunishmentsFromMaps(getPermPunishments(), getTempPunishments());
 
 		for (final Punishment p : punishments) {
-			final String key = p.getPunished().replaceAll(".", "-") + p.getType().toString(); // Should be unique
+			final String key = p.getPunished().replaceAll("\\.", "-") + '-' + p.getType().toString(); // Should be unique
 			final ConfigurationSection pSection = config.createSection(key);
 			pSection.set("punished", p.getPunished());
 			pSection.set("type", p.getType().toString());
