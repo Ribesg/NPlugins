@@ -43,7 +43,9 @@ public class NPlayer extends NPlugin implements PlayerNode {
 
 	@Override
 	public boolean onNodeEnable() {
-		// Messages first !
+		entering(getClass(), "onNodeEnable");
+
+		debug("Loading plugin messages...");
 		try {
 			if (!getDataFolder().isDirectory()) {
 				getDataFolder().mkdir();
@@ -51,52 +53,50 @@ public class NPlayer extends NPlugin implements PlayerNode {
 			messages = new Messages();
 			messages.loadMessages(this);
 		} catch (final IOException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NPlayer tried to load messages.yml");
+			error("An error occured when NPlayer tried to load messages.yml", e);
 			return false;
 		}
 
-		// Config
+		debug("Loading plugin config...");
 		try {
 			pluginConfig = new Config(this);
 			pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NPlayer tried to load config.yml");
+			error("An error occured when NPlayer tried to load config.yml", e);
 			return false;
 		}
 
+		debug("Initializing LoggedOutUserHandler...");
 		loggedOutUserHandler = new LoggedOutUserHandler(this);
 
+		debug("Creating UserDb...");
 		userDb = new UserDb(this);
+
+		debug("Loading UserDb...");
 		try {
 			userDb.loadConfig();
 		} catch (IOException | InvalidConfigurationException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NPlayer tried to load userDB.yml");
+			error("An error occured when NPlayer tried to load userDB.yml", e);
 			return false;
 		}
 
+		debug("Creating PunishmentDb...");
 		punishmentDb = new PunishmentDb(this);
+
+		debug("Loading PunishmentDb...");
 		try {
 			punishmentDb.loadConfig();
 		} catch (IOException | InvalidConfigurationException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NPlayer tried to load punishmentDB.yml");
+			error("An error occured when NPlayer tried to load punishmentDB.yml", e);
 			return false;
 		}
 
-		// Listener
+		debug("Creating and Registering Listeners...");
 		final PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(loggedOutUserHandler, this);
 		pm.registerEvents(new PunishmentListener(this), this);
 
-		// Commands
-
+		debug("Creating PlayerCommandHandler and registering commands...");
 		final PlayerCommandHandler playerCommandHandler = new PlayerCommandHandler(this);
 		setCommandExecutor("login", playerCommandHandler);
 		setCommandExecutor("register", playerCommandHandler);
@@ -106,6 +106,7 @@ public class NPlayer extends NPlugin implements PlayerNode {
 		setCommandExecutor("sethome", playerCommandHandler);
 		setCommandExecutor("forcelogin", playerCommandHandler);
 
+		debug("Creating PunishmentCommandHandler and registering commands...");
 		final PunishmentCommandHandler punishmentCommandHandler = new PunishmentCommandHandler(this);
 		setCommandExecutor("ban", punishmentCommandHandler);
 		setCommandExecutor("banip", punishmentCommandHandler);
@@ -117,10 +118,10 @@ public class NPlayer extends NPlugin implements PlayerNode {
 		setCommandExecutor("unjail", punishmentCommandHandler);
 		setCommandExecutor("kick", punishmentCommandHandler);
 
-		// CommandHandler's Listeners
+		debug("Registering CommandHandler's Listeners...");
 		pm.registerEvents(playerCommandHandler, this);
 
-		// Metrics
+		debug("Initializing Metrics...");
 		final Metrics.Graph g = getMetrics().createGraph("Amount of Players");
 		g.addPlotter(new Metrics.Plotter("Registered") {
 
@@ -137,6 +138,7 @@ public class NPlayer extends NPlugin implements PlayerNode {
 			}
 		});
 
+		exiting(getClass(), "onNodeEnable");
 		return true;
 	}
 
@@ -148,25 +150,30 @@ public class NPlayer extends NPlugin implements PlayerNode {
 
 	@Override
 	public void onNodeDisable() {
+		entering(getClass(), "onNodeDisable");
+
+		debug("Saving config.yml...");
 		try {
 			getPluginConfig().writeConfig();
 		} catch (final IOException e) {
-			e.printStackTrace();
+			error("An error occured when NPlayer tried to save config.yml", e);
 		}
+
+		debug("Saving userDB.yml...");
 		try {
 			userDb.saveConfig();
-		} catch (IOException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NPlayer tried to save userDB.yml");
+		} catch (final IOException e) {
+			error("An error occured when NPlayer tried to save userDB.yml", e);
 		}
+
+		debug("Saving punishmentDB.yml");
 		try {
 			punishmentDb.saveConfig();
-		} catch (IOException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NPlayer tried to save punishmentDB.yml");
+		} catch (final IOException e) {
+			error("An error occured when NPlayer tried to save punishmentDB.yml", e);
 		}
+
+		exiting(getClass(), "onNodeDisable");
 	}
 
 	@Override

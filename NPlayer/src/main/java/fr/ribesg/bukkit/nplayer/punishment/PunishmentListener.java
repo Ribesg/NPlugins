@@ -58,6 +58,8 @@ public class PunishmentListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerChat(final AsyncPlayerChatEvent event) {
+		plugin.entering(getClass(), "onPlayerChat");
+
 		final String playerName = event.getPlayer().getName();
 		final Punishment mute;
 		synchronized (this.punishmentDb) {
@@ -65,21 +67,35 @@ public class PunishmentListener implements Listener {
 		}
 		if (mute != null) {
 			if (mute.isPermanent()) {
+				plugin.debug("Player is muted permanently");
 				plugin.sendMessage(event.getPlayer(), MessageId.player_deniedPermMuted, mute.getReason());
 			} else {
+				plugin.debug("Player is muted temporarily");
 				plugin.sendMessage(event.getPlayer(), MessageId.player_deniedTempMuted, mute.getReason(), TimeUtils.toString((mute.getEndDate() - System.currentTimeMillis()) / 1000));
 			}
 			event.setCancelled(true);
 		}
+
+		plugin.exiting(getClass(), "onPlayerChat");
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerKick(final PlayerKickEvent event) {
-		final String msg = punishmentDb.getLeaveMessages().get(event.getPlayer().getName());
+		plugin.entering(getClass(), "onPlayerKick");
+
+		String msg = punishmentDb.getLeaveMessages().remove(event.getPlayer().getName());
 		if (msg != null) {
-			event.setLeaveMessage(msg);
+			if (plugin.isDebugEnabled()) {
+				plugin.debug("Message not null: '" + msg + "'");
+			}
 		} else {
-			event.setLeaveMessage(plugin.getMessages().get(MessageId.player_standardKickMessage, event.getPlayer().getName())[0]);
+			msg = plugin.getMessages().get(MessageId.player_standardKickMessage, event.getPlayer().getName())[0];
+			if (plugin.isDebugEnabled()) {
+				plugin.debug("Message is null, setting default: '" + msg + "'");
+			}
 		}
+		event.setLeaveMessage(msg);
+
+		plugin.exiting(getClass(), "onPlayerKick");
 	}
 }

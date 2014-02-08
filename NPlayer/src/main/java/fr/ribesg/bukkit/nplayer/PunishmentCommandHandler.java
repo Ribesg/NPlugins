@@ -37,85 +37,101 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String commandLabel, final String[] args) {
+		plugin.entering(getClass(), "onCommand");
+		boolean result = false;
+
 		switch (cmd.getName()) {
 			case "ban":
 				if (Perms.hasBan(sender)) {
-					return cmdBan(sender, args);
+					result = cmdBan(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
+					break;
 				}
 			case "banip":
 				if (Perms.hasBanIp(sender)) {
-					return cmdBanIp(sender, args);
+					result = cmdBanIp(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
+					break;
 				}
 			case "jail":
 				if (Perms.hasJail(sender)) {
-					return cmdJail(sender, args);
+					result = cmdJail(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
+					break;
 				}
 			case "mute":
 				if (Perms.hasMute(sender)) {
-					return cmdMute(sender, args);
+					result = cmdMute(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
+					break;
 				}
 			case "unban":
 				if (Perms.hasUnBan(sender)) {
-					return cmdUnBan(sender, args);
+					result = cmdUnBan(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
+					break;
 				}
 			case "unbanip":
 				if (Perms.hasUnBanIp(sender)) {
-					return cmdUnBanIp(sender, args);
+					result = cmdUnBanIp(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
+					break;
 				}
 			case "unjail":
 				if (Perms.hasUnJail(sender)) {
-					return cmdUnJail(sender, args);
+					result = cmdUnJail(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
+					break;
 				}
 			case "unmute":
 				if (Perms.hasUnMute(sender)) {
-					return cmdUnMute(sender, args);
+					result = cmdUnMute(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
+					break;
 				}
 			case "kick":
 				if (Perms.hasKick(sender)) {
-					return cmdKick(sender, args);
+					result = cmdKick(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
+					break;
 				}
 			default:
-				return false;
+				result = false;
 		}
+
+		plugin.exiting(getClass(), "onCommand");
+		return result;
 	}
 
 	private boolean cmdBan(final CommandSender sender, final String[] args) {
-		final Result res = get(PunishmentType.BAN, args);
+		plugin.entering(getClass(), "cmdBan");
+
+		final Result res = parsePunishmentDataFromArgs(PunishmentType.BAN, args);
 		if (res == null) {
+			plugin.exiting(getClass(), "cmdBan", "Invalid arguments");
 			return false;
 		}
 		if (!plugin.getUserDb().isUserKnown(res.punished)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, res.punished);
-			return true;
-		}
-		if (res.duration == -1) {
+		} else if (res.duration == -1) {
 			if (Perms.hasBanPermanent(sender)) {
 				if (!db.permBanNick(res.punished, res.reason)) {
 					plugin.sendMessage(sender, MessageId.player_alreadyBanned, res.punished);
@@ -128,10 +144,8 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 						plugin.broadcastMessage(MessageId.player_permBannedBroadcast, res.punished, res.reason);
 					}
 				}
-				return true;
 			} else {
 				plugin.sendMessage(sender, MessageId.player_noPermissionForPermanent, "ban");
-				return true;
 			}
 		} else {
 			if (!db.tempBanNick(res.punished, res.duration, res.reason)) {
@@ -145,13 +159,18 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 					plugin.broadcastMessage(MessageId.player_tempBannedBroadcast, res.punished, TimeUtils.toString(res.duration), res.reason);
 				}
 			}
-			return true;
 		}
+
+		plugin.exiting(getClass(), "cmdBan");
+		return true;
 	}
 
 	private boolean cmdBanIp(final CommandSender sender, final String[] args) {
-		final Result res = get(PunishmentType.IPBAN, args);
+		plugin.entering(getClass(), "cmdBanIp");
+
+		final Result res = parsePunishmentDataFromArgs(PunishmentType.IPBAN, args);
 		if (res == null) {
+			plugin.exiting(getClass(), "cmdBanIp", "Invalid arguments");
 			return false;
 		}
 		final boolean isIp = IPValidator.isValidIp(res.punished);
@@ -160,6 +179,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 			ip = res.punished;
 			if (!plugin.getUserDb().isIpKnown(ip)) {
 				plugin.sendMessage(sender, MessageId.player_unknownIp, ip);
+				plugin.exiting(getClass(), "cmdBanIp", "Unknown IP");
 				return true;
 			}
 		} else {
@@ -171,6 +191,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 			final User user = plugin.getUserDb().get(playerName);
 			if (user == null) {
 				plugin.sendMessage(sender, MessageId.player_unknownUser, res.punished);
+				plugin.exiting(getClass(), "cmdBanIp", "Unknown user");
 				return true;
 			} else {
 				ip = user.getLastIp();
@@ -190,10 +211,8 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 					}
 					plugin.broadcastMessage(MessageId.player_permIpBannedBroadcast, ip, res.reason);
 				}
-				return true;
 			} else {
 				plugin.sendMessage(sender, MessageId.player_noPermissionForPermanent, "banip");
-				return true;
 			}
 		} else {
 			if (!db.tempBanIp(res.punished, res.duration, res.reason)) {
@@ -208,8 +227,10 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 				}
 				plugin.broadcastMessage(MessageId.player_tempIpBannedBroadcast, ip, TimeUtils.toString(res.duration), res.reason);
 			}
-			return true;
 		}
+
+		plugin.exiting(getClass(), "cmdBanIp");
+		return true;
 	}
 
 	private boolean cmdJail(final CommandSender sender, final String[] args) {
@@ -218,15 +239,16 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 	}
 
 	private boolean cmdMute(final CommandSender sender, final String[] args) {
-		final Result res = get(PunishmentType.MUTE, args);
+		plugin.entering(getClass(), "cmdMute");
+
+		final Result res = parsePunishmentDataFromArgs(PunishmentType.MUTE, args);
 		if (res == null) {
+			plugin.exiting(getClass(), "cmdMute", "Invalid arguments");
 			return false;
 		}
 		if (!plugin.getUserDb().isUserKnown(res.punished)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, res.punished);
-			return true;
-		}
-		if (res.duration == -1) {
+		} else if (res.duration == -1) {
 			if (Perms.hasMutePermanent(sender)) {
 				if (!db.permMuteNick(res.punished, res.reason)) {
 					plugin.sendMessage(sender, MessageId.player_alreadyMuted, res.punished);
@@ -237,10 +259,8 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 					}
 					plugin.broadcastMessage(MessageId.player_permMutedBroadcast, res.punished, res.reason);
 				}
-				return true;
 			} else {
 				plugin.sendMessage(sender, MessageId.player_noPermissionForPermanent, "mute");
-				return true;
 			}
 		} else {
 			if (!db.tempMuteNick(res.punished, res.duration, res.reason)) {
@@ -252,44 +272,50 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 				}
 				plugin.broadcastMessage(MessageId.player_tempMutedBroadcast, res.punished, TimeUtils.toString(res.duration), res.reason);
 			}
-			return true;
 		}
+
+		plugin.exiting(getClass(), "cmdMute");
+		return true;
 	}
 
 	private boolean cmdUnBan(final CommandSender sender, final String[] args) {
+		plugin.entering(getClass(), "cmdUnBan");
+
 		if (args.length != 1) {
+			plugin.exiting(getClass(), "cmdUnBan", "Invalid arguments");
 			return false;
 		}
 		final String userName = args[0];
 		if (!plugin.getUserDb().isUserKnown(userName)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, userName);
-			return true;
-		}
-		if (db.unbanNick(userName)) {
+		} else if (db.unbanNick(userName)) {
 			plugin.broadcastMessage(MessageId.player_unBannedBroadcast, userName);
-			return true;
 		} else {
 			plugin.sendMessage(sender, MessageId.player_notBanned, userName);
-			return true;
 		}
+
+		plugin.exiting(getClass(), "cmdUnBan");
+		return true;
 	}
 
 	private boolean cmdUnBanIp(final CommandSender sender, final String[] args) {
+		plugin.entering(getClass(), "cmdUnBanIp");
+
 		if (args.length != 1) {
+			plugin.exiting(getClass(), "cmdUnBanIp", "Invalid arguments");
 			return false;
 		}
 		final String ip = args[0];
 		if (!plugin.getUserDb().isIpKnown(ip)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, ip);
-			return true;
-		}
-		if (db.unbanIp(ip)) {
+		} else if (db.unbanIp(ip)) {
 			plugin.broadcastMessage(MessageId.player_unBannedIpBroadcast, ip);
-			return true;
 		} else {
 			plugin.sendMessage(sender, MessageId.player_notBannedIp, ip);
-			return true;
 		}
+
+		plugin.exiting(getClass(), "cmdUnBanIp");
+		return true;
 	}
 
 	private boolean cmdUnJail(final CommandSender sender, final String[] args) {
@@ -297,7 +323,10 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 	}
 
 	private boolean cmdUnMute(final CommandSender sender, final String[] args) {
+		plugin.entering(getClass(), "cmdUnMute");
+
 		if (args.length != 1) {
+			plugin.exiting(getClass(), "cmdUnMute", "Invalid arguments");
 			return false;
 		}
 		String userName = args[0];
@@ -307,36 +336,35 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 		if (!plugin.getUserDb().isUserKnown(userName)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, userName);
-			return true;
-		}
-		if (db.unmuteNick(userName)) {
+		} else if (db.unmuteNick(userName)) {
 			plugin.broadcastMessage(MessageId.player_unMutedBroadcast, userName);
-			return true;
 		} else {
 			plugin.sendMessage(sender, MessageId.player_notMuted, userName);
-			return true;
 		}
+
+		plugin.exiting(getClass(), "cmdUnMute");
+		return true;
 	}
 
 	private boolean cmdKick(final CommandSender sender, final String[] args) {
+		plugin.entering(getClass(), "cmdKick");
+
 		if (args.length < 2) {
+			plugin.exiting(getClass(), "cmdKick", "Invalid arguments");
 			return false;
 		}
 		final String userName = args[0];
 		final Player player = Bukkit.getPlayer(userName);
 		if (player == null) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, userName);
-			return true;
 		} else {
-			if (args.length > 1) {
-				final String reason = StringUtils.joinStrings(args, 1);
-				db.getLeaveMessages().put(player.getName(), plugin.getMessages().get(MessageId.player_broadcastedKickMessage, userName, reason)[0]);
-				player.kickPlayer(plugin.getMessages().get(MessageId.player_kickMessage, reason)[0]);
-				return true;
-			} else {
-				return false;
-			}
+			final String reason = StringUtils.joinStrings(args, 1);
+			db.getLeaveMessages().put(player.getName(), plugin.getMessages().get(MessageId.player_broadcastedKickMessage, userName, reason)[0]);
+			player.kickPlayer(plugin.getMessages().get(MessageId.player_kickMessage, reason)[0]);
 		}
+
+		plugin.exiting(getClass(), "cmdKick");
+		return true;
 	}
 
 	private class Result {
@@ -354,8 +382,11 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 	}
 
-	private Result get(final PunishmentType type, final String[] cmdArgs) {
+	private Result parsePunishmentDataFromArgs(final PunishmentType type, final String[] cmdArgs) {
+		plugin.entering(getClass(), "parsePunishmentDataFromArgs");
+
 		if (cmdArgs.length < 2) {
+			plugin.exiting(getClass(), "parsePunishmentDataFromArgs", "Invalid arguments (No reason)");
 			return null;
 		}
 		final Player player = Bukkit.getPlayer(cmdArgs[0]);
@@ -366,6 +397,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		try {
 			duration = TimeUtils.getInSeconds(cmdArgs[1]);
 			if (cmdArgs.length < 3 || jail && cmdArgs.length < 4) {
+				plugin.exiting(getClass(), "parsePunishmentDataFromArgs", "Invalid arguments (No reason for temporary)");
 				return null;
 			}
 		} catch (final IllegalArgumentException e) {
@@ -374,6 +406,8 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		final int reasonFirstWordIndex = 1 + (permanent ? 0 : 1) + (jail ? 1 : 0);
 		final String reason = StringUtils.joinStrings(cmdArgs, reasonFirstWordIndex);
 		final String jailPointName = jail ? (permanent ? cmdArgs[1] : cmdArgs[2]) : null;
+
+		plugin.exiting(getClass(), "parsePunishmentDataFromArgs");
 		return new Result(punished, reason, duration, jailPointName);
 	}
 }

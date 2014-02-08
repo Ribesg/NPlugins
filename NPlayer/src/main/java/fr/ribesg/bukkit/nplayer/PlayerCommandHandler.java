@@ -24,6 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,9 +41,12 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerCommandPreProcess(final PlayerCommandPreprocessEvent event) {
+		plugin.entering(getClass(), "onPlayerCommandPreProcess");
+
 		final String firstWord = event.getMessage().contains(" ") ? event.getMessage().split(" ")[0].toLowerCase() : event.getMessage().toLowerCase();
 		switch (firstWord) {
 			case "/login":
+				plugin.debug("/login command");
 				event.setCancelled(true);
 				if (Perms.hasLogin(event.getPlayer())) {
 					loginCommand(event.getPlayer(), event.getMessage().substring(6).trim().split(" "));
@@ -63,9 +67,11 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			case ":logn":
 			case ":logi":
 				// Typo on /login command, do not output the password in console or ingame
+				plugin.debug("Typo on /login");
 				event.setCancelled(true);
 				break;
 			case "/register":
+				plugin.debug("/register command");
 				event.setCancelled(true);
 				if (Perms.hasRegister(event.getPlayer())) {
 					registerCommand(event.getPlayer(), event.getMessage().substring(9).trim().split(" "));
@@ -92,305 +98,360 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			case ":registr":
 			case ":registe":
 				// Typo on /register command, do not output the password in console or ingame
+				plugin.debug("Typo on /register");
 				event.setCancelled(true);
 				break;
 			default:
 				break;
 		}
+
+		plugin.exiting(getClass(), "onPlayerCommandPreProcess");
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+		plugin.entering(getClass(), "onCommand");
+		boolean result = false;
+
+		plugin.debug("Executing command " + command.getName() + " with arguments " + Arrays.toString(args));
 		switch (command.getName()) {
 			case "login":
 				if (sender instanceof Player) {
 					if (Perms.hasLogin(sender)) {
-						return loginCommand((Player) sender, args);
+						result = loginCommand((Player) sender, args);
 					} else {
 						plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-						return true;
+						result = true;
 					}
 				} else {
 					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-					return true;
+					result = true;
 				}
+				break;
 			case "register":
 				if (sender instanceof Player) {
 					if (Perms.hasRegister(sender)) {
-						return registerCommand((Player) sender, args);
+						result = registerCommand((Player) sender, args);
 					} else {
 						plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-						return true;
+						result = true;
 					}
 				} else {
 					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-					return true;
+					result = true;
 				}
+				break;
 			case "logout":
 				if (sender instanceof Player) {
 					if (Perms.hasLogout(sender)) {
-						return logoutCommand((Player) sender, args);
+						result = logoutCommand((Player) sender, args);
 					} else {
 						plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-						return true;
+						result = true;
 					}
 				} else {
 					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-					return true;
+					result = true;
 				}
+				break;
 			case "info":
 				if (Perms.hasInfo(sender)) {
-					return infoCommand(sender, args);
+					result = infoCommand(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
 				}
+				break;
 			case "home":
 				if (sender instanceof Player) {
 					if (Perms.hasHome(sender)) {
-						return homeCommand((Player) sender, args);
+						result = homeCommand((Player) sender, args);
 					} else {
 						plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-						return true;
+						result = true;
 					}
 				} else {
 					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-					return true;
+					result = true;
 				}
+				break;
 			case "sethome":
 				if (sender instanceof Player) {
 					if (Perms.hasSetHome(sender)) {
-						return setHomeCommand((Player) sender, args);
+						result = setHomeCommand((Player) sender, args);
 					} else {
 						plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-						return true;
+						result = true;
 					}
 				} else {
 					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-					return true;
+					result = true;
 				}
+				break;
 			case "forcelogin":
 				if (Perms.hasForceLogin(sender)) {
-					return forceLoginCommand(sender, args);
+					result = forceLoginCommand(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-					return true;
+					result = true;
 				}
+				break;
 		}
-		return false;
+
+		plugin.debug("Command execution result: " + result);
+
+		plugin.exiting(getClass(), "onCommand");
+		return result;
 	}
 
 	private boolean loginCommand(final Player player, final String[] args) {
+		plugin.entering(getClass(), "loginCommand");
+
 		final User user = plugin.getUserDb().get(player.getName());
 		if (user == null) {
+			plugin.debug("Unregistered user");
 			plugin.sendMessage(player, MessageId.player_registerFirst);
-			return true;
 		} else {
+			plugin.debug("Registered user");
 			final String password = StringUtils.joinStrings(args);
 			final boolean isCorrect = Security.isUserPassword(password, user);
 			if (isCorrect) {
+				plugin.debug("Correct password provided");
 				plugin.sendMessage(player, MessageId.player_welcomeBack);
 				user.setLoggedIn(true);
 				user.newIp(player.getAddress().getAddress().getHostAddress());
-				return true;
 			} else {
+				plugin.debug("Incorrect password provided");
 				plugin.sendMessage(player, MessageId.player_wrongPassword);
 				loginAttempt(player.getName());
-				return true;
 			}
 		}
+
+		plugin.exiting(getClass(), "loginCommand");
+		return true;
 	}
 
 	private boolean registerCommand(final Player player, final String[] args) {
+		plugin.entering(getClass(), "registerCommand");
+
 		User user = plugin.getUserDb().get(player.getName());
 		final String password = StringUtils.joinStrings(args);
 		if (user == null) {
+			plugin.debug("Unregistered user");
 			user = plugin.getUserDb().newUser(player.getName(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
 			user.setLoggedIn(true);
 			plugin.sendMessage(player, MessageId.player_welcomeToTheServer);
-			return true;
 		} else if (user.isLoggedIn()) {
+			plugin.debug("Registered and logged-in user, change password");
 			user.setPasswordHash(Security.hash(password));
 			plugin.sendMessage(player, MessageId.player_passwordChanged);
-			return true;
 		} else {
+			plugin.debug("Registered non-logged-in user");
 			plugin.sendMessage(player, MessageId.player_alreadyRegistered);
-			return true;
 		}
+
+		plugin.exiting(getClass(), "registerCommand");
+		return true;
 	}
 
 	private boolean logoutCommand(final Player player, final String[] args) {
+		plugin.entering(getClass(), "logoutCommand");
+
 		final User user = plugin.getUserDb().get(player.getName());
 		if (user == null) {
+			plugin.debug("Unregistered user");
 			plugin.sendMessage(player, MessageId.player_registerFirst);
-			return true;
 		} else if (!user.isLoggedIn()) {
+			plugin.debug("Registered non-logged-in user");
 			plugin.sendMessage(player, MessageId.player_loginFirst);
-			return true;
-		}
-		boolean autoLogout = false;
-		boolean toggle = false;
-		boolean enable = false;
-		boolean disable = false;
-		if (args != null && args.length > 0) {
-			for (int i = 0; i < args.length; i++) {
-				args[i] = args[i].toLowerCase();
-			}
-			if (args.length == 1) {
-				if (args[0].equals("autologout") || args[0].equals("auto")) {
-					autoLogout = true;
-					toggle = true;
+		} else {
+			plugin.debug("Registered logged-in user");
+			boolean autoLogout = false;
+			boolean toggle = false;
+			boolean enable = false;
+			boolean disable = false;
+			if (args != null && args.length > 0) {
+				plugin.debug("Additional arguments");
+				for (int i = 0; i < args.length; i++) {
+					args[i] = args[i].toLowerCase();
 				}
-			} else if (args.length == 2) {
-				if (args[0].equals("autologout") || args[0].equals("auto")) {
-					autoLogout = true;
-					if (args[1].equals("enable")) {
-						enable = true;
-					} else if (args[1].equals("disable")) {
-						disable = true;
+				if (args.length == 1) {
+					if (args[0].equals("autologout") || args[0].equals("auto")) {
+						plugin.debug("Toggle auto-logout");
+						autoLogout = true;
+						toggle = true;
+					}
+				} else if (args.length == 2) {
+					if (args[0].equals("autologout") || args[0].equals("auto")) {
+						autoLogout = true;
+						if (args[1].equals("enable")) {
+							plugin.debug("Enable auto-logout");
+							enable = true;
+						} else if (args[1].equals("disable")) {
+							plugin.debug("Disable auto-logout");
+							disable = true;
+						}
 					}
 				}
 			}
-		}
-		if (autoLogout) {
-			if (toggle) {
-				user.setAutoLogout(!user.hasAutoLogout());
-			} else if (enable) {
-				user.setAutoLogout(true);
-			} else if (disable) {
-				user.setAutoLogout(false);
-			}
-			if (user.hasAutoLogout()) {
-				plugin.sendMessage(player, MessageId.player_autoLogoutEnabled);
+			if (autoLogout) {
+				plugin.debug("Modifying auto-logout state");
+				if (toggle) {
+					user.setAutoLogout(!user.hasAutoLogout());
+				} else if (enable) {
+					user.setAutoLogout(true);
+				} else if (disable) {
+					user.setAutoLogout(false);
+				}
+				if (user.hasAutoLogout()) {
+					plugin.sendMessage(player, MessageId.player_autoLogoutEnabled);
+				} else {
+					plugin.sendMessage(player, MessageId.player_autoLogoutDisabled);
+				}
 			} else {
-				plugin.sendMessage(player, MessageId.player_autoLogoutDisabled);
+				plugin.debug("Logging out");
+				user.setLoggedIn(false);
+				plugin.sendMessage(player, MessageId.player_loggedOut);
 			}
-			return true;
-		} else {
-			user.setLoggedIn(false);
-			plugin.sendMessage(player, MessageId.player_loggedOut);
-			return true;
 		}
+
+		plugin.exiting(getClass(), "logoutCommand");
+		return true;
 	}
 
 	private boolean infoCommand(final CommandSender sender, final String[] args) {
+		plugin.entering(getClass(), "infoCommand");
+
 		final boolean isAdmin = Perms.hasInfoAdmin(sender);
 		sender.sendMessage("/info command STILL TODO");
+
+		plugin.exiting(getClass(), "infoCommand");
 		return false; // TODO
 	}
 
 	private boolean homeCommand(final Player player, final String[] args) {
+		plugin.entering(getClass(), "homeCommand");
+
 		if (args.length > 0) {
 			if (!Perms.hasHomeOthers(player)) {
 				plugin.sendMessage(player, MessageId.noPermissionForCommand);
-				return true;
-			}
-			final String userName = args[0];
-			final User user = plugin.getUserDb().get(userName);
-			if (user == null) {
-				plugin.sendMessage(player, MessageId.player_unknownUser, userName);
-				return true;
-			}
-			final Location dest = user.getHome();
-			if (dest == null) {
-				plugin.sendMessage(player, MessageId.player_userHasNoHome, user.getUserName());
-				return true;
 			} else {
-				plugin.sendMessage(player, MessageId.player_teleportingToUserHome, user.getUserName());
-				dest.getChunk().load(true);
-				plugin.getServer().getScheduler().runTask(plugin, new BukkitRunnable() {
+				final String userName = args[0];
+				final User user = plugin.getUserDb().get(userName);
+				if (user == null) {
+					plugin.sendMessage(player, MessageId.player_unknownUser, userName);
+				} else {
+					final Location dest = user.getHome();
+					if (dest == null) {
+						plugin.sendMessage(player, MessageId.player_userHasNoHome, user.getUserName());
+					} else {
+						plugin.sendMessage(player, MessageId.player_teleportingToUserHome, user.getUserName());
+						dest.getChunk().load(true);
+						plugin.getServer().getScheduler().runTask(plugin, new BukkitRunnable() {
 
-					@Override
-					public void run() {
-						player.teleport(dest);
+							@Override
+							public void run() {
+								player.teleport(dest);
+							}
+						});
 					}
-				});
-				return true;
+				}
 			}
 		} else {
 			final User user = plugin.getUserDb().get(player.getName());
 			if (user == null) {
 				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use the command.");
 				player.sendMessage("§cUnknown error, see console.");
-				return true;
-			}
-			final Location dest = user.getHome();
-			if (dest == null) {
-				plugin.sendMessage(player, MessageId.player_youHaveNoHome);
-				return true;
 			} else {
-				plugin.sendMessage(player, MessageId.player_teleportingToYourHome);
-				dest.getChunk().load(true);
-				plugin.getServer().getScheduler().runTask(plugin, new BukkitRunnable() {
+				final Location dest = user.getHome();
+				if (dest == null) {
+					plugin.sendMessage(player, MessageId.player_youHaveNoHome);
+				} else {
+					plugin.sendMessage(player, MessageId.player_teleportingToYourHome);
+					dest.getChunk().load(true);
+					plugin.getServer().getScheduler().runTask(plugin, new BukkitRunnable() {
 
-					@Override
-					public void run() {
-						player.teleport(dest);
-					}
-				});
-				return true;
+						@Override
+						public void run() {
+							player.teleport(dest);
+						}
+					});
+				}
 			}
 		}
+
+		plugin.exiting(getClass(), "homeCommand");
+		return true;
 	}
 
 	private boolean setHomeCommand(final Player player, final String[] args) {
+		plugin.entering(getClass(), "setHomeCommand");
+
 		if (args.length > 0) {
 			if (!Perms.hasSetHomeOthers(player)) {
 				plugin.sendMessage(player, MessageId.noPermissionForCommand);
-				return true;
+			} else {
+				final String userName = args[0];
+				final User user = plugin.getUserDb().get(userName);
+				if (user == null) {
+					plugin.sendMessage(player, MessageId.player_unknownUser, userName);
+				} else {
+					user.setHome(player.getLocation());
+					plugin.sendMessage(player, MessageId.player_userHomeSet, user.getUserName());
+				}
 			}
-			final String userName = args[0];
-			final User user = plugin.getUserDb().get(userName);
-			if (user == null) {
-				plugin.sendMessage(player, MessageId.player_unknownUser, userName);
-				return true;
-			}
-			user.setHome(player.getLocation());
-			plugin.sendMessage(player, MessageId.player_userHomeSet, user.getUserName());
-			return true;
 		} else {
 			final User user = plugin.getUserDb().get(player.getName());
 			if (user == null) {
 				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use the command.");
 				player.sendMessage("§cUnknown error, see console.");
-				return true;
+			} else {
+				user.setHome(player.getLocation());
+				plugin.sendMessage(player, MessageId.player_yourHomeSet);
 			}
-			user.setHome(player.getLocation());
-			plugin.sendMessage(player, MessageId.player_yourHomeSet);
-			return true;
 		}
+
+		plugin.exiting(getClass(), "setHomeCommand");
+		return true;
 	}
 
 	private boolean forceLoginCommand(final CommandSender sender, final String[] args) {
-		if (args.length != 1) {
-			return false;
-		}
-		final Player player = Bukkit.getPlayer(args[0]);
-		if (player == null) {
-			plugin.sendMessage(sender, MessageId.player_unknownUser, args[0]);
-			return true;
-		} else {
-			final User user = plugin.getUserDb().get(player.getName());
-			if (user == null) {
-				plugin.sendMessage(sender, MessageId.player_unknownUser, player.getName());
-				return true;
+		plugin.entering(getClass(), "forceLoginCommand");
+		boolean result = false;
+
+		if (args.length == 1) {
+			final Player player = Bukkit.getPlayer(args[0]);
+			if (player == null) {
+				plugin.sendMessage(sender, MessageId.player_unknownUser, args[0]);
 			} else {
-				user.setLoggedIn(true);
-				plugin.getLoggedOutUserHandler().notifyLogin(user);
-				plugin.sendMessage(sender, MessageId.player_youForcedLogin, player.getName());
-				plugin.sendMessage(player, MessageId.player_somebodyForcedLoginYou, sender.getName());
-				return true;
+				final User user = plugin.getUserDb().get(player.getName());
+				if (user == null) {
+					plugin.sendMessage(sender, MessageId.player_unknownUser, player.getName());
+				} else {
+					user.setLoggedIn(true);
+					plugin.getLoggedOutUserHandler().notifyLogin(user);
+					plugin.sendMessage(sender, MessageId.player_youForcedLogin, player.getName());
+					plugin.sendMessage(player, MessageId.player_somebodyForcedLoginYou, sender.getName());
+				}
 			}
+
+			result = true;
 		}
+
+		plugin.exiting(getClass(), "forceLoginCommand");
+		return result;
 	}
 
 	private void loginAttempt(final String userName) {
+		plugin.entering(getClass(), "loginAttempt");
+
 		int nb = 0;
 		if (loginAttempts.containsKey(userName)) {
 			nb = loginAttempts.get(userName);
 		}
 		nb++;
 		if (nb > plugin.getPluginConfig().getMaximumLoginAttempts()) {
+			plugin.debug("Reached maximum allowed login attempts");
 			final Player target = Bukkit.getPlayerExact(userName);
 			switch (plugin.getPluginConfig().getTooManyAttemptsPunishment()) {
 				case 0:
@@ -413,5 +474,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			loginAttempts.put(userName, plugin.getPluginConfig().getMaximumLoginAttempts() - 1);
 		}
 		loginAttempts.put(userName, nb);
+
+		plugin.exiting(getClass(), "loginAttempt");
 	}
 }

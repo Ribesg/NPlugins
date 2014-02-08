@@ -125,6 +125,7 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 	 * @return if the command was successfully registered
 	 */
 	public boolean setCommandExecutor(final String commandName, final CommandExecutor executor) {
+		debug("- Registering command " + commandName);
 		final PluginCommand cuboidCmd = getCommand(commandName);
 		if (cuboidCmd != null) {
 			cuboidCmd.setExecutor(executor);
@@ -214,6 +215,12 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 	public void exiting(final Class clazz, final String methodName) {
 		if (this.debugEnabled) {
 			logger.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
+		}
+	}
+
+	public void exiting(final Class clazz, final String methodName, final String comment) {
+		if (this.debugEnabled) {
+			logger.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()) + '(' + comment + ')');
 		}
 	}
 
