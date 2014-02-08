@@ -12,17 +12,24 @@ package fr.ribesg.bukkit.nenchantingegg;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.utils.inventory.EnchantmentUtils;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altars;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 
 public class Config extends AbstractConfig<NEnchantingEgg> {
 
-	private int    minimumDistanceBetweenTwoAltars;
-	private double repairBoostMultiplier;
-	private double enchantmentBoostMultiplier;
+	private int                       minimumDistanceBetweenTwoAltars;
+	private double                    repairBoostMultiplier;
+	private double                    enchantmentBoostMultiplier;
+	private Map<Enchantment, Integer> enchantmentsMaxLevels;
 
 	private final Altars altars;
 
@@ -34,6 +41,11 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		setMinimumDistanceBetweenTwoAltars(500);
 		setRepairBoostMultiplier(1.0);
 		setEnchantmentBoostMultiplier(1.0);
+
+		enchantmentsMaxLevels = new HashMap<>();
+		for (final Enchantment enchantment : Enchantment.values()) {
+			enchantmentsMaxLevels.put(enchantment, 10);
+		}
 	}
 
 	/** @see AbstractConfig#handleValues(YamlConfiguration) */
@@ -63,6 +75,22 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		if (getEnchantmentBoostMultiplier() <= 0.0) {
 			wrongValue("config.yml", "enchantmentBoostMultiplier", getEnchantmentBoostMultiplier(), 1.0);
 			setEnchantmentBoostMultiplier(1.0);
+		}
+
+		// enchantmentMaxLevels.
+		if (config.isConfigurationSection("enchantmentMaxLevels")) {
+			final ConfigurationSection section = config.getConfigurationSection("enchantmentMaxLevels");
+			for (final String key : section.getKeys(false)) {
+				final int level = section.getInt(key, 10);
+				final Enchantment enchantment = EnchantmentUtils.getEnchantment(key);
+				if (enchantment == null) {
+					plugin.error(Level.WARNING, "Ignored unknown enchantment name or id: " + key);
+				} else if (level > 10) {
+					plugin.error(Level.WARNING, "Ignored too high level for enchantment '" + key + "': " + level);
+				} else {
+					enchantmentsMaxLevels.put(enchantment, level);
+				}
+			}
 		}
 
 		if (config.isList("altars")) {
@@ -124,6 +152,16 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		content.append("#       Example: 1.1 is an IMPORTANT increase!\n");
 		content.append("enchantmentBoostMultiplier: " + getEnchantmentBoostMultiplier() + "\n\n");
 
+		// Enchantments max levels
+		content.append("# Maximum allowed levels for each enchantment.\n");
+		content.append("# You can use the enchantment id for the key if you're not sure.\n");
+		content.append("# Notes: - Any Enchantment not specified here has a max level of 10.\n");
+		content.append("#        - Any value greater than 10 will be ignored.\n");
+		content.append("enchantmentMaxLevels:\n");
+		for (final Map.Entry<Enchantment, Integer> e : enchantmentsMaxLevels.entrySet()) {
+			content.append("  " + e.getKey().getName() + ": " + e.getValue() + "\n");
+		}
+
 		// Altars
 		content.append("# This stores created altars\n");
 		content.append("altars:\n");
@@ -157,5 +195,9 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 
 	public void setEnchantmentBoostMultiplier(final double enchantmentBoostMultiplier) {
 		this.enchantmentBoostMultiplier = enchantmentBoostMultiplier;
+	}
+
+	public int getEnchantmentMaxLevel(final Enchantment enchantment) {
+		return enchantmentsMaxLevels.get(enchantment);
 	}
 }

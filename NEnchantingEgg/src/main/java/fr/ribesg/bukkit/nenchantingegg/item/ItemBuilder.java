@@ -398,7 +398,7 @@ public class ItemBuilder {
 						break;
 					}
 				}
-				newEnchantmentsMap.put(e.getKey(), Math.min(10, e.getValue() + result));
+				newEnchantmentsMap.put(e.getKey(), Math.min(plugin.getPluginConfig().getEnchantmentMaxLevel(e.getKey()), e.getValue() + result));
 			}
 
 			if (plugin.isDebugEnabled()) {
