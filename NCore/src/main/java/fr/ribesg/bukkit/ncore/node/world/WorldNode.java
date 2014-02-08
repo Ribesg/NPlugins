@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ncore.node.world;
 
 import fr.ribesg.bukkit.ncore.node.Node;
+import org.bukkit.Location;
 
 /**
  * API for the NWorld plugin.
@@ -19,4 +20,12 @@ import fr.ribesg.bukkit.ncore.node.Node;
  */
 public interface WorldNode extends Node {
 
+	/**
+	 * Gets the Location of the provided world's spawn point.
+	 *
+	 * @param worldName the world name
+	 *
+	 * @return the spawn location or null if no world found
+	 */
+	public Location getWorldSpawnLocation(final String worldName);
 }

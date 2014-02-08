@@ -16,10 +16,12 @@ import fr.ribesg.bukkit.nworld.config.Config;
 import fr.ribesg.bukkit.nworld.lang.Messages;
 import fr.ribesg.bukkit.nworld.warp.Warps;
 import fr.ribesg.bukkit.nworld.world.AdditionalWorld;
+import fr.ribesg.bukkit.nworld.world.GeneralWorld;
 import fr.ribesg.bukkit.nworld.world.GeneralWorld.WorldType;
 import fr.ribesg.bukkit.nworld.world.StockWorld;
 import fr.ribesg.bukkit.nworld.world.Worlds;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -251,5 +253,11 @@ public class NWorld extends NPlugin implements WorldNode {
 	@Override
 	public String getNodeName() {
 		return WORLD;
+	}
+
+	@Override
+	public Location getWorldSpawnLocation(final String worldName) {
+		final GeneralWorld world = worlds.get(worldName);
+		return world == null ? null : world.getSpawnLocation().toBukkitLocation();
 	}
 }
