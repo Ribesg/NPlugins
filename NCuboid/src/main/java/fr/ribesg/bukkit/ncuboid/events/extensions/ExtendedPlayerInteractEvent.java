@@ -18,26 +18,40 @@ import java.util.Set;
 
 public class ExtendedPlayerInteractEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion      region;
-	private final Set<GeneralRegion> regions;
+	private final GeneralRegion      clickedRegion;
+	private final Set<GeneralRegion> clickedRegions;
+	private final GeneralRegion      relativeClickedRegion;
+	private final Set<GeneralRegion> relativeClickedRegions;
 
 	// Called only if event.hasBlock()
 	public ExtendedPlayerInteractEvent(final RegionDb db, final PlayerInteractEvent event) {
 		super(event);
 		if (event.hasBlock()) {
-			regions = db.getAllByLocation(event.getClickedBlock().getLocation());
-			region = db.getPrior(regions);
+			clickedRegions = db.getAllByLocation(event.getClickedBlock().getLocation());
+			clickedRegion = db.getPrior(clickedRegions);
+			relativeClickedRegions = db.getAllByLocation(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
+			relativeClickedRegion = db.getPrior(relativeClickedRegions);
 		} else {
-			regions = null;
-			region = null;
+			clickedRegions = null;
+			clickedRegion = null;
+			relativeClickedRegion = null;
+			relativeClickedRegions = null;
 		}
 	}
 
-	public GeneralRegion getRegion() {
-		return region;
+	public GeneralRegion getClickedRegion() {
+		return clickedRegion;
 	}
 
-	public Set<GeneralRegion> getRegions() {
-		return regions;
+	public Set<GeneralRegion> getClickedRegions() {
+		return clickedRegions;
+	}
+
+	public GeneralRegion getRelativeClickedRegion() {
+		return relativeClickedRegion;
+	}
+
+	public Set<GeneralRegion> getRelativeClickedRegions() {
+		return relativeClickedRegions;
 	}
 }

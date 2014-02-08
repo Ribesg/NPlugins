@@ -61,7 +61,7 @@ public class PlayerStickListener extends AbstractListener {
 					}
 				} else { // Action.LEFT_CLICK_BLOCK
 					// Info tool
-					final Set<GeneralRegion> regions = ext.getRegions();
+					final Set<GeneralRegion> regions = ext.getClickedRegions();
 					if (regions == null ||
 					    regions.size() == 0 ||
 					    regions.size() == 1 && regions.iterator().next().getType() == GeneralRegion.RegionType.WORLD) {

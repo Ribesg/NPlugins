@@ -92,7 +92,7 @@ public class FarmFlagListener extends AbstractListener {
 	public void onPlayerInteractEvent(final ExtendedPlayerInteractEvent ext) {
 		final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
 		if (event.getAction() == Action.PHYSICAL && event.hasBlock() && event.getClickedBlock().getType() == Material.SOIL) {
-			if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.FARM)) {
+			if (ext.getClickedRegion() != null && ext.getClickedRegion().getFlag(Flag.FARM)) {
 				event.setCancelled(true);
 			}
 		}

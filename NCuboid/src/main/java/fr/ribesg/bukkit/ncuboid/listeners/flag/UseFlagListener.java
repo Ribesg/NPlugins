@@ -83,9 +83,9 @@ public class UseFlagListener extends AbstractListener {
 	public void onPlayerInteract(final ExtendedPlayerInteractEvent ext) {
 		final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
 		if (event.hasBlock()) {
-			if (ext.getRegion() != null &&
-			    ext.getRegion().getFlag(Flag.USE) &&
-			    !ext.getRegion().isUser(event.getPlayer()) &&
+			if (ext.getClickedRegion() != null &&
+			    ext.getClickedRegion().getFlag(Flag.USE) &&
+			    !ext.getClickedRegion().isUser(event.getPlayer()) &&
 			    getDenyUseMaterials().contains(event.getClickedBlock().getType())) {
 				event.setCancelled(true);
 			}

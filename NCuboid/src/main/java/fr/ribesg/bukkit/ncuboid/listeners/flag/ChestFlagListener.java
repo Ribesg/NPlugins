@@ -33,7 +33,7 @@ public class ChestFlagListener extends AbstractListener {
 	public void onPlayerInteract(final ExtendedPlayerInteractEvent ext) {
 		final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
 		if (event.hasBlock()) {
-			if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.CHEST) && !ext.getRegion().isUser(event.getPlayer())) {
+			if (ext.getClickedRegion() != null && ext.getClickedRegion().getFlag(Flag.CHEST) && !ext.getClickedRegion().isUser(event.getPlayer())) {
 				switch (event.getClickedBlock().getType()) {
 					case CHEST:
 					case TRAPPED_CHEST:
