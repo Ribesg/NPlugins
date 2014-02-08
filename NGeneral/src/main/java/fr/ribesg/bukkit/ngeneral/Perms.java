@@ -37,6 +37,7 @@ public class Perms {
 	private static final String CMD_TPPOS             = "ngeneral.cmd.tppos";
 	private static final String CMD_TPHERE            = "ngeneral.cmd.tphere";
 	private static final String CMD_TPTHERE           = "ngeneral.cmd.tpthere";
+	private static final String CMD_TPWORLD           = "ngeneral.cmd.tpworld";
 	private static final String CMD_TPBACK            = "ngeneral.cmd.tpback";
 	private static final String PROTECTIONSIGN        = "ngeneral.protectionsign";
 	private static final String PROTECTIONSIGN_BYPASS = "ngeneral.protectionsign.bypass";
@@ -125,6 +126,10 @@ public class Perms {
 
 	public static boolean hasTpThere(final CommandSender sender) {
 		return sender.isOp() || sender.hasPermission(CMD_TPTHERE) || sender.hasPermission(ADMIN);
+	}
+
+	public static boolean hasTpWorld(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_TPWORLD) || sender.hasPermission(ADMIN);
 	}
 
 	public static boolean hasTpBack(final CommandSender sender) {

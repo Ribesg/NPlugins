@@ -159,7 +159,7 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.general_nightvision_enabled, "&aNight Vision enabled", null, null, true));
 		newMessages.add(new Message(MessageId.general_nightvision_disabled, "&aNight Vision disabled", null, null, true));
 
-		// Commands - TP / TPHERE / TPTHERE / TPBACK
+		// Commands - TP / TPHERE / TPTHERE / TPWORLD / TPBACK
 		newMessages.add(new Message(MessageId.general_tp_youToTarget, "&aYou teleported yourself to %target%", new String[] {"%target%"}, null, true));
 		newMessages.add(new Message(MessageId.general_tp_somebodyToTarget, "&a%teleporter% teleported you to %target%", new String[] {
 				"%teleporter%",
@@ -177,6 +177,16 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.general_tp_youSomebodyToLocation, "&aYou teleported %player% to location %location%", new String[] {
 				"%player%",
 				"%location%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.general_tp_worldNotFound, "&cUnknown world '%worldName%'", new String[] {"%worldName%"}, null, true));
+		newMessages.add(new Message(MessageId.general_tp_youToWorld, "&aYou teleported yourself to %worldName%", new String[] {"%worldName%"}, null, true));
+		newMessages.add(new Message(MessageId.general_tp_somebodyToWorld, "&a%teleporter% teleported you to %worldName%", new String[] {
+				"%teleporter%",
+				"%worldName%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.general_tp_youSomebodyToWorld, "&aYou teleported %player% to %worldName%", new String[] {
+				"%player%",
+				"%worldName%"
 		}, null, true));
 		newMessages.add(new Message(MessageId.general_tp_youNoKnownBack, "&cCould not find a location to go back to", null, null, true));
 		newMessages.add(new Message(MessageId.general_tp_youBackWorldUnloaded, "&cThe back location is in an unloaded world, '%worldName%'", new String[] {"%worldName%"}, null, true));

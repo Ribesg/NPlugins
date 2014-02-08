@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ngeneral.simplefeature;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.node.world.WorldNode;
 import fr.ribesg.bukkit.ncore.utils.PlayerUtils;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
@@ -33,6 +34,7 @@ public class TeleportCommands implements CommandExecutor {
 	private static final String COMMAND_TPPOS   = "tppos";
 	private static final String COMMAND_TPHERE  = "tphere";
 	private static final String COMMAND_TPTHERE = "tpthere";
+	private static final String COMMAND_TPWORLD = "tpworld";
 	private static final String COMMAND_TPBACK  = "tpback";
 
 	private final NGeneral               plugin;
@@ -45,6 +47,7 @@ public class TeleportCommands implements CommandExecutor {
 		plugin.setCommandExecutor(COMMAND_TPPOS, this);
 		plugin.setCommandExecutor(COMMAND_TPHERE, this);
 		plugin.setCommandExecutor(COMMAND_TPTHERE, this);
+		plugin.setCommandExecutor(COMMAND_TPWORLD, this);
 		plugin.setCommandExecutor(COMMAND_TPBACK, this);
 	}
 
@@ -75,6 +78,13 @@ public class TeleportCommands implements CommandExecutor {
 			case COMMAND_TPTHERE:
 				if (Perms.hasTpThere(sender)) {
 					return execTpThereCommand(sender, args);
+				} else {
+					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					return true;
+				}
+			case COMMAND_TPWORLD:
+				if (Perms.hasTpWorld(sender)) {
+					return execTpWorldCommand(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
@@ -231,6 +241,61 @@ public class TeleportCommands implements CommandExecutor {
 				}
 				return true;
 			}
+		} else {
+			return false;
+		}
+	}
+
+	private boolean execTpWorldCommand(final CommandSender sender, final String[] args) {
+		if (args.length == 1) {
+			if (!(sender instanceof Player)) {
+				plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+			} else {
+				final Player player = (Player) sender;
+				final String worldName = args[0];
+				final World world = Bukkit.getWorld(worldName);
+				if (world == null) {
+					plugin.sendMessage(player, MessageId.general_tp_worldNotFound, worldName);
+				} else {
+					final WorldNode worldNode = plugin.getCore().getWorldNode();
+					final Location spawnLoc;
+					if (worldNode == null) {
+						spawnLoc = world.getSpawnLocation();
+					} else {
+						spawnLoc = worldNode.getWorldSpawnLocation(world.getName());
+					}
+					backMap.put(player.getName(), new NLocation(spawnLoc));
+					player.teleport(spawnLoc);
+					plugin.sendMessage(player, MessageId.general_tp_youToWorld, world.getName());
+				}
+			}
+			return true;
+		} else if (args.length == 2) {
+			final String worldName = args[1];
+			final World world = Bukkit.getWorld(worldName);
+			if (world == null) {
+				plugin.sendMessage(sender, MessageId.general_tp_worldNotFound, worldName);
+			} else {
+				final WorldNode worldNode = plugin.getCore().getWorldNode();
+				final Location spawnLoc;
+				if (worldNode == null) {
+					spawnLoc = world.getSpawnLocation();
+				} else {
+					spawnLoc = worldNode.getWorldSpawnLocation(world.getName());
+				}
+				for (final String playerName : args[0].split(",")) {
+					final Player toTeleport = Bukkit.getPlayer(playerName);
+					if (toTeleport == null) {
+						plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, args[0]);
+					} else {
+						backMap.put(toTeleport.getName(), new NLocation(toTeleport.getLocation()));
+						toTeleport.teleport(spawnLoc);
+						plugin.sendMessage(sender, MessageId.general_tp_youSomebodyToWorld, toTeleport.getName(), world.getName());
+						plugin.sendMessage(toTeleport, MessageId.general_tp_somebodyToWorld, sender.getName(), world.getName());
+					}
+				}
+			}
+			return true;
 		} else {
 			return false;
 		}

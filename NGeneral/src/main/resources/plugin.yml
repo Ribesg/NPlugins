@@ -74,6 +74,11 @@ commands:
     aliases: [tpt]
     usage: |
       /<command> [playerName[,...]]
+  tpworld:
+    description: Teleport Command
+    aliases: [tpw]
+    usage: |
+      /<command> [playerName[,...]] <worldName>
   tpback:
     description: Teleport Command
     aliases: [tpb]
