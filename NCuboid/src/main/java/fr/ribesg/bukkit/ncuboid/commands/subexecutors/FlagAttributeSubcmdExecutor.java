@@ -68,7 +68,7 @@ public class FlagAttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 					}
 					c.setIntFlagAtt(fa, value);
 				} else if (FlagAtt.isVectFlagAtt(fa)) {
-					final Vector v = parseVector(args[2]);
+					final Vector v = parseVector(sender, args[2]);
 					if (v == null) {
 						return false;
 					} else {
@@ -101,23 +101,31 @@ public class FlagAttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 		}
 	}
 
-	private Vector parseVector(final String input) {
-		final String splitChar;
-		if (input.contains(";")) {
-			splitChar = ";";
-		} else if (input.contains(",")) {
-			splitChar = ",";
+	private Vector parseVector(final CommandSender sender, final String input) {
+		if ("set".equalsIgnoreCase(input)) {
+			if (sender instanceof Player) {
+				return ((Player) sender).getLocation().getDirection();
+			} else {
+				return null;
+			}
 		} else {
-			return null;
-		}
-		final String[] parts = input.split(splitChar);
-		if (parts.length != 3) {
-			return null;
-		}
-		try {
-			return new Vector(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]), Double.parseDouble(parts[2]));
-		} catch (final NumberFormatException e) {
-			return null;
+			final String splitChar;
+			if (input.contains(";")) {
+				splitChar = ";";
+			} else if (input.contains(",")) {
+				splitChar = ",";
+			} else {
+				return null;
+			}
+			final String[] parts = input.split(splitChar);
+			if (parts.length != 3) {
+				return null;
+			}
+			try {
+				return new Vector(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]), Double.parseDouble(parts[2]));
+			} catch (final NumberFormatException e) {
+				return null;
+			}
 		}
 	}
 }
