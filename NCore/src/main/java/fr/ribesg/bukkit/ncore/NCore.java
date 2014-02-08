@@ -15,6 +15,13 @@ import fr.ribesg.bukkit.ncore.config.Config;
 import fr.ribesg.bukkit.ncore.event.NEventsListener;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.Node;
+import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
+import fr.ribesg.bukkit.ncore.node.enchantingegg.EnchantingEggNode;
+import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
+import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
+import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
+import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
+import fr.ribesg.bukkit.ncore.node.world.WorldNode;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.utils.VersionUtils;
 import org.bukkit.Bukkit;
@@ -240,6 +247,34 @@ public class NCore extends JavaPlugin {
 
 	public Node get(final String nodeName) {
 		return this.nodes.get(nodeName);
+	}
+
+	public CuboidNode getCuboidNode() {
+		return (CuboidNode) get(Node.CUBOID);
+	}
+
+	public EnchantingEggNode getEnchantingEggNode() {
+		return (EnchantingEggNode) get(Node.ENCHANTING_EGG);
+	}
+
+	public GeneralNode getGeneralNode() {
+		return (GeneralNode) get(Node.GENERAL);
+	}
+
+	public PlayerNode getPlayerNode() {
+		return (PlayerNode) get(Node.PLAYER);
+	}
+
+	public TalkNode getTalkNode() {
+		return (TalkNode) get(Node.TALK);
+	}
+
+	public TheEndAgainNode getTheEndAgainNode() {
+		return (TheEndAgainNode) get(Node.THE_END_AGAIN);
+	}
+
+	public WorldNode getWorldNode() {
+		return (WorldNode) get(Node.WORLD);
 	}
 
 	public void set(final String nodeName, final Node node) {

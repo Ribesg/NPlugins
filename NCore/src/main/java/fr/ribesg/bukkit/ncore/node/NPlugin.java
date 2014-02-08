@@ -186,7 +186,7 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 		return getCore().getDescription().getVersion();
 	}
 
-	protected NCore getCore() {
+	public NCore getCore() {
 		return core;
 	}
 
