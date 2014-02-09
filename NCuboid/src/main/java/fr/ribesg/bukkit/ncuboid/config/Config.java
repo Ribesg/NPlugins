@@ -11,6 +11,8 @@ package fr.ribesg.bukkit.ncuboid.config;
 
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.utils.inventory.InventoryUtilException;
+import fr.ribesg.bukkit.ncore.utils.inventory.MaterialUtils;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -59,7 +61,12 @@ public class Config extends AbstractConfig<NCuboid> {
 	protected void handleValues(final YamlConfiguration config) {
 
 		// selectionItemMaterial. Default : Stick/280
-		final Material m = Material.getMaterial(config.getInt("selectionItemMaterial", Material.STICK.getId()));
+		Material m;
+		try {
+			m = MaterialUtils.getMaterial(config.getString("selectionItemMaterial", Material.STICK.name()));
+		} catch (final InventoryUtilException e) {
+			m = null;
+		}
 		setSelectionItemMaterial(m == null ? Material.STICK : m);
 
 		// groupConfigs.
@@ -106,7 +113,7 @@ public class Config extends AbstractConfig<NCuboid> {
 
 		// selectionItemMaterial. Default : Stick/280
 		content.append("# The tool used to select points and get informations about blocks protection. Default : 180 (Stick)\n");
-		content.append("selectionItemMaterial: " + getSelectionItemMaterial().getId() + "\n\n");
+		content.append("selectionItemMaterial: " + getSelectionItemMaterial().name() + "\n\n");
 
 		// groupConfigs
 		content.append("# Here, you can configure for each group:\n");
