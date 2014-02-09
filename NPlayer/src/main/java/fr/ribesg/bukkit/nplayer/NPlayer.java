@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.nplayer;
 
 import fr.ribesg.bukkit.ncore.node.NPlugin;
+import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
 import fr.ribesg.bukkit.nplayer.lang.Messages;
 import fr.ribesg.bukkit.nplayer.punishment.PunishmentDb;
@@ -29,7 +30,7 @@ public class NPlayer extends NPlugin implements PlayerNode {
 	private Config   pluginConfig;
 
 	// Useful Nodes
-	// // None
+	private CuboidNode cuboidNode;
 
 	// Plugin Data
 	private UserDb               userDb;
@@ -145,7 +146,12 @@ public class NPlayer extends NPlugin implements PlayerNode {
 	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
 	@Override
 	protected void handleOtherNodes() {
-		// Nothing to do here for now
+		this.cuboidNode = getCore().getCuboidNode();
+		if (this.cuboidNode == null) {
+			info("NCuboid not found, Jail feature disabled");
+		} else {
+			info("NCuboid found, Jail feature enabled");
+		}
 	}
 
 	@Override
