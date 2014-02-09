@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncore.utils.inventory;
 
+import fr.ribesg.bukkit.ncore.utils.ColorUtils;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -180,11 +181,11 @@ public class ItemMetaUtils {
 		}
 
 		if (meta.hasDisplayName()) {
-			createAndGetSection(itemSection, "meta").set("name", meta.getDisplayName());
+			createAndGetSection(itemSection, "meta").set("name", ColorUtils.decolorize(meta.getDisplayName()));
 		}
 
 		if (meta.hasLore()) {
-			createAndGetSection(itemSection, "meta").set("lore", meta.getLore());
+			createAndGetSection(itemSection, "meta").set("lore", ColorUtils.decolorize(meta.getLore()));
 		}
 	}
 
@@ -232,14 +233,14 @@ public class ItemMetaUtils {
 				loadSkullMetaFromConfigSection(metaSection, (SkullMeta) meta);
 			}
 
-			final String displayName = itemSection.getString("name", "");
+			final String displayName = metaSection.getString("name", "");
 			if (!displayName.isEmpty()) {
-				meta.setDisplayName(displayName);
+				meta.setDisplayName(ColorUtils.colorize(displayName));
 			}
 
-			final List<String> lore = itemSection.getStringList("lore");
+			final List<String> lore = metaSection.getStringList("lore");
 			if (!lore.isEmpty()) {
-				meta.setLore(lore);
+				meta.setLore(ColorUtils.colorize(lore));
 			}
 
 			is.setItemMeta(meta);
@@ -281,15 +282,15 @@ public class ItemMetaUtils {
 	}
 
 	private static void saveBookMetaToConfigSection(final ConfigurationSection metaSection, final BookMeta meta) {
-		metaSection.set("title", meta.getTitle());
-		metaSection.set("author", meta.getAuthor());
-		metaSection.set("pages", meta.getPages());
+		metaSection.set("title", ColorUtils.decolorize(meta.getTitle()));
+		metaSection.set("author", ColorUtils.decolorize(meta.getAuthor()));
+		metaSection.set("pages", ColorUtils.decolorize(meta.getPages()));
 	}
 
 	private static void loadBookMetaFromConfigSection(final ConfigurationSection metaSection, final BookMeta meta) {
-		final String title = metaSection.getString("title");
-		final String author = metaSection.getString("author");
-		final List<String> pages = metaSection.getStringList("pages");
+		final String title = ColorUtils.colorize(metaSection.getString("title"));
+		final String author = ColorUtils.colorize(metaSection.getString("author"));
+		final List<String> pages = ColorUtils.colorize(metaSection.getStringList("pages"));
 
 		meta.setTitle(title);
 		meta.setAuthor(author);
@@ -712,10 +713,10 @@ public class ItemMetaUtils {
 	}
 
 	private static void saveSkullMetaToConfigSection(final ConfigurationSection metaSection, final SkullMeta meta) {
-		metaSection.set("skullOwner", meta.getOwner());
+		metaSection.set("skullOwner", ColorUtils.decolorize(meta.getOwner()));
 	}
 
 	private static void loadSkullMetaFromConfigSection(final ConfigurationSection metaSection, final SkullMeta meta) {
-		meta.setOwner(metaSection.getString("skullOwner"));
+		meta.setOwner(ColorUtils.colorize(metaSection.getString("skullOwner")));
 	}
 }

@@ -39,4 +39,16 @@ public class PairList<K, V> implements Iterable<Pair<K, V>> {
 	public void put(final K key, final V value) {
 		this.pairList.add(new Pair<>(key, value));
 	}
+
+	public Pair<K, V> get(final int index) {
+		return pairList.get(index);
+	}
+
+	public K getKey(final int index) {
+		return get(index).getKey();
+	}
+
+	public V getValue(final int index) {
+		return get(index).getValue();
+	}
 }

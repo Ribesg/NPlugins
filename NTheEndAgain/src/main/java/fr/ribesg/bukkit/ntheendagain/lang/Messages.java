@@ -27,7 +27,9 @@ public class Messages extends AbstractMessages {
 		super("TheEndAgain");
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#createMessage() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#createMessage()
+	 */
 	@Override
 	protected Set<Message> createMessage() {
 		final Set<Message> newMessages = new HashSet<>();
@@ -96,6 +98,8 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.theEndAgain_receivedXP, "&aYou received %nb% XP points", new String[] {"%nb%"}, null, true));
 		newMessages.add(new Message(MessageId.theEndAgain_receivedDragonEgg, "&aYou received a Dragon Egg !", null, null, true));
 		newMessages.add(new Message(MessageId.theEndAgain_droppedDragonEgg, "&aYour inventory is full, dropped a DragonEgg !", null, null, true));
+		newMessages.add(new Message(MessageId.theEndAgain_receivedDrop, "&aYou received a Drop !", null, null, true));
+		newMessages.add(new Message(MessageId.theEndAgain_droppedDrop, "&aYour inventory is full, dropped something !", null, null, true));
 
 		return newMessages;
 	}

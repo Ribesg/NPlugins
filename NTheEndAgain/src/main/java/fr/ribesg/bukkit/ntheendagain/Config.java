@@ -9,11 +9,21 @@
 
 package fr.ribesg.bukkit.ntheendagain;
 
+import fr.ribesg.bukkit.ncore.common.collection.pairlist.Pair;
+import fr.ribesg.bukkit.ncore.common.collection.pairlist.PairList;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.utils.YamlConfigUtils;
+import fr.ribesg.bukkit.ncore.utils.inventory.InventoryUtilException;
+import fr.ribesg.bukkit.ncore.utils.inventory.ItemStackUtils;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Config extends AbstractConfig<NTheEndAgain> {
@@ -75,7 +85,6 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	private int slowSoftRegenTimer;
 
 	// Respawn
-
 	private final static int DEFAULT_respawnNumber = 1;
 	private int respawnNumber;
 
@@ -88,8 +97,13 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	private final static int DEFAULT_respawnTimerMax = 14_400;
 	private int respawnTimerMax;
 
-	// Data
+	// Drop Table
+	private final static int DEFAULT_dropTableHandling = 1;
+	private int dropTableHandling;
 
+	private final PairList<ItemStack, Float> dropTable;
+
+	// Data
 	private final static long DEFAULT_nextRegenTaskTime = 0;
 	private long nextRegenTaskTime;
 
@@ -130,12 +144,18 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		setRespawnTimerMin(DEFAULT_respawnTimerMin);
 		setRespawnTimerMax(DEFAULT_respawnTimerMax);
 
+		// Drop Table
+		setDropTableHandling(DEFAULT_dropTableHandling);
+		this.dropTable = new PairList<>();
+
 		// Data
 		setNextRegenTaskTime(DEFAULT_nextRegenTaskTime);
 		setNextRespawnTaskTime(DEFAULT_nextRespawnTaskTime);
 	}
 
-	/** @see AbstractConfig#handleValues(YamlConfiguration) */
+	/**
+	 * @see AbstractConfig#handleValues(YamlConfiguration)
+	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 
@@ -192,7 +212,6 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		}
 
 		// EnderCrystals
-
 		setEcHealthRegainRate((float) config.getDouble("ecHealthRegainRate", DEFAULT_ecHealthRegainRate));
 		if (!match(getEcHealthRegainRate(), 0f, Float.MAX_VALUE)) {
 			wrongValue(fileName, "ecHealthRegainRate", getEcHealthRegainRate(), DEFAULT_ecHealthRegainRate);
@@ -273,6 +292,26 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 			setRespawnTimerMin(getRespawnTimerMin());
 		}
 
+		// Drop Table
+		if (config.isConfigurationSection("dropTable")) {
+			dropTable.clear();
+			final ConfigurationSection dropTableSection = config.getConfigurationSection("dropTable");
+			for (final String drop : dropTableSection.getKeys(false)) {
+				final ConfigurationSection dropSection = dropTableSection.getConfigurationSection(drop);
+				final float probability = (float) dropSection.getDouble("probability", -1);
+				if (probability > 1 || probability <= 0) {
+					plugin.error("Invalid probability value in configuration for world '" + worldName + "' (drop '" + drop + "')");
+				} else {
+					try {
+						final ItemStack is = ItemStackUtils.loadFromConfig(dropSection, "itemStack");
+						dropTable.put(is, probability);
+					} catch (final InventoryUtilException e) {
+						plugin.error("Invalid ItemStack in configuration for world '" + worldName + "' (drop '" + drop + "')");
+					}
+				}
+			}
+		}
+
 		// Data
 		setNextRegenTaskTime(config.getLong("nextRegenTaskTime", DEFAULT_nextRegenTaskTime));
 		if (!match(getNextRegenTaskTime(), 0, Long.MAX_VALUE)) {
@@ -287,15 +326,17 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		}
 	}
 
-	/** @see AbstractConfig#getConfigString() */
+	/**
+	 * @see AbstractConfig#getConfigString()
+	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
 		FrameBuilder frame;
 
-		// ############
-		// ## HEADER ##
-		// ############
+		// ############ //
+		// ## HEADER ## //
+		// ############ //
 
 		frame = new FrameBuilder();
 		frame.addLine("Config file for NTheEndAgain plugin", FrameBuilder.Option.CENTER);
@@ -307,9 +348,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 
 		content.append("\n# This config file is about the world \"" + worldName + "\"\n\n");
 
-		// #############
-		// ## GENERAL ##
-		// #############
+		// ############# //
+		// ## GENERAL ## //
+		// ############# //
 
 		frame = new FrameBuilder();
 		frame.addLine("GENERAL CONFIGURATION", FrameBuilder.Option.CENTER);
@@ -331,9 +372,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#\n");
 		content.append("filterMovedTooQuicklySpam: " + getFilterMovedTooQuicklySpam() + "\n\n");
 
-		// #################
-		// ## ENDERDRAGON ##
-		// #################
+		// ################# //
+		// ## ENDERDRAGON ## //
+		// ################# //
 
 		frame = new FrameBuilder();
 		frame.addLine("ENDERDRAGON CONFIGURATION", FrameBuilder.Option.CENTER);
@@ -389,9 +430,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#\n");
 		content.append("edPortalSpawn: " + getEdPortalSpawn() + "\n\n");
 
-		// ###################
-		// ## ENDERCRYSTALS ##
-		// ###################
+		// ################### //
+		// ## ENDERCRYSTALS ## //
+		// ################### //
 
 		frame = new FrameBuilder();
 		frame.addLine("ENDERCRYSTALS CONFIGURATION", FrameBuilder.Option.CENTER);
@@ -411,9 +452,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#\n");
 		content.append("ecHealthRegainRate: " + getEcHealthRegainRate() + "\n\n");
 
-		// ##################
-		// ## REGENERATION ##
-		// ##################
+		// ################## //
+		// ## REGENERATION ## //
+		// ################## //
 
 		frame = new FrameBuilder();
 		frame.addLine("REGENERATION CONFIGURATION", FrameBuilder.Option.CENTER);
@@ -498,9 +539,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("# Soft Regeneration has started. Default value: " + DEFAULT_slowSoftRegenTimer + "\n");
 		content.append("slowSoftRegenTimer: " + getSlowSoftRegenTimer() + "\n\n");
 
-		// #############
-		// ## RESPAWN ##
-		// #############
+		// ############# //
+		// ## RESPAWN ## //
+		// ############# //
 
 		frame = new FrameBuilder();
 		frame.addLine("RESPAWN CONFIGURATION", FrameBuilder.Option.CENTER);
@@ -556,9 +597,61 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("respawnTimerMin: " + getRespawnTimerMin() + "\n");
 		content.append("respawnTimerMax: " + getRespawnTimerMax() + "\n\n");
 
-		// ##########
-		// ## DATA ##
-		// ##########
+		// ################ //
+		// ## DROP TABLE ## //
+		// ################ //
+
+		frame = new FrameBuilder();
+		frame.addLine("DROP TABLE", FrameBuilder.Option.CENTER);
+		for (final String line : frame.build()) {
+			content.append(line);
+			content.append('\n');
+		}
+		content.append('\n');
+
+		// dropTableHandling
+		content.append("# The way the Drops will spawn. Default: " + DEFAULT_dropTableHandling + "\n");
+		content.append("#\n");
+		content.append("#       0: Stock. Drops will just fall from the EnderDragon death Location\n");
+		content.append("#       1: Distribution. Drops will be distributed exactly like the DragonEgg\n");
+		content.append("#\n");
+		content.append("dropTableHandling: " + getDropTableHandling() + "\n\n");
+
+		content.append("# Drop table for the EnderDragons. Complete informations: http://ribe.sg/is-config\n");
+		content.append("# Example drop table:\n");
+		content.append("#\n");
+		try {
+			final ConfigurationSection dummySection = YamlConfigUtils.createDummyConfigurationSection("dropTable");
+			final ConfigurationSection exampleDropSection = dummySection.createSection("drop1");
+			final ItemStack is = new ItemStack(Material.DIAMOND_SWORD);
+			final ItemMeta meta = is.getItemMeta();
+			meta.setDisplayName("The Great Example Sword");
+			meta.setLore(Arrays.asList("Such sword", "Very diamond", "Wow"));
+			is.setItemMeta(meta);
+			exampleDropSection.set("probability", 0.25);
+			ItemStackUtils.saveToConfigSection(exampleDropSection, "itemStack", is);
+			content.append(StringUtils.prependLines(YamlConfigUtils.printConfigurationSection(dummySection), "# "));
+		} catch (final InventoryUtilException e) {
+			plugin.error("Failed to save example ItemStack!", e);
+		}
+		content.append("\n");
+		try {
+			final ConfigurationSection dummySection = YamlConfigUtils.createDummyConfigurationSection("dropTable");
+			int i = 0;
+			for (final Pair<ItemStack, Float> p : dropTable) {
+				final ConfigurationSection exampleDropSection = dummySection.createSection("drop" + ++i);
+				exampleDropSection.set("probability", p.getValue());
+				ItemStackUtils.saveToConfigSection(exampleDropSection, "itemStack", p.getKey());
+			}
+			content.append(YamlConfigUtils.printConfigurationSection(dummySection));
+		} catch (final InventoryUtilException e) {
+			plugin.error("Failed to save DropTable!", e);
+		}
+		content.append("\n");
+
+		// ########## //
+		// ## DATA ## //
+		// ########## //
 
 		frame = new FrameBuilder();
 		frame.addLine("DATA - PLEASE DO NOT TOUCH!", FrameBuilder.Option.CENTER);
@@ -752,6 +845,20 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 
 	private void setRespawnType(final int respawnType) {
 		this.respawnType = respawnType;
+	}
+
+	// Drop Table
+
+	public int getDropTableHandling() {
+		return dropTableHandling;
+	}
+
+	private void setDropTableHandling(final int dropTableHandling) {
+		this.dropTableHandling = dropTableHandling;
+	}
+
+	public PairList<ItemStack, Float> getDropTable() {
+		return this.dropTable;
 	}
 
 	// Data

@@ -9,7 +9,9 @@
 
 package fr.ribesg.bukkit.ncore.lang;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public enum MessageId {
 
 	// ######################### //
@@ -113,6 +115,8 @@ public enum MessageId {
 	theEndAgain_receivedXP,
 	theEndAgain_receivedDragonEgg,
 	theEndAgain_droppedDragonEgg,
+	theEndAgain_receivedDrop,
+	theEndAgain_droppedDrop,
 
 	// #################### //
 	// ## NWorld related ## //

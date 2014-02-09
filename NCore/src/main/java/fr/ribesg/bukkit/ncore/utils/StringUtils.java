@@ -215,4 +215,20 @@ public class StringUtils {
 		}
 		return result;
 	}
+
+	/**
+	 * Prepend each line of the provided String with the provided String
+	 *
+	 * @param string the String to be prefixed
+	 * @param prefix the prefix to be applied
+	 *
+	 * @return the original String with prefix applied
+	 */
+	public static String prependLines(final String string, final String prefix) {
+		String result = prefix + string.replaceAll("\r\n", "\n").replaceAll("\n", "\n" + prefix);
+		if (result.endsWith(prefix)) {
+			result = result.substring(0, result.length() - prefix.length() + 1);
+		}
+		return result;
+	}
 }
