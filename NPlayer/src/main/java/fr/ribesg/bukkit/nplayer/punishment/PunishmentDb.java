@@ -160,10 +160,16 @@ public class PunishmentDb {
 	// ################## //
 
 	public boolean tempBanNick(final String playerName, final long duration, final String reason) {
-		if (get(playerName, PunishmentType.BAN) != null) {
-			return false;
+		final long newBanEndDate = System.currentTimeMillis() + duration * 1000;
+		final Ban ban = (Ban) get(playerName, PunishmentType.BAN);
+		if (ban != null) {
+			if (ban.isPermanent() || ban.getEndDate() > newBanEndDate) {
+				return false;
+			} else {
+				remove(ban);
+			}
 		}
-		final Punishment newBan = new Ban(playerName, reason, System.currentTimeMillis() + duration * 1000);
+		final Punishment newBan = new Ban(playerName, reason, newBanEndDate);
 		Set<Punishment> playerPunishments = getTempPunishments().get(playerName.toLowerCase());
 		if (playerPunishments == null) {
 			playerPunishments = new HashSet<>();
@@ -205,15 +211,21 @@ public class PunishmentDb {
 	// ############ //
 
 	public boolean tempBanIp(final String ip, final long duration, final String reason) {
-		if (get(ip, PunishmentType.IPBAN) != null) {
-			return false;
+		final long newIpBanEndDate = System.currentTimeMillis() + duration * 1000;
+		final IpBan ipBan = (IpBan) get(ip, PunishmentType.IPBAN);
+		if (ipBan != null) {
+			if (ipBan.isPermanent() || ipBan.getEndDate() > newIpBanEndDate) {
+				return false;
+			} else {
+				remove(ipBan);
+			}
 		}
-		final Punishment newBan = new IpBan(ip.toLowerCase(), reason, System.currentTimeMillis() + duration * 1000);
+		final Punishment newIpBan = new IpBan(ip.toLowerCase(), reason, newIpBanEndDate);
 		Set<Punishment> ipPunishments = getTempPunishments().get(ip.toLowerCase());
 		if (ipPunishments == null) {
 			ipPunishments = new HashSet<>();
 		}
-		ipPunishments.add(newBan);
+		ipPunishments.add(newIpBan);
 		getTempPunishments().put(ip.toLowerCase(), ipPunishments);
 		return true;
 	}
@@ -250,10 +262,16 @@ public class PunishmentDb {
 	// ################### //
 
 	public boolean tempMuteNick(final String playerName, final long duration, final String reason) {
-		if (get(playerName, PunishmentType.MUTE) != null) {
-			return false;
+		final long newMuteEndDate = System.currentTimeMillis() + duration * 1000;
+		final Mute mute = (Mute) get(playerName, PunishmentType.MUTE);
+		if (mute != null) {
+			if (mute.isPermanent() || mute.getEndDate() > newMuteEndDate) {
+				return false;
+			} else {
+				remove(mute);
+			}
 		}
-		final Punishment newMute = new Mute(playerName, reason, System.currentTimeMillis() + duration * 1000);
+		final Punishment newMute = new Mute(playerName, reason, newMuteEndDate);
 		Set<Punishment> playerPunishments = getTempPunishments().get(playerName.toLowerCase());
 		if (playerPunishments == null) {
 			playerPunishments = new HashSet<>();
