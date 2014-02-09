@@ -15,18 +15,21 @@ import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /** @author Ribesg */
 public abstract class Filter implements TrieElement {
 
 	private final String           outputString;
 	private final String           filteredString;
+	private final Pattern          filteredStringRegexPattern;
 	private final boolean          regex;
 	private final ChatFilterResult responseType;
 
 	protected Filter(final String outputString, final String filteredString, final boolean regex, final ChatFilterResult responseType) {
 		this.outputString = outputString;
 		this.filteredString = filteredString;
+		this.filteredStringRegexPattern = this.filteredString == null ? null : Pattern.compile(this.filteredString);
 		this.regex = regex;
 		this.responseType = responseType;
 	}
@@ -37,6 +40,10 @@ public abstract class Filter implements TrieElement {
 
 	public String getFilteredString() {
 		return filteredString;
+	}
+
+	public Pattern getFilteredStringRegexPattern() {
+		return filteredStringRegexPattern;
 	}
 
 	public char[] getCharSequence() {

@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 
 /** @author Ribesg */
 public class ChatFilter extends AbstractConfig<NTalk> {
@@ -185,16 +184,13 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 		return result;
 	}
 
-	public Filter check(final String message) {
-		final Filter filter = this.strings.check(message);
-		if (filter != null) {
-			return filter;
-		}
+	public Set<Filter> check(final String message) {
+		final Set<Filter> result = this.strings.checkAll(message);
 		for (final Filter regexFilter : this.regexes) {
-			if (Pattern.compile(regexFilter.getFilteredString()).matcher(message).find()) {
-				return regexFilter;
+			if (regexFilter.getFilteredStringRegexPattern().matcher(message).find()) {
+				result.add(regexFilter);
 			}
 		}
-		return null;
+		return result;
 	}
 }

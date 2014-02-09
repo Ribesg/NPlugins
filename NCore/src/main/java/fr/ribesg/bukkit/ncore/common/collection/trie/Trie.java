@@ -41,6 +41,21 @@ public class Trie<T extends TrieElement> {
 		}
 	}
 
+	public Set<T> checkAll(final String aString) {
+		final Set<T> result = new HashSet<>();
+		final char[] chars = aString.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			final Node<T> root = this.roots.get(chars[i]);
+			if (root != null) {
+				final T res = root.check(chars, i);
+				if (res != null) {
+					result.add(res);
+				}
+			}
+		}
+		return result;
+	}
+
 	public T check(final String aString) {
 		final char[] chars = aString.toCharArray();
 		for (int i = 0; i < chars.length; i++) {

@@ -24,6 +24,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
@@ -62,83 +63,85 @@ public class TalkListener implements Listener {
 		if (filter != null) {
 			final String message = event.getMessage();
 			final String uncoloredMessage = ColorUtils.stripColorCodes(message);
-			final Filter result = filter.check(' ' + uncoloredMessage + ' ');
-			if (result != null) {
-				switch (result.getResponseType()) {
-					case DENY:
-						event.setCancelled(true);
-						break;
-					case REPLACE:
-						final ReplaceFilter replaceFilter = (ReplaceFilter) result;
-						String newMessage;
-						if (replaceFilter.isRegex()) {
-							newMessage = message.replaceAll(replaceFilter.getFilteredString(), replaceFilter.getReplacement());
-						} else {
-							final String filtered = replaceFilter.getFilteredString().trim();
-							final String replacement = replaceFilter.getReplacement();
-							newMessage = message;
-							int i = newMessage.indexOf(filtered);
-							while (i != -1) {
-								newMessage = newMessage.substring(0, i) +
-								             replacement +
-								             newMessage.substring((i += filtered.length()));
-								i = newMessage.indexOf(filtered, i);
+			final Set<Filter> result = filter.check(' ' + uncoloredMessage + ' ');
+			if (!result.isEmpty()) {
+				for (final Filter f : result) {
+					switch (f.getResponseType()) {
+						case DENY:
+							event.setCancelled(true);
+							break;
+						case REPLACE:
+							final ReplaceFilter replaceFilter = (ReplaceFilter) f;
+							String newMessage;
+							if (replaceFilter.isRegex()) {
+								newMessage = message.replaceAll(replaceFilter.getFilteredString(), replaceFilter.getReplacement());
+							} else {
+								final String filtered = replaceFilter.getFilteredString().trim();
+								final String replacement = replaceFilter.getReplacement();
+								newMessage = message;
+								int i = newMessage.indexOf(filtered);
+								while (i != -1) {
+									newMessage = newMessage.substring(0, i) +
+									             replacement +
+									             newMessage.substring((i += filtered.length()));
+									i = newMessage.indexOf(filtered, i);
+								}
 							}
-						}
-						event.setMessage(newMessage);
-						break;
-					case TEMPORARY_MUTE:
-						final MuteFilter muteFilter = (MuteFilter) result;
-						final String mutePlayerName = event.getPlayer().getName();
-						final long muteDuration = muteFilter.getDuration();
-						final String muteReason = plugin.getMessages().get(MessageId.talk_filterMutedReason, muteFilter.getOutputString())[0];
-						final String muteCommand = plugin.getPluginConfig().getTempMuteCommand(mutePlayerName, muteDuration, muteReason);
-						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
+							event.setMessage(newMessage);
+							break;
+						case TEMPORARY_MUTE:
+							final MuteFilter muteFilter = (MuteFilter) f;
+							final String mutePlayerName = event.getPlayer().getName();
+							final long muteDuration = muteFilter.getDuration();
+							final String muteReason = plugin.getMessages().get(MessageId.talk_filterMutedReason, muteFilter.getOutputString())[0];
+							final String muteCommand = plugin.getPluginConfig().getTempMuteCommand(mutePlayerName, muteDuration, muteReason);
+							Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
 
-							@Override
-							public Object call() throws Exception {
-								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), muteCommand);
-								return null;
-							}
-						});
-						break;
-					case TEMPORARY_BAN:
-						final BanFilter banFilter = (BanFilter) result;
-						final String banPlayerName = event.getPlayer().getName();
-						final long banDuration = banFilter.getDuration();
-						final String banReason = plugin.getMessages().get(MessageId.talk_filterBannedReason, banFilter.getOutputString())[0];
-						final String banCommand = plugin.getPluginConfig().getTempBanCommand(banPlayerName, banDuration, banReason);
-						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
+								@Override
+								public Object call() throws Exception {
+									Bukkit.dispatchCommand(Bukkit.getConsoleSender(), muteCommand);
+									return null;
+								}
+							});
+							break;
+						case TEMPORARY_BAN:
+							final BanFilter banFilter = (BanFilter) f;
+							final String banPlayerName = event.getPlayer().getName();
+							final long banDuration = banFilter.getDuration();
+							final String banReason = plugin.getMessages().get(MessageId.talk_filterBannedReason, banFilter.getOutputString())[0];
+							final String banCommand = plugin.getPluginConfig().getTempBanCommand(banPlayerName, banDuration, banReason);
+							Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
 
-							@Override
-							public Object call() throws Exception {
-								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), banCommand);
-								return null;
-							}
-						});
-						break;
-					case TEMPORARY_JAIL:
-						final JailFilter jailFilter = (JailFilter) result;
-						final String jailPlayerName = event.getPlayer().getName();
-						final long jailDuration = jailFilter.getDuration();
-						final String jailName = jailFilter.getJailName();
-						final String jailReason = plugin.getMessages().get(MessageId.talk_filterJailedReason, jailFilter.getOutputString())[0];
-						final String jailCommand = plugin.getPluginConfig().getTempJailCommand(jailPlayerName, jailDuration, jailName, jailReason);
-						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
+								@Override
+								public Object call() throws Exception {
+									Bukkit.dispatchCommand(Bukkit.getConsoleSender(), banCommand);
+									return null;
+								}
+							});
+							break;
+						case TEMPORARY_JAIL:
+							final JailFilter jailFilter = (JailFilter) f;
+							final String jailPlayerName = event.getPlayer().getName();
+							final long jailDuration = jailFilter.getDuration();
+							final String jailName = jailFilter.getJailName();
+							final String jailReason = plugin.getMessages().get(MessageId.talk_filterJailedReason, jailFilter.getOutputString())[0];
+							final String jailCommand = plugin.getPluginConfig().getTempJailCommand(jailPlayerName, jailDuration, jailName, jailReason);
+							Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
 
-							@Override
-							public Object call() throws Exception {
-								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), jailCommand);
-								return null;
-							}
-						});
-						break;
-					case DIVINE_PUNISHMENT:
-						// TODO
-						LOGGER.severe("Divine Punishment has not yet been implemented! Please don't use it!");
-						break;
-					default:
-						break;
+								@Override
+								public Object call() throws Exception {
+									Bukkit.dispatchCommand(Bukkit.getConsoleSender(), jailCommand);
+									return null;
+								}
+							});
+							break;
+						case DIVINE_PUNISHMENT:
+							// TODO
+							LOGGER.severe("Divine Punishment has not yet been implemented! Please don't use it!");
+							break;
+						default:
+							break;
+					}
 				}
 			}
 		}
@@ -149,7 +152,7 @@ public class TalkListener implements Listener {
 	public void onPlayerChatLast(final AsyncPlayerChatEvent event) {
 		event.setFormat(plugin.getFormater().getFormat(event.getPlayer(), true));
 		if (Perms.hasColor(event.getPlayer(), true)) {
-			event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage())); // Reformat the message
+			event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage().trim())); // Reformat the message
 		}
 	}
 }
