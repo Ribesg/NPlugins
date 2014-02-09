@@ -44,6 +44,7 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.aliasesMap.put("remove", "delete");
 		this.aliasesMap.put("a", "admin");
 		this.aliasesMap.put("u", "user");
+		this.aliasesMap.put("g", "group");
 		this.aliasesMap.put("f", "flag");
 		this.aliasesMap.put("fa", "flagattribute");
 		this.aliasesMap.put("flagatt", "flagattribute");
@@ -53,8 +54,9 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.executorsMap.put("create", new CreateSubcmdExecutor(instance));
 		this.executorsMap.put("delete", new DeleteSubcmdExecutor(instance));
 		this.executorsMap.put("reload", new ReloadSubcmdExecutor(instance));
-		this.executorsMap.put("admin", new AdminUserGroupSubcmdExecutor(instance, true));
-		this.executorsMap.put("user", new AdminUserGroupSubcmdExecutor(instance, false));
+		this.executorsMap.put("admin", new AdminUserGroupSubcmdExecutor(instance, AdminUserGroupSubcmdExecutor.Mode.ADMIN));
+		this.executorsMap.put("user", new AdminUserGroupSubcmdExecutor(instance, AdminUserGroupSubcmdExecutor.Mode.USER));
+		this.executorsMap.put("group", new AdminUserGroupSubcmdExecutor(instance, AdminUserGroupSubcmdExecutor.Mode.GROUP));
 		this.executorsMap.put("flag", new FlagSubcmdExecutor(instance));
 		this.executorsMap.put("flagattribute", new FlagAttributeSubcmdExecutor(instance));
 	}
