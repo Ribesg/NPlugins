@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.utils.SignUtils;
+import fr.ribesg.bukkit.ngeneral.NGeneral;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.InventoryHolder;
@@ -36,6 +37,7 @@ public class ReceiverSign {
 		return chestMaterials;
 	}
 
+	private final NGeneral          plugin;
 	private final NLocation         location;
 	private final Set<Material>     acceptedMaterials;
 	private final Set<MaterialData> acceptedMaterialDatas;
@@ -50,7 +52,8 @@ public class ReceiverSign {
 	 * @param location      the Location of the ReceiverSign
 	 * @param acceptsString the Materials that this ReceiverSign accepts
 	 */
-	public ReceiverSign(final NLocation location, final String acceptsString) {
+	public ReceiverSign(final NGeneral plugin, final NLocation location, final String acceptsString) {
+		this.plugin = plugin;
 		this.location = location;
 
 		if (!ACCEPTED_MATERIALS_REGEX.matcher(acceptsString).matches()) {
@@ -68,7 +71,12 @@ public class ReceiverSign {
 				if (s.contains(":")) {
 					acceptedMaterialDatas.add(new MaterialData(Integer.parseInt(s.split(":")[0]), (byte) Integer.parseInt(s.split(":")[1])));
 				} else {
-					acceptedMaterials.add(Material.getMaterial(Integer.parseInt(s)));
+					final Material material = Material.getMaterial(Integer.parseInt(s));
+					if (material != null) {
+						acceptedMaterials.add(material);
+					} else {
+						plugin.error("Unable to find Material enum value for id " + s);
+					}
 				}
 			}
 		}
