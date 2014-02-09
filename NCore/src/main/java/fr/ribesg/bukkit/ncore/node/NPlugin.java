@@ -92,7 +92,9 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 	 */
 	protected abstract boolean onNodeEnable();
 
-	/** Call {@link #handleOtherNodes()} after plugin initialization tick. */
+	/**
+	 * Call {@link #handleOtherNodes()} after plugin initialization tick.
+	 */
 	private void afterEnable() {
 		new BukkitRunnable() {
 
@@ -206,21 +208,29 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 		return this.debugEnabled;
 	}
 
+	public void log(final Level level, final String message) {
+		logger.log(level, message);
+	}
+
+	public void info(final String message) {
+		log(Level.INFO, message);
+	}
+
 	public void entering(final Class clazz, final String methodName) {
 		if (this.debugEnabled) {
-			logger.log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
+			log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
 		}
 	}
 
 	public void exiting(final Class clazz, final String methodName) {
 		if (this.debugEnabled) {
-			logger.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
+			log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
 		}
 	}
 
 	public void exiting(final Class clazz, final String methodName, final String comment) {
 		if (this.debugEnabled) {
-			logger.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()) + '(' + comment + ')');
+			log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()) + '(' + comment + ')');
 		}
 	}
 
@@ -230,7 +240,7 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 
 	public void debug(final String message) {
 		if (this.debugEnabled) {
-			logger.log(Level.INFO, "DEBUG         " + message);
+			log(Level.INFO, "DEBUG         " + message);
 		}
 	}
 
@@ -245,7 +255,7 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 	}
 
 	public void error(final Level level, final String message) {
-		logger.log(level, message);
+		log(level, message);
 	}
 
 	public void error(final String message, final Throwable e) {
@@ -253,6 +263,6 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 	}
 
 	public void error(final Level level, final String message, final Throwable e) {
-		logger.log(level, message);
+		logger.log(level, message, e);
 	}
 }
