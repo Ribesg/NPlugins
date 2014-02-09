@@ -40,6 +40,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -49,7 +50,7 @@ import java.util.logging.Logger;
  */
 public class NCore extends JavaPlugin {
 
-	private final static Logger LOGGER = Logger.getLogger(NCore.class.getName());
+	private static Logger logger;
 
 	private Map<String, Node> nodes;
 	private Metrics           metrics;
@@ -58,6 +59,8 @@ public class NCore extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		logger = this.getLogger();
+
 		try {
 			metrics = new Metrics(this);
 		} catch (final IOException e) {
@@ -69,9 +72,7 @@ public class NCore extends JavaPlugin {
 			pluginConfig = new Config(this);
 			pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			LOGGER.severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			LOGGER.severe("This error occured when NCore tried to load config.yml");
+			logger.log(Level.SEVERE, "An error occured when NCore tried to load config.yml", e);
 		}
 
 		this.nodes = new HashMap<>();
@@ -236,7 +237,7 @@ public class NCore extends JavaPlugin {
 			frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
 
 			for (final String s : frame.build()) {
-				LOGGER.severe(s);
+				logger.severe(s);
 			}
 
 			getPluginLoader().disablePlugin(this);
@@ -298,7 +299,7 @@ public class NCore extends JavaPlugin {
 			@Override
 			public void run() {
 				for (final JavaPlugin plugin : plugins) {
-					if (plugin != null && VersionUtils.isRelease(plugin.getDescription().getVersion())) {
+					if (plugin != null && VersionUtils.isRelease('v' + plugin.getDescription().getVersion())) {
 						Boolean result = null;
 						FileDescription latestFile = null;
 						try {
@@ -330,15 +331,15 @@ public class NCore extends JavaPlugin {
 
 	private void checkedForUpdates(final JavaPlugin plugin, final Boolean result, final FileDescription fileDescription) {
 		if (result == null) {
-			LOGGER.warning("Failed to check for updates for plugin " + plugin.getName());
+			logger.warning("Failed to check for updates for plugin " + plugin.getName());
 		} else if (!result) {
-			LOGGER.warning("A new version of " + plugin.getName() + " is available!");
-			LOGGER.warning("Current version:   v" + plugin.getDescription().getVersion());
-			LOGGER.warning("Available version: " + fileDescription.getVersion());
-			LOGGER.warning("Find all updated from the NCore homepage!");
-			LOGGER.warning("http://dev.bukkit.org/bukkit-plugins/ncore/");
+			logger.warning("A new version of " + plugin.getName() + " is available!");
+			logger.warning("Current version:   v" + plugin.getDescription().getVersion());
+			logger.warning("Available version: " + fileDescription.getVersion());
+			logger.warning("Find all updates from the NCore homepage!");
+			logger.warning("http://dev.bukkit.org/bukkit-plugins/ncore/");
 		} else {
-			LOGGER.info(plugin.getName() + " is up to date (v" + plugin.getDescription().getVersion() + ")");
+			logger.info(plugin.getName() + " is up to date (latest: v" + plugin.getDescription().getVersion() + ")");
 		}
 	}
 }
