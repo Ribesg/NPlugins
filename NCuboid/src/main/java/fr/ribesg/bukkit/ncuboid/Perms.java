@@ -30,6 +30,7 @@ public class Perms {
 	private static final String CMD_FLAGATTRIBUTE    = "ncuboid.cmd.flagattribute";
 	private static final String CMD_ADMIN            = "ncuboid.cmd.admin";
 	private static final String CMD_USER             = "ncuboid.cmd.user";
+	private static final String CMD_GROUP             = "ncuboid.cmd.group";
 
 	// Flag permissions
 	private static Map<Flag, String> flagPermissions;
@@ -167,5 +168,9 @@ public class Perms {
 
 	public static boolean hasUser(final CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(CMD_USER) || sender.hasPermission(USER);
+	}
+
+	public static boolean hasGroup(final CommandSender sender) {
+		return isAdmin(sender) || sender.hasPermission(CMD_GROUP) || sender.hasPermission(USER);
 	}
 }

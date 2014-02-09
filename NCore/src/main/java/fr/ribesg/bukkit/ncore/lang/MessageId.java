@@ -82,6 +82,11 @@ public enum MessageId {
 	cuboid_cmdUserRemoved,
 	cuboid_cmdUserNotUser,
 
+	cuboid_cmdGroupAdded,
+	cuboid_cmdGroupAlreadyGroup,
+	cuboid_cmdGroupRemoved,
+	cuboid_cmdGroupNotGroup,
+
 	// ########################## //
 	// ## NTheEndAgain related ## //
 	// ########################## //

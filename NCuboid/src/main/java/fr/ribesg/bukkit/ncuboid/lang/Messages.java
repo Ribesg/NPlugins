@@ -29,7 +29,9 @@ public class Messages extends AbstractMessages {
 		super("Cuboid");
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#createMessage() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#createMessage()
+	 */
 	@Override
 	protected Set<Message> createMessage() {
 		final Set<Message> newMessages = new HashSet<>();
@@ -155,6 +157,24 @@ public class Messages extends AbstractMessages {
 		}, null, true));
 		newMessages.add(new Message(MessageId.cuboid_cmdUserRemoved, "&c%player% is not user of '%region%'", new String[] {
 				"%player%",
+				"%region%"
+		}, null, true));
+
+		// Command - GROUP
+		newMessages.add(new Message(MessageId.cuboid_cmdGroupAdded, "&a%groupName% has been added to allowed groups of '%region%'", new String[] {
+				"%groupName%",
+				"%region%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdGroupAlreadyGroup, "&cThe group %groupName% is already allowed for Region '%region%'", new String[] {
+				"%groupName%",
+				"%region%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdGroupRemoved, "&aThe group %groupName% is no longer allowed for Region '%region%'", new String[] {
+				"%groupName%",
+				"%region%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdGroupRemoved, "&cThe group %groupName% is not allowed in Region '%region%'", new String[] {
+				"%groupName%",
 				"%region%"
 		}, null, true));
 

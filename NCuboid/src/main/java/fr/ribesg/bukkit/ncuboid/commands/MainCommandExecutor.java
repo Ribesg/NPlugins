@@ -12,7 +12,7 @@ package fr.ribesg.bukkit.ncuboid.commands;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
-import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AdminUserSubcmdExecutor;
+import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AdminUserGroupSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.CreateSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.DeleteSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.FlagAttributeSubcmdExecutor;
@@ -53,8 +53,8 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.executorsMap.put("create", new CreateSubcmdExecutor(instance));
 		this.executorsMap.put("delete", new DeleteSubcmdExecutor(instance));
 		this.executorsMap.put("reload", new ReloadSubcmdExecutor(instance));
-		this.executorsMap.put("admin", new AdminUserSubcmdExecutor(instance, true));
-		this.executorsMap.put("user", new AdminUserSubcmdExecutor(instance, false));
+		this.executorsMap.put("admin", new AdminUserGroupSubcmdExecutor(instance, true));
+		this.executorsMap.put("user", new AdminUserGroupSubcmdExecutor(instance, false));
 		this.executorsMap.put("flag", new FlagSubcmdExecutor(instance));
 		this.executorsMap.put("flagattribute", new FlagAttributeSubcmdExecutor(instance));
 	}

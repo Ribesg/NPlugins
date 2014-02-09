@@ -159,6 +159,14 @@ public abstract class GeneralRegion extends Region {
 		return rights.isAdminName(name);
 	}
 
+	public boolean isAllowedGroup(final String groupName) {
+		return rights.isAllowedGroup(groupName);
+	}
+
+	public boolean isAllowedCommand(final String command) {
+		return rights.isAllowedCommand(command);
+	}
+
 	public Set<String> getUsers() {
 		return rights.getUsers();
 	}
@@ -189,5 +197,21 @@ public abstract class GeneralRegion extends Region {
 
 	public void removeAdmin(final String playerName) {
 		rights.removeAdmin(playerName);
+	}
+
+	public void allowGroup(final String groupName) {
+		rights.allowGroup(groupName);
+	}
+
+	public void denyGroup(final String groupName) {
+		rights.denyGroup(groupName);
+	}
+
+	public void allowCommand(final String command) {
+		rights.allowCommand(command);
+	}
+
+	public void denyCommand(final String command) {
+		rights.denyCommand(command);
 	}
 }

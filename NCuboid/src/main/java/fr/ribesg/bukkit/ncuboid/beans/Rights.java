@@ -57,7 +57,7 @@ public class Rights {
 		return admins != null && admins.contains(playerName.toLowerCase());
 	}
 
-	public boolean isAllowedGroupName(final String groupName) {
+	public boolean isAllowedGroup(final String groupName) {
 		return allowedGroups != null && allowedGroups.contains(groupName.toLowerCase());
 	}
 

@@ -1,6 +1,6 @@
 /***************************************************************************
- * Project file:    NPlugins - NCuboid - AdminUserSubcmdExecutor.java      *
- * Full Class name: fr.ribesg.bukkit.ncuboid.commands.subexecutors.AdminUserSubcmdExecutor
+ * Project file:    NPlugins - NCuboid - AdminUserGroupSubcmdExecutor.java *
+ * Full Class name: fr.ribesg.bukkit.ncuboid.commands.subexecutors.AdminUserGroupSubcmdExecutor
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
@@ -17,23 +17,48 @@ import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class AdminUserSubcmdExecutor extends AbstractSubcmdExecutor {
+public class AdminUserGroupSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	private final boolean adminMode;
+	public enum Mode {
+		ADMIN,
+		USER,
+		GROUP
+	}
 
-	public AdminUserSubcmdExecutor(final NCuboid instance, final boolean adminMode) {
+	private final Mode mode;
+
+	public AdminUserGroupSubcmdExecutor(final NCuboid instance, final Mode mode) {
 		super(instance);
-		this.adminMode = adminMode;
-		if (adminMode) {
-			setUsage(ChatColor.RED + "Usage : /cuboid admin <regionName> add|del <playerName>[,playerName]");
-		} else {
-			setUsage(ChatColor.RED + "Usage : /cuboid user <regionName> add|del <playerName>[,playerName]");
+		this.mode = mode;
+		switch (mode) {
+			case ADMIN:
+				setUsage(ChatColor.RED + "Usage : /cuboid admin <regionName> add|del <playerName>[,playerName]");
+				break;
+			case USER:
+				setUsage(ChatColor.RED + "Usage : /cuboid user <regionName> add|del <playerName>[,playerName]");
+				break;
+			case GROUP:
+				setUsage(ChatColor.RED + "Usage : /cuboid group <regionName> add|del <groupName>[,groupName]");
+				break;
 		}
 	}
 
 	@Override
 	protected boolean exec(final CommandSender sender, final String[] args) {
-		return args.length == 3 && (adminMode ? execAdmin(sender, args) : execUser(sender, args));
+		if (args.length != 3) {
+			return false;
+		} else {
+			switch (mode) {
+				case ADMIN:
+					return execAdmin(sender, args);
+				case USER:
+					return execUser(sender, args);
+				case GROUP:
+					return execGroup(sender, args);
+				default:
+					return false; // Dead code
+			}
+		}
 	}
 
 	private boolean execAdmin(final CommandSender sender, final String[] args) {
@@ -126,11 +151,56 @@ public class AdminUserSubcmdExecutor extends AbstractSubcmdExecutor {
 		}
 	}
 
+	private boolean execGroup(final CommandSender sender, final String[] args) {
+		if (Perms.hasGroup(sender)) {
+			// Get region, check rights on region
+			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
+			if (c == null) {
+				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
+				return true;
+			}
+			if (!Perms.isAdmin(sender) && !c.isAdmin(sender)) {
+				getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidOwner, c.getRegionName());
+				return true;
+			}
+
+			// Get required action
+			final Boolean add = getAction(args[1]);
+			if (add == null) {
+				return false;
+			}
+
+			// Now for each provided groupName
+			for (final String name : args[2].toLowerCase().split(",")) {
+				if (add) {
+					if (c.isAllowedGroup(name)) {
+						getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupAlreadyGroup, name, c.getRegionName());
+					} else {
+						c.allowGroup(name);
+						getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupAdded, name, c.getRegionName());
+					}
+				} else {
+					if (!c.isAllowedGroup(name)) {
+						getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupNotGroup, name, c.getRegionName());
+						return true;
+					} else {
+						c.denyGroup(name);
+						getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupRemoved, name, c.getRegionName());
+					}
+				}
+			}
+			return true;
+		} else {
+			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+			return true;
+		}
+	}
+
 	/**
 	 * @param actionString a String that represents an action
 	 *
 	 * @return true if the action is to ADD, false if it's to REMOVE, null if
-	 *         it's incorrect
+	 * it's incorrect
 	 */
 	private Boolean getAction(final String actionString) {
 		switch (actionString.toLowerCase()) {
