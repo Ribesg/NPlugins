@@ -311,7 +311,7 @@ public class Config extends AbstractConfig<NWorld> {
 							final double z = spawnSection.getDouble("z");
 							final float yaw = (float) spawnSection.getDouble("yaw");
 							final float pitch = (float) spawnSection.getDouble("pitch");
-							netherSpawnLocation = new NLocation(worldName, x, y, z, yaw, pitch);
+							netherSpawnLocation = new NLocation(worldName + "_nether", x, y, z, yaw, pitch);
 						}
 					}
 					if (!netherSection.isString("requiredPermission")) {
@@ -382,7 +382,7 @@ public class Config extends AbstractConfig<NWorld> {
 							final double z = spawnSection.getDouble("z");
 							final float yaw = (float) spawnSection.getDouble("yaw");
 							final float pitch = (float) spawnSection.getDouble("pitch");
-							endSpawnLocation = new NLocation(worldName, x, y, z, yaw, pitch);
+							endSpawnLocation = new NLocation(worldName + "_the_end", x, y, z, yaw, pitch);
 						}
 					}
 					if (!endSection.isString("requiredPermission")) {
