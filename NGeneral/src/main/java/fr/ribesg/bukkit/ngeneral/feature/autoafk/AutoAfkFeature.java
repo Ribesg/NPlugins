@@ -28,7 +28,9 @@ public class AutoAfkFeature extends Feature {
 	private Map<String, Long> lastUpdateMap;
 	private BukkitTask        task;
 
-	/** Must not interact with Bukkit in any way */
+	/**
+	 * Must not interact with Bukkit in any way
+	 */
 	public AutoAfkFeature(final NGeneral instance) {
 		super(instance, FeatureType.AUTO_AFK, instance.getPluginConfig().hasAutoAfkFeature());
 		this.lastUpdateMap = new ConcurrentHashMap<>();

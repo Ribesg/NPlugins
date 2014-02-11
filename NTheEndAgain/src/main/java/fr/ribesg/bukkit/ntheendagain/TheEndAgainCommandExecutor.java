@@ -260,7 +260,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 	 * @param args   the arguments used by the sender
 	 *
 	 * @return a new args String[] containing the new arguments, or null if the
-	 *         sender did not provide a World (as a ConsoleSender)
+	 * sender did not provide a World (as a ConsoleSender)
 	 */
 	private String[] checkWorldArgument(final CommandSender sender, final String[] args) {
 		final String[] result;

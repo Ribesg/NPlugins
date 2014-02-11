@@ -32,25 +32,39 @@ public class TimeUtils {
 	 */
 	private enum TimeUnits {
 
-		/** Base unit */
+		/**
+		 * Base unit
+		 */
 		SECOND(1L, "s", "sec", "second", "seconds"),
 
-		/** 60 * {@link #SECOND} */
+		/**
+		 * 60 * {@link #SECOND}
+		 */
 		MINUTE(60L, "m", "min", "minute", "minutes"),
 
-		/** 60 * {@link #MINUTE} */
+		/**
+		 * 60 * {@link #MINUTE}
+		 */
 		HOUR(3600L, "h", "hour", "hours"),
 
-		/** 24 * {@link #HOUR} */
+		/**
+		 * 24 * {@link #HOUR}
+		 */
 		DAY(86_400L, "d", "day", "days"),
 
-		/** 7 * {@link #DAY} */
+		/**
+		 * 7 * {@link #DAY}
+		 */
 		WEEK(604_800L, "w", "week", "weeks"),
 
-		/** Using the average 30 {@link #DAY days} per month value */
+		/**
+		 * Using the average 30 {@link #DAY days} per month value
+		 */
 		MONTH(2_592_000L, "month", "months"),
 
-		/** Using the average 365.2425 {@link #DAY days} per year value */
+		/**
+		 * Using the average 365.2425 {@link #DAY days} per year value
+		 */
 		YEAR(31_556_952L, "y", "year", "years");
 
 		/**
@@ -87,10 +101,14 @@ public class TimeUtils {
 			return mapping;
 		}
 
-		/** The acceptable String representations of this TimeUnits value */
+		/**
+		 * The acceptable String representations of this TimeUnits value
+		 */
 		private final String[] stringRepresentations;
 
-		/** How many seconds in this unit of time */
+		/**
+		 * How many seconds in this unit of time
+		 */
 		private final long multiplier;
 
 		private TimeUnits(final long multiplier, final String... stringRepresentations) {
@@ -98,18 +116,24 @@ public class TimeUtils {
 			this.stringRepresentations = stringRepresentations;
 		}
 
-		/** @return {@link #multiplier} */
+		/**
+		 * @return {@link #multiplier}
+		 */
 		private long getMultiplier() {
 			return this.multiplier;
 		}
 
-		/** @return {@link #stringRepresentations} */
+		/**
+		 * @return {@link #stringRepresentations}
+		 */
 		private String[] getStringRepresentations() {
 			return this.stringRepresentations;
 		}
 	}
 
-	/** Message of the exception thrown when the provided String is invalid */
+	/**
+	 * Message of the exception thrown when the provided String is invalid
+	 */
 	private static final String MALFORMED_STRING_MSG = "String was not correctly formatted";
 
 	public static String toString(final long seconds) {
@@ -222,37 +246,51 @@ public class TimeUtils {
 		return time;
 	}
 
-	/** @see #getInSeconds(String) */
+	/**
+	 * @see #getInSeconds(String)
+	 */
 	public static long getInMilliseconds(final String stringRepresentation) {
 		return getInSeconds(stringRepresentation) * 1000;
 	}
 
-	/** @see #getInSeconds(String) */
+	/**
+	 * @see #getInSeconds(String)
+	 */
 	public static double getInMinutes(final String stringRepresentation) {
 		return getInSeconds(stringRepresentation) / (double) TimeUnits.MINUTE.getMultiplier();
 	}
 
-	/** @see #getInSeconds(String) */
+	/**
+	 * @see #getInSeconds(String)
+	 */
 	public static double getInHours(final String stringRepresentation) {
 		return getInSeconds(stringRepresentation) / (double) TimeUnits.HOUR.getMultiplier();
 	}
 
-	/** @see #getInSeconds(String) */
+	/**
+	 * @see #getInSeconds(String)
+	 */
 	public static double getInDays(final String stringRepresentation) {
 		return getInSeconds(stringRepresentation) / (double) TimeUnits.DAY.getMultiplier();
 	}
 
-	/** @see #getInSeconds(String) */
+	/**
+	 * @see #getInSeconds(String)
+	 */
 	public static double getInWeeks(final String stringRepresentation) {
 		return getInSeconds(stringRepresentation) / (double) TimeUnits.WEEK.getMultiplier();
 	}
 
-	/** @see #getInSeconds(String) */
+	/**
+	 * @see #getInSeconds(String)
+	 */
 	public static double getInMonths(final String stringRepresentation) {
 		return getInSeconds(stringRepresentation) / (double) TimeUnits.MONTH.getMultiplier();
 	}
 
-	/** @see #getInSeconds(String) */
+	/**
+	 * @see #getInSeconds(String)
+	 */
 	public static double getInYears(final String stringRepresentation) {
 		return getInSeconds(stringRepresentation) / (double) TimeUnits.YEAR.getMultiplier();
 	}

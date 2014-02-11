@@ -143,7 +143,9 @@ public class NPlayer extends NPlugin implements PlayerNode {
 		return true;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
+	 */
 	@Override
 	protected void handleOtherNodes() {
 		this.cuboidNode = getCore().getCuboidNode();

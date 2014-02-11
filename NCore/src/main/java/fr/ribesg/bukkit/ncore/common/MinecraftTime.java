@@ -16,16 +16,24 @@ package fr.ribesg.bukkit.ncore.common;
  */
 public enum MinecraftTime {
 
-	/** Moment between "full dark" and "full bright" */
+	/**
+	 * Moment between "full dark" and "full bright"
+	 */
 	MORNING(ExactTime.NIGHT_END, ExactTime.DAY_START),
 
-	/** Always "full bright" */
+	/**
+	 * Always "full bright"
+	 */
 	DAY(ExactTime.DAY_START, ExactTime.DAY_END),
 
-	/** Moment between "full bright" and "full dark" */
+	/**
+	 * Moment between "full bright" and "full dark"
+	 */
 	EVENING(ExactTime.DAY_END, ExactTime.NIGHT_START),
 
-	/** Always "full dark" */
+	/**
+	 * Always "full dark"
+	 */
 	NIGHT(ExactTime.NIGHT_START, ExactTime.NIGHT_END);
 
 	/**

@@ -42,7 +42,7 @@ public class PlayerUtils {
 	 *                    limited by server by at least 100 blocks, no less)
 	 *
 	 * @return list containing all blocks along the living entity's line
-	 *         of sight
+	 * of sight
 	 */
 	public static List<Block> getLineOfSight(final Player player, final Set<Material> transparent, int maxDistance, final int maxLength) {
 		if (maxDistance > LINEOFSIGHT_MAXDISTANCE) {
@@ -80,7 +80,7 @@ public class PlayerUtils {
 	 *                 limited by server by at least 100 blocks, no less)
 	 *
 	 * @return list containing all blocks along the living entity's line
-	 *         of sight
+	 * of sight
 	 */
 	public static List<Block> getAllInLineOfSight(final Player player, int distance) {
 		if (distance > LINEOFSIGHT_MAXDISTANCE) {
@@ -107,7 +107,7 @@ public class PlayerUtils {
 	 *                    limited by server by at least 100 blocks, no less)
 	 *
 	 * @return block that the living entity has targeted or null is only
-	 *         transparent blocks in line of sight
+	 * transparent blocks in line of sight
 	 */
 	public static Block getTargetBlock(final Player player, final Set<Material> transparent, int maxDistance) {
 		if (maxDistance > LINEOFSIGHT_MAXDISTANCE) {

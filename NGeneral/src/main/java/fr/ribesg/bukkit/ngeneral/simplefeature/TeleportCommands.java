@@ -27,7 +27,9 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class TeleportCommands implements CommandExecutor {
 
 	private static final String COMMAND_TP      = "tp";

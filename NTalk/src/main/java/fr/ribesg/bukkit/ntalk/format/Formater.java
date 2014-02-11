@@ -115,7 +115,9 @@ public class Formater {
 		return ChatColor.translateAlternateColorCodes('&', unicoder(prefixedString));
 	}
 
-	/** Replace {{unicode}} by the actual char with unicode representation "unicode" */
+	/**
+	 * Replace {{unicode}} by the actual char with unicode representation "unicode"
+	 */
 	private String unicoder(String s) {
 		if (!s.contains("{{") || !s.contains("}}")) {
 			return s;

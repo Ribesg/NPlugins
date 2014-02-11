@@ -56,7 +56,9 @@ public class Config extends AbstractConfig<NCuboid> {
 		this.defaultGroupConfig = new GroupConfig("", 0, 0, 0);
 	}
 
-	/** @see AbstractConfig#handleValues(YamlConfiguration) */
+	/**
+	 * @see AbstractConfig#handleValues(YamlConfiguration)
+	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 
@@ -96,7 +98,9 @@ public class Config extends AbstractConfig<NCuboid> {
 		}
 	}
 
-	/** @see AbstractConfig#getConfigString() */
+	/**
+	 * @see AbstractConfig#getConfigString()
+	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();

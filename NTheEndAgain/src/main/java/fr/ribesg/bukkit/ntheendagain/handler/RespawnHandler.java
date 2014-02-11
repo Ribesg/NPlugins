@@ -20,7 +20,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class RespawnHandler {
 
 	private static final Random RANDOM = new Random();

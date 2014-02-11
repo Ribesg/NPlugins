@@ -30,7 +30,7 @@ public class Perms {
 	private static final String CMD_FLAGATTRIBUTE    = "ncuboid.cmd.flagattribute";
 	private static final String CMD_ADMIN            = "ncuboid.cmd.admin";
 	private static final String CMD_USER             = "ncuboid.cmd.user";
-	private static final String CMD_GROUP             = "ncuboid.cmd.group";
+	private static final String CMD_GROUP            = "ncuboid.cmd.group";
 
 	// Flag permissions
 	private static Map<Flag, String> flagPermissions;

@@ -30,7 +30,9 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		super(instance);
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration)
+	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
@@ -78,7 +80,9 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		}
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString()
+	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();

@@ -20,7 +20,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-/** @author ribes */
+/**
+ * @author ribes
+ */
 public class TalkCommandExecutor implements CommandExecutor {
 
 	private final static String CONSOLE_NAME = Bukkit.getConsoleSender().getName();

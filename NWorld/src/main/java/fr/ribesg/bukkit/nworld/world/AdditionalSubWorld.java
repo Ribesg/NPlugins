@@ -12,7 +12,9 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nworld.NWorld;
 import org.bukkit.World.Environment;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class AdditionalSubWorld extends GeneralWorld {
 
 	private final AdditionalWorld parentWorld;

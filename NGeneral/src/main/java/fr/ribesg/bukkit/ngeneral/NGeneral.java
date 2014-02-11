@@ -98,7 +98,9 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		return true;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
+	 */
 	@Override
 	protected void handleOtherNodes() {
 		// NOP

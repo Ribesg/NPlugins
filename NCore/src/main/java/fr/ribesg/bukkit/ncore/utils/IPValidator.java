@@ -17,13 +17,19 @@ import java.util.regex.Pattern;
  */
 public class IPValidator {
 
-	/** This Regex recognize any valid IPv4 between 0.0.0.0 and 255.255.255.255 */
+	/**
+	 * This Regex recognize any valid IPv4 between 0.0.0.0 and 255.255.255.255
+	 */
 	private static final String IP_V4_REGEX = "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
-	/** This Pattern recognize any valid IPv4 between 0.0.0.0 and 255.255.255.255 */
+	/**
+	 * This Pattern recognize any valid IPv4 between 0.0.0.0 and 255.255.255.255
+	 */
 	private static final Pattern IP_V4 = Pattern.compile(IP_V4_REGEX);
 
-	/** This Regex recognize any valid IPv6 (even ::1 and other strange patterns) */
+	/**
+	 * This Regex recognize any valid IPv6 (even ::1 and other strange patterns)
+	 */
 	private static final String IP_V6_REGEX = "^((([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0" +
 	                                          "-9A-Fa-f]{1,4}:){5}:([0-9A-Fa-f]{1,4}:)?[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){4}:([0-9A-" +
 	                                          "Fa-f]{1,4}:){0,2}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){3}:([0-9A-Fa-f]{1,4}:){0,3}[0-9A-" +
@@ -35,10 +41,14 @@ public class IPValidator {
 	                                          "4}::([0-9A-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4}" +
 	                                          ")|(([0-9A-Fa-f]{1,4}:){1,7}:))$";
 
-	/** This Pattern recognize any valid IPv6 (even ::1 and other strange patterns) */
+	/**
+	 * This Pattern recognize any valid IPv6 (even ::1 and other strange patterns)
+	 */
 	private static final Pattern IP_V6 = Pattern.compile(IP_V6_REGEX);
 
-	/** This Regex recognize any valid IPv4 or IPv6 */
+	/**
+	 * This Regex recognize any valid IPv4 or IPv6
+	 */
 	private static final String IP_ALL_REGEX = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]" +
 	                                           "|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?))|((([0-9A-Fa-f]{1," +
 	                                           "4}:){7}[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){6}:[0-9A-Fa-f]{1,4})|(([0-9A-Fa-f]{1,4}:){" +
@@ -52,7 +62,9 @@ public class IPValidator {
 	                                           "-Fa-f]{1,4}:){0,5}[0-9A-Fa-f]{1,4})|(::([0-9A-Fa-f]{1,4}:){0,6}[0-9A-Fa-f]{1,4})|(([0-9A" +
 	                                           "-Fa-f]{1,4}:){1,7}:))$";
 
-	/** This Pattern recognize any valid IPv4 or IPv6 */
+	/**
+	 * This Pattern recognize any valid IPv4 or IPv6
+	 */
 	private static final Pattern IP_ALL = Pattern.compile(IP_ALL_REGEX);
 
 	/**

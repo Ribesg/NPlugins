@@ -47,7 +47,9 @@ public class ChunkCoord {
 		return worldName + SEPARATOR + x + SEPARATOR + z;
 	}
 
-	/** Yeah it's a deserialization method. */
+	/**
+	 * Yeah it's a deserialization method.
+	 */
 	public static ChunkCoord fromString(final String string) {
 		final String[] split = string.split(SEPARATOR);
 		return new ChunkCoord(Integer.parseInt(split[1]), Integer.parseInt(split[2]), split[0]);

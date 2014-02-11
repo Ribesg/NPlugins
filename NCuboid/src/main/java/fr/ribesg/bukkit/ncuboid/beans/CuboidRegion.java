@@ -21,7 +21,9 @@ public class CuboidRegion extends PlayerRegion {
 	private NLocation minCorner, maxCorner;
 	private int minX, maxX, minY, maxY, minZ, maxZ;
 
-	/** Create a new Cuboid Region */
+	/**
+	 * Create a new Cuboid Region
+	 */
 	public CuboidRegion(final String cuboidName, final String ownerName, final String worldName, final NLocation minCorner) {
 
 		super(cuboidName, ownerName, worldName, RegionType.CUBOID);
@@ -30,7 +32,9 @@ public class CuboidRegion extends PlayerRegion {
 		setChunks(null);
 	}
 
-	/** Create a Cuboid Region from a save */
+	/**
+	 * Create a Cuboid Region from a save
+	 */
 	public CuboidRegion(final String cuboidName, final String ownerName, final String worldName, final RegionState state, final long totalSize, final String welcomeMessage, final String farewellMessage, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts, final NLocation minCorner, final NLocation maxCorner) {
 
 		super(cuboidName, ownerName, worldName, state, totalSize, welcomeMessage, farewellMessage, RegionType.CUBOID, rights, priority, flags, flagAtts);
@@ -46,7 +50,9 @@ public class CuboidRegion extends PlayerRegion {
 		setChunks(computeChunks());
 	}
 
-	/** Called when the player select the second corner */
+	/**
+	 * Called when the player select the second corner
+	 */
 	public void secondPoint(final Location secondPoint) {
 		if (secondPoint.getWorld().getName().equals(getWorldName())) {
 			setMinX(getMinCorner().getBlockX() < secondPoint.getBlockX() ? getMinCorner().getBlockX() : secondPoint.getBlockX());
@@ -63,13 +69,17 @@ public class CuboidRegion extends PlayerRegion {
 		}
 	}
 
-	/** @see CuboidRegion#create(String) */
+	/**
+	 * @see CuboidRegion#create(String)
+	 */
 	@Override
 	public void create(final String regionName) {
 		super.create(regionName);
 	}
 
-	/** Should only be used when the cuboid is not in the byChunks map */
+	/**
+	 * Should only be used when the cuboid is not in the byChunks map
+	 */
 	public Set<ChunkCoord> computeChunks() {
 		final Set<ChunkCoord> chunks = new HashSet<>();
 		final ChunkCoord cMin = new ChunkCoord(getMinCorner());

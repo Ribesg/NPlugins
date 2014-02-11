@@ -17,7 +17,9 @@ import java.util.Comparator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class FileDescription {
 
 	private static final String VERSION_KEY        = "name";

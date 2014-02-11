@@ -20,7 +20,9 @@ import org.junit.runners.Parameterized.Parameters;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 @RunWith(Parameterized.class)
 public class MaterialUtilsTest {
 

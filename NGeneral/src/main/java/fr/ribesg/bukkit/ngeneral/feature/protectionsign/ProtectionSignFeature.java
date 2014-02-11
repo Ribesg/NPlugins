@@ -40,24 +40,36 @@ public class ProtectionSignFeature extends Feature {
 	// ## Constants ## //
 	// ############### //
 
-	/** First line of a Protection sign - Exactly 16 chars */
+	/**
+	 * First line of a Protection sign - Exactly 16 chars
+	 */
 	/* package */ static final String PROTECTION       = "[" + ChatColor.GREEN + "Private" + ChatColor.BLACK + "]";
-	/** Prefix of the Protection sign Owner name */
+	/**
+	 * Prefix of the Protection sign Owner name
+	 */
 	/* package */ static final String PRIMARY_PREFIX   = ChatColor.GREEN.toString();
-	/** Prefix of a Protection sign additional name */
+	/**
+	 * Prefix of a Protection sign additional name
+	 */
 	/* package */ static final String SECONDARY_PREFIX = ChatColor.GRAY.toString();
 
-	/** First line of an Error sign */
+	/**
+	 * First line of an Error sign
+	 */
 	/* package */ static final String ERROR = "[" + ChatColor.DARK_RED + "Error" + ChatColor.RESET + "]";
 
 	// ################### //
 	// ## Constant sets ## //
 	// ################### //
 
-	/** Set of String that players could write as first lines to say that it's a Protection sign */
+	/**
+	 * Set of String that players could write as first lines to say that it's a Protection sign
+	 */
 	private static Set<String> protectionStrings;
 
-	/** Static lazy getter for {@link #protectionStrings} */
+	/**
+	 * Static lazy getter for {@link #protectionStrings}
+	 */
 	public static Set<String> getProtectionStrings() {
 		if (protectionStrings == null) {
 			protectionStrings = new HashSet<>(5);
@@ -70,10 +82,14 @@ public class ProtectionSignFeature extends Feature {
 		return protectionStrings;
 	}
 
-	/** Set of block types that can be protected by a Protection sign */
+	/**
+	 * Set of block types that can be protected by a Protection sign
+	 */
 	private static Set<Material> protectedMaterials;
 
-	/** Static lazy getter for {@link #protectedMaterials} */
+	/**
+	 * Static lazy getter for {@link #protectedMaterials}
+	 */
 	public static Set<Material> getProtectedMaterials() {
 		if (protectedMaterials == null) {
 			protectedMaterials = new HashSet<>(11);

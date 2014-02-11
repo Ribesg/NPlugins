@@ -48,7 +48,9 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		}
 	}
 
-	/** @see AbstractConfig#handleValues(YamlConfiguration) */
+	/**
+	 * @see AbstractConfig#handleValues(YamlConfiguration)
+	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 		plugin.entering(getClass(), "handleValues");
@@ -118,7 +120,9 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		plugin.exiting(getClass(), "handleValues");
 	}
 
-	/** @see AbstractConfig#getConfigString() */
+	/**
+	 * @see AbstractConfig#getConfigString()
+	 */
 	@Override
 	protected String getConfigString() {
 		plugin.entering(getClass(), "getConfigString");

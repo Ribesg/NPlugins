@@ -27,7 +27,9 @@ public class NEventsListener implements Listener {
 		plugin = instance;
 	}
 
-	/** Throws a PlayerJoinedEvent AFTER a Player joined the game. */
+	/**
+	 * Throws a PlayerJoinedEvent AFTER a Player joined the game.
+	 */
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
@@ -39,7 +41,9 @@ public class NEventsListener implements Listener {
 		}, 1L);
 	}
 
-	/** Throws a PlayerGridMoveEvent if a Player change block-location */
+	/**
+	 * Throws a PlayerGridMoveEvent if a Player change block-location
+	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerMove(final PlayerMoveEvent event) {
 		final Player player = event.getPlayer();
@@ -55,7 +59,9 @@ public class NEventsListener implements Listener {
 		}
 	}
 
-	/** Throws a PlayerChunkMoveEvent if a Player change chunk-location */
+	/**
+	 * Throws a PlayerChunkMoveEvent if a Player change chunk-location
+	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerGridMove(final PlayerGridMoveEvent event) {
 		final Player player = event.getPlayer();

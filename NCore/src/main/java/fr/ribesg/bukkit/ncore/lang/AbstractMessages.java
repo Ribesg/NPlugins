@@ -36,17 +36,23 @@ import java.util.Set;
  */
 public abstract class AbstractMessages {
 
-	/** Separator used in config to define if you want to send multiple messages to player */
+	/**
+	 * Separator used in config to define if you want to send multiple messages to player
+	 */
 	public static final String LINE_SEPARATOR = "##";
 
 	private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
 	private final String nodeName;
 
-	/** Header of each messages sent to player */
+	/**
+	 * Header of each messages sent to player
+	 */
 	private final String messageHeader;
 
-	/** Charset used for reading/writing config file */
+	/**
+	 * Charset used for reading/writing config file
+	 */
 	private static final Charset CHARSET = StandardCharsets.UTF_8;
 
 	private EnumMap<MessageId, Message> messagesMap;                            // Id ; Message
@@ -100,7 +106,9 @@ public abstract class AbstractMessages {
 		}
 	}
 
-	/** @return a default AbstractMessages map */
+	/**
+	 * @return a default AbstractMessages map
+	 */
 	EnumMap<MessageId, Message> getDefaultConfig() {
 		final EnumMap<MessageId, Message> map = new EnumMap<>(MessageId.class);
 		for (final Message m : createMessage()) {
@@ -130,7 +138,9 @@ public abstract class AbstractMessages {
 		}
 	}
 
-	/** @return the String that will be written in config file */
+	/**
+	 * @return the String that will be written in config file
+	 */
 	private String getConfigString() {
 		final StringBuilder content = new StringBuilder();
 

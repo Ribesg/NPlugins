@@ -208,7 +208,9 @@ public class NWorld extends NPlugin implements WorldNode {
 		return true;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
+	 */
 	@Override
 	protected void handleOtherNodes() {
 		// Nothing to do here for now

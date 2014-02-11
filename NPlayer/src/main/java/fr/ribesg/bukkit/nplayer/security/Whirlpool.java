@@ -69,16 +69,24 @@ import java.util.Arrays;
 
 public class Whirlpool {
 
-	/** The message digest size (in bits) */
+	/**
+	 * The message digest size (in bits)
+	 */
 	public static final int DIGESTBITS = 512;
 
-	/** The message digest size (in bytes) */
+	/**
+	 * The message digest size (in bytes)
+	 */
 	public static final int DIGESTBYTES = Whirlpool.DIGESTBITS >>> 3;
 
-	/** The number of rounds of the internal dedicated block cipher. */
+	/**
+	 * The number of rounds of the internal dedicated block cipher.
+	 */
 	protected static final int R = 10;
 
-	/** The substitution box. */
+	/**
+	 * The substitution box.
+	 */
 	private static final String sbox = "\u1823\uc6E8\u87B8\u014F\u36A6\ud2F5\u796F\u9152" +
 	                                   "\u60Bc\u9B8E\uA30c\u7B35\u1dE0\ud7c2\u2E4B\uFE57" +
 	                                   "\u1577\u37E5\u9FF0\u4AdA\u58c9\u290A\uB1A0\u6B85" +
@@ -128,7 +136,7 @@ public class Whirlpool {
 				Whirlpool.C[t][x] = Whirlpool.C[t - 1][x] >>> 8 | Whirlpool.C[t - 1][x] << 56;
 			}
 		}
-	    /*
+		/*
         for (int t = 0; t < 8; t++) {
             System.out.println("static const u64 C" + t + "[256] = {");
             for (int i = 0; i < 64; i++) {
@@ -173,19 +181,29 @@ public class Whirlpool {
         //*/
 	}
 
-	/** Global number of hashed bits (256-bit counter). */
+	/**
+	 * Global number of hashed bits (256-bit counter).
+	 */
 	protected final byte[] bitLength = new byte[32];
 
-	/** Buffer of data to hash. */
+	/**
+	 * Buffer of data to hash.
+	 */
 	protected final byte[] buffer = new byte[64];
 
-	/** Current number of bits on the buffer. */
+	/**
+	 * Current number of bits on the buffer.
+	 */
 	protected int bufferBits = 0;
 
-	/** Current (possibly incomplete) byte slot on the buffer. */
+	/**
+	 * Current (possibly incomplete) byte slot on the buffer.
+	 */
 	protected int bufferPos = 0;
 
-	/** The hashing state. */
+	/**
+	 * The hashing state.
+	 */
 	protected final long[] hash  = new long[8];
 	protected final long[] K     = new long[8];                                               // the round key
 	protected final long[] L     = new long[8];
@@ -195,7 +213,9 @@ public class Whirlpool {
 	public Whirlpool() {
 	}
 
-	/** The core Whirlpool transform. */
+	/**
+	 * The core Whirlpool transform.
+	 */
 	protected void processBuffer() {
         /*
          * map the buffer to a block:
@@ -245,7 +265,9 @@ public class Whirlpool {
 		}
 	}
 
-	/** Initialize the hashing state. */
+	/**
+	 * Initialize the hashing state.
+	 */
 	public void NESSIEinit() {
 		Arrays.fill(this.bitLength, (byte) 0);
 		this.bufferBits = this.bufferPos = 0;

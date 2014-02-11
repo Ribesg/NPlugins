@@ -113,7 +113,9 @@ public class DynmapBridge {
 		}
 	}
 
-	/** Precondition: We already checked that this cuboid region can be shown and has to be shown. */
+	/**
+	 * Precondition: We already checked that this cuboid region can be shown and has to be shown.
+	 */
 	private boolean showCuboidRegion(final CuboidRegion region) {
 		// Parameter 1: marker ID
 		final String id = StringUtils.toLowerCamelCase(region.getRegionName());

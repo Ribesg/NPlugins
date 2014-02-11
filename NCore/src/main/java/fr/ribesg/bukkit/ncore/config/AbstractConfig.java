@@ -33,10 +33,14 @@ import java.nio.file.StandardOpenOption;
  */
 public abstract class AbstractConfig<T extends JavaPlugin> {
 
-	/** The Charset used for reading/writing files */
+	/**
+	 * The Charset used for reading/writing files
+	 */
 	public static final Charset CHARSET = StandardCharsets.UTF_8;
 
-	/** The Plugin linked to this config */
+	/**
+	 * The Plugin linked to this config
+	 */
 	protected final T plugin;
 
 	/**
@@ -134,6 +138,8 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 	 */
 	protected abstract void handleValues(final YamlConfiguration config) throws InvalidConfigurationException;
 
-	/** @return the String to be written to file */
+	/**
+	 * @return the String to be written to file
+	 */
 	protected abstract String getConfigString();
 }

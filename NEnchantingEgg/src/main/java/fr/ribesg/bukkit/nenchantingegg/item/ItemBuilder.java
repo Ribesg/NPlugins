@@ -25,7 +25,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-/** Based on a main item and some ingredients, builds a new boosted item. */
+/**
+ * Based on a main item and some ingredients, builds a new boosted item.
+ */
 public class ItemBuilder {
 
 	private static final Random        RANDOM            = new Random();
@@ -59,7 +61,9 @@ public class ItemBuilder {
 	};
 	private static final double     ENCH_REDUCE  = 0.1f;
 
-	/** List of items that can be boosted */
+	/**
+	 * List of items that can be boosted
+	 */
 	private static Set<Material> getPossibleMainItems() {
 		if (possibleMainItems == null) {
 			possibleMainItems = new HashSet<>();
@@ -113,7 +117,9 @@ public class ItemBuilder {
 		return possibleMainItems;
 	}
 
-	/** The amount of base material needed based on the type of item */
+	/**
+	 * The amount of base material needed based on the type of item
+	 */
 	private int getBaseRessourceAmount(final Material material) {
 		switch (material) {
 			case LEATHER_CHESTPLATE:
@@ -179,7 +185,9 @@ public class ItemBuilder {
 		items = new ArrayList<>();
 	}
 
-	/** Handles the reception of an item */
+	/**
+	 * Handles the reception of an item
+	 */
 	public void addItem(final ItemStack is) {
 		plugin.entering(getClass(), "addItem");
 

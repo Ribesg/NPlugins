@@ -18,7 +18,9 @@ import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class Config extends AbstractConfig<NCore> {
 
 	private boolean           updateCheck;

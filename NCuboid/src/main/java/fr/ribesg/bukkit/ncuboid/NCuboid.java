@@ -59,7 +59,9 @@ public class NCuboid extends NPlugin implements CuboidNode {
 		return "0.5.1";
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeEnable() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeEnable()
+	 */
 	@Override
 	protected boolean onNodeEnable() {
 		// Messages first !
@@ -152,7 +154,9 @@ public class NCuboid extends NPlugin implements CuboidNode {
 		return true;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
+	 */
 	@Override
 	protected void handleOtherNodes() {
 		// See if there are new worlds
@@ -163,7 +167,9 @@ public class NCuboid extends NPlugin implements CuboidNode {
 		}
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeDisable() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeDisable()
+	 */
 	@Override
 	protected void onNodeDisable() {
 		try {

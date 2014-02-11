@@ -25,7 +25,7 @@ public class VersionUtils {
 	 * Check if a version represents a Snapshot version or not.
 	 *
 	 * @return true if the provided String represents a Snapshot version,
-	 *         false otherwise
+	 * false otherwise
 	 */
 	public static boolean isSnapshot(final String versionString) {
 		return SNAPSHOT_REGEX.matcher(versionString).matches();
@@ -35,7 +35,7 @@ public class VersionUtils {
 	 * Check if a version represents a Release version or not.
 	 *
 	 * @return true if the provided String represents a Release version,
-	 *         false otherwise
+	 * false otherwise
 	 */
 	public static boolean isRelease(final String versionString) {
 		return RELEASE_REGEX.matcher(versionString).matches();

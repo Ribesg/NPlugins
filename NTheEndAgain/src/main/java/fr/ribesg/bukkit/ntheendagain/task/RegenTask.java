@@ -11,7 +11,9 @@ package fr.ribesg.bukkit.ntheendagain.task;
 
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class RegenTask extends RandomRepeatingTask {
 
 	public RegenTask(final EndWorldHandler handler) {

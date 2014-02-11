@@ -303,7 +303,9 @@ public class RegionDb implements Iterable<GeneralRegion> {
 			return result;
 		}
 
-		/** Only available if OVERLAP result */
+		/**
+		 * Only available if OVERLAP result
+		 */
 		public GeneralRegion getRegion() {
 			return region;
 		}

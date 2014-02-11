@@ -12,7 +12,9 @@ import fr.ribesg.bukkit.nworld.world.GeneralWorld.WorldType;
 
 import java.util.*;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class Worlds implements Iterable<GeneralWorld> {
 
 	private final Map<String, GeneralWorld> worlds;

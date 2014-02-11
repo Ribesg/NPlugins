@@ -45,7 +45,7 @@ public final class AsyncPermAccessor {
 	 * @param permissionNode the permission to check
 	 *
 	 * @return true if the provided Player had the provided Permission on
-	 *         the last update, false otherwise
+	 * the last update, false otherwise
 	 */
 	public static boolean has(final String playerName, final String permissionNode) {
 		checkState();
@@ -58,7 +58,7 @@ public final class AsyncPermAccessor {
 	 * @param playerName the player's name
 	 *
 	 * @return true if the provided Player was Op on the last update,
-	 *         false otherwise
+	 * false otherwise
 	 */
 	public static boolean isOp(final String playerName) {
 		checkState();
@@ -83,10 +83,14 @@ public final class AsyncPermAccessor {
 	// ## Static object ## //
 	// ################### //
 
-	/** The unique instance of this tool. */
+	/**
+	 * The unique instance of this tool.
+	 */
 	private static AsyncPermAccessor instance;
 
-	/** Checks if the tool has been initialized. */
+	/**
+	 * Checks if the tool has been initialized.
+	 */
 	private static void checkState() {
 		if (instance == null) {
 			throw new IllegalStateException("AsyncPermAccessor has not been initialized");
@@ -109,10 +113,14 @@ public final class AsyncPermAccessor {
 	 */
 	private final Set<String> ops;
 
-	/** The plugin on which the task is attached. */
+	/**
+	 * The plugin on which the task is attached.
+	 */
 	private final Plugin plugin;
 
-	/** The update rate, in seconds. */
+	/**
+	 * The update rate, in seconds.
+	 */
 	private final int updateDelay;
 
 	/**
@@ -131,25 +139,33 @@ public final class AsyncPermAccessor {
 		launchUpdateTask();
 	}
 
-	/** @see #has(String, String) */
+	/**
+	 * @see #has(String, String)
+	 */
 	private boolean _has(final String playerName, final String permissionNode) {
 		final Set<String> playerPerms = this.permissions.get(playerName);
 		return playerPerms != null && playerPerms.contains(permissionNode);
 	}
 
-	/** @see #isOp(String) */
+	/**
+	 * @see #isOp(String)
+	 */
 	private boolean _isOp(final String playerName) {
 		return this.ops.contains(playerName);
 	}
 
-	/** Update all permissions and op state of all connected players. */
+	/**
+	 * Update all permissions and op state of all connected players.
+	 */
 	private void update() {
 		for (final Player player : Bukkit.getOnlinePlayers()) {
 			updatePlayer(player);
 		}
 	}
 
-	/** Update all permissions and op state of the provided player. */
+	/**
+	 * Update all permissions and op state of the provided player.
+	 */
 	private void updatePlayer(final Player player) {
 		final String playerName = player.getName();
 		if (player.isOp()) {
@@ -171,7 +187,9 @@ public final class AsyncPermAccessor {
 		this.permissions.put(playerName, playerPerms);
 	}
 
-	/** Launch the update task. */
+	/**
+	 * Launch the update task.
+	 */
 	private void launchUpdateTask() {
 		final long tickDelay = this.updateDelay * 20L;
 		Bukkit.getScheduler().runTaskTimer(this.plugin, new BukkitRunnable() {

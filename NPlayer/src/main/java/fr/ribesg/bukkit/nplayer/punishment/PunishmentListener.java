@@ -18,7 +18,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class PunishmentListener implements Listener {
 
 	private final NPlayer      plugin;

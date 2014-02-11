@@ -40,7 +40,9 @@ public class TalkListener implements Listener {
 		filter = plugin.getChatFilter();
 	}
 
-	/** Handles "@playerName message" PMs */
+	/**
+	 * Handles "@playerName message" PMs
+	 */
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerChatFirst(final AsyncPlayerChatEvent event) {
 		if (event.getMessage().startsWith("@") && !event.getMessage().startsWith("@ ")) {
@@ -57,7 +59,9 @@ public class TalkListener implements Listener {
 		}
 	}
 
-	/** Handles chat filter */
+	/**
+	 * Handles chat filter
+	 */
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerChatThen(final AsyncPlayerChatEvent event) {
 		if (filter != null) {
@@ -147,7 +151,9 @@ public class TalkListener implements Listener {
 		}
 	}
 
-	/** Handles colors in chat */
+	/**
+	 * Handles colors in chat
+	 */
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerChatLast(final AsyncPlayerChatEvent event) {
 		event.setFormat(plugin.getFormater().getFormat(event.getPlayer(), true));

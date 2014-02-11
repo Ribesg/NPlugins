@@ -20,13 +20,19 @@ import java.util.Set;
 public abstract class PlayerRegion extends GeneralRegion {
 
 	public static enum RegionState {
-		/** Normal Region */
+		/**
+		 * Normal Region
+		 */
 		NORMAL,
 
-		/** First point selected */
+		/**
+		 * First point selected
+		 */
 		TMPSTATE1,
 
-		/** All points selected, waiting for "/cuboid create" command */
+		/**
+		 * All points selected, waiting for "/cuboid create" command
+		 */
 		TMPSTATE2
 	}
 
@@ -38,7 +44,9 @@ public abstract class PlayerRegion extends GeneralRegion {
 	private String          farewellMessage;
 	private Set<ChunkCoord> chunks;
 
-	/** Create a new Region, when user select points etc */
+	/**
+	 * Create a new Region, when user select points etc
+	 */
 	public PlayerRegion(final String regionName, final String ownerName, final String worldName, final RegionType type) {
 		super(worldName, type, 1);
 		setRegionName(regionName);
@@ -48,7 +56,9 @@ public abstract class PlayerRegion extends GeneralRegion {
 		setFarewellMessage(null);
 	}
 
-	/** Create a Region from a save */
+	/**
+	 * Create a Region from a save
+	 */
 	public PlayerRegion(final String regionName, final String ownerName, final String worldName, final RegionState state, final long totalSize, final String welcomeMessage, final String farewellMessage, final RegionType type, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
 
 		super(worldName, type, rights, priority, flags, flagAtts);

@@ -46,22 +46,36 @@ import java.util.Set;
 
 public class ItemNetworkListener implements Listener {
 
-	/** First line of a INet Emitter sign */
+	/**
+	 * First line of a INet Emitter sign
+	 */
 	private static final String ITEMNETWORK_EMITTER  = "[" + ChatColor.GREEN + "INet-Em" + ChatColor.BLACK + "]";
-	/** First line of a INet Receiver sign */
+	/**
+	 * First line of a INet Receiver sign
+	 */
 	private static final String ITEMNETWORK_RECEIVER = "[" + ChatColor.GREEN + "INet-Re" + ChatColor.BLACK + "]";
-	/** Prefix of the INet sign owner name */
+	/**
+	 * Prefix of the INet sign owner name
+	 */
 	private static final String PRIMARY_PREFIX       = ChatColor.GREEN.toString();
-	/** Prefix of all other lines */
+	/**
+	 * Prefix of all other lines
+	 */
 	private static final String SECONDARY_PREFIX     = ChatColor.GOLD.toString();
 
-	/** First line of an Error sign */
+	/**
+	 * First line of an Error sign
+	 */
 	private static final String ERROR = "[" + ChatColor.DARK_RED + "Error" + ChatColor.RESET + "]";
 
-	/** Set of String that players could write as first lines to say that it's a INet Emitter sign */
+	/**
+	 * Set of String that players could write as first lines to say that it's a INet Emitter sign
+	 */
 	private static Set<String> itemNetworkEmitterStrings;
 
-	/** Static lazy getter for {@link #itemNetworkEmitterStrings} */
+	/**
+	 * Static lazy getter for {@link #itemNetworkEmitterStrings}
+	 */
 	private static Set<String> getItemNetworkEmitterStrings() {
 		if (itemNetworkEmitterStrings == null) {
 			itemNetworkEmitterStrings = new HashSet<>(3);
@@ -72,10 +86,14 @@ public class ItemNetworkListener implements Listener {
 		return itemNetworkEmitterStrings;
 	}
 
-	/** Set of String that players could write as first lines to say that it's a INet Receiver sign */
+	/**
+	 * Set of String that players could write as first lines to say that it's a INet Receiver sign
+	 */
 	private static Set<String> itemNetworkReceiverStrings;
 
-	/** Static lazy getter for {@link #itemNetworkReceiverStrings} */
+	/**
+	 * Static lazy getter for {@link #itemNetworkReceiverStrings}
+	 */
 	private static Set<String> getItemNetworkReceiverStrings() {
 		if (itemNetworkReceiverStrings == null) {
 			itemNetworkReceiverStrings = new HashSet<>(3);

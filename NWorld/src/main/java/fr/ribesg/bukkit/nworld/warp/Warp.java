@@ -11,7 +11,9 @@ package fr.ribesg.bukkit.nworld.warp;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import org.bukkit.Location;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class Warp implements Comparable<Warp> {
 
 	private String    name;

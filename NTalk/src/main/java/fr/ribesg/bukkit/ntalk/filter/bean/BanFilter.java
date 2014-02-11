@@ -12,7 +12,9 @@ import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
 import java.util.Map;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class BanFilter extends TimedFilter {
 
 	public BanFilter(final String outputString, final String filteredString, final boolean regex, final long duration) {

@@ -12,7 +12,9 @@ import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
 import java.util.Map;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public abstract class TimedFilter extends Filter {
 
 	private final long duration;

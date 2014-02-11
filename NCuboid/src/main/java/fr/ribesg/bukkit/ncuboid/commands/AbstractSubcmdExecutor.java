@@ -27,7 +27,9 @@ public abstract class AbstractSubcmdExecutor {
 		return plugin;
 	}
 
-	/** Should be called in sub-classes' constructors */
+	/**
+	 * Should be called in sub-classes' constructors
+	 */
 	protected void setUsage(final String... usage) {
 		this.usage = usage;
 	}

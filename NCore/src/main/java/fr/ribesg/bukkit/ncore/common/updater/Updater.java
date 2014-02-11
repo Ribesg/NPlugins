@@ -36,7 +36,9 @@ public class Updater {
 	private static final String API_HOST  = "https://api.curseforge.com";
 	private static final String API_QUERY = "/servermods/files?projectIds=";
 
-	/** IDs of the Curse projects corresponding to the NPlugins suite */
+	/**
+	 * IDs of the Curse projects corresponding to the NPlugins suite
+	 */
 	private static final Map<String, Integer> CURSE_IDS;
 
 	static {

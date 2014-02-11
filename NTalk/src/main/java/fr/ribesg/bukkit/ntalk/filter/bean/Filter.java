@@ -17,7 +17,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public abstract class Filter implements TrieElement {
 
 	private final String           outputString;
@@ -65,7 +67,9 @@ public abstract class Filter implements TrieElement {
 	// ## Saving ## //
 	// ############ //
 
-	/** May be overriden to add stuff */
+	/**
+	 * May be overriden to add stuff
+	 */
 	public Map<String, Object> getConfigMap() {
 		final Map<String, Object> map = new LinkedHashMap<>();
 		map.put("filteredString", filteredString);

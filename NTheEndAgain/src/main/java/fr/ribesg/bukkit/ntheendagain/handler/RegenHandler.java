@@ -21,12 +21,18 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class RegenHandler {
 
-	/** The End spawn Location is always [100;50;0] */
+	/**
+	 * The End spawn Location is always [100;50;0]
+	 */
 	private static final int END_SPAWN_CHUNK_X = 100 >> 4;
-	/** The End spawn Location is always [100;50;0] */
+	/**
+	 * The End spawn Location is always [100;50;0]
+	 */
 	private static final int END_SPAWN_CHUNK_Z = 0;
 
 	private final EndWorldHandler worldHandler;

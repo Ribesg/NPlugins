@@ -12,7 +12,9 @@ import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
 import java.util.Map;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class DenyFilter extends Filter {
 
 	public DenyFilter(final String outputString, final String filteredString, final boolean regex) {

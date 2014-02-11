@@ -10,14 +10,18 @@
 package fr.ribesg.bukkit.ngeneral.feature;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 
-/** Represents an autonomous feature. */
+/**
+ * Represents an autonomous feature.
+ */
 public abstract class Feature {
 
 	protected final NGeneral    plugin;
 	protected final FeatureType type;
 	protected final boolean     enabled;
 
-	/** Must not interact with Bukkit in any way */
+	/**
+	 * Must not interact with Bukkit in any way
+	 */
 	protected Feature(final NGeneral instance, final FeatureType type, final boolean enabled) {
 		this.plugin = instance;
 		this.type = type;
@@ -36,7 +40,9 @@ public abstract class Feature {
 		return enabled;
 	}
 
-	/** Must be overridden by Features to start interacting with Bukkit. */
+	/**
+	 * Must be overridden by Features to start interacting with Bukkit.
+	 */
 	public abstract void initialize();
 
 	/**

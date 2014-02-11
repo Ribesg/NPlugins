@@ -50,7 +50,9 @@ public class Message {
 		this.useHeader = useHeader;
 	}
 
-	/** @return a String representation of what arguments were awaited */
+	/**
+	 * @return a String representation of what arguments were awaited
+	 */
 	public String getAwaitedArgsString() {
 		if (awaitedArgs == null) {
 			return "none";
@@ -64,7 +66,9 @@ public class Message {
 		}
 	}
 
-	/** @return the number of arguments awaited */
+	/**
+	 * @return the number of arguments awaited
+	 */
 	public int getAwaitedArgsNb() {
 		if (awaitedArgs == null) {
 			return 0;

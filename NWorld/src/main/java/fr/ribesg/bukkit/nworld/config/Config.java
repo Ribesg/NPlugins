@@ -67,7 +67,9 @@ public class Config extends AbstractConfig<NWorld> {
 		broadcastOnWorldUnload = 0;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration)
+	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
@@ -499,7 +501,9 @@ public class Config extends AbstractConfig<NWorld> {
 		warps.putAll(warpsMap);
 	}
 
-	/** @see AbstractConfig#getConfigString() */
+	/**
+	 * @see AbstractConfig#getConfigString()
+	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();

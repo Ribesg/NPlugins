@@ -91,7 +91,7 @@ public class Config extends AbstractConfig<NGeneral> {
 		flyModeFeature = true;
 		protectionSignFeature = true;
 		itemNetworkFeature = true;
-		autoAfkFeature=true;
+		autoAfkFeature = true;
 
 		itemNetworkMaxDistance = 100;
 		autoAfkDelay = 120;
@@ -128,7 +128,9 @@ public class Config extends AbstractConfig<NGeneral> {
 		itemNetworkSignTooFarMsgLine3 = DEFAULT_itemNetworkSignTooFarMsgLine3;
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration)
+	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
@@ -315,7 +317,9 @@ public class Config extends AbstractConfig<NGeneral> {
 
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString()
+	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();

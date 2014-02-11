@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
 public class BusyCommand implements CommandExecutor {
 
 	private static final String BUSY_PREFIX = "" + ChatColor.DARK_RED + ChatColor.ITALIC;
-	private static final String COMMAND                 = "busy";
+	private static final String COMMAND     = "busy";
 
 	private final NGeneral plugin;
 

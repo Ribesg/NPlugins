@@ -73,7 +73,9 @@ public class Config extends AbstractConfig<NTalk> {
 		setTempJailCommand(defaultTempJailCommand);
 	}
 
-	/** @see AbstractConfig#handleValues(YamlConfiguration) */
+	/**
+	 * @see AbstractConfig#handleValues(YamlConfiguration)
+	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 
@@ -178,7 +180,9 @@ public class Config extends AbstractConfig<NTalk> {
 		}
 	}
 
-	/** @see AbstractConfig#getConfigString() */
+	/**
+	 * @see AbstractConfig#getConfigString()
+	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();

@@ -22,13 +22,17 @@ import java.util.Set;
  */
 public class FrameBuilder {
 
-	/** Enum of options available for each line */
+	/**
+	 * Enum of options available for each line
+	 */
 	public enum Option {
 		CENTER,
 		RIGHT
 	}
 
-	/** Represents a line of text with some options */
+	/**
+	 * Represents a line of text with some options
+	 */
 	private class Line {
 
 		public final String      line;

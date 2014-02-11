@@ -17,7 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class Warps implements Iterable<Warp> {
 
 	private final Map<String, Warp> warps;

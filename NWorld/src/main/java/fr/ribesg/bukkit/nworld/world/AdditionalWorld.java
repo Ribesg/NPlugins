@@ -11,7 +11,9 @@ package fr.ribesg.bukkit.nworld.world;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nworld.NWorld;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class AdditionalWorld extends GeneralWorld {
 
 	private final long               seed;

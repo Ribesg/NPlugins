@@ -14,7 +14,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public abstract class RandomRepeatingTask extends BukkitRunnable {
 
 	protected final EndWorldHandler worldHandler;
@@ -68,6 +70,8 @@ public abstract class RandomRepeatingTask extends BukkitRunnable {
 		return initialDelay / 1_000_000_000;
 	}
 
-	/** @return a Random value between the minimum and maximum delay set in config */
+	/**
+	 * @return a Random value between the minimum and maximum delay set in config
+	 */
 	protected abstract long getDelay();
 }

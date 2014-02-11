@@ -24,7 +24,9 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.logging.Logger;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class NListener implements Listener {
 
 	private static final Logger LOGGER = Logger.getLogger(NListener.class.getName());
@@ -87,7 +89,9 @@ public class NListener implements Listener {
 		}
 	}
 
-	/** Little structure used to return 3 values. */
+	/**
+	 * Little structure used to return 3 values.
+	 */
 	private class PortalEventResult {
 
 		public final Location destination;

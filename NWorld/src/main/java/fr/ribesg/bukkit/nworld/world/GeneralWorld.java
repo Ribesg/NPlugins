@@ -21,7 +21,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 
 	public enum WorldType {
@@ -183,7 +185,9 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		}
 	}
 
-	/** @return Null if the world doesn't exist / isn't loaded */
+	/**
+	 * @return Null if the world doesn't exist / isn't loaded
+	 */
 	public World getBukkitWorld() {
 		return Bukkit.getWorld(getWorldName());
 	}

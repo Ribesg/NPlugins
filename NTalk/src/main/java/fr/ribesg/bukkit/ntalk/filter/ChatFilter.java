@@ -28,7 +28,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class ChatFilter extends AbstractConfig<NTalk> {
 
 	private final Set<Filter>  regexes;

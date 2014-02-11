@@ -52,7 +52,9 @@ public class XPDistributionEvent extends Event implements Cancellable {
 		return xpMap;
 	}
 
-	/** The total amount of XP given for this Dragon's death, for reference. */
+	/**
+	 * The total amount of XP given for this Dragon's death, for reference.
+	 */
 	public int getTotalXPAmount() {
 		return totalXPAmount;
 	}

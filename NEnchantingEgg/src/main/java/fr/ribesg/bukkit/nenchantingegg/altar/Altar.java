@@ -82,7 +82,9 @@ public class Altar {
 		plugin.getAltars().remove(this);
 	}
 
-	/** This is called on server stops, prevents Altars from being save with an invalid state */
+	/**
+	 * This is called on server stops, prevents Altars from being save with an invalid state
+	 */
 	public void hardResetToInactive(final boolean hurt) {
 		this.state = AltarState.INACTIVE;
 		final Location loc = getCenterLocation().toBukkitLocation();

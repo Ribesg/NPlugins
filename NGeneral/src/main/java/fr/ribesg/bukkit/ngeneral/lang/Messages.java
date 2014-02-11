@@ -31,7 +31,9 @@ public class Messages extends AbstractMessages {
 		super("General");
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#createMessage() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.lang.AbstractMessages#createMessage()
+	 */
 	@Override
 	protected Set<Message> createMessage() {
 		final Set<Message> newMessages = new HashSet<>();

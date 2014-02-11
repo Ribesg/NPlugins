@@ -11,7 +11,9 @@ package fr.ribesg.bukkit.ncore.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-/** @author dumptruckman, Ribesg */
+/**
+ * @author dumptruckman, Ribesg
+ */
 public class ArgumentParser {
 
 	/**
@@ -26,29 +28,45 @@ public class ArgumentParser {
 		return new ArgumentParser(args).joinArgsWithQuotes();
 	}
 
-	/** Different states encountered while iterating over the args array */
+	/**
+	 * Different states encountered while iterating over the args array
+	 */
 	private static enum QuoteState {
 
-		/** Not inside a quoted String */
+		/**
+		 * Not inside a quoted String
+		 */
 		NO_QUOTES,
 
-		/** Inside a single-quoted String */
+		/**
+		 * Inside a single-quoted String
+		 */
 		SINGLE_QUOTES,
 
-		/** Inside a double-quoted String */
+		/**
+		 * Inside a double-quoted String
+		 */
 		DOUBLE_QUOTES
 	}
 
-	/** Used to store the input */
+	/**
+	 * Used to store the input
+	 */
 	private final String[] initialArgs;
 
-	/** Used to store the final result */
+	/**
+	 * Used to store the final result
+	 */
 	private final List<String> parsedArgs;
 
-	/** Used to store the current quote state */
+	/**
+	 * Used to store the current quote state
+	 */
 	private QuoteState quoteState;
 
-	/** Used to build the content of a quoted String as a single String */
+	/**
+	 * Used to build the content of a quoted String as a single String
+	 */
 	private final StringBuilder quotedArgsBuffer;
 
 	/**
@@ -200,7 +218,9 @@ public class ArgumentParser {
 		return "";
 	}
 
-	/** Resets buffers and state */
+	/**
+	 * Resets buffers and state
+	 */
 	private void resetQuotedArgTracking() {
 		quotedArgsBuffer.delete(0, quotedArgsBuffer.length());
 		fallBackBuffer.clear();

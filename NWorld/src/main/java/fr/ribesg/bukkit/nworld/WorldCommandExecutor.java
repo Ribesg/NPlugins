@@ -35,7 +35,9 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class WorldCommandExecutor implements CommandExecutor {
 
 	private final NWorld plugin;

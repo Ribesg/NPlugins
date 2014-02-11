@@ -8,7 +8,9 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncuboid.config;
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class GroupConfig {
 
 	private final String groupName;

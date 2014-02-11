@@ -26,7 +26,9 @@ public class Config extends AbstractConfig<NPlayer> {
 		setTooManyAttemptsPunishmentDuration(300);
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration) */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration)
+	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 
@@ -55,7 +57,9 @@ public class Config extends AbstractConfig<NPlayer> {
 		}
 	}
 
-	/** @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString() */
+	/**
+	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString()
+	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();

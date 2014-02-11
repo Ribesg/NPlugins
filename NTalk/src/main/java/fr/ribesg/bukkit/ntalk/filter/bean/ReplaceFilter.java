@@ -12,7 +12,9 @@ import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
 import java.util.Map;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class ReplaceFilter extends Filter {
 
 	private final String replacement;

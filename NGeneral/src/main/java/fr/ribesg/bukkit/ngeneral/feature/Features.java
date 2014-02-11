@@ -18,7 +18,9 @@ import fr.ribesg.bukkit.ngeneral.feature.protectionsign.ProtectionSignFeature;
 import java.util.EnumMap;
 import java.util.Map;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class Features {
 
 	private final Map<FeatureType, Feature> features;

@@ -17,7 +17,9 @@ import fr.ribesg.bukkit.ngeneral.feature.protectionsign.ProtectionSignFeature;
 import java.util.HashMap;
 import java.util.Map;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public enum FeatureType {
 
 	FLY_MODE(FlyModeFeature.class),
@@ -30,7 +32,9 @@ public enum FeatureType {
 
 	AUTO_AFK(AutoAfkFeature.class);
 
-	/** Maps Feature classes to appropriate FeatureType enum value */
+	/**
+	 * Maps Feature classes to appropriate FeatureType enum value
+	 */
 	private static final Map<Class<? extends Feature>, FeatureType> REVERSE_MAP = new HashMap<>();
 
 	/**
@@ -49,14 +53,18 @@ public enum FeatureType {
 		return REVERSE_MAP.get(clazz);
 	}
 
-	/** The Feature class linked to this FeatureType enum value */
+	/**
+	 * The Feature class linked to this FeatureType enum value
+	 */
 	private final Class<? extends Feature> clazz;
 
 	private FeatureType(final Class<? extends Feature> clazz) {
 		this.clazz = clazz;
 	}
 
-	/** Get the Feature class linked to this FeatureType enum value */
+	/**
+	 * Get the Feature class linked to this FeatureType enum value
+	 */
 	public Class<? extends Feature> toClass() {
 		return this.clazz;
 	}
