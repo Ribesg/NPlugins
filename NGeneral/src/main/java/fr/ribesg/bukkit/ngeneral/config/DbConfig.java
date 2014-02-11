@@ -69,7 +69,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 						final ConfigurationSection receiverSection = receiversSection.getConfigurationSection(key);
 						final NLocation location = NLocation.toNLocation(receiverSection.getString("location"));
 						final String acceptsString = receiverSection.getString("accepts");
-						final ReceiverSign receiverSign = new ReceiverSign(location, acceptsString);
+						final ReceiverSign receiverSign = new ReceiverSign(plugin, location, acceptsString);
 						network.getReceivers().add(receiverSign);
 					}
 				}

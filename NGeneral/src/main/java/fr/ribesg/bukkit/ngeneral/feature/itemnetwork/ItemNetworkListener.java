@@ -203,7 +203,7 @@ public class ItemNetworkListener implements Listener {
 			} else {
 				final String acceptedString = event.getLine(2);
 				try {
-					network.getReceivers().add(new ReceiverSign(new NLocation(event.getBlock().getLocation()), acceptedString));
+					network.getReceivers().add(new ReceiverSign(feature.getPlugin(), new NLocation(event.getBlock().getLocation()), acceptedString));
 				} catch (IllegalArgumentException e) {
 					event.setLine(0, ERROR);
 					event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignInvalidMaterialsMsgLine1()));
