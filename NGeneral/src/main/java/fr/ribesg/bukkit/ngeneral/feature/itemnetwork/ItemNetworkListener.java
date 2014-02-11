@@ -14,6 +14,7 @@ import fr.ribesg.bukkit.ncore.utils.ColorUtils;
 import fr.ribesg.bukkit.ncore.utils.SignUtils;
 import fr.ribesg.bukkit.ncore.utils.UsernameUtils;
 import fr.ribesg.bukkit.ngeneral.Perms;
+import fr.ribesg.bukkit.ngeneral.config.Config;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.InventoryContent;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ItemNetwork;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ReceiverSign;
@@ -86,9 +87,11 @@ public class ItemNetworkListener implements Listener {
 	}
 
 	private final ItemNetworkFeature feature;
+	private final Config             config;
 
 	public ItemNetworkListener(final ItemNetworkFeature feature) {
 		this.feature = feature;
+		this.config = feature.getPlugin().getPluginConfig();
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -163,19 +166,19 @@ public class ItemNetworkListener implements Listener {
 			final ItemNetwork network = feature.getNetworks().get(networkName);
 			if (network == null) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignUnknownNetworkMsgLine1()));
-				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignUnknownNetworkMsgLine2()));
-				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignUnknownNetworkMsgLine3()));
+				event.setLine(1, ColorUtils.colorize(config.getItemNetworkSignUnknownNetworkMsgLine1()));
+				event.setLine(2, ColorUtils.colorize(config.getItemNetworkSignUnknownNetworkMsgLine2()));
+				event.setLine(3, ColorUtils.colorize(config.getItemNetworkSignUnknownNetworkMsgLine3()));
 			} else if (!Perms.hasItemNetworkAll(player) && !player.getName().equalsIgnoreCase(network.getCreator())) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine1()));
-				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine2()));
-				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine3()));
+				event.setLine(1, ColorUtils.colorize(config.getItemNetworkSignNotAllowedMsgLine1()));
+				event.setLine(2, ColorUtils.colorize(config.getItemNetworkSignNotAllowedMsgLine2()));
+				event.setLine(3, ColorUtils.colorize(config.getItemNetworkSignNotAllowedMsgLine3()));
 			} else if (network.isTooFar(event.getBlock().getLocation())) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine1()));
-				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine2()));
-				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine3()));
+				event.setLine(1, ColorUtils.colorize(config.getItemNetworkSignTooFarMsgLine1()));
+				event.setLine(2, ColorUtils.colorize(config.getItemNetworkSignTooFarMsgLine2()));
+				event.setLine(3, ColorUtils.colorize(config.getItemNetworkSignTooFarMsgLine3()));
 			} else {
 				event.setLine(0, ITEMNETWORK_EMITTER);
 				event.setLine(1, SECONDARY_PREFIX + network.getName());
@@ -187,28 +190,28 @@ public class ItemNetworkListener implements Listener {
 			final ItemNetwork network = feature.getNetworks().get(networkName);
 			if (network == null) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignUnknownNetworkMsgLine1()));
-				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignUnknownNetworkMsgLine2()));
-				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignUnknownNetworkMsgLine3()));
+				event.setLine(1, ColorUtils.colorize(config.getItemNetworkSignUnknownNetworkMsgLine1()));
+				event.setLine(2, ColorUtils.colorize(config.getItemNetworkSignUnknownNetworkMsgLine2()));
+				event.setLine(3, ColorUtils.colorize(config.getItemNetworkSignUnknownNetworkMsgLine3()));
 			} else if (!Perms.hasItemNetworkAll(player) && !player.getName().equalsIgnoreCase(network.getCreator())) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine1()));
-				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine2()));
-				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignNotAllowedMsgLine3()));
+				event.setLine(1, ColorUtils.colorize(config.getItemNetworkSignNotAllowedMsgLine1()));
+				event.setLine(2, ColorUtils.colorize(config.getItemNetworkSignNotAllowedMsgLine2()));
+				event.setLine(3, ColorUtils.colorize(config.getItemNetworkSignNotAllowedMsgLine3()));
 			} else if (network.isTooFar(event.getBlock().getLocation())) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine1()));
-				event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine2()));
-				event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignTooFarMsgLine3()));
+				event.setLine(1, ColorUtils.colorize(config.getItemNetworkSignTooFarMsgLine1()));
+				event.setLine(2, ColorUtils.colorize(config.getItemNetworkSignTooFarMsgLine2()));
+				event.setLine(3, ColorUtils.colorize(config.getItemNetworkSignTooFarMsgLine3()));
 			} else {
 				final String acceptedString = event.getLine(2);
 				try {
 					network.getReceivers().add(new ReceiverSign(feature.getPlugin(), new NLocation(event.getBlock().getLocation()), acceptedString));
 				} catch (IllegalArgumentException e) {
 					event.setLine(0, ERROR);
-					event.setLine(1, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignInvalidMaterialsMsgLine1()));
-					event.setLine(2, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignInvalidMaterialsMsgLine2()));
-					event.setLine(3, ColorUtils.colorize(feature.getPlugin().getPluginConfig().getItemNetworkSignInvalidMaterialsMsgLine3()));
+					event.setLine(1, ColorUtils.colorize(config.getItemNetworkSignInvalidMaterialsMsgLine1()));
+					event.setLine(2, ColorUtils.colorize(config.getItemNetworkSignInvalidMaterialsMsgLine2()));
+					event.setLine(3, ColorUtils.colorize(config.getItemNetworkSignInvalidMaterialsMsgLine3()));
 					return;
 				}
 				event.setLine(0, ITEMNETWORK_RECEIVER);
