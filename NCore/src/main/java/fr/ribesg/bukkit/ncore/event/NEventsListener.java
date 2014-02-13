@@ -67,7 +67,7 @@ public class NEventsListener implements Listener {
 		final Player player = event.getPlayer();
 		final Location from = event.getFrom();
 		final Location to = event.getTo();
-		if (from.getBlockX() << 4 != to.getBlockX() << 4 || from.getBlockZ() << 4 != to.getBlockZ() << 4) {
+		if (from.getBlockX() / 16 != to.getBlockX() / 16 || from.getBlockZ() / 16 != to.getBlockZ() / 16) {
 			final PlayerChunkMoveEvent chunkMoveEvent = new PlayerChunkMoveEvent(player, from, to);
 			chunkMoveEvent.setCancelled(event.isCancelled());
 			Bukkit.getPluginManager().callEvent(chunkMoveEvent);
