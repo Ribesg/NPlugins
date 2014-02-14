@@ -33,11 +33,12 @@ public class RespawnHandler {
 		this.worldHandler = worldHandler;
 	}
 
-	public void respawn() {
+	public boolean respawn() {
 		if (worldHandler.getConfig().getRegenType() == 1) {
 			worldHandler.getRegenHandler().regenThenRespawn();
+			return false;
 		} else {
-			respawnDragons();
+			return respawnDragons();
 		}
 	}
 
@@ -55,12 +56,13 @@ public class RespawnHandler {
 		respawnDragons();
 	}
 
-	private void respawnDragons() {
+	private boolean respawnDragons() {
 		final int nbAlive = worldHandler.getNumberOfAliveEnderDragons();
 		final int respawnNumber = worldHandler.getConfig().getRespawnNumber();
 		int respawning = 0;
+		boolean result = true;
 		for (int i = nbAlive; i < respawnNumber; i++) {
-			respawnDragon();
+			result &= respawnDragon();
 			respawning++;
 		}
 		if (respawning > 1) {
@@ -68,9 +70,10 @@ public class RespawnHandler {
 		} else if (respawning == 1) {
 			worldHandler.getPlugin().broadcastMessage(MessageId.theEndAgain_respawned1, worldHandler.getEndWorld().getName());
 		}
+		return result;
 	}
 
-	private void respawnDragon() {
+	private boolean respawnDragon() {
 		final World world = worldHandler.getEndWorld();
 		final EndChunks chunks = worldHandler.getChunks();
 		// Create a random location near the center
@@ -98,10 +101,13 @@ public class RespawnHandler {
 				@Override
 				public void run() {
 					world.spawnEntity(loc, EntityType.ENDER_DRAGON);
+					worldHandler.getConfig().setNextRespawnTaskTime(System.nanoTime() + worldHandler.getConfig().getRandomRespawnTimer() * 1_000_000_000);
 				}
 			}, EndWorldHandler.REGEN_TO_RESPAWN_DELAY);
+			return false;
 		} else {
 			world.spawnEntity(loc, EntityType.ENDER_DRAGON);
+			return true;
 		}
 	}
 

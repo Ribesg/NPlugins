@@ -36,17 +36,17 @@ public abstract class RandomRepeatingTask extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		exec();
+		final boolean success = exec();
 		final long delay = getDelay();
 		Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), this, delay * 20);
-		worldHandler.getConfig().setNextRespawnTaskTime(System.nanoTime() + delay * 1_000_000_000);
+		worldHandler.getConfig().setNextRespawnTaskTime(System.nanoTime() + (success ? delay : 0) * 1_000_000_000);
 	}
 
 	/**
 	 * Execute the task.
 	 * This is equivalent to the run() task of a standard repeating task
 	 */
-	public abstract void exec();
+	public abstract boolean exec();
 
 	/**
 	 * Get the initial delay for this task

@@ -21,8 +21,8 @@ public class RespawnTask extends RandomRepeatingTask {
 	}
 
 	@Override
-	public void exec() {
-		worldHandler.getRespawnHandler().respawn();
+	public boolean exec() {
+		return worldHandler.getRespawnHandler().respawn();
 	}
 
 	@Override

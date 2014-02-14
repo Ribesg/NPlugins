@@ -21,8 +21,9 @@ public class RegenTask extends RandomRepeatingTask {
 	}
 
 	@Override
-	public void exec() {
+	public boolean exec() {
 		worldHandler.getRegenHandler().regen();
+		return true;
 	}
 
 	@Override
