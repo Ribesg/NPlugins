@@ -46,7 +46,9 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
 	@Override
 	public boolean onNodeEnable() {
-		// Messages first !
+		entering(getClass(), "onNodeEnable");
+
+		debug("Loading plugin Messages...");
 		try {
 			if (!getDataFolder().isDirectory()) {
 				getDataFolder().mkdir();
@@ -54,47 +56,52 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 			messages = new Messages();
 			messages.loadMessages(this);
 		} catch (final IOException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NTheEndAgain tried to load messages.yml");
+			error("An error occured when NTheEndAgain tried to load messages.yml", e);
 			return false;
 		}
 
-		// Load End worlds configs and chunks data
+		debug("Loading End world config and Chunk data...");
 		worldHandlers = new HashMap<>();
 		boolean res = true;
+
+		debug("Analysing all worlds...");
 		for (final World w : Bukkit.getWorlds()) {
+			debug("World " + w.getName() + " is of type " + w.getEnvironment());
 			if (w.getEnvironment() == Environment.THE_END) {
 				try {
+					debug("Trying to load world " + w.getName());
 					res = loadWorld(w);
 					if (!res) {
+						debug("Load of world " + w.getName() + " failed!");
 						break;
 					}
-				} catch (InvalidConfigurationException e) {
-					getLogger().severe("An error occured, stacktrace follows:");
-					e.printStackTrace();
-					getLogger().severe("This error occured when NTheEndAgain tried to load \"" + w.getName() + "\"'s config file.");
+				} catch (final InvalidConfigurationException e) {
+					error("An error occured when NTheEndAgain tried to load \"" + w.getName() + "\"'s config file.", e);
 					break;
 				}
 			}
 		}
 		if (!res) {
+			error("Failed to load a configuration, please triple-check them. Disabling plugin...");
 			for (final EndWorldHandler handler : worldHandlers.values()) {
 				handler.cancelTasks();
 			}
 			return false;
 		}
 
+		debug("Activating filter if needed...");
 		activateFilter();
 
+		debug("Registering event handlers...");
 		getServer().getPluginManager().registerEvents(new WorldListener(this), this);
 		getServer().getPluginManager().registerEvents(new ChunkListener(this), this);
 		getServer().getPluginManager().registerEvents(new EnderDragonListener(this), this);
 		getServer().getPluginManager().registerEvents(new DamageListener(this), this);
 
+		debug("Registering command...");
 		setCommandExecutor("nend", new TheEndAgainCommandExecutor(this));
 
-		// Metrics - Number of End Worlds handled
+		debug("Handling Metrics...");
 		final Metrics.Graph g1 = getMetrics().createGraph("Amount of End Worlds handled");
 		g1.addPlotter(new Metrics.Plotter() {
 
@@ -186,6 +193,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 			}
 		});
 
+		exiting(getClass(), "onNodeEnable");
 		return true;
 	}
 
@@ -199,15 +207,18 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
 	@Override
 	public void onNodeDisable() {
+		entering(getClass(), "onNodeDisable");
+
 		for (final EndWorldHandler handler : worldHandlers.values()) {
 			try {
 				handler.unload(true);
-			} catch (InvalidConfigurationException e) {
-				getLogger().severe("Unable to disable \"" + handler.getEndWorld().getName() + "\"'s world handler. Server should be " +
-				                   "stopped now (Were you reloading?)");
-				e.printStackTrace();
+			} catch (final InvalidConfigurationException e) {
+				error("Unable to disable \"" + handler.getEndWorld().getName() + "\"'s world handler. Server should be " +
+				      "stopped now (Were you reloading?)", e);
 			}
 		}
+
+		exiting(getClass(), "onNodeDisable");
 	}
 
 	public Path getConfigFilePath(final String fileName) {
@@ -223,9 +234,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 			handler.initLater();
 			return true;
 		} catch (final IOException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NTheEndAgain tried to load " + e.getMessage() + ".yml");
+			error("This error occured when NTheEndAgain tried to load " + e.getMessage() + ".yml", e);
 			return false;
 		}
 	}
@@ -247,12 +256,16 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 		boolean filterActivated = false;
 		for (final EndWorldHandler handler : worldHandlers.values()) {
 			if (handler.getConfig().getFilterMovedTooQuicklySpam() == 1) {
+				debug("Filter needs to be actiavted for world " + handler.getEndWorld().getName());
 				filterActivated = true;
 				break;
 			}
 		}
 		if (filterActivated) {
+			debug("Filter activated!");
 			Bukkit.getLogger().setFilter(new MovedTooQuicklyFilter(this));
+		} else {
+			debug("Filter was not activated");
 		}
 	}
 

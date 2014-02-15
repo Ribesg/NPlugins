@@ -22,7 +22,11 @@ public class RegenTask extends RandomRepeatingTask {
 
 	@Override
 	public boolean exec() {
+		worldHandler.getPlugin().entering(getClass(), "exec");
+
 		worldHandler.getRegenHandler().regen();
+
+		worldHandler.getPlugin().exiting(getClass(), "exec");
 		return true;
 	}
 

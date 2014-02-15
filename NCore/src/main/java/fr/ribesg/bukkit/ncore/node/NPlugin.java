@@ -222,6 +222,12 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 		}
 	}
 
+	public void entering(final Class clazz, final String methodName, final String comment) {
+		if (this.debugEnabled) {
+			log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
+		}
+	}
+
 	public void exiting(final Class clazz, final String methodName) {
 		if (this.debugEnabled) {
 			log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
@@ -230,7 +236,7 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 
 	public void exiting(final Class clazz, final String methodName, final String comment) {
 		if (this.debugEnabled) {
-			log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()) + '(' + comment + ')');
+			log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
 		}
 	}
 

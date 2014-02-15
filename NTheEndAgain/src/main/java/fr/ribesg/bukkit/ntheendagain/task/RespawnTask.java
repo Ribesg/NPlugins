@@ -22,7 +22,12 @@ public class RespawnTask extends RandomRepeatingTask {
 
 	@Override
 	public boolean exec() {
-		return worldHandler.getRespawnHandler().respawn();
+		worldHandler.getPlugin().entering(getClass(), "exec");
+
+		final boolean res = worldHandler.getRespawnHandler().respawn();
+
+		worldHandler.getPlugin().exiting(getClass(), "exec", Boolean.toString(res));
+		return res;
 	}
 
 	@Override
