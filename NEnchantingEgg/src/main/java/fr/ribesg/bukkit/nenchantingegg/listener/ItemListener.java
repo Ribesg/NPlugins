@@ -38,18 +38,20 @@ public class ItemListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onItemPortal(final EntityPortalEvent event) {
 		plugin.entering(getClass(), "onItemPortal");
-		if (event.getEntityType() == EntityType.DROPPED_ITEM) {
-			plugin.debug("Teleporting entity is a Dropped Item, trying to handle it...");
-			final Location loc = event.getEntity().getLocation();
-			final Altar altar = plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
-			if (altar != null && altar.getState() == AltarState.EGG_PROVIDED && event.getEntity().isValid()) {
+		final Location loc = event.getEntity().getLocation();
+		final Altar altar = plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
+		if (altar != null && altar.getState() == AltarState.EGG_PROVIDED && event.getEntity().isValid()) {
+			plugin.debug("Teleportation caused by an Altar.");
+			if (event.getEntityType() == EntityType.DROPPED_ITEM) {
+				plugin.debug("Teleporting entity is a Dropped Item, handling it...");
 				altar.getBuilder().addItem(((Item) event.getEntity()).getItemStack());
-				event.setCancelled(true);
 				event.getEntity().remove();
 				plugin.debug("Entity handled by an Altar. Location=" + altar.getCenterLocation().toString());
-			} else {
-				plugin.debug("Entity not handled");
 			}
+			plugin.debug("Entity not an item, not handled");
+			event.setCancelled(true);
+		} else {
+			plugin.debug("Entity not handled");
 		}
 		plugin.exiting(getClass(), "onItemPortal");
 	}

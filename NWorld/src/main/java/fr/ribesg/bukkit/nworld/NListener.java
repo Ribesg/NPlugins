@@ -39,6 +39,9 @@ public class NListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onEntityUsePortal(final EntityPortalEvent event) {
+		if (event.getTo() == null) {
+			return;
+		}
 		final World.Environment from = event.getFrom().getWorld().getEnvironment();
 		final World.Environment to = event.getTo().getWorld().getEnvironment();
 
