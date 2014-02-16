@@ -104,7 +104,11 @@ public class WorldCommandExecutor implements CommandExecutor {
 				final boolean hasPermission = Perms.hasRequiredPermission(sender, world.getRequiredPermission());
 				if (world.isEnabled()) {
 					if (hasPermission) {
-						sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + world.getWorldName());
+						if (world.isHidden()) {
+							sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + world.getWorldName());
+						} else {
+							sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.GREEN + world.getWorldName());
+						}
 					} else if (!world.isHidden()) {
 						sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.RED + world.getWorldName());
 					}
@@ -582,7 +586,11 @@ public class WorldCommandExecutor implements CommandExecutor {
 				if (warp.isEnabled()) {
 					final boolean hasPermission = Perms.hasRequiredPermission(sender, warp.getRequiredPermission()) || Perms.hasWarpAll(sender);
 					if (hasPermission) {
-						builder.append(ChatColor.GRAY + ", " + ChatColor.GREEN + warp.getName());
+						if (warp.isHidden()) {
+							builder.append(ChatColor.GRAY + ", " + ChatColor.DARK_GREEN + warp.getName());
+						} else {
+							builder.append(ChatColor.GRAY + ", " + ChatColor.GREEN + warp.getName());
+						}
 					} else if (!warp.isHidden()) {
 						builder.append(ChatColor.GRAY + ", " + ChatColor.RED + warp.getName());
 					}
