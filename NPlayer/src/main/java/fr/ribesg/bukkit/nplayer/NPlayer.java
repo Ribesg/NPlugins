@@ -43,7 +43,7 @@ public class NPlayer extends NPlugin implements PlayerNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.5.1";
+		return "0.6.1";
 	}
 
 	@Override
