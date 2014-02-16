@@ -15,6 +15,7 @@ import fr.ribesg.bukkit.nworld.world.GeneralWorld;
 import org.bukkit.Location;
 import org.bukkit.TravelAgent;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -41,9 +42,15 @@ public class NListener implements Listener {
 	public void onEntityUsePortal(final EntityPortalEvent event) {
 		if (event.getTo() == null) {
 			return;
+		} else if (event.getEntityType() == EntityType.ENDER_DRAGON) {
+			// This is a bad idea!
+			event.setCancelled(true);
+			return;
 		}
-		final World.Environment from = event.getFrom().getWorld().getEnvironment();
-		final World.Environment to = event.getTo().getWorld().getEnvironment();
+		if (plugin.getWorlds().getStock().containsKey(event.getFrom().getWorld().getName()) || plugin.getWorlds().getStock().containsKey(event.getTo().getWorld().getName())) {
+			// Stock world, do not handle
+			return;
+		}
 
 		// Build a fake TeleportCause based on From and To locations
 		final PlayerTeleportEvent.TeleportCause cause;
