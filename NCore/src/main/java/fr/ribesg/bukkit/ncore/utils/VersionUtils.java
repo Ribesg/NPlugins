@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncore.utils;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -18,8 +19,7 @@ import java.util.regex.Pattern;
  */
 public class VersionUtils {
 
-	private static final Pattern RELEASE_REGEX  = Pattern.compile("^v\\d+.\\d+.\\d+$");
-	private static final Pattern SNAPSHOT_REGEX = Pattern.compile("^v\\d+.\\d+.\\d+-SNAPSHOT$");
+	private static final Pattern VERSION_REGEX = Pattern.compile("^(v\\d+.\\d+.\\d+)");
 
 	/**
 	 * Check if a version represents a Snapshot version or not.
@@ -28,7 +28,7 @@ public class VersionUtils {
 	 * false otherwise
 	 */
 	public static boolean isSnapshot(final String versionString) {
-		return SNAPSHOT_REGEX.matcher(versionString).matches();
+		return versionString.toLowerCase().contains("-snapshot") && VERSION_REGEX.matcher(versionString).find();
 	}
 
 	/**
@@ -38,7 +38,24 @@ public class VersionUtils {
 	 * false otherwise
 	 */
 	public static boolean isRelease(final String versionString) {
-		return RELEASE_REGEX.matcher(versionString).matches();
+		return !versionString.toLowerCase().contains("-snapshot") && VERSION_REGEX.matcher(versionString).find();
+	}
+
+	/**
+	 * Gets the version part in this String.
+	 * Example: for "v0.4.2 (Foo)", returns "v0.4.2"
+	 *
+	 * @param versionString the version String
+	 *
+	 * @return the version in this String, or null if there's none
+	 */
+	public static String getVersion(final String versionString) {
+		final Matcher matcher = VERSION_REGEX.matcher(versionString);
+		if (matcher.find()) {
+			return matcher.group(1);
+		} else {
+			return null;
+		}
 	}
 
 }

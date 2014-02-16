@@ -40,7 +40,7 @@ public class FileDescription {
 		for (final Object o : array.toArray()) {
 			final JSONObject object = (JSONObject) o;
 			final String fileName = (String) object.get(FILENAME_KEY);
-			final String version = (String) object.get(VERSION_KEY);
+			final String version = VersionUtils.getVersion((String) object.get(VERSION_KEY));
 			final String bukkitVersion = (String) object.get(BUKKIT_VERSION_KEY);
 			final String type = (String) object.get(TYPE_KEY);
 			final String link = (String) object.get(DOWNLOAD_URL_KEY);

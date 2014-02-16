@@ -133,10 +133,11 @@ public class Updater {
 			public void run() {
 				for (final JavaPlugin plugin : plugins.values()) {
 					if (plugin != null && (nodeName == null || plugin.getName().equalsIgnoreCase(nodeName)) && VersionUtils.isRelease('v' + plugin.getDescription().getVersion())) {
+						final String version = VersionUtils.getVersion('v' + plugin.getDescription().getVersion());
 						Boolean result = null;
 						FileDescription latestFile = null;
 						try {
-							if (!isUpToDate(plugin.getName(), 'v' + plugin.getDescription().getVersion())) {
+							if (!isUpToDate(plugin.getName(), version)) {
 								latestFile = getLatestVersion(plugin.getName());
 								result = false;
 							} else {
