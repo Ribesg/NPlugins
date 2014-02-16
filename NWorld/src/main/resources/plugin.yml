@@ -3,7 +3,7 @@ main: ${project.groupId}.${project.name}
 name: ${project.name}
 description: ${project.description}
 url: ${project.url}
-version: ${project.version}
+version: maven-version-number
 
 load: POSTWORLD
 

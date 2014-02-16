@@ -3,7 +3,7 @@ main: ${project.groupId}.${project.name}
 name: ${project.name}
 description: ${project.description}
 url: ${project.url}
-version: ${project.version}
+version: maven-version-number
 
 load: STARTUP
 
@@ -11,4 +11,4 @@ commands:
   debug:
     description: Debug Command
     usage: |
-      /<command> [enable|disable] <NodeName>
+      /<command> [enable|disable] <nodeName>
