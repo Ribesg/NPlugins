@@ -54,7 +54,7 @@ public class VersionUtils {
 		if (matcher.find()) {
 			return matcher.group(1);
 		} else {
-			return null;
+			return "";
 		}
 	}
 
