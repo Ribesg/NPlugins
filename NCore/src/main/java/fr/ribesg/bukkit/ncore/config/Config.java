@@ -24,6 +24,7 @@ import java.util.List;
 public class Config extends AbstractConfig<NCore> {
 
 	private boolean           updateCheck;
+	private long              updateCheckInterval;
 	private List<String>      checkFor;
 	private String            apiKey;
 	private InetSocketAddress proxyAddress;
@@ -38,6 +39,7 @@ public class Config extends AbstractConfig<NCore> {
 	public Config(final NCore instance) {
 		super(instance);
 		this.updateCheck = true;
+		this.updateCheckInterval = 7200;
 		this.checkFor = new ArrayList<>();
 		this.checkFor.add("NCore");
 		this.checkFor.add("NCuboid");
@@ -59,6 +61,10 @@ public class Config extends AbstractConfig<NCore> {
 		// updateCheck. Default: true
 		// Possible values: boolean
 		setUpdateCheck(config.getBoolean("updateCheck", true));
+
+		// updateCheckInterval. Default: 7200
+		// Possible values: Positive or null intergers, in seconds
+		setUpdateCheckInterval(config.getLong("updateCheckInterval", 7200));
 
 		// checkFor. Default: NCore, NCuboid, NEnchantingEgg, NGeneral, NPlayer, NTalk, NTheEndAgain, NWorld
 		// Possible values: any subset of the default value
@@ -93,8 +99,34 @@ public class Config extends AbstractConfig<NCore> {
 		}
 
 		// updateCheck. Default: true
-		content.append("# Enables update check globally at startup. Default : true\n");
+		content.append("# Allows you to disable the Updater system globally. Default : true\n");
+		content.append("# If this is set to false, everything related to updater will not work:\n");
+		content.append("# - Automatic check for updates\n");
+		content.append("# - The whole /updater command\n");
+		content.append("# - File download\n");
 		content.append("updateCheck: " + isUpdateCheck() + "\n\n");
+
+		// updateCheckInterval: Default: 7200
+		content.append("# Interval between Update check, in seconds. Default : 7200\n");
+		content.append("#\n");
+		content.append("# Here are some example values:\n");
+		content.append("#   Value   --   Description\n");
+		content.append("#       1800: 30 minutes\n");
+		content.append("#       3600: 1 hour\n");
+		content.append("#       7200: 2 hours\n");
+		content.append("#      10800: 3 hours\n");
+		content.append("#      14400: 4 hours\n");
+		content.append("#      21600: 6 hours\n");
+		content.append("#      28800: 8 hours\n");
+		content.append("#      43200: 12 hours\n");
+		content.append("#      86400: 24 hours - 1 day\n");
+		content.append("#     172800: 48 hours - 2 days\n");
+		content.append("#\n");
+		content.append("# Note: Set this to 0 to disable automatic update check completely.\n");
+		content.append("# Note: This is not persistent through restarts.\n");
+		content.append("# Note: Values below 15 minutes are useless because of an internal cache.\n");
+		content.append("#\n");
+		content.append("updateCheckInterval: " + getUpdateCheckInterval() + "\n\n");
 
 		// checkFor. Default: NCore, NCuboid, NEnchantingEgg, NGeneral, NPlayer, NTalk, NTheEndAgain, NWorld
 		content.append("# Enable update check for each specific node. Default: all nodes\n");
@@ -103,6 +135,7 @@ public class Config extends AbstractConfig<NCore> {
 		for (final String pluginName : this.checkFor) {
 			content.append("- " + pluginName + "\n");
 		}
+		content.append('\n');
 
 		// apiKey. Default: empty
 		content.append("# An API key is not required for the Updater to work,\n");
@@ -114,7 +147,7 @@ public class Config extends AbstractConfig<NCore> {
 		content.append("#\n");
 		content.append("# Note: Generate a key from https://dev.bukkit.org/home/servermods-apikey/\n");
 		content.append("#       You must be logged in.\n");
-		content.append("apiKey: " + this.apiKey + "\n");
+		content.append("apiKey: " + this.apiKey + "\n\n");
 
 		// proxyAddress. Default: empty
 		content.append("# Proxy informations for the Updater. Default: empty\n");
@@ -125,6 +158,7 @@ public class Config extends AbstractConfig<NCore> {
 			content.append("proxyHost: \"" + this.proxyAddress.getHostName() + "\"\n");
 			content.append("proxyPort: " + this.proxyAddress.getPort() + "\n");
 		}
+		content.append('\n');
 
 		// debugEnabled. Default: empty
 		content.append("# Enables debug mode for each specific node. Default: empty\n");
@@ -142,6 +176,14 @@ public class Config extends AbstractConfig<NCore> {
 
 	public void setUpdateCheck(final boolean updateCheck) {
 		this.updateCheck = updateCheck;
+	}
+
+	public long getUpdateCheckInterval() {
+		return updateCheckInterval;
+	}
+
+	public void setUpdateCheckInterval(final long updateCheckInterval) {
+		this.updateCheckInterval = updateCheckInterval;
 	}
 
 	public List<String> getCheckFor() {

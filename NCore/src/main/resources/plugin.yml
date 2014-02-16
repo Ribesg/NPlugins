@@ -12,3 +12,9 @@ commands:
     description: Debug Command
     usage: |
       /<command> [enable|disable] <nodeName>
+  updater:
+    description: Updater Command
+    aliases: [u, up]
+    usage: |
+      /<command> status|check <nodeName>|all
+      /<command> download|dl <nodeName>

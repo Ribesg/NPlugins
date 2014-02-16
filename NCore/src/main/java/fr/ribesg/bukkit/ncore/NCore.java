@@ -9,8 +9,6 @@
 
 package fr.ribesg.bukkit.ncore;
 
-import fr.ribesg.bukkit.ncore.common.updater.FileDescription;
-import fr.ribesg.bukkit.ncore.common.updater.Updater;
 import fr.ribesg.bukkit.ncore.config.Config;
 import fr.ribesg.bukkit.ncore.event.NEventsListener;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
@@ -22,8 +20,8 @@ import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
 import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
 import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ncore.node.world.WorldNode;
+import fr.ribesg.bukkit.ncore.updater.Updater;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
-import fr.ribesg.bukkit.ncore.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -36,10 +34,8 @@ import org.mcstats.Metrics;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -131,6 +127,35 @@ public class NCore extends JavaPlugin {
 				}
 				return true;
 			}
+		} else if (cmd.getName().equals("updater")) {
+			if (updater == null) {
+				sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Updater is disabled in config");
+			} else if (args.length != 2) {
+				return false;
+			} else {
+				final String action = args[0].toLowerCase();
+				final String nodeName = args[1];
+				final boolean all = args[1].equalsIgnoreCase("all");
+				if (!all && updater.getPlugins().get(nodeName.toLowerCase()) == null) {
+					sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Unknown Node: " + nodeName);
+				} else {
+					switch (action) {
+						case "check":
+						case "status":
+							updater.checkForUpdates(sender, all ? null : nodeName);
+							break;
+						case "download":
+						case "dl":
+							if (all) {
+								sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Please select a specific Node to download");
+							} else {
+								updater.downloadUpdate(sender, nodeName);
+							}
+							break;
+					}
+				}
+			}
+			return true;
 		} else {
 			return false;
 		}
@@ -139,8 +164,6 @@ public class NCore extends JavaPlugin {
 	private void afterNodesLoad() {
 		boolean noNodeFound = true;
 		final Metrics.Graph nodesUsedGraph = metrics.createGraph("Nodes used");
-		final List<JavaPlugin> plugins = new LinkedList<>();
-		plugins.add(this);
 
 		if (get(Node.CUBOID) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.CUBOID) {
@@ -151,7 +174,6 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
-			plugins.add((JavaPlugin) get(Node.CUBOID));
 		}
 
 		if (get(Node.ENCHANTING_EGG) != null) {
@@ -163,7 +185,6 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
-			plugins.add((JavaPlugin) get(Node.ENCHANTING_EGG));
 		}
 
 		if (get(Node.GENERAL) != null) {
@@ -175,7 +196,6 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
-			plugins.add((JavaPlugin) get(Node.GENERAL));
 		}
 
 		if (get(Node.PLAYER) != null) {
@@ -187,7 +207,6 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
-			plugins.add((JavaPlugin) get(Node.PLAYER));
 		}
 
 		if (get(Node.TALK) != null) {
@@ -199,7 +218,6 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
-			plugins.add((JavaPlugin) get(Node.TALK));
 		}
 
 		if (get(Node.THE_END_AGAIN) != null) {
@@ -211,7 +229,6 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
-			plugins.add((JavaPlugin) get(Node.THE_END_AGAIN));
 		}
 
 		if (get(Node.WORLD) != null) {
@@ -223,7 +240,6 @@ public class NCore extends JavaPlugin {
 				}
 			});
 			noNodeFound = false;
-			plugins.add((JavaPlugin) get(Node.WORLD));
 		}
 
 		metrics.start();
@@ -241,13 +257,14 @@ public class NCore extends JavaPlugin {
 			}
 
 			getPluginLoader().disablePlugin(this);
-		} else {
-			checkForUpdates(plugins.toArray(new JavaPlugin[plugins.size()]));
+		} else if (pluginConfig.isUpdateCheck()) {
+			this.updater = new Updater(this, 'v' + getDescription().getVersion(), pluginConfig.getProxy(), pluginConfig.getApiKey());
+			this.updater.startTask();
 		}
 	}
 
 	public Node get(final String nodeName) {
-		return this.nodes.get(nodeName);
+		return this.nodes.get(nodeName.toLowerCase());
 	}
 
 	public CuboidNode getCuboidNode() {
@@ -279,67 +296,14 @@ public class NCore extends JavaPlugin {
 	}
 
 	public void set(final String nodeName, final Node node) {
-		if (this.nodes.containsKey(nodeName)) {
+		if (this.nodes.containsKey(nodeName.toLowerCase())) {
 			throw new IllegalStateException("Registering the same node twice!");
 		} else {
-			this.nodes.put(nodeName, node);
+			this.nodes.put(nodeName.toLowerCase(), node);
 		}
 	}
 
 	public Config getPluginConfig() {
 		return pluginConfig;
-	}
-
-	private void checkForUpdates(final JavaPlugin... plugins) {
-		if (this.updater == null) {
-			this.updater = new Updater('v' + getDescription().getVersion(), pluginConfig.getProxy(), pluginConfig.getApiKey());
-		}
-		Bukkit.getScheduler().runTaskAsynchronously(this, new BukkitRunnable() {
-
-			@Override
-			public void run() {
-				for (final JavaPlugin plugin : plugins) {
-					if (plugin != null && VersionUtils.isRelease('v' + plugin.getDescription().getVersion())) {
-						Boolean result = null;
-						FileDescription latestFile = null;
-						try {
-							if (!updater.isUpToDate(plugin.getName(), 'v' + plugin.getDescription().getVersion())) {
-								latestFile = updater.getLatestVersion(plugin.getName());
-								result = false;
-							} else {
-								result = true;
-							}
-						} catch (final IOException e) {
-							e.printStackTrace();
-						}
-
-						final Boolean finalResult = result;
-						final FileDescription finalLatestFile = latestFile;
-						Bukkit.getScheduler().callSyncMethod(plugin, new Callable<Object>() {
-
-							@Override
-							public Object call() throws Exception {
-								checkedForUpdates(plugin, finalResult, finalLatestFile);
-								return null;
-							}
-						});
-					}
-				}
-			}
-		});
-	}
-
-	private void checkedForUpdates(final JavaPlugin plugin, final Boolean result, final FileDescription fileDescription) {
-		if (result == null) {
-			logger.warning("Failed to check for updates for plugin " + plugin.getName());
-		} else if (!result) {
-			logger.warning("A new version of " + plugin.getName() + " is available!");
-			logger.warning("Current version:   v" + plugin.getDescription().getVersion());
-			logger.warning("Available version: " + fileDescription.getVersion());
-			logger.warning("Find all updates from the NCore homepage!");
-			logger.warning("http://dev.bukkit.org/bukkit-plugins/ncore/");
-		} else {
-			logger.info(plugin.getName() + " is up to date (latest: v" + plugin.getDescription().getVersion() + ")");
-		}
 	}
 }
