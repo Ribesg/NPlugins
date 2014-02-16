@@ -69,6 +69,7 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.player_yourHomeSet, "&aHome set !", null, null, true));
 
 		// Command - PUNISHMENT
+		newMessages.add(new Message(MessageId.player_noPermissionForPermanent, "&cYou do not have the permission to use the command %command% with an infinite duration", new String[] {"%command%"}, null, true));
 		newMessages.add(new Message(MessageId.player_kickMessage, "&cYou have been kicked: %reason%", new String[] {"%reason%"}, null, false));
 		newMessages.add(new Message(MessageId.player_broadcastedKickMessage, "&e%userName% has been kicked (%reason%)", new String[] {
 				"%userName%",
