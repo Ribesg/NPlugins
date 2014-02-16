@@ -13,8 +13,12 @@ import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
 import fr.ribesg.bukkit.nplayer.lang.Messages;
+import fr.ribesg.bukkit.nplayer.punishment.Jail;
+import fr.ribesg.bukkit.nplayer.punishment.Punishment;
 import fr.ribesg.bukkit.nplayer.punishment.PunishmentDb;
 import fr.ribesg.bukkit.nplayer.punishment.PunishmentListener;
+import fr.ribesg.bukkit.nplayer.punishment.PunishmentType;
+import fr.ribesg.bukkit.nplayer.punishment.TemporaryPunishmentCleanerTask;
 import fr.ribesg.bukkit.nplayer.user.LoggedOutUserHandler;
 import fr.ribesg.bukkit.nplayer.user.UserDb;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -92,6 +96,9 @@ public class NPlayer extends NPlugin implements PlayerNode {
 			return false;
 		}
 
+		debug("Launching temporary punishments cleaner task...");
+		new TemporaryPunishmentCleanerTask(this).runTaskTimer(this, 10L, 10L);
+
 		debug("Creating and Registering Listeners...");
 		final PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(loggedOutUserHandler, this);
@@ -153,6 +160,14 @@ public class NPlayer extends NPlugin implements PlayerNode {
 			info("NCuboid not found, Jail feature disabled");
 		} else {
 			info("NCuboid found, Jail feature enabled");
+			for (final Punishment p : punishmentDb.getAllPunishments()) {
+				if (p.getType() == PunishmentType.JAIL) {
+					final Jail jail = (Jail) p;
+					if (!cuboidNode.jail(jail.getPunished(), jail.getJailPointName())) {
+						error("Failed to jail player '" + jail.getPunished() + "' in NCuboid!");
+					}
+				}
+			}
 		}
 	}
 
@@ -191,6 +206,10 @@ public class NPlayer extends NPlugin implements PlayerNode {
 
 	public Config getPluginConfig() {
 		return pluginConfig;
+	}
+
+	public CuboidNode getCuboidNode() {
+		return cuboidNode;
 	}
 
 	public UserDb getUserDb() {

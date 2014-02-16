@@ -381,6 +381,34 @@ public class NLocation {
 		}
 	}
 
+	/**
+	 * Used for "smooth" teleportation.
+	 * Applies the same direction as directionLocation to
+	 * positionLocation, and returns it.
+	 *
+	 * @param positionLocation  the position Location
+	 * @param directionLocation the direction Location
+	 *
+	 * @return a Location with world, x, y, z of positionLocation and pitch, yaw of directionLocation
+	 */
+	public static Location fixDirection(final NLocation positionLocation, final Location directionLocation) {
+		return fixDirection(positionLocation.toBukkitLocation(), directionLocation);
+	}
+
+	/**
+	 * Used for "smooth" teleportation.
+	 * Applies the same direction as directionLocation to
+	 * positionLocation, and returns it.
+	 *
+	 * @param positionLocation  the position Location
+	 * @param directionLocation the direction Location
+	 *
+	 * @return a Location with world, x, y, z of positionLocation and pitch, yaw of directionLocation
+	 */
+	public static Location fixDirection(final Location positionLocation, final Location directionLocation) {
+		return positionLocation.setDirection(directionLocation.getDirection());
+	}
+
 	public double distance(final NLocation o) {
 		return Math.sqrt(distanceSquared(o));
 	}

@@ -28,6 +28,7 @@ public class Perms {
 	private static final String CMD_DELETE           = "ncuboid.cmd.delete";
 	private static final String CMD_FLAG             = "ncuboid.cmd.flag";
 	private static final String CMD_FLAGATTRIBUTE    = "ncuboid.cmd.flagattribute";
+	private static final String CMD_JAIL             = "ncuboid.cmd.jail";
 	private static final String CMD_ADMIN            = "ncuboid.cmd.admin";
 	private static final String CMD_USER             = "ncuboid.cmd.user";
 	private static final String CMD_GROUP            = "ncuboid.cmd.group";
@@ -160,6 +161,10 @@ public class Perms {
 
 	public static boolean hasFlagAttribute(final CommandSender sender) {
 		return isAdmin(sender) || sender.hasPermission(CMD_FLAGATTRIBUTE) || sender.hasPermission(USER);
+	}
+
+	public static boolean hasJail(final CommandSender sender) {
+		return isAdmin(sender) || sender.hasPermission(CMD_JAIL) || sender.hasPermission(ADMIN);
 	}
 
 	public static boolean hasAdmin(final CommandSender sender) {

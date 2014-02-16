@@ -25,4 +25,15 @@ public class Jail extends Punishment {
 	public String getJailPointName() {
 		return jailPointName;
 	}
+
+	@Override
+	public String toString() {
+		return "Jail{" +
+		       "punished='" + punished + '\'' +
+		       ", type=" + type +
+		       ", endDate=" + endDate +
+		       ", reason='" + reason + '\'' +
+		       ", jailPointName='" + jailPointName + '\'' +
+		       '}';
+	}
 }

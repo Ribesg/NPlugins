@@ -10,10 +10,10 @@
 package fr.ribesg.bukkit.nplayer.punishment;
 public abstract class Punishment {
 
-	private final String         punished;
-	private final PunishmentType type;
-	private final long           endDate;
-	private final String         reason;
+	protected final String         punished;
+	protected final PunishmentType type;
+	protected final long           endDate;
+	protected final String         reason;
 
 	protected Punishment(final String punished, final PunishmentType type, final String reason) {
 		this(punished, type, reason, -1);
@@ -51,5 +51,15 @@ public abstract class Punishment {
 
 	public String getReason() {
 		return reason;
+	}
+
+	@Override
+	public String toString() {
+		return "Punishment{" +
+		       "punished='" + punished + '\'' +
+		       ", type=" + type +
+		       ", endDate=" + endDate +
+		       ", reason='" + reason + '\'' +
+		       '}';
 	}
 }

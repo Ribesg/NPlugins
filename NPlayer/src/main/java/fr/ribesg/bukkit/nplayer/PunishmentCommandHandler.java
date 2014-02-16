@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.nplayer;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.utils.IPValidator;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
 import fr.ribesg.bukkit.ncore.utils.TimeUtils;
@@ -16,7 +17,6 @@ import fr.ribesg.bukkit.nplayer.punishment.PunishmentDb;
 import fr.ribesg.bukkit.nplayer.punishment.PunishmentType;
 import fr.ribesg.bukkit.nplayer.user.User;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,8 +37,8 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String commandLabel, final String[] args) {
-		plugin.entering(getClass(), "onCommand");
-		boolean result = false;
+		plugin.entering(getClass(), "onCommand", "cmd=" + cmd.getName());
+		final boolean result;
 
 		switch (cmd.getName()) {
 			case "ban":
@@ -47,72 +47,72 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
-					break;
 				}
+				break;
 			case "banip":
 				if (Perms.hasBanIp(sender)) {
 					result = cmdBanIp(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
-					break;
 				}
+				break;
 			case "jail":
 				if (Perms.hasJail(sender)) {
 					result = cmdJail(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
-					break;
 				}
+				break;
 			case "mute":
 				if (Perms.hasMute(sender)) {
 					result = cmdMute(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
-					break;
 				}
+				break;
 			case "unban":
 				if (Perms.hasUnBan(sender)) {
 					result = cmdUnBan(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
-					break;
 				}
+				break;
 			case "unbanip":
 				if (Perms.hasUnBanIp(sender)) {
 					result = cmdUnBanIp(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
-					break;
 				}
+				break;
 			case "unjail":
 				if (Perms.hasUnJail(sender)) {
 					result = cmdUnJail(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
-					break;
 				}
+				break;
 			case "unmute":
 				if (Perms.hasUnMute(sender)) {
 					result = cmdUnMute(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
-					break;
 				}
+				break;
 			case "kick":
 				if (Perms.hasKick(sender)) {
 					result = cmdKick(sender, args);
 				} else {
 					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
-					break;
 				}
+				break;
 			default:
 				result = false;
 		}
@@ -234,8 +234,54 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 	}
 
 	private boolean cmdJail(final CommandSender sender, final String[] args) {
-		sender.sendMessage(ChatColor.RED + "Not yet implemented");
-		return true;  // TODO Implement method
+		plugin.entering(getClass(), "cmdJail");
+
+		final CuboidNode cuboidNode = plugin.getCuboidNode();
+		if (cuboidNode == null) {
+			plugin.sendMessage(sender, MessageId.player_cuboidNodeRequired);
+			plugin.exiting(getClass(), "cmdJail", "No Cuboid Node");
+			return true;
+		}
+
+		final Result res = parsePunishmentDataFromArgs(PunishmentType.JAIL, args);
+		if (res == null) {
+			plugin.exiting(getClass(), "cmdJail", "Invalid arguments");
+			return false;
+		}
+		if (!plugin.getUserDb().isUserKnown(res.punished)) {
+			plugin.sendMessage(sender, MessageId.player_unknownUser, res.punished);
+		} else if (!cuboidNode.getJailsSet().contains(res.jailPointName.toLowerCase())) {
+			plugin.sendMessage(sender, MessageId.player_unknownJail, res.jailPointName);
+		} else if (res.duration == -1) {
+			if (Perms.hasJailPermanent(sender)) {
+				if (!db.permJailNick(res.punished, res.reason, res.jailPointName)) {
+					plugin.sendMessage(sender, MessageId.player_alreadyJailed, res.punished);
+				} else {
+					final Player target = Bukkit.getPlayerExact(res.punished);
+					if (target != null) {
+						target.teleport(cuboidNode.getJailLocation(res.jailPointName).toBukkitLocation());
+						plugin.sendMessage(target, MessageId.player_permJailed, res.reason);
+					}
+					plugin.broadcastMessage(MessageId.player_permJailedBroadcast, res.punished, res.reason);
+				}
+			} else {
+				plugin.sendMessage(sender, MessageId.player_noPermissionForPermanent, "jail");
+			}
+		} else {
+			if (!db.tempJailNick(res.punished, res.duration, res.reason, res.jailPointName)) {
+				plugin.sendMessage(sender, MessageId.player_alreadyJailed, res.punished);
+			} else {
+				final Player target = Bukkit.getPlayerExact(res.punished);
+				if (target != null) {
+					target.teleport(cuboidNode.getJailLocation(res.jailPointName).toBukkitLocation());
+					plugin.sendMessage(target, MessageId.player_tempJailed, res.reason, TimeUtils.toString(res.duration));
+				}
+				plugin.broadcastMessage(MessageId.player_tempJailedBroadcast, res.punished, TimeUtils.toString(res.duration), res.reason);
+			}
+		}
+
+		plugin.exiting(getClass(), "cmdJail");
+		return true;
 	}
 
 	private boolean cmdMute(final CommandSender sender, final String[] args) {
@@ -288,7 +334,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		final String userName = args[0];
 		if (!plugin.getUserDb().isUserKnown(userName)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, userName);
-		} else if (db.unbanNick(userName)) {
+		} else if (db.unBanNick(userName)) {
 			plugin.broadcastMessage(MessageId.player_unBannedBroadcast, userName);
 		} else {
 			plugin.sendMessage(sender, MessageId.player_notBanned, userName);
@@ -308,7 +354,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		final String ip = args[0];
 		if (!plugin.getUserDb().isIpKnown(ip)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, ip);
-		} else if (db.unbanIp(ip)) {
+		} else if (db.unBanIp(ip)) {
 			plugin.broadcastMessage(MessageId.player_unBannedIpBroadcast, ip);
 		} else {
 			plugin.sendMessage(sender, MessageId.player_notBannedIp, ip);
@@ -319,7 +365,27 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 	}
 
 	private boolean cmdUnJail(final CommandSender sender, final String[] args) {
-		return false; // TODO
+		plugin.entering(getClass(), "cmdUnJail");
+
+		if (args.length != 1) {
+			plugin.exiting(getClass(), "cmdUnJail", "Invalid arguments");
+			return false;
+		}
+		String userName = args[0];
+		final Player player = Bukkit.getPlayer(userName);
+		if (player != null) {
+			userName = player.getName();
+		}
+		if (!plugin.getUserDb().isUserKnown(userName)) {
+			plugin.sendMessage(sender, MessageId.player_unknownUser, userName);
+		} else if (db.unJailNick(userName)) {
+			plugin.broadcastMessage(MessageId.player_unJailedBroadcast, userName);
+		} else {
+			plugin.sendMessage(sender, MessageId.player_notJailed, userName);
+		}
+
+		plugin.exiting(getClass(), "cmdUnJail");
+		return true;
 	}
 
 	private boolean cmdUnMute(final CommandSender sender, final String[] args) {
@@ -336,7 +402,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 		}
 		if (!plugin.getUserDb().isUserKnown(userName)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, userName);
-		} else if (db.unmuteNick(userName)) {
+		} else if (db.unMuteNick(userName)) {
 			plugin.broadcastMessage(MessageId.player_unMutedBroadcast, userName);
 		} else {
 			plugin.sendMessage(sender, MessageId.player_notMuted, userName);

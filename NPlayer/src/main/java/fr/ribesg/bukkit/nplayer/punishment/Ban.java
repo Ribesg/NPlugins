@@ -17,4 +17,14 @@ public class Ban extends Punishment {
 	public Ban(final String punished, final String reason, final long endDate) {
 		super(punished, PunishmentType.BAN, reason, endDate);
 	}
+
+	@Override
+	public String toString() {
+		return "Ban{" +
+		       "punished='" + punished + '\'' +
+		       ", type=" + type +
+		       ", endDate=" + endDate +
+		       ", reason='" + reason + '\'' +
+		       '}';
+	}
 }

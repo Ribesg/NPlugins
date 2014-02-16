@@ -12,7 +12,7 @@ package fr.ribesg.bukkit.ncuboid.commands;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
-import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AdminUserGroupSubcmdExecutor;
+import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AdminUserGroupJailSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.CreateSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.DeleteSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.FlagAttributeSubcmdExecutor;
@@ -45,6 +45,7 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.aliasesMap.put("a", "admin");
 		this.aliasesMap.put("u", "user");
 		this.aliasesMap.put("g", "group");
+		this.aliasesMap.put("j", "jail");
 		this.aliasesMap.put("f", "flag");
 		this.aliasesMap.put("fa", "flagattribute");
 		this.aliasesMap.put("flagatt", "flagattribute");
@@ -54,9 +55,10 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.executorsMap.put("create", new CreateSubcmdExecutor(instance));
 		this.executorsMap.put("delete", new DeleteSubcmdExecutor(instance));
 		this.executorsMap.put("reload", new ReloadSubcmdExecutor(instance));
-		this.executorsMap.put("admin", new AdminUserGroupSubcmdExecutor(instance, AdminUserGroupSubcmdExecutor.Mode.ADMIN));
-		this.executorsMap.put("user", new AdminUserGroupSubcmdExecutor(instance, AdminUserGroupSubcmdExecutor.Mode.USER));
-		this.executorsMap.put("group", new AdminUserGroupSubcmdExecutor(instance, AdminUserGroupSubcmdExecutor.Mode.GROUP));
+		this.executorsMap.put("admin", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.ADMIN));
+		this.executorsMap.put("user", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.USER));
+		this.executorsMap.put("group", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.GROUP));
+		this.executorsMap.put("jail", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.JAIL));
 		this.executorsMap.put("flag", new FlagSubcmdExecutor(instance));
 		this.executorsMap.put("flagattribute", new FlagAttributeSubcmdExecutor(instance));
 	}

@@ -155,6 +155,26 @@ public class Messages extends AbstractMessages {
 
 		newMessages.add(new Message(MessageId.player_standardKickMessage, "&e%userName% has been kicked", new String[] {"%userName%"}, null, false));
 
+		newMessages.add(new Message(MessageId.player_cuboidNodeRequired, "&cJail feature disabled without NCuboid", null, null, true));
+		newMessages.add(new Message(MessageId.player_unknownJail, "&cUnknown jail: %jailName%", new String[] {"%jailName%"}, null, true));
+		newMessages.add(new Message(MessageId.player_alreadyJailed, "&c%userName% is already jailed!", new String[] {"%userName%"}, null, true));
+		newMessages.add(new Message(MessageId.player_permJailed, "&cYou were permanently jailed: %reason%", new String[] {"%reason%"}, null, true));
+		newMessages.add(new Message(MessageId.player_permJailedBroadcast, "&e%userName% has been permanently jailed (%reason%)", new String[] {
+				"%userName%",
+				"%reason%"
+		}, null, false));
+		newMessages.add(new Message(MessageId.player_tempJailed, "&cYou have been jailed for %duration%: %reason%", new String[] {
+				"%reason%",
+				"%duration%"
+		}, null, true));
+		newMessages.add(new Message(MessageId.player_tempJailedBroadcast, "&e%userName% has been jailed for %duration% (%reason%)", new String[] {
+				"%userName%",
+				"%duration%",
+				"%reason%"
+		}, null, false));
+		newMessages.add(new Message(MessageId.player_unJailedBroadcast, "&e%userName% has been unjailed", new String[] {"%userName%"}, null, false));
+		newMessages.add(new Message(MessageId.player_notJailed, "&c%userName% is not jailed", new String[] {"%userName%"}, null, true));
+
 		// Login
 		newMessages.add(new Message(MessageId.player_loginAttemptsKickMessage, "&cYou have been kicked: Too many login attempts", null, null, false));
 		newMessages.add(new Message(MessageId.player_loginAttemptsBroadcastedKickMessage, "&e%userName% has been kicked (Too many login attempts)", new String[] {"%userName%"}, null, false));

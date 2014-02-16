@@ -17,4 +17,14 @@ public class IpBan extends Punishment {
 	public IpBan(final String banned, final String reason, final long endDate) {
 		super(banned, PunishmentType.IPBAN, reason, endDate);
 	}
+
+	@Override
+	public String toString() {
+		return "IpBan{" +
+		       "punished='" + punished + '\'' +
+		       ", type=" + type +
+		       ", endDate=" + endDate +
+		       ", reason='" + reason + '\'' +
+		       '}';
+	}
 }

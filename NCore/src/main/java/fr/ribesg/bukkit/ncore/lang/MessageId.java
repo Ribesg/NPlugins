@@ -89,6 +89,13 @@ public enum MessageId {
 	cuboid_cmdGroupRemoved,
 	cuboid_cmdGroupNotGroup,
 
+	cuboid_cmdJailNotJailCuboid,
+	cuboid_cmdJailNotInRegion,
+	cuboid_cmdJailCreated,
+	cuboid_cmdJailAlreadyExists,
+	cuboid_cmdJailRemoved,
+	cuboid_cmdJailUnknown,
+
 	// ########################## //
 	// ## NTheEndAgain related ## //
 	// ########################## //
@@ -261,6 +268,16 @@ public enum MessageId {
 	player_alreadyBanned,
 	player_alreadyBannedIp,
 	player_alreadyMuted,
+
+	player_cuboidNodeRequired,
+	player_unknownJail,
+	player_alreadyJailed,
+	player_permJailed,
+	player_permJailedBroadcast,
+	player_tempJailed,
+	player_tempJailedBroadcast,
+	player_unJailedBroadcast,
+	player_notJailed,
 
 	player_standardKickMessage,
 

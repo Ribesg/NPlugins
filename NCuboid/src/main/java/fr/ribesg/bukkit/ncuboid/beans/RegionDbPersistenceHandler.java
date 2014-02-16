@@ -122,6 +122,8 @@ public class RegionDbPersistenceHandler {
 				}
 			}
 
+			plugin.getJails().loadJails(db, config);
+
 			return db;
 		}
 	}
@@ -263,6 +265,8 @@ public class RegionDbPersistenceHandler {
 			final PlayerRegion region = playerRegionIterator.next();
 			writePlayerRegion(playerRegionsSection, region);
 		}
+
+		plugin.getJails().saveJails(config);
 
 		final String configString = config.saveToString();
 		try (BufferedWriter writer = Files.newBufferedWriter(regionDbConfigFile, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {

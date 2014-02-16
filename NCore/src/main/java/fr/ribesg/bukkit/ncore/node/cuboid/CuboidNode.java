@@ -9,9 +9,10 @@
 
 package fr.ribesg.bukkit.ncore.node.cuboid;
 
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.node.Node;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * API for the NCuboid plugin.
@@ -21,11 +22,48 @@ import java.util.List;
  */
 public interface CuboidNode extends Node {
 
+	/**
+	 * Checks if a Player is jailed. Not case sensitive.
+	 *
+	 * @param playerName the Player's name
+	 *
+	 * @return true if the Player is jailed, false otherwise
+	 */
 	public boolean isJailed(String playerName);
 
+	/**
+	 * Jails the Player if he's not jailed and if the provided jail name
+	 * exists.
+	 *
+	 * @param playerName the Player's name
+	 * @param jailName   the Jail name
+	 *
+	 * @return true if the Player can be, and is now considered, jailed
+	 */
 	public boolean jail(String playerName, String jailName);
 
+	/**
+	 * Unjails a Player
+	 *
+	 * @param playerName the Player's name
+	 *
+	 * @return true if the Player was jailed
+	 */
 	public boolean unJail(String playerName);
 
-	public List<String> getJailList();
+	/**
+	 * Gets a set of all existing jails.
+	 *
+	 * @return a set of all existing jails
+	 */
+	public Set<String> getJailsSet();
+
+	/**
+	 * Gets the Location of a Jail.
+	 *
+	 * @param jailName the Jail name
+	 *
+	 * @return the Location of the jail, or null if it does not exist
+	 */
+	public NLocation getJailLocation(final String jailName);
 }

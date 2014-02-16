@@ -17,4 +17,14 @@ public class Mute extends Punishment {
 	public Mute(final String muted, final String reason, final long endDate) {
 		super(muted, PunishmentType.MUTE, reason, endDate);
 	}
+
+	@Override
+	public String toString() {
+		return "Mute{" +
+		       "punished='" + punished + '\'' +
+		       ", type=" + type +
+		       ", endDate=" + endDate +
+		       ", reason='" + reason + '\'' +
+		       '}';
+	}
 }
