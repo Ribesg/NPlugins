@@ -12,6 +12,7 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedHangingBreakEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
@@ -25,6 +26,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -147,6 +149,10 @@ public class BuildFlagListener extends AbstractListener {
 				if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.BUILD) && !ext.getRegion().isUser(player)) {
 					event.setCancelled(true);
 				}
+			} else {
+				if (ext.getRegion() != null && (ext.getRegion().getFlag(Flag.BUILD) || ext.getRegion().getFlag(Flag.MOB))) {
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
@@ -156,6 +162,25 @@ public class BuildFlagListener extends AbstractListener {
 		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
 		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.BUILD) && !ext.getRegion().isUser(event.getPlayer())) {
 			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
+		if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
+			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
+			if (event.getEntityType() == EntityType.ITEM_FRAME) {
+				if (event.getDamager().getType() == EntityType.PLAYER) {
+					final Player player = (Player) event.getDamager();
+					if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.BUILD) && !ext.getEntityRegion().isUser(player)) {
+						event.setCancelled(true);
+					}
+				} else {
+					if (ext.getEntityRegion() != null && (ext.getEntityRegion().getFlag(Flag.BUILD) || ext.getEntityRegion().getFlag(Flag.MOB))) {
+						event.setCancelled(true);
+					}
+				}
+			}
 		}
 	}
 
