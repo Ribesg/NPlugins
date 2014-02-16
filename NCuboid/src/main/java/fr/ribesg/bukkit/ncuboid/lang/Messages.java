@@ -184,13 +184,13 @@ public class Messages extends AbstractMessages {
 				"%location%",
 				"%region%"
 		}, null, true));
-		newMessages.add(new Message(MessageId.cuboid_cmdJailCreated, "&aCreated jail '%jailName' in Region %region% at location %location%", new String[] {
+		newMessages.add(new Message(MessageId.cuboid_cmdJailCreated, "&aCreated jail '%jailName%' in Region %region% at location %location%", new String[] {
 				"%jailName%",
 				"%region%",
 				"%location%"
 		}, null, true));
 		newMessages.add(new Message(MessageId.cuboid_cmdJailAlreadyExists, "&cA Jail with the name %jailName% already exists", new String[] {"%jailName%"}, null, true));
-		newMessages.add(new Message(MessageId.cuboid_cmdJailRemoved, "&aThe jail '%jailName' has been removed", new String[] {"%jailName%"}, null, true));
+		newMessages.add(new Message(MessageId.cuboid_cmdJailRemoved, "&aThe jail '%jailName%' has been removed", new String[] {"%jailName%"}, null, true));
 		newMessages.add(new Message(MessageId.cuboid_cmdJailUnknown, "&cUnknown jail: %jailName%", new String[] {"%jailName%"}, null, true));
 
 		return newMessages;
