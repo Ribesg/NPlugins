@@ -39,7 +39,7 @@ public class Config extends AbstractConfig<NCore> {
 	public Config(final NCore instance) {
 		super(instance);
 		this.updateCheck = true;
-		this.updateCheckInterval = 7200;
+		this.updateCheckInterval = 43200;
 		this.checkFor = new ArrayList<>();
 		this.checkFor.add("NCore");
 		this.checkFor.add("NCuboid");
@@ -62,9 +62,9 @@ public class Config extends AbstractConfig<NCore> {
 		// Possible values: boolean
 		setUpdateCheck(config.getBoolean("updateCheck", true));
 
-		// updateCheckInterval. Default: 7200
+		// updateCheckInterval. Default: 43200
 		// Possible values: Positive or null intergers, in seconds
-		setUpdateCheckInterval(config.getLong("updateCheckInterval", 7200));
+		setUpdateCheckInterval(config.getLong("updateCheckInterval", 43200));
 
 		// checkFor. Default: NCore, NCuboid, NEnchantingEgg, NGeneral, NPlayer, NTalk, NTheEndAgain, NWorld
 		// Possible values: any subset of the default value
@@ -106,8 +106,8 @@ public class Config extends AbstractConfig<NCore> {
 		content.append("# - File download\n");
 		content.append("updateCheck: " + isUpdateCheck() + "\n\n");
 
-		// updateCheckInterval: Default: 7200
-		content.append("# Interval between Update check, in seconds. Default : 7200\n");
+		// updateCheckInterval: Default: 43200
+		content.append("# Interval between Update check, in seconds. Default : 43200\n");
 		content.append("#\n");
 		content.append("# Here are some example values:\n");
 		content.append("#   Value   --   Description\n");
