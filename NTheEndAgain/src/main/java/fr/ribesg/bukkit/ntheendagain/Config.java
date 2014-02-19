@@ -293,6 +293,12 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		}
 
 		// Drop Table
+		setDropTableHandling(config.getInt("dropTableHandling", DEFAULT_dropTableHandling));
+		if (!match(getDropTableHandling(), 0, 1)) {
+			wrongValue(fileName, "dropTableHandling", getDropTableHandling(), DEFAULT_dropTableHandling);
+			setDropTableHandling(DEFAULT_dropTableHandling);
+		}
+
 		if (config.isConfigurationSection("dropTable")) {
 			dropTable.clear();
 			final ConfigurationSection dropTableSection = config.getConfigurationSection("dropTable");
