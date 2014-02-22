@@ -245,7 +245,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 				final Integer z = chunk.getZ();
 				final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkUnprotect : MessageId.theEndAgain_unprotectedChunkUnprotect;
 				plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
-				chunk.setProtected(true);
+				chunk.setProtected(false);
 				return true;
 			}
 		}
