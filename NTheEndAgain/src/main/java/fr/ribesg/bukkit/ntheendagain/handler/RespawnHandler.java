@@ -131,18 +131,35 @@ public class RespawnHandler {
 
 				@Override
 				public void run() {
-					world.spawnEntity(loc, EntityType.ENDER_DRAGON);
+					if (world.spawnEntity(loc, EntityType.ENDER_DRAGON) == null) {
+						retryRespawn(loc);
+					}
 					worldHandler.getConfig().setNextRespawnTaskTime(System.nanoTime() + worldHandler.getConfig().getRandomRespawnTimer() * 1_000_000_000);
 				}
 			}, EndWorldHandler.REGEN_TO_RESPAWN_DELAY);
 		} else {
 			plugin.debug("No chunk has been regen, respawn now");
-			world.spawnEntity(loc, EntityType.ENDER_DRAGON);
+			if (world.spawnEntity(loc, EntityType.ENDER_DRAGON) == null) {
+				retryRespawn(loc);
+			}
 			result = true;
 		}
 
 		plugin.exiting(getClass(), "respawnDragon");
 		return result;
+	}
+
+	private void retryRespawn(final Location loc) {
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				plugin.info("Failed to spawn an EnderDragon at Location " + NLocation.toString(loc) + ", trying again in 1 second");
+				if (loc.getWorld().spawnEntity(loc, EntityType.ENDER_DRAGON) != null) {
+					this.cancel();
+				}
+			}
+		}.runTaskTimer(plugin, 0L, 20L);
 	}
 
 }
