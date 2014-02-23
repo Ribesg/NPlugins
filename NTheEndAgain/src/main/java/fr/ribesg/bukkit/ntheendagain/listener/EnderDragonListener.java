@@ -97,7 +97,7 @@ public class EnderDragonListener implements Listener {
 						}
 
 						// Get total damages done to the ED by Online players
-						long totalDamages = 0;
+						double totalDamages = 0;
 						for (final double v : dmgMap.values()) {
 							totalDamages += v;
 						}
@@ -106,7 +106,7 @@ public class EnderDragonListener implements Listener {
 						final Map<String, Integer> xpMap = new HashMap<>(dmgMap.size());
 						for (final Entry<String, Double> entry : dmgMap.entrySet()) {
 							final int reward = (int) (config.getEdExpReward() * entry.getValue() / totalDamages);
-							xpMap.put(entry.getKey(), reward);
+							xpMap.put(entry.getKey(), Math.min(reward,config.getEdExpReward()));
 						}
 
 						// Call event for external plugins to be able to play with this map
