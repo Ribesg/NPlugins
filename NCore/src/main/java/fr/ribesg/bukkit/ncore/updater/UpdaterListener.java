@@ -8,6 +8,54 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.updater;
-public class UpdaterListener {
 
+import fr.ribesg.bukkit.ncore.NCore;
+import fr.ribesg.bukkit.ncore.Perms;
+import fr.ribesg.bukkit.ncore.event.PlayerJoinedEvent;
+import java.util.Map;
+import java.util.SortedMap;
+import org.bukkit.event.Listener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.entity.Player;
+
+public class UpdaterListener implements Listener {
+
+	private final NCore plugin;
+
+	public UpdaterListener(final NCore instance) {
+		plugin = instance;
+	}
+
+        @EventHandler(priority = EventPriority.HIGHEST)
+        public void onJoin(final PlayerJoinedEvent event) {
+                Player p = event.getPlayer();
+                
+                if (Perms.hasUpdateNotice(p)) {
+                    SortedMap<String, String> updates = plugin.getPluginUpdater().getUpdateAvailable();
+                    if (updates.size() == 0) {
+                        return;
+                    }
+                    
+                    StringBuilder updatesString = new StringBuilder();
+                    
+                    int count = 0;
+                    for (Map.Entry<String, String> update : updates.entrySet()) {
+                        if (count == updates.size()) {
+                            updatesString.append("§e" + update.getKey() + "§7(§b" + update.getValue() + "§7)" + "§8, ");
+                        } else {
+                            updatesString.append("§e" + update.getKey() + "§7(§b" + update.getValue() + "§7)" + "§8.");
+                        }
+                        count ++;
+                    }
+                    
+                    if (updates.size() == 1) {
+                        p.sendMessage(plugin.getPluginUpdater().getMessagePrefix() + "§bThe following update is available:");
+                    } else {
+                        p.sendMessage(plugin.getPluginUpdater().getMessagePrefix() + "§bThe following updates are available:");
+                    }
+                    
+                    p.sendMessage(plugin.getPluginUpdater().getMessagePrefix() + updatesString.toString());
+                }
+        }
 }

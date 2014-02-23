@@ -423,4 +423,12 @@ public class Updater {
 
 		return builder.toString();
 	}
+        
+        public SortedMap<String, String> getUpdateAvailable() {
+            return updateAvailable;
+        }
+        
+        public String getMessagePrefix() {
+            return PREFIX;
+        }
 }
