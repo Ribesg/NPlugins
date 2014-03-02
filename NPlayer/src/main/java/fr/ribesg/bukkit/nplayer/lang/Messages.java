@@ -184,11 +184,8 @@ public class Messages extends AbstractMessages {
 				"%userName%",
 				"%duration%"
 		}, null, false));
-		newMessages.add(new Message(MessageId.player_loginAttemptsPermBanMessage, "&cYou have been permanently banned : Too many login attempts", new String[] {"%duration%"}, null, false));
-		newMessages.add(new Message(MessageId.player_loginAttemptsBroadcastedPermBanMessage, "&e%userName% has been permanently banned (Too many login attempts)", new String[] {
-				"%userName%",
-				"%duration%"
-		}, null, false));
+		newMessages.add(new Message(MessageId.player_loginAttemptsPermBanMessage, "&cYou have been permanently banned : Too many login attempts", null, null, false));
+		newMessages.add(new Message(MessageId.player_loginAttemptsBroadcastedPermBanMessage, "&e%userName% has been permanently banned (Too many login attempts)", new String[] {"%userName%"}, null, false));
 		newMessages.add(new Message(MessageId.player_loginAttemptsTooMany, "&cToo many login attempts", null, null, false));
 
 		// Force Login

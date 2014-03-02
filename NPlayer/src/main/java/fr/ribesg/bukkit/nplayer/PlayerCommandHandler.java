@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.nplayer;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.utils.TimeUtils;
 import fr.ribesg.bukkit.nplayer.security.Security;
 import fr.ribesg.bukkit.nplayer.user.User;
 import org.bukkit.Bukkit;
@@ -459,8 +460,10 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsKickMessage)[0]);
 					break;
 				case 1:
-					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName)[0]);
-					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsTempBanMessage)[0]);
+					final int duration = plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration();
+					final String durationString = TimeUtils.toString(duration);
+					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName, durationString)[0]);
+					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsTempBanMessage, durationString)[0]);
 					plugin.getPunishmentDb().tempBanIp(target.getAddress().getAddress().getHostAddress(), plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration(), plugin.getMessages().get(MessageId.player_loginAttemptsTooMany)[0]);
 					break;
 				case 2:
