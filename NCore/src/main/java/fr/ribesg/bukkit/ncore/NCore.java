@@ -21,6 +21,7 @@ import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
 import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ncore.node.world.WorldNode;
 import fr.ribesg.bukkit.ncore.updater.Updater;
+import fr.ribesg.bukkit.ncore.updater.UpdaterListener;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -82,6 +83,7 @@ public class NCore extends JavaPlugin {
 		}, 5 * 20L /* ~5 seconds */);
 
 		Bukkit.getPluginManager().registerEvents(new NEventsListener(this), this);
+		Bukkit.getPluginManager().registerEvents(new UpdaterListener(this), this);
 	}
 
 	@Override
@@ -305,5 +307,9 @@ public class NCore extends JavaPlugin {
 
 	public Config getPluginConfig() {
 		return pluginConfig;
+	}
+
+	public Updater getUpdater() {
+		return updater;
 	}
 }

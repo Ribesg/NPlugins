@@ -114,6 +114,14 @@ public class Updater {
 		return plugins;
 	}
 
+	public SortedMap<String, String> getUpdateAvailable() {
+		return updateAvailable;
+	}
+
+	public String getMessagePrefix() {
+		return PREFIX;
+	}
+
 	public void startTask() {
 		new UpdaterTask(this).runTaskTimer(plugin, 20L, plugin.getPluginConfig().getUpdateCheckInterval() * 20L);
 	}
