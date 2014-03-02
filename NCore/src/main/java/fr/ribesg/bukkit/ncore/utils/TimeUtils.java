@@ -25,6 +25,36 @@ import java.util.regex.Pattern;
  */
 public class TimeUtils {
 
+	private static final Map<String, String> translatedUnits = new HashMap<>(14);
+
+	static {
+		for (final String s : new String[] {
+				"second",
+				"seconds",
+				"minute",
+				"minutes",
+				"hour",
+				"hours",
+				"day",
+				"days",
+				"week",
+				"weeks",
+				"month",
+				"months",
+				"year",
+				"years"
+		}) {
+			translatedUnits.put(s, s);
+		}
+	}
+
+	public static void setTranslatedUnit(final String key, final String value) {
+		if (!translatedUnits.containsKey(key)) {
+			throw new IllegalArgumentException("Unknown key: " + key);
+		}
+		translatedUnits.put(key, value);
+	}
+
 	/**
 	 * This enum is used to:
 	 * - Define to-seconds multiplier for each unit
@@ -141,16 +171,16 @@ public class TimeUtils {
 
 		final long years = seconds / TimeUnits.YEAR.getMultiplier();
 		if (years != 0) {
-			builder = new StringBuilder(years + " year" + (years == 1 ? "" : "s"));
+			builder = new StringBuilder(years + " " + translatedUnits.get("year" + (years == 1 ? "" : "s")));
 		}
 		long leftOver = seconds % TimeUnits.YEAR.getMultiplier();
 
 		final long months = leftOver / TimeUnits.MONTH.getMultiplier();
 		if (months != 0) {
 			if (builder == null) {
-				builder = new StringBuilder(months + " month" + (months == 1 ? "" : "s"));
+				builder = new StringBuilder(months + " " + translatedUnits.get("month" + (months == 1 ? "" : "s")));
 			} else {
-				builder.append(", ").append(months).append(" month").append(months == 1 ? "" : "s");
+				builder.append(", ").append(months).append(" ").append(translatedUnits.get("month" + (months == 1 ? "" : "s")));
 			}
 		}
 		leftOver = leftOver % TimeUnits.MONTH.getMultiplier();
@@ -158,9 +188,9 @@ public class TimeUtils {
 		final long weeks = leftOver / TimeUnits.WEEK.getMultiplier();
 		if (weeks != 0) {
 			if (builder == null) {
-				builder = new StringBuilder(weeks + " week" + (weeks == 1 ? "" : "s"));
+				builder = new StringBuilder(weeks + " " + translatedUnits.get("week" + (weeks == 1 ? "" : "s")));
 			} else {
-				builder.append(", ").append(weeks).append(" week").append(weeks == 1 ? "" : "s");
+				builder.append(", ").append(weeks).append(" ").append(translatedUnits.get("week" + (weeks == 1 ? "" : "s")));
 			}
 		}
 		leftOver = leftOver % TimeUnits.WEEK.getMultiplier();
@@ -168,9 +198,9 @@ public class TimeUtils {
 		final long days = leftOver / TimeUnits.DAY.getMultiplier();
 		if (days != 0) {
 			if (builder == null) {
-				builder = new StringBuilder(days + " day" + (days == 1 ? "" : "s"));
+				builder = new StringBuilder(days + " " + translatedUnits.get("day" + (days == 1 ? "" : "s")));
 			} else {
-				builder.append(", ").append(days).append(" day").append(days == 1 ? "" : "s");
+				builder.append(", ").append(days).append(" ").append(translatedUnits.get("day" + (days == 1 ? "" : "s")));
 			}
 		}
 		leftOver = leftOver % TimeUnits.DAY.getMultiplier();
@@ -178,9 +208,9 @@ public class TimeUtils {
 		final long hours = leftOver / TimeUnits.HOUR.getMultiplier();
 		if (hours != 0) {
 			if (builder == null) {
-				builder = new StringBuilder(hours + " hour" + (hours == 1 ? "" : "s"));
+				builder = new StringBuilder(hours + " " + translatedUnits.get("hour" + (hours == 1 ? "" : "s")));
 			} else {
-				builder.append(", ").append(hours).append(" hour").append(hours == 1 ? "" : "s");
+				builder.append(", ").append(hours).append(" ").append(translatedUnits.get("hour" + (hours == 1 ? "" : "s")));
 			}
 		}
 		leftOver = leftOver % TimeUnits.HOUR.getMultiplier();
@@ -188,17 +218,17 @@ public class TimeUtils {
 		final long minutes = leftOver / TimeUnits.MINUTE.getMultiplier();
 		if (minutes != 0) {
 			if (builder == null) {
-				builder = new StringBuilder(minutes + " minute" + (minutes == 1 ? "" : "s"));
+				builder = new StringBuilder(minutes + " " + translatedUnits.get("minute" + (minutes == 1 ? "" : "s")));
 			} else {
-				builder.append(", ").append(minutes).append(" minute").append(minutes == 1 ? "" : "s");
+				builder.append(", ").append(minutes).append(" ").append(translatedUnits.get("minute" + (minutes == 1 ? "" : "s")));
 			}
 		}
 		leftOver = leftOver % TimeUnits.MINUTE.getMultiplier();
 
 		if (builder == null) {
-			builder = new StringBuilder(leftOver + " second" + (leftOver == 1 ? "" : "s"));
+			builder = new StringBuilder(leftOver + " " + translatedUnits.get("second" + (leftOver == 1 ? "" : "s")));
 		} else if (leftOver != 0) {
-			builder.append(", ").append(leftOver).append(" second").append(leftOver == 1 ? "" : "s");
+			builder.append(", ").append(leftOver).append(" ").append(translatedUnits.get("second" + (leftOver == 1 ? "" : "s")));
 		}
 
 		return builder.toString();

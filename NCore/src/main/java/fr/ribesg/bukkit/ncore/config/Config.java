@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ncore.config;
 import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.utils.TimeUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -28,6 +29,8 @@ public class Config extends AbstractConfig<NCore> {
 	private List<String>      checkFor;
 	private String            apiKey;
 	private InetSocketAddress proxyAddress;
+
+	private String second, seconds, minute, minutes, hour, hours, day, days, week, weeks, month, months, year, years;
 
 	private List<String> debugEnabled;
 
@@ -51,6 +54,21 @@ public class Config extends AbstractConfig<NCore> {
 		this.checkFor.add("NWorld");
 		this.apiKey = "";
 		this.proxyAddress = null;
+
+		this.second = "second";
+		this.seconds = "seconds";
+		this.minute = "minute";
+		this.minutes = "minutes";
+		this.hour = "hour";
+		this.hours = "hours";
+		this.day = "day";
+		this.days = "days";
+		this.week = "week";
+		this.weeks = "weeks";
+		this.month = "month";
+		this.months = "months";
+		this.year = "year";
+		this.years = "years";
 
 		this.debugEnabled = new ArrayList<>();
 	}
@@ -79,6 +97,37 @@ public class Config extends AbstractConfig<NCore> {
 		if (proxyHost != null && !proxyHost.isEmpty() && proxyPort != -1) {
 			setProxyAddress(new InetSocketAddress(proxyHost, proxyPort));
 		}
+
+		// translatableUnits
+		setSecondTimeUnit(config.getString("second", "second"));
+		setSecondsTimeUnit(config.getString("seconds", "seconds"));
+		setMinuteTimeUnit(config.getString("minute", "minute"));
+		setMinutesTimeUnit(config.getString("minutes", "minutes"));
+		setHourTimeUnit(config.getString("hour", "hour"));
+		setHoursTimeUnit(config.getString("hours", "hours"));
+		setDayTimeUnit(config.getString("day", "day"));
+		setDaysTimeUnit(config.getString("days", "days"));
+		setWeekTimeUnit(config.getString("week", "week"));
+		setWeeksTimeUnit(config.getString("weeks", "weeks"));
+		setMonthTimeUnit(config.getString("month", "month"));
+		setMonthsTimeUnit(config.getString("months", "months"));
+		setYearTimeUnit(config.getString("year", "year"));
+		setYearsTimeUnit(config.getString("years", "years"));
+
+		TimeUtils.setTranslatedUnit("second", this.second);
+		TimeUtils.setTranslatedUnit("seconds", this.seconds);
+		TimeUtils.setTranslatedUnit("minute", this.minute);
+		TimeUtils.setTranslatedUnit("minutes", this.minutes);
+		TimeUtils.setTranslatedUnit("hour", this.hour);
+		TimeUtils.setTranslatedUnit("hours", this.hours);
+		TimeUtils.setTranslatedUnit("day", this.day);
+		TimeUtils.setTranslatedUnit("days", this.days);
+		TimeUtils.setTranslatedUnit("week", this.week);
+		TimeUtils.setTranslatedUnit("weeks", this.weeks);
+		TimeUtils.setTranslatedUnit("month", this.month);
+		TimeUtils.setTranslatedUnit("months", this.months);
+		TimeUtils.setTranslatedUnit("year", this.year);
+		TimeUtils.setTranslatedUnit("years", this.years);
 
 		// debugEnabled. Default: empty
 		setDebugEnabled(config.getStringList("debugEnabled"));
@@ -160,6 +209,25 @@ public class Config extends AbstractConfig<NCore> {
 		}
 		content.append('\n');
 
+		// translatableUnits
+		content.append("# Here you can translate what's written in every plugin when\n");
+		content.append("# a duration is printed.\n");
+		content.append("second: " + getSecondTimeUnit() + '\n');
+		content.append("seconds: " + getSecondsTimeUnit() + '\n');
+		content.append("minute: " + getMinuteTimeUnit() + '\n');
+		content.append("minutes: " + getMinutesTimeUnit() + '\n');
+		content.append("hour: " + getHourTimeUnit() + '\n');
+		content.append("hours: " + getHoursTimeUnit() + '\n');
+		content.append("day: " + getDayTimeUnit() + '\n');
+		content.append("days: " + getDaysTimeUnit() + '\n');
+		content.append("week: " + getWeekTimeUnit() + '\n');
+		content.append("weeks: " + getWeeksTimeUnit() + '\n');
+		content.append("month: " + getMonthTimeUnit() + '\n');
+		content.append("months: " + getMonthsTimeUnit() + '\n');
+		content.append("year: " + getYearTimeUnit() + '\n');
+		content.append("years: " + getYearsTimeUnit() + '\n');
+		content.append('\n');
+
 		// debugEnabled. Default: empty
 		content.append("# Enables debug mode for each specific node. Default: empty\n");
 		content.append("debugEnabled:\n");
@@ -216,6 +284,118 @@ public class Config extends AbstractConfig<NCore> {
 		} else {
 			return null;
 		}
+	}
+
+	public String getSecondTimeUnit() {
+		return second;
+	}
+
+	public void setSecondTimeUnit(final String second) {
+		this.second = second;
+	}
+
+	public String getSecondsTimeUnit() {
+		return seconds;
+	}
+
+	public void setSecondsTimeUnit(final String seconds) {
+		this.seconds = seconds;
+	}
+
+	public String getMinuteTimeUnit() {
+		return minute;
+	}
+
+	public void setMinuteTimeUnit(final String minute) {
+		this.minute = minute;
+	}
+
+	public String getMinutesTimeUnit() {
+		return minutes;
+	}
+
+	public void setMinutesTimeUnit(final String minutes) {
+		this.minutes = minutes;
+	}
+
+	public String getHourTimeUnit() {
+		return hour;
+	}
+
+	public void setHourTimeUnit(final String hour) {
+		this.hour = hour;
+	}
+
+	public String getHoursTimeUnit() {
+		return hours;
+	}
+
+	public void setHoursTimeUnit(final String hours) {
+		this.hours = hours;
+	}
+
+	public String getDayTimeUnit() {
+		return day;
+	}
+
+	public void setDayTimeUnit(final String day) {
+		this.day = day;
+	}
+
+	public String getDaysTimeUnit() {
+		return days;
+	}
+
+	public void setDaysTimeUnit(final String days) {
+		this.days = days;
+	}
+
+	public String getWeekTimeUnit() {
+		return week;
+	}
+
+	public void setWeekTimeUnit(final String week) {
+		this.week = week;
+	}
+
+	public String getWeeksTimeUnit() {
+		return weeks;
+	}
+
+	public void setWeeksTimeUnit(final String weeks) {
+		this.weeks = weeks;
+	}
+
+	public String getMonthTimeUnit() {
+		return month;
+	}
+
+	public void setMonthTimeUnit(final String month) {
+		this.month = month;
+	}
+
+	public String getMonthsTimeUnit() {
+		return months;
+	}
+
+	public void setMonthsTimeUnit(final String months) {
+		this.months = months;
+	}
+
+	public String getYearTimeUnit() {
+		return year;
+	}
+
+	public void setYearTimeUnit(final String year) {
+		this.year = year;
+	}
+
+	public String getYearsTimeUnit() {
+		return years;
+	}
+
+	public void setYearsTimeUnit(final String years) {
+		this.years = years;
 	}
 
 	public List<String> getDebugEnabled() {
