@@ -36,7 +36,10 @@ public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 		if (event instanceof EntityDamageByEntityEvent) {
 			Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
 			if (damager instanceof Projectile) {
-				damager = ((Projectile) damager).getShooter();
+				final Projectile projectile = (Projectile) damager;
+				if (projectile.getShooter() instanceof Entity) {
+					damager = (Entity) projectile.getShooter();
+				}
 				damagerProjectile = true;
 				shooter = damager;
 			}

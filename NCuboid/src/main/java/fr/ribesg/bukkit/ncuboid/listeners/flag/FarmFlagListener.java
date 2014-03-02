@@ -19,7 +19,6 @@ import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -30,6 +29,7 @@ import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -70,8 +70,8 @@ public class FarmFlagListener extends AbstractListener {
 			if (event.getDamager().getType() == EntityType.PLAYER) {
 				p = (Player) event.getDamager();
 			} else if (event.getDamager() instanceof Projectile) {
-				final LivingEntity shooter = ((Projectile) event.getDamager()).getShooter();
-				if (shooter != null && shooter.getType() == EntityType.PLAYER) {
+				final ProjectileSource shooter = ((Projectile) event.getDamager()).getShooter();
+				if (shooter != null && shooter instanceof Player) {
 					p = (Player) shooter;
 				} else {
 					return;

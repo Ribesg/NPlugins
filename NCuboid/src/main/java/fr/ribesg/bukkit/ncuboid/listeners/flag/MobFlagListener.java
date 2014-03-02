@@ -15,14 +15,15 @@ import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPotionSplashEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -72,7 +73,7 @@ public class MobFlagListener extends AbstractListener {
 	public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
 		if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
 			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
-			if (getMobs().contains(event.getDamager().getType()) || ext.isDamagerProjectile() && getMobs().contains(((Projectile) event.getDamager()).getShooter().getType())) {
+			if (getMobs().contains(event.getDamager().getType()) || ext.isDamagerProjectile() && ext.getShooter() != null && getMobs().contains(ext.getShooter().getType())) {
 				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.MOB) || ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.MOB)) {
 					event.setCancelled(true);
 				}
@@ -83,7 +84,8 @@ public class MobFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPotionSplash(final ExtendedPotionSplashEvent ext) {
 		final PotionSplashEvent event = (PotionSplashEvent) ext.getBaseEvent();
-		if (getMobs().contains(event.getPotion().getShooter().getType())) {
+		final ProjectileSource shooter = event.getPotion().getShooter();
+		if (shooter instanceof Entity && getMobs().contains(((Entity) shooter).getType())) {
 			if (ext.hasNegativeEffect()) {
 				GeneralRegion region;
 				for (final LivingEntity e : ext.getEntityRegionsMap().keySet()) {

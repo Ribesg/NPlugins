@@ -58,7 +58,7 @@ public class DamageListener implements Listener {
 			final Player player;
 			if (event.getDamager().getType() == EntityType.PLAYER) {
 				player = (Player) event.getDamager();
-			} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER) {
+			} else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
 				player = (Player) ((Projectile) event.getDamager()).getShooter();
 			} else {
 				// Not caused by a Player

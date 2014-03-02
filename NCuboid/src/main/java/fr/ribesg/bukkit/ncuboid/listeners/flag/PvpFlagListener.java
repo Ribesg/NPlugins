@@ -17,7 +17,7 @@ import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPotionSplashEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -33,7 +33,7 @@ public class PvpFlagListener extends AbstractListener {
 	public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
 		if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
 			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
-			if (event.getEntityType() == EntityType.PLAYER && (event.getDamager().getType() == EntityType.PLAYER || ext.isDamagerProjectile() && ((Projectile) event.getDamager()).getShooter().getType() == EntityType.PLAYER)) {
+			if (event.getEntityType() == EntityType.PLAYER && (event.getDamager().getType() == EntityType.PLAYER || ext.isDamagerProjectile() && ext.getShooter() != null && ext.getShooter() instanceof Player)) {
 				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.PVP) || ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.PVP)) {
 					event.setCancelled(true);
 				}
@@ -44,7 +44,7 @@ public class PvpFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPotionSplash(final ExtendedPotionSplashEvent ext) {
 		final PotionSplashEvent event = (PotionSplashEvent) ext.getBaseEvent();
-		if (event.getPotion().getShooter().getType() == EntityType.PLAYER) {
+		if (event.getPotion().getShooter() instanceof Player) {
 			if (ext.hasNegativeEffect()) {
 				GeneralRegion region;
 				for (final LivingEntity e : ext.getEntityRegionsMap().keySet()) {
