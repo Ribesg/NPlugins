@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ntheendagain;
 
-import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permissible;
 
 public class Perms {
 
@@ -25,35 +25,35 @@ public class Perms {
 	private static final String CMD_CHUNKPROTECT   = "ntheendagain.cmd.chunkprotect";
 	private static final String CMD_CHUNKUNPROTECT = "ntheendagain.cmd.chunkunprotect";
 
-	public static boolean hasHelp(final CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_HELP) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+	public static boolean hasHelp(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_HELP) || user.hasPermission(USER) || user.hasPermission(ADMIN);
 	}
 
-	public static boolean hasReload(final CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_RELOAD) || sender.hasPermission(ADMIN);
+	public static boolean hasReload(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_RELOAD) || user.hasPermission(ADMIN);
 	}
 
-	public static boolean hasRegen(final CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_REGEN) || sender.hasPermission(ADMIN);
+	public static boolean hasRegen(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_REGEN) || user.hasPermission(ADMIN);
 	}
 
-	public static boolean hasRespawn(final CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_RESPAWN) || sender.hasPermission(ADMIN);
+	public static boolean hasRespawn(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_RESPAWN) || user.hasPermission(ADMIN);
 	}
 
-	public static boolean hasNb(final CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_NB) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+	public static boolean hasNb(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_NB) || user.hasPermission(USER) || user.hasPermission(ADMIN);
 	}
 
-	public static boolean hasChunkInfo(final CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_CHUNKINFO) || sender.hasPermission(USER) || sender.hasPermission(ADMIN);
+	public static boolean hasChunkInfo(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_CHUNKINFO) || user.hasPermission(USER) || user.hasPermission(ADMIN);
 	}
 
-	public static boolean hasChunkProtect(final CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_CHUNKPROTECT) || sender.hasPermission(ADMIN);
+	public static boolean hasChunkProtect(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_CHUNKPROTECT) || user.hasPermission(ADMIN);
 	}
 
-	public static boolean hasChunkUnprotect(final CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(CMD_CHUNKUNPROTECT) || sender.hasPermission(ADMIN);
+	public static boolean hasChunkUnprotect(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_CHUNKUNPROTECT) || user.hasPermission(ADMIN);
 	}
 }

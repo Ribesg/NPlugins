@@ -11,7 +11,7 @@ package fr.ribesg.bukkit.ncuboid;
 
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
-import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permissible;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -94,13 +94,13 @@ public class Perms {
 		return flagAttributesPermissions.get(fa);
 	}
 
-	public static boolean isAdmin(final CommandSender sender) {
-		return sender.isOp() || sender.hasPermission(ADMIN);
+	public static boolean isAdmin(final Permissible user) {
+		return user.isOp() || user.hasPermission(ADMIN);
 	}
 
-	public static boolean hasFlag(final CommandSender sender, final Flag f) {
+	public static boolean hasFlag(final Permissible user, final Flag f) {
 		final String perm = getFlagPermission(f);
-		final boolean user;
+		final boolean isUser;
 		switch (f) {
 			case BUILD:
 			case CHEST:
@@ -113,70 +113,70 @@ public class Perms {
 			case MOB:
 			case SNOW:
 			case USE:
-				user = true;
+				isUser = true;
 				break;
 			default:
-				user = false;
+				isUser = false;
 				break;
 		}
-		return isAdmin(sender) || sender.hasPermission(perm) || user && sender.hasPermission(USER);
+		return isAdmin(user) || user.hasPermission(perm) || isUser && user.hasPermission(USER);
 	}
 
-	public static boolean hasFlagAttribute(final CommandSender sender, final FlagAtt fa) {
+	public static boolean hasFlagAttribute(final Permissible user, final FlagAtt fa) {
 		final String perm = getFlagAttributePermission(fa);
-		final boolean user;
+		final boolean isUser;
 		switch (fa) {
 			case EXPLOSION_BLOCK_DROP:
-				user = true;
+				isUser = true;
 				break;
 			default:
-				user = false;
+				isUser = false;
 				break;
 		}
-		return isAdmin(sender) || sender.hasPermission(perm) || user && sender.hasPermission(USER);
+		return isAdmin(user) || user.hasPermission(perm) || isUser && user.hasPermission(USER);
 	}
 
-	public static boolean hasSeeInvisibleCuboid(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(SEE_INVISIBLE_CUBOID);
+	public static boolean hasSeeInvisibleCuboid(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(SEE_INVISIBLE_CUBOID);
 	}
 
-	public static boolean hasGeneral(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_GENERAL) || sender.hasPermission(USER);
+	public static boolean hasGeneral(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_GENERAL) || user.hasPermission(USER);
 	}
 
-	public static boolean hasReload(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_RELOAD);
+	public static boolean hasReload(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_RELOAD);
 	}
 
-	public static boolean hasCreate(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_CREATE) || sender.hasPermission(USER);
+	public static boolean hasCreate(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_CREATE) || user.hasPermission(USER);
 	}
 
-	public static boolean hasDelete(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_DELETE) || sender.hasPermission(USER);
+	public static boolean hasDelete(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_DELETE) || user.hasPermission(USER);
 	}
 
-	public static boolean hasFlag(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_FLAG) || sender.hasPermission(USER);
+	public static boolean hasFlag(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_FLAG) || user.hasPermission(USER);
 	}
 
-	public static boolean hasFlagAttribute(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_FLAGATTRIBUTE) || sender.hasPermission(USER);
+	public static boolean hasFlagAttribute(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_FLAGATTRIBUTE) || user.hasPermission(USER);
 	}
 
-	public static boolean hasJail(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_JAIL) || sender.hasPermission(ADMIN);
+	public static boolean hasJail(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_JAIL) || user.hasPermission(ADMIN);
 	}
 
-	public static boolean hasAdmin(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_ADMIN) || sender.hasPermission(USER);
+	public static boolean hasAdmin(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_ADMIN) || user.hasPermission(USER);
 	}
 
-	public static boolean hasUser(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_USER) || sender.hasPermission(USER);
+	public static boolean hasUser(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_USER) || user.hasPermission(USER);
 	}
 
-	public static boolean hasGroup(final CommandSender sender) {
-		return isAdmin(sender) || sender.hasPermission(CMD_GROUP) || sender.hasPermission(USER);
+	public static boolean hasGroup(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_GROUP) || user.hasPermission(USER);
 	}
 }

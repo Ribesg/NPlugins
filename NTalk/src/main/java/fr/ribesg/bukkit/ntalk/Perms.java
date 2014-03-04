@@ -24,41 +24,41 @@ public class Perms {
 	private static final String CMD_PR   = "ntalk.cmd.pr";
 	private static final String CMD_NICK = "ntalk.cmd.nick";
 
-	public static boolean hasAdmin(final CommandSender sender, final boolean async) {
+	public static boolean hasAdmin(final CommandSender user, final boolean async) {
 		if (async) {
-			if (!(sender instanceof Player)) {
+			if (!(user instanceof Player)) {
 				throw new UnsupportedOperationException();
 			}
-			return AsyncPermAccessor.isOp(sender.getName()) || AsyncPermAccessor.has(sender.getName(), ADMIN);
+			return AsyncPermAccessor.isOp(user.getName()) || AsyncPermAccessor.has(user.getName(), ADMIN);
 		} else {
-			return sender.isOp() || sender.hasPermission(ADMIN);
+			return user.isOp() || user.hasPermission(ADMIN);
 		}
 	}
 
-	public static boolean hasPrivateMessage(final CommandSender sender) {
-		return hasAdmin(sender, false) || sender.hasPermission(CMD_PM) || sender.hasPermission(USER);
+	public static boolean hasPrivateMessage(final CommandSender user) {
+		return hasAdmin(user, false) || user.hasPermission(CMD_PM) || user.hasPermission(USER);
 	}
 
-	public static boolean hasPrivateResponse(final CommandSender sender) {
-		return hasAdmin(sender, false) || sender.hasPermission(CMD_PR) || sender.hasPermission(USER);
+	public static boolean hasPrivateResponse(final CommandSender user) {
+		return hasAdmin(user, false) || user.hasPermission(CMD_PR) || user.hasPermission(USER);
 	}
 
-	public static boolean hasNick(final CommandSender sender) {
-		return hasAdmin(sender, false) || sender.hasPermission(CMD_NICK);
+	public static boolean hasNick(final CommandSender user) {
+		return hasAdmin(user, false) || user.hasPermission(CMD_NICK);
 	}
 
-	public static boolean hasSpy(final CommandSender sender) {
-		return hasAdmin(sender, false) || sender.hasPermission(SPY);
+	public static boolean hasSpy(final CommandSender user) {
+		return hasAdmin(user, false) || user.hasPermission(SPY);
 	}
 
-	public static boolean hasColor(final CommandSender sender, final boolean async) {
+	public static boolean hasColor(final CommandSender user, final boolean async) {
 		if (async) {
-			if (!(sender instanceof Player)) {
+			if (!(user instanceof Player)) {
 				throw new UnsupportedOperationException();
 			}
-			return hasAdmin(sender, true) || AsyncPermAccessor.has(sender.getName(), COLOR);
+			return hasAdmin(user, true) || AsyncPermAccessor.has(user.getName(), COLOR);
 		} else {
-			return hasAdmin(sender, false) || sender.hasPermission(COLOR);
+			return hasAdmin(user, false) || user.hasPermission(COLOR);
 		}
 	}
 }
