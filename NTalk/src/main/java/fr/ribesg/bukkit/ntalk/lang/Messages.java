@@ -23,8 +23,6 @@ import java.util.Set;
  */
 public class Messages extends AbstractMessages {
 
-	/**
-	 */
 	public Messages() {
 		super("Talk");
 	}
@@ -37,31 +35,31 @@ public class Messages extends AbstractMessages {
 		final Set<Message> newMessages = new HashSet<>();
 
 		// General deny response
-		newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null, true));
-		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", new String[] {"%playerName%"}, null, true));
-		newMessages.add(new Message(MessageId.talk_nobodyToRespond, "&cYou have nobody to respond to", null, null, true));
-		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null, true));
+		newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", true, null));
+		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", true, new String[] {"%playerName%"}));
+		newMessages.add(new Message(MessageId.talk_nobodyToRespond, "&cYou have nobody to respond to", true, null));
+		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", true, null));
 
 		// Command - RELOAD
-		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null, true));
-		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null, true));
+		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", true, null));
+		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", true, null));
 
 		// Command - NICK
-		newMessages.add(new Message(MessageId.talk_youNickNamed, "&aYou renamed %realName% %nickName%", new String[] {
+		newMessages.add(new Message(MessageId.talk_youNickNamed, "&aYou renamed %realName% %nickName%", true, new String[] {
 				"%realName%",
 				"%nickName%"
-		}, null, true));
-		newMessages.add(new Message(MessageId.talk_youDeNickNamed, "&aYou reseted the name of %realName%", new String[] {"%realName%"}, null, true));
-		newMessages.add(new Message(MessageId.talk_youWereNickNamed, "&aYou were renamed %nickName% by %playerName%", new String[] {
+		}));
+		newMessages.add(new Message(MessageId.talk_youDeNickNamed, "&aYou reseted the name of %realName%", true, new String[] {"%realName%"}));
+		newMessages.add(new Message(MessageId.talk_youWereNickNamed, "&aYou were renamed %nickName% by %playerName%", true, new String[] {
 				"%nickName%",
 				"%playerName%"
-		}, null, true));
-		newMessages.add(new Message(MessageId.talk_youWereDeNickNamed, "&aYour name was reseted by %playerName%", new String[] {"%playerName%"}, null, true));
+		}));
+		newMessages.add(new Message(MessageId.talk_youWereDeNickNamed, "&aYour name was reseted by %playerName%", true, new String[] {"%playerName%"}));
 
 		// Chat Filter reasons
-		newMessages.add(new Message(MessageId.talk_filterMutedReason, "Use of word '%word%'", new String[] {"%word%"}, null, false));
-		newMessages.add(new Message(MessageId.talk_filterBannedReason, "Use of word '%word%'", new String[] {"%word%"}, null, false));
-		newMessages.add(new Message(MessageId.talk_filterJailedReason, "Use of word '%word%'", new String[] {"%word%"}, null, false));
+		newMessages.add(new Message(MessageId.talk_filterMutedReason, "Use of word '%word%'", false, new String[] {"%word%"}));
+		newMessages.add(new Message(MessageId.talk_filterBannedReason, "Use of word '%word%'", false, new String[] {"%word%"}));
+		newMessages.add(new Message(MessageId.talk_filterJailedReason, "Use of word '%word%'", false, new String[] {"%word%"}));
 
 		return newMessages;
 	}

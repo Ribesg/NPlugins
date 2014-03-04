@@ -20,6 +20,7 @@ public class Message {
 	private final String    defaultMessage;
 	private final String    configMessage;
 	private final String[]  awaitedArgs;
+	private final boolean   defaultUseHeader;
 	private final boolean   useHeader;
 
 	/**
@@ -27,12 +28,13 @@ public class Message {
 	 * @param defaultMessage The default Message (in English)
 	 * @param awaitedArgs    The awaited arguments used while parsing the message
 	 */
-	public Message(final MessageId id, final String defaultMessage, final String[] awaitedArgs) {
+	public Message(final MessageId id, final String defaultMessage, final boolean defaultUseHeader, final String[] awaitedArgs) {
 		this.id = id;
 		this.defaultMessage = defaultMessage;
 		this.awaitedArgs = awaitedArgs;
 		this.configMessage = null;
-		this.useHeader = true;
+		this.defaultUseHeader = defaultUseHeader;
+		this.useHeader = defaultUseHeader;
 	}
 
 	/**
@@ -42,11 +44,12 @@ public class Message {
 	 * @param configMessage  The Message found in the configuration file
 	 * @param useHeader      Defines if we should prepend the header or not
 	 */
-	public Message(final MessageId id, final String defaultMessage, final String[] awaitedArgs, final String configMessage, final boolean useHeader) {
+	public Message(final MessageId id, final String defaultMessage, final String[] awaitedArgs, final String configMessage, final boolean defaultUseHeader, final boolean useHeader) {
 		this.id = id;
 		this.defaultMessage = defaultMessage;
 		this.awaitedArgs = awaitedArgs;
 		this.configMessage = configMessage;
+		this.defaultUseHeader = defaultUseHeader;
 		this.useHeader = useHeader;
 	}
 
@@ -91,6 +94,10 @@ public class Message {
 
 	public String[] getAwaitedArgs() {
 		return this.awaitedArgs;
+	}
+
+	public boolean defaultUseHeader() {
+		return this.defaultUseHeader;
 	}
 
 	public boolean useHeader() {

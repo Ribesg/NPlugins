@@ -97,7 +97,7 @@ public abstract class AbstractMessages {
 					final ConfigurationSection section = messagesConfig.getConfigurationSection(idString);
 					final String value = section.getString("value", def.getDefaultMessage());
 					final boolean useHeader = section.getBoolean("useHeader", true);
-					messagesMap.put(id, new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), value, useHeader));
+					messagesMap.put(id, new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), value, def.defaultUseHeader(), useHeader));
 				} catch (final IllegalArgumentException e) {
 					plugin.getLogger().warning(idString + " is not / no longer used, removing it from messages config file.");
 				}
@@ -155,7 +155,7 @@ public abstract class AbstractMessages {
 
 		for (final Message m : getMessagesMap().values()) {
 			content.append("# Default value    : " + m.getDefaultMessage() + '\n');
-			content.append("# Default useHeader: " + m.useHeader() + '\n');
+			content.append("# Default useHeader: " + m.defaultUseHeader() + '\n');
 			content.append("# Awaited arguments: " + m.getAwaitedArgsString() + '\n');
 			content.append(m.getId().name() + ":\n");
 			content.append("  value: \"" + (m.getConfigMessage() != null ? m.getConfigMessage() : m.getDefaultMessage()) + "\"\n");

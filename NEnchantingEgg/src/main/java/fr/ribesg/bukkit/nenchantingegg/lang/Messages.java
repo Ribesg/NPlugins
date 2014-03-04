@@ -16,10 +16,13 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Messages for NEnchantingEgg
+ *
+ * @author Ribesg
+ */
 public class Messages extends AbstractMessages {
 
-	/**
-	 */
 	public Messages() {
 		super("EnchantingEgg");
 	}
@@ -32,22 +35,22 @@ public class Messages extends AbstractMessages {
 		final Set<Message> newMessages = new HashSet<>();
 
 		// General deny response
-		newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", null, null, true));
-		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", new String[] {"%playerName%"}, null, true));
-		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", null, null, true));
+		newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", true, null));
+		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", true, new String[] {"%playerName%"}));
+		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", true, null));
 
 		// Command - RELOAD
-		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", null, null, true));
-		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", null, null, true));
+		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", true, null));
+		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", true, null));
 
 		// Altars
-		newMessages.add(new Message(MessageId.egg_altarCreated, "&6You feel strange... Dark powers...", null, null, true));
-		newMessages.add(new Message(MessageId.egg_altarDestroyed, "&aThis area seems to be purified", null, null, true));
-		newMessages.add(new Message(MessageId.egg_altarProtectedSkullAtNight, "&cI am too powerful for you...", null, null, true));
-		newMessages.add(new Message(MessageId.egg_altarProtectedBlock, "&cDo not play with fire...", null, null, true));
-		newMessages.add(new Message(MessageId.egg_cantPlaceOnAltar, "&cAre you trying to provoke me?", null, null, true));
-		newMessages.add(new Message(MessageId.egg_altarTooClose, "&cSomething already drain the dark powers of this area...", null, null, true));
-		newMessages.add(new Message(MessageId.egg_altarEggProvided, "&6Aaaah... Power!", null, null, true));
+		newMessages.add(new Message(MessageId.egg_altarCreated, "&6You feel strange... Dark powers...", true, null));
+		newMessages.add(new Message(MessageId.egg_altarDestroyed, "&aThis area seems to be purified", true, null));
+		newMessages.add(new Message(MessageId.egg_altarProtectedSkullAtNight, "&cI am too powerful for you...", true, null));
+		newMessages.add(new Message(MessageId.egg_altarProtectedBlock, "&cDo not play with fire...", true, null));
+		newMessages.add(new Message(MessageId.egg_cantPlaceOnAltar, "&cAre you trying to provoke me?", true, null));
+		newMessages.add(new Message(MessageId.egg_altarTooClose, "&cSomething already drain the dark powers of this area...", true, null));
+		newMessages.add(new Message(MessageId.egg_altarEggProvided, "&6Aaaah... Power!", true, null));
 
 		return newMessages;
 	}
