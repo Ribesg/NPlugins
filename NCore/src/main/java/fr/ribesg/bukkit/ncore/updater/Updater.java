@@ -103,9 +103,11 @@ public class Updater {
 
 		this.plugins.put(plugin.getName().toLowerCase(), plugin);
 		for (final String nodeName : CURSE_IDS.keySet()) {
-			final String shortNodeName = nodeName.substring(1);
-			if (plugin.get(shortNodeName) != null) {
-				this.plugins.put(nodeName.toLowerCase(), (JavaPlugin) plugin.get(shortNodeName));
+			if (plugin.getPluginConfig().getCheckFor().contains(nodeName)) {
+				final String shortNodeName = nodeName.substring(1);
+				if (plugin.get(shortNodeName) != null) {
+					this.plugins.put(nodeName.toLowerCase(), (JavaPlugin) plugin.get(shortNodeName));
+				}
 			}
 		}
 	}
