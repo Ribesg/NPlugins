@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.utils.UsernameUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,7 +26,7 @@ import java.util.Set;
  */
 public class TalkCommandExecutor implements CommandExecutor {
 
-	private final static String CONSOLE_NAME = Bukkit.getConsoleSender().getName();
+	private static final String CONSOLE_NAME = Bukkit.getConsoleSender().getName();
 
 	private final NTalk                   plugin;
 	private final HashMap<String, String> lastReceivedPmMap;
@@ -141,6 +142,10 @@ public class TalkCommandExecutor implements CommandExecutor {
 			return false;
 		} else if (args.length == 1) {
 			final String realName = args[0];
+			if (!UsernameUtils.isValidMinecraftUserName(realName)) {
+				plugin.sendMessage(sender, MessageId.talk_invalidUsername, realName);
+				return true;
+			}
 			plugin.getPluginConfig().getPlayerNicknames().remove(realName);
 			plugin.sendMessage(sender, MessageId.talk_youDeNickNamed, realName);
 			if (plugin.getServer().getPlayerExact(realName) != null) {
@@ -150,6 +155,13 @@ public class TalkCommandExecutor implements CommandExecutor {
 		} else {
 			final String realName = args[0];
 			final String nick = args[1];
+			if (!UsernameUtils.isValidMinecraftUserName(realName)) {
+				plugin.sendMessage(sender, MessageId.talk_invalidUsername, realName);
+				return true;
+			} else if (!UsernameUtils.isValidNickName(nick)) {
+				plugin.sendMessage(sender, MessageId.talk_invalidNickname, nick);
+				return true;
+			}
 			plugin.getPluginConfig().getPlayerNicknames().put(realName, nick);
 			plugin.sendMessage(sender, MessageId.talk_youNickNamed, realName, nick);
 			if (plugin.getServer().getPlayerExact(realName) != null) {

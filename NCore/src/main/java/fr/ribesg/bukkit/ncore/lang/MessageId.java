@@ -202,6 +202,8 @@ public enum MessageId {
 	talk_youDeNickNamed,
 	talk_youWereNickNamed,
 	talk_youWereDeNickNamed,
+	talk_invalidUsername,
+	talk_invalidNickname,
 
 	talk_filterMutedReason,
 	talk_filterBannedReason,

@@ -55,6 +55,8 @@ public class Messages extends AbstractMessages {
 				"%playerName%"
 		}));
 		newMessages.add(new Message(MessageId.talk_youWereDeNickNamed, "&aYour name was reseted by %playerName%", true, new String[] {"%playerName%"}));
+		newMessages.add(new Message(MessageId.talk_invalidUsername, "&cThe username '%username%' is invalid!", true, new String[] {"%username%"}));
+		newMessages.add(new Message(MessageId.talk_invalidNickname, "&cThe nickname '%nickname%&c' is invalid!", true, new String[] {"%nickname%"}));
 
 		// Chat Filter reasons
 		newMessages.add(new Message(MessageId.talk_filterMutedReason, "Use of word '%word%'", false, new String[] {"%word%"}));
