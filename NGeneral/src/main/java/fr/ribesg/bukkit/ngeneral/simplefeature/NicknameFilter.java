@@ -24,7 +24,7 @@ public class NicknameFilter implements Listener {
 
 	public NicknameFilter(final NGeneral plugin) {
 		this.plugin = plugin;
-		this.pattern = Pattern.compile("^[\\w]{3,16}$");
+		this.pattern = Pattern.compile("^[a-z0-9_]{2,16}$/i");
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
