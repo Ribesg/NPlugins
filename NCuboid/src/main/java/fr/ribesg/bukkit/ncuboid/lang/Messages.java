@@ -59,6 +59,10 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.cuboid_selectionReset, "&aYour selection has been reset", true, null));
 		newMessages.add(new Message(MessageId.cuboid_noSelection, "&cYou have no selection to reset", true, null));
 
+		// PVP entering/exiting messages
+		newMessages.add(new Message(MessageId.cuboid_enteringPvpArea, "&6You are entering a PVP area: %region%", true, new String[] {"%region%"}));
+		newMessages.add(new Message(MessageId.cuboid_exitingPvpArea, "&6You are leaving a PVP area: %region%", true, new String[] {"%region%"}));
+
 		// Command - RELOAD
 		newMessages.add(new Message(MessageId.cuboid_cmdReloadRegions, "&aRegions reloaded!", true, null));
 		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded!", true, null));

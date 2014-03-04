@@ -96,6 +96,9 @@ public enum MessageId {
 	cuboid_cmdJailRemoved,
 	cuboid_cmdJailUnknown,
 
+	cuboid_enteringPvpArea,
+	cuboid_exitingPvpArea,
+
 	// ########################## //
 	// ## NTheEndAgain related ## //
 	// ########################## //

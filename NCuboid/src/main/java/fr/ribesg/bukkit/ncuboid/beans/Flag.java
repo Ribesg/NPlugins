@@ -34,6 +34,7 @@ public enum Flag {
 	PERMANENT,
 	PICKUP,
 	PVP,
+	PVP_HIDE,
 	SNOW,
 	TELEPORT,
 	USE,

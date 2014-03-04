@@ -63,6 +63,7 @@ public class Perms {
 			flagPermissions.put(Flag.PERMANENT, "ncuboid.flag.permanent");
 			flagPermissions.put(Flag.PICKUP, "ncuboid.flag.pickup");
 			flagPermissions.put(Flag.PVP, "ncuboid.flag.pvp");
+			flagPermissions.put(Flag.PVP_HIDE, "ncuboid.flag.pvphide");
 			flagPermissions.put(Flag.SNOW, "ncuboid.flag.snow");
 			flagPermissions.put(Flag.TELEPORT, "ncuboid.flag.teleport");
 			flagPermissions.put(Flag.USE, "ncuboid.flag.use");

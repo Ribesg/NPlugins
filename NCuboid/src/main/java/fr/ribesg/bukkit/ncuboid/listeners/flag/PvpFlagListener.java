@@ -9,10 +9,14 @@
 
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
+import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
+import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerTeleportEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPotionSplashEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.entity.EntityType;
@@ -22,6 +26,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class PvpFlagListener extends AbstractListener {
 
@@ -55,6 +60,34 @@ public class PvpFlagListener extends AbstractListener {
 						}
 					}
 				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
+		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
+		if (!ext.isCustomCancelled() && !event.isCancelled()) {
+			if (!ext.getToRegion().getFlag(Flag.PVP_HIDE) && ext.getToRegion().getFlag(Flag.PVP) && !ext.getFromRegions().contains(ext.getToRegion())) {
+				// Entering PVP Area
+				getPlugin().sendMessage(event.getPlayer(), MessageId.cuboid_enteringPvpArea, ext.getToRegion().getRegionName());
+			} else if (!ext.getFromRegion().getFlag(Flag.PVP_HIDE) && ext.getFromRegion().getFlag(Flag.PVP) && !ext.getToRegions().contains(ext.getFromRegion())) {
+				// Exiting PVP Area
+				getPlugin().sendMessage(event.getPlayer(), MessageId.cuboid_exitingPvpArea, ext.getFromRegion().getRegionName());
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onPlayerTeleport(final ExtendedPlayerTeleportEvent ext) {
+		final PlayerTeleportEvent event = (PlayerTeleportEvent) ext.getBaseEvent();
+		if (!event.isCancelled()) {
+			if (!ext.getToRegion().getFlag(Flag.PVP_HIDE) && ext.getToRegion().getFlag(Flag.PVP) && !ext.getFromRegions().contains(ext.getToRegion())) {
+				// Entering PVP Area
+				getPlugin().sendMessage(event.getPlayer(), MessageId.cuboid_enteringPvpArea, ext.getToRegion().getRegionName());
+			} else if (!ext.getFromRegion().getFlag(Flag.PVP_HIDE) && ext.getFromRegion().getFlag(Flag.PVP) && !ext.getToRegions().contains(ext.getFromRegion())) {
+				// Exiting PVP Area
+				getPlugin().sendMessage(event.getPlayer(), MessageId.cuboid_exitingPvpArea, ext.getFromRegion().getRegionName());
 			}
 		}
 	}
