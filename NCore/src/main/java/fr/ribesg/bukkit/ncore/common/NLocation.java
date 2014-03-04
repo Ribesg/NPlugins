@@ -409,20 +409,20 @@ public class NLocation {
 		return positionLocation.setDirection(directionLocation.getDirection());
 	}
 
-	public double distance(final NLocation o) {
+	public double distance(final NLocation o) throws IllegalArgumentException {
 		return Math.sqrt(distanceSquared(o));
 	}
 
-	public double distanceSquared(final NLocation o) {
+	public double distanceSquared(final NLocation o) throws IllegalArgumentException {
 		final double dy = y - o.y;
 		return distance2DSquared(o) + dy * dy;
 	}
 
-	public double distance2D(final NLocation o) {
+	public double distance2D(final NLocation o) throws IllegalArgumentException {
 		return Math.sqrt(distance2DSquared(o));
 	}
 
-	public double distance2DSquared(final NLocation o) {
+	public double distance2DSquared(final NLocation o) throws IllegalArgumentException {
 		if (o == null) {
 			throw new IllegalArgumentException("Cannot measure distance to a null location");
 		} else if (!o.getWorldName().equals(getWorldName())) {

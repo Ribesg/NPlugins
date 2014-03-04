@@ -140,10 +140,14 @@ public class ItemNetwork {
 		final int maxDistance = feature.getPlugin().getPluginConfig().getItemNetworkMaxDistance();
 		final int squaredMaxDistance = maxDistance * maxDistance;
 		final NLocation nLoc = new NLocation(loc);
-		for (final ReceiverSign r : getReceivers()) {
-			if (r.getLocation().distance2DSquared(nLoc) > squaredMaxDistance) {
-				return true;
+		try {
+			for (final ReceiverSign r : getReceivers()) {
+				if (r.getLocation().distance2DSquared(nLoc) > squaredMaxDistance) {
+					return true;
+				}
 			}
+		} catch (final IllegalArgumentException e) {
+			return true;
 		}
 		return false;
 	}
