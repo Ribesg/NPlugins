@@ -9,12 +9,24 @@
 
 package fr.ribesg.bukkit.ncore;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 public class Perms {
-	private static final String UPDATER_NOTICE                 = "ncore.updater.notice";
 
-	public static boolean hasUpdaterNotice(final Player player) {
-		return player.isOp() || player.hasPermission(UPDATER_NOTICE);
+	private static final String CMD_DEBUG   = "ncore.cmd.debug";
+	private static final String CMD_UPDATER = "ncore.cmd.updater";
+
+	private static final String UPDATER_NOTICE = "ncore.updater.notice";
+
+	public static boolean hasDebug(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_DEBUG);
+	}
+
+	public static boolean hasUpdater(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(CMD_UPDATER);
+	}
+
+	public static boolean hasUpdaterNotice(final CommandSender sender) {
+		return sender.isOp() || sender.hasPermission(UPDATER_NOTICE);
 	}
 }

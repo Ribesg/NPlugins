@@ -22,6 +22,7 @@ import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ncore.node.world.WorldNode;
 import fr.ribesg.bukkit.ncore.updater.Updater;
 import fr.ribesg.bukkit.ncore.updater.UpdaterListener;
+import fr.ribesg.bukkit.ncore.utils.ColorUtils;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -94,6 +95,10 @@ public class NCore extends JavaPlugin {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 		if (cmd.getName().equals("debug")) {
+			if (!Perms.hasDebug(sender)) {
+				sender.sendMessage(ColorUtils.colorize("&cYou do not have the permission to use that command"));
+				return true;
+			}
 			if (args.length < 1 || args.length > 2) {
 				return false;
 			} else {
@@ -130,6 +135,10 @@ public class NCore extends JavaPlugin {
 				return true;
 			}
 		} else if (cmd.getName().equals("updater")) {
+			if (!Perms.hasUpdater(sender)) {
+				sender.sendMessage(ColorUtils.colorize("&cYou do not have the permission to use that command"));
+				return true;
+			}
 			if (updater == null) {
 				sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Updater is disabled in config");
 			} else if (args.length != 2) {
@@ -261,7 +270,9 @@ public class NCore extends JavaPlugin {
 			getPluginLoader().disablePlugin(this);
 		} else if (pluginConfig.isUpdateCheck()) {
 			this.updater = new Updater(this, 'v' + getDescription().getVersion(), pluginConfig.getProxy(), pluginConfig.getApiKey());
-			this.updater.startTask();
+			if (pluginConfig.getUpdateCheckInterval() > 0) {
+				this.updater.startTask();
+			}
 		}
 	}
 

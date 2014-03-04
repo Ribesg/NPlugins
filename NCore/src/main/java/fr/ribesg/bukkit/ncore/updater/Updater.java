@@ -15,6 +15,7 @@ import fr.ribesg.bukkit.ncore.utils.VersionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -112,12 +113,12 @@ public class Updater {
 		}
 	}
 
-	public Map<String, JavaPlugin> getPlugins() {
-		return plugins;
+	public NCore getPlugin() {
+		return this.plugin;
 	}
 
-	public SortedMap<String, String> getUpdateAvailable() {
-		return updateAvailable;
+	public Map<String, JavaPlugin> getPlugins() {
+		return this.plugins;
 	}
 
 	public String getMessagePrefix() {
@@ -126,6 +127,33 @@ public class Updater {
 
 	public void startTask() {
 		new UpdaterTask(this).runTaskTimer(plugin, 20L, plugin.getPluginConfig().getUpdateCheckInterval() * 20L);
+	}
+
+	/* package */ void notice(final CommandSender sender) {
+		if (updateAvailable.isEmpty()) {
+			return;
+		}
+
+		final StringBuilder updatesString = new StringBuilder();
+
+		int count = 0;
+		for (final Map.Entry<String, String> update : updateAvailable.entrySet()) {
+			if (++count != updateAvailable.size()) {
+				updatesString.append(ChatColor.GOLD).append(plugin.getUpdater().getPlugins().get(update.getKey()).getName());
+				updatesString.append(ChatColor.DARK_GREEN).append(" (").append(update.getValue()).append("), ");
+			} else {
+				updatesString.append(ChatColor.GOLD).append(plugin.getUpdater().getPlugins().get(update.getKey()).getName());
+				updatesString.append(ChatColor.DARK_GREEN).append(" (").append(update.getValue()).append(").");
+			}
+		}
+
+		if (updateAvailable.size() == 1) {
+			sender.sendMessage(plugin.getUpdater().getMessagePrefix() + ChatColor.GREEN + "An update for the following node is available:");
+		} else {
+			sender.sendMessage(plugin.getUpdater().getMessagePrefix() + ChatColor.GREEN + "Updates for the following nodes are available:");
+		}
+
+		sender.sendMessage(plugin.getUpdater().getMessagePrefix() + updatesString.toString());
 	}
 
 	public void checkForUpdates() {
@@ -174,17 +202,31 @@ public class Updater {
 	}
 
 	private void checkedForUpdates(final CommandSender sender, final JavaPlugin plugin, final Boolean result, final FileDescription fileDescription) {
+		final ConsoleCommandSender console = Bukkit.getConsoleSender();
+
+		final String[] message;
 		if (result == null) {
-			sender.sendMessage(PREFIX + ChatColor.RED + "Failed to check for updates for plugin " + plugin.getName());
+			message = new String[] {
+					PREFIX + ChatColor.RED + "Failed to check for updates for plugin " + plugin.getName()
+			};
 		} else if (!result) {
 			newUpdateAvailable(plugin.getName(), fileDescription.getVersion());
-			sender.sendMessage(PREFIX + ChatColor.GREEN + "A new version of " + ChatColor.GOLD + plugin.getName() + ChatColor.GREEN + " is available!");
-			sender.sendMessage(PREFIX + ChatColor.GREEN + "Current version:   " + ChatColor.GOLD + "v" + plugin.getDescription().getVersion());
-			sender.sendMessage(PREFIX + ChatColor.GREEN + "Available version: " + ChatColor.GOLD + fileDescription.getVersion());
-			sender.sendMessage(PREFIX + ChatColor.GREEN + "Download the update from BukkitDev or with");
-			sender.sendMessage(PREFIX + ChatColor.GOLD + "/updater download " + plugin.getName());
+			message = new String[] {
+					PREFIX + ChatColor.GREEN + "A new version of " + ChatColor.GOLD + plugin.getName() + ChatColor.GREEN + " is available!",
+					PREFIX + ChatColor.GREEN + "Current version:   " + ChatColor.GOLD + "v" + plugin.getDescription().getVersion(),
+					PREFIX + ChatColor.GREEN + "Available version: " + ChatColor.GOLD + fileDescription.getVersion(),
+					PREFIX + ChatColor.GREEN + "Download the update from BukkitDev or with",
+					PREFIX + ChatColor.GOLD + "/updater download " + plugin.getName()
+			};
 		} else {
-			sender.sendMessage(PREFIX + ChatColor.GOLD + plugin.getName() + ChatColor.GREEN + " is up to date (latest: " + ChatColor.GOLD + "v" + plugin.getDescription().getVersion() + ChatColor.GREEN + ")");
+			message = new String[] {
+					PREFIX + ChatColor.GOLD + plugin.getName() + ChatColor.GREEN + " is up to date (latest: " + ChatColor.GOLD + "v" + plugin.getDescription().getVersion() + ChatColor.GREEN + ")"
+			};
+		}
+
+		sender.sendMessage(message);
+		if (sender != console) {
+			console.sendMessage(message);
 		}
 	}
 
@@ -293,7 +335,7 @@ public class Updater {
 	 *
 	 * @throws IOException if an error occur while trying to contact Curse API
 	 */
-	public FileDescription getLatestVersion(final String pluginName) throws IOException {
+	private FileDescription getLatestVersion(final String pluginName) throws IOException {
 		if (CURSE_IDS.containsKey(pluginName.toLowerCase())) {
 			return getNPluginLatestVersion(pluginName);
 		} else {
@@ -320,7 +362,7 @@ public class Updater {
 	 *
 	 * @throws IOException if an error occur while trying to contact Curse API
 	 */
-	public boolean isUpToDate(final String pluginName, final String currentVersion) throws IOException {
+	private boolean isUpToDate(final String pluginName, final String currentVersion) throws IOException {
 		final FileDescription latestFile = getLatestVersion(pluginName);
 		return latestFile.getVersion().compareTo(currentVersion) <= 0;
 	}
@@ -336,7 +378,7 @@ public class Updater {
 	 *
 	 * @throws IOException if there is an error while retrieving files
 	 */
-	public Collection<FileDescription> getFiles(final String pluginName) throws IOException {
+	private Collection<FileDescription> getFiles(final String pluginName) throws IOException {
 		try {
 			final Integer projectId = CURSE_IDS.get(pluginName.toLowerCase());
 			if (projectId == null) {
@@ -358,7 +400,7 @@ public class Updater {
 	 *
 	 * @throws IOException if there is an error while retrieving files
 	 */
-	public Collection<FileDescription> getFiles(final int... projectId) throws IOException {
+	private Collection<FileDescription> getFiles(final int... projectId) throws IOException {
 		try {
 			final String projectIds = getProjectIdsString(projectId);
 			final Long timeout = this.cacheTimeout.get(projectIds);
