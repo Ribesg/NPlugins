@@ -58,9 +58,10 @@ public class RegionDbPersistenceHandler {
 	private static final String MAX_CORNER = "maxCorner";
 
 	// Common sub-sections
-	private static final String FLAGS           = "flags";
-	private static final String FLAG_ATTRIBUTES = "flagAttributes";
-	private static final String RIGHTS          = "rights";
+	private static final String FLAGS          = "flags";
+	private static final String ATTRIBUTES_OLD = "flagAttributes"; // TODO Compatibility thing, remove this in next version
+	private static final String ATTRIBUTES     = "attributes";
+	private static final String RIGHTS         = "rights";
 
 	// For rights
 	private static final String ADMINS              = "admins";
@@ -134,7 +135,7 @@ public class RegionDbPersistenceHandler {
 		final int priority = worldSection.getInt(PRIORITY, 0);
 
 		final Flags flags = readFlags(worldSection);
-		final FlagAttributes attributes = readFlagAttributes(worldSection);
+		final Attributes attributes = readAttributes(worldSection);
 		final Rights rights = readRights(worldSection);
 
 		return new WorldRegion(name, rights, priority, flags, attributes);
@@ -154,7 +155,7 @@ public class RegionDbPersistenceHandler {
 
 		// First load non-specific things that may be written after the specific stuff
 		final Flags flags = readFlags(playerSection);
-		final FlagAttributes attributes = readFlagAttributes(playerSection);
+		final Attributes attributes = readAttributes(playerSection);
 		final Rights rights = readRights(playerSection);
 
 		// Read specific stuff and return corresponding Region
@@ -179,31 +180,58 @@ public class RegionDbPersistenceHandler {
 		return flags;
 	}
 
-	private static FlagAttributes readFlagAttributes(final ConfigurationSection sec) {
-		final FlagAttributes attributes = new FlagAttributes();
-		if (sec.isConfigurationSection(FLAG_ATTRIBUTES)) {
-			final ConfigurationSection flagAttributesSection = sec.getConfigurationSection(FLAG_ATTRIBUTES);
-			for (final FlagAtt f : FlagAtt.values()) {
-				if (FlagAtt.isIntFlagAtt(f)) {
-					final Integer theInteger = flagAttributesSection.getInt(f.toString(), Integer.MIN_VALUE);
+	private static Attributes readAttributes(final ConfigurationSection sec) {
+		final Attributes attributes = new Attributes();
+		if (sec.isConfigurationSection(ATTRIBUTES)) {
+			final ConfigurationSection attributesSection = sec.getConfigurationSection(ATTRIBUTES);
+			for (final Attribute f : Attribute.values()) {
+				if (Attribute.isIntFlagAtt(f)) {
+					final Integer theInteger = attributesSection.getInt(f.toString(), Integer.MIN_VALUE);
 					if (theInteger != Integer.MIN_VALUE) {
-						attributes.setIntFlagAtt(f, theInteger);
+						attributes.setIntAttribute(f, theInteger);
 					}
-				} else if (FlagAtt.isLocFlagAtt(f)) {
-					final Location theLocation = NLocation.toLocation(flagAttributesSection.getString(f.toString(), ""));
+				} else if (Attribute.isLocFlagAtt(f)) {
+					final Location theLocation = NLocation.toLocation(attributesSection.getString(f.toString(), ""));
 					if (theLocation != null) {
-						attributes.setLocFlagAtt(f, theLocation);
+						attributes.setLocAttribute(f, theLocation);
 					}
-				} else if (FlagAtt.isVectFlagAtt(f)) {
-					final Vector theVector = StringUtils.toVector(flagAttributesSection.getString(f.toString(), ""));
+				} else if (Attribute.isVectFlagAtt(f)) {
+					final Vector theVector = StringUtils.toVector(attributesSection.getString(f.toString(), ""));
 					if (theVector != null) {
-						attributes.setVectFlagAtt(f, theVector);
+						attributes.setVectAttribute(f, theVector);
 					}
 				} else {
 					// Hello, future
 				}
 			}
 		}
+
+		// TODO Compatibility thing, remove this in next version
+		else if (sec.isConfigurationSection(ATTRIBUTES_OLD)) {
+			final ConfigurationSection attributesSection = sec.getConfigurationSection(ATTRIBUTES_OLD);
+			for (final Attribute f : Attribute.values()) {
+				if (Attribute.isIntFlagAtt(f)) {
+					final Integer theInteger = attributesSection.getInt(f.toString(), Integer.MIN_VALUE);
+					if (theInteger != Integer.MIN_VALUE) {
+						attributes.setIntAttribute(f, theInteger);
+					}
+				} else if (Attribute.isLocFlagAtt(f)) {
+					final Location theLocation = NLocation.toLocation(attributesSection.getString(f.toString(), ""));
+					if (theLocation != null) {
+						attributes.setLocAttribute(f, theLocation);
+					}
+				} else if (Attribute.isVectFlagAtt(f)) {
+					final Vector theVector = StringUtils.toVector(attributesSection.getString(f.toString(), ""));
+					if (theVector != null) {
+						attributes.setVectAttribute(f, theVector);
+					}
+				} else {
+					// Hello, future
+				}
+			}
+		}
+		// TODO End Compatibility thing
+
 		return attributes;
 	}
 
@@ -278,7 +306,7 @@ public class RegionDbPersistenceHandler {
 		final ConfigurationSection sec = parent.createSection(region.getWorldName());
 		sec.set(PRIORITY, region.getPriority());
 		writeFlags(sec, region);
-		writeFlagAtts(sec, region);
+		writeAttributes(sec, region);
 		writeRights(sec, region);
 	}
 
@@ -305,7 +333,7 @@ public class RegionDbPersistenceHandler {
 		}
 
 		writeFlags(sec, region);
-		writeFlagAtts(sec, region);
+		writeAttributes(sec, region);
 		writeRights(sec, region);
 	}
 
@@ -321,25 +349,25 @@ public class RegionDbPersistenceHandler {
 		}
 	}
 
-	private static void writeFlagAtts(final ConfigurationSection parent, final GeneralRegion region) {
-		final ConfigurationSection sec = parent.createSection(FLAG_ATTRIBUTES);
+	private static void writeAttributes(final ConfigurationSection parent, final GeneralRegion region) {
+		final ConfigurationSection sec = parent.createSection(ATTRIBUTES);
 		boolean used = false;
 
-		for (final FlagAtt f : FlagAtt.values()) {
-			if (FlagAtt.isIntFlagAtt(f)) {
-				final Integer theInteger = region.getIntFlagAtt(f);
+		for (final Attribute f : Attribute.values()) {
+			if (Attribute.isIntFlagAtt(f)) {
+				final Integer theInteger = region.getIntAttribute(f);
 				if (theInteger != null) {
 					used = true;
 					sec.set(f.toString(), theInteger);
 				}
-			} else if (FlagAtt.isLocFlagAtt(f)) {
-				final Location theLocation = region.getLocFlagAtt(f);
+			} else if (Attribute.isLocFlagAtt(f)) {
+				final Location theLocation = region.getLocAttribute(f);
 				if (theLocation != null) {
 					used = true;
 					sec.set(f.toString(), NLocation.toStringPlus(theLocation));
 				}
-			} else if (FlagAtt.isVectFlagAtt(f)) {
-				final Vector theVector = region.getVectFlagAtt(f);
+			} else if (Attribute.isVectFlagAtt(f)) {
+				final Vector theVector = region.getVectAttribute(f);
 				if (theVector != null) {
 					used = true;
 					sec.set(f.toString(), StringUtils.toString(theVector));
@@ -350,7 +378,7 @@ public class RegionDbPersistenceHandler {
 		}
 
 		if (!used) {
-			parent.set(FLAG_ATTRIBUTES, null);
+			parent.set(ATTRIBUTES, null);
 		}
 	}
 

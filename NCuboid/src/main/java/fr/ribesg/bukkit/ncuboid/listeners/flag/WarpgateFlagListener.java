@@ -11,8 +11,8 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
 import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.event.EventHandler;
@@ -29,7 +29,7 @@ public class WarpgateFlagListener extends AbstractListener {
 		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.WARPGATE)) {
-				event.getPlayer().teleport(ext.getToRegion().getLocFlagAtt(FlagAtt.EXTERNAL_POINT));
+				event.getPlayer().teleport(ext.getToRegion().getLocAttribute(Attribute.EXTERNAL_POINT));
 				ext.setCustomCancelled(true);
 				event.setCancelled(true);
 			}

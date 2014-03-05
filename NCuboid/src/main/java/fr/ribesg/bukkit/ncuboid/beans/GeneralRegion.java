@@ -35,18 +35,18 @@ public abstract class GeneralRegion extends Region {
 	private       int    priority;
 
 	// Flags related
-	private final Flags          flags;
-	private final FlagAttributes flagAtts;
+	private final Flags      flags;
+	private final Attributes attributes;
 
 	// This is for Dynmap!
 	private final boolean dynmapable;
 
 	// Create a new Region, when user select points etc
 	public GeneralRegion(final String worldName, final RegionType type, final int priority) {
-		this(worldName, type, new Rights(), priority, new Flags(), new FlagAttributes());
+		this(worldName, type, new Rights(), priority, new Flags(), new Attributes());
 	}
 
-	public GeneralRegion(final String worldName, final RegionType type, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
+	public GeneralRegion(final String worldName, final RegionType type, final Rights rights, final int priority, final Flags flags, final Attributes attributes) {
 		setWorldName(worldName);
 		setType(type);
 		switch (type) {
@@ -61,7 +61,7 @@ public abstract class GeneralRegion extends Region {
 		this.rights = rights;
 		setPriority(priority);
 		this.flags = flags;
-		this.flagAtts = flagAtts;
+		this.attributes = attributes;
 	}
 
 	// Location check
@@ -75,8 +75,8 @@ public abstract class GeneralRegion extends Region {
 
 	public abstract long getTotalSize();
 
-	public FlagAttributes getFlagAtts() {
-		return flagAtts;
+	public Attributes getAttributes() {
+		return attributes;
 	}
 
 	public int getPriority() {
@@ -115,32 +115,32 @@ public abstract class GeneralRegion extends Region {
 		flags.setFlag(f, b);
 	}
 
-	public Integer getIntFlagAtt(final FlagAtt fa) {
-		return flagAtts.getIntFlagAtt(fa);
+	public Integer getIntAttribute(final Attribute att) {
+		return attributes.getIntAttribute(att);
 	}
 
-	public void setIntFlagAtt(final FlagAtt fa, final Integer i) {
-		flagAtts.setIntFlagAtt(fa, i);
+	public void setIntAttribute(final Attribute att, final Integer i) {
+		attributes.setIntAttribute(att, i);
 	}
 
-	public Location getLocFlagAtt(final FlagAtt fa) {
-		return flagAtts.getLocFlagAtt(fa);
+	public Location getLocAttribute(final Attribute att) {
+		return attributes.getLocAttribute(att);
 	}
 
-	public void setLocFlagAtt(final FlagAtt fa, final Location loc) {
-		flagAtts.setLocFlagAtt(fa, loc);
+	public void setLocAttribute(final Attribute att, final Location loc) {
+		attributes.setLocAttribute(att, loc);
 	}
 
-	public Vector getVectFlagAtt(final FlagAtt fa) {
-		return flagAtts.getVectFlagAtt(fa);
+	public Vector getVectAttribute(final Attribute att) {
+		return attributes.getVectAttribute(att);
 	}
 
-	public void setVectFlagAtt(final FlagAtt fa, final Vector v) {
-		flagAtts.setVectFlagAtt(fa, v);
+	public void setVectAttribute(final Attribute att, final Vector v) {
+		attributes.setVectAttribute(att, v);
 	}
 
-	public String getStringRepresentation(final FlagAtt fa) {
-		return flagAtts.getStringRepresentation(fa);
+	public String getStringRepresentation(final Attribute att) {
+		return attributes.getStringRepresentation(att);
 	}
 
 	public boolean isUser(final CommandSender sender) {

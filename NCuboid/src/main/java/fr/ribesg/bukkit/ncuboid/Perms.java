@@ -9,8 +9,8 @@
 
 package fr.ribesg.bukkit.ncuboid;
 
+import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
 import org.bukkit.permissions.Permissible;
 
 import java.util.HashMap;
@@ -73,23 +73,23 @@ public class Perms {
 	}
 
 	// Flag attributes permissions, linked to their related Flag permission
-	private static Map<FlagAtt, String> flagAttributesPermissions;
+	private static Map<Attribute, String> flagAttributesPermissions;
 
-	private static String getFlagAttributePermission(final FlagAtt fa) {
+	private static String getFlagAttributePermission(final Attribute fa) {
 		if (flagAttributesPermissions == null) {
-			flagAttributesPermissions = new HashMap<>(FlagAtt.values().length);
-			flagAttributesPermissions.put(FlagAtt.HEAL_AMOUNT, "ncuboid.flag.heal");
-			flagAttributesPermissions.put(FlagAtt.HEAL_TIMER, "ncuboid.flag.heal");
-			flagAttributesPermissions.put(FlagAtt.HEAL_MIN_HEALTH, "ncuboid.flag.heal");
-			flagAttributesPermissions.put(FlagAtt.HEAL_MAX_HEALTH, "ncuboid.flag.heal");
-			flagAttributesPermissions.put(FlagAtt.FEED_AMOUNT, "ncuboid.flag.feed");
-			flagAttributesPermissions.put(FlagAtt.FEED_TIMER, "ncuboid.flag.feed");
-			flagAttributesPermissions.put(FlagAtt.FEED_MIN_FOOD, "ncuboid.flag.feed");
-			flagAttributesPermissions.put(FlagAtt.FEED_MAX_FOOD, "ncuboid.flag.feed");
-			flagAttributesPermissions.put(FlagAtt.EXPLOSION_BLOCK_DROP, "ncuboid.flag.explosionblock");
-			flagAttributesPermissions.put(FlagAtt.EXTERNAL_POINT, "ncuboid.flag.pass");
-			flagAttributesPermissions.put(FlagAtt.INTERNAL_POINT, "ncuboid.flag.closed");
-			flagAttributesPermissions.put(FlagAtt.BOOSTER_VECTOR, "ncuboid.flag.booster");
+			flagAttributesPermissions = new HashMap<>(Attribute.values().length);
+			flagAttributesPermissions.put(Attribute.HEAL_AMOUNT, "ncuboid.flag.heal");
+			flagAttributesPermissions.put(Attribute.HEAL_TIMER, "ncuboid.flag.heal");
+			flagAttributesPermissions.put(Attribute.HEAL_MIN_HEALTH, "ncuboid.flag.heal");
+			flagAttributesPermissions.put(Attribute.HEAL_MAX_HEALTH, "ncuboid.flag.heal");
+			flagAttributesPermissions.put(Attribute.FEED_AMOUNT, "ncuboid.flag.feed");
+			flagAttributesPermissions.put(Attribute.FEED_TIMER, "ncuboid.flag.feed");
+			flagAttributesPermissions.put(Attribute.FEED_MIN_FOOD, "ncuboid.flag.feed");
+			flagAttributesPermissions.put(Attribute.FEED_MAX_FOOD, "ncuboid.flag.feed");
+			flagAttributesPermissions.put(Attribute.EXPLOSION_BLOCK_DROP, "ncuboid.flag.explosionblock");
+			flagAttributesPermissions.put(Attribute.EXTERNAL_POINT, "ncuboid.flag.pass");
+			flagAttributesPermissions.put(Attribute.INTERNAL_POINT, "ncuboid.flag.closed");
+			flagAttributesPermissions.put(Attribute.BOOSTER_VECTOR, "ncuboid.flag.booster");
 		}
 		return flagAttributesPermissions.get(fa);
 	}
@@ -122,7 +122,7 @@ public class Perms {
 		return isAdmin(user) || user.hasPermission(perm) || isUser && user.hasPermission(USER);
 	}
 
-	public static boolean hasFlagAttribute(final Permissible user, final FlagAtt fa) {
+	public static boolean hasFlagAttribute(final Permissible user, final Attribute fa) {
 		final String perm = getFlagAttributePermission(fa);
 		final boolean isUser;
 		switch (fa) {

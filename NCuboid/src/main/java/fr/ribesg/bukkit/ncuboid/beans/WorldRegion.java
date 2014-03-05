@@ -24,10 +24,10 @@ public class WorldRegion extends GeneralRegion {
 		setFlag(Flag.USE, false);
 
 		// Should change / remove this
-		setIntFlagAtt(FlagAtt.EXPLOSION_BLOCK_DROP, 100);
+		setIntAttribute(Attribute.EXPLOSION_BLOCK_DROP, 100);
 	}
 
-	public WorldRegion(final String worldName, final Rights rights, final int priority, final Flags flags, final FlagAttributes flagAtts) {
+	public WorldRegion(final String worldName, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts) {
 		super(worldName, RegionType.WORLD, rights, priority, flags, flagAtts);
 	}
 

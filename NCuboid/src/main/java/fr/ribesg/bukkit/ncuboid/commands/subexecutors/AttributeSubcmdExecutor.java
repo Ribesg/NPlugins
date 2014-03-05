@@ -1,6 +1,6 @@
 /***************************************************************************
- * Project file:    NPlugins - NCuboid - FlagAttributeSubcmdExecutor.java  *
- * Full Class name: fr.ribesg.bukkit.ncuboid.commands.subexecutors.FlagAttributeSubcmdExecutor
+ * Project file:    NPlugins - NCuboid - AttributeSubcmdExecutor.java      *
+ * Full Class name: fr.ribesg.bukkit.ncuboid.commands.subexecutors.AttributeSubcmdExecutor
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
@@ -12,7 +12,7 @@ package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
-import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
+import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
@@ -21,11 +21,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-public class FlagAttributeSubcmdExecutor extends AbstractSubcmdExecutor {
+public class AttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	public FlagAttributeSubcmdExecutor(final NCuboid instance) {
+	public AttributeSubcmdExecutor(final NCuboid instance) {
 		super(instance);
-		setUsage(ChatColor.RED + "Usage : /cuboid flagAttribute <regionName> <flagAttributeName> [value]");
+		setUsage(ChatColor.RED + "Usage : /cuboid attribute <regionName> <attributeName> [value]");
 	}
 
 	@Override
@@ -44,41 +44,41 @@ public class FlagAttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 			}
 
 			// Get flag attribute, check rights on flag attribute
-			final FlagAtt fa = FlagAtt.get(args[1]);
+			final Attribute fa = Attribute.get(args[1]);
 			if (fa == null) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAttUnknownFlagAtt, args[1]);
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdAttUnknownFlagAtt, args[1]);
 				return true;
 			} else if (!Perms.hasFlagAttribute(sender, fa)) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAttNoPermission, fa.name());
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdAttNoPermission, fa.name());
 				return true;
 			}
 
 			if (args.length == 2) {
 				// Show value
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAttValue, fa.name(), c.getStringRepresentation(fa), c.getRegionName());
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdAttValue, fa.name(), c.getStringRepresentation(fa), c.getRegionName());
 				return true;
 			} else {
 				// Parse and set value
-				if (FlagAtt.isIntFlagAtt(fa)) {
+				if (Attribute.isIntFlagAtt(fa)) {
 					final int value;
 					try {
 						value = Integer.parseInt(args[2]);
 					} catch (final NumberFormatException e) {
 						return false;
 					}
-					c.setIntFlagAtt(fa, value);
-				} else if (FlagAtt.isVectFlagAtt(fa)) {
+					c.setIntAttribute(fa, value);
+				} else if (Attribute.isVectFlagAtt(fa)) {
 					final Vector v = parseVector(sender, args[2]);
 					if (v == null) {
 						return false;
 					} else {
-						c.setVectFlagAtt(fa, v);
+						c.setVectAttribute(fa, v);
 					}
-				} else if (FlagAtt.isLocFlagAtt(fa)) {
+				} else if (Attribute.isLocFlagAtt(fa)) {
 					if (sender instanceof Player) {
 						if ("set".equalsIgnoreCase(args[2])) {
 							final Location loc = ((Player) sender).getLocation();
-							c.setLocFlagAtt(fa, loc);
+							c.setLocAttribute(fa, loc);
 						} else {
 							return false;
 						}

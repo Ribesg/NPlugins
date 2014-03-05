@@ -1,6 +1,6 @@
 /***************************************************************************
- * Project file:    NPlugins - NCuboid - FlagAtt.java                      *
- * Full Class name: fr.ribesg.bukkit.ncuboid.beans.FlagAtt                 *
+ * Project file:    NPlugins - NCuboid - Attribute.java                    *
+ * Full Class name: fr.ribesg.bukkit.ncuboid.beans.Attribute               *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ncuboid.beans;
 
-public enum FlagAtt {
+public enum Attribute {
 
 	// Integer
 	HEAL_AMOUNT,
@@ -29,11 +29,11 @@ public enum FlagAtt {
 	// Vector
 	BOOSTER_VECTOR;
 
-	public static FlagAtt get(final String val) {
+	public static Attribute get(final String val) {
 		final String in = val.toUpperCase();
-		FlagAtt fa;
+		Attribute fa;
 		try {
-			fa = FlagAtt.valueOf(in);
+			fa = Attribute.valueOf(in);
 		} catch (final IllegalArgumentException e) {
 			switch (in) {
 				case "HA":
@@ -107,15 +107,15 @@ public enum FlagAtt {
 		return fa;
 	}
 
-	public static boolean isIntFlagAtt(final FlagAtt f) {
+	public static boolean isIntFlagAtt(final Attribute f) {
 		return f != null && HEAL_AMOUNT.compareTo(f) <= 0 && EXPLOSION_BLOCK_DROP.compareTo(f) >= 0;
 	}
 
-	public static boolean isLocFlagAtt(final FlagAtt f) {
+	public static boolean isLocFlagAtt(final Attribute f) {
 		return f != null && EXTERNAL_POINT.compareTo(f) <= 0 && INTERNAL_POINT.compareTo(f) >= 0;
 	}
 
-	public static boolean isVectFlagAtt(final FlagAtt f) {
+	public static boolean isVectFlagAtt(final Attribute f) {
 		return f != null && f == BOOSTER_VECTOR;
 	}
 }

@@ -11,8 +11,8 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
 import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
@@ -32,7 +32,7 @@ public class ClosedFlagListener extends AbstractListener {
 		if (!ext.isCustomCancelled()) {
 			final GeneralRegion r = ext.getFromRegion();
 			if (r != null && r.getFlag(Flag.CLOSED) && !r.equals(ext.getToRegion())) {
-				final Location loc = r.getLocFlagAtt(FlagAtt.INTERNAL_POINT);
+				final Location loc = r.getLocAttribute(Attribute.INTERNAL_POINT);
 				if (loc == null) {
 					event.setTo(new Location(event.getFrom().getWorld(), event.getFrom().getBlockX() + 0.5, event.getFrom().getBlockY() + 0.1, event.getFrom().getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
 				} else {

@@ -112,16 +112,16 @@ public class Messages extends AbstractMessages {
 				"%region%"
 		}));
 
-		// Command - FLAG ATTRIBUTE
-		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttUnknownFlagAtt, "&cUnknown flag attribute: '%flagAttName%'", true, new String[] {"%flagAttName%"}));
-		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttNoPermission, "&cYou don't have the permissions to use flag attribute '%flagAttName%'", true, new String[] {"%flagAttName%"}));
-		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttValue, "&aThe flag attribute '%flagAtt%' is currently set to '%value%' for region '%region%'", true, new String[] {
-				"%flagAtt%",
+		// Command - ATTRIBUTE
+		newMessages.add(new Message(MessageId.cuboid_cmdAttUnknownFlagAtt, "&cUnknown attribute: '%attName%'", true, new String[] {"%attName%"}));
+		newMessages.add(new Message(MessageId.cuboid_cmdAttNoPermission, "&cYou don't have the permissions to use attribute '%attName%'", true, new String[] {"%attName%"}));
+		newMessages.add(new Message(MessageId.cuboid_cmdAttValue, "&aThe attribute '%att%' is currently set to '%value%' for region '%region%'", true, new String[] {
+				"%att%",
 				"%value%",
 				"%region%"
 		}));
-		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttSet, "&aThe flag attribute '%flagAtt%' is now set to '%value%' for region '%region%'", true, new String[] {
-				"%flagAtt%",
+		newMessages.add(new Message(MessageId.cuboid_cmdFlagAttSet, "&aThe attribute '%att%' is now set to '%value%' for region '%region%'", true, new String[] {
+				"%att%",
 				"%value%",
 				"%region%"
 		}));

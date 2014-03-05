@@ -15,7 +15,7 @@ import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AdminUserGroupJailSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.CreateSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.DeleteSubcmdExecutor;
-import fr.ribesg.bukkit.ncuboid.commands.subexecutors.FlagAttributeSubcmdExecutor;
+import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AttributeSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.FlagSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.ReloadSubcmdExecutor;
 import org.bukkit.command.Command;
@@ -47,9 +47,9 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.aliasesMap.put("g", "group");
 		this.aliasesMap.put("j", "jail");
 		this.aliasesMap.put("f", "flag");
-		this.aliasesMap.put("fa", "flagattribute");
-		this.aliasesMap.put("flagatt", "flagattribute");
-		this.aliasesMap.put("flagattributes", "flagattribute");
+		this.aliasesMap.put("at", "attribute");
+		this.aliasesMap.put("att", "attribute");
+		this.aliasesMap.put("attributes", "attribute");
 
 		this.executorsMap = new HashMap<>(3);
 		this.executorsMap.put("create", new CreateSubcmdExecutor(instance));
@@ -60,7 +60,7 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.executorsMap.put("group", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.GROUP));
 		this.executorsMap.put("jail", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.JAIL));
 		this.executorsMap.put("flag", new FlagSubcmdExecutor(instance));
-		this.executorsMap.put("flagattribute", new FlagAttributeSubcmdExecutor(instance));
+		this.executorsMap.put("attribute", new AttributeSubcmdExecutor(instance));
 	}
 
 	@Override

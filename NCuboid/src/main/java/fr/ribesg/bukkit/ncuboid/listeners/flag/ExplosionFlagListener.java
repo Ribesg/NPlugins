@@ -11,7 +11,7 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.FlagAtt;
+import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityChangeBlockEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
@@ -40,7 +40,7 @@ public class ExplosionFlagListener extends AbstractListener {
 			}
 		}
 		if (ext.getEntityRegion() != null) {
-			final Integer blockDropRatio = ext.getEntityRegion().getIntFlagAtt(FlagAtt.EXPLOSION_BLOCK_DROP);
+			final Integer blockDropRatio = ext.getEntityRegion().getIntAttribute(Attribute.EXPLOSION_BLOCK_DROP);
 			if (blockDropRatio != null) {
 				event.setYield(blockDropRatio / 100f);
 			}
