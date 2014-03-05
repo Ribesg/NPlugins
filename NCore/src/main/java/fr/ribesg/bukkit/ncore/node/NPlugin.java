@@ -165,9 +165,7 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 		final String[] m = getMessages().get(messageId, args);
 		for (final Player p : Bukkit.getOnlinePlayers()) {
 			if (p != player) {
-				for (final String mes : m) {
-					getServer().broadcastMessage(mes);
-				}
+				p.sendMessage(m);
 			}
 		}
 	}

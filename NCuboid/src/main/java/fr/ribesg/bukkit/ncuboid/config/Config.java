@@ -160,7 +160,7 @@ public class Config extends AbstractConfig<NCuboid> {
 				return gc;
 			}
 		}
-		LOGGER.warning("Player '" + player.getName() + "' doesn't have any associated group, he will not be able to make cuboids!");
+		LOGGER.warning("Player '" + player.getName() + "' doesn't have any associated group, he will not be able to make regions!");
 		return defaultGroupConfig;
 	}
 }
