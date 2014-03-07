@@ -12,7 +12,9 @@ package fr.ribesg.bukkit.nworld;
 import fr.ribesg.bukkit.nworld.world.AdditionalSubWorld;
 import fr.ribesg.bukkit.nworld.world.AdditionalWorld;
 import fr.ribesg.bukkit.nworld.world.GeneralWorld;
+
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.TravelAgent;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -23,14 +25,10 @@ import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import java.util.logging.Logger;
-
 /**
  * @author Ribesg
  */
 public class NListener implements Listener {
-
-	private static final Logger LOGGER = Logger.getLogger(NListener.class.getName());
 
 	private final NWorld plugin;
 
@@ -40,32 +38,19 @@ public class NListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onEntityUsePortal(final EntityPortalEvent event) {
-		if (event.getTo() == null) {
-			return;
-		} else if (event.getEntityType() == EntityType.ENDER_DRAGON) {
+		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
 			// This is a bad idea!
 			event.setCancelled(true);
-			return;
-		}
-		if (plugin.getWorlds().getStock().containsKey(event.getFrom().getWorld().getName()) || plugin.getWorlds().getStock().containsKey(event.getTo().getWorld().getName())) {
-			// Stock world, do not handle
 			return;
 		}
 
 		// Build a fake TeleportCause based on From and To locations
 		final PlayerTeleportEvent.TeleportCause cause;
-		switch (event.getFrom().getBlock().getType()) {
-			case PORTAL:
-				cause = PlayerTeleportEvent.TeleportCause.NETHER_PORTAL;
-				break;
-			case ENDER_PORTAL:
-				cause = PlayerTeleportEvent.TeleportCause.END_PORTAL;
-				break;
-			default:
-				// An entity should not be able to call this event if there's no portal
-				cause = PlayerTeleportEvent.TeleportCause.PLUGIN;
-				break;
-		}
+        if (event.getFrom().getBlock().getType() == Material.ENDER_PORTAL) {
+            cause = PlayerTeleportEvent.TeleportCause.END_PORTAL;
+        } else {
+            cause = PlayerTeleportEvent.TeleportCause.NETHER_PORTAL;
+        }
 
 		final PortalEventResult result = handlePortalEvent(event.getFrom(), cause, event.getPortalTravelAgent());
 		if (result == null) {
