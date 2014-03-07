@@ -9,12 +9,16 @@
 
 package fr.ribesg.bukkit.nworld;
 
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nworld.world.AdditionalSubWorld;
 import fr.ribesg.bukkit.nworld.world.AdditionalWorld;
 import fr.ribesg.bukkit.nworld.world.GeneralWorld;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.TravelAgent;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,14 +27,34 @@ import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import java.util.logging.Logger;
-
 /**
  * @author Ribesg
  */
 public class NListener implements Listener {
 
-	private static final Logger LOGGER = Logger.getLogger(NListener.class.getName());
+	private static final BlockFace[] blockFaces = {
+			// Where we should find it
+			BlockFace.NORTH,
+			BlockFace.SOUTH,
+			BlockFace.EAST,
+			BlockFace.WEST,
+			BlockFace.UP,
+			BlockFace.DOWN,
+
+			// Let's check those too
+			BlockFace.NORTH_EAST,
+			BlockFace.NORTH_WEST,
+			BlockFace.NORTH_NORTH_EAST,
+			BlockFace.NORTH_NORTH_WEST,
+			BlockFace.SOUTH_EAST,
+			BlockFace.SOUTH_WEST,
+			BlockFace.SOUTH_SOUTH_EAST,
+			BlockFace.SOUTH_SOUTH_WEST,
+			BlockFace.EAST_NORTH_EAST,
+			BlockFace.EAST_SOUTH_EAST,
+			BlockFace.WEST_NORTH_WEST,
+			BlockFace.WEST_SOUTH_WEST
+	};
 
 	private final NWorld plugin;
 
@@ -40,21 +64,22 @@ public class NListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onEntityUsePortal(final EntityPortalEvent event) {
-		if (event.getTo() == null) {
-			return;
-		} else if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-			// This is a bad idea!
+		plugin.entering(getClass(), "onEntityUsePortal", "entity=" + event.getEntityType() + ";from=" + NLocation.toString(event.getFrom()) + ";to=" + NLocation.toString(event.getTo()));
+
+		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
+			plugin.exiting(getClass(), "onEntityUsePortal", "EnderDragon should really stay in the End!");
 			event.setCancelled(true);
 			return;
 		}
-		if (plugin.getWorlds().getStock().containsKey(event.getFrom().getWorld().getName()) || plugin.getWorlds().getStock().containsKey(event.getTo().getWorld().getName())) {
-			// Stock world, do not handle
+		if (plugin.getWorlds().getStock().containsKey(event.getFrom().getWorld().getName())) {
+			plugin.exiting(getClass(), "onEntityUsePortal", "Stock world!");
 			return;
 		}
 
 		// Build a fake TeleportCause based on From and To locations
-		final PlayerTeleportEvent.TeleportCause cause;
-		switch (event.getFrom().getBlock().getType()) {
+		PlayerTeleportEvent.TeleportCause cause = null;
+		final Block block = event.getFrom().getBlock();
+		switch (block.getType()) {
 			case PORTAL:
 				cause = PlayerTeleportEvent.TeleportCause.NETHER_PORTAL;
 				break;
@@ -62,13 +87,27 @@ public class NListener implements Listener {
 				cause = PlayerTeleportEvent.TeleportCause.END_PORTAL;
 				break;
 			default:
-				// An entity should not be able to call this event if there's no portal
-				cause = PlayerTeleportEvent.TeleportCause.PLUGIN;
+				plugin.debug("Strange block found: " + block.getType() + ", trying to find a portal block near the Location");
+				for (final BlockFace face : blockFaces) {
+					if (block.getRelative(face).getType() == Material.PORTAL) {
+						cause = PlayerTeleportEvent.TeleportCause.NETHER_PORTAL;
+						plugin.debug("Found a Nether Portal block at " + NLocation.toString(block.getRelative(face).getLocation()));
+						break;
+					} else if (block.getRelative(face).getType() == Material.ENDER_PORTAL) {
+						cause = PlayerTeleportEvent.TeleportCause.END_PORTAL;
+						plugin.debug("Found an End Portal block at " + NLocation.toString(block.getRelative(face).getLocation()));
+						break;
+					}
+				}
+				if (cause == null) {
+					cause = PlayerTeleportEvent.TeleportCause.PLUGIN;
+				}
 				break;
 		}
 
 		final PortalEventResult result = handlePortalEvent(event.getFrom(), cause, event.getPortalTravelAgent());
 		if (result == null) {
+			plugin.exiting(getClass(), "onEntityUsePortal", "result is null");
 			return;
 		}
 		if (result.destination != null) {
@@ -80,6 +119,8 @@ public class NListener implements Listener {
 		if (result.cancelEvent) {
 			event.setCancelled(true);
 		}
+
+		plugin.exiting(getClass(), "onEntityUsePortal");
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
@@ -116,6 +157,8 @@ public class NListener implements Listener {
 	}
 
 	private PortalEventResult handlePortalEvent(final Location fromLocation, final PlayerTeleportEvent.TeleportCause teleportCause, final TravelAgent portalTravelAgent) {
+		plugin.entering(getClass(), "handlePortalEvent", "fromLocation=" + NLocation.toString(fromLocation) + ";teleportCause=" + teleportCause);
+
 		// In case of error or other good reasons
 		final PortalEventResult cancel = new PortalEventResult(null, false, true);
 
@@ -126,6 +169,7 @@ public class NListener implements Listener {
 
 		if (GeneralWorld.WorldType.isStock(world)) {
 			// Do not override any Bukkit behaviour
+			plugin.exiting(getClass(), "handlePortalEvent", "Source is stock world");
 			return null;
 		}
 
@@ -135,6 +179,7 @@ public class NListener implements Listener {
 				final AdditionalWorld normalWorld = (AdditionalWorld) world;
 				final AdditionalSubWorld netherWorld = normalWorld.getNetherWorld();
 				if (netherWorld == null) {
+					plugin.exiting(getClass(), "handlePortalEvent", "NORMAL => NETHER - cancel");
 					return cancel;
 				}
 				final Location averageDestination = normalToNetherLocation(netherWorld.getBukkitWorld(), fromLocation);
@@ -145,6 +190,7 @@ public class NListener implements Listener {
 				final AdditionalSubWorld netherWorld = (AdditionalSubWorld) world;
 				final AdditionalWorld normalWorld = netherWorld.getParentWorld();
 				if (normalWorld == null) {
+					plugin.exiting(getClass(), "handlePortalEvent", "NETHER => NORMAL - cancel");
 					return cancel;
 				}
 				final Location averageDestination = netherToNormalLocation(normalWorld.getBukkitWorld(), fromLocation);
@@ -153,6 +199,7 @@ public class NListener implements Listener {
 			} else if (sourceWorldEnvironment == World.Environment.THE_END) {
 				// END => NETHER
 				// Buggy in Vanilla, do not handle and prevent bugs.
+				plugin.exiting(getClass(), "handlePortalEvent", "END => NETHER - cancel");
 				return cancel;
 			}
 		} else if (teleportCause == PlayerTeleportEvent.TeleportCause.END_PORTAL) {
@@ -161,6 +208,7 @@ public class NListener implements Listener {
 				final AdditionalWorld normalWorld = (AdditionalWorld) world;
 				final AdditionalSubWorld endWorld = normalWorld.getEndWorld();
 				if (endWorld == null) {
+					plugin.exiting(getClass(), "handlePortalEvent", "NORMAL => END - cancel");
 					return cancel;
 				}
 				final Location actualDestination = getEndLocation(endWorld.getBukkitWorld());
@@ -169,6 +217,7 @@ public class NListener implements Listener {
 			} else if (sourceWorldEnvironment == World.Environment.NETHER) {
 				// NETHER => END (WTF)
 				// Not possible in Vanilla, do not handle and prevent eventual bugs.
+				plugin.exiting(getClass(), "handlePortalEvent", "NETHER => END - cancel");
 				return cancel;
 			} else if (sourceWorldEnvironment == World.Environment.THE_END) {
 				// END => NORMAL
@@ -176,12 +225,16 @@ public class NListener implements Listener {
 				final AdditionalSubWorld endWorld = (AdditionalSubWorld) world;
 				final AdditionalWorld normalWorld = endWorld.getParentWorld();
 				if (normalWorld == null) {
+					plugin.exiting(getClass(), "handlePortalEvent", "END => NORMAL - cancel");
 					return cancel;
 				}
 				final Location actualDestination = normalWorld.getSpawnLocation().toBukkitLocation();
+				plugin.exiting(getClass(), "handlePortalEvent");
 				return new PortalEventResult(actualDestination, false, false);
 			}
 		}
+
+		plugin.exiting(getClass(), "handlePortalEvent", "Not handled");
 		return null;
 	}
 
