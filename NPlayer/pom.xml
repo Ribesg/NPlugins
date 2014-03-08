@@ -8,13 +8,13 @@
 	<parent>
 		<groupId>fr.ribesg.bukkit.nplugins</groupId>
 		<artifactId>NPlugins</artifactId>
-		<version>0.6.2-SNAPSHOT</version>
+		<version>0.6.2</version>
 	</parent>
 
 	<groupId>fr.ribesg.bukkit.nplayer</groupId>
 	<artifactId>NPlayer</artifactId>
 	<name>NPlayer</name>
-	<version>0.6.2-SNAPSHOT</version>
+	<version>0.6.2</version>
 
 	<url>https://github.com/Ribesg/NPlugins/tree/master/NPlayer</url>
 
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>fr.ribesg.bukkit.ncore</groupId>
 			<artifactId>NCore</artifactId>
-			<version>0.6.2-SNAPSHOT</version>
+			<version>0.6.2</version>
 		</dependency>
 	</dependencies>
 
