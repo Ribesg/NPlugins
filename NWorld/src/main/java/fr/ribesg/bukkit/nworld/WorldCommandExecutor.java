@@ -14,7 +14,6 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.ArgumentParser;
 import fr.ribesg.bukkit.ncore.utils.WorldUtils;
 import fr.ribesg.bukkit.nworld.warp.Warp;
-import fr.ribesg.bukkit.nworld.world.AdditionalSubWorld;
 import fr.ribesg.bukkit.nworld.world.AdditionalWorld;
 import fr.ribesg.bukkit.nworld.world.GeneralWorld;
 import org.bukkit.Bukkit;
@@ -481,21 +480,11 @@ public class WorldCommandExecutor implements CommandExecutor {
 				} else {
 					plugin.sendMessage(sender, MessageId.world_worldNetherDisabled, worldName);
 					world.setNether(false);
-					Bukkit.unloadWorld(worldName, true);
 				}
 			} else {
 				if (value) {
 					plugin.sendMessage(sender, MessageId.world_worldNetherEnabled, worldName);
 					world.setNether(true);
-					AdditionalSubWorld nether = world.getNetherWorld();
-					if (nether == null) {
-						nether = new AdditionalSubWorld(plugin, world, null /* Will be affected by load() */, plugin.getPluginConfig().getDefaultRequiredPermission(), true, plugin.getPluginConfig().isDefaultHidden(), World.Environment.NETHER);
-					}
-					if (nether.exists()) {
-						nether.load();
-					} else {
-						nether.create();
-					}
 				} else {
 					plugin.sendMessage(sender, MessageId.world_worldNetherAlreadyDisabled, worldName);
 				}
@@ -530,15 +519,6 @@ public class WorldCommandExecutor implements CommandExecutor {
 				if (value) {
 					plugin.sendMessage(sender, MessageId.world_worldEndEnabled, worldName);
 					world.setEnd(true);
-					AdditionalSubWorld end = world.getEndWorld();
-					if (end == null) {
-						end = new AdditionalSubWorld(plugin, world, null /* Will be affected by load() */, plugin.getPluginConfig().getDefaultRequiredPermission(), true, plugin.getPluginConfig().isDefaultHidden(), World.Environment.THE_END);
-					}
-					if (end.exists()) {
-						end.load();
-					} else {
-						end.create();
-					}
 				} else {
 					plugin.sendMessage(sender, MessageId.world_worldEndAlreadyDisabled, worldName);
 				}
