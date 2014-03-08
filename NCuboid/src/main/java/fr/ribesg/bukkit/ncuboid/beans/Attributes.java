@@ -15,19 +15,15 @@ import org.bukkit.util.Vector;
 
 import java.util.EnumMap;
 
-import static fr.ribesg.bukkit.ncuboid.beans.Attribute.isIntFlagAtt;
-import static fr.ribesg.bukkit.ncuboid.beans.Attribute.isLocFlagAtt;
-import static fr.ribesg.bukkit.ncuboid.beans.Attribute.isVectFlagAtt;
-
 public class Attributes {
 
 	// Default map
-	private static EnumMap<Attribute, Object> getDefaultFlagAttMap() {
-		final EnumMap<Attribute, Object> defaultFlagMap = new EnumMap<>(Attribute.class);
+	private static EnumMap<Attribute, Object> getDefaultAttributesMap() {
+		final EnumMap<Attribute, Object> defaultAttributesMap = new EnumMap<>(Attribute.class);
 
 		// We do not put anything in the map, we do not want to store useless objects / references
 
-		return defaultFlagMap;
+		return defaultAttributesMap;
 	}
 
 	private EnumMap<Attribute, Object> attributes;
@@ -37,78 +33,110 @@ public class Attributes {
 	}
 
 	private void newMap() {
-		attributes = getDefaultFlagAttMap();
+		attributes = getDefaultAttributesMap();
 	}
 
-	// Integers handling
-	public Integer getIntAttribute(final Attribute f) {
+	// Strings handling
+	public String getStringAttribute(final Attribute att) {
 		if (attributes == null) {
 			return null;
-		} else if (isIntFlagAtt(f)) {
-			return (Integer) attributes.get(f);
+		} else if (Attribute.isStringAttribute(att)) {
+			return (String) attributes.get(att);
 		} else {
-			new IllegalArgumentException(f.name()).printStackTrace();
+			new IllegalArgumentException(att.name()).printStackTrace();
 			return null;
 		}
 	}
 
-	public void setIntAttribute(final Attribute att, final Integer i) {
+	public void setStringAttribute(final Attribute att, final String s) {
 		if (attributes == null) {
 			newMap();
 		}
-		if (isIntFlagAtt(att)) {
-			attributes.put(att, i);
-			checkIntAttributeCorrectness();
+		if (Attribute.isStringAttribute(att)) {
+			attributes.put(att, s);
+			checkStringAttributeCorrectness();
 		} else {
 			new IllegalArgumentException(att == null ? "null" : att.name()).printStackTrace();
 		}
 	}
 
-	private void setIntAttributeNoCheck(final Attribute att, final Integer i) {
+	private void setStringAttributeNoCheck(final Attribute att, final String s) {
+		attributes.put(att, s);
+	}
+
+	private void checkStringAttributeCorrectness() {
+		// Nothing to do yet
+	}
+
+	// Integers handling
+	public Integer getIntegerAttribute(final Attribute att) {
+		if (attributes == null) {
+			return null;
+		} else if (Attribute.isIntegerAttribute(att)) {
+			return (Integer) attributes.get(att);
+		} else {
+			new IllegalArgumentException(att.name()).printStackTrace();
+			return null;
+		}
+	}
+
+	public void setIntegerAttribute(final Attribute att, final Integer i) {
+		if (attributes == null) {
+			newMap();
+		}
+		if (Attribute.isIntegerAttribute(att)) {
+			attributes.put(att, i);
+			checkIntegerAttributeCorrectness();
+		} else {
+			new IllegalArgumentException(att == null ? "null" : att.name()).printStackTrace();
+		}
+	}
+
+	private void setIntegerAttributeNoCheck(final Attribute att, final Integer i) {
 		attributes.put(att, i);
 	}
 
-	private void checkIntAttributeCorrectness() {
-		if (getIntAttribute(Attribute.HEAL_TIMER) != null && getIntAttribute(Attribute.HEAL_TIMER) < 5) {
-			setIntAttributeNoCheck(Attribute.HEAL_TIMER, 5);
+	private void checkIntegerAttributeCorrectness() {
+		if (getIntegerAttribute(Attribute.HEAL_TIMER) != null && getIntegerAttribute(Attribute.HEAL_TIMER) < 5) {
+			setIntegerAttributeNoCheck(Attribute.HEAL_TIMER, 5);
 		}
-		if (getIntAttribute(Attribute.FEED_TIMER) != null && getIntAttribute(Attribute.FEED_TIMER) < 5) {
-			setIntAttributeNoCheck(Attribute.FEED_TIMER, 5);
+		if (getIntegerAttribute(Attribute.FEED_TIMER) != null && getIntegerAttribute(Attribute.FEED_TIMER) < 5) {
+			setIntegerAttributeNoCheck(Attribute.FEED_TIMER, 5);
 		}
-		if (getIntAttribute(Attribute.HEAL_AMOUNT) != null && getIntAttribute(Attribute.HEAL_AMOUNT) < -20) {
-			setIntAttributeNoCheck(Attribute.HEAL_AMOUNT, -20);
-		} else if (getIntAttribute(Attribute.HEAL_AMOUNT) != null && getIntAttribute(Attribute.HEAL_AMOUNT) > 20) {
-			setIntAttributeNoCheck(Attribute.HEAL_AMOUNT, 20);
+		if (getIntegerAttribute(Attribute.HEAL_AMOUNT) != null && getIntegerAttribute(Attribute.HEAL_AMOUNT) < -20) {
+			setIntegerAttributeNoCheck(Attribute.HEAL_AMOUNT, -20);
+		} else if (getIntegerAttribute(Attribute.HEAL_AMOUNT) != null && getIntegerAttribute(Attribute.HEAL_AMOUNT) > 20) {
+			setIntegerAttributeNoCheck(Attribute.HEAL_AMOUNT, 20);
 		}
-		if (getIntAttribute(Attribute.FEED_AMOUNT) != null && getIntAttribute(Attribute.FEED_AMOUNT) < -20) {
-			setIntAttributeNoCheck(Attribute.FEED_AMOUNT, -20);
-		} else if (getIntAttribute(Attribute.FEED_AMOUNT) != null && getIntAttribute(Attribute.FEED_AMOUNT) > 20) {
-			setIntAttributeNoCheck(Attribute.FEED_AMOUNT, 20);
+		if (getIntegerAttribute(Attribute.FEED_AMOUNT) != null && getIntegerAttribute(Attribute.FEED_AMOUNT) < -20) {
+			setIntegerAttributeNoCheck(Attribute.FEED_AMOUNT, -20);
+		} else if (getIntegerAttribute(Attribute.FEED_AMOUNT) != null && getIntegerAttribute(Attribute.FEED_AMOUNT) > 20) {
+			setIntegerAttributeNoCheck(Attribute.FEED_AMOUNT, 20);
 		}
-		for (final Attribute f : new Attribute[] {
+		for (final Attribute att : new Attribute[] {
 				Attribute.HEAL_MIN_HEALTH,
 				Attribute.HEAL_MAX_HEALTH,
 				Attribute.FEED_MIN_FOOD,
 				Attribute.FEED_MAX_FOOD
 		}) {
-			if (getIntAttribute(f) != null && getIntAttribute(f) < 0) {
-				setIntAttributeNoCheck(f, 0);
-			} else if (getIntAttribute(f) != null && getIntAttribute(f) > 20) {
-				setIntAttributeNoCheck(f, 20);
+			if (getIntegerAttribute(att) != null && getIntegerAttribute(att) < 0) {
+				setIntegerAttributeNoCheck(att, 0);
+			} else if (getIntegerAttribute(att) != null && getIntegerAttribute(att) > 20) {
+				setIntegerAttributeNoCheck(att, 20);
 			}
 		}
-		if (getIntAttribute(Attribute.EXPLOSION_BLOCK_DROP) != null && getIntAttribute(Attribute.EXPLOSION_BLOCK_DROP) < 0) {
-			setIntAttribute(Attribute.EXPLOSION_BLOCK_DROP, 0);
-		} else if (getIntAttribute(Attribute.EXPLOSION_BLOCK_DROP) != null && getIntAttribute(Attribute.EXPLOSION_BLOCK_DROP) > 100) {
-			setIntAttribute(Attribute.EXPLOSION_BLOCK_DROP, 100);
+		if (getIntegerAttribute(Attribute.EXPLOSION_BLOCK_DROP) != null && getIntegerAttribute(Attribute.EXPLOSION_BLOCK_DROP) < 0) {
+			setIntegerAttribute(Attribute.EXPLOSION_BLOCK_DROP, 0);
+		} else if (getIntegerAttribute(Attribute.EXPLOSION_BLOCK_DROP) != null && getIntegerAttribute(Attribute.EXPLOSION_BLOCK_DROP) > 100) {
+			setIntegerAttribute(Attribute.EXPLOSION_BLOCK_DROP, 100);
 		}
 	}
 
 	// Locations handling
-	public Location getLocAttribute(final Attribute att) {
+	public Location getLocationAttribute(final Attribute att) {
 		if (attributes == null) {
 			return null;
-		} else if (isLocFlagAtt(att)) {
+		} else if (Attribute.isLocationAttribute(att)) {
 			return (Location) attributes.get(att);
 		} else {
 			new IllegalArgumentException(att.name()).printStackTrace();
@@ -116,27 +144,27 @@ public class Attributes {
 		}
 	}
 
-	public void setLocAttribute(final Attribute att, final Location loc) {
+	public void setLocationAttribute(final Attribute att, final Location loc) {
 		if (attributes == null) {
 			newMap();
 		}
-		if (isLocFlagAtt(att)) {
+		if (Attribute.isLocationAttribute(att)) {
 			attributes.put(att, loc);
-			checkLocAttributeCorrectness();
+			checkLocationAttributeCorrectness();
 		} else {
 			new IllegalArgumentException(att.name()).printStackTrace();
 		}
 	}
 
-	private void checkLocAttributeCorrectness() {
+	private void checkLocationAttributeCorrectness() {
 		// Nothing to do yet
 	}
 
 	// Vectors handling
-	public Vector getVectAttribute(final Attribute att) {
+	public Vector getVectorAttribute(final Attribute att) {
 		if (attributes == null) {
 			return null;
-		} else if (isVectFlagAtt(att)) {
+		} else if (Attribute.isVectorAttribute(att)) {
 			return (Vector) attributes.get(att);
 		} else {
 			new IllegalArgumentException(att.name()).printStackTrace();
@@ -144,33 +172,35 @@ public class Attributes {
 		}
 	}
 
-	public void setVectAttribute(final Attribute att, final Vector v) {
+	public void setVectorAttribute(final Attribute att, final Vector v) {
 		if (attributes == null) {
 			newMap();
 		}
-		if (isVectFlagAtt(att)) {
+		if (Attribute.isVectorAttribute(att)) {
 			attributes.put(att, v);
-			checkVectAttributeCorrectness();
+			checkVectorAttributeCorrectness();
 		} else {
 			new IllegalArgumentException(att.name()).printStackTrace();
 		}
 	}
 
-	private void checkVectAttributeCorrectness() {
-		if (getVectAttribute(Attribute.BOOSTER_VECTOR) != null && getVectAttribute(Attribute.BOOSTER_VECTOR).lengthSquared() > 100) {
+	private void checkVectorAttributeCorrectness() {
+		if (getVectorAttribute(Attribute.BOOSTER_VECTOR) != null && getVectorAttribute(Attribute.BOOSTER_VECTOR).lengthSquared() > 100) {
 			// XXX: Bukkit does not allow > 10 m/s Velocity
-			setVectAttribute(Attribute.BOOSTER_VECTOR, getVectAttribute(Attribute.BOOSTER_VECTOR).normalize().multiply(9.95D));
+			setVectorAttribute(Attribute.BOOSTER_VECTOR, getVectorAttribute(Attribute.BOOSTER_VECTOR).normalize().multiply(9.95D));
 		}
 	}
 
 	public String getStringRepresentation(final Attribute att) {
-		if (isIntFlagAtt(att)) {
-			return Integer.toString(getIntAttribute(att));
-		} else if (isVectFlagAtt(att)) {
-			final Vector v = getVectAttribute(att);
+		if (Attribute.isStringAttribute(att)) {
+			return getStringAttribute(att);
+		} else if (Attribute.isIntegerAttribute(att)) {
+			return Integer.toString(getIntegerAttribute(att));
+		} else if (Attribute.isVectorAttribute(att)) {
+			final Vector v = getVectorAttribute(att);
 			return "<" + v.getX() + ";" + v.getY() + ";" + v.getZ() + ">";
-		} else if (isLocFlagAtt(att)) {
-			return NLocation.toStringPlus(getLocAttribute(att));
+		} else if (Attribute.isLocationAttribute(att)) {
+			return NLocation.toStringPlus(getLocationAttribute(att));
 		} else {
 			throw new UnsupportedOperationException("Not yet implemented for " + att.name());
 		}

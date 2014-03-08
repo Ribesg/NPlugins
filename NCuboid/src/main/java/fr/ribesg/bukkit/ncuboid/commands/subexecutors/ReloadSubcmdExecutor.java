@@ -25,7 +25,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 
 	public ReloadSubcmdExecutor(final NCuboid instance) {
 		super(instance);
-		setUsage(ChatColor.RED + "Usage : /cuboid reload <regions|config|messages>");
+		setUsage(ChatColor.RED + "Usage : /ncuboid reload <regions|config|messages>");
 	}
 
 	@Override

@@ -115,28 +115,36 @@ public abstract class GeneralRegion extends Region {
 		flags.setFlag(f, b);
 	}
 
-	public Integer getIntAttribute(final Attribute att) {
-		return attributes.getIntAttribute(att);
+	public String getStringAttribute(final Attribute att) {
+		return attributes.getStringAttribute(att);
 	}
 
-	public void setIntAttribute(final Attribute att, final Integer i) {
-		attributes.setIntAttribute(att, i);
+	public void setStringAttribute(final Attribute att, final String s) {
+		attributes.setStringAttribute(att, s);
 	}
 
-	public Location getLocAttribute(final Attribute att) {
-		return attributes.getLocAttribute(att);
+	public Integer getIntegerAttribute(final Attribute att) {
+		return attributes.getIntegerAttribute(att);
 	}
 
-	public void setLocAttribute(final Attribute att, final Location loc) {
-		attributes.setLocAttribute(att, loc);
+	public void setIntegerAttribute(final Attribute att, final Integer i) {
+		attributes.setIntegerAttribute(att, i);
 	}
 
-	public Vector getVectAttribute(final Attribute att) {
-		return attributes.getVectAttribute(att);
+	public Location getLocationAttribute(final Attribute att) {
+		return attributes.getLocationAttribute(att);
 	}
 
-	public void setVectAttribute(final Attribute att, final Vector v) {
-		attributes.setVectAttribute(att, v);
+	public void setLocationAttribute(final Attribute att, final Location loc) {
+		attributes.setLocationAttribute(att, loc);
+	}
+
+	public Vector getVectorAttribute(final Attribute att) {
+		return attributes.getVectorAttribute(att);
+	}
+
+	public void setVectorAttribute(final Attribute att, final Vector v) {
+		attributes.setVectorAttribute(att, v);
 	}
 
 	public String getStringRepresentation(final Attribute att) {

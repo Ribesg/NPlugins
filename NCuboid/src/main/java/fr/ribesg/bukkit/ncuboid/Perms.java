@@ -27,7 +27,7 @@ public class Perms {
 	private static final String CMD_CREATE           = "ncuboid.cmd.create";
 	private static final String CMD_DELETE           = "ncuboid.cmd.delete";
 	private static final String CMD_FLAG             = "ncuboid.cmd.flag";
-	private static final String CMD_FLAGATTRIBUTE    = "ncuboid.cmd.flagattribute";
+	private static final String CMD_ATTRIBUTE        = "ncuboid.cmd.attribute";
 	private static final String CMD_JAIL             = "ncuboid.cmd.jail";
 	private static final String CMD_ADMIN            = "ncuboid.cmd.admin";
 	private static final String CMD_USER             = "ncuboid.cmd.user";
@@ -73,25 +73,35 @@ public class Perms {
 	}
 
 	// Flag attributes permissions, linked to their related Flag permission
-	private static Map<Attribute, String> flagAttributesPermissions;
+	private static Map<Attribute, String> attributesPermissions;
 
-	private static String getFlagAttributePermission(final Attribute fa) {
-		if (flagAttributesPermissions == null) {
-			flagAttributesPermissions = new HashMap<>(Attribute.values().length);
-			flagAttributesPermissions.put(Attribute.HEAL_AMOUNT, "ncuboid.flag.heal");
-			flagAttributesPermissions.put(Attribute.HEAL_TIMER, "ncuboid.flag.heal");
-			flagAttributesPermissions.put(Attribute.HEAL_MIN_HEALTH, "ncuboid.flag.heal");
-			flagAttributesPermissions.put(Attribute.HEAL_MAX_HEALTH, "ncuboid.flag.heal");
-			flagAttributesPermissions.put(Attribute.FEED_AMOUNT, "ncuboid.flag.feed");
-			flagAttributesPermissions.put(Attribute.FEED_TIMER, "ncuboid.flag.feed");
-			flagAttributesPermissions.put(Attribute.FEED_MIN_FOOD, "ncuboid.flag.feed");
-			flagAttributesPermissions.put(Attribute.FEED_MAX_FOOD, "ncuboid.flag.feed");
-			flagAttributesPermissions.put(Attribute.EXPLOSION_BLOCK_DROP, "ncuboid.flag.explosionblock");
-			flagAttributesPermissions.put(Attribute.EXTERNAL_POINT, "ncuboid.flag.pass");
-			flagAttributesPermissions.put(Attribute.INTERNAL_POINT, "ncuboid.flag.closed");
-			flagAttributesPermissions.put(Attribute.BOOSTER_VECTOR, "ncuboid.flag.booster");
+	private static String getAttributePermission(final Attribute fa) {
+		if (attributesPermissions == null) {
+			attributesPermissions = new HashMap<>(Attribute.values().length);
+
+			// Strings
+			attributesPermissions.put(Attribute.FAREWELL_MESSAGE, "ncuboid.attribute.farewellmessage");
+			attributesPermissions.put(Attribute.WELCOME_MESSAGE, "ncuboid.attribute.welcomemessage");
+
+			// Integers
+			attributesPermissions.put(Attribute.EXPLOSION_BLOCK_DROP, "ncuboid.attribute.explosionblockdrop");
+			attributesPermissions.put(Attribute.FEED_AMOUNT, "ncuboid.flag.feed");
+			attributesPermissions.put(Attribute.FEED_MAX_FOOD, "ncuboid.flag.feed");
+			attributesPermissions.put(Attribute.FEED_MIN_FOOD, "ncuboid.flag.feed");
+			attributesPermissions.put(Attribute.FEED_TIMER, "ncuboid.flag.feed");
+			attributesPermissions.put(Attribute.HEAL_AMOUNT, "ncuboid.flag.heal");
+			attributesPermissions.put(Attribute.HEAL_MAX_HEALTH, "ncuboid.flag.heal");
+			attributesPermissions.put(Attribute.HEAL_MIN_HEALTH, "ncuboid.flag.heal");
+			attributesPermissions.put(Attribute.HEAL_TIMER, "ncuboid.flag.heal");
+
+			// Locations
+			attributesPermissions.put(Attribute.EXTERNAL_POINT, "ncuboid.attribute.externalpoint");
+			attributesPermissions.put(Attribute.INTERNAL_POINT, "ncuboid.attribute.internalpoint");
+
+			// Vectors
+			attributesPermissions.put(Attribute.BOOSTER_VECTOR, "ncuboid.flag.booster");
 		}
-		return flagAttributesPermissions.get(fa);
+		return attributesPermissions.get(fa);
 	}
 
 	public static boolean isAdmin(final Permissible user) {
@@ -122,11 +132,12 @@ public class Perms {
 		return isAdmin(user) || user.hasPermission(perm) || isUser && user.hasPermission(USER);
 	}
 
-	public static boolean hasFlagAttribute(final Permissible user, final Attribute fa) {
-		final String perm = getFlagAttributePermission(fa);
+	public static boolean hasAttribute(final Permissible user, final Attribute fa) {
+		final String perm = getAttributePermission(fa);
 		final boolean isUser;
 		switch (fa) {
-			case EXPLOSION_BLOCK_DROP:
+			case FAREWELL_MESSAGE:
+			case WELCOME_MESSAGE:
 				isUser = true;
 				break;
 			default:
@@ -160,8 +171,8 @@ public class Perms {
 		return isAdmin(user) || user.hasPermission(CMD_FLAG) || user.hasPermission(USER);
 	}
 
-	public static boolean hasFlagAttribute(final Permissible user) {
-		return isAdmin(user) || user.hasPermission(CMD_FLAGATTRIBUTE) || user.hasPermission(USER);
+	public static boolean hasAttribute(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_ATTRIBUTE) || user.hasPermission(USER);
 	}
 
 	public static boolean hasJail(final Permissible user) {

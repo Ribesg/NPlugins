@@ -24,6 +24,7 @@ import fr.ribesg.bukkit.ncuboid.lang.Messages;
 import fr.ribesg.bukkit.ncuboid.listeners.EventExtensionListener;
 import fr.ribesg.bukkit.ncuboid.listeners.PlayerStickListener;
 import fr.ribesg.bukkit.ncuboid.listeners.WorldLoadingListener;
+import fr.ribesg.bukkit.ncuboid.listeners.attribute.MessageListener;
 import fr.ribesg.bukkit.ncuboid.listeners.flag.*;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -133,6 +134,9 @@ public class NCuboid extends NPlugin implements CuboidNode {
 		pm.registerEvents(new TeleportFlagListener(this), this);
 		pm.registerEvents(new UseFlagListener(this), this);
 		pm.registerEvents(new WarpgateFlagListener(this), this);
+
+		// Attribute listeners
+		pm.registerEvents(new MessageListener(this), this);
 
 		debug("Registering command...");
 		setCommandExecutor("ncuboid", new MainCommandExecutor(this));

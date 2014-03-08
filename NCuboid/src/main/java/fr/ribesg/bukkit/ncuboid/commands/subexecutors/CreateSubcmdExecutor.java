@@ -24,7 +24,7 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 
 	public CreateSubcmdExecutor(final NCuboid instance) {
 		super(instance);
-		setUsage(ChatColor.RED + "Usage : /cuboid create <regionName>");
+		setUsage(ChatColor.RED + "Usage : /ncuboid create <regionName>");
 	}
 
 	@Override

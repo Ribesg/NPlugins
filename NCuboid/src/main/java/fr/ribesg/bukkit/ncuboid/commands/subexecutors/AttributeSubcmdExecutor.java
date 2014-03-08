@@ -25,14 +25,14 @@ public class AttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 
 	public AttributeSubcmdExecutor(final NCuboid instance) {
 		super(instance);
-		setUsage(ChatColor.RED + "Usage : /cuboid attribute <regionName> <attributeName> [value]");
+		setUsage(ChatColor.RED + "Usage : /ncuboid attribute <regionName> <attributeName> [value]");
 	}
 
 	@Override
 	public boolean exec(final CommandSender sender, final String[] args) {
-		if (args.length != 2 && args.length != 3) {
+		if (args.length < 2) {
 			return false;
-		} else if (Perms.hasFlagAttribute(sender)) {
+		} else if (Perms.hasAttribute(sender)) {
 			// Get region, check rights on region
 			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
@@ -44,41 +44,59 @@ public class AttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 			}
 
 			// Get flag attribute, check rights on flag attribute
-			final Attribute fa = Attribute.get(args[1]);
-			if (fa == null) {
+			final Attribute att = Attribute.get(args[1]);
+			if (att == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_cmdAttUnknownFlagAtt, args[1]);
 				return true;
-			} else if (!Perms.hasFlagAttribute(sender, fa)) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdAttNoPermission, fa.name());
+			} else if (!Perms.hasAttribute(sender, att)) {
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdAttNoPermission, att.name());
 				return true;
 			}
 
 			if (args.length == 2) {
 				// Show value
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdAttValue, fa.name(), c.getStringRepresentation(fa), c.getRegionName());
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdAttValue, att.name(), c.getStringRepresentation(att), c.getRegionName());
 				return true;
 			} else {
 				// Parse and set value
-				if (Attribute.isIntFlagAtt(fa)) {
+				if (Attribute.isStringAttribute(att)) {
+					final StringBuilder builder = new StringBuilder(args[2]);
+					int i = 3;
+					while (i < args.length) {
+						builder.append(' ').append(args[i]);
+						i++;
+					}
+					final String theString = builder.toString();
+					c.setStringAttribute(att, theString);
+				} else if (Attribute.isIntegerAttribute(att)) {
+					if (args.length != 3) {
+						return false;
+					}
 					final int value;
 					try {
 						value = Integer.parseInt(args[2]);
 					} catch (final NumberFormatException e) {
 						return false;
 					}
-					c.setIntAttribute(fa, value);
-				} else if (Attribute.isVectFlagAtt(fa)) {
+					c.setIntegerAttribute(att, value);
+				} else if (Attribute.isVectorAttribute(att)) {
+					if (args.length != 3) {
+						return false;
+					}
 					final Vector v = parseVector(sender, args[2]);
 					if (v == null) {
 						return false;
 					} else {
-						c.setVectAttribute(fa, v);
+						c.setVectorAttribute(att, v);
 					}
-				} else if (Attribute.isLocFlagAtt(fa)) {
+				} else if (Attribute.isLocationAttribute(att)) {
+					if (args.length != 3) {
+						return false;
+					}
 					if (sender instanceof Player) {
 						if ("set".equalsIgnoreCase(args[2])) {
 							final Location loc = ((Player) sender).getLocation();
-							c.setLocAttribute(fa, loc);
+							c.setLocationAttribute(att, loc);
 						} else {
 							return false;
 						}
@@ -88,11 +106,11 @@ public class AttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 					}
 				} else {
 					// Hello, future
-					throw new UnsupportedOperationException("Not yet implemented for " + fa.name());
+					throw new UnsupportedOperationException("Not yet implemented for " + att.name());
 				}
 
 				// Notice the new value (not necessarily the provided value)
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAttSet, fa.name(), c.getStringRepresentation(fa), c.getRegionName());
+				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAttSet, att.name(), c.getStringRepresentation(att), c.getRegionName());
 				return true;
 			}
 		} else {

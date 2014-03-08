@@ -27,7 +27,7 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 
 	public FlagSubcmdExecutor(final NCuboid instance) {
 		super(instance);
-		setUsage(ChatColor.RED + "Usage : /cuboid flag <regionName> <flagName> [value]");
+		setUsage(ChatColor.RED + "Usage : /ncuboid flag <regionName> <flagName> [value]");
 	}
 
 	@Override

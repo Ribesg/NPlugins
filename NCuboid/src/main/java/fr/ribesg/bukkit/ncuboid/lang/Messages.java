@@ -115,7 +115,7 @@ public class Messages extends AbstractMessages {
 		// Command - ATTRIBUTE
 		newMessages.add(new Message(MessageId.cuboid_cmdAttUnknownFlagAtt, "&cUnknown attribute: '%attName%'", true, new String[] {"%attName%"}));
 		newMessages.add(new Message(MessageId.cuboid_cmdAttNoPermission, "&cYou don't have the permissions to use attribute '%attName%'", true, new String[] {"%attName%"}));
-		newMessages.add(new Message(MessageId.cuboid_cmdAttValue, "&aThe attribute '%att%' is currently set to '%value%' for region '%region%'", true, new String[] {
+		newMessages.add(new Message(MessageId.cuboid_cmdAttValue, "&aThe attribute '%att%' is currently set to '%value%&a' for region '%region%'", true, new String[] {
 				"%att%",
 				"%value%",
 				"%region%"

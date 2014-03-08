@@ -11,16 +11,20 @@ package fr.ribesg.bukkit.ncuboid.beans;
 
 public enum Attribute {
 
+	// String
+	FAREWELL_MESSAGE,
+	WELCOME_MESSAGE,
+
 	// Integer
-	HEAL_AMOUNT,
-	HEAL_TIMER,
-	HEAL_MIN_HEALTH,
-	HEAL_MAX_HEALTH,
-	FEED_AMOUNT,
-	FEED_TIMER,
-	FEED_MIN_FOOD,
-	FEED_MAX_FOOD,
 	EXPLOSION_BLOCK_DROP,
+	FEED_AMOUNT,
+	FEED_MAX_FOOD,
+	FEED_MIN_FOOD,
+	FEED_TIMER,
+	HEAL_AMOUNT,
+	HEAL_MAX_HEALTH,
+	HEAL_MIN_HEALTH,
+	HEAL_TIMER,
 
 	// Location
 	EXTERNAL_POINT,
@@ -36,6 +40,32 @@ public enum Attribute {
 			fa = Attribute.valueOf(in);
 		} catch (final IllegalArgumentException e) {
 			switch (in) {
+				case "WM":
+				case "W_M":
+				case "WMES":
+				case "W_MES":
+				case "WMESS":
+				case "W_MESS":
+				case "WELCOMEMES":
+				case "WELCOME_MES":
+				case "WELCOMEMESS":
+				case "WELCOME_MESS":
+				case "WELCOMEMESSAGE":
+					fa = WELCOME_MESSAGE;
+					break;
+				case "FM":
+				case "F_M":
+				case "FMES":
+				case "F_MES":
+				case "FMESS":
+				case "F_MESS":
+				case "FAREWELLMES":
+				case "FAREWELL_MES":
+				case "FAREWELLMESS":
+				case "FAREWELL_MESS":
+				case "FAREWELLMESSAGE":
+					fa = FAREWELL_MESSAGE;
+					break;
 				case "HA":
 				case "HAMOUNT":
 				case "H_AMOUNT":
@@ -107,15 +137,19 @@ public enum Attribute {
 		return fa;
 	}
 
-	public static boolean isIntFlagAtt(final Attribute f) {
-		return f != null && HEAL_AMOUNT.compareTo(f) <= 0 && EXPLOSION_BLOCK_DROP.compareTo(f) >= 0;
+	public static boolean isStringAttribute(final Attribute att) {
+		return att != null && FAREWELL_MESSAGE.compareTo(att) <= 0 && WELCOME_MESSAGE.compareTo(att) >= 0;
 	}
 
-	public static boolean isLocFlagAtt(final Attribute f) {
-		return f != null && EXTERNAL_POINT.compareTo(f) <= 0 && INTERNAL_POINT.compareTo(f) >= 0;
+	public static boolean isIntegerAttribute(final Attribute att) {
+		return att != null && EXPLOSION_BLOCK_DROP.compareTo(att) <= 0 && HEAL_TIMER.compareTo(att) >= 0;
 	}
 
-	public static boolean isVectFlagAtt(final Attribute f) {
-		return f != null && f == BOOSTER_VECTOR;
+	public static boolean isLocationAttribute(final Attribute att) {
+		return att != null && EXTERNAL_POINT.compareTo(att) <= 0 && INTERNAL_POINT.compareTo(att) >= 0;
+	}
+
+	public static boolean isVectorAttribute(final Attribute att) {
+		return att != null && att == BOOSTER_VECTOR;
 	}
 }

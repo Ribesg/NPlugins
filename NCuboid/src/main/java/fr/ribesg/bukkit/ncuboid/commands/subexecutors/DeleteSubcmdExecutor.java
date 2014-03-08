@@ -22,7 +22,7 @@ public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 
 	public DeleteSubcmdExecutor(final NCuboid instance) {
 		super(instance);
-		setUsage(ChatColor.RED + "Usage : /cuboid delete <regionName>");
+		setUsage(ChatColor.RED + "Usage : /ncuboid delete <regionName>");
 	}
 
 	@Override

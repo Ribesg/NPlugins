@@ -37,16 +37,16 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 		this.mode = mode;
 		switch (mode) {
 			case ADMIN:
-				setUsage(ChatColor.RED + "Usage : /cuboid admin <regionName> add|del <playerName>[,playerName]");
+				setUsage(ChatColor.RED + "Usage : /ncuboid admin <regionName> add|del <playerName>[,playerName]");
 				break;
 			case USER:
-				setUsage(ChatColor.RED + "Usage : /cuboid user <regionName> add|del <playerName>[,playerName]");
+				setUsage(ChatColor.RED + "Usage : /ncuboid user <regionName> add|del <playerName>[,playerName]");
 				break;
 			case GROUP:
-				setUsage(ChatColor.RED + "Usage : /cuboid group <regionName> add|del <groupName>[,groupName]");
+				setUsage(ChatColor.RED + "Usage : /ncuboid group <regionName> add|del <groupName>[,groupName]");
 				break;
 			case JAIL:
-				setUsage(ChatColor.RED + "Usage : /cuboid jail <regionName> add|del <jailName>");
+				setUsage(ChatColor.RED + "Usage : /ncuboid jail <regionName> add|del <jailName>");
 				break;
 		}
 	}

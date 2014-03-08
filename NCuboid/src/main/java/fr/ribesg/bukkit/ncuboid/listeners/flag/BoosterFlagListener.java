@@ -29,7 +29,7 @@ public class BoosterFlagListener extends AbstractListener {
 		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.BOOSTER)) {
-				event.getPlayer().setVelocity(ext.getToRegion().getVectAttribute(Attribute.BOOSTER_VECTOR));
+				event.getPlayer().setVelocity(ext.getToRegion().getVectorAttribute(Attribute.BOOSTER_VECTOR));
 			}
 		}
 	}

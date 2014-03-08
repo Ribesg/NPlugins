@@ -40,8 +40,6 @@ public abstract class PlayerRegion extends GeneralRegion {
 	private String          ownerName;
 	private RegionState     state;
 	private long            totalSize;
-	private String          welcomeMessage;
-	private String          farewellMessage;
 	private Set<ChunkCoord> chunks;
 
 	/**
@@ -52,22 +50,18 @@ public abstract class PlayerRegion extends GeneralRegion {
 		setRegionName(regionName);
 		setOwnerName(ownerName);
 		setState(RegionState.TMPSTATE1);
-		setWelcomeMessage(null);
-		setFarewellMessage(null);
 	}
 
 	/**
 	 * Create a Region from a save
 	 */
-	public PlayerRegion(final String regionName, final String ownerName, final String worldName, final RegionState state, final long totalSize, final String welcomeMessage, final String farewellMessage, final RegionType type, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts) {
+	public PlayerRegion(final String regionName, final String ownerName, final String worldName, final RegionState state, final long totalSize, final RegionType type, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts) {
 
 		super(worldName, type, rights, priority, flags, flagAtts);
 		setRegionName(regionName);
 		setOwnerName(ownerName);
 		setState(state);
 		setTotalSize(totalSize);
-		setWelcomeMessage(welcomeMessage);
-		setFarewellMessage(farewellMessage);
 	}
 
 	/**
@@ -121,14 +115,6 @@ public abstract class PlayerRegion extends GeneralRegion {
 		this.regionName = regionName;
 	}
 
-	public String getFarewellMessage() {
-		return farewellMessage;
-	}
-
-	public void setFarewellMessage(final String farewellMessage) {
-		this.farewellMessage = farewellMessage;
-	}
-
 	public String getOwnerName() {
 		return ownerName;
 	}
@@ -153,14 +139,6 @@ public abstract class PlayerRegion extends GeneralRegion {
 
 	protected void setTotalSize(final long totalSize) {
 		this.totalSize = totalSize;
-	}
-
-	public String getWelcomeMessage() {
-		return welcomeMessage;
-	}
-
-	public void setWelcomeMessage(final String welcomeMessage) {
-		this.welcomeMessage = welcomeMessage;
 	}
 
 	@Override

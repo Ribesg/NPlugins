@@ -40,7 +40,7 @@ public class ExplosionFlagListener extends AbstractListener {
 			}
 		}
 		if (ext.getEntityRegion() != null) {
-			final Integer blockDropRatio = ext.getEntityRegion().getIntAttribute(Attribute.EXPLOSION_BLOCK_DROP);
+			final Integer blockDropRatio = ext.getEntityRegion().getIntegerAttribute(Attribute.EXPLOSION_BLOCK_DROP);
 			if (blockDropRatio != null) {
 				event.setYield(blockDropRatio / 100f);
 			}

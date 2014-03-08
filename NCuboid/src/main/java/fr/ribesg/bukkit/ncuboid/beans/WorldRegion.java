@@ -22,9 +22,6 @@ public class WorldRegion extends GeneralRegion {
 		setFlag(Flag.BUILD, false);
 		setFlag(Flag.CHEST, false);
 		setFlag(Flag.USE, false);
-
-		// Should change / remove this
-		setIntAttribute(Attribute.EXPLOSION_BLOCK_DROP, 100);
 	}
 
 	public WorldRegion(final String worldName, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts) {

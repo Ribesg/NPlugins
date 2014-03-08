@@ -25,11 +25,11 @@ public class FlagsAttributesTest extends AbstractReflectionTest {
 	public void checkPermForEachFlag() {
 		// Initialize maps by first call
 		executeStaticMethod(Perms.class, "getFlagPermission", new Class[] {Flag.class}, new Object[] {null});
-		executeStaticMethod(Perms.class, "getFlagAttributePermission", new Class[] {Attribute.class}, new Object[] {null});
+		executeStaticMethod(Perms.class, "getAttributePermission", new Class[] {Attribute.class}, new Object[] {null});
 
 		// Get maps
 		final Map<Flag, String> flagPermissions = (Map<Flag, String>) getStaticFieldValue(Perms.class, "flagPermissions");
-		final Map<Attribute, String> flagAttributesPermissions = (Map<Attribute, String>) getStaticFieldValue(Perms.class, "flagAttributesPermissions");
+		final Map<Attribute, String> flagAttributesPermissions = (Map<Attribute, String>) getStaticFieldValue(Perms.class, "attributesPermissions");
 
 		// Check content. We only need to check the size as those are Maps, so there's no duplicated key. If
 		// the size is ok then everything is here.

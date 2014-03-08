@@ -1,28 +1,27 @@
 /***************************************************************************
- * Project file:    NPlugins - NCuboid - ClosedFlagListener.java           *
- * Full Class name: fr.ribesg.bukkit.ncuboid.listeners.flag.ClosedFlagListener
+ * Project file:    NPlugins - NCuboid - MessageListener.java              *
+ * Full Class name: fr.ribesg.bukkit.ncuboid.listeners.attribute.MessageListener
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncuboid.listeners.flag;
+package fr.ribesg.bukkit.ncuboid.listeners.attribute;
 
 import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
+import fr.ribesg.bukkit.ncore.utils.ColorUtils;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Attribute;
-import fr.ribesg.bukkit.ncuboid.beans.Flag;
-import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
-import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-public class ClosedFlagListener extends AbstractListener {
+public class MessageListener extends AbstractListener {
 
-	public ClosedFlagListener(final NCuboid instance) {
+	public MessageListener(final NCuboid instance) {
 		super(instance);
 	}
 
@@ -30,15 +29,18 @@ public class ClosedFlagListener extends AbstractListener {
 	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
 		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
-			final GeneralRegion r = ext.getFromRegion();
-			if (r != null && r.getFlag(Flag.CLOSED) && !r.equals(ext.getToRegion())) {
-				final Location loc = r.getLocationAttribute(Attribute.INTERNAL_POINT);
-				if (loc == null) {
-					event.setTo(new Location(event.getFrom().getWorld(), event.getFrom().getBlockX() + 0.5, event.getFrom().getBlockY() + 0.1, event.getFrom().getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
-				} else {
-					event.setTo(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getBlockY() + 0.1, loc.getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
+			final Player player = event.getPlayer();
+			if (ext.getFromRegion() != null && !ext.getToRegions().contains(ext.getFromRegion())) {
+				final String farewellMessage = ext.getFromRegion().getStringAttribute(Attribute.FAREWELL_MESSAGE);
+				if (farewellMessage != null) {
+					player.sendMessage(ColorUtils.colorize(farewellMessage));
 				}
-				ext.setCustomCancelled(true);
+			}
+			if (ext.getToRegion() != null && !ext.getFromRegions().contains(ext.getToRegion())) {
+				final String welcomeMessage = ext.getToRegion().getStringAttribute(Attribute.WELCOME_MESSAGE);
+				if (welcomeMessage != null) {
+					player.sendMessage(ColorUtils.colorize(welcomeMessage));
+				}
 			}
 		}
 	}
