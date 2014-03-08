@@ -110,7 +110,7 @@ public class TimeUtils {
 
 		/**
 		 * Maps String representations to their TimeUnits enum value counterpart.
-		 * User should use the lazy {@see #getMapping()} getter.
+		 * User should use the lazy {@link #getMapping()} getter.
 		 */
 		private static Map<String, TimeUnits> mapping;
 

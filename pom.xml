@@ -84,19 +84,6 @@
 		</dependency>
 	</dependencies>
 
-	<distributionManagement>
-		<repository>
-			<id>ribesg-repo</id>
-			<name>Ribesg's Release Repository</name>
-			<url>http://repo.ribesg.fr/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>ribesg-repo</id>
-			<name>Ribesg's Snapshot Repository</name>
-			<url>http://repo.ribesg.fr/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
 	<build>
 		<resources>
 			<resource>
@@ -195,12 +182,17 @@
 					</executions>
 				</plugin>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
 					<version>2.8.1</version>
 					<configuration>
 						<skip>true</skip>
 					</configuration>
+					<executions>
+						<execution>
+							<id>default-deploy</id>
+							<phase>none</phase>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -222,12 +214,17 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>2.8.1</version>
 				<configuration>
 					<skip>true</skip>
 				</configuration>
+				<executions>
+					<execution>
+						<id>default-deploy</id>
+						<phase>none</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

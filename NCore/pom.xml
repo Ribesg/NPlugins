@@ -20,6 +20,19 @@
 
 	<description>Core plugin of the NPlugins suite</description>
 
+	<distributionManagement>
+		<repository>
+			<id>ribesg-repo</id>
+			<name>Ribesg's Release Repository</name>
+			<url>http://repo.ribesg.fr/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>ribesg-repo</id>
+			<name>Ribesg's Snapshot Repository</name>
+			<url>http://repo.ribesg.fr/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -57,8 +70,10 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
 				<executions>
 					<execution>
+						<id>attach-sources</id>
 						<phase>deploy</phase>
 						<goals>
 							<goal>jar-no-fork</goal>
@@ -78,9 +93,11 @@
 					<author>true</author>
 					<keywords>true</keywords>
 					<show>private</show>
+					<skip>false</skip>
 				</configuration>
 				<executions>
 					<execution>
+						<id>attach-javadocs</id>
 						<phase>deploy</phase>
 						<goals>
 							<goal>jar</goal>
@@ -89,12 +106,19 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>2.8.1</version>
 				<configuration>
 					<skip>false</skip>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
