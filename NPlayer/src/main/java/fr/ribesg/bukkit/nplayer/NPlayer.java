@@ -47,20 +47,21 @@ public class NPlayer extends NPlugin implements PlayerNode {
 	}
 
 	@Override
+	protected void loadMessages() throws IOException {
+		debug("Loading plugin Messages...");
+		if (!getDataFolder().isDirectory()) {
+			getDataFolder().mkdir();
+		}
+
+		final Messages messages = new Messages();
+		messages.loadMessages(this);
+
+		this.messages = messages;
+	}
+
+	@Override
 	public boolean onNodeEnable() {
 		entering(getClass(), "onNodeEnable");
-
-		debug("Loading plugin messages...");
-		try {
-			if (!getDataFolder().isDirectory()) {
-				getDataFolder().mkdir();
-			}
-			messages = new Messages();
-			messages.loadMessages(this);
-		} catch (final IOException e) {
-			error("An error occured when NPlayer tried to load messages.yml", e);
-			return false;
-		}
 
 		debug("Loading plugin config...");
 		try {
@@ -106,6 +107,7 @@ public class NPlayer extends NPlugin implements PlayerNode {
 
 		debug("Creating PlayerCommandHandler and registering commands...");
 		final PlayerCommandHandler playerCommandHandler = new PlayerCommandHandler(this);
+		setCommandExecutor("nplayer", playerCommandHandler);
 		setCommandExecutor("login", playerCommandHandler);
 		setCommandExecutor("register", playerCommandHandler);
 		setCommandExecutor("logout", playerCommandHandler);

@@ -13,9 +13,9 @@ import org.bukkit.permissions.Permissible;
 
 public class Perms {
 
-	// Player node permissions
 	private static final String ADMIN               = "nplayer.admin";
 	private static final String USER                = "nplayer.user";
+	private static final String CMD_RELOAD          = "nplayer.cmd.reload";
 	private static final String CMD_FORCELOGIN      = "nplayer.cmd.forcelogin";
 	private static final String CMD_LOGIN           = "nplayer.cmd.login";
 	private static final String CMD_LOGOUT          = "nplayer.cmd.logout";
@@ -39,6 +39,10 @@ public class Perms {
 	private static final String CMD_MUTE_PERMANENT  = "nplayer.cmd.mute.permanent";
 	private static final String CMD_UNMUTE          = "nplayer.cmd.unmute";
 	private static final String CMD_KICK            = "nplayer.cmd.kick";
+
+	public static boolean hasReload(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_RELOAD) || user.hasPermission(ADMIN);
+	}
 
 	public static boolean hasForceLogin(final Permissible user) {
 		return user.isOp() || user.hasPermission(CMD_FORCELOGIN) || user.hasPermission(ADMIN);

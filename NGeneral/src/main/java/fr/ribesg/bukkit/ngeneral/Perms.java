@@ -14,9 +14,9 @@ import org.bukkit.permissions.Permissible;
 
 public class Perms {
 
-	// World node permissions
 	private static final String ADMIN                 = "ngeneral.admin";
 	private static final String USER                  = "ngeneral.user";
+	private static final String CMD_RELOAD            = "ngeneral.cmd.reload";
 	private static final String CMD_GOD               = "ngeneral.cmd.god";
 	private static final String CMD_GOD_OTHERS        = "ngeneral.cmd.god.others";
 	private static final String CMD_FLY               = "ngeneral.cmd.fly";
@@ -46,6 +46,10 @@ public class Perms {
 
 	public static boolean isAdmin(final Permissible user) {
 		return user.isOp() || user.hasPermission(ADMIN);
+	}
+
+	public static boolean hasReload(final Permissible user) {
+		return isAdmin(user) || user.hasPermission(CMD_RELOAD);
 	}
 
 	public static boolean hasGod(final Permissible user) {

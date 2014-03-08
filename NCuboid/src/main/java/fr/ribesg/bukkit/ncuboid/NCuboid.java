@@ -61,24 +61,25 @@ public class NCuboid extends NPlugin implements CuboidNode {
 		return "0.6.1";
 	}
 
+	@Override
+	public void loadMessages() throws IOException {
+		debug("Loading plugin Messages...");
+		if (!getDataFolder().isDirectory()) {
+			getDataFolder().mkdir();
+		}
+
+		final Messages messages = new Messages();
+		messages.loadMessages(this);
+
+		this.messages = messages;
+	}
+
 	/**
 	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeEnable()
 	 */
 	@Override
 	protected boolean onNodeEnable() {
 		entering(getClass(), "onNodeEnable");
-
-		debug("Loading plugin messages...");
-		try {
-			if (!getDataFolder().isDirectory()) {
-				getDataFolder().mkdir();
-			}
-			messages = new Messages();
-			messages.loadMessages(this);
-		} catch (final IOException e) {
-			error("An error occured when NCuboid tried to load messages.yml", e);
-			return false;
-		}
 
 		debug("Loading plugin configuration...");
 		try {
@@ -134,7 +135,7 @@ public class NCuboid extends NPlugin implements CuboidNode {
 		pm.registerEvents(new WarpgateFlagListener(this), this);
 
 		debug("Registering command...");
-		setCommandExecutor("cuboid", new MainCommandExecutor(this));
+		setCommandExecutor("ncuboid", new MainCommandExecutor(this));
 
 		debug("Initializing Dynmap bridge...");
 		this.dynmapBridge.initialize(this.db);

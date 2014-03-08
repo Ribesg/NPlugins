@@ -41,21 +41,20 @@ public class NTalk extends NPlugin implements TalkNode {
 	}
 
 	@Override
-	public boolean onNodeEnable() {
-		// Messages first !
-		try {
-			if (!getDataFolder().isDirectory()) {
-				getDataFolder().mkdir();
-			}
-			messages = new Messages();
-			messages.loadMessages(this);
-		} catch (final IOException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NTalk tried to load messages.yml");
-			return false;
+	protected void loadMessages() throws IOException {
+		debug("Loading plugin Messages...");
+		if (!getDataFolder().isDirectory()) {
+			getDataFolder().mkdir();
 		}
 
+		final Messages messages = new Messages();
+		messages.loadMessages(this);
+
+		this.messages = messages;
+	}
+
+	@Override
+	public boolean onNodeEnable() {
 		// Config
 		try {
 			pluginConfig = new Config(this);
@@ -88,6 +87,7 @@ public class NTalk extends NPlugin implements TalkNode {
 
 		// Command
 		final TalkCommandExecutor executor = new TalkCommandExecutor(this);
+		setCommandExecutor("ntalk", executor);
 		setCommandExecutor("pm", executor);
 		setCommandExecutor("pr", executor);
 		setCommandExecutor("nick", executor);

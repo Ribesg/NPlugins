@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.nenchantingegg;
 
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.enchantingegg.EnchantingEggNode;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altars;
@@ -22,6 +23,8 @@ import fr.ribesg.bukkit.nenchantingegg.listener.PlayerListener;
 import fr.ribesg.bukkit.nenchantingegg.listener.WorldListener;
 import fr.ribesg.bukkit.nenchantingegg.task.TimeListenerTask;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 import org.mcstats.Metrics;
@@ -57,20 +60,21 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 	}
 
 	@Override
+	protected void loadMessages() throws IOException {
+		debug("Loading plugin Messages...");
+		if (!getDataFolder().isDirectory()) {
+			getDataFolder().mkdir();
+		}
+
+		final Messages messages = new Messages();
+		messages.loadMessages(this);
+
+		this.messages = messages;
+	}
+
+	@Override
 	public boolean onNodeEnable() {
 		entering(getClass(), "onNodeEnable");
-
-		debug("Loading plugin Messages...");
-		try {
-			if (!getDataFolder().isDirectory()) {
-				getDataFolder().mkdir();
-			}
-			messages = new Messages();
-			messages.loadMessages(this);
-		} catch (final IOException e) {
-			error("An error occured when NEnchantingEgg tried to load messages.yml", e);
-			return false;
-		}
 
 		debug("Initializing transitions...");
 		inactiveToActiveTransition = new InactiveToActiveTransition(this);
@@ -121,6 +125,46 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 		exiting(getClass(), "onNodeEnable");
 		return true;
+	}
+
+	@Override
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+		if (cmd.getName().equals("nenchantingegg")) {
+			if (args.length < 1) {
+				return false;
+			}
+			switch (args[0].toLowerCase()) {
+				case "reload":
+				case "rld":
+					if (Perms.hasReload(sender)) {
+						if (args.length != 2) {
+							return false;
+						}
+						switch (args[1].toLowerCase()) {
+							case "messages":
+							case "mess":
+							case "mes":
+								try {
+									loadMessages();
+									sendMessage(sender, MessageId.cmdReloadMessages);
+								} catch (final IOException e) {
+									error("An error occured when NEnchantingEgg tried to load messages.yml", e);
+									sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+								}
+								return true;
+							default:
+								return false;
+						}
+					} else {
+						sendMessage(sender, MessageId.noPermissionForCommand);
+						return true;
+					}
+				default:
+					return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**

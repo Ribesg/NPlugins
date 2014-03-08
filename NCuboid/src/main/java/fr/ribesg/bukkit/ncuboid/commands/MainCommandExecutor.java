@@ -65,7 +65,7 @@ public class MainCommandExecutor implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String cmdLabel, final String[] args) {
-		if (cmd.getName().equals("cuboid")) {
+		if (cmd.getName().equals("ncuboid")) {
 			if (!Perms.hasGeneral(sender)) {
 				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 				return true;

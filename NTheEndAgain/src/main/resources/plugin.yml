@@ -13,3 +13,5 @@ commands:
   nend:
     description: Base NTheEndAgain command
     aliases: [end,ntheendagain]
+    usage: |
+      /<command> help

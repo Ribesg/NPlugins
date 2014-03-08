@@ -13,7 +13,6 @@ import org.bukkit.permissions.Permissible;
 
 public class Perms {
 
-	// TheEndAgain node permissions
 	private static final String ADMIN              = "ntheendagain.admin";
 	private static final String USER               = "ntheendagain.user";
 	private static final String CMD_HELP           = "ntheendagain.cmd.help";

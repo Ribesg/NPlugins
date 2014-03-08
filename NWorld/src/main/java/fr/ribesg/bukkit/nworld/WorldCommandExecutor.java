@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.ChatPaginator;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
@@ -142,6 +143,9 @@ public class WorldCommandExecutor implements CommandExecutor {
 				case "end":
 				case "setend":
 					return subCmdWorldSetEnd(sender, parsedArgs);
+				case "reload":
+				case "rld":
+					return subCmdWorldReload(sender, parsedArgs);
 				default:
 					return false;
 			}
@@ -543,6 +547,31 @@ public class WorldCommandExecutor implements CommandExecutor {
 		} else {
 			plugin.sendMessage(sender, MessageId.unknownWorld, worldName);
 			return true;
+		}
+	}
+
+	private boolean subCmdWorldReload(final CommandSender sender, final String[] args) {
+		if (!Perms.hasReload(sender)) {
+			plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+			return true;
+		}
+		if (args.length != 1) {
+			return false;
+		}
+		switch (args[0].toLowerCase()) {
+			case "messages":
+			case "mess":
+			case "mes":
+				try {
+					plugin.loadMessages();
+					plugin.sendMessage(sender, MessageId.cmdReloadMessages);
+				} catch (final IOException e) {
+					plugin.error("An error occured when NWorld tried to load messages.yml", e);
+					plugin.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+				}
+				return true;
+			default:
+				return false;
 		}
 	}
 

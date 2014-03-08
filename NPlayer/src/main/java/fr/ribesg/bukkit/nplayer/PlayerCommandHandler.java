@@ -25,6 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -116,6 +117,25 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 		plugin.debug("Executing command " + command.getName() + " with arguments " + Arrays.toString(args));
 		switch (command.getName()) {
+			case "nplayer":
+				if (args.length < 1) {
+					result = false;
+					break;
+				}
+				switch (args[0].toLowerCase()) {
+					case "reload":
+					case "rld":
+						if (Perms.hasReload(sender)) {
+							result = reloadCommand(sender, args);
+						} else {
+							plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+							result = true;
+						}
+						break;
+					default:
+						result = false;
+				}
+				break;
 			case "login":
 				if (sender instanceof Player) {
 					if (Perms.hasLogin(sender)) {
@@ -203,6 +223,27 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 		plugin.exiting(getClass(), "onCommand");
 		return result;
+	}
+
+	private boolean reloadCommand(final CommandSender sender, final String[] args) {
+		if (args.length != 2) {
+			return false;
+		}
+		switch (args[1].toLowerCase()) {
+			case "messages":
+			case "mess":
+			case "mes":
+				try {
+					plugin.loadMessages();
+					plugin.sendMessage(sender, MessageId.cmdReloadMessages);
+				} catch (final IOException e) {
+					plugin.error("An error occured when NPlayer tried to load messages.yml", e);
+					plugin.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+				}
+				return true;
+			default:
+				return false;
+		}
 	}
 
 	private boolean loginCommand(final Player player, final String[] args) {

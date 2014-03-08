@@ -58,20 +58,25 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 			frame.addLine("Disabling plugin...");
 
 			for (final String s : frame.build()) {
-				getLogger().severe(s);
+				error(s);
 			}
 
 			getPluginLoader().disablePlugin(this);
 		} else /* Everything's ok */ {
 			debugEnabled = core.getPluginConfig().isDebugEnabled(this.getName());
 			if (debugEnabled) {
-				getLogger().info("DEBUG MODE ENABLED!");
+				info("DEBUG MODE ENABLED!");
 			}
 			try {
 				metrics = new Metrics(this);
 				metrics.start();
 			} catch (final IOException e) {
-				e.printStackTrace();
+				error("Failed to initialize Metrics", e);
+			}
+			try {
+				loadMessages();
+			} catch (final IOException e) {
+				error("An error occured when N" + getNodeName() + " tried to load messages.yml", e);
 			}
 			final boolean activationResult = onNodeEnable();
 			if (activationResult) {
@@ -84,6 +89,13 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 			}
 		}
 	}
+
+	/**
+	 * Loads the Messages used by this Node.
+	 *
+	 * @throws IOException if it fails to load this Node's Messages
+	 */
+	protected abstract void loadMessages() throws IOException;
 
 	/**
 	 * Replace the normal {@link org.bukkit.plugin.java.JavaPlugin#onEnable()} method in a normal plugin.

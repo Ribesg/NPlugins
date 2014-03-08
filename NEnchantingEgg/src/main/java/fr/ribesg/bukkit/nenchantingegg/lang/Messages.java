@@ -40,8 +40,8 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", true, null));
 
 		// Command - RELOAD
-		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", true, null));
-		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", true, null));
+		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded!", true, null));
+		newMessages.add(new Message(MessageId.cmdReloadError, "&An error occured while loading %file%!", true, new String[] {"%file%"}));
 
 		// Altars
 		newMessages.add(new Message(MessageId.egg_altarCreated, "&6You feel strange... Dark powers...", true, null));

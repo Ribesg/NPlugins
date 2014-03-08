@@ -41,8 +41,8 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.unknownWorld, "&cUnknown world '%world%'", true, new String[] {"%world%"}));
 
 		// Command - RELOAD
-		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", true, null));
-		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", true, null));
+		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded!", true, null));
+		newMessages.add(new Message(MessageId.cmdReloadError, "&An error occured while loading %file%!", true, new String[] {"%file%"}));
 
 		// Command - WORLD
 		newMessages.add(new Message(MessageId.world_availableWorlds, "&aList of loaded worlds:", true, null));

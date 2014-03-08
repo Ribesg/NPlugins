@@ -44,8 +44,8 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.player_autoLogged, "&aYou have been automatically logged in!", false, null));
 
 		// Command - RELOAD
-		newMessages.add(new Message(MessageId.cmdReloadConfig, "&aConfig reloaded !", true, null));
-		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded !", true, null));
+		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded!", true, null));
+		newMessages.add(new Message(MessageId.cmdReloadError, "&An error occured while loading %file%!", true, new String[] {"%file%"}));
 
 		// Command - PLAYER
 		newMessages.add(new Message(MessageId.player_registerFirst, "&cYou need to register before login!##&cUse the '/register' command", true, null));

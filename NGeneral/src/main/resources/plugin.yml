@@ -10,6 +10,10 @@ load: POSTWORLD
 depend: [NCore]
 
 commands:
+  ngeneral:
+    description: Main plugin command
+    usage: |
+      /<command> reload messages
   god:
     description: GodMode Command
     usage: |

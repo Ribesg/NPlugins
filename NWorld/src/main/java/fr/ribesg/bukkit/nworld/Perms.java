@@ -13,7 +13,6 @@ import org.bukkit.permissions.Permissible;
 
 public class Perms {
 
-	// World node permissions
 	private static final String ADMIN               = "nworld.admin";
 	private static final String USER                = "nworld.user";
 	private static final String CMD_WORLD           = "nworld.cmd.world";
@@ -25,6 +24,7 @@ public class Perms {
 	private static final String CMD_WORLD_SETPERM   = "nworld.cmd.world.setperm";
 	private static final String CMD_WORLD_SETNETHER = "nworld.cmd.world.setnether";
 	private static final String CMD_WORLD_SETEND    = "nworld.cmd.world.setend";
+	private static final String CMD_RELOAD          = "nworld.cmd.reload";
 	private static final String CMD_SPAWN           = "nworld.cmd.spawn";
 	private static final String CMD_SETSPAWN        = "nworld.cmd.setspawn";
 	private static final String CMD_WARP            = "nworld.cmd.warp";
@@ -72,6 +72,10 @@ public class Perms {
 
 	public static boolean hasWorldSetEnd(final Permissible user) {
 		return hasAdmin(user) || user.hasPermission(CMD_WORLD_SETEND);
+	}
+
+	public static boolean hasReload(final Permissible user) {
+		return hasAdmin(user) || user.hasPermission(CMD_RELOAD);
 	}
 
 	public static boolean hasSpawn(final Permissible user) {

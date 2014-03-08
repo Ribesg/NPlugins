@@ -45,20 +45,21 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 	}
 
 	@Override
+	protected void loadMessages() throws IOException {
+		debug("Loading plugin Messages...");
+		if (!getDataFolder().isDirectory()) {
+			getDataFolder().mkdir();
+		}
+
+		final Messages messages = new Messages();
+		messages.loadMessages(this);
+
+		this.messages = messages;
+	}
+
+	@Override
 	public boolean onNodeEnable() {
 		entering(getClass(), "onNodeEnable");
-
-		debug("Loading plugin Messages...");
-		try {
-			if (!getDataFolder().isDirectory()) {
-				getDataFolder().mkdir();
-			}
-			messages = new Messages();
-			messages.loadMessages(this);
-		} catch (final IOException e) {
-			error("An error occured when NTheEndAgain tried to load messages.yml", e);
-			return false;
-		}
 
 		debug("Loading End world config and Chunk data...");
 		worldHandlers = new HashMap<>();

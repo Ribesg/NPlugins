@@ -18,6 +18,7 @@ commands:
       /<command> create <worldName> [seed] [requiredPermission] [hidden] [type]
       /<command> load|unload <worldName>
       /<command> setHidden|setPerm|setNether|setEnd <worldName> <value>
+      /<command> reload messages
   spawn:
     description: Spawn command
     usage: |

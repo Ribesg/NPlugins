@@ -33,7 +33,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 		if (args.length != 1) {
 			return false;
 		} else if (Perms.hasReload(sender)) {
-			switch (args[0]) {
+			switch (args[0].toLowerCase()) {
 				case "regions":
 				case "region":
 					final RegionDb db = RegionDbPersistenceHandler.reloadDb(getPlugin());
@@ -51,9 +51,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 						getPlugin().sendMessage(sender, MessageId.cmdReloadConfig);
 						return true;
 					} catch (final IOException | InvalidConfigurationException e) {
-						getPlugin().getLogger().severe("An error occured, stacktrace follows:");
-						e.printStackTrace();
-						getPlugin().getLogger().severe("This error occured when NCuboid tried to reload config.yml");
+						getPlugin().error("An error occured when NCuboid tried to reload config.yml", e);
 						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "config.yml");
 						return true;
 					}
@@ -61,16 +59,13 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 				case "mess":
 				case "mes":
 					try {
-						getPlugin().getMessages().loadMessages(getPlugin());
+						getPlugin().loadMessages();
 						getPlugin().sendMessage(sender, MessageId.cmdReloadMessages);
-						return true;
 					} catch (final IOException e) {
-						getPlugin().getLogger().severe("An error occured, stacktrace follows:");
-						e.printStackTrace();
-						getPlugin().getLogger().severe("This error occured when NCuboid tried to reload messages.yml");
+						getPlugin().error("An error occured when NCuboid tried to reload messages.yml", e);
 						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
-						return true;
 					}
+					return true;
 				default:
 					return false;
 			}

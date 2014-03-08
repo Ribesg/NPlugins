@@ -15,14 +15,14 @@ import org.bukkit.entity.Player;
 
 public class Perms {
 
-	// Talk node permissions
-	private static final String ADMIN    = "ntalk.admin";
-	private static final String USER     = "ntalk.user";
-	private static final String SPY      = "ntalk.spy";
-	private static final String COLOR    = "ntalk.color";
-	private static final String CMD_PM   = "ntalk.cmd.pm";
-	private static final String CMD_PR   = "ntalk.cmd.pr";
-	private static final String CMD_NICK = "ntalk.cmd.nick";
+	private static final String ADMIN      = "ntalk.admin";
+	private static final String USER       = "ntalk.user";
+	private static final String SPY        = "ntalk.spy";
+	private static final String COLOR      = "ntalk.color";
+	private static final String CMD_RELOAD = "ntalk.cmd.reload";
+	private static final String CMD_PM     = "ntalk.cmd.pm";
+	private static final String CMD_PR     = "ntalk.cmd.pr";
+	private static final String CMD_NICK   = "ntalk.cmd.nick";
 
 	public static boolean hasAdmin(final CommandSender user, final boolean async) {
 		if (async) {
@@ -33,6 +33,10 @@ public class Perms {
 		} else {
 			return user.isOp() || user.hasPermission(ADMIN);
 		}
+	}
+
+	public static boolean hasReload(final CommandSender user) {
+		return hasAdmin(user, false) || user.hasPermission(CMD_RELOAD);
 	}
 
 	public static boolean hasPrivateMessage(final CommandSender user) {

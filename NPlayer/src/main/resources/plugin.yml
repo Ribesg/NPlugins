@@ -11,6 +11,10 @@ depend: [NCore]
 softdepend: [NCuboid, NWorld]
 
 commands:
+  nplayer:
+    description: Main plugin command
+    usage: |
+      /<command> reload messages
   forcelogin:
     decription: Force-login a Player
     aliases: [flogin]

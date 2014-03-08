@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ngeneral;
 
+import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
 import fr.ribesg.bukkit.ngeneral.config.Config;
@@ -16,6 +17,8 @@ import fr.ribesg.bukkit.ngeneral.config.DbConfig;
 import fr.ribesg.bukkit.ngeneral.feature.Features;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
 import fr.ribesg.bukkit.ngeneral.simplefeature.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
@@ -36,25 +39,20 @@ public class NGeneral extends NPlugin implements GeneralNode {
 	}
 
 	@Override
-	protected boolean onNodeEnable() {
-		// Messages first !
-		try {
-			if (!getDataFolder().isDirectory()) {
-				final boolean res = getDataFolder().mkdir();
-				if (!res) {
-					getLogger().severe("Unable to create subfolder in /plugins/");
-					return false;
-				}
-			}
-			messages = new Messages();
-			messages.loadMessages(this);
-		} catch (final IOException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NGeneral tried to load messages.yml");
-			return false;
+	protected void loadMessages() throws IOException {
+		debug("Loading plugin Messages...");
+		if (!getDataFolder().isDirectory()) {
+			getDataFolder().mkdir();
 		}
 
+		final Messages messages = new Messages();
+		messages.loadMessages(this);
+
+		this.messages = messages;
+	}
+
+	@Override
+	protected boolean onNodeEnable() {
 		// Config
 		try {
 			pluginConfig = new Config(this);
@@ -96,6 +94,46 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		new WelcomeListener(this);
 
 		return true;
+	}
+
+	@Override
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+		if (cmd.getName().equals("ngeneral")) {
+			if (args.length < 1) {
+				return false;
+			}
+			switch (args[0].toLowerCase()) {
+				case "reload":
+				case "rld":
+					if (Perms.hasReload(sender)) {
+						if (args.length != 2) {
+							return false;
+						}
+						switch (args[1].toLowerCase()) {
+							case "messages":
+							case "mess":
+							case "mes":
+								try {
+									loadMessages();
+									sendMessage(sender, MessageId.cmdReloadMessages);
+								} catch (final IOException e) {
+									error("An error occured when NPlayer tried to load messages.yml", e);
+									sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+								}
+								return true;
+							default:
+								return false;
+						}
+					} else {
+						sendMessage(sender, MessageId.noPermissionForCommand);
+						return true;
+					}
+				default:
+					return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**

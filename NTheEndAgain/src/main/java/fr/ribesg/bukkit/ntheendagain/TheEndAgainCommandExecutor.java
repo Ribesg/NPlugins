@@ -20,6 +20,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class TheEndAgainCommandExecutor implements CommandExecutor {
@@ -102,6 +103,14 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 
 							}
 						}
+					case "reload":
+					case "rld":
+						if (Perms.hasReload(sender)) {
+							return cmdReload(sender, Arrays.copyOfRange(args, 1, args.length));
+						} else {
+							plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+							return true;
+						}
 					default:
 						plugin.sendMessage(sender, MessageId.theEndAgain_unkownSubCmd, args[0]);
 						return true;
@@ -115,7 +124,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 	private boolean cmdHelp(final CommandSender sender) {
 		// TODO We will create some kind of great Help thing later for the whole NPlugins suite
 		//      Or maybe we will just use the Bukkit /help command...
-		sender.sendMessage("Available subcommands: help, regen, respawn, nb, chunk info, chunk protect, chunk unprotect");
+		sender.sendMessage("Available subcommands: help, regen, respawn, nb, chunk info, chunk protect, chunk unprotect, reload messages");
 		return true;
 	}
 
@@ -247,6 +256,28 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 				plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
 				chunk.setProtected(false);
 				return true;
+			}
+		}
+	}
+
+	private boolean cmdReload(final CommandSender sender, final String[] args) {
+		if (args.length != 1) {
+			return false;
+		} else {
+			switch (args[0].toLowerCase()) {
+				case "messages":
+				case "mess":
+				case "mes":
+					try {
+						plugin.loadMessages();
+						plugin.sendMessage(sender, MessageId.cmdReloadMessages);
+					} catch (final IOException e) {
+						plugin.error("An error occured when NTheEndAgain tried to load messages.yml", e);
+						plugin.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+					}
+					return true;
+				default:
+					return false;
 			}
 		}
 	}

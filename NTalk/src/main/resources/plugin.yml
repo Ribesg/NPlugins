@@ -10,6 +10,10 @@ load: POSTWORLD
 depend: [NCore]
 
 commands:
+  ntalk:
+    description: Main plugin command
+    usage: |
+      /<command> reload messages
   pm:
     description: Private message
     aliases: [m,msg]

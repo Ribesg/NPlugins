@@ -17,6 +17,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,29 +39,67 @@ public class TalkCommandExecutor implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if (command.getName().equalsIgnoreCase("pm")) {
-			if (Perms.hasPrivateMessage(sender)) {
-				return cmdPrivateMessage(sender, args);
-			} else {
-				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-				return true;
-			}
-		} else if (command.getName().equalsIgnoreCase("pr")) {
-			if (Perms.hasPrivateResponse(sender)) {
-				return cmdPrivateResponse(sender, args);
-			} else {
-				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-				return true;
-			}
-		} else if (command.getName().equalsIgnoreCase("nick")) {
-			if (Perms.hasNick(sender)) {
-				return cmdNick(sender, args);
-			} else {
-				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-				return true;
-			}
-		} else {
+		switch (command.getName()) {
+			case "ntalk":
+				if (args.length < 1) {
+					return false;
+				}
+				switch (args[0].toLowerCase()) {
+					case "reload":
+					case "rld":
+						if (Perms.hasReload(sender)) {
+							return cmdReload(sender, args);
+						} else {
+							plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+							return true;
+						}
+					default:
+						return false;
+				}
+			case "pm":
+				if (Perms.hasPrivateMessage(sender)) {
+					return cmdPrivateMessage(sender, args);
+				} else {
+					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					return true;
+				}
+			case "pr":
+				if (Perms.hasPrivateResponse(sender)) {
+					return cmdPrivateResponse(sender, args);
+				} else {
+					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					return true;
+				}
+			case "nick":
+				if (Perms.hasNick(sender)) {
+					return cmdNick(sender, args);
+				} else {
+					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					return true;
+				}
+			default:
+				return false;
+		}
+	}
+
+	private boolean cmdReload(final CommandSender sender, final String[] args) {
+		if (args.length != 2) {
 			return false;
+		}
+		switch (args[1].toLowerCase()) {
+			case "messages":
+			case "mess":
+			case "mes":
+				try {
+					plugin.loadMessages();
+					plugin.sendMessage(sender, MessageId.cmdReloadMessages);
+				} catch (final IOException e) {
+					plugin.error("An error occured when NTalk tried to load messages.yml", e);
+					plugin.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+				}
+				return true;
+			default:
+				return false;
 		}
 	}
 

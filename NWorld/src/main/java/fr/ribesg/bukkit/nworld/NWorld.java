@@ -54,25 +54,20 @@ public class NWorld extends NPlugin implements WorldNode {
 	}
 
 	@Override
-	public boolean onNodeEnable() {
-		// Messages first !
-		try {
-			if (!getDataFolder().isDirectory()) {
-				final boolean res = getDataFolder().mkdir();
-				if (!res) {
-					getLogger().severe("Unable to create subfolder in /plugins/");
-					return false;
-				}
-			}
-			messages = new Messages();
-			messages.loadMessages(this);
-		} catch (final IOException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NWorld tried to load messages.yml");
-			return false;
+	public void loadMessages() throws IOException {
+		debug("Loading plugin Messages...");
+		if (!getDataFolder().isDirectory()) {
+			getDataFolder().mkdir();
 		}
 
+		final Messages messages = new Messages();
+		messages.loadMessages(this);
+
+		this.messages = messages;
+	}
+
+	@Override
+	public boolean onNodeEnable() {
 		worlds = new Worlds();
 		warps = new Warps();
 

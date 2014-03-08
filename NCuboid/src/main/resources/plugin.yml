@@ -11,8 +11,8 @@ depend: [NCore]
 softdepend: [NWorld, dynmap]
 
 commands:
-    cuboid:
+    ncuboid:
         description: General cuboid command
-        aliases: [c,cubo]
+        aliases: [c,cubo,cuboid]
         usage: |
             /<command> help
