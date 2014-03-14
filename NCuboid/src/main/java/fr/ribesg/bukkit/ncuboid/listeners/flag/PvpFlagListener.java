@@ -82,10 +82,10 @@ public class PvpFlagListener extends AbstractListener {
 	public void onPlayerTeleport(final ExtendedPlayerTeleportEvent ext) {
 		final PlayerTeleportEvent event = (PlayerTeleportEvent) ext.getBaseEvent();
 		if (!event.isCancelled()) {
-			if (!ext.getToRegion().getFlag(Flag.PVP_HIDE) && ext.getToRegion().getFlag(Flag.PVP) && !ext.getFromRegions().contains(ext.getToRegion())) {
+			if (!ext.getToRegion().getFlag(Flag.PVP_HIDE) && !ext.getToRegion().getFlag(Flag.PVP) && !ext.getFromRegions().contains(ext.getToRegion())) {
 				// Entering PVP Area
 				getPlugin().sendMessage(event.getPlayer(), MessageId.cuboid_enteringPvpArea, ext.getToRegion().getRegionName());
-			} else if (!ext.getFromRegion().getFlag(Flag.PVP_HIDE) && ext.getFromRegion().getFlag(Flag.PVP) && !ext.getToRegions().contains(ext.getFromRegion())) {
+			} else if (!ext.getFromRegion().getFlag(Flag.PVP_HIDE) && !ext.getFromRegion().getFlag(Flag.PVP) && !ext.getToRegions().contains(ext.getFromRegion())) {
 				// Exiting PVP Area
 				getPlugin().sendMessage(event.getPlayer(), MessageId.cuboid_exitingPvpArea, ext.getFromRegion().getRegionName());
 			}
