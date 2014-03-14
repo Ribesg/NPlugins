@@ -14,7 +14,7 @@ commands:
       /<command> [enable|disable] <nodeName>
   updater:
     description: Updater Command
-    aliases: [u, up]
+    aliases: [update]
     usage: |
       /<command> status|check <nodeName>|all
       /<command> download|dl <nodeName>
