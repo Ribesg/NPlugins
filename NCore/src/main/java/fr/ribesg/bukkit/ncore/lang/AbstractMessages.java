@@ -95,9 +95,15 @@ public abstract class AbstractMessages {
 					final MessageId id = MessageId.valueOf(idString);
 					final Message def = messagesMap.get(id);
 					final ConfigurationSection section = messagesConfig.getConfigurationSection(idString);
-					final String value = section.getString("value", def.getDefaultMessage());
-					final boolean useHeader = section.getBoolean("useHeader", true);
-					messagesMap.put(id, new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), value, def.defaultUseHeader(), useHeader));
+					if (section == null) {
+						plugin.getLogger().warning(idString + "was not found in messages.yml, maybe it's new? Adding default value!");
+					} else if (def == null) {
+						plugin.getLogger().warning(idString + " was found in messages.yml but not in the default messages list for this Node. This is due to the fact that it has been removed from this Node, but not from all Nodes. Removing it from this Node's messages.yml!");
+					} else {
+						final String value = section.getString("value", def.getDefaultMessage());
+						final boolean useHeader = section.getBoolean("useHeader", true);
+						messagesMap.put(id, new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), value, def.defaultUseHeader(), useHeader));
+					}
 				} catch (final IllegalArgumentException e) {
 					plugin.getLogger().warning(idString + " is not / no longer used, removing it from messages config file.");
 				}
