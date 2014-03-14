@@ -71,7 +71,9 @@ public class NListener implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		if (plugin.getWorlds().getStock().containsKey(event.getFrom().getWorld().getName())) {
+
+		final GeneralWorld world = plugin.getWorlds().get(event.getFrom().getWorld().getName());
+		if (GeneralWorld.WorldType.isStock(world)) {
 			plugin.exiting(getClass(), "onEntityUsePortal", "Stock world!");
 			return;
 		}
@@ -103,6 +105,19 @@ public class NListener implements Listener {
 					cause = PlayerTeleportEvent.TeleportCause.PLUGIN;
 				}
 				break;
+		}
+
+		if (world.getType() == GeneralWorld.WorldType.ADDITIONAL) {
+			final AdditionalWorld additionalWorld = (AdditionalWorld) world;
+			if (cause == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL && !additionalWorld.hasNether()) {
+				event.setCancelled(true);
+				plugin.exiting(getClass(), "onEntityUsePortal", "doesn't have required subworld (nether)");
+				return;
+			} else if (cause == PlayerTeleportEvent.TeleportCause.END_PORTAL && !additionalWorld.hasEnd()) {
+				event.setCancelled(true);
+				plugin.exiting(getClass(), "onEntityUsePortal", "doesn't have required subworld (end)");
+				return;
+			}
 		}
 
 		final PortalEventResult result = handlePortalEvent(event.getFrom(), cause, event.getPortalTravelAgent());
