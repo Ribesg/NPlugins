@@ -140,6 +140,26 @@ public class NListener implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onPlayerUsePortal(final PlayerPortalEvent event) {
+		plugin.entering(getClass(), "onPlayerUsePortal", "player=" + event.getPlayer().getName() + ";from=" + NLocation.toString(event.getFrom()) + ";to=" + NLocation.toString(event.getTo()));
+
+		final GeneralWorld world = plugin.getWorlds().get(event.getFrom().getWorld().getName());
+		if (GeneralWorld.WorldType.isStock(world)) {
+			return;
+		}
+
+		if (world.getType() == GeneralWorld.WorldType.ADDITIONAL) {
+			final AdditionalWorld additionalWorld = (AdditionalWorld) world;
+			if (event.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL && !additionalWorld.hasNether()) {
+				event.setCancelled(true);
+				plugin.exiting(getClass(), "onPlayerUsePortal", "doesn't have required subworld (nether)");
+				return;
+			} else if (event.getCause() == PlayerTeleportEvent.TeleportCause.END_PORTAL && !additionalWorld.hasEnd()) {
+				event.setCancelled(true);
+				plugin.exiting(getClass(), "onPlayerUsePortal", "doesn't have required subworld (end)");
+				return;
+			}
+		}
+
 		final PortalEventResult result = handlePortalEvent(event.getFrom(), event.getCause(), event.getPortalTravelAgent());
 		if (result == null) {
 			return;
@@ -153,6 +173,8 @@ public class NListener implements Listener {
 		if (result.cancelEvent) {
 			event.setCancelled(true);
 		}
+
+		plugin.exiting(getClass(), "onPlayerUsePortal");
 	}
 
 	/**
