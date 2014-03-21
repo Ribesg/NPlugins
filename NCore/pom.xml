@@ -117,7 +117,7 @@
 							<show>protected</show>
 							<stylesheet>java</stylesheet>
 							<stylesheetfile>src/main/javadoc/javadoc.css</stylesheetfile>
-							<reportOutputDirectory>/home/www/javadocs.ribesg.fr/</reportOutputDirectory>
+							<reportOutputDirectory>/home/javadoc/javadoc/</reportOutputDirectory>
 							<destDir>${project.name}/${project.version}</destDir>
 						</configuration>
 					</execution>
