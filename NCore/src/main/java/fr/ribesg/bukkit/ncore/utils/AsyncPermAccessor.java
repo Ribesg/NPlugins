@@ -67,7 +67,7 @@ public final class AsyncPermAccessor {
 
 	/**
 	 * Create the unique instance.
-	 * <p/>
+	 * <p>
 	 * Should be called sync.
 	 *
 	 * @param updateDelay the delay between updates, in seconds.

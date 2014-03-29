@@ -66,7 +66,7 @@ public class InventoryUtils {
 	 *
 	 * @param items the items
 	 *
-	 * @return the stacked & sorted items
+	 * @return the stacked and sorted items
 	 */
 	public static ItemStack[] stackKeepSizeAndSort(final ItemStack[] items) {
 		return sort(stackKeepSize(items));
@@ -78,7 +78,7 @@ public class InventoryUtils {
 	 *
 	 * @param items the items
 	 *
-	 * @return the stacked & sorted items
+	 * @return the stacked and sorted items
 	 */
 	public static ItemStack[] stackAndSort(final ItemStack[] items) {
 		return sort(stack(items));

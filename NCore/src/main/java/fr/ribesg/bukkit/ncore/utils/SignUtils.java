@@ -198,7 +198,7 @@ public class SignUtils {
 	/**
 	 * Gets a list of Blocks around the provided Location. Returned blocks
 	 * types are contained in the filter Set if not null.
-	 * <p/>
+	 * <p>
 	 * This is useful for getting all Chest near a Sign for example, but this
 	 * could also be used for anything else.
 	 *
@@ -249,7 +249,7 @@ public class SignUtils {
 	/**
 	 * Gets a list of Blocks around the provided Location. Returned blocks
 	 * types are contained in the filter Set if not null.
-	 * <p/>
+	 * <p>
 	 * This is useful for getting all Chest near a Sign for example, but this
 	 * could also be used for anything else.
 	 *
@@ -265,7 +265,7 @@ public class SignUtils {
 	/**
 	 * Gets a list of Blocks around the provided Location. Returned blocks
 	 * types are contained in the filter Set if not null.
-	 * <p/>
+	 * <p>
 	 * This is useful for getting all Chest near a Sign for example, but this
 	 * could also be used for anything else.
 	 *
@@ -299,7 +299,7 @@ public class SignUtils {
 
 	/**
 	 * Checks if the block at ( x+rX ; y+rY ; z+rZ ) is a Sign. Adds found Sign block to list.
-	 * <p/>
+	 * <p>
 	 * Compared to {@link #checkAddSign(java.util.List, org.bukkit.World, int, int, int, int, int, int)}, this
 	 * method returns a boolean that indicates if the block found was of provided type chestId or not.
 	 * It's used to consider double chest (a Chest next to a Trapped Chest is not a Double Chest).

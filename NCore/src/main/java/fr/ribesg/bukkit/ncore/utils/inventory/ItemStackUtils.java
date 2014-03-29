@@ -37,35 +37,35 @@ public class ItemStackUtils {
 
 	/**
 	 * Create an ItemStack description String from an ItemStack.
-	 * <p/>
+	 * <p>
 	 * Item Description String format: [field][;;field]{5}
 	 * Every field is mandatory but can be empty. First field obviously
 	 * cannot be empty.
-	 * <p/>
+	 * <p>
 	 * List of available fields:
-	 * <p/>
+	 * <p>
 	 * First field:
 	 * - Material name as defined in Bukkit's Material enum
 	 * - Material ID
-	 * <p/>
+	 * <p>
 	 * Second field:
 	 * - Material Data byte
 	 * - Durability
 	 * - Empty for 0
-	 * <p/>
+	 * <p>
 	 * Third field:
 	 * - Amount
-	 * <p/>
+	 * <p>
 	 * Fourth field:
 	 * - List of Enchantments, separated by ','. ID or name as defined in
 	 * Bukkit's Enchantment enum + ':' + level.
-	 * <p/>
+	 * <p>
 	 * Fifth field:
 	 * - Item Name if non-default
-	 * <p/>
+	 * <p>
 	 * Sixth field:
 	 * - Item Lore, list separated by the first 2 chars in the field's String
-	 * <p/>
+	 * <p>
 	 * Seventh field:
 	 * - Special Meta field
 	 *

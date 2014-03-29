@@ -109,7 +109,7 @@ public class ColorUtils {
 	}
 
 	/**
-	 * Removes all types of color codes: Bukkit & NPlugins ones.
+	 * Removes all types of color codes: Bukkit and NPlugins ones.
 	 *
 	 * @param toStrip the String to strip
 	 *
@@ -120,7 +120,7 @@ public class ColorUtils {
 	}
 
 	/**
-	 * Removes all types of color codes: Bukkit & NPlugins ones.
+	 * Removes all types of color codes: Bukkit and NPlugins ones.
 	 *
 	 * @param toStrip the Strings to strip
 	 *
@@ -134,7 +134,7 @@ public class ColorUtils {
 	}
 
 	/**
-	 * Removes all types of color codes: Bukkit & NPlugins ones.
+	 * Removes all types of color codes: Bukkit and NPlugins ones.
 	 *
 	 * @param toStrip the Strings to strip
 	 *

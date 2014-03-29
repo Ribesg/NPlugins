@@ -174,10 +174,10 @@ public class StringUtils {
 
 	/**
 	 * Better split method than String.split(...)
-	 * <p/>
+	 * <p>
 	 * Example:
-	 * ";;;".split(";"); => {}
-	 * splitEmpty(";;;", ";") => {"","","",""}
+	 * ";;;".split(";"); =&gt; {}
+	 * splitEmpty(";;;", ";") =&gt; {"","","",""}
 	 *
 	 * @param string the String to be splitted
 	 * @param split  the separator on which we want to split. Not a regex.

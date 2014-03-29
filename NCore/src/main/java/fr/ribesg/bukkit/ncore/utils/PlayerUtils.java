@@ -29,10 +29,10 @@ public class PlayerUtils {
 
 	/**
 	 * Gets all blocks along the living entity's line of sight.
-	 * <p/>
+	 * <p>
 	 * This list contains all blocks from the living entity's eye position
 	 * to target inclusive.
-	 * <p/>
+	 * <p>
 	 * This is a direct translation of the following deprecated method:
 	 * {@link org.bukkit.entity.LivingEntity#getLineOfSight(java.util.HashSet, int)}
 	 *
@@ -72,7 +72,7 @@ public class PlayerUtils {
 
 	/**
 	 * Gets all blocks along the living entity's line of sight.
-	 * <p/>
+	 * <p>
 	 * This list contains all blocks from the living entity's eye position
 	 * to the block at distance distance inclusive.
 	 *
@@ -97,7 +97,7 @@ public class PlayerUtils {
 
 	/**
 	 * Gets the block that the living entity has targeted.
-	 * <p/>
+	 * <p>
 	 * This is a direct translation of the following deprecated method:
 	 * {@link org.bukkit.entity.LivingEntity#getTargetBlock(java.util.HashSet, int)}
 	 *

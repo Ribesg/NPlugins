@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 /**
  * Defines a new Time format that can be used in commands
- * <p/>
+ * <p>
  * Example command argument: "4d5hours8s"
  * Example obtainable output: 363608 seconds
  *
@@ -237,10 +237,10 @@ public class TimeUtils {
 	/**
 	 * This method parses the provided String and extract the number of seconds it
 	 * represents.
-	 * <p/>
+	 * <p>
 	 * Example input: "4d5hours8s" will return the number of seconds representing
 	 * 4 days + 5 hours + 8 seconds = 363608 seconds
-	 * <p/>
+	 * <p>
 	 * This is the base method for all "getIn***(...)" methods.
 	 *
 	 * @param stringRepresentation a string representation of an amount of time
