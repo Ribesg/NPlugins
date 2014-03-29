@@ -66,6 +66,7 @@ public class Updater {
 		map.put("NCuboid".toLowerCase(), 69596);
 		map.put("NEnchantingEgg".toLowerCase(), 46694);
 		map.put("NGeneral".toLowerCase(), 69595);
+		map.put("NPermissions".toLowerCase(), -1 /* TODO */);
 		map.put("NPlayer".toLowerCase(), 69598);
 		map.put("NTalk".toLowerCase(), 35825);
 		map.put("NTheEndAgain".toLowerCase(), 35931);

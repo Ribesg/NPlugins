@@ -24,6 +24,7 @@
 		<module>NEnchantingEgg</module>
 		<module>NGeneral</module>
 		<module>NPlayer</module>
+		<module>NPermissions</module>
 		<module>NTalk</module>
 		<module>NTheEndAgain</module>
 		<module>NWorld</module>

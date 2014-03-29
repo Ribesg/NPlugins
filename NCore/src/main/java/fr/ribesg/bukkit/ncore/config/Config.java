@@ -49,6 +49,7 @@ public class Config extends AbstractConfig<NCore> {
 		this.checkFor.add("NEnchantingEgg");
 		this.checkFor.add("NGeneral");
 		this.checkFor.add("NPlayer");
+		this.checkFor.add("NPermissions");
 		this.checkFor.add("NTalk");
 		this.checkFor.add("NTheEndAgain");
 		this.checkFor.add("NWorld");

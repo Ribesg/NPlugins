@@ -16,6 +16,7 @@ import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.node.enchantingegg.EnchantingEggNode;
 import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
+import fr.ribesg.bukkit.ncore.node.permissions.PermissionsNode;
 import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
 import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
 import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
@@ -220,6 +221,17 @@ public class NCore extends JavaPlugin {
 			noNodeFound = false;
 		}
 
+		if (get(Node.PERMISSIONS) != null) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PERMISSIONS) {
+
+				@Override
+				public int getValue() {
+					return 1;
+				}
+			});
+			noNodeFound = false;
+		}
+
 		if (get(Node.TALK) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.TALK) {
 
@@ -294,6 +306,10 @@ public class NCore extends JavaPlugin {
 
 	public PlayerNode getPlayerNode() {
 		return (PlayerNode) get(Node.PLAYER);
+	}
+
+	public PermissionsNode getPermissionsNode() {
+		return (PermissionsNode) get(Node.PERMISSIONS);
 	}
 
 	public TalkNode getTalkNode() {
