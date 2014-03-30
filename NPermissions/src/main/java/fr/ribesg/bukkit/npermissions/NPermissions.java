@@ -13,8 +13,11 @@ import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.permissions.PermissionsNode;
 import fr.ribesg.bukkit.npermissions.lang.Messages;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.permissions.PermissionAttachment;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NPermissions extends NPlugin implements PermissionsNode {
 
@@ -24,6 +27,9 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 
 	// Useful Nodes
 	// // None
+
+	// Permissions
+	private Map<String, PermissionAttachment> permissions;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -55,6 +61,9 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 			getLogger().severe("This error occured when NTalk tried to load config.yml");
 			return false;
 		}
+
+		this.permissions = new HashMap<>();
+
 		return true;
 	}
 
