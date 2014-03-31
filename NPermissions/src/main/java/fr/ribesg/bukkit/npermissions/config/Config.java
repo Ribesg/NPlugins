@@ -1,16 +1,17 @@
 /***************************************************************************
  * Project file:    NPlugins - NPermissions - Config.java                  *
- * Full Class name: fr.ribesg.bukkit.npermissions.Config                   *
+ * Full Class name: fr.ribesg.bukkit.npermissions.config.Config            *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.npermissions;
+package fr.ribesg.bukkit.npermissions.config;
 
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.npermissions.NPermissions;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NPermissions> {
@@ -43,7 +44,7 @@ public class Config extends AbstractConfig<NPermissions> {
 		frame.addLine("If you don't understand something, please ask on dev.bukkit.org");
 		frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
 		for (final String line : frame.build()) {
-			content.append(line + '\n');
+			content.append(line).append('\n');
 		}
 
 		// TODO

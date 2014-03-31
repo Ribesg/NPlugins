@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.npermissions;
 
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.permissions.PermissionsNode;
+import fr.ribesg.bukkit.npermissions.config.Config;
 import fr.ribesg.bukkit.npermissions.lang.Messages;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.permissions.PermissionAttachment;

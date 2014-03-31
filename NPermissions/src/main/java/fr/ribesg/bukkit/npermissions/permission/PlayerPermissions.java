@@ -10,10 +10,13 @@
 package fr.ribesg.bukkit.npermissions.permission;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Represents the Permissions attached to a Player.
@@ -125,13 +128,42 @@ public class PlayerPermissions extends PermissionsSet {
 	 * @see PermissionsSet#computeAllowedPermissions(java.util.Set)
 	 */
 	@Override
-	public Set<String> computeAllowedPermissions(Set<String> resultSet) {
-		resultSet = this.mainGroup.computeAllowedPermissions(resultSet);
+	public Set<String> computeAllowedPermissions(final Set<String> resultSet) {
+		// Create some nice data structure
+		final SortedMap<Integer, Set<PermissionsSet>> prioritizedPermissions = new TreeMap<>();
+
+		// Populate it with all the things
+		Set<PermissionsSet> set = new HashSet<>();
+		set.add(this.mainGroup);
+		prioritizedPermissions.put(this.mainGroup.getPriority(), set);
+
 		for (final GroupPermissions g : this.groups.values()) {
-			resultSet = g.computeAllowedPermissions(resultSet);
+			set = prioritizedPermissions.get(g.getPriority());
+			if (set == null) {
+				set = new HashSet<>();
+			}
+			set.add(g);
+			prioritizedPermissions.put(g.getPriority(), set);
 		}
-		resultSet.addAll(this.allow);
-		resultSet.removeAll(this.deny);
+
+		set = prioritizedPermissions.get(this.getPriority());
+		if (set == null) {
+			set = new HashSet<>();
+		}
+		set.add(this);
+		prioritizedPermissions.put(this.getPriority(), set);
+
+		// For each priority level, allows are added THEN denies are removed,
+		// overriding lower priority action if needed
+		for (final Set<PermissionsSet> permsSet : prioritizedPermissions.values()) {
+			for (final PermissionsSet perms : permsSet) {
+				resultSet.addAll(perms.getComputedAllowed());
+			}
+			for (final PermissionsSet perms : permsSet) {
+				resultSet.removeAll(perms.getComputedDenied());
+			}
+		}
+
 		return resultSet;
 	}
 
@@ -141,12 +173,42 @@ public class PlayerPermissions extends PermissionsSet {
 	 * @see PermissionsSet#computeDeniedPermissions(java.util.Set)
 	 */
 	@Override
-	public Set<String> computeDeniedPermissions(Set<String> resultSet) {
-		resultSet = this.mainGroup.computeDeniedPermissions(resultSet);
+	public Set<String> computeDeniedPermissions(final Set<String> resultSet) {
+		// Create some nice data structure
+		final SortedMap<Integer, Set<PermissionsSet>> prioritizedPermissions = new TreeMap<>();
+
+		// Populate it with all the things
+		Set<PermissionsSet> set = new HashSet<>();
+		set.add(this.mainGroup);
+		prioritizedPermissions.put(this.mainGroup.getPriority(), set);
+
 		for (final GroupPermissions g : this.groups.values()) {
-			resultSet = g.computeDeniedPermissions(resultSet);
+			set = prioritizedPermissions.get(g.getPriority());
+			if (set == null) {
+				set = new HashSet<>();
+			}
+			set.add(g);
+			prioritizedPermissions.put(g.getPriority(), set);
 		}
-		resultSet.addAll(this.deny);
+
+		set = prioritizedPermissions.get(this.getPriority());
+		if (set == null) {
+			set = new HashSet<>();
+		}
+		set.add(this);
+		prioritizedPermissions.put(this.getPriority(), set);
+
+		// For each priority level, allows are added THEN denies are removed,
+		// overriding lower priority action if needed
+		for (final Set<PermissionsSet> permsSet : prioritizedPermissions.values()) {
+			for (final PermissionsSet perms : permsSet) {
+				resultSet.removeAll(perms.getComputedAllowed());
+			}
+			for (final PermissionsSet perms : permsSet) {
+				resultSet.addAll(perms.getComputedDenied());
+			}
+		}
+
 		return resultSet;
 	}
 }

@@ -38,14 +38,26 @@ public abstract class PermissionsSet {
 	protected final int priority;
 
 	/**
-	 * Permissions allowed by this Permissions Set
+	 * Permissions explicitly allowed by this Permissions Set
 	 */
 	protected final Set<String> allow;
 
 	/**
-	 * Permissions denied by this Permissions Set
+	 * Permissions explicitly denied by this Permissions Set
 	 */
 	protected final Set<String> deny;
+
+	/**
+	 * Permissions explicitly allowed by this Permissions Set and/or
+	 * any dependency of this PermissionsSet
+	 */
+	protected Set<String> computedAllowed;
+
+	/**
+	 * Permissions explicitly denied by this Permissions Set and/or
+	 * any dependency of this PermissionsSet
+	 */
+	protected Set<String> computedDenied;
 
 	/**
 	 * Permissions Set constructor.
@@ -100,6 +112,17 @@ public abstract class PermissionsSet {
 	}
 
 	/**
+	 * Gets the computed Set of permissions this PermissionSet and/or all
+	 * dependencies of this PermissionsSet explicitly allow.
+	 *
+	 * @return the computed Set of permissions this PermissionSet and/or all
+	 * dependencies of this PermissionsSet explicitly allow
+	 */
+	public Set<String> getComputedAllowed() {
+		return this.computedAllowed;
+	}
+
+	/**
 	 * Adds a new denied Permission to this Permissions Set.
 	 * <p>
 	 * Note: any permission that is already allowed by this Permissions Set
@@ -118,6 +141,17 @@ public abstract class PermissionsSet {
 			this.allow.remove(lowerCasedPerm);
 			this.deny.add(lowerCasedPerm);
 		}
+	}
+
+	/**
+	 * Gets the computed Set of permissions this PermissionSet and/or all
+	 * dependencies of this PermissionsSet explicitly deny.
+	 *
+	 * @return the computed Set of permissions this PermissionSet and/or all
+	 * dependencies of this PermissionsSet explicitly deny
+	 */
+	public Set<String> getComputedDenied() {
+		return this.computedDenied;
 	}
 
 	/**
@@ -148,9 +182,6 @@ public abstract class PermissionsSet {
 	 * <p>
 	 * Certain implementations of this may be a bit heavy due to having to
 	 * browse through dependency of this PermissionsSet.
-	 * <p>
-	 * TODO: Cache this, to prevent recalculating it when calculating
-	 *       Player things
 	 *
 	 * @return a Set of permissions that this PermissionsSet explicitly
 	 * allows
@@ -165,9 +196,6 @@ public abstract class PermissionsSet {
 	 * <p>
 	 * Certain implementations of this may be a bit heavy due to having to
 	 * browse through dependency of this PermissionsSet.
-	 * <p>
-	 * TODO: Cache this, to prevent recalculating it when calculating
-	 *       Player things
 	 *
 	 * @return a Set of permissions that this PermissionsSet explicitly
 	 * denies
