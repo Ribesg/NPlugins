@@ -14,7 +14,6 @@ import fr.ribesg.bukkit.ncore.common.collection.pairlist.PairList;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.ncore.utils.StringUtils;
-import fr.ribesg.bukkit.ncore.utils.YamlConfigUtils;
 import fr.ribesg.bukkit.ncore.utils.inventory.InventoryUtilException;
 import fr.ribesg.bukkit.ncore.utils.inventory.ItemStackUtils;
 import org.bukkit.Material;
@@ -627,7 +626,8 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("# Example drop table:\n");
 		content.append("#\n");
 		try {
-			final ConfigurationSection dummySection = YamlConfigUtils.createDummyConfigurationSection("dropTable");
+			final YamlConfiguration dummyConfig = new YamlConfiguration();
+			final ConfigurationSection dummySection = dummyConfig.createSection("dropTable");
 			final ConfigurationSection exampleDropSection = dummySection.createSection("drop1");
 			final ItemStack is = new ItemStack(Material.DIAMOND_SWORD);
 			final ItemMeta meta = is.getItemMeta();
@@ -636,20 +636,21 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 			is.setItemMeta(meta);
 			exampleDropSection.set("probability", 0.25);
 			ItemStackUtils.saveToConfigSection(exampleDropSection, "itemStack", is);
-			content.append(StringUtils.prependLines(YamlConfigUtils.printConfigurationSection(dummySection), "# "));
+			content.append(StringUtils.prependLines(dummyConfig.saveToString(), "# "));
 		} catch (final InventoryUtilException e) {
 			plugin.error("Failed to save example ItemStack!", e);
 		}
 		content.append("\n");
 		try {
-			final ConfigurationSection dummySection = YamlConfigUtils.createDummyConfigurationSection("dropTable");
+			final YamlConfiguration dummyConfig = new YamlConfiguration();
+			final ConfigurationSection dummySection = dummyConfig.createSection("dropTable");
 			int i = 0;
 			for (final Pair<ItemStack, Float> p : dropTable) {
 				final ConfigurationSection exampleDropSection = dummySection.createSection("drop" + ++i);
 				exampleDropSection.set("probability", p.getValue());
 				ItemStackUtils.saveToConfigSection(exampleDropSection, "itemStack", p.getKey());
 			}
-			content.append(YamlConfigUtils.printConfigurationSection(dummySection));
+			content.append(dummyConfig.saveToString());
 		} catch (final InventoryUtilException e) {
 			plugin.error("Failed to save DropTable!", e);
 		}
