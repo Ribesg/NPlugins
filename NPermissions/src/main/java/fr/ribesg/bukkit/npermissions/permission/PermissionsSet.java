@@ -8,7 +8,10 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.permission;
+import org.bukkit.configuration.ConfigurationSection;
+
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -62,7 +65,7 @@ public abstract class PermissionsSet {
 	 *
 	 * @return the name of this Permissions Set
 	 */
-	public String getName() {
+	protected String getName() {
 		return this.name;
 	}
 
@@ -118,28 +121,78 @@ public abstract class PermissionsSet {
 	}
 
 	/**
-	 * Checks if this Permissions Set explicitly allows a Permission.
+	 * Saves this PermissionsSet priority (if non-default), allow and deny
+	 * permissions list under the provided ConfigurationSection.
 	 *
-	 * @param permission the Permission to check
-	 *
-	 * @return true if this Permissions Set explicitly allows the provided
-	 * Permission, false otherwise
+	 * @param thisSection the ConfigurationSection under which this
+	 *                    PermissionsSet's informations will be saved
 	 */
-	public boolean allows(final String permission) {
-		// We don't have to check for the deny Set because a permission
-		// can't be in both Sets.
-		return this.allow.contains(permission.toLowerCase());
+	protected void save(final ConfigurationSection thisSection) {
+		if (this.priority != this.getDefaultPriority()) {
+			thisSection.set("priority", this.priority);
+		}
+		thisSection.set("allow", new LinkedList<>(this.allow));
+		thisSection.set("deny", new LinkedList<>(this.deny));
 	}
 
 	/**
-	 * Checks if this Permissions Set explicitly denies a Permission.
+	 * Gets the default priority for this PermissionsSet.
 	 *
-	 * @param permission the Permission to check
-	 *
-	 * @return true if this Permissions Set explicitly denies the provided
-	 * Permission, false otherwise
+	 * @return 0 for a Group, 1 for a Player
 	 */
-	public boolean denies(final String permission) {
-		return this.deny.contains(permission.toLowerCase());
+	protected abstract int getDefaultPriority();
+
+	/**
+	 * Compute a Set of permissions that this PermissionsSet explicitly
+	 * allows.
+	 * <p>
+	 * Certain implementations of this may be a bit heavy due to having to
+	 * browse through dependency of this PermissionsSet.
+	 * <p>
+	 * TODO: Cache this, to prevent recalculating it when calculating
+	 *       Player things
+	 *
+	 * @return a Set of permissions that this PermissionsSet explicitly
+	 * allows
+	 */
+	public Set<String> computeAllowedPermissions() {
+		return computeAllowedPermissions(new HashSet<String>());
 	}
+
+	/**
+	 * Compute a Set of permissions that this PermissionsSet explicitly
+	 * denies.
+	 * <p>
+	 * Certain implementations of this may be a bit heavy due to having to
+	 * browse through dependency of this PermissionsSet.
+	 * <p>
+	 * TODO: Cache this, to prevent recalculating it when calculating
+	 *       Player things
+	 *
+	 * @return a Set of permissions that this PermissionsSet explicitly
+	 * denies
+	 */
+	public Set<String> computeDeniedPermissions() {
+		return computeDeniedPermissions(new HashSet<String>());
+	}
+
+	/**
+	 * This is the method that should be implemented to compute allowed
+	 * Permissions for this PermissionsSet based on subtype.
+	 *
+	 * @param resultSet the resultSet to provision
+	 *
+	 * @return the same resultSet, update with local information
+	 */
+	protected abstract Set<String> computeAllowedPermissions(Set<String> resultSet);
+
+	/**
+	 * This is the method that should be implemented to compute denied
+	 * Permissions for this PermissionsSet based on subtype.
+	 *
+	 * @param resultSet the resultSet to provision
+	 *
+	 * @return the same resultSet, update with local information
+	 */
+	protected abstract Set<String> computeDeniedPermissions(Set<String> resultSet);
 }
