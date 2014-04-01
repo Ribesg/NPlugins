@@ -10,9 +10,8 @@
 package fr.ribesg.bukkit.npermissions.permission;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -22,12 +21,15 @@ import java.util.Set;
  */
 public class GroupPermissions extends PermissionsSet {
 
+	/**
+	 * The default priority for groups is 0
+	 */
 	private static final int DEFAULT_GROUP_PRIORITY = 0;
 
 	/**
 	 * A Collection of all N+1 Groups in this Group's hierarchy
 	 */
-	private final Map<String, GroupPermissions> superGroups;
+	private final Set<String> superGroups;
 
 	/**
 	 * Group Permissions constructor.
@@ -35,12 +37,13 @@ public class GroupPermissions extends PermissionsSet {
 	 * This constructor will also add the group.groupname Permission to
 	 * this Permissions Set.
 	 *
+	 * @param manager   the Permissions Manager
 	 * @param groupName the name of this Group
 	 * @param priority  the priority of this Permissions Set
 	 */
-	public GroupPermissions(final String groupName, final int priority) {
-		super(groupName, priority);
-		this.superGroups = new LinkedHashMap<>();
+	public GroupPermissions(final PermissionsManager manager, final String groupName, final int priority) {
+		super(manager, groupName, priority);
+		this.superGroups = new LinkedHashSet<>();
 
 		// Add this Group's permission
 		this.allow.add("group." + groupName.toLowerCase());
@@ -58,10 +61,10 @@ public class GroupPermissions extends PermissionsSet {
 	/**
 	 * Adds a N+1 Group in this Group's hierarchy.
 	 *
-	 * @param groupPermissions the N+1 Group to add
+	 * @param group the N+1 Group to add
 	 */
-	public void addSuperGroup(final GroupPermissions groupPermissions) {
-		this.superGroups.put(groupPermissions.name, groupPermissions);
+	public void addSuperGroup(final String group) {
+		this.superGroups.add(group);
 	}
 
 	/**
@@ -74,7 +77,7 @@ public class GroupPermissions extends PermissionsSet {
 	@Override
 	public void save(final ConfigurationSection parentSection) {
 		final ConfigurationSection thisSection = parentSection.createSection(this.name);
-		thisSection.set("extends", new LinkedList<>(this.superGroups.keySet()));
+		thisSection.set("extends", new LinkedList<>(this.superGroups));
 		super.save(thisSection);
 	}
 
@@ -93,8 +96,9 @@ public class GroupPermissions extends PermissionsSet {
 	 */
 	@Override
 	public Set<String> computeAllowedPermissions(Set<String> resultSet) {
-		for (final GroupPermissions g : this.superGroups.values()) {
-			resultSet = g.computeAllowedPermissions(resultSet);
+		for (final String groupName : this.superGroups) {
+			final GroupPermissions group = manager.getGroups().get(groupName);
+			resultSet = group.computeAllowedPermissions(resultSet);
 		}
 		resultSet.addAll(this.allow);
 		resultSet.removeAll(this.deny);
@@ -108,8 +112,9 @@ public class GroupPermissions extends PermissionsSet {
 	 */
 	@Override
 	public Set<String> computeDeniedPermissions(Set<String> resultSet) {
-		for (final GroupPermissions g : this.superGroups.values()) {
-			resultSet = g.computeDeniedPermissions(resultSet);
+		for (final String groupName : this.superGroups) {
+			final GroupPermissions group = manager.getGroups().get(groupName);
+			resultSet = group.computeDeniedPermissions(resultSet);
 		}
 		resultSet.addAll(this.deny);
 		return resultSet;

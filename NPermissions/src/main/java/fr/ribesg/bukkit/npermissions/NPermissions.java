@@ -12,7 +12,10 @@ package fr.ribesg.bukkit.npermissions;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.permissions.PermissionsNode;
 import fr.ribesg.bukkit.npermissions.config.Config;
+import fr.ribesg.bukkit.npermissions.config.Groups;
+import fr.ribesg.bukkit.npermissions.config.Players;
 import fr.ribesg.bukkit.npermissions.lang.Messages;
+import fr.ribesg.bukkit.npermissions.permission.PermissionsManager;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.permissions.PermissionAttachment;
 
@@ -25,11 +28,14 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 	// Configs
 	private Messages messages;
 	private Config   pluginConfig;
+	private Groups   groupsConfig;
+	private Players  playersConfig;
 
 	// Useful Nodes
 	// // None
 
 	// Permissions
+	private PermissionsManager                manager;
 	private Map<String, PermissionAttachment> permissions;
 
 	@Override
@@ -57,13 +63,30 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 			pluginConfig = new Config(this);
 			pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NTalk tried to load config.yml");
+			error("An error occured when NPermissions tried to load config.yml", e);
 			return false;
 		}
 
+		this.manager = new PermissionsManager(this);
 		this.permissions = new HashMap<>();
+
+		// Groups
+		try {
+			groupsConfig = new Groups(this);
+			groupsConfig.loadConfig("groups.yml");
+		} catch (final IOException | InvalidConfigurationException e) {
+			error("An error occured when NPermissions tried to load groups.yml", e);
+			return false;
+		}
+
+		// Players
+		try {
+			playersConfig = new Players(this);
+			playersConfig.loadConfig("players.yml");
+		} catch (final IOException | InvalidConfigurationException e) {
+			error("An error occured when NPermissions tried to load players.yml", e);
+			return false;
+		}
 
 		return true;
 	}
@@ -87,6 +110,10 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 
 	public Config getPluginConfig() {
 		return pluginConfig;
+	}
+
+	public PermissionsManager getManager() {
+		return manager;
 	}
 
 	// API for other nodes

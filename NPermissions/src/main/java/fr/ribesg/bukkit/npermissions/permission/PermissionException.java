@@ -17,14 +17,30 @@ package fr.ribesg.bukkit.npermissions.permission;
  */
 public class PermissionException extends Exception {
 
+	/**
+	 * PermissionException constructor with a message.
+	 *
+	 * @param message the message of this Exception
+	 */
 	public PermissionException(final String message) {
 		super(message);
 	}
 
+	/**
+	 * PermissionException constructor with a message and a cause.
+	 *
+	 * @param message the message of this Exception
+	 * @param cause   the cause of this Exception
+	 */
 	public PermissionException(final String message, final Throwable cause) {
 		super(message, cause);
 	}
 
+	/**
+	 * PermissionException constructor with a cause.
+	 *
+	 * @param cause the cause of this Exception
+	 */
 	public PermissionException(final Throwable cause) {
 		super(cause);
 	}

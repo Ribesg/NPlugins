@@ -11,12 +11,12 @@ package fr.ribesg.bukkit.npermissions.permission;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.UUID;
 
 /**
  * Represents the Permissions attached to a Player.
@@ -25,41 +25,45 @@ import java.util.TreeMap;
  */
 public class PlayerPermissions extends PermissionsSet {
 
+	/**
+	 * The default priority for players is 1
+	 */
 	private static final int DEFAULT_PLAYER_PRIORITY = 1;
 
 	/**
 	 * This Player's UUID
 	 */
-	private final String playerUuid;
+	private final UUID playerUuid;
 
 	/**
 	 * The main group of attached to this Player
 	 */
-	private GroupPermissions mainGroup;
+	private String mainGroup;
 
 	/**
 	 * Groups this Player belongs to, not counting the main one
 	 */
-	private final Map<String, GroupPermissions> groups;
+	private final Set<String> groups;
 
 	/**
 	 * Player Permissions constructor.
-	 * <p>
+	 * <p/>
 	 * This constructor will also add the maingroup.groupname Permission to
 	 * this Permissions Set.
 	 *
+	 * @param manager    the Permissions Manager
 	 * @param playerUuid the Universally Unique Identifier of the Player
 	 * @param playerName the last known name of the Player
 	 * @param priority   the priority of this Permissions Set
 	 * @param mainGroup  the main Group of the Player
 	 */
-	public PlayerPermissions(final String playerUuid, final String playerName, final int priority, final GroupPermissions mainGroup) {
-		super(playerName, priority);
+	public PlayerPermissions(final PermissionsManager manager, final UUID playerUuid, final String playerName, final int priority, final String mainGroup) {
+		super(manager, playerName, priority);
 		this.playerUuid = playerUuid;
 		this.mainGroup = mainGroup;
-		this.groups = new LinkedHashMap<>();
+		this.groups = new LinkedHashSet<>();
 
-		this.allow.add("maingroup." + mainGroup.getGroupName().toLowerCase());
+		this.allow.add("maingroup." + mainGroup.toLowerCase());
 	}
 
 	/**
@@ -67,8 +71,17 @@ public class PlayerPermissions extends PermissionsSet {
 	 *
 	 * @return the Player's Universally Unique Identifier
 	 */
-	public String getPlayerUuid() {
+	public UUID getPlayerUuid() {
 		return this.playerUuid;
+	}
+
+	/**
+	 * Gets the name of the Player this PlayerPermissions represents.
+	 *
+	 * @return the name of the Player this PlayerPermissions represents
+	 */
+	public String getPlayerName() {
+		return this.getName();
 	}
 
 	/**
@@ -76,7 +89,7 @@ public class PlayerPermissions extends PermissionsSet {
 	 *
 	 * @return the main Group Permissions Set for this Player
 	 */
-	public GroupPermissions getMainGroup() {
+	public String getMainGroup() {
 		return this.mainGroup;
 	}
 
@@ -85,17 +98,26 @@ public class PlayerPermissions extends PermissionsSet {
 	 *
 	 * @param mainGroup the new main Group Permissions Set for this Player
 	 */
-	public void setMainGroup(final GroupPermissions mainGroup) {
+	public void setMainGroup(final String mainGroup) {
 		this.mainGroup = mainGroup;
 	}
 
 	/**
 	 * Adds a Group to the Groups for this Player
 	 *
-	 * @param groupPermissions a new additional Group for this Player
+	 * @param group a new additional Group for this Player
 	 */
-	public void addGroup(final GroupPermissions groupPermissions) {
-		this.groups.put(groupPermissions.name, groupPermissions);
+	public void addGroup(final String group) {
+		this.groups.add(group);
+	}
+
+	/**
+	 * Gets the Groups for this Player, main Group excluded.
+	 *
+	 * @return the Groups for this Player, main Group excluded
+	 */
+	public Set<String> getGroups() {
+		return groups;
 	}
 
 	/**
@@ -107,10 +129,10 @@ public class PlayerPermissions extends PermissionsSet {
 	 */
 	@Override
 	public void save(final ConfigurationSection parentSection) {
-		final ConfigurationSection thisSection = parentSection.createSection(this.playerUuid);
+		final ConfigurationSection thisSection = parentSection.createSection(this.playerUuid.toString());
 		thisSection.set("playerName", this.name);
-		thisSection.set("mainGroup", this.mainGroup.getGroupName());
-		thisSection.set("groups", new LinkedList<>(this.groups.keySet()));
+		thisSection.set("mainGroup", this.mainGroup);
+		thisSection.set("groups", new LinkedList<>(this.groups));
 		super.save(thisSection);
 	}
 
@@ -123,8 +145,6 @@ public class PlayerPermissions extends PermissionsSet {
 	}
 
 	/**
-	 * TODO: handle priorities
-	 *
 	 * @see PermissionsSet#computeAllowedPermissions(java.util.Set)
 	 */
 	@Override
@@ -133,17 +153,19 @@ public class PlayerPermissions extends PermissionsSet {
 		final SortedMap<Integer, Set<PermissionsSet>> prioritizedPermissions = new TreeMap<>();
 
 		// Populate it with all the things
+		final GroupPermissions mainGroupPermissionsSet = this.manager.getGroups().get(this.mainGroup);
 		Set<PermissionsSet> set = new HashSet<>();
-		set.add(this.mainGroup);
-		prioritizedPermissions.put(this.mainGroup.getPriority(), set);
+		set.add(mainGroupPermissionsSet);
+		prioritizedPermissions.put(mainGroupPermissionsSet.getPriority(), set);
 
-		for (final GroupPermissions g : this.groups.values()) {
-			set = prioritizedPermissions.get(g.getPriority());
+		for (final String groupName : this.groups) {
+			final GroupPermissions group = this.manager.getGroups().get(groupName);
+			set = prioritizedPermissions.get(group.getPriority());
 			if (set == null) {
 				set = new HashSet<>();
 			}
-			set.add(g);
-			prioritizedPermissions.put(g.getPriority(), set);
+			set.add(group);
+			prioritizedPermissions.put(group.getPriority(), set);
 		}
 
 		set = prioritizedPermissions.get(this.getPriority());
@@ -168,8 +190,6 @@ public class PlayerPermissions extends PermissionsSet {
 	}
 
 	/**
-	 * TODO: handle priorities
-	 *
 	 * @see PermissionsSet#computeDeniedPermissions(java.util.Set)
 	 */
 	@Override
@@ -178,17 +198,19 @@ public class PlayerPermissions extends PermissionsSet {
 		final SortedMap<Integer, Set<PermissionsSet>> prioritizedPermissions = new TreeMap<>();
 
 		// Populate it with all the things
+		final GroupPermissions mainGroupPermissionsSet = this.manager.getGroups().get(this.mainGroup);
 		Set<PermissionsSet> set = new HashSet<>();
-		set.add(this.mainGroup);
-		prioritizedPermissions.put(this.mainGroup.getPriority(), set);
+		set.add(mainGroupPermissionsSet);
+		prioritizedPermissions.put(mainGroupPermissionsSet.getPriority(), set);
 
-		for (final GroupPermissions g : this.groups.values()) {
-			set = prioritizedPermissions.get(g.getPriority());
+		for (final String groupName : this.groups) {
+			final GroupPermissions group = this.manager.getGroups().get(groupName);
+			set = prioritizedPermissions.get(group.getPriority());
 			if (set == null) {
 				set = new HashSet<>();
 			}
-			set.add(g);
-			prioritizedPermissions.put(g.getPriority(), set);
+			set.add(group);
+			prioritizedPermissions.put(group.getPriority(), set);
 		}
 
 		set = prioritizedPermissions.get(this.getPriority());

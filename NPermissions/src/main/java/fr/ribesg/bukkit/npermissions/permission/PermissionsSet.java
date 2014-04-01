@@ -11,7 +11,9 @@ package fr.ribesg.bukkit.npermissions.permission;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -25,7 +27,12 @@ public abstract class PermissionsSet {
 	/**
 	 * A regex matching any String starting with 'group.' of 'maingroup.'.
 	 */
-	private static final Pattern DENIED_PERMISSIONS_REGEX = Pattern.compile("^(?:main)?group\\.");
+	private static final Pattern DENIED_PERMISSIONS_REGEX = Pattern.compile("^(?:main)?group\\..*$");
+
+	/**
+	 * The Permissions Manager
+	 */
+	protected final PermissionsManager manager;
 
 	/**
 	 * The name of this Permissions Set
@@ -62,10 +69,12 @@ public abstract class PermissionsSet {
 	/**
 	 * Permissions Set constructor.
 	 *
+	 * @param manager  the Permissions Manager
 	 * @param name     the name of this Permissions Set
 	 * @param priority the priority of this Permissions Set
 	 */
-	protected PermissionsSet(final String name, final int priority) {
+	protected PermissionsSet(final PermissionsManager manager, final String name, final int priority) {
+		this.manager = manager;
 		this.name = name;
 		this.priority = priority;
 		this.allow = new HashSet<>();
@@ -165,8 +174,28 @@ public abstract class PermissionsSet {
 		if (this.priority != this.getDefaultPriority()) {
 			thisSection.set("priority", this.priority);
 		}
-		thisSection.set("allow", new LinkedList<>(this.allow));
-		thisSection.set("deny", new LinkedList<>(this.deny));
+
+		final List<String> allowList = new LinkedList<>(this.allow);
+		final Iterator<String> itAllow = allowList.iterator();
+		while (itAllow.hasNext()) {
+			if (DENIED_PERMISSIONS_REGEX.matcher(itAllow.next()).matches()) {
+				itAllow.remove();
+			}
+		}
+		if (allowList.size() > 0) {
+			thisSection.set("allow", new LinkedList<>(allowList));
+		}
+
+		final List<String> denyList = new LinkedList<>(this.deny);
+		final Iterator<String> itDeny = allowList.iterator();
+		while (itDeny.hasNext()) {
+			if (DENIED_PERMISSIONS_REGEX.matcher(itDeny.next()).matches()) {
+				itDeny.remove();
+			}
+		}
+		if (denyList.size() > 0) {
+			thisSection.set("deny", new LinkedList<>(denyList));
+		}
 	}
 
 	/**

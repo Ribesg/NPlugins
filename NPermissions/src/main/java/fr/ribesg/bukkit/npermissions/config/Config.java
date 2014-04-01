@@ -16,10 +16,15 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NPermissions> {
 
+	private String defaultGroup;
+
+	/**
+	 *
+	 * @param instance
+	 */
 	public Config(final NPermissions instance) {
 		super(instance);
-
-		// TODO
+		this.defaultGroup = "user";
 	}
 
 	/**
@@ -27,7 +32,7 @@ public class Config extends AbstractConfig<NPermissions> {
 	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
-		// TODO
+		this.defaultGroup = config.getString("defaultGroup", "user");
 	}
 
 	/**
@@ -47,7 +52,8 @@ public class Config extends AbstractConfig<NPermissions> {
 			content.append(line).append('\n');
 		}
 
-		// TODO
+		// TODO add some doc comment before this
+		content.append("defaultGroup: ").append(this.defaultGroup).append("\n\n");
 
 		return content.toString();
 	}

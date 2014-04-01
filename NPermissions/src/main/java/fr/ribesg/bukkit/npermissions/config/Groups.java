@@ -13,6 +13,8 @@ import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
 import fr.ribesg.bukkit.npermissions.NPermissions;
 import fr.ribesg.bukkit.npermissions.permission.GroupPermissions;
 import fr.ribesg.bukkit.npermissions.permission.PermissionException;
+import fr.ribesg.bukkit.npermissions.permission.PermissionsManager;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -24,26 +26,68 @@ import java.util.logging.Level;
 /** @author Ribesg */
 public class Groups extends AbstractConfig<NPermissions> {
 
-	private final Map<String, GroupPermissions> groups;
+	/**
+	 * Default NPlugins simple permissions: admin and user prefixes
+	 */
+	private static final String[] DEFAULT_PERMISSIONS_PREFIXES = new String[] {
+			"ncuboid.",
+			"nenchantingegg.",
+			"ngeneral.",
+			"npermissions.",
+			"nplayer.",
+			"ntalk.",
+			"ntheendagain.",
+			"nworld."
+	};
 
+	/**
+	 * The Permissions Manager
+	 */
+	private final PermissionsManager manager;
+
+	/**
+	 * Groups config constructor.
+	 *
+	 * @param instance the NPermissions plugin instance
+	 */
 	public Groups(final NPermissions instance) {
 		super(instance);
-		this.groups = new LinkedHashMap<>();
+		this.manager = instance.getManager();
+
+		final GroupPermissions user = new GroupPermissions(this.manager, "user", 0);
+		final GroupPermissions admin = new GroupPermissions(this.manager, "admin", 0);
+		final GroupPermissions example = new GroupPermissions(this.manager, "example", 0);
+		try {
+			for (final String permPrefix : DEFAULT_PERMISSIONS_PREFIXES) {
+				user.addAllow(permPrefix + "user");
+				admin.addAllow(permPrefix + "admin");
+			}
+		} catch (final PermissionException e) {
+			plugin.error(e.getMessage(), e);
+		}
+		admin.addSuperGroup("user");
+
+		this.manager.getGroups().put(user.getGroupName(), user);
+		this.manager.getGroups().put(admin.getGroupName(), admin);
+		this.manager.getGroups().put(example.getGroupName(), example);
 	}
 
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
+		this.manager.getGroups().clear();
+
 		final Map<GroupPermissions, List<String>> inheritanceMap = new LinkedHashMap<>();
 
 		for (final String key : config.getKeys(false)) {
 			if (!config.isConfigurationSection(key)) {
 				plugin.error(Level.WARNING, "Unknown key '" + key + "' found in groups.yml, ignored");
 			} else {
-				final int priority = config.getInt("priority", 0);
-				final List<String> extendsList = config.getStringList("extends");
-				final List<String> allow = config.getStringList("allow");
-				final List<String> deny = config.getStringList("deny");
-				final GroupPermissions group = new GroupPermissions(key, priority);
+				final ConfigurationSection groupSection = config.getConfigurationSection(key);
+				final int priority = groupSection.getInt("priority", 0);
+				final List<String> extendsList = groupSection.getStringList("extends");
+				final List<String> allow = groupSection.getStringList("allow");
+				final List<String> deny = groupSection.getStringList("deny");
+				final GroupPermissions group = new GroupPermissions(this.manager, key, priority);
 
 				for (final String allowedPermission : allow) {
 					try {
@@ -62,24 +106,24 @@ public class Groups extends AbstractConfig<NPermissions> {
 				}
 
 				inheritanceMap.put(group, extendsList);
-				this.groups.put(key, group);
+				this.manager.getGroups().put(key, group);
 			}
 		}
 
 		for (final GroupPermissions group : inheritanceMap.keySet()) {
 			final List<String> extendsList = inheritanceMap.get(group);
 			for (final String superGroupName : extendsList) {
-				final GroupPermissions superGroup = this.groups.get(superGroupName);
+				final GroupPermissions superGroup = this.manager.getGroups().get(superGroupName);
 				if (superGroup == null) {
 					plugin.error("Group '" + group.getGroupName() + "' references unknown supergroup '" + superGroupName + "'");
 				} else {
-					group.addSuperGroup(superGroup);
+					group.addSuperGroup(superGroupName);
 				}
 			}
 		}
 
 		// Compute group perms
-		for (final GroupPermissions group : this.groups.values()) {
+		for (final GroupPermissions group : this.manager.getGroups().values()) {
 			group.getComputedAllowed();
 			group.getComputedDenied();
 		}
@@ -98,12 +142,18 @@ public class Groups extends AbstractConfig<NPermissions> {
 		for (final String line : frame.build()) {
 			content.append(line).append('\n');
 		}
+		content.append('\n');
 
-		final YamlConfiguration dummySection = new YamlConfiguration();
-		for (final GroupPermissions group : this.groups.values()) {
+		// TODO print some (commented) example before
+
+		for (final GroupPermissions group : this.manager.getGroups().values()) {
+			content.append("# The group '" + group.getGroupName() + "', also defines the following permissions:\n");
+			content.append("# - group." + group.getGroupName().toLowerCase() + " - For members of this group AND members of subgroups\n");
+			content.append("# - maingroup." + group.getGroupName().toLowerCase() + " - For players for whom this group is the main group (unique per player)\n");
+			final YamlConfiguration dummySection = new YamlConfiguration();
 			group.save(dummySection);
+			content.append(dummySection.saveToString()).append("\n\n");
 		}
-		content.append(dummySection.saveToString()).append('\n');
 
 		return content.toString();
 	}
