@@ -9,7 +9,10 @@
 
 package fr.ribesg.bukkit.npermissions.permission;
 import fr.ribesg.bukkit.npermissions.NPermissions;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -38,6 +41,8 @@ public class PermissionsManager {
 	 */
 	private final Map<UUID, PlayerPermissions> players;
 
+	private final Map<UUID, PermissionAttachment> attachmentMap;
+
 	/**
 	 * Permissions Manager constructor.
 	 *
@@ -47,6 +52,7 @@ public class PermissionsManager {
 		this.plugin = instance;
 		this.groups = new LinkedHashMap<>();
 		this.players = new LinkedHashMap<>();
+		this.attachmentMap = new HashMap<>();
 	}
 
 	/**
@@ -74,5 +80,44 @@ public class PermissionsManager {
 	 */
 	public Map<UUID, PlayerPermissions> getPlayers() {
 		return this.players;
+	}
+
+	/**
+	 * TODO
+	 * @param player
+	 */
+	public void registerPlayer(final Player player) {
+		final Map<String, Boolean> permissions = this.players.get(player.getUniqueId()).getComputedPermissions();
+		final PermissionAttachment playerPermissions = new PermissionAttachment(plugin, player);
+		for (final Map.Entry<String, Boolean> e : permissions.entrySet()) {
+			playerPermissions.setPermission(e.getKey(), e.getValue());
+		}
+	}
+
+	/**
+	 * TODO
+	 * @param player
+	 */
+	public void unRegisterPlayer(final Player player) {
+		final UUID playerUuid = player.getUniqueId();
+		final PermissionAttachment playerAttachment = this.attachmentMap.get(playerUuid);
+		if (playerAttachment != null) {
+			playerAttachment.remove();
+			this.attachmentMap.remove(playerUuid);
+		}
+	}
+
+	/**
+	 * TODO
+	 * @param player
+	 */
+	public void unRegisterPlayerForWorld(final Player player) {
+		final UUID playerUuid = player.getUniqueId();
+		final PermissionAttachment playerAttachment = this.attachmentMap.get(playerUuid);
+		if (playerAttachment == null) {
+			throw new IllegalStateException();
+		} else {
+			// TODO
+		}
 	}
 }

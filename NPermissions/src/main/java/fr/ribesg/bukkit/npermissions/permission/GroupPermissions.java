@@ -12,6 +12,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -46,7 +47,7 @@ public class GroupPermissions extends PermissionsSet {
 		this.superGroups = new LinkedHashSet<>();
 
 		// Add this Group's permission
-		this.allow.add("group." + groupName.toLowerCase());
+		this.permissions.put("group." + groupName.toLowerCase(), true);
 	}
 
 	/**
@@ -92,31 +93,15 @@ public class GroupPermissions extends PermissionsSet {
 	/**
 	 * Priorities does not count vertically.
 	 *
-	 * @see PermissionsSet#computeAllowedPermissions(java.util.Set)
+	 * @see PermissionsSet#computePermissions(java.util.Map)
 	 */
 	@Override
-	public Set<String> computeAllowedPermissions(Set<String> resultSet) {
+	public Map<String, Boolean> computePermissions(Map<String, Boolean> resultMap) {
 		for (final String groupName : this.superGroups) {
 			final GroupPermissions group = manager.getGroups().get(groupName);
-			resultSet = group.computeAllowedPermissions(resultSet);
+			resultMap = group.computePermissions(resultMap);
 		}
-		resultSet.addAll(this.allow);
-		resultSet.removeAll(this.deny);
-		return resultSet;
-	}
-
-	/**
-	 * Priorities does not count vertically.
-	 *
-	 * @see PermissionsSet#computeDeniedPermissions(java.util.Set)
-	 */
-	@Override
-	public Set<String> computeDeniedPermissions(Set<String> resultSet) {
-		for (final String groupName : this.superGroups) {
-			final GroupPermissions group = manager.getGroups().get(groupName);
-			resultSet = group.computeDeniedPermissions(resultSet);
-		}
-		resultSet.addAll(this.deny);
-		return resultSet;
+		resultMap.putAll(this.permissions);
+		return resultMap;
 	}
 }

@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class Groups extends AbstractConfig<NPermissions> {
 
 	/**
@@ -59,8 +61,8 @@ public class Groups extends AbstractConfig<NPermissions> {
 		final GroupPermissions example = new GroupPermissions(this.manager, "example", 0);
 		try {
 			for (final String permPrefix : DEFAULT_PERMISSIONS_PREFIXES) {
-				user.addAllow(permPrefix + "user");
-				admin.addAllow(permPrefix + "admin");
+				user.add(permPrefix + "user", true);
+				admin.add(permPrefix + "admin", true);
 			}
 		} catch (final PermissionException e) {
 			plugin.error(e.getMessage(), e);
@@ -91,17 +93,17 @@ public class Groups extends AbstractConfig<NPermissions> {
 
 				for (final String allowedPermission : allow) {
 					try {
-						group.addAllow(allowedPermission);
+						group.add(allowedPermission, true);
 					} catch (final PermissionException e) {
-						plugin.error(e.getMessage(), e);
+						plugin.error("Error while loading group '" + key + "': " + e.getMessage(), e);
 					}
 				}
 
 				for (final String deniedPermission : deny) {
 					try {
-						group.addDeny(deniedPermission);
+						group.add(deniedPermission, false);
 					} catch (final PermissionException e) {
-						plugin.error(e.getMessage(), e);
+						plugin.error("Error while loading group '" + key + "': " + e.getMessage(), e);
 					}
 				}
 
@@ -120,12 +122,6 @@ public class Groups extends AbstractConfig<NPermissions> {
 					group.addSuperGroup(superGroupName);
 				}
 			}
-		}
-
-		// Compute group perms
-		for (final GroupPermissions group : this.manager.getGroups().values()) {
-			group.getComputedAllowed();
-			group.getComputedDenied();
 		}
 	}
 

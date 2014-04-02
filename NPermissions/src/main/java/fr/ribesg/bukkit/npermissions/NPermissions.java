@@ -17,11 +17,8 @@ import fr.ribesg.bukkit.npermissions.config.Players;
 import fr.ribesg.bukkit.npermissions.lang.Messages;
 import fr.ribesg.bukkit.npermissions.permission.PermissionsManager;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.permissions.PermissionAttachment;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class NPermissions extends NPlugin implements PermissionsNode {
 
@@ -36,7 +33,6 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 
 	// Permissions
 	private PermissionsManager                manager;
-	private Map<String, PermissionAttachment> permissions;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -68,7 +64,6 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 		}
 
 		this.manager = new PermissionsManager(this);
-		this.permissions = new HashMap<>();
 
 		// Groups
 		try {

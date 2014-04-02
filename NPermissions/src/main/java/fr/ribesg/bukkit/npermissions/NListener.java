@@ -8,7 +8,10 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 /**
  * NPermissions Listener. Binds PermissionAttachments to
@@ -32,5 +35,39 @@ public class NListener implements Listener {
 		this.plugin = instance;
 	}
 
-	// TODO Attach! Detach!
+	/**
+	 * Registers the player as soon as he logins to be able to do some
+	 * Permissions checks in the PlayerLoginEvent.
+	 *
+	 * @param event the PlayerLoginEvent
+	 */
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerLoginFirst(final PlayerLoginEvent event) {
+		this.plugin.getManager().registerPlayer(event.getPlayer());
+	}
+
+	/**
+	 * Unregisters the player if the login failed.
+	 *
+	 * @param event the PlayerLoginEvent
+	 */
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerLoginLast(final PlayerLoginEvent event) {
+		if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
+			this.plugin.getManager().unRegisterPlayer(event.getPlayer());
+		}
+	}
+
+	/**
+	 * Update permissions for Player now that we now in which world he is.
+	 * XXX: Per-world permissions will be done later.
+	 *
+	 * @param event the PlayerJoinEvent
+	 */
+	/*
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerJoin(final PlayerJoinEvent event) {
+		this.plugin.getManager().registerPlayerForWorld(event.getPlayer());
+	}
+	*/
 }

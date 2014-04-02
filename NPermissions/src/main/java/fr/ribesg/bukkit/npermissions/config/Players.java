@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class Players extends AbstractConfig<NPermissions> {
 
 	/**
@@ -41,8 +43,8 @@ public class Players extends AbstractConfig<NPermissions> {
 
 		final PlayerPermissions notch = new PlayerPermissions(this.manager, UUID.fromString("069a79f4-44e9-4726-a5be-fca90e38aaf5"), "Notch", 1, "admin");
 		try {
-			notch.addAllow("world.rule");
-			notch.addDeny("mojang.sell");
+			notch.add("world.rule", true);
+			notch.add("mojang.sell", true);
 		} catch (final PermissionException e) {
 			plugin.error(e.getMessage(), e);
 		}
@@ -75,17 +77,17 @@ public class Players extends AbstractConfig<NPermissions> {
 
 				for (final String allowedPermission : allow) {
 					try {
-						player.addAllow(allowedPermission);
+						player.add(allowedPermission, true);
 					} catch (final PermissionException e) {
-						plugin.error(e.getMessage(), e);
+						plugin.error("Error while loading player '" + playerName + "' (" + key + "): " + e.getMessage(), e);
 					}
 				}
 
 				for (final String deniedPermission : deny) {
 					try {
-						player.addDeny(deniedPermission);
+						player.add(deniedPermission, false);
 					} catch (final PermissionException e) {
-						plugin.error(e.getMessage(), e);
+						plugin.error("Error while loading player '" + playerName + "' (" + key + "): " + e.getMessage(), e);
 					}
 				}
 
@@ -99,12 +101,6 @@ public class Players extends AbstractConfig<NPermissions> {
 
 				this.manager.getPlayers().put(uuid, player);
 			}
-		}
-
-		// Compute group perms
-		for (final PlayerPermissions player : this.manager.getPlayers().values()) {
-			player.getComputedAllowed();
-			player.getComputedDenied();
 		}
 	}
 

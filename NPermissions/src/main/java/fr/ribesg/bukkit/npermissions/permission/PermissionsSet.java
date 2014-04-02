@@ -10,11 +10,11 @@
 package fr.ribesg.bukkit.npermissions.permission;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -45,26 +45,15 @@ public abstract class PermissionsSet {
 	protected final int priority;
 
 	/**
-	 * Permissions explicitly allowed by this Permissions Set
+	 * Permissions explicitly allowed or denied by this Permissions Set
 	 */
-	protected final Set<String> allow;
+	protected final Map<String, Boolean> permissions;
 
 	/**
-	 * Permissions explicitly denied by this Permissions Set
+	 * Permissions explicitly allowed or denied by this Permissions Set
+	 * and/or any dependency of this PermissionsSet
 	 */
-	protected final Set<String> deny;
-
-	/**
-	 * Permissions explicitly allowed by this Permissions Set and/or
-	 * any dependency of this PermissionsSet
-	 */
-	protected Set<String> computedAllowed;
-
-	/**
-	 * Permissions explicitly denied by this Permissions Set and/or
-	 * any dependency of this PermissionsSet
-	 */
-	protected Set<String> computedDenied;
+	protected Map<String, Boolean> computedPermissions;
 
 	/**
 	 * Permissions Set constructor.
@@ -77,8 +66,7 @@ public abstract class PermissionsSet {
 		this.manager = manager;
 		this.name = name;
 		this.priority = priority;
-		this.allow = new HashSet<>();
-		this.deny = new HashSet<>();
+		this.permissions = new LinkedHashMap<>();
 	}
 
 	/**
@@ -100,67 +88,34 @@ public abstract class PermissionsSet {
 	}
 
 	/**
-	 * Adds a new allowed Permission to this Permissions Set.
-	 * <p>
-	 * Note: any permission that is already denied by this Permissions Set
-	 * will not be added.
+	 * Adds a new allowed or denied Permission to this Permissions Set.
 	 *
-	 * @param permission the allowed Permission to add to this Permissions
-	 *                   Set
+	 * @param permission the allowed or denied Permission to add to this
+	 *                   Permissions Set
 	 *
-	 * @throws PermissionException if it's an attempt to register an internal permission
+	 * @throws PermissionException if it's an attempt to register an
+	 *                             internal permission or if there's a
+	 *                             duplicate permission declaration
 	 */
-	public void addAllow(final String permission) throws PermissionException {
-		final String lowerCasedPerm = permission.toLowerCase();
-		if (DENIED_PERMISSIONS_REGEX.matcher(lowerCasedPerm).matches()) {
-			throw new PermissionException("Attempt to register internal permission '" + lowerCasedPerm + "'");
-		} else if (!this.deny.contains(lowerCasedPerm)) {
-			this.allow.add(permission.toLowerCase());
-		}
-
-	}
-
-	/**
-	 * Gets the computed Set of permissions this PermissionSet and/or all
-	 * dependencies of this PermissionsSet explicitly allow.
-	 *
-	 * @return the computed Set of permissions this PermissionSet and/or all
-	 * dependencies of this PermissionsSet explicitly allow
-	 */
-	public Set<String> getComputedAllowed() {
-		return this.computedAllowed;
-	}
-
-	/**
-	 * Adds a new denied Permission to this Permissions Set.
-	 * <p>
-	 * Note: any permission that is already allowed by this Permissions Set
-	 * will be added to the denied Permissions and removed from the allowed
-	 * Permissions.
-	 *
-	 * @param permission the denied Permission to add to this Permissions Set
-	 *
-	 * @throws PermissionException if it's an attempt to register an internal permission
-	 */
-	public void addDeny(final String permission) throws PermissionException {
+	public void add(final String permission, final boolean value) throws PermissionException {
 		final String lowerCasedPerm = permission.toLowerCase();
 		if (DENIED_PERMISSIONS_REGEX.matcher(lowerCasedPerm).matches()) {
 			throw new PermissionException("Attempt to register internal permission '" + lowerCasedPerm + "'");
 		} else {
-			this.allow.remove(lowerCasedPerm);
-			this.deny.add(lowerCasedPerm);
+			final Boolean currentValue = this.permissions.get(lowerCasedPerm);
+			if (currentValue == null) {
+				this.permissions.put(lowerCasedPerm, value);
+			} else {
+				if (currentValue != value) {
+					this.permissions.put(lowerCasedPerm, false);
+					throw new PermissionException("Permission '" + lowerCasedPerm + "' is both allowed and denied. Setting to denied.");
+				} else {
+					this.permissions.put(lowerCasedPerm, value);
+					throw new PermissionException("Permission '" + lowerCasedPerm + "' is set to " + value + " twice. Duplicate will be removed");
+				}
+			}
 		}
-	}
 
-	/**
-	 * Gets the computed Set of permissions this PermissionSet and/or all
-	 * dependencies of this PermissionsSet explicitly deny.
-	 *
-	 * @return the computed Set of permissions this PermissionSet and/or all
-	 * dependencies of this PermissionsSet explicitly deny
-	 */
-	public Set<String> getComputedDenied() {
-		return this.computedDenied;
 	}
 
 	/**
@@ -175,23 +130,20 @@ public abstract class PermissionsSet {
 			thisSection.set("priority", this.priority);
 		}
 
-		final List<String> allowList = new LinkedList<>(this.allow);
-		final Iterator<String> itAllow = allowList.iterator();
-		while (itAllow.hasNext()) {
-			if (DENIED_PERMISSIONS_REGEX.matcher(itAllow.next()).matches()) {
-				itAllow.remove();
+		final List<String> allowList = new LinkedList<>();
+		final List<String> denyList = new LinkedList<>();
+		for (final Map.Entry<String, Boolean> e : this.permissions.entrySet()) {
+			if (!DENIED_PERMISSIONS_REGEX.matcher(e.getKey()).matches()) {
+				if (e.getValue()) {
+					allowList.add(e.getKey());
+				} else {
+					denyList.add(e.getKey());
+				}
 			}
-		}
-		if (allowList.size() > 0) {
-			thisSection.set("allow", new LinkedList<>(allowList));
 		}
 
-		final List<String> denyList = new LinkedList<>(this.deny);
-		final Iterator<String> itDeny = allowList.iterator();
-		while (itDeny.hasNext()) {
-			if (DENIED_PERMISSIONS_REGEX.matcher(itDeny.next()).matches()) {
-				itDeny.remove();
-			}
+		if (allowList.size() > 0) {
+			thisSection.set("allow", new LinkedList<>(allowList));
 		}
 		if (denyList.size() > 0) {
 			thisSection.set("deny", new LinkedList<>(denyList));
@@ -205,51 +157,31 @@ public abstract class PermissionsSet {
 	 */
 	protected abstract int getDefaultPriority();
 
-	/**
-	 * Compute a Set of permissions that this PermissionsSet explicitly
-	 * allows.
-	 * <p>
-	 * Certain implementations of this may be a bit heavy due to having to
-	 * browse through dependency of this PermissionsSet.
-	 *
-	 * @return a Set of permissions that this PermissionsSet explicitly
-	 * allows
-	 */
-	public Set<String> computeAllowedPermissions() {
-		return computeAllowedPermissions(new HashSet<String>());
+	public Map<String, Boolean> getComputedPermissions() {
+		if (this.computedPermissions == null) {
+			this.computePermissions();
+		}
+		return this.computedPermissions;
 	}
 
 	/**
-	 * Compute a Set of permissions that this PermissionsSet explicitly
-	 * denies.
+	 * Compute a Map of permissions that this PermissionsSet explicitly
+	 * allows or denies.
 	 * <p>
 	 * Certain implementations of this may be a bit heavy due to having to
 	 * browse through dependency of this PermissionsSet.
-	 *
-	 * @return a Set of permissions that this PermissionsSet explicitly
-	 * denies
 	 */
-	public Set<String> computeDeniedPermissions() {
-		return computeDeniedPermissions(new HashSet<String>());
+	public void computePermissions() {
+		this.computedPermissions = computePermissions(new HashMap<String, Boolean>());
 	}
-
-	/**
-	 * This is the method that should be implemented to compute allowed
-	 * Permissions for this PermissionsSet based on subtype.
-	 *
-	 * @param resultSet the resultSet to provision
-	 *
-	 * @return the same resultSet, update with local information
-	 */
-	protected abstract Set<String> computeAllowedPermissions(Set<String> resultSet);
 
 	/**
 	 * This is the method that should be implemented to compute denied
 	 * Permissions for this PermissionsSet based on subtype.
 	 *
-	 * @param resultSet the resultSet to provision
+	 * @param resultMap the resultMap to provision
 	 *
-	 * @return the same resultSet, update with local information
+	 * @return the same resultMap, update with local information
 	 */
-	protected abstract Set<String> computeDeniedPermissions(Set<String> resultSet);
+	protected abstract Map<String, Boolean> computePermissions(Map<String, Boolean> resultMap);
 }
