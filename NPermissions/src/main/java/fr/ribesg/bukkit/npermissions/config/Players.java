@@ -64,7 +64,7 @@ public class Players extends AbstractConfig<NPermissions> {
 				final UUID uuid = UUID.fromString(key);
 				final String playerName = playerSection.getString("playerName");
 				final String mainGroup = playerSection.getString("mainGroup");
-				final int priority = playerSection.getInt("priority", 0);
+				final int priority = playerSection.getInt("priority", 1);
 				final List<String> groups = playerSection.getStringList("groups");
 				final List<String> allow = playerSection.getStringList("allow");
 				final List<String> deny = playerSection.getStringList("deny");

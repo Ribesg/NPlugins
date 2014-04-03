@@ -16,7 +16,9 @@ import fr.ribesg.bukkit.npermissions.config.Groups;
 import fr.ribesg.bukkit.npermissions.config.Players;
 import fr.ribesg.bukkit.npermissions.lang.Messages;
 import fr.ribesg.bukkit.npermissions.permission.PermissionsManager;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
 
@@ -32,7 +34,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 	// // None
 
 	// Permissions
-	private PermissionsManager                manager;
+	private PermissionsManager manager;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -82,6 +84,9 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 			error("An error occured when NPermissions tried to load players.yml", e);
 			return false;
 		}
+
+		final PluginManager pm = Bukkit.getPluginManager();
+		pm.registerEvents(new NListener(this), this);
 
 		return true;
 	}

@@ -19,7 +19,6 @@ public class Config extends AbstractConfig<NPermissions> {
 	private String defaultGroup;
 
 	/**
-	 *
 	 * @param instance
 	 */
 	public Config(final NPermissions instance) {
@@ -56,5 +55,9 @@ public class Config extends AbstractConfig<NPermissions> {
 		content.append("defaultGroup: ").append(this.defaultGroup).append("\n\n");
 
 		return content.toString();
+	}
+
+	public String getDefaultGroup() {
+		return this.defaultGroup;
 	}
 }

@@ -84,18 +84,27 @@ public class PermissionsManager {
 
 	/**
 	 * TODO
+	 *
 	 * @param player
 	 */
 	public void registerPlayer(final Player player) {
-		final Map<String, Boolean> permissions = this.players.get(player.getUniqueId()).getComputedPermissions();
-		final PermissionAttachment playerPermissions = new PermissionAttachment(plugin, player);
+		final UUID playerUuid = player.getUniqueId();
+		PlayerPermissions playerPermissionsSet = this.players.get(playerUuid);
+		if (playerPermissionsSet == null) {
+			playerPermissionsSet = new PlayerPermissions(this, playerUuid, player.getName(), 1, plugin.getPluginConfig().getDefaultGroup());
+			this.players.put(playerUuid, playerPermissionsSet);
+		}
+		final Map<String, Boolean> permissions = playerPermissionsSet.getComputedPermissions();
+		final PermissionAttachment playerPermissions = player.addAttachment(plugin);
 		for (final Map.Entry<String, Boolean> e : permissions.entrySet()) {
 			playerPermissions.setPermission(e.getKey(), e.getValue());
 		}
+		this.attachmentMap.put(playerUuid, playerPermissions);
 	}
 
 	/**
 	 * TODO
+	 *
 	 * @param player
 	 */
 	public void unRegisterPlayer(final Player player) {
@@ -109,6 +118,7 @@ public class PermissionsManager {
 
 	/**
 	 * TODO
+	 *
 	 * @param player
 	 */
 	public void unRegisterPlayerForWorld(final Player player) {

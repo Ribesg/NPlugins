@@ -65,6 +65,7 @@ public class PlayerPermissions extends PermissionsSet {
 		this.groups = new LinkedHashSet<>();
 
 		this.permissions.put("maingroup." + mainGroup.toLowerCase(), true);
+		this.permissions.put("group." + mainGroup.toLowerCase(), true);
 	}
 
 	/**
@@ -133,7 +134,9 @@ public class PlayerPermissions extends PermissionsSet {
 		final ConfigurationSection thisSection = parentSection.createSection(this.playerUuid.toString());
 		thisSection.set("playerName", this.name);
 		thisSection.set("mainGroup", this.mainGroup);
-		thisSection.set("groups", new LinkedList<>(this.groups));
+		if (this.groups.size() > 0) {
+			thisSection.set("groups", new LinkedList<>(this.groups));
+		}
 		super.save(thisSection);
 	}
 
@@ -176,11 +179,19 @@ public class PlayerPermissions extends PermissionsSet {
 		set.add(this);
 		prioritizedPermissions.put(this.getPriority(), set);
 
-		// For each priority level, allows are added THEN denies are removed,
-		// overriding lower priority action if needed
-		for (final Set<PermissionsSet> permsSet : prioritizedPermissions.values()) {
-			for (final PermissionsSet perms : permsSet) {
-				resultMap.putAll(perms.getComputedPermissions());
+		for (final Map.Entry<Integer, Set<PermissionsSet>> entry : prioritizedPermissions.entrySet()) {
+			if (entry.getKey() == this.getPriority()) {
+				for (final PermissionsSet perms : entry.getValue()) {
+					if (perms == this) {
+						resultMap.putAll(this.permissions);
+					} else {
+						resultMap.putAll(perms.getComputedPermissions());
+					}
+				}
+			} else {
+				for (final PermissionsSet perms : entry.getValue()) {
+					resultMap.putAll(perms.getComputedPermissions());
+				}
 			}
 		}
 
