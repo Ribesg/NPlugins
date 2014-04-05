@@ -118,6 +118,18 @@ public class EndWorldHandler {
 
 		if (config.getRespawnType() == 3) {
 			respawnHandler.respawnNoRegen();
+		} else if (config.getRespawnType() == 6) {
+			if (config.getNextRespawnTaskTime() > System.currentTimeMillis()) {
+				tasks.add(Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+
+					@Override
+					public void run() {
+						respawnHandler.respawn();
+					}
+				}, config.getNextRespawnTaskTime() / 1000 * 20));
+			} else {
+				respawnHandler.respawn();
+			}
 		}
 
 		tasks.add(new UnexpectedDragonDeathHandlerTask(this).schedule(getPlugin()));

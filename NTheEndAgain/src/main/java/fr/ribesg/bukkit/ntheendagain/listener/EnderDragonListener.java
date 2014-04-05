@@ -33,6 +33,7 @@ import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -106,7 +107,7 @@ public class EnderDragonListener implements Listener {
 						final Map<String, Integer> xpMap = new HashMap<>(dmgMap.size());
 						for (final Entry<String, Double> entry : dmgMap.entrySet()) {
 							final int reward = (int) (config.getEdExpReward() * entry.getValue() / totalDamages);
-							xpMap.put(entry.getKey(), Math.min(reward,config.getEdExpReward()));
+							xpMap.put(entry.getKey(), Math.min(reward, config.getEdExpReward()));
 						}
 
 						// Call event for external plugins to be able to play with this map
@@ -356,14 +357,21 @@ public class EnderDragonListener implements Listener {
 				handler.getLoadedDragons().remove(event.getEntity().getUniqueId());
 
 				// Handle on-ED-death regen/respawn
-				boolean willRespawn = false;
 				if (config.getRespawnType() == 1) {
-					willRespawn = true;
-				} else if (config.getRespawnType() == 2 && handler.getNumberOfAliveEnderDragons() == 0) {
-					willRespawn = true;
-				}
-				if (willRespawn) {
 					handler.getRespawnHandler().respawnLater();
+				} else if (handler.getNumberOfAliveEnderDragons() == 0) {
+					if (config.getRespawnType() == 2) {
+						handler.getRespawnHandler().respawnLater();
+					} else if (config.getRespawnType() == 6) {
+						config.setNextRespawnTaskTime(System.currentTimeMillis() + config.getRandomRespawnTimer() * 1000);
+						handler.getTasks().add(Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+
+							@Override
+							public void run() {
+								handler.getRespawnHandler().respawn();
+							}
+						}, config.getNextRespawnTaskTime() / 1000 * 20));
+					}
 				}
 			}
 		}

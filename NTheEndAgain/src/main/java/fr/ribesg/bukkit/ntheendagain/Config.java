@@ -274,7 +274,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		}
 
 		setRespawnType(config.getInt("respawnType", DEFAULT_respawnType));
-		if (!match(getRegenType(), 0, 5)) {
+		if (!match(getRegenType(), 0, 6)) {
 			wrongValue(fileName, "respawnType", getRespawnType(), DEFAULT_respawnType);
 			setRespawnType(DEFAULT_respawnType);
 		}
@@ -569,6 +569,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#       3: On server start.\n");
 		content.append("#       4: Periodic - From load time. Respawn every X seconds after boot/load.\n");
 		content.append("#       5: Periodic - Persistent. Respawn every X seconds, persistent through reboots/reloads\n");
+		content.append("#       6: NEW - Respawn every X seconds after the last Dragon alive's death, persistent through reboots/reloads\n");
 		content.append("#\n");
 		content.append("respawnType: " + getRespawnType() + "\n\n");
 
