@@ -55,6 +55,7 @@ public class NCore extends JavaPlugin {
 	private Metrics           metrics;
 	private Config            pluginConfig;
 	private Updater           updater;
+	private boolean debugEnabled = false;
 
 	@Override
 	public void onEnable() {
@@ -72,6 +73,11 @@ public class NCore extends JavaPlugin {
 			pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
 			logger.log(Level.SEVERE, "An error occured when NCore tried to load config.yml", e);
+		}
+
+		if (pluginConfig.getDebugEnabled().contains(getName())) {
+			this.debugEnabled = true;
+			info("DEBUG MODE ENABLED!");
 		}
 
 		this.nodes = new HashMap<>();
@@ -106,30 +112,39 @@ public class NCore extends JavaPlugin {
 				final String header = "" + ChatColor.DARK_GRAY + ChatColor.BOLD + "DEBUG " + ChatColor.RESET;
 				final String nodeName = args[args.length - 1];
 				final Plugin plugin = Bukkit.getPluginManager().getPlugin(nodeName);
-				if (plugin == null || !(plugin instanceof NPlugin)) {
+				if (plugin == null || (!(plugin instanceof NPlugin) && plugin != this)) {
 					sender.sendMessage(header + ChatColor.RED + "'" + nodeName + "' is unknown or unloaded!");
 				} else {
-					final NPlugin nPlugin = (NPlugin) plugin;
 					final boolean value;
-					if (args.length == 1) {
-						value = !nPlugin.isDebugEnabled();
+					if (plugin == this) {
+						if (args.length == 1) {
+							value = !isDebugEnabled();
+						} else {
+							value = Boolean.parseBoolean(args[0]);
+						}
+						setDebugEnabled(value);
 					} else {
-						value = Boolean.parseBoolean(args[0]);
+						final NPlugin nPlugin = (NPlugin) plugin;
+						if (args.length == 1) {
+							value = !nPlugin.isDebugEnabled();
+						} else {
+							value = Boolean.parseBoolean(args[0]);
+						}
+						nPlugin.setDebugEnabled(value);
 					}
-					nPlugin.setDebugEnabled(value);
 					sender.sendMessage(header + ChatColor.GREEN + "'" + nodeName + "' now has debug mode " + ChatColor.GOLD +
 					                   (value ? "enabled" : "disabled") + ChatColor.GREEN + "!");
 					try {
 						final List<String> debugEnabledList = pluginConfig.getDebugEnabled();
 						if (value) {
-							debugEnabledList.add(nPlugin.getName());
+							debugEnabledList.add(plugin.getName());
 						} else {
-							debugEnabledList.remove(nPlugin.getName());
+							debugEnabledList.remove(plugin.getName());
 						}
 						pluginConfig.loadConfig();
 						pluginConfig.setDebugEnabled(debugEnabledList);
 						pluginConfig.writeConfig();
-					} catch (InvalidConfigurationException | IOException ignored) {
+					} catch (final InvalidConfigurationException | IOException ignored) {
 						// Not a real problem
 					}
 				}
@@ -338,5 +353,81 @@ public class NCore extends JavaPlugin {
 
 	public Updater getUpdater() {
 		return updater;
+	}
+
+	// ##################### //
+	// ## Debugging stuff ## //
+	// ##################### //
+
+	public void setDebugEnabled(final boolean value) {
+		this.debugEnabled = value;
+	}
+
+	public boolean isDebugEnabled() {
+		return this.debugEnabled;
+	}
+
+	public void log(final Level level, final String message) {
+		logger.log(level, message);
+	}
+
+	public void info(final String message) {
+		log(Level.INFO, message);
+	}
+
+	public void entering(final Class clazz, final String methodName) {
+		if (this.debugEnabled) {
+			log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
+		}
+	}
+
+	public void entering(final Class clazz, final String methodName, final String comment) {
+		if (this.debugEnabled) {
+			log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
+		}
+	}
+
+	public void exiting(final Class clazz, final String methodName) {
+		if (this.debugEnabled) {
+			log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
+		}
+	}
+
+	public void exiting(final Class clazz, final String methodName, final String comment) {
+		if (this.debugEnabled) {
+			log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
+		}
+	}
+
+	private String shortNPluginPackageName(final String packageName) {
+		return packageName.substring(17);
+	}
+
+	public void debug(final String message) {
+		if (this.debugEnabled) {
+			log(Level.INFO, "DEBUG         " + message);
+		}
+	}
+
+	public void debug(final String message, final Throwable e) {
+		if (this.debugEnabled) {
+			logger.log(Level.SEVERE, "DEBUG         " + message, e);
+		}
+	}
+
+	public void error(final String message) {
+		error(Level.SEVERE, message);
+	}
+
+	public void error(final Level level, final String message) {
+		log(level, message);
+	}
+
+	public void error(final String message, final Throwable e) {
+		error(Level.SEVERE, message, e);
+	}
+
+	public void error(final Level level, final String message, final Throwable e) {
+		logger.log(level, message, e);
 	}
 }
