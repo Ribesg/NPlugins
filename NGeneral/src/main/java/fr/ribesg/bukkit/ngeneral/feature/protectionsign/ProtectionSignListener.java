@@ -10,8 +10,10 @@
 package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
+import fr.ribesg.bukkit.ncore.utils.SignUtils;
 import fr.ribesg.bukkit.ncore.utils.UsernameUtils;
 import fr.ribesg.bukkit.ngeneral.Perms;
+import org.bukkit.Location;
 import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
 import org.bukkit.block.BrewingStand;
@@ -60,17 +62,19 @@ public class ProtectionSignListener implements Listener {
 		final String[] lines = event.getLines();
 		if (ProtectionSignFeature.getProtectionStrings().contains(ColorUtils.stripColorCodes(lines[0]).toLowerCase())) {
 			// This is a Protection sign
+			final Location loc = event.getBlock().getLocation();
 			if (!Perms.hasProtectionSign(event.getPlayer())) {
 				lines[0] = ProtectionSignFeature.ERROR;
 				lines[1] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine1());
 				lines[2] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine2());
 				lines[3] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine3());
-			} else if (feature.protectsSomething(event.getBlock().getLocation())) {
-				if (feature.canPlaceSign(event.getPlayer().getName(), event.getBlock().getLocation())) {
+			} else if (feature.protectsSomething(loc)) {
+				if (feature.canPlaceSign(event.getPlayer().getName(), loc)) {
 					lines[0] = ProtectionSignFeature.PROTECTION;
 					lines[1] = ProtectionSignFeature.SECONDARY_PREFIX + UsernameUtils.getId(ColorUtils.stripColorCodes(lines[1]));
 					lines[2] = ProtectionSignFeature.SECONDARY_PREFIX + UsernameUtils.getId(ColorUtils.stripColorCodes(lines[2]));
 					lines[3] = ProtectionSignFeature.PRIMARY_PREFIX + UsernameUtils.getId(event.getPlayer().getName());
+					feature.clearCache(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getWorld().getName());
 				} else {
 					lines[0] = ProtectionSignFeature.ERROR;
 					lines[1] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine1());
@@ -91,9 +95,14 @@ public class ProtectionSignListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBreakBlock(final BlockBreakEvent event) {
-		if (!feature.canBreak(event.getBlock(), event.getPlayer())) {
-			feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_breakDenied);
-			event.setCancelled(true);
+		final Block b = event.getBlock();
+		if (SignUtils.isSign(b)) {
+			if (!feature.canBreak(b, event.getPlayer())) {
+				feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_breakDenied);
+				event.setCancelled(true);
+			} else {
+				feature.clearCache(b.getX(), b.getY(), b.getZ(), b.getWorld().getName());
+			}
 		}
 	}
 

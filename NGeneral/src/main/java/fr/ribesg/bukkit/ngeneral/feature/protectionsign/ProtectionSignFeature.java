@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
 import fr.ribesg.bukkit.ncore.utils.SignUtils;
+import fr.ribesg.bukkit.ncore.utils.TimeUtils;
 import fr.ribesg.bukkit.ncore.utils.UsernameUtils;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
@@ -57,6 +58,11 @@ public class ProtectionSignFeature extends Feature {
 	 * First line of an Error sign
 	 */
 	/* package */ static final String ERROR = "[" + ChatColor.DARK_RED + "Error" + ChatColor.RESET + "]";
+
+	/**
+	 * Amount of time to keep cached results
+	 */
+	private static final int CACHE_TIME = (int) TimeUtils.getInMilliseconds("1minute");
 
 	// ################### //
 	// ## Constant sets ## //
@@ -157,6 +163,24 @@ public class ProtectionSignFeature extends Feature {
 	public void terminate() {
 		if (cacheFreeTask != null) {
 			cacheFreeTask.cancel();
+		}
+	}
+
+	/**
+	 * Clear the cache for the provided location information.
+	 *
+	 * @param x         the X coordinate
+	 * @param y         the Y coordinate
+	 * @param z         the Z coordinate
+	 * @param worldName the world this location relates to
+	 */
+	public void clearCache(final int x, final int y, final int z, final String worldName) {
+		for (int i = x - 2; i < x + 2; i++) {
+			for (int j = y - 2; j < y + 2; j++) {
+				for (int k = z - 2; k < z + 2; k++) {
+					this.isProtectedCache.remove(new NLocation(worldName, x, y, z));
+				}
+			}
 		}
 	}
 
@@ -284,7 +308,7 @@ public class ProtectionSignFeature extends Feature {
 					}
 				}
 			}
-			isProtectedCache.put(loc, new ProtectionState(result, System.currentTimeMillis()));
+			isProtectedCache.put(loc, new ProtectionState(result, System.currentTimeMillis() + CACHE_TIME));
 			return result;
 		}
 	}
