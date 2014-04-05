@@ -103,6 +103,22 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 	public void onNodeDisable() {
 	}
 
+	public void saveGroups() {
+		try {
+			groupsConfig.writeConfig("groups.yml");
+		} catch (final IOException e) {
+			error("An error occured when NPermissions tried to save groups.yml", e);
+		}
+	}
+
+	public void savePlayers() {
+		try {
+			playersConfig.writeConfig("players.yml");
+		} catch (final IOException e) {
+			error("An error occured when NPermissions tried to save players.yml", e);
+		}
+	}
+
 	@Override
 	public Messages getMessages() {
 		return messages;

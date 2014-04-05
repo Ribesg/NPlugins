@@ -69,6 +69,19 @@ public class PlayerPermissions extends PermissionsSet {
 	}
 
 	/**
+	 * Player Permissions constructor using a LegacyPlayerPermissionsSet.
+	 *
+	 * @param playerUuid the Universally Unique Identifier of the Player
+	 */
+	public PlayerPermissions(final UUID playerUuid, final LegacyPlayerPermissions legacyPlayerPermissions) {
+		super(legacyPlayerPermissions.manager, legacyPlayerPermissions.name, legacyPlayerPermissions.priority);
+		this.playerUuid = playerUuid;
+		this.mainGroup = legacyPlayerPermissions.getMainGroup();
+		this.groups = legacyPlayerPermissions.getGroups();
+		this.permissions.putAll(legacyPlayerPermissions.permissions);
+	}
+
+	/**
 	 * Gets the Player's Universally Unique Identifier.
 	 *
 	 * @return the Player's Universally Unique Identifier
@@ -129,7 +142,6 @@ public class PlayerPermissions extends PermissionsSet {
 	 * @param parentSection the ConfigurationSection under which this
 	 *                      PlayerPermissions representation will be saved
 	 */
-	@Override
 	public void save(final ConfigurationSection parentSection) {
 		final ConfigurationSection thisSection = parentSection.createSection(this.playerUuid.toString());
 		thisSection.set("playerName", this.name);
@@ -137,7 +149,7 @@ public class PlayerPermissions extends PermissionsSet {
 		if (this.groups.size() > 0) {
 			thisSection.set("groups", new LinkedList<>(this.groups));
 		}
-		super.save(thisSection);
+		super.saveCommon(thisSection);
 	}
 
 	/**

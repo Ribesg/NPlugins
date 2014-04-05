@@ -41,6 +41,14 @@ public class PermissionsManager {
 	 */
 	private final Map<UUID, PlayerPermissions> players;
 
+	/**
+	 * Map of Legacy Players with their attached Permissions
+	 */
+	private final Map<String, LegacyPlayerPermissions> legacyPlayers;
+
+	/**
+	 * Map of online Players and their PermissionAttachment
+	 */
 	private final Map<UUID, PermissionAttachment> attachmentMap;
 
 	/**
@@ -52,6 +60,7 @@ public class PermissionsManager {
 		this.plugin = instance;
 		this.groups = new LinkedHashMap<>();
 		this.players = new LinkedHashMap<>();
+		this.legacyPlayers = new LinkedHashMap<>();
 		this.attachmentMap = new HashMap<>();
 	}
 
@@ -83,16 +92,33 @@ public class PermissionsManager {
 	}
 
 	/**
+	 * Gets the map of Legacy Players with their attached Permissions.
+	 *
+	 * @return the map of Legacy Players with their attached Permissions
+	 */
+	public Map<String, LegacyPlayerPermissions> getLegacyPlayers() {
+		return this.legacyPlayers;
+	}
+
+	/**
 	 * TODO
 	 *
 	 * @param player
 	 */
 	public void registerPlayer(final Player player) {
+		boolean saveNeeded = false;
 		final UUID playerUuid = player.getUniqueId();
+		final String playerName = player.getName();
 		PlayerPermissions playerPermissionsSet = this.players.get(playerUuid);
 		if (playerPermissionsSet == null) {
-			playerPermissionsSet = new PlayerPermissions(this, playerUuid, player.getName(), 1, plugin.getPluginConfig().getDefaultGroup());
+			final LegacyPlayerPermissions legacyPlayerPermissionsSet = this.legacyPlayers.remove(playerName);
+			if (legacyPlayerPermissionsSet == null) {
+				playerPermissionsSet = new PlayerPermissions(this, playerUuid, player.getName(), 1, plugin.getPluginConfig().getDefaultGroup());
+			} else {
+				playerPermissionsSet = new PlayerPermissions(playerUuid, legacyPlayerPermissionsSet);
+			}
 			this.players.put(playerUuid, playerPermissionsSet);
+			saveNeeded = true;
 		}
 		final Map<String, Boolean> permissions = playerPermissionsSet.getComputedPermissions();
 		final PermissionAttachment playerPermissions = player.addAttachment(plugin);
@@ -100,6 +126,9 @@ public class PermissionsManager {
 			playerPermissions.setPermission(e.getKey(), e.getValue());
 		}
 		this.attachmentMap.put(playerUuid, playerPermissions);
+		if (saveNeeded) {
+			this.plugin.savePlayers();
+		}
 	}
 
 	/**

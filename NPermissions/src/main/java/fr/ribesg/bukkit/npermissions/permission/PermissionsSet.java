@@ -125,7 +125,7 @@ public abstract class PermissionsSet {
 	 * @param thisSection the ConfigurationSection under which this
 	 *                    PermissionsSet's informations will be saved
 	 */
-	protected void save(final ConfigurationSection thisSection) {
+	protected void saveCommon(final ConfigurationSection thisSection) {
 		if (this.priority != this.getDefaultPriority()) {
 			thisSection.set("priority", this.priority);
 		}
