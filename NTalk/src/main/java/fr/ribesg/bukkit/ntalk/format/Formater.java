@@ -39,7 +39,7 @@ public class Formater {
 			}
 		} else {
 			for (final String groupName : cfg.getGroupFormats().keySet()) {
-				if (async ? AsyncPermAccessor.has(player.getName(), "group." + groupName.toLowerCase()) : player.hasPermission("group." + groupName.toLowerCase())) {
+				if (async ? AsyncPermAccessor.has(player.getName(), "maingroup." + groupName.toLowerCase()) : player.hasPermission("maingroup." + groupName.toLowerCase())) {
 					format = cfg.getGroupFormats().get(groupName);
 					break;
 				}
@@ -72,7 +72,7 @@ public class Formater {
 				}
 			} else {
 				for (final String groupName : cfg.getGroupFormats().keySet()) {
-					if (from.hasPermission("group." + groupName)) {
+					if (from.hasPermission("maingroup." + groupName)) {
 						formatFrom = cfg.getGroupFormats().get(groupName);
 						break;
 					}
@@ -98,7 +98,7 @@ public class Formater {
 				}
 			} else {
 				for (final String groupName : cfg.getGroupFormats().keySet()) {
-					if (to.hasPermission("group." + groupName)) {
+					if (to.hasPermission("maingroup." + groupName)) {
 						formatTo = cfg.getGroupFormats().get(groupName);
 						break;
 					}

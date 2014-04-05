@@ -221,7 +221,7 @@ public class Config extends AbstractConfig<NTalk> {
 		// group prefixes and suffixes
 		content.append("# Group prefixes and suffixes. Use exact group names as written in your permissions files\n");
 		content.append("# For example, prefixes and suffixes for group 'test' will be applied to players\n");
-		content.append("# with permission 'group.test'\n");
+		content.append("# with permission 'maingroup.test'\n");
 		content.append("groupFormats:\n");
 		for (final Entry<String, Format> e : getGroupFormats().entrySet()) {
 			content.append("  " + e.getKey() + ": \n");
