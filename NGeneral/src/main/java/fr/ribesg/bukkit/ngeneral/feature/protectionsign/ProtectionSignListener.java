@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
+import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
 import fr.ribesg.bukkit.ncore.utils.SignUtils;
@@ -165,6 +166,7 @@ public class ProtectionSignListener implements Listener {
 				return;
 		}
 		if (b != null) {
+			feature.getPlugin().debug("InventoryMoveEvent with source at " + NLocation.toString(b.getLocation()));
 			event.setCancelled(feature.isProtected(b) != null);
 		}
 	}
