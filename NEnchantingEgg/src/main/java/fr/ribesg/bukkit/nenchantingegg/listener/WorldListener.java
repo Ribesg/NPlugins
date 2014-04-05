@@ -108,7 +108,7 @@ public class WorldListener implements Listener {
 	public void onFlow(final BlockFromToEvent event) {
 		final Location loc = event.getToBlock().getLocation();
 		final Altar altar = plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
-		if (altar.preventsBlockPlacement(loc)) {
+		if (altar != null && altar.preventsBlockPlacement(loc)) {
 			event.setCancelled(true);
 		}
 	}
