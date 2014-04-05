@@ -51,14 +51,14 @@ public class PlayerListener implements Listener {
 		switch (mat) {
 			case DRAGON_EGG: // Placing a Dragon Egg on the center of an activated Altar
 				plugin.debug("Placing a Dragon Egg");
-				coord = new ChunkCoord(event.getBlockPlaced().getLocation().getChunk());
+				coord = new ChunkCoord(loc.getChunk());
 				altar = plugin.getAltars().get(coord);
 				if (altar != null) {
 					if (altar.getState() == AltarState.ACTIVE && altar.isEggPosition(loc)) {
 						plugin.getActiveToEggProvidedTransition().doTransition(altar);
 						plugin.sendMessage(event.getPlayer(), MessageId.egg_altarEggProvided);
 						altar.setPlayerName(event.getPlayer().getName());
-					} else if (altar.preventsBlockPlacement(event)) {
+					} else if (altar.preventsBlockPlacement(loc)) {
 						plugin.sendMessage(event.getPlayer(), MessageId.egg_cantPlaceOnAltar);
 						event.setCancelled(true);
 					}
@@ -109,10 +109,10 @@ public class PlayerListener implements Listener {
 				break;
 			default:
 				plugin.debug("Placing something else");
-				coord = new ChunkCoord(event.getBlockPlaced().getLocation().getChunk());
+				coord = new ChunkCoord(loc.getChunk());
 				altar = plugin.getAltars().get(coord);
 				if (altar != null) {
-					if (altar.preventsBlockPlacement(event)) {
+					if (altar.preventsBlockPlacement(loc)) {
 						plugin.debug("Preventing block placement");
 						plugin.sendMessage(event.getPlayer(), MessageId.egg_cantPlaceOnAltar);
 						event.setCancelled(true);

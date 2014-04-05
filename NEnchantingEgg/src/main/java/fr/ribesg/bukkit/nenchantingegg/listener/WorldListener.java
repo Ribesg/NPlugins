@@ -14,10 +14,14 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockFormEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 
@@ -87,5 +91,25 @@ public class WorldListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onChunkLoad(final ChunkLoadEvent event) {
 		plugin.getAltars().chunkLoad(new ChunkCoord(event.getChunk()));
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onSnowForm(final BlockFormEvent event) {
+		if (event.getNewState().getType() == Material.SNOW) {
+			final Location loc = event.getBlock().getLocation();
+			final Altar altar = plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
+			if (altar.preventsBlockPlacement(loc)) {
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onFlow(final BlockFromToEvent event) {
+		final Location loc = event.getToBlock().getLocation();
+		final Altar altar = plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
+		if (altar.preventsBlockPlacement(loc)) {
+			event.setCancelled(true);
+		}
 	}
 }

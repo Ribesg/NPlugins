@@ -217,12 +217,11 @@ public class Altar {
 	}
 
 	/**
-	 * @param event A BlockPlaceEvent
+	 * @param loc the Location of the block to place
 	 *
 	 * @return True if this altar prevents the placement of the block
 	 */
-	public boolean preventsBlockPlacement(final BlockPlaceEvent event) {
-		final Location loc = event.getBlockPlaced().getLocation();
+	public boolean preventsBlockPlacement(final Location loc) {
 		final int x = loc.getBlockX() - centerLocation.getBlockX();
 		final int y = loc.getBlockY() - centerLocation.getBlockY();
 		final int z = loc.getBlockZ() - centerLocation.getBlockZ();
