@@ -8,13 +8,13 @@
 	<parent>
 		<groupId>fr.ribesg.bukkit.nplugins</groupId>
 		<artifactId>NPlugins</artifactId>
-		<version>0.6.4</version>
+		<version>0.6.5-SNAPSHOT</version>
 	</parent>
 
 	<groupId>fr.ribesg.bukkit.ntheendagain</groupId>
 	<artifactId>NTheEndAgain</artifactId>
 	<name>NTheEndAgain</name>
-	<version>0.6.4</version>
+	<version>0.6.5-SNAPSHOT</version>
 
 	<url>https://github.com/Ribesg/NPlugins/tree/master/NTheEndAgain</url>
 
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>fr.ribesg.bukkit.ncore</groupId>
 			<artifactId>NCore</artifactId>
-			<version>0.6.4</version>
+			<version>0.6.5-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
