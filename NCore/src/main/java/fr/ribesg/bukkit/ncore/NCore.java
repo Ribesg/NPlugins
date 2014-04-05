@@ -178,7 +178,7 @@ public class NCore extends JavaPlugin {
 		final Metrics.Graph nodesUsedGraph = metrics.createGraph("Nodes used");
 
 		if (get(Node.CUBOID) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.CUBOID) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.CUBOID.substring(1)) {
 
 				@Override
 				public int getValue() {
@@ -189,7 +189,7 @@ public class NCore extends JavaPlugin {
 		}
 
 		if (get(Node.ENCHANTING_EGG) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.ENCHANTING_EGG) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.ENCHANTING_EGG.substring(1)) {
 
 				@Override
 				public int getValue() {
@@ -200,7 +200,7 @@ public class NCore extends JavaPlugin {
 		}
 
 		if (get(Node.GENERAL) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.GENERAL) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.GENERAL.substring(1)) {
 
 				@Override
 				public int getValue() {
@@ -211,7 +211,7 @@ public class NCore extends JavaPlugin {
 		}
 
 		if (get(Node.PLAYER) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PLAYER) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PLAYER.substring(1)) {
 
 				@Override
 				public int getValue() {
@@ -222,7 +222,7 @@ public class NCore extends JavaPlugin {
 		}
 
 		if (get(Node.PERMISSIONS) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PERMISSIONS) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PERMISSIONS.substring(1)) {
 
 				@Override
 				public int getValue() {
@@ -233,7 +233,7 @@ public class NCore extends JavaPlugin {
 		}
 
 		if (get(Node.TALK) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.TALK) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.TALK.substring(1)) {
 
 				@Override
 				public int getValue() {
@@ -244,7 +244,7 @@ public class NCore extends JavaPlugin {
 		}
 
 		if (get(Node.THE_END_AGAIN) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.THE_END_AGAIN) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.THE_END_AGAIN.substring(1)) {
 
 				@Override
 				public int getValue() {
@@ -255,7 +255,7 @@ public class NCore extends JavaPlugin {
 		}
 
 		if (get(Node.WORLD) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.WORLD) {
+			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.WORLD.substring(1)) {
 
 				@Override
 				public int getValue() {

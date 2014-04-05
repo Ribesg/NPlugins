@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ncore.updater;
 
 import fr.ribesg.bukkit.ncore.NCore;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.utils.TimeUtils;
 import fr.ribesg.bukkit.ncore.utils.VersionUtils;
 import org.bukkit.Bukkit;
@@ -62,15 +63,15 @@ public class Updater {
 
 	static {
 		final Map<String, Integer> map = new TreeMap<>();
-		map.put("NCore".toLowerCase(), 55525);
-		map.put("NCuboid".toLowerCase(), 69596);
-		map.put("NEnchantingEgg".toLowerCase(), 46694);
-		map.put("NGeneral".toLowerCase(), 69595);
-		map.put("NPermissions".toLowerCase(), 77088);
-		map.put("NPlayer".toLowerCase(), 69598);
-		map.put("NTalk".toLowerCase(), 35825);
-		map.put("NTheEndAgain".toLowerCase(), 35931);
-		map.put("NWorld".toLowerCase(), 62972);
+		map.put("NCore", 55525);
+		map.put(Node.CUBOID, 69596);
+		map.put(Node.ENCHANTING_EGG, 46694);
+		map.put(Node.GENERAL, 69595);
+		map.put(Node.PERMISSIONS, 77088);
+		map.put(Node.PLAYER, 69598);
+		map.put(Node.TALK, 35825);
+		map.put(Node.THE_END_AGAIN, 35931);
+		map.put(Node.WORLD, 62972);
 		CURSE_IDS = Collections.unmodifiableMap(map);
 	}
 
@@ -103,12 +104,11 @@ public class Updater {
 		this.cacheDuration = TimeUtils.getInMilliseconds(cacheDuration);
 		this.updateAvailable = new TreeMap<>();
 
-		this.plugins.put(plugin.getName().toLowerCase(), plugin);
+		this.plugins.put(plugin.getName(), plugin);
 		for (final String nodeName : CURSE_IDS.keySet()) {
 			if (plugin.getPluginConfig().getCheckFor().contains(nodeName)) {
-				final String shortNodeName = nodeName.substring(1);
-				if (plugin.get(shortNodeName) != null) {
-					this.plugins.put(nodeName.toLowerCase(), (JavaPlugin) plugin.get(shortNodeName));
+				if (plugin.get(nodeName) != null) {
+					this.plugins.put(nodeName, (JavaPlugin) plugin.get(nodeName));
 				}
 			}
 		}
@@ -232,11 +232,11 @@ public class Updater {
 	}
 
 	private void newUpdateAvailable(final String pluginName, final String newVersion) {
-		this.updateAvailable.put(pluginName.toLowerCase(), newVersion);
+		this.updateAvailable.put(pluginName, newVersion);
 	}
 
 	public void downloadUpdate(final CommandSender sender, final String nodeName) {
-		if (updateAvailable.containsKey(nodeName.toLowerCase())) {
+		if (updateAvailable.containsKey(nodeName)) {
 			try {
 				if (nodeName != null) {
 					final FileDescription desc = getLatestVersion(nodeName);
@@ -337,10 +337,10 @@ public class Updater {
 	 * @throws IOException if an error occur while trying to contact Curse API
 	 */
 	private FileDescription getLatestVersion(final String pluginName) throws IOException {
-		if (CURSE_IDS.containsKey(pluginName.toLowerCase())) {
+		if (CURSE_IDS.containsKey(pluginName)) {
 			return getNPluginLatestVersion(pluginName);
 		} else {
-			throw new UnsupportedOperationException("Non-NPlugin not yet supported");
+			throw new UnsupportedOperationException("Non-NPlugin not yet supported (while trying to update '" + pluginName + "')");
 		}
 	}
 
@@ -365,7 +365,7 @@ public class Updater {
 	 */
 	private boolean isUpToDate(final String pluginName, final String currentVersion) throws IOException {
 		final FileDescription latestFile = getLatestVersion(pluginName);
-		return latestFile.getVersion().compareTo(currentVersion) <= 0;
+		return latestFile == null || latestFile.getVersion().compareTo(currentVersion) <= 0;
 	}
 
 	/**
@@ -381,7 +381,7 @@ public class Updater {
 	 */
 	private Collection<FileDescription> getFiles(final String pluginName) throws IOException {
 		try {
-			final Integer projectId = CURSE_IDS.get(pluginName.toLowerCase());
+			final Integer projectId = CURSE_IDS.get(pluginName);
 			if (projectId == null) {
 				throw new IllegalArgumentException("Unknown plugin '" + pluginName + "'");
 			}

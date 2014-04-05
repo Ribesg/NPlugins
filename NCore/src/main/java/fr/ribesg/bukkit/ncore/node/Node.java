@@ -16,14 +16,14 @@ package fr.ribesg.bukkit.ncore.node;
  */
 public interface Node {
 
-	public static final String CUBOID         = "Cuboid";
-	public static final String ENCHANTING_EGG = "EnchantingEgg";
-	public static final String GENERAL        = "General";
-	public static final String PERMISSIONS    = "Permissions";
-	public static final String PLAYER         = "Player";
-	public static final String TALK           = "Talk";
-	public static final String THE_END_AGAIN  = "TheEndAgain";
-	public static final String WORLD          = "World";
+	public static final String CUBOID         = "NCuboid";
+	public static final String ENCHANTING_EGG = "NEnchantingEgg";
+	public static final String GENERAL        = "NGeneral";
+	public static final String PERMISSIONS    = "NPermissions";
+	public static final String PLAYER         = "NPlayer";
+	public static final String TALK           = "NTalk";
+	public static final String THE_END_AGAIN  = "NTheEndAgain";
+	public static final String WORLD          = "NWorld";
 
 	public String getNodeName();
 }
