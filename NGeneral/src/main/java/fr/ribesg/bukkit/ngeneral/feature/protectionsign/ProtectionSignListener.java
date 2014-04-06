@@ -12,7 +12,7 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
 import fr.ribesg.bukkit.ncore.utils.SignUtils;
-import fr.ribesg.bukkit.ncore.utils.UsernameUtils;
+import fr.ribesg.bukkit.ncore.utils.PlayerIdentifiersUtils;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import org.bukkit.Location;
 import org.bukkit.block.Beacon;
@@ -72,9 +72,9 @@ public class ProtectionSignListener implements Listener {
 			} else if (feature.protectsSomething(loc)) {
 				if (feature.canPlaceSign(event.getPlayer().getName(), loc)) {
 					lines[0] = ProtectionSignFeature.PROTECTION;
-					lines[1] = ProtectionSignFeature.SECONDARY_PREFIX + UsernameUtils.getId(ColorUtils.stripColorCodes(lines[1]));
-					lines[2] = ProtectionSignFeature.SECONDARY_PREFIX + UsernameUtils.getId(ColorUtils.stripColorCodes(lines[2]));
-					lines[3] = ProtectionSignFeature.PRIMARY_PREFIX + UsernameUtils.getId(event.getPlayer().getName());
+					lines[1] = ProtectionSignFeature.SECONDARY_PREFIX + PlayerIdentifiersUtils.getId(ColorUtils.stripColorCodes(lines[1]));
+					lines[2] = ProtectionSignFeature.SECONDARY_PREFIX + PlayerIdentifiersUtils.getId(ColorUtils.stripColorCodes(lines[2]));
+					lines[3] = ProtectionSignFeature.PRIMARY_PREFIX + PlayerIdentifiersUtils.getId(event.getPlayer().getName());
 					feature.clearCache(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getWorld().getName());
 				} else {
 					lines[0] = ProtectionSignFeature.ERROR;

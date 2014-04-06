@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.UsernameUtils;
+import fr.ribesg.bukkit.ncore.utils.PlayerIdentifiersUtils;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,7 +28,7 @@ public class NicknameFilter implements Listener {
 	public void onPlayerLogin(final PlayerLoginEvent event) {
 		if (event.getResult() == PlayerLoginEvent.Result.ALLOWED) {
 			final String playerName = event.getPlayer().getName();
-			if (!UsernameUtils.isValidMinecraftUserName(playerName)) {
+			if (!PlayerIdentifiersUtils.isValidMinecraftUserName(playerName)) {
 				event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
 				event.setKickMessage(plugin.getMessages().get(MessageId.general_nicknameFilter_invalid, playerName)[0]);
 			}

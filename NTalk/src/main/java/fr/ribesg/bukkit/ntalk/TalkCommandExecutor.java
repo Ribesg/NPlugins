@@ -10,7 +10,7 @@
 package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.UsernameUtils;
+import fr.ribesg.bukkit.ncore.utils.PlayerIdentifiersUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -181,7 +181,7 @@ public class TalkCommandExecutor implements CommandExecutor {
 			return false;
 		} else if (args.length == 1) {
 			final String realName = args[0];
-			if (!UsernameUtils.isValidMinecraftUserName(realName)) {
+			if (!PlayerIdentifiersUtils.isValidMinecraftUserName(realName)) {
 				plugin.sendMessage(sender, MessageId.talk_invalidUsername, realName);
 				return true;
 			}
@@ -194,10 +194,10 @@ public class TalkCommandExecutor implements CommandExecutor {
 		} else {
 			final String realName = args[0];
 			final String nick = args[1];
-			if (!UsernameUtils.isValidMinecraftUserName(realName)) {
+			if (!PlayerIdentifiersUtils.isValidMinecraftUserName(realName)) {
 				plugin.sendMessage(sender, MessageId.talk_invalidUsername, realName);
 				return true;
-			} else if (!UsernameUtils.isValidNickName(nick)) {
+			} else if (!PlayerIdentifiersUtils.isValidNickName(nick)) {
 				plugin.sendMessage(sender, MessageId.talk_invalidNickname, nick);
 				return true;
 			}
