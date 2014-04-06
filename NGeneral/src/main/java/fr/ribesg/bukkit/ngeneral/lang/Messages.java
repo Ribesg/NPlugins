@@ -70,7 +70,7 @@ public class Messages extends AbstractMessages {
 
 		// Command - RELOAD
 		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded!", true, null));
-		newMessages.add(new Message(MessageId.cmdReloadError, "&An error occured while loading %file%!", true, new String[] {"%file%"}));
+		newMessages.add(new Message(MessageId.cmdReloadError, "&cAn error occured while loading %file%!", true, new String[] {"%file%"}));
 
 		// Command - GOD
 		newMessages.add(new Message(MessageId.general_god_enabled, "&aGod Mode enabled", true, null));
