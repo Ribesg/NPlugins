@@ -69,9 +69,9 @@ public class Groups extends AbstractConfig<NPermissions> {
 		}
 		admin.addSuperGroup("user");
 
-		this.manager.getGroups().put(user.getGroupName(), user);
-		this.manager.getGroups().put(admin.getGroupName(), admin);
-		this.manager.getGroups().put(example.getGroupName(), example);
+		this.manager.getGroups().put("user", user);
+		this.manager.getGroups().put("admin", admin);
+		this.manager.getGroups().put("example", example);
 	}
 
 	@Override
@@ -85,17 +85,18 @@ public class Groups extends AbstractConfig<NPermissions> {
 				plugin.error(Level.WARNING, "Unknown key '" + key + "' found in groups.yml, ignored");
 			} else {
 				final ConfigurationSection groupSection = config.getConfigurationSection(key);
+				final String groupName = key.toLowerCase();
 				final int priority = groupSection.getInt("priority", 0);
 				final List<String> extendsList = groupSection.getStringList("extends");
 				final List<String> allow = groupSection.getStringList("allow");
 				final List<String> deny = groupSection.getStringList("deny");
-				final GroupPermissions group = new GroupPermissions(this.manager, key, priority);
+				final GroupPermissions group = new GroupPermissions(this.manager, groupName, priority);
 
 				for (final String allowedPermission : allow) {
 					try {
 						group.add(allowedPermission, true);
 					} catch (final PermissionException e) {
-						plugin.error("Error while loading group '" + key + "': " + e.getMessage(), e);
+						plugin.error("Error while loading group '" + groupName + "': " + e.getMessage(), e);
 					}
 				}
 
@@ -103,23 +104,23 @@ public class Groups extends AbstractConfig<NPermissions> {
 					try {
 						group.add(deniedPermission, false);
 					} catch (final PermissionException e) {
-						plugin.error("Error while loading group '" + key + "': " + e.getMessage(), e);
+						plugin.error("Error while loading group '" + groupName + "': " + e.getMessage(), e);
 					}
 				}
 
 				inheritanceMap.put(group, extendsList);
-				this.manager.getGroups().put(key, group);
+				this.manager.getGroups().put(groupName, group);
 			}
 		}
 
 		for (final GroupPermissions group : inheritanceMap.keySet()) {
 			final List<String> extendsList = inheritanceMap.get(group);
 			for (final String superGroupName : extendsList) {
-				final GroupPermissions superGroup = this.manager.getGroups().get(superGroupName);
+				final GroupPermissions superGroup = this.manager.getGroups().get(superGroupName.toLowerCase());
 				if (superGroup == null) {
-					plugin.error("Group '" + group.getGroupName() + "' references unknown supergroup '" + superGroupName + "'");
+					plugin.error("Group '" + group.getGroupName() + "' references unknown supergroup '" + superGroupName.toLowerCase() + "'");
 				} else {
-					group.addSuperGroup(superGroupName);
+					group.addSuperGroup(superGroupName.toLowerCase());
 				}
 			}
 		}
@@ -148,7 +149,7 @@ public class Groups extends AbstractConfig<NPermissions> {
 			content.append("# - maingroup." + group.getGroupName().toLowerCase() + " - For players for whom this group is the main group (unique per player)\n");
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			group.save(dummySection);
-			content.append(dummySection.saveToString()).append("\n\n");
+			content.append(dummySection.saveToString()).append("\n");
 		}
 
 		return content.toString();

@@ -88,6 +88,10 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 		final PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new NListener(this), this);
 
+		final NCommandExecutor executor = new NCommandExecutor(this);
+		setCommandExecutor("npermissions", executor);
+		setCommandExecutor("setgroup", executor);
+
 		return true;
 	}
 
@@ -126,6 +130,14 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 
 	public Config getPluginConfig() {
 		return pluginConfig;
+	}
+
+	public Groups getGroupsConfig() {
+		return groupsConfig;
+	}
+
+	public Players getPlayersConfig() {
+		return playersConfig;
 	}
 
 	public PermissionsManager getManager() {

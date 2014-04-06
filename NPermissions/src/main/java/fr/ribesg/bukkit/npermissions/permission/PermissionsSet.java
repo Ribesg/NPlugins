@@ -37,7 +37,7 @@ public abstract class PermissionsSet {
 	/**
 	 * The name of this Permissions Set
 	 */
-	protected final String name;
+	protected String name;
 
 	/**
 	 * The priority of this Permissions Set

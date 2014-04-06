@@ -10,3 +10,13 @@ load: POSTWORLD
 depend: [NCore]
 
 commands:
+  npermissions:
+    description: Main plugin command
+    aliases: [permissions, nperms, perms, nperm, perm]
+    usage: |
+      /<command> reload <messages|groups|players>
+  setgroup:
+    description: Change the main group of a player
+    aliases: [setg]
+    usage: |
+      /<command> <playerName|UUID>[,...] <groupName> [force]

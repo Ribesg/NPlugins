@@ -57,7 +57,7 @@ public class Players extends AbstractConfig<NPermissions> {
 		// Example Legacy Player
 		final LegacyPlayerPermissions ribesg = new LegacyPlayerPermissions(this.manager, "Ribesg", 1, "example");
 		ribesg.addGroup("user");
-		this.manager.getLegacyPlayers().put(ribesg.getPlayerName(), ribesg);
+		this.manager.getLegacyPlayers().put(ribesg.getPlayerName().toLowerCase(), ribesg);
 	}
 
 	@Override
@@ -110,13 +110,19 @@ public class Players extends AbstractConfig<NPermissions> {
 							}
 						}
 
-						this.manager.getLegacyPlayers().put(legacyKey, legacyPlayer);
+						this.manager.getLegacyPlayers().put(legacyKey.toLowerCase(), legacyPlayer);
 					}
 				}
 			} else {
 				final ConfigurationSection playerSection = config.getConfigurationSection(key);
-				final UUID uuid = UUID.fromString(key);
 				final String playerName = playerSection.getString("playerName");
+				final UUID uuid;
+				try {
+					uuid = UUID.fromString(key);
+				} catch (final IllegalArgumentException e) {
+					plugin.error("Malformed UUID '" + key + "' in players.yml (for player '" + playerName + "')");
+					continue;
+				}
 				final String mainGroup = playerSection.getString("mainGroup");
 				final int priority = playerSection.getInt("priority", 1);
 				final List<String> groups = playerSection.getStringList("groups");
@@ -183,7 +189,7 @@ public class Players extends AbstractConfig<NPermissions> {
 			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			player.save(dummySection);
-			content.append(dummySection.saveToString()).append("\n\n");
+			content.append(dummySection.saveToString()).append("\n");
 		}
 
 		content.append("_legacy:\n");
@@ -195,7 +201,7 @@ public class Players extends AbstractConfig<NPermissions> {
 			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			legacyPlayer.save(dummySection);
-			content.append(StringUtils.prependLines(dummySection.saveToString(), "  ")).append("\n\n");
+			content.append(StringUtils.prependLines(dummySection.saveToString(), "  ")).append("\n");
 		}
 
 		return content.toString();

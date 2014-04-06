@@ -392,4 +392,21 @@ public enum MessageId {
 	general_itemnetwork_created,
 	general_itemnetwork_deleted,
 
+	// ########################## //
+	// ## NPermissions related ## //
+	// ########################## //
+
+	cmdReloadGroups,
+	cmdReloadPlayers,
+
+	permissions_unknown,
+	permissions_unknownGroup,
+	permissions_newPlayer,
+	permissions_unknownUuid,
+	permissions_changedGroup,
+	permissions_newLegacyPlayer,
+	permissions_unknownPlayer,
+	permissions_changedLegacyGroup,
+	permissions_alreadyMainGroup,
+
 }

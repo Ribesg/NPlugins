@@ -100,6 +100,16 @@ public class PlayerPermissions extends PermissionsSet {
 	}
 
 	/**
+	 * Sets the name of the Player this PlayerPermissions represents.
+	 *
+	 * @param playerName the new name of the Player this PlayerPermissions
+	 *                   represents
+	 */
+	public void setPlayerName(final String playerName) {
+		this.name = playerName;
+	}
+
+	/**
 	 * Gets the main Group Permissions Set for this Player.
 	 *
 	 * @return the main Group Permissions Set for this Player

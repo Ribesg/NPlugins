@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.npermissions.permission;
 import fr.ribesg.bukkit.npermissions.NPermissions;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
@@ -50,6 +51,11 @@ public class PermissionsManager {
 	 * Map of online Players and their PermissionAttachment
 	 */
 	private final Map<UUID, PermissionAttachment> attachmentMap;
+
+	/**
+	 * Map that enables easy per-String PlayerPermissions get
+	 */
+	private Map<String, UUID> playerNameToUuidMap = new HashMap<>();
 
 	/**
 	 * Permissions Manager constructor.
@@ -101,6 +107,17 @@ public class PermissionsManager {
 	}
 
 	/**
+	 * Gets a UUID based on a registered Player name.
+	 *
+	 * @param playerName a Player name
+	 *
+	 * @return the UUID associated to this Player's name or null if unknown
+	 */
+	public UUID getByPlayerName(final String playerName) {
+		return this.playerNameToUuidMap.get(playerName.toLowerCase());
+	}
+
+	/**
 	 * TODO
 	 *
 	 * @param player
@@ -111,11 +128,12 @@ public class PermissionsManager {
 		final String playerName = player.getName();
 		PlayerPermissions playerPermissionsSet = this.players.get(playerUuid);
 		if (playerPermissionsSet == null) {
-			final LegacyPlayerPermissions legacyPlayerPermissionsSet = this.legacyPlayers.remove(playerName);
+			final LegacyPlayerPermissions legacyPlayerPermissionsSet = this.legacyPlayers.remove(playerName.toLowerCase());
 			if (legacyPlayerPermissionsSet == null) {
-				playerPermissionsSet = new PlayerPermissions(this, playerUuid, player.getName(), 1, plugin.getPluginConfig().getDefaultGroup());
+				playerPermissionsSet = new PlayerPermissions(this, playerUuid, playerName, 1, plugin.getPluginConfig().getDefaultGroup());
 			} else {
 				playerPermissionsSet = new PlayerPermissions(playerUuid, legacyPlayerPermissionsSet);
+				playerPermissionsSet.setPlayerName(playerName);
 			}
 			this.players.put(playerUuid, playerPermissionsSet);
 			saveNeeded = true;
@@ -134,14 +152,19 @@ public class PermissionsManager {
 	/**
 	 * TODO
 	 *
-	 * @param player
+	 * @param uuid
 	 */
-	public void unRegisterPlayer(final Player player) {
-		final UUID playerUuid = player.getUniqueId();
-		final PermissionAttachment playerAttachment = this.attachmentMap.get(playerUuid);
+	public void reRegisterPlayer(final UUID uuid) {
+		PermissionAttachment playerAttachment = this.attachmentMap.remove(uuid);
 		if (playerAttachment != null) {
+			final Player player = (Player) playerAttachment.getPermissible();
+			final PlayerPermissions playerPermissions = this.players.get(uuid);
 			playerAttachment.remove();
-			this.attachmentMap.remove(playerUuid);
+			playerAttachment = player.addAttachment(plugin);
+			for (final Map.Entry<String, Boolean> e : playerPermissions.getComputedPermissions().entrySet()) {
+				playerAttachment.setPermission(e.getKey(), e.getValue());
+			}
+			this.attachmentMap.put(uuid, playerAttachment);
 		}
 	}
 
@@ -150,13 +173,35 @@ public class PermissionsManager {
 	 *
 	 * @param player
 	 */
-	public void unRegisterPlayerForWorld(final Player player) {
+	public void unRegisterPlayer(final Player player) {
+		this.attachmentMap.remove(player.getUniqueId());
+	}
+
+	/**
+	 * TODO
+	 *
+	 * @param player
+	 */
+	public void handleWorldChange(final Player player) {
 		final UUID playerUuid = player.getUniqueId();
-		final PermissionAttachment playerAttachment = this.attachmentMap.get(playerUuid);
+		final PermissionAttachment playerAttachment = this.attachmentMap.remove(playerUuid);
 		if (playerAttachment == null) {
-			throw new IllegalStateException();
+			throw new IllegalStateException("Wtf?" /* TODO */);
 		} else {
 			// TODO
+		}
+	}
+
+	/**
+	 * TODO
+	 */
+	public void reload() {
+		for (final Player player : Bukkit.getOnlinePlayers()) {
+			this.plugin.getManager().unRegisterPlayer(player);
+		}
+		this.attachmentMap.clear();
+		for (final Player player : Bukkit.getOnlinePlayers()) {
+			this.plugin.getManager().registerPlayer(player);
 		}
 	}
 }
