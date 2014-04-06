@@ -11,8 +11,8 @@ package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
-import fr.ribesg.bukkit.ncore.utils.SignUtils;
 import fr.ribesg.bukkit.ncore.utils.PlayerIdentifiersUtils;
+import fr.ribesg.bukkit.ncore.utils.SignUtils;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import org.bukkit.Location;
 import org.bukkit.block.Beacon;
@@ -129,8 +129,8 @@ public class ProtectionSignListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onInventoryMoveItemEvent(final InventoryMoveItemEvent event) {
-		final InventoryType type = event.getSource().getType();
-		final InventoryHolder holder = event.getSource().getHolder();
+		InventoryType type = event.getSource().getType();
+		InventoryHolder holder = event.getSource().getHolder();
 		Block b = null;
 		switch (type) {
 			case HOPPER:
@@ -166,8 +166,55 @@ public class ProtectionSignListener implements Listener {
 				return;
 		}
 		if (b != null) {
-			feature.getPlugin().debug("InventoryMoveEvent with source at " + NLocation.toString(b.getLocation()));
+			if (feature.getPlugin().isDebugEnabled()) {
+				feature.getPlugin().debug("InventoryMoveEvent with source at " + NLocation.toString(b.getLocation()));
+			}
 			event.setCancelled(feature.isProtected(b) != null);
+		}
+
+		if (!event.isCancelled()) {
+			type = event.getDestination().getType();
+			holder = event.getDestination().getHolder();
+			b = null;
+			switch (type) {
+				case HOPPER:
+					if (holder instanceof Hopper) {
+						b = ((Hopper) holder).getBlock();
+					} // else Minecart Hopper
+					break;
+				case CHEST:
+					if (holder instanceof Chest) {
+						b = ((Chest) holder).getBlock();
+					} else if (holder instanceof DoubleChest) {
+						b = ((DoubleChest) holder).getLocation().getBlock();
+					} // else Minecart Chest
+					break;
+				case BEACON:
+					b = ((Beacon) holder).getBlock();
+					break;
+				case BREWING:
+					b = ((BrewingStand) holder).getBlock();
+					break;
+				case FURNACE:
+					b = ((Furnace) holder).getBlock();
+					break;
+				case DISPENSER:
+					if (holder instanceof Dispenser) {
+						b = ((Dispenser) holder).getBlock();
+					} // else Minecart Dispenser
+					break;
+				case DROPPER:
+					b = ((Dropper) holder).getBlock();
+					break;
+				default:
+					return;
+			}
+			if (b != null) {
+				if (feature.getPlugin().isDebugEnabled()) {
+					feature.getPlugin().debug("InventoryMoveEvent with destination at " + NLocation.toString(b.getLocation()));
+				}
+				event.setCancelled(feature.isProtected(b) != null);
+			}
 		}
 	}
 }
