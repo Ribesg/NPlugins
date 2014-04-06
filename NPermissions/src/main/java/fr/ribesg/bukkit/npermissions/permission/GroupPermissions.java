@@ -77,7 +77,9 @@ public class GroupPermissions extends PermissionsSet {
 	 */
 	public void save(final ConfigurationSection parentSection) {
 		final ConfigurationSection thisSection = parentSection.createSection(this.name);
-		thisSection.set("extends", new LinkedList<>(this.superGroups));
+		if (this.superGroups.size() > 0) {
+			thisSection.set("extends", new LinkedList<>(this.superGroups));
+		}
 		super.saveCommon(thisSection);
 	}
 
