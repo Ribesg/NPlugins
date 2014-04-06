@@ -60,7 +60,7 @@ public class Config extends AbstractConfig<NWorld> {
 
 		// Set default values for first use
 		spawnCommandBehaviour = 1;
-		defaultRequiredPermission = "nworld.admin";
+		defaultRequiredPermission = "group.admin";
 		defaultHidden = true;
 		broadcastOnWorldCreate = 0;
 		broadcastOnWorldLoad = 0;
@@ -85,8 +85,8 @@ public class Config extends AbstractConfig<NWorld> {
 			setSpawnCommandBehaviour(0);
 		}
 
-		// defaultRequiredPermission. Default: nworld.admin
-		setDefaultRequiredPermission(config.getString("defaultRequiredPermission", "nworld.admin"));
+		// defaultRequiredPermission. Default: group.admin
+		setDefaultRequiredPermission(config.getString("defaultRequiredPermission", "group.admin"));
 
 		// defaultHidden. Default: true
 		setDefaultHidden(config.getBoolean("defaultHidden", true));
@@ -541,7 +541,7 @@ public class Config extends AbstractConfig<NWorld> {
 		// Default required permission
 		content.append("# The default permission required to warp to a point, set if\n");
 		content.append("# not provided in \"/nworld create\" or \"/setwarp\" commands\n");
-		content.append("# Default : nworld.admin\n");
+		content.append("# Default : group.admin\n");
 		content.append("defaultRequiredPermission: \"" + getDefaultRequiredPermission() + "\"\n\n");
 
 		// Default hidden value
@@ -556,10 +556,10 @@ public class Config extends AbstractConfig<NWorld> {
 		content.append("# Note: every key should be lowercase.\n");
 		content.append("permissionShortcuts:\n");
 		if (!permissionShortcuts.containsKey("user")) {
-			content.append("  user: \"nworld.user\"\n");
+			content.append("  user: \"group.user\"\n");
 		}
 		if (!permissionShortcuts.containsKey("admin")) {
-			content.append("  admin: \"nworld.admin\"\n");
+			content.append("  admin: \"group.admin\"\n");
 		}
 		for (final Map.Entry<String, String> e : permissionShortcuts.entrySet()) {
 			content.append("  " + e.getKey() + ": \"" + e.getValue() + "\"\n");
