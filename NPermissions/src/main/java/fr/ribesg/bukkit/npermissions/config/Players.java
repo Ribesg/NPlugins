@@ -70,10 +70,10 @@ public class Players extends AbstractConfig<NPermissions> {
 			} else if ("_legacy".equals(key)) {
 				final ConfigurationSection legacyPlayersSection = config.getConfigurationSection(key);
 				for (final String legacyKey : legacyPlayersSection.getKeys(false)) {
-					if (!config.isConfigurationSection(legacyKey)) {
+					if (!legacyPlayersSection.isConfigurationSection(legacyKey)) {
 						plugin.error(Level.WARNING, "Unknown key '" + legacyKey + "' found in players.yml under _legacy, ignored");
 					} else {
-						final ConfigurationSection legacyPlayerSection = config.getConfigurationSection(legacyKey);
+						final ConfigurationSection legacyPlayerSection = legacyPlayersSection.getConfigurationSection(legacyKey);
 						final String mainGroup = legacyPlayerSection.getString("mainGroup");
 						final int priority = legacyPlayerSection.getInt("priority", 1);
 						final List<String> groups = legacyPlayerSection.getStringList("groups");
