@@ -10,14 +10,7 @@
 package fr.ribesg.bukkit.npermissions.permission;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Represents the Permissions attached to a Player.
@@ -143,6 +136,20 @@ public class PlayerPermissions extends PermissionsSet {
 	 */
 	public Set<String> getGroups() {
 		return groups;
+	}
+
+	/**
+	 * Gets all 'group.x' permissions this Player has.
+	 *
+	 * @return all 'group.x' permissions this Player has
+	 */
+	public SortedSet<String> getAllGroupPerms() {
+		final SortedSet<String> result = new TreeSet<>();
+		result.addAll(this.manager.getGroups().get(this.mainGroup).getAllGroupPerms());
+		for (final String secondaryGroup : new TreeSet<>(this.groups)) {
+			result.addAll(this.manager.getGroups().get(secondaryGroup).getAllGroupPerms());
+		}
+		return result;
 	}
 
 	/**

@@ -184,8 +184,8 @@ public class Players extends AbstractConfig<NPermissions> {
 		for (final PlayerPermissions player : this.manager.getPlayers().values()) {
 			content.append("# The player '" + player.getPlayerName() + "' also has the following permissions:\n");
 			content.append("# - maingroup." + player.getMainGroup().toLowerCase() + '\n');
-			for (final String group : player.getGroups()) {
-				content.append("# - group." + group.toLowerCase() + '\n');
+			for (final String groupPerm : player.getAllGroupPerms()) {
+				content.append("# - " + groupPerm + '\n');
 			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			player.save(dummySection);
@@ -196,8 +196,8 @@ public class Players extends AbstractConfig<NPermissions> {
 		for (final LegacyPlayerPermissions legacyPlayer : this.manager.getLegacyPlayers().values()) {
 			content.append("  # The player '" + legacyPlayer.getPlayerName() + "' will also have the following permissions:\n");
 			content.append("  # - maingroup." + legacyPlayer.getMainGroup().toLowerCase() + '\n');
-			for (final String group : legacyPlayer.getGroups()) {
-				content.append("  # - group." + group.toLowerCase() + '\n');
+			for (final String groupPerm : legacyPlayer.getAllGroupPerms()) {
+				content.append("  # - " + groupPerm + '\n');
 			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			legacyPlayer.save(dummySection);

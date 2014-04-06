@@ -12,8 +12,11 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Represents the Permissions attached to a Group.
@@ -66,6 +69,20 @@ public class GroupPermissions extends PermissionsSet {
 	 */
 	public void addSuperGroup(final String group) {
 		this.superGroups.add(group);
+	}
+
+	/**
+	 * Gets all 'group.x' permissions this Group provides.
+	 *
+	 * @return all 'group.x' permissions this Group provides
+	 */
+	public SortedSet<String> getAllGroupPerms() {
+		final SortedSet<String> result = new TreeSet<>();
+		result.add("group." + this.getGroupName().toLowerCase());
+		for (final String superGroup : new TreeSet<>(this.superGroups)) {
+			result.addAll(this.manager.getGroups().get(superGroup).getAllGroupPerms());
+		}
+		return result;
 	}
 
 	/**

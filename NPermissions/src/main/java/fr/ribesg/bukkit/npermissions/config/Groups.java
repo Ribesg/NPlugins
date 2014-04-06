@@ -21,6 +21,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.logging.Level;
 
 /**
@@ -144,9 +145,20 @@ public class Groups extends AbstractConfig<NPermissions> {
 		// TODO print some (commented) example before
 
 		for (final GroupPermissions group : this.manager.getGroups().values()) {
+			final String groupPermission = "group." + group.getGroupName().toLowerCase();
+			final String mainPermission = "main" + groupPermission;
 			content.append("# The group '" + group.getGroupName() + "', also defines the following permissions:\n");
-			content.append("# - group." + group.getGroupName().toLowerCase() + " - For members of this group AND members of subgroups\n");
-			content.append("# - maingroup." + group.getGroupName().toLowerCase() + " - For players for whom this group is the main group (unique per player)\n");
+			content.append("# - " + mainPermission + " - For players for whom this group is the main group (unique per player)\n");
+			content.append("# - " + groupPermission + " - For members of this group AND members of subgroups\n");
+			final SortedSet<String> groupPerms = group.getAllGroupPerms();
+			if (groupPerms.size() > 0) {
+				content.append("# Members of this group also have the following permissions:\n");
+				for (final String groupPerm : groupPerms) {
+					if (!groupPermission.equals(groupPerm)) {
+						content.append("# - " + groupPerm + "\n");
+					}
+				}
+			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			group.save(dummySection);
 			content.append(dummySection.saveToString()).append("\n");
