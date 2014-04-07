@@ -50,6 +50,7 @@ public class Config extends AbstractConfig<NPermissions> {
 		for (final String line : frame.build()) {
 			content.append(line).append('\n');
 		}
+		content.append('\n');
 
 		// TODO add some doc comment before this
 		content.append("defaultGroup: ").append(this.defaultGroup).append("\n\n");

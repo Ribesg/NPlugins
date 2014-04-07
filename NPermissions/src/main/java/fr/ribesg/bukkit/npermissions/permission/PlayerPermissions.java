@@ -54,7 +54,7 @@ public class PlayerPermissions extends PermissionsSet {
 	public PlayerPermissions(final PermissionsManager manager, final UUID playerUuid, final String playerName, final int priority, final String mainGroup) {
 		super(manager, playerName, priority);
 		this.playerUuid = playerUuid;
-		this.mainGroup = mainGroup;
+		this.mainGroup = mainGroup.toLowerCase();
 		this.groups = new LinkedHashSet<>();
 
 		this.permissions.put("maingroup." + mainGroup.toLowerCase(), true);
