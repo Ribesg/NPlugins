@@ -63,6 +63,7 @@ public class Players extends AbstractConfig<NPermissions> {
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 		this.manager.getPlayers().clear();
+		this.manager.getLegacyPlayers().clear();
 
 		for (final String key : config.getKeys(false)) {
 			if (!config.isConfigurationSection(key)) {
@@ -74,7 +75,7 @@ public class Players extends AbstractConfig<NPermissions> {
 						plugin.error(Level.WARNING, "Unknown key '" + legacyKey + "' found in players.yml under _legacy, ignored");
 					} else {
 						final ConfigurationSection legacyPlayerSection = legacyPlayersSection.getConfigurationSection(legacyKey);
-						final String mainGroup = legacyPlayerSection.getString("mainGroup");
+						final String mainGroup = legacyPlayerSection.getString("mainGroup", plugin.getPluginConfig().getDefaultGroup()).toLowerCase();
 						final int priority = legacyPlayerSection.getInt("priority", 1);
 						final List<String> groups = legacyPlayerSection.getStringList("groups");
 						final List<String> allow = legacyPlayerSection.getStringList("allow");
@@ -103,8 +104,8 @@ public class Players extends AbstractConfig<NPermissions> {
 						}
 
 						for (final String group : groups) {
-							if (!manager.getGroups().containsKey(mainGroup)) {
-								plugin.error("Unknown group '" + key + "' found in players.yml as secondary group of player '" + legacyPlayer + "', ignored group");
+							if (!manager.getGroups().containsKey(group.toLowerCase())) {
+								plugin.error("Unknown group '" + group + "' found in players.yml as secondary group of player '" + legacyPlayer + "', ignored group");
 							} else {
 								legacyPlayer.addGroup(group);
 							}
@@ -152,8 +153,8 @@ public class Players extends AbstractConfig<NPermissions> {
 				}
 
 				for (final String group : groups) {
-					if (!manager.getGroups().containsKey(mainGroup)) {
-						plugin.error("Unknown group '" + key + "' found in players.yml as secondary group of player '" + playerName + "' with UUID '" + key + "', ignored group");
+					if (!manager.getGroups().containsKey(group.toLowerCase())) {
+						plugin.error("Unknown group '" + group + "' found in players.yml as secondary group of player '" + playerName + "' with UUID '" + key + "', ignored group");
 					} else {
 						player.addGroup(group);
 					}

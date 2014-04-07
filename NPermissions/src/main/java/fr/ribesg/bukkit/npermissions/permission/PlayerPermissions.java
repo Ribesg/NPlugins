@@ -117,7 +117,7 @@ public class PlayerPermissions extends PermissionsSet {
 	 * @param mainGroup the new main Group Permissions Set for this Player
 	 */
 	public void setMainGroup(final String mainGroup) {
-		this.mainGroup = mainGroup;
+		this.mainGroup = mainGroup.toLowerCase();
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class PlayerPermissions extends PermissionsSet {
 	 * @param group a new additional Group for this Player
 	 */
 	public void addGroup(final String group) {
-		this.groups.add(group);
+		this.groups.add(group.toLowerCase());
 	}
 
 	/**
