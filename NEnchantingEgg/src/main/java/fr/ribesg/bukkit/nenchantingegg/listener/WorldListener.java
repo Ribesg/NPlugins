@@ -98,7 +98,7 @@ public class WorldListener implements Listener {
 		if (event.getNewState().getType() == Material.SNOW) {
 			final Location loc = event.getBlock().getLocation();
 			final Altar altar = plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
-			if (altar.preventsBlockPlacement(loc)) {
+			if (altar != null && altar.preventsBlockPlacement(loc)) {
 				event.setCancelled(true);
 			}
 		}
