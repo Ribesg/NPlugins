@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncore;
 
+import fr.ribesg.bukkit.ncore.common.logging.FilterManager;
 import fr.ribesg.bukkit.ncore.config.Config;
 import fr.ribesg.bukkit.ncore.event.NEventsListener;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
@@ -49,7 +50,8 @@ import java.util.logging.Logger;
  */
 public class NCore extends JavaPlugin {
 
-	private static Logger logger;
+	private Logger        logger;
+	private FilterManager filterManager;
 
 	private Map<String, Node> nodes;
 	private Metrics           metrics;
@@ -59,7 +61,8 @@ public class NCore extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		logger = this.getLogger();
+		this.logger = this.getLogger();
+		this.filterManager = new FilterManager();
 
 		try {
 			metrics = new Metrics(this);
@@ -353,6 +356,10 @@ public class NCore extends JavaPlugin {
 
 	public Updater getUpdater() {
 		return updater;
+	}
+
+	public FilterManager getFilterManager() {
+		return filterManager;
 	}
 
 	// ##################### //

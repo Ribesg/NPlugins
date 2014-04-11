@@ -264,7 +264,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 		}
 		if (filterActivated) {
 			debug("Filter activated!");
-			Bukkit.getLogger().setFilter(new MovedTooQuicklyFilter(this));
+			getCore().getFilterManager().addDenyFilter(new MovedTooQuicklyDenyFilter(this));
 		} else {
 			debug("Filter was not activated");
 		}

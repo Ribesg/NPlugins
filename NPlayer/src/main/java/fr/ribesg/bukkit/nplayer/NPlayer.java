@@ -63,6 +63,8 @@ public class NPlayer extends NPlugin implements PlayerNode {
 	public boolean onNodeEnable() {
 		entering(getClass(), "onNodeEnable");
 
+		getCore().getFilterManager().addDenyFilter(new LoginRegisterFilter());
+
 		debug("Loading plugin config...");
 		try {
 			pluginConfig = new Config(this);
