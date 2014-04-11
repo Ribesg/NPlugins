@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
@@ -42,72 +42,26 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onPlayerCommandPreProcess(final PlayerCommandPreprocessEvent event) {
-		plugin.entering(getClass(), "onPlayerCommandPreProcess");
+	public void onPlayerChat(final AsyncPlayerChatEvent event) {
+		plugin.entering(getClass(), "onPlayerChat");
 
-		final String firstWord = event.getMessage().contains(" ") ? event.getMessage().split(" ")[0].toLowerCase() : event.getMessage().toLowerCase();
-		switch (firstWord) {
-			case "/login":
-				plugin.debug("/login command");
-				event.setCancelled(true);
-				if (Perms.hasLogin(event.getPlayer())) {
-					loginCommand(event.getPlayer(), event.getMessage().substring(6).trim().split(" "));
-				} else {
-					plugin.sendMessage(event.getPlayer(), MessageId.noPermissionForCommand);
+		final Player player = event.getPlayer();
+		final String[] split = event.getMessage().split(" ");
+
+		// Check if Player's password after first arg
+		if (split.length > 1) {
+			final User user = plugin.getUserDb().get(player.getName());
+			if (user != null) {
+				final String password = StringUtils.joinStrings(split, 1);
+				final boolean isCorrect = Security.isUserPassword(password, user);
+				if (isCorrect) {
+					plugin.debug("Player typed his password, don't output it");
+					event.setMessage(split[0] + " ****************");
 				}
-				break;
-			case "login":
-			case "/ogin":
-			case "/lgin":
-			case "/loin":
-			case "/logn":
-			case "/logi":
-			case ":login":
-			case ":ogin":
-			case ":lgin":
-			case ":loin":
-			case ":logn":
-			case ":logi":
-				// Typo on /login command, do not output the password in console or ingame
-				plugin.debug("Typo on /login");
-				event.setCancelled(true);
-				break;
-			case "/register":
-				plugin.debug("/register command");
-				event.setCancelled(true);
-				if (Perms.hasRegister(event.getPlayer())) {
-					registerCommand(event.getPlayer(), event.getMessage().substring(9).trim().split(" "));
-				} else {
-					plugin.sendMessage(event.getPlayer(), MessageId.noPermissionForCommand);
-				}
-				break;
-			case "register":
-			case "/egister":
-			case "/rgister":
-			case "/reister":
-			case "/regster":
-			case "/regiter":
-			case "/regiser":
-			case "/registr":
-			case "/registe":
-			case ":register":
-			case ":egister":
-			case ":rgister":
-			case ":reister":
-			case ":regster":
-			case ":regiter":
-			case ":regiser":
-			case ":registr":
-			case ":registe":
-				// Typo on /register command, do not output the password in console or ingame
-				plugin.debug("Typo on /register");
-				event.setCancelled(true);
-				break;
-			default:
-				break;
+			}
 		}
 
-		plugin.exiting(getClass(), "onPlayerCommandPreProcess");
+		plugin.exiting(getClass(), "onPlayerChat");
 	}
 
 	@Override
