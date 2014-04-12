@@ -47,6 +47,8 @@ public class XPDistributionEvent extends Event implements Cancellable {
 	/**
 	 * A map linking Player names to the XP they will receive.
 	 * The amount of XP can be modified, and you are free to add or remove people from this map.
+	 *
+	 * @return the map
 	 */
 	public Map<String, Integer> getXpMap() {
 		return xpMap;
@@ -54,6 +56,8 @@ public class XPDistributionEvent extends Event implements Cancellable {
 
 	/**
 	 * The total amount of XP given for this Dragon's death, for reference.
+	 *
+	 * @return the total amount of XP given for this Dragon's death, for reference
 	 */
 	public int getTotalXPAmount() {
 		return totalXPAmount;

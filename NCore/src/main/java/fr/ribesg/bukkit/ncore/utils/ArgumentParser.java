@@ -23,6 +23,8 @@ public class ArgumentParser {
 	 * - Output = { a | b c d | e f g | h"i | j" | k l'm n | 'o | p | q }
 	 *
 	 * @param args The original Bukkit command args array
+	 *
+	 * @return a new command args array
 	 */
 	public static String[] joinArgsWithQuotes(final String[] args) {
 		return new ArgumentParser(args).joinArgsWithQuotes();

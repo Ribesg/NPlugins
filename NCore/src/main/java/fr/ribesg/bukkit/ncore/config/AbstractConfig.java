@@ -55,7 +55,8 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 	/**
 	 * Default fileName to config.yml in call to {@link #loadConfig(String)}
 	 *
-	 * @throws IOException If there is an error reading / writing file
+	 * @throws IOException                   If there is an error reading / writing file
+	 * @throws InvalidConfigurationException If the configuration is malformed
 	 */
 	public void loadConfig() throws IOException, InvalidConfigurationException {
 		loadConfig("config.yml");
@@ -68,7 +69,8 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 	 *
 	 * @param fileName The name of the file to load
 	 *
-	 * @throws IOException If there is an error reading / writing file
+	 * @throws IOException                   If there is an error reading / writing file
+	 * @throws InvalidConfigurationException If the configuration is malformed
 	 */
 	public void loadConfig(final String fileName) throws IOException, InvalidConfigurationException {
 		final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + fileName);
@@ -135,6 +137,8 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 	 * Read the values in the YamlConfiguration instance and handles them correctly (Ex: saves them to Config class fields)
 	 *
 	 * @param config The config where to set values
+	 *
+	 * @throws InvalidConfigurationException If the configuration is malformed
 	 */
 	protected abstract void handleValues(final YamlConfiguration config) throws InvalidConfigurationException;
 

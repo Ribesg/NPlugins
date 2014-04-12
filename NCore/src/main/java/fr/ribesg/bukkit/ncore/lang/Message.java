@@ -24,9 +24,10 @@ public class Message {
 	private final boolean   useHeader;
 
 	/**
-	 * @param id             The Message Id
-	 * @param defaultMessage The default Message (in English)
-	 * @param awaitedArgs    The awaited arguments used while parsing the message
+	 * @param id               The Message Id
+	 * @param defaultMessage   The default Message (in English)
+	 * @param defaultUseHeader The default value for useHeader
+	 * @param awaitedArgs      The awaited arguments used while parsing the message
 	 */
 	public Message(final MessageId id, final String defaultMessage, final boolean defaultUseHeader, final String[] awaitedArgs) {
 		this.id = id;
@@ -38,11 +39,12 @@ public class Message {
 	}
 
 	/**
-	 * @param id             The Message Id
-	 * @param defaultMessage The default Message (in English)
-	 * @param awaitedArgs    The awaited arguments used while parsing the message
-	 * @param configMessage  The Message found in the configuration file
-	 * @param useHeader      Defines if we should prepend the header or not
+	 * @param id               The Message Id
+	 * @param defaultMessage   The default Message (in English)
+	 * @param awaitedArgs      The awaited arguments used while parsing the message
+	 * @param configMessage    The Message found in the configuration file
+	 * @param defaultUseHeader The default value for useHeader
+	 * @param useHeader        Defines if we should prepend the header or not
 	 */
 	public Message(final MessageId id, final String defaultMessage, final String[] awaitedArgs, final String configMessage, final boolean defaultUseHeader, final boolean useHeader) {
 		this.id = id;

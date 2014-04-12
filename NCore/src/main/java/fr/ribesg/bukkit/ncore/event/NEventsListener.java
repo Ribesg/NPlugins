@@ -29,6 +29,8 @@ public class NEventsListener implements Listener {
 
 	/**
 	 * Throws a PlayerJoinedEvent AFTER a Player joined the game.
+	 *
+	 * @param event the event
 	 */
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
@@ -43,6 +45,8 @@ public class NEventsListener implements Listener {
 
 	/**
 	 * Throws a PlayerGridMoveEvent if a Player change block-location
+	 *
+	 * @param event the event
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerMove(final PlayerMoveEvent event) {
@@ -61,6 +65,8 @@ public class NEventsListener implements Listener {
 
 	/**
 	 * Throws a PlayerChunkMoveEvent if a Player change chunk-location
+	 *
+	 * @param event the event
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerGridMove(final PlayerGridMoveEvent event) {

@@ -43,7 +43,9 @@ public class ChunkRegenEvent extends Event implements Cancellable {
 	}
 
 	/**
-	 * The chunk that is about to be regen (or not)
+	 * The chunk that is about to be regen (or not).
+	 *
+	 * @return the chunk that is about to be regen (or not)
 	 */
 	public Chunk getChunk() {
 		return chunk;

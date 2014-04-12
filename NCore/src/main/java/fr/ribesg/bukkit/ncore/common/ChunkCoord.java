@@ -48,7 +48,11 @@ public class ChunkCoord {
 	}
 
 	/**
-	 * Yeah it's a deserialization method.
+	 * Deserialize a String into a ChunkCoord object.
+	 *
+	 * @param string a String representation of a ChunkCoord
+	 *
+	 * @return a ChunkCoord matching this String representation
 	 */
 	public static ChunkCoord fromString(final String string) {
 		final String[] split = string.split(SEPARATOR);
