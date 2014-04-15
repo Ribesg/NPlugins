@@ -18,12 +18,15 @@ import fr.ribesg.bukkit.ntalk.filter.bean.JailFilter;
 import fr.ribesg.bukkit.ntalk.filter.bean.MuteFilter;
 import fr.ribesg.bukkit.ntalk.filter.bean.ReplaceFilter;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
@@ -156,10 +159,33 @@ public class TalkListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerChatLast(final AsyncPlayerChatEvent event) {
-		event.setFormat(plugin.getFormater().getFormat(event.getPlayer(), true));
+		final String[] formats = plugin.getFormater().getFormat(event.getPlayer(), true);
+		event.setFormat(formats[0]);
+		String message = event.getMessage().trim();
 		if (Perms.hasColor(event.getPlayer(), true)) {
-			event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage().trim())); // Reformat the message
+			message = ColorUtils.colorize(message);
+		}
+		event.setMessage(message); // Reformat the message
+
+		final Iterator<Player> it = event.getRecipients().iterator();
+		final Set<Player> players = new HashSet<>();
+		while (it.hasNext()) {
+			final Player player = it.next();
+			if (!Perms.hasSeeNicks(player, true)) {
+				it.remove();
+				players.add(player);
+			}
 		}
 
+		final String normalMessage = String.format(formats[1], event.getPlayer().getDisplayName(), message);
+		Bukkit.getScheduler().runTask(plugin, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				for (final Player p : players) {
+					p.sendMessage(normalMessage);
+				}
+			}
+		});
 	}
 }

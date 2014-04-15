@@ -84,7 +84,7 @@ public class Config extends AbstractConfig<NTalk> {
 		setGroupFormats(new HashMap<String, Format>());
 
 		// template. Default: "&f<[prefix][name]%%([realName])%%[suffix]&f> [message]".
-		// Possible values: Any String containing at least "[name]", "[message]" and "%%X%%" here X contains "[realName]"
+		// Possible values: Any String containing at least "[name]" and "[message]""
 		setTemplate(config.getString("template", defaultTemplate));
 		if (!getTemplate().contains("[name]") || !getTemplate().contains("[message]")) {
 			wrongValue("config.yml", "template", getTemplate(), defaultTemplate);
@@ -92,7 +92,7 @@ public class Config extends AbstractConfig<NTalk> {
 		}
 
 		// pmTemplate. Default: "&f<[prefixFrom][nameFrom]%1%([realNameFrom])%%[suffixFrom]&c -> &f[prefixTo][nameTo]%2%([realNameTo])%%[suffixTo]&f> [message]".
-		// Possible values: Any String containing at least "[nameFrom]", "[nameTo]", "[message]", "%1%X%%" here X contains "[realNameFrom]" and "%2%X%%" here X contains "[realNameTo]"
+		// Possible values: Any String containing at least "[nameFrom]", "[nameTo]" and "[message]"
 		setPmTemplate(config.getString("pmTemplate", defaultPmTemplate));
 		if (!getPmTemplate().contains("[nameFrom]") || !getPmTemplate().contains("[nameTo]") || !getPmTemplate().contains("[message]")) {
 			wrongValue("config.yml", "pmTemplate", getPmTemplate(), defaultPmTemplate);

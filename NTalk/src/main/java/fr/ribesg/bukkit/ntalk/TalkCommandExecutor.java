@@ -156,14 +156,14 @@ public class TalkCommandExecutor implements CommandExecutor {
 				for (int i = 1; i < args.length; i++) {
 					messageBuilder.append(' ').append(args[i]);
 				}
-				final String formattedMessage = sendMessage(sender, target, messageBuilder.toString());
+				final String[] formattedMessage = sendMessage(sender, target, messageBuilder.toString());
 				for (final Player p : plugin.getServer().getOnlinePlayers()) {
 					if (Perms.hasSpy(p) && p != target && p != sender) {
-						p.sendMessage(formattedMessage);
+						p.sendMessage(formattedMessage[Perms.hasSeeNicks(p, false) ? 0 : 1]);
 					}
 				}
 				if (target != plugin.getServer().getConsoleSender()) {
-					plugin.getServer().getConsoleSender().sendMessage(formattedMessage);
+					plugin.getServer().getConsoleSender().sendMessage(formattedMessage[0]);
 				}
 				return true;
 			} else {
@@ -214,19 +214,19 @@ public class TalkCommandExecutor implements CommandExecutor {
 
 	private void sendMessages(final CommandSender from, final Set<CommandSender> toSet, final Set<CommandSender> spySet, final String message) {
 		for (final CommandSender to : toSet) {
-			final String formattedMessage = sendMessage(from, to, message);
+			final String formattedMessage[] = sendMessage(from, to, message);
 			for (final CommandSender spy : spySet) {
 				if (spy != from && spy != to) {
-					spy.sendMessage(formattedMessage);
+					spy.sendMessage(formattedMessage[Perms.hasSeeNicks(spy, false) ? 0 : 1]);
 				}
 			}
 		}
 	}
 
-	private String sendMessage(final CommandSender from, final CommandSender to, final String message) {
-		final String formattedMessage = plugin.getFormater().parsePM(from, to, message);
-		from.sendMessage(formattedMessage);
-		to.sendMessage(formattedMessage);
+	private String[] sendMessage(final CommandSender from, final CommandSender to, final String message) {
+		final String[] formattedMessage = plugin.getFormater().parsePM(from, to, message);
+		from.sendMessage(formattedMessage[Perms.hasSeeNicks(from, false) ? 0 : 1]);
+		to.sendMessage(formattedMessage[Perms.hasSeeNicks(to, false) ? 0 : 1]);
 		lastReceivedPmMap.put(to.getName(), from.getName());
 		return formattedMessage;
 	}
