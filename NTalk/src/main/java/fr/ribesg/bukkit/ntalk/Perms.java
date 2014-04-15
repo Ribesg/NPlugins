@@ -23,6 +23,7 @@ public class Perms {
 	private static final String CMD_PM     = "ntalk.cmd.pm";
 	private static final String CMD_PR     = "ntalk.cmd.pr";
 	private static final String CMD_NICK   = "ntalk.cmd.nick";
+	private static final String SEE_NICKS  = "ntalk.seenicks";
 
 	public static boolean hasAdmin(final CommandSender user, final boolean async) {
 		if (async) {
@@ -63,6 +64,17 @@ public class Perms {
 			return hasAdmin(user, true) || AsyncPermAccessor.has(user.getName(), COLOR);
 		} else {
 			return hasAdmin(user, false) || user.hasPermission(COLOR);
+		}
+	}
+
+	public static boolean hasSeeNicks(final CommandSender user, final boolean async) {
+		if (async) {
+			if (!(user instanceof Player)) {
+				throw new UnsupportedOperationException();
+			}
+			return hasAdmin(user, true) || AsyncPermAccessor.has(user.getName(), SEE_NICKS);
+		} else {
+			return hasAdmin(user, false) || user.hasPermission(SEE_NICKS);
 		}
 	}
 }

@@ -187,7 +187,8 @@ public class TalkCommandExecutor implements CommandExecutor {
 			}
 			plugin.getPluginConfig().getPlayerNicknames().remove(realName);
 			plugin.sendMessage(sender, MessageId.talk_youDeNickNamed, realName);
-			if (plugin.getServer().getPlayerExact(realName) != null) {
+			final Player p = plugin.getServer().getPlayerExact(realName);
+			if (p != null && p != sender) {
 				plugin.sendMessage(plugin.getServer().getPlayerExact(realName), MessageId.talk_youWereDeNickNamed, sender.getName());
 			}
 			return true;
@@ -203,7 +204,8 @@ public class TalkCommandExecutor implements CommandExecutor {
 			}
 			plugin.getPluginConfig().getPlayerNicknames().put(realName, nick);
 			plugin.sendMessage(sender, MessageId.talk_youNickNamed, realName, nick);
-			if (plugin.getServer().getPlayerExact(realName) != null) {
+			final Player p = plugin.getServer().getPlayerExact(realName);
+			if (p != null && p != sender) {
 				plugin.sendMessage(plugin.getServer().getPlayerExact(realName), MessageId.talk_youWereNickNamed, nick, sender.getName());
 			}
 			return true;

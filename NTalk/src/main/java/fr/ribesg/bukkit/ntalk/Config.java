@@ -24,8 +24,8 @@ import java.util.Set;
 
 public class Config extends AbstractConfig<NTalk> {
 
-	private static final String defaultTemplate        = "&f<[prefix][name][suffix]&f> [message]";
-	private static final String defaultPmTemplate      = "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> [message]";
+	private static final String defaultTemplate        = "&f<[prefix][name]%%([realName])%%[suffix]&f> [message]";
+	private static final String defaultPmTemplate      = "&f<[prefixFrom][nameFrom]%1%([realNameFrom])%%[suffixFrom]&c -> &f[prefixTo][nameTo]%2%([realNameTo])%%[suffixTo]&f> [message]";
 	private static final String defaultTempMuteCommand = "/mute %player% %duration%s %reason%";
 	private static final String defaultTempBanCommand  = "/ban %player% %duration%s %reason%";
 	private static final String defaultTempJailCommand = "/jail %player% %duration%s %jailName% %reason%";
@@ -83,16 +83,16 @@ public class Config extends AbstractConfig<NTalk> {
 		setPlayerNicknames(new HashMap<String, String>());
 		setGroupFormats(new HashMap<String, Format>());
 
-		// template. Default: "&f<[prefix][name][suffix]&f> [message]".
-		// Possible values: Any String containing at least "[name]" and "[message]"
+		// template. Default: "&f<[prefix][name]%%([realName])%%[suffix]&f> [message]".
+		// Possible values: Any String containing at least "[name]", "[message]" and "%%X%%" here X contains "[realName]"
 		setTemplate(config.getString("template", defaultTemplate));
 		if (!getTemplate().contains("[name]") || !getTemplate().contains("[message]")) {
 			wrongValue("config.yml", "template", getTemplate(), defaultTemplate);
 			setTemplate(defaultTemplate);
 		}
 
-		// pmTemplate. Default: "&f<[prefixFrom][nameFrom][suffixFrom]&c -> &f[prefixTo][nameTo][suffixTo]&f> [message]".
-		// Possible values: Any String containing at least "[nameFrom]", "[nameTo]" and "[message]"
+		// pmTemplate. Default: "&f<[prefixFrom][nameFrom]%1%([realNameFrom])%%[suffixFrom]&c -> &f[prefixTo][nameTo]%2%([realNameTo])%%[suffixTo]&f> [message]".
+		// Possible values: Any String containing at least "[nameFrom]", "[nameTo]", "[message]", "%1%X%%" here X contains "[realNameFrom]" and "%2%X%%" here X contains "[realNameTo]"
 		setPmTemplate(config.getString("pmTemplate", defaultPmTemplate));
 		if (!getPmTemplate().contains("[nameFrom]") || !getPmTemplate().contains("[nameTo]") || !getPmTemplate().contains("[message]")) {
 			wrongValue("config.yml", "pmTemplate", getPmTemplate(), defaultPmTemplate);

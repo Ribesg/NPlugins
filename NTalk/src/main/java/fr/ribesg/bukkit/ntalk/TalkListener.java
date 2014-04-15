@@ -160,5 +160,6 @@ public class TalkListener implements Listener {
 		if (Perms.hasColor(event.getPlayer(), true)) {
 			event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage().trim())); // Reformat the message
 		}
+
 	}
 }
