@@ -102,7 +102,7 @@ public abstract class AbstractMessages {
 					} else {
 						final String value = section.getString("value", def.getDefaultMessage());
 						final boolean useHeader = section.getBoolean("useHeader", true);
-						messagesMap.put(id, new Message(id, def.getDefaultMessage(), def.getAwaitedArgs(), value, def.defaultUseHeader(), useHeader));
+						messagesMap.put(id, new Message(id, def.getDefaultMessage(), value, def.defaultUseHeader(), useHeader, def.getAwaitedArgs()));
 					}
 				} catch (final IllegalArgumentException e) {
 					plugin.getLogger().warning(idString + " is not / no longer used, removing it from messages config file.");
