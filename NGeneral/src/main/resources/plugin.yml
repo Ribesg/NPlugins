@@ -93,3 +93,19 @@ commands:
     aliases: [in]
     usage: |
       /<command> <create|delete> <networkName>
+  heal:
+    description: Heal Command
+    usage: |
+      /<command> [playerName[,...][ ...]]
+  feed:
+    description: Feed Command
+    usage: |
+      /<command> [playerName[,...][ ...]]
+  health:
+    description: Health Command
+    usage: |
+      /<command> [playerName[,...][ ...]] <value>
+  food:
+    description: Food Command
+    usage: |
+      /<command> [playerName[,...][ ...]] <value>
