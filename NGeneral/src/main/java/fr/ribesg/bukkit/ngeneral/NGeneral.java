@@ -81,7 +81,7 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		// Feature init
 		this.features.initialize();
 
-		// Simple commands - Self-registered
+		// Simple features - Self-registered
 		new FlySpeedCommand(this);
 		new WalkSpeedCommand(this);
 		new BusyCommand(this);
@@ -92,6 +92,7 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		new SignColorsListener(this);
 		new TeleportCommands(this);
 		new WelcomeListener(this);
+		new HealFoodCommands(this);
 
 		return true;
 	}

@@ -39,6 +39,10 @@ public class Perms {
 	private static final String CMD_TPTHERE           = "ngeneral.cmd.tpthere";
 	private static final String CMD_TPWORLD           = "ngeneral.cmd.tpworld";
 	private static final String CMD_TPBACK            = "ngeneral.cmd.tpback";
+	private static final String CMD_HEAL              = "ngeneral.cmd.heal";
+	private static final String CMD_HEALTH            = "ngeneral.cmd.health";
+	private static final String CMD_FEED              = "ngeneral.cmd.feed";
+	private static final String CMD_FOOD              = "ngeneral.cmd.food";
 	private static final String PROTECTIONSIGN        = "ngeneral.protectionsign";
 	private static final String PROTECTIONSIGN_BYPASS = "ngeneral.protectionsign.bypass";
 	private static final String PROTECTIONSIGN_BREAK  = "ngeneral.protectionsign.break";
@@ -138,6 +142,22 @@ public class Perms {
 
 	public static boolean hasTpBack(final Permissible user) {
 		return user.isOp() || user.hasPermission(CMD_TPBACK) || user.hasPermission(ADMIN);
+	}
+
+	public static boolean hasHeal(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_HEAL) || user.hasPermission(ADMIN);
+	}
+
+	public static boolean hasHealth(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_HEALTH) || user.hasPermission(ADMIN);
+	}
+
+	public static boolean hasFeed(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_FEED) || user.hasPermission(ADMIN);
+	}
+
+	public static boolean hasFood(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_FOOD) || user.hasPermission(ADMIN);
 	}
 
 	public static boolean hasProtectionSign(final Player player) {

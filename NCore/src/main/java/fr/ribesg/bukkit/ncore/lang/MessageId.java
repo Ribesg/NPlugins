@@ -370,6 +370,19 @@ public enum MessageId {
 	general_tp_somebodyTeleportedYouBack,
 	general_tp_youTeleportedSomebodyBack,
 
+	general_heal_autoHeal,
+	general_heal_healedBy,
+	general_heal_healed,
+	general_feed_autoFeed,
+	general_feed_fedBy,
+	general_feed_fed,
+	general_health_autoSet,
+	general_health_setBy,
+	general_health_set,
+	general_food_autoSet,
+	general_food_setBy,
+	general_food_set,
+
 	general_timeSet,
 	general_weatherSet,
 

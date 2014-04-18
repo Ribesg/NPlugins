@@ -199,6 +199,32 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.general_tp_somebodyTeleportedYouBack, "&a%teleporter% teleported you back to the location you were before", true, new String[] {"%teleporter%"}));
 		newMessages.add(new Message(MessageId.general_tp_youTeleportedSomebodyBack, "&aYou teleported %player% back to the location he was before", true, new String[] {"%player%"}));
 
+		// Commands - HEAL / FEED / HEALTH / FOOD
+		newMessages.add(new Message(MessageId.general_heal_autoHeal, "&aYou healed youself", true, null));
+		newMessages.add(new Message(MessageId.general_heal_healedBy, "&aYou have been healed by %name%", true, new String[] {"%name%"}));
+		newMessages.add(new Message(MessageId.general_heal_healed, "&aYou healed %name%", true, new String[] {"%name%"}));
+		newMessages.add(new Message(MessageId.general_feed_autoFeed, "&aYou fed youself", true, null));
+		newMessages.add(new Message(MessageId.general_feed_fedBy, "&aYou have been fed by %name%", true, new String[] {"%name%"}));
+		newMessages.add(new Message(MessageId.general_feed_fed, "&aYou fed %name%", true, new String[] {"%name%"}));
+		newMessages.add(new Message(MessageId.general_health_autoSet, "&aYou set your health to %value%", true, new String[] {"%value%"}));
+		newMessages.add(new Message(MessageId.general_health_setBy, "&a%name% set your health to %value%", true, new String[] {
+				"%name%",
+				"%value%"
+		}));
+		newMessages.add(new Message(MessageId.general_health_set, "&aYou set %name%'s health to %value%", true, new String[] {
+				"%name%",
+				"%value%"
+		}));
+		newMessages.add(new Message(MessageId.general_food_autoSet, "&aYou set your food level to %value%", true, new String[] {"%value%"}));
+		newMessages.add(new Message(MessageId.general_food_setBy, "&a%name% set your food level to %value%", true, new String[] {
+				"%name%",
+				"%value%"
+		}));
+		newMessages.add(new Message(MessageId.general_food_set, "&aYou set %name%'s food level to %value%", true, new String[] {
+				"%name%",
+				"%value%"
+		}));
+
 		// Feature - SIGN COLORS
 		newMessages.add(new Message(MessageId.general_signcolors_permissionDenied, "&cYou do not have the permission to use colors on signs", true, null));
 
