@@ -59,7 +59,7 @@ public class Message {
 	 * @return a String representation of what arguments were awaited
 	 */
 	public String getAwaitedArgsString() {
-		if (awaitedArgs == null) {
+		if (awaitedArgs == null || awaitedArgs.length == 0) {
 			return "none";
 		} else {
 			final StringBuilder s = new StringBuilder();
@@ -75,7 +75,7 @@ public class Message {
 	 * @return the number of arguments awaited
 	 */
 	public int getAwaitedArgsNb() {
-		if (awaitedArgs == null) {
+		if (awaitedArgs == null || awaitedArgs.length == 0) {
 			return 0;
 		} else {
 			return awaitedArgs.length;
