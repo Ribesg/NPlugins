@@ -29,6 +29,7 @@ public enum Attribute {
 	// Location
 	EXTERNAL_POINT,
 	INTERNAL_POINT,
+	RESPAWN_POINT,
 
 	// Vector
 	BOOSTER_VECTOR;
@@ -128,6 +129,11 @@ public enum Attribute {
 				case "BOOSTERVECTOR":
 					fa = BOOSTER_VECTOR;
 					break;
+				case "RESPAWN":
+				case "R_POINT":
+				case "RESPAWNPOINT":
+					fa = RESPAWN_POINT;
+					break;
 				default:
 					fa = null;
 					break;
@@ -146,7 +152,7 @@ public enum Attribute {
 	}
 
 	public static boolean isLocationAttribute(final Attribute att) {
-		return att != null && EXTERNAL_POINT.compareTo(att) <= 0 && INTERNAL_POINT.compareTo(att) >= 0;
+		return att != null && EXTERNAL_POINT.compareTo(att) <= 0 && RESPAWN_POINT.compareTo(att) >= 0;
 	}
 
 	public static boolean isVectorAttribute(final Attribute att) {

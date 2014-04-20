@@ -16,14 +16,7 @@ import fr.ribesg.bukkit.ncuboid.config.GroupConfig;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class RegionDb implements Iterable<GeneralRegion> {
 
@@ -154,68 +147,21 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		return getPrior(getAllByLocation(loc));
 	}
 
-	public GeneralRegion getPrior(final Set<GeneralRegion> regions) {
+	public GeneralRegion getPrior(final SortedSet<GeneralRegion> regions) {
 		if (regions == null) {
 			return null;
 		} else {
-			// Switch on number of regions at this location
-			switch (regions.size()) {
-				case 0:
-					return null;
-				case 1: // We're done
-					return regions.iterator().next();
-				case 2: // It's not too complicated
-					final Iterator<GeneralRegion> it = regions.iterator();
-					final GeneralRegion region1 = it.next();
-					final GeneralRegion region2 = it.next();
-					final int priorityCompare = Integer.compare(region1.getPriority(), region2.getPriority());
-					// Check priority
-					if (priorityCompare < 0) {
-						return region2;
-					} else if (priorityCompare > 0) {
-						return region1;
-					} else {
-						final int sizeCompare = Long.compare(region1.getTotalSize(), region2.getTotalSize());
-						if (sizeCompare < 0) {
-							return region1;
-						} else if (sizeCompare > 0) {
-							return region2;
-						} else {
-							// Wtf ! Well, we should always return the same one.
-							// So let's return in alphabetic order
-							if (region1.getRegionName().compareTo(region2.getRegionName()) < 0) {
-								return region1;
-							} else { // This can't return 0 as names are unique, so it's < or >
-								return region2;
-							}
-						}
-					}
-				default: // Let's compare them all in O(n) time
-					int maxPriority = Integer.MIN_VALUE; // "current" max priority in regions Set
-					final SortedMap<Long, GeneralRegion> sizeMap = new TreeMap<>(); // TotalSize ; Region
-					for (final GeneralRegion region : regions) {
-						if (region.getPriority() > maxPriority) {
-							// Higher priority spotted, all previous regions are less interesting
-							maxPriority = region.getPriority();
-							sizeMap.clear();
-							sizeMap.put(region.getTotalSize(), region);
-						} else if (region.getPriority() == maxPriority) {
-							sizeMap.put(region.getTotalSize(), region);
-						}
-					}
-					// TreeMap is already sorted by size, take the first one
-					return sizeMap.get(sizeMap.firstKey());
-			}
+			return regions.first();
 		}
 	}
 
-	public Set<GeneralRegion> getAllByLocation(final Location loc) {
+	public SortedSet<GeneralRegion> getAllByLocation(final Location loc) {
 		return getAllByLocation(new NLocation(loc));
 	}
 
-	public Set<GeneralRegion> getAllByLocation(final NLocation loc) {
+	public SortedSet<GeneralRegion> getAllByLocation(final NLocation loc) {
 		final ChunkCoord chunkKey = new ChunkCoord(loc);
-		final Set<GeneralRegion> regions = new HashSet<>();
+		final SortedSet<GeneralRegion> regions = new TreeSet<>();
 		if (byWorld.containsKey("world_" + loc.getWorldName())) {
 			regions.add(byWorld.get("world_" + loc.getWorldName()));
 		}

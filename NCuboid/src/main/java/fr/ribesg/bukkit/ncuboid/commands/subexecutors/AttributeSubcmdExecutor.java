@@ -97,8 +97,8 @@ public class AttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 						if ("set".equalsIgnoreCase(args[2])) {
 							final Location loc = ((Player) sender).getLocation();
 							c.setLocationAttribute(att, loc);
-						} else {
-							return false;
+						} else if ("unset".equalsIgnoreCase(args[2])) {
+							c.setLocationAttribute(att, null);
 						}
 					} else {
 						getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);

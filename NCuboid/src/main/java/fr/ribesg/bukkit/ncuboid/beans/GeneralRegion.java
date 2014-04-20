@@ -16,7 +16,7 @@ import org.bukkit.util.Vector;
 
 import java.util.Set;
 
-public abstract class GeneralRegion extends Region {
+public abstract class GeneralRegion extends Region implements Comparable<GeneralRegion> {
 
 	public static enum RegionType {
 		// Cuboid Region
@@ -221,5 +221,20 @@ public abstract class GeneralRegion extends Region {
 
 	public void denyCommand(final String command) {
 		rights.denyCommand(command);
+	}
+
+	@Override
+	public int compareTo(final GeneralRegion o) {
+		int res = Integer.compare(this.getPriority(), o.getPriority());
+		if (res != 0) {
+			return res;
+		} else {
+			res = Long.compare(this.getTotalSize(), o.getTotalSize());
+			if (res != 0) {
+				return res;
+			} else {
+				return this.getRegionName().compareTo(o.getRegionName());
+			}
+		}
 	}
 }
