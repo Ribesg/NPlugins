@@ -15,13 +15,14 @@ import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 public class ExtendedPlayerTeleportEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion      fromRegion;
-	private final Set<GeneralRegion> fromRegions;
-	private final GeneralRegion      toRegion;
-	private final Set<GeneralRegion> toRegions;
+	private final GeneralRegion            fromRegion;
+	private final SortedSet<GeneralRegion> fromRegions;
+	private final GeneralRegion            toRegion;
+	private final SortedSet<GeneralRegion> toRegions;
 
 	public ExtendedPlayerTeleportEvent(final RegionDb db, final PlayerTeleportEvent event) {
 		super(event);

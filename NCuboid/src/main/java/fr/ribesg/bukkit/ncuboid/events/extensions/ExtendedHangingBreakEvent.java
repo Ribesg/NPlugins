@@ -15,11 +15,12 @@ import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 public class ExtendedHangingBreakEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion      region;
-	private final Set<GeneralRegion> regions;
+	private final GeneralRegion            region;
+	private final SortedSet<GeneralRegion> regions;
 
 	public ExtendedHangingBreakEvent(final RegionDb db, final HangingBreakEvent event) {
 		super(event);

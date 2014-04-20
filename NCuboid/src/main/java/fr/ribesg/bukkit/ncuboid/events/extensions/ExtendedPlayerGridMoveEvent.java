@@ -15,14 +15,15 @@ import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 public class ExtendedPlayerGridMoveEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion      fromRegion;
-	private final Set<GeneralRegion> fromRegions;
-	private final GeneralRegion      toRegion;
-	private final Set<GeneralRegion> toRegions;
-	private       boolean            customCancelled;
+	private final GeneralRegion            fromRegion;
+	private final SortedSet<GeneralRegion> fromRegions;
+	private final GeneralRegion            toRegion;
+	private final SortedSet<GeneralRegion> toRegions;
+	private       boolean                  customCancelled;
 
 	public ExtendedPlayerGridMoveEvent(final RegionDb db, final PlayerGridMoveEvent event) {
 		super(event);

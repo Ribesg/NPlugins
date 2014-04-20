@@ -15,13 +15,14 @@ import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 public class ExtendedPlayerInteractEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion      clickedRegion;
-	private final Set<GeneralRegion> clickedRegions;
-	private final GeneralRegion      relativeClickedRegion;
-	private final Set<GeneralRegion> relativeClickedRegions;
+	private final GeneralRegion            clickedRegion;
+	private final SortedSet<GeneralRegion> clickedRegions;
+	private final GeneralRegion            relativeClickedRegion;
+	private final SortedSet<GeneralRegion> relativeClickedRegions;
 
 	// Called only if event.hasBlock()
 	public ExtendedPlayerInteractEvent(final RegionDb db, final PlayerInteractEvent event) {

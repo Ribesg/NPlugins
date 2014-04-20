@@ -97,6 +97,7 @@ public class Perms {
 			// Locations
 			attributesPermissions.put(Attribute.EXTERNAL_POINT, "ncuboid.attribute.externalpoint");
 			attributesPermissions.put(Attribute.INTERNAL_POINT, "ncuboid.attribute.internalpoint");
+			attributesPermissions.put(Attribute.RESPAWN_POINT, "ncuboid.attribute.respawnpoint");
 
 			// Vectors
 			attributesPermissions.put(Attribute.BOOSTER_VECTOR, "ncuboid.flag.booster");

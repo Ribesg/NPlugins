@@ -15,11 +15,12 @@ import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 public class ExtendedPlayerJoinEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion      region;
-	private final Set<GeneralRegion> regions;
+	private final GeneralRegion            region;
+	private final SortedSet<GeneralRegion> regions;
 
 	public ExtendedPlayerJoinEvent(final RegionDb db, final PlayerJoinEvent event) {
 		super(event);

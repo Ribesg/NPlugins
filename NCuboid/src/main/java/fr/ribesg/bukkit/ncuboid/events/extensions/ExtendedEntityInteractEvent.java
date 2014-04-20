@@ -15,11 +15,12 @@ import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 public class ExtendedEntityInteractEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion      region;
-	private final Set<GeneralRegion> regions;
+	private final GeneralRegion            region;
+	private final SortedSet<GeneralRegion> regions;
 
 	public ExtendedEntityInteractEvent(final RegionDb db, final EntityInteractEvent event) {
 		super(event);

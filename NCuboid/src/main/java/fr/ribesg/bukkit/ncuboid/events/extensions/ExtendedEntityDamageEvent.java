@@ -18,13 +18,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 
-	private final Set<GeneralRegion> entityRegions;
-	private       Set<GeneralRegion> damagerRegions;
-	private final GeneralRegion      entityRegion;
-	private       GeneralRegion      damagerRegion;
+	private final SortedSet<GeneralRegion> entityRegions;
+	private       SortedSet<GeneralRegion> damagerRegions;
+	private final GeneralRegion            entityRegion;
+	private       GeneralRegion            damagerRegion;
 
 	private boolean damagerProjectile = false;
 	private Entity shooter;
