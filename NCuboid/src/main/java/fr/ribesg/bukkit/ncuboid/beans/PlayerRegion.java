@@ -11,11 +11,12 @@ package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncore.common.ChunkCoord;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import org.bukkit.command.CommandSender;
+import fr.ribesg.bukkit.ncore.config.UuidDb;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public abstract class PlayerRegion extends GeneralRegion {
 
@@ -37,7 +38,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 	}
 
 	private String          regionName;
-	private String          ownerName;
+	private UUID            ownerId;
 	private RegionState     state;
 	private long            totalSize;
 	private Set<ChunkCoord> chunks;
@@ -45,21 +46,21 @@ public abstract class PlayerRegion extends GeneralRegion {
 	/**
 	 * Create a new Region, when user select points etc
 	 */
-	public PlayerRegion(final String regionName, final String ownerName, final String worldName, final RegionType type) {
+	public PlayerRegion(final String regionName, final UUID ownerId, final String worldName, final RegionType type) {
 		super(worldName, type, 1);
 		setRegionName(regionName);
-		setOwnerName(ownerName);
+		setOwnerId(ownerId);
 		setState(RegionState.TMPSTATE1);
 	}
 
 	/**
 	 * Create a Region from a save
 	 */
-	public PlayerRegion(final String regionName, final String ownerName, final String worldName, final RegionState state, final long totalSize, final RegionType type, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts) {
+	public PlayerRegion(final String regionName, final UUID ownerId, final String worldName, final RegionState state, final long totalSize, final RegionType type, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts) {
 
 		super(worldName, type, rights, priority, flags, flagAtts);
 		setRegionName(regionName);
-		setOwnerName(ownerName);
+		setOwnerId(ownerId);
 		setState(state);
 		setTotalSize(totalSize);
 	}
@@ -86,17 +87,17 @@ public abstract class PlayerRegion extends GeneralRegion {
 
 	// Info
 	public String getInfoLine() {
-		return "- " + getRegionName() + " (" + getOwnerName() + ") " + getSizeString();
+		return "- " + getRegionName() + " (" + UuidDb.getName(this.ownerId) + ") " + getSizeString();
 	}
 
 	public abstract String getSizeString();
 
-	public boolean isOwner(final CommandSender sender) {
-		return sender instanceof Player && isOwner(sender.getName());
+	public boolean isOwner(final Player player) {
+		return isOwnerId(player.getUniqueId());
 	}
 
-	public boolean isOwner(final String playerName) {
-		return this.ownerName.equals(playerName);
+	public boolean isOwnerId(final UUID id) {
+		return this.ownerId.equals(id);
 	}
 
 	public Set<ChunkCoord> getChunks() {
@@ -115,12 +116,12 @@ public abstract class PlayerRegion extends GeneralRegion {
 		this.regionName = regionName;
 	}
 
-	public String getOwnerName() {
-		return ownerName;
+	public UUID getOwnerId() {
+		return ownerId;
 	}
 
-	public void setOwnerName(final String ownerName) {
-		this.ownerName = ownerName;
+	public void setOwnerId(final UUID ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	public RegionState getState() {
@@ -142,44 +143,44 @@ public abstract class PlayerRegion extends GeneralRegion {
 	}
 
 	@Override
-	public boolean isUser(final CommandSender sender) {
-		return isOwner(sender.getName()) || super.isUser(sender);
+	public boolean isUser(final Player player) {
+		return isOwnerId(player.getUniqueId()) || super.isUser(player);
 	}
 
 	@Override
-	public boolean isUserName(final String name) {
-		return isOwner(name) || super.isUserName(name);
+	public boolean isUserId(final UUID id) {
+		return isOwnerId(id) || super.isUserId(id);
 	}
 
 	@Override
-	public boolean isAdmin(final CommandSender sender) {
-		return isOwner(sender.getName()) || super.isAdmin(sender);
+	public boolean isAdmin(final Player player) {
+		return isOwnerId(player.getUniqueId()) || super.isAdmin(player);
 	}
 
 	@Override
-	public boolean isAdminName(final String name) {
-		return isOwner(name) || super.isAdminName(name);
+	public boolean isAdminId(final UUID id) {
+		return isOwnerId(id) || super.isAdminId(id);
 	}
 
 	@Override
-	public Set<String> getUsers() {
-		final Set<String> users = super.getUsers();
-		final Set<String> result = new HashSet<>();
+	public Set<UUID> getUsers() {
+		final Set<UUID> users = super.getUsers();
+		final Set<UUID> result = new HashSet<>();
 		if (users != null) {
 			result.addAll(users);
 		}
-		result.add(getOwnerName().toLowerCase());
+		result.add(getOwnerId());
 		return result;
 	}
 
 	@Override
-	public Set<String> getAdmins() {
-		final Set<String> admins = super.getAdmins();
-		final Set<String> result = new HashSet<>();
+	public Set<UUID> getAdmins() {
+		final Set<UUID> admins = super.getAdmins();
+		final Set<UUID> result = new HashSet<>();
 		if (admins != null) {
 			result.addAll(admins);
 		}
-		result.add(getOwnerName().toLowerCase());
+		result.add(getOwnerId());
 		return result;
 	}
 }

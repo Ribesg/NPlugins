@@ -11,10 +11,11 @@ package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.Set;
+import java.util.UUID;
 
 public abstract class GeneralRegion extends Region implements Comparable<GeneralRegion> {
 
@@ -151,20 +152,20 @@ public abstract class GeneralRegion extends Region implements Comparable<General
 		return attributes.getStringRepresentation(att);
 	}
 
-	public boolean isUser(final CommandSender sender) {
-		return rights.isUser(sender);
+	public boolean isUser(final Player player) {
+		return rights.isUser(player);
 	}
 
-	public boolean isUserName(final String name) {
-		return rights.isUserName(name);
+	public boolean isUserId(final UUID id) {
+		return rights.isUserId(id);
 	}
 
-	public boolean isAdmin(final CommandSender sender) {
-		return rights.isAdmin(sender);
+	public boolean isAdmin(final Player player) {
+		return rights.isAdmin(player);
 	}
 
-	public boolean isAdminName(final String name) {
-		return rights.isAdminName(name);
+	public boolean isAdminId(final UUID id) {
+		return rights.isAdminId(id);
 	}
 
 	public boolean isAllowedGroup(final String groupName) {
@@ -175,11 +176,11 @@ public abstract class GeneralRegion extends Region implements Comparable<General
 		return rights.isAllowedCommand(command);
 	}
 
-	public Set<String> getUsers() {
+	public Set<UUID> getUsers() {
 		return rights.getUsers();
 	}
 
-	public Set<String> getAdmins() {
+	public Set<UUID> getAdmins() {
 		return rights.getAdmins();
 	}
 
@@ -191,20 +192,20 @@ public abstract class GeneralRegion extends Region implements Comparable<General
 		return rights.getDisallowedCommands();
 	}
 
-	public void removeUser(final String playerName) {
-		rights.removeUser(playerName);
+	public void removeUser(final UUID id) {
+		rights.removeUser(id);
 	}
 
-	public void addUser(final String playerName) {
-		rights.addUser(playerName);
+	public void addUser(final UUID id) {
+		rights.addUser(id);
 	}
 
-	public void addAdmin(final String playerName) {
-		rights.addAdmin(playerName);
+	public void addAdmin(final UUID id) {
+		rights.addAdmin(id);
 	}
 
-	public void removeAdmin(final String playerName) {
-		rights.removeAdmin(playerName);
+	public void removeAdmin(final UUID id) {
+		rights.removeAdmin(id);
 	}
 
 	public void allowGroup(final String groupName) {
