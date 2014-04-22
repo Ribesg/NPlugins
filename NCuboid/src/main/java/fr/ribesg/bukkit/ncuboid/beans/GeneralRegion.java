@@ -227,7 +227,7 @@ public abstract class GeneralRegion extends Region implements Comparable<General
 	public int compareTo(final GeneralRegion o) {
 		int res = Integer.compare(this.getPriority(), o.getPriority());
 		if (res != 0) {
-			return res;
+			return -res;
 		} else {
 			res = Long.compare(this.getTotalSize(), o.getTotalSize());
 			if (res != 0) {
