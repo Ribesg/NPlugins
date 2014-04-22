@@ -42,7 +42,7 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 	}
 
 	public static UUID getId(final String name) {
-		final PlayerInfo info = instance.byName.get(name);
+		final PlayerInfo info = instance.byName.get(name.toLowerCase());
 		return info == null ? null : info.uuid;
 	}
 
@@ -63,7 +63,7 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 		if (info == null) {
 			info = new PlayerInfo(id, name, new TreeMap<Long, String>(), now, now);
 			instance.byUuid.put(id, info);
-			instance.byName.put(name, info);
+			instance.byName.put(name.toLowerCase(), info);
 		} else if (!name.equals(info.lastKnownName)) {
 			info.previousNames.put(now, info.lastKnownName);
 			info.lastKnownName = name;
@@ -135,7 +135,7 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 			}
 			final PlayerInfo info = new PlayerInfo(id, lastKnownName, previousNames, firstSeen, lastSeen);
 			byUuid.put(id, info);
-			byName.put(lastKnownName, info);
+			byName.put(lastKnownName.toLowerCase(), info);
 		}
 	}
 
