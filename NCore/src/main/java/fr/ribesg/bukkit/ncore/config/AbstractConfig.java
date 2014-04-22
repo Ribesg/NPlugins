@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Date;
 
 /**
  * Represents a config file
@@ -88,7 +89,13 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 				config.loadFromString(s.toString());
 			}
 
-			handleValues(config);
+			try {
+				handleValues(config);
+			} catch (final Throwable t) {
+				// Make a backup copy of the just-read file in case something REALLY wrong happened
+				Files.copy(path, Paths.get(path.getParent().toString(), fileName + '.' + String.format("%tFT%<tRZ", new Date()) + ".bak"));
+				throw t;
+			}
 
 			// Rewrite the config to "clean" it
 			writeConfig(path);
