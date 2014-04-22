@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncore.config;
 
+import fr.ribesg.bukkit.ncore.util.DateUtil;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Date;
 
 /**
  * Represents a config file
@@ -93,7 +93,7 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 				handleValues(config);
 			} catch (final Throwable t) {
 				// Make a backup copy of the just-read file in case something REALLY wrong happened
-				Files.copy(path, Paths.get(path.getParent().toString(), fileName + '.' + String.format("%tFT%<tRZ", new Date()) + ".bak"));
+				Files.copy(path, Paths.get(path.getParent().toString(), fileName + '.' + DateUtil.formatNow() + ".bak"));
 				throw t;
 			}
 
