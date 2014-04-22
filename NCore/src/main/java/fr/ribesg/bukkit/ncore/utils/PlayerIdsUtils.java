@@ -1,6 +1,6 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - PlayerIdentifiersUtils.java         *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.PlayerIdentifiersUtils    *
+ * Project file:    NPlugins - NCore - PlayerIdsUtils.java                 *
+ * Full Class name: fr.ribesg.bukkit.ncore.utils.PlayerIdsUtils            *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  *
  * @author Ribesg
  */
-public class PlayerIdentifiersUtils {
+public class PlayerIdsUtils {
 
 	private static final Pattern USERNAME_REGEX   = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
 	private static final Pattern SHORT_UUID_REGEX = Pattern.compile("^[a-zA-Z0-9]{32}$");

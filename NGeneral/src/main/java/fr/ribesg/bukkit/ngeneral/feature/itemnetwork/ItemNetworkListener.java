@@ -11,7 +11,7 @@ package fr.ribesg.bukkit.ngeneral.feature.itemnetwork;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
-import fr.ribesg.bukkit.ncore.utils.PlayerIdentifiersUtils;
+import fr.ribesg.bukkit.ncore.utils.PlayerIdsUtils;
 import fr.ribesg.bukkit.ncore.utils.SignUtils;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import fr.ribesg.bukkit.ngeneral.config.Config;
@@ -201,7 +201,7 @@ public class ItemNetworkListener implements Listener {
 				event.setLine(0, ITEMNETWORK_EMITTER);
 				event.setLine(1, SECONDARY_PREFIX + network.getName());
 				event.setLine(2, "");
-				event.setLine(3, PRIMARY_PREFIX + PlayerIdentifiersUtils.getId(player.getName()));
+				event.setLine(3, PRIMARY_PREFIX + PlayerIdsUtils.getId(player.getName()));
 			}
 		} else if (getItemNetworkReceiverStrings().contains(cleanedFirstLine)) {
 			final String networkName = ColorUtils.stripColorCodes(lines[1].toLowerCase());
@@ -235,7 +235,7 @@ public class ItemNetworkListener implements Listener {
 				event.setLine(0, ITEMNETWORK_RECEIVER);
 				event.setLine(1, SECONDARY_PREFIX + network.getName());
 				event.setLine(2, SECONDARY_PREFIX + event.getLine(2));
-				event.setLine(3, PRIMARY_PREFIX + PlayerIdentifiersUtils.getId(player.getName()));
+				event.setLine(3, PRIMARY_PREFIX + PlayerIdsUtils.getId(player.getName()));
 			}
 		}
 	}
@@ -247,7 +247,7 @@ public class ItemNetworkListener implements Listener {
 			final String line1 = sign.getLine(0);
 			if (line1.equals(ITEMNETWORK_EMITTER) || line1.equals(ITEMNETWORK_RECEIVER)) {
 				final String playerId = ColorUtils.stripColorCodes(sign.getLine(3));
-				if (!Perms.isAdmin(event.getPlayer()) && !PlayerIdentifiersUtils.getId(event.getPlayer().getName()).equals(playerId)) {
+				if (!Perms.isAdmin(event.getPlayer()) && !PlayerIdsUtils.getId(event.getPlayer().getName()).equals(playerId)) {
 					feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_itemnetwork_youNeedToBeCreator);
 					event.setCancelled(true);
 				} else if (line1.equals(ITEMNETWORK_RECEIVER)) {

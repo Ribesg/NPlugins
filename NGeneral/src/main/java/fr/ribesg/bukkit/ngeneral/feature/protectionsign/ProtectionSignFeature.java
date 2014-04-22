@@ -10,7 +10,7 @@
 package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.utils.ColorUtils;
-import fr.ribesg.bukkit.ncore.utils.PlayerIdentifiersUtils;
+import fr.ribesg.bukkit.ncore.utils.PlayerIdsUtils;
 import fr.ribesg.bukkit.ncore.utils.SignUtils;
 import fr.ribesg.bukkit.ncore.utils.TimeUtils;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
@@ -194,7 +194,7 @@ public class ProtectionSignFeature extends Feature {
 	 */
 	public boolean canBreak(final Block b, final Player player) {
 		final Material blockType = b.getType();
-		final String userId = player != null ? PlayerIdentifiersUtils.getId(player.getName()) : null;
+		final String userId = player != null ? PlayerIdsUtils.getId(player.getName()) : null;
 		if (blockType == Material.SIGN_POST || blockType == Material.WALL_SIGN) {
 			final Sign sign = (Sign) b.getState();
 			return !sign.getLine(0).equals(PROTECTION) ||
@@ -231,7 +231,7 @@ public class ProtectionSignFeature extends Feature {
 			return true;
 		}
 		final Material blockType = b.getType();
-		final String userId = PlayerIdentifiersUtils.getId(player.getName());
+		final String userId = PlayerIdsUtils.getId(player.getName());
 		final List<Sign> signLines;
 		if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
 			signLines = SignUtils.getSignsForChest(b);
@@ -332,7 +332,7 @@ public class ProtectionSignFeature extends Feature {
 		final int y = loc.getBlockY();
 		final int z = loc.getBlockZ();
 
-		final String userId = PlayerIdentifiersUtils.getId(playerName);
+		final String userId = PlayerIdsUtils.getId(playerName);
 		String protecterId;
 
 		protecterId = isProtected(w.getBlockAt(x - 1, y, z));
