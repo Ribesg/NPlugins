@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncore.util;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -112,5 +113,17 @@ public class PlayerIdsUtil {
 		                       shortUuid.substring(12, 16) + '-' +
 		                       shortUuid.substring(16, 20) + '-' +
 		                       shortUuid.substring(20, 32));
+	}
+
+	/**
+	 * Generate the offline-mode UUID for the provided Player name, based
+	 * on how it's done internally as of 1.7.9.
+	 *
+	 * @param playerName the player's name
+	 *
+	 * @return an offline-mode UUID corresponding to this player name
+	 */
+	public static UUID getOfflineUuid(final String playerName) {
+		return UUID.nameUUIDFromBytes(("OfflinePlayer:" + playerName).getBytes(StandardCharsets.UTF_8));
 	}
 }
