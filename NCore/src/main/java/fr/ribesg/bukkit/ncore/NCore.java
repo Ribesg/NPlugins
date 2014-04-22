@@ -24,8 +24,8 @@ import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ncore.node.world.WorldNode;
 import fr.ribesg.bukkit.ncore.updater.Updater;
 import fr.ribesg.bukkit.ncore.updater.UpdaterListener;
-import fr.ribesg.bukkit.ncore.utils.ColorUtils;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.ColorUtil;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -106,7 +106,7 @@ public class NCore extends JavaPlugin {
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
 		if (cmd.getName().equals("debug")) {
 			if (!Perms.hasDebug(sender)) {
-				sender.sendMessage(ColorUtils.colorize("&cYou do not have the permission to use that command"));
+				sender.sendMessage(ColorUtil.colorize("&cYou do not have the permission to use that command"));
 				return true;
 			}
 			if (args.length < 1 || args.length > 2) {
@@ -155,7 +155,7 @@ public class NCore extends JavaPlugin {
 			}
 		} else if (cmd.getName().equals("updater")) {
 			if (!Perms.hasUpdater(sender)) {
-				sender.sendMessage(ColorUtils.colorize("&cYou do not have the permission to use that command"));
+				sender.sendMessage(ColorUtil.colorize("&cYou do not have the permission to use that command"));
 				return true;
 			}
 			if (updater == null) {

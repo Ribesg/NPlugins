@@ -1,14 +1,14 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - InventoryUtils.java                 *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.inventory.InventoryUtils  *
+ * Project file:    NPlugins - NCore - InventoryUtil.java                  *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.inventory.InventoryUtil    *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils.inventory;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+package fr.ribesg.bukkit.ncore.util.inventory;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.Inventory;
@@ -27,7 +27,7 @@ import java.util.Map;
  *
  * @author Ribesg
  */
-public class InventoryUtils {
+public class InventoryUtil {
 
 	private static Comparator<ItemStack> comparator;
 
@@ -148,14 +148,14 @@ public class InventoryUtils {
 				strings.add((""));
 			} else {
 				try {
-					strings.add(ItemStackUtils.toString(is));
+					strings.add(ItemStackUtil.toString(is));
 				} catch (final InventoryUtilException e) {
 					throw new InventoryUtilException("Invalid item in provided array", e);
 				}
 			}
 		}
 
-		final String separator = StringUtils.getPossibleSeparator(strings, 4);
+		final String separator = StringUtil.getPossibleSeparator(strings, 4);
 		final StringBuilder builder = new StringBuilder();
 		for (final String s : strings) {
 			builder.append(separator).append(s);
@@ -174,11 +174,11 @@ public class InventoryUtils {
 	 */
 	public static ItemStack[] fromString(final String string) throws InventoryUtilException {
 		final String separator = string.substring(0, 4);
-		final String[] items = StringUtils.splitKeepEmpty(string, separator);
+		final String[] items = StringUtil.splitKeepEmpty(string, separator);
 		final ItemStack[] result = new ItemStack[items.length - 1];
 		for (int i = 1; i < items.length; i++) {
 			try {
-				result[i - 1] = items[i].isEmpty() ? null : ItemStackUtils.fromString(items[i]);
+				result[i - 1] = items[i].isEmpty() ? null : ItemStackUtil.fromString(items[i]);
 			} catch (final InventoryUtilException e) {
 				throw new InventoryUtilException("Invalid item string provided ('" + string + "')", e);
 			}
@@ -202,7 +202,7 @@ public class InventoryUtils {
 		for (int i = 0; i < itemStacks.length; i++) {
 			final ItemStack is = itemStacks[i];
 			if (is != null) {
-				ItemStackUtils.saveToConfigSection(itemsSection, Integer.toString(i), is);
+				ItemStackUtil.saveToConfigSection(itemsSection, Integer.toString(i), is);
 			}
 		}
 	}
@@ -222,7 +222,7 @@ public class InventoryUtils {
 		final ConfigurationSection itemsSection = parent.getConfigurationSection(key);
 		final ItemStack[] result = new ItemStack[itemsSection.getInt("size")];
 		for (final String isKey : itemsSection.getKeys(false)) {
-			final ItemStack is = ItemStackUtils.loadFromConfig(itemsSection, isKey);
+			final ItemStack is = ItemStackUtil.loadFromConfig(itemsSection, isKey);
 			result[Integer.parseInt(isKey)] = is;
 		}
 		return result;

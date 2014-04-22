@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.npermissions;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.PlayerIdsUtils;
+import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.npermissions.permission.LegacyPlayerPermissions;
 import fr.ribesg.bukkit.npermissions.permission.PlayerPermissions;
 import org.bukkit.command.Command;
@@ -152,7 +152,7 @@ public class NCommandExecutor implements CommandExecutor {
 							if (id.length() == 32) {
 								// Maybe an UUID without dashes? Add them!
 								try {
-									uuid = PlayerIdsUtils.shortUuidToUuid(id);
+									uuid = PlayerIdsUtil.shortUuidToUuid(id);
 								} catch (final IllegalArgumentException e2) {
 									uuid = this.plugin.getManager().getByPlayerName(id);
 								}
@@ -181,7 +181,7 @@ public class NCommandExecutor implements CommandExecutor {
 							}
 						} else {
 							// At least check that it's a valid username
-							if (!PlayerIdsUtils.isValidMinecraftUserName(id)) {
+							if (!PlayerIdsUtil.isValidMinecraftUserName(id)) {
 								this.plugin.sendMessage(sender, MessageId.permissions_unknown, id);
 							} else {
 								LegacyPlayerPermissions legacyPlayerPerms = this.plugin.getManager().getLegacyPlayers().get(id.toLowerCase());

@@ -9,8 +9,8 @@
 
 package fr.ribesg.bukkit.npermissions.config;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.npermissions.NPermissions;
 import fr.ribesg.bukkit.npermissions.permission.LegacyPlayerPermissions;
 import fr.ribesg.bukkit.npermissions.permission.PermissionException;
@@ -202,7 +202,7 @@ public class Players extends AbstractConfig<NPermissions> {
 			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			legacyPlayer.save(dummySection);
-			content.append(StringUtils.prependLines(dummySection.saveToString(), "  ")).append("\n");
+			content.append(StringUtil.prependLines(dummySection.saveToString(), "  ")).append("\n");
 		}
 
 		return content.toString();

@@ -9,8 +9,8 @@
 
 package fr.ribesg.bukkit.nplayer;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
-import fr.ribesg.bukkit.ncore.utils.TimeUtils;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
+import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.nplayer.security.Security;
 import fr.ribesg.bukkit.nplayer.user.User;
 import org.bukkit.Bukkit;
@@ -52,7 +52,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		if (split.length > 1) {
 			final User user = plugin.getUserDb().get(player.getName());
 			if (user != null) {
-				final String password = StringUtils.joinStrings(split, 1);
+				final String password = StringUtil.joinStrings(split, 1);
 				final boolean isCorrect = Security.isUserPassword(password, user);
 				if (isCorrect) {
 					plugin.debug("Player typed his password, don't output it");
@@ -209,7 +209,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			plugin.sendMessage(player, MessageId.player_registerFirst);
 		} else {
 			plugin.debug("Registered user");
-			final String password = StringUtils.joinStrings(args);
+			final String password = StringUtil.joinStrings(args);
 			final boolean isCorrect = Security.isUserPassword(password, user);
 			if (isCorrect) {
 				plugin.debug("Correct password provided");
@@ -231,7 +231,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 		plugin.entering(getClass(), "registerCommand");
 
 		User user = plugin.getUserDb().get(player.getName());
-		final String password = StringUtils.joinStrings(args);
+		final String password = StringUtil.joinStrings(args);
 		if (user == null) {
 			plugin.debug("Unregistered user");
 			user = plugin.getUserDb().newUser(player.getName(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
@@ -456,7 +456,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 					break;
 				case 1:
 					final int duration = plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration();
-					final String durationString = TimeUtils.toString(duration);
+					final String durationString = TimeUtil.toString(duration);
 					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName, durationString)[0]);
 					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsTempBanMessage, durationString)[0]);
 					plugin.getPunishmentDb().tempBanIp(target.getAddress().getAddress().getHostAddress(), plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration(), plugin.getMessages().get(MessageId.player_loginAttemptsTooMany)[0]);

@@ -12,7 +12,7 @@ package fr.ribesg.bukkit.ntheendagain.listener;
 import fr.ribesg.bukkit.ncore.common.collection.pairlist.Pair;
 import fr.ribesg.bukkit.ncore.event.theendagain.XPDistributionEvent;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
@@ -71,7 +71,7 @@ public class EnderDragonListener implements Listener {
 	public void onEnderDragonDeath(final EntityDeathEvent event) {
 		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
 			final World endWorld = event.getEntity().getWorld();
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(endWorld.getName()));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
 			if (handler != null) {
 				final Config config = handler.getConfig();
 				switch (config.getEdExpHandling()) {
@@ -154,7 +154,7 @@ public class EnderDragonListener implements Listener {
 	public void onEnderDragonCreatePortal(final EntityCreatePortalEvent event) {
 		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
 			final World endWorld = event.getEntity().getWorld();
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(endWorld.getName()));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
 			if (handler != null) {
 				final Config config = handler.getConfig();
 				final int pH = config.getEdPortalSpawn();
@@ -387,7 +387,7 @@ public class EnderDragonListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEnderDragonSpawn(final CreatureSpawnEvent event) {
 		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(event.getLocation().getWorld().getName()));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(event.getLocation().getWorld().getName()));
 			if (handler != null) {
 				if (handler.getNumberOfAliveEnderDragons() >= handler.getConfig().getRespawnNumber()) {
 					event.setCancelled(true);
@@ -415,7 +415,7 @@ public class EnderDragonListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEnderDragonRegainHealth(final EntityRegainHealthEvent event) {
 		if (event.getEntityType() == EntityType.ENDER_DRAGON && event.getRegainReason() == EntityRegainHealthEvent.RegainReason.ENDER_CRYSTAL) {
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(event.getEntity().getLocation().getWorld().getName()));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(event.getEntity().getLocation().getWorld().getName()));
 			if (handler != null) {
 				final float rate = handler.getConfig().getEcHealthRegainRate();
 				if (rate < 1.0) {

@@ -9,10 +9,10 @@
 
 package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.utils.ColorUtils;
-import fr.ribesg.bukkit.ncore.utils.PlayerIdsUtils;
-import fr.ribesg.bukkit.ncore.utils.SignUtils;
-import fr.ribesg.bukkit.ncore.utils.TimeUtils;
+import fr.ribesg.bukkit.ncore.util.ColorUtil;
+import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
+import fr.ribesg.bukkit.ncore.util.SignUtil;
+import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import fr.ribesg.bukkit.ngeneral.feature.Feature;
@@ -62,7 +62,7 @@ public class ProtectionSignFeature extends Feature {
 	/**
 	 * Amount of time to keep cached results
 	 */
-	private static final int CACHE_TIME = (int) TimeUtils.getInMilliseconds("1minute");
+	private static final int CACHE_TIME = (int) TimeUtil.getInMilliseconds("1minute");
 
 	// ################### //
 	// ## Constant sets ## //
@@ -194,18 +194,18 @@ public class ProtectionSignFeature extends Feature {
 	 */
 	public boolean canBreak(final Block b, final Player player) {
 		final Material blockType = b.getType();
-		final String userId = player != null ? PlayerIdsUtils.getId(player.getName()) : null;
+		final String userId = player != null ? PlayerIdsUtil.getId(player.getName()) : null;
 		if (blockType == Material.SIGN_POST || blockType == Material.WALL_SIGN) {
 			final Sign sign = (Sign) b.getState();
 			return !sign.getLine(0).equals(PROTECTION) ||
-			       player != null && ColorUtils.stripColorCodes(sign.getLine(3)).equals(userId) ||
+			       player != null && ColorUtil.stripColorCodes(sign.getLine(3)).equals(userId) ||
 			       player != null && Perms.hasProtectionSignBreak(player);
 		} else {
 			final List<Sign> signLines;
 			if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
-				signLines = SignUtils.getSignsForChest(b);
+				signLines = SignUtil.getSignsForChest(b);
 			} else if (getProtectedMaterials().contains(blockType)) {
-				signLines = SignUtils.getSignsForBlock(b);
+				signLines = SignUtil.getSignsForBlock(b);
 			} else {
 				return true;
 			}
@@ -231,12 +231,12 @@ public class ProtectionSignFeature extends Feature {
 			return true;
 		}
 		final Material blockType = b.getType();
-		final String userId = PlayerIdsUtils.getId(player.getName());
+		final String userId = PlayerIdsUtil.getId(player.getName());
 		final List<Sign> signLines;
 		if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
-			signLines = SignUtils.getSignsForChest(b);
+			signLines = SignUtil.getSignsForChest(b);
 		} else if (getProtectedMaterials().contains(blockType)) {
-			signLines = SignUtils.getSignsForBlock(b);
+			signLines = SignUtil.getSignsForBlock(b);
 		} else {
 			return true;
 		}
@@ -245,9 +245,9 @@ public class ProtectionSignFeature extends Feature {
 		for (final Sign sign : signLines) {
 			if (sign.getLine(0).equals(PROTECTION)) {
 				protectedBySign = true;
-				if (ColorUtils.stripColorCodes(sign.getLine(1)).equals(userId) ||
-				    ColorUtils.stripColorCodes(sign.getLine(2)).equals(userId) ||
-				    ColorUtils.stripColorCodes(sign.getLine(3)).equals(userId)) {
+				if (ColorUtil.stripColorCodes(sign.getLine(1)).equals(userId) ||
+				    ColorUtil.stripColorCodes(sign.getLine(2)).equals(userId) ||
+				    ColorUtil.stripColorCodes(sign.getLine(3)).equals(userId)) {
 					explicitlyAllowed = true;
 					break;
 				}
@@ -296,14 +296,14 @@ public class ProtectionSignFeature extends Feature {
 			String result = null;
 			List<Sign> signLines = null;
 			if (blockType == Material.CHEST || blockType == Material.TRAPPED_CHEST) {
-				signLines = SignUtils.getSignsForChest(b);
+				signLines = SignUtil.getSignsForChest(b);
 			} else if (getProtectedMaterials().contains(blockType)) {
-				signLines = SignUtils.getSignsForBlock(b);
+				signLines = SignUtil.getSignsForBlock(b);
 			}
 			if (signLines != null) {
 				for (final Sign sign : signLines) {
 					if (PROTECTION.equals(sign.getLine(0))) {
-						result = ColorUtils.stripColorCodes(sign.getLine(3));
+						result = ColorUtil.stripColorCodes(sign.getLine(3));
 						break;
 					}
 				}
@@ -332,7 +332,7 @@ public class ProtectionSignFeature extends Feature {
 		final int y = loc.getBlockY();
 		final int z = loc.getBlockZ();
 
-		final String userId = PlayerIdsUtils.getId(playerName);
+		final String userId = PlayerIdsUtil.getId(playerName);
 		String protecterId;
 
 		protecterId = isProtected(w.getBlockAt(x - 1, y, z));

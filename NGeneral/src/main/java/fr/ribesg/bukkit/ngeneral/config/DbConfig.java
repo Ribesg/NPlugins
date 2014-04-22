@@ -11,7 +11,7 @@ package fr.ribesg.bukkit.ngeneral.config;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;

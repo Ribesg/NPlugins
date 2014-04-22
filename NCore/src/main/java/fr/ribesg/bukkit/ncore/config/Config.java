@@ -9,8 +9,8 @@
 
 package fr.ribesg.bukkit.ncore.config;
 import fr.ribesg.bukkit.ncore.NCore;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
-import fr.ribesg.bukkit.ncore.utils.TimeUtils;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -115,20 +115,20 @@ public class Config extends AbstractConfig<NCore> {
 		setYearTimeUnit(config.getString("year", "year"));
 		setYearsTimeUnit(config.getString("years", "years"));
 
-		TimeUtils.setTranslatedUnit("second", this.second);
-		TimeUtils.setTranslatedUnit("seconds", this.seconds);
-		TimeUtils.setTranslatedUnit("minute", this.minute);
-		TimeUtils.setTranslatedUnit("minutes", this.minutes);
-		TimeUtils.setTranslatedUnit("hour", this.hour);
-		TimeUtils.setTranslatedUnit("hours", this.hours);
-		TimeUtils.setTranslatedUnit("day", this.day);
-		TimeUtils.setTranslatedUnit("days", this.days);
-		TimeUtils.setTranslatedUnit("week", this.week);
-		TimeUtils.setTranslatedUnit("weeks", this.weeks);
-		TimeUtils.setTranslatedUnit("month", this.month);
-		TimeUtils.setTranslatedUnit("months", this.months);
-		TimeUtils.setTranslatedUnit("year", this.year);
-		TimeUtils.setTranslatedUnit("years", this.years);
+		TimeUtil.setTranslatedUnit("second", this.second);
+		TimeUtil.setTranslatedUnit("seconds", this.seconds);
+		TimeUtil.setTranslatedUnit("minute", this.minute);
+		TimeUtil.setTranslatedUnit("minutes", this.minutes);
+		TimeUtil.setTranslatedUnit("hour", this.hour);
+		TimeUtil.setTranslatedUnit("hours", this.hours);
+		TimeUtil.setTranslatedUnit("day", this.day);
+		TimeUtil.setTranslatedUnit("days", this.days);
+		TimeUtil.setTranslatedUnit("week", this.week);
+		TimeUtil.setTranslatedUnit("weeks", this.weeks);
+		TimeUtil.setTranslatedUnit("month", this.month);
+		TimeUtil.setTranslatedUnit("months", this.months);
+		TimeUtil.setTranslatedUnit("year", this.year);
+		TimeUtil.setTranslatedUnit("years", this.years);
 
 		// debugEnabled. Default: empty
 		setDebugEnabled(config.getStringList("debugEnabled"));

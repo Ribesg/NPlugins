@@ -10,9 +10,9 @@
 package fr.ribesg.bukkit.ncuboid.config;
 
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
-import fr.ribesg.bukkit.ncore.utils.inventory.InventoryUtilException;
-import fr.ribesg.bukkit.ncore.utils.inventory.MaterialUtils;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.inventory.InventoryUtilException;
+import fr.ribesg.bukkit.ncore.util.inventory.MaterialUtil;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -65,7 +65,7 @@ public class Config extends AbstractConfig<NCuboid> {
 		// selectionItemMaterial. Default : Stick/280
 		Material m;
 		try {
-			m = MaterialUtils.getMaterial(config.getString("selectionItemMaterial", Material.STICK.name()));
+			m = MaterialUtil.getMaterial(config.getString("selectionItemMaterial", Material.STICK.name()));
 		} catch (final InventoryUtilException e) {
 			m = null;
 		}

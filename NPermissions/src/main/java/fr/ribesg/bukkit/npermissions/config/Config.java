@@ -10,7 +10,7 @@
 package fr.ribesg.bukkit.npermissions.config;
 
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.npermissions.NPermissions;
 import org.bukkit.configuration.file.YamlConfiguration;
 

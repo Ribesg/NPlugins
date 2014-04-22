@@ -10,7 +10,7 @@
 package fr.ribesg.bukkit.ntalk.filter;
 import fr.ribesg.bukkit.ncore.common.collection.trie.Trie;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ntalk.NTalk;
 import fr.ribesg.bukkit.ntalk.filter.bean.BanFilter;
 import fr.ribesg.bukkit.ntalk.filter.bean.DenyFilter;

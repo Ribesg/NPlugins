@@ -11,7 +11,7 @@ package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
-import fr.ribesg.bukkit.ncore.utils.AsyncPermAccessor;
+import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
 import fr.ribesg.bukkit.ntalk.filter.ChatFilter;
 import fr.ribesg.bukkit.ntalk.format.Formater;
 import fr.ribesg.bukkit.ntalk.lang.Messages;

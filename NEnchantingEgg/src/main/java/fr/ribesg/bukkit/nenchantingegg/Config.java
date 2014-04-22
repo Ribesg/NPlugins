@@ -11,8 +11,8 @@ package fr.ribesg.bukkit.nenchantingegg;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
-import fr.ribesg.bukkit.ncore.utils.inventory.EnchantmentUtils;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.inventory.EnchantmentUtil;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altars;
 import org.bukkit.configuration.ConfigurationSection;
@@ -84,7 +84,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 			final ConfigurationSection section = config.getConfigurationSection("enchantmentMaxLevels");
 			for (final String key : section.getKeys(false)) {
 				final int level = section.getInt(key, 10);
-				final Enchantment enchantment = EnchantmentUtils.getEnchantment(key);
+				final Enchantment enchantment = EnchantmentUtil.getEnchantment(key);
 				if (enchantment == null) {
 					plugin.error(Level.WARNING, "Ignored unknown enchantment name or id: " + key);
 				} else if (level > 10) {

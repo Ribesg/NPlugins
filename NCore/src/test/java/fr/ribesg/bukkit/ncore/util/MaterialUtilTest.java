@@ -1,15 +1,15 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - MaterialUtilsTest.java              *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.MaterialUtilsTest         *
+ * Project file:    NPlugins - NCore - MaterialUtilTest.java               *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.MaterialUtilTest           *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils;
-import fr.ribesg.bukkit.ncore.utils.inventory.InventoryUtilException;
-import fr.ribesg.bukkit.ncore.utils.inventory.MaterialUtils;
+package fr.ribesg.bukkit.ncore.util;
+import fr.ribesg.bukkit.ncore.util.inventory.InventoryUtilException;
+import fr.ribesg.bukkit.ncore.util.inventory.MaterialUtil;
 import org.bukkit.Material;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,12 +24,12 @@ import java.util.Collection;
  * @author Ribesg
  */
 @RunWith(Parameterized.class)
-public class MaterialUtilsTest {
+public class MaterialUtilTest {
 
 	private final Material awaitedMaterial;
 	private final String   idString;
 
-	public MaterialUtilsTest(final Material awaitedMaterial, final String idString) {
+	public MaterialUtilTest(final Material awaitedMaterial, final String idString) {
 		this.awaitedMaterial = awaitedMaterial;
 		this.idString = idString;
 	}
@@ -38,7 +38,7 @@ public class MaterialUtilsTest {
 	public void testGetMaterial() throws InventoryUtilException {
 		final String awaitedMaterialName = awaitedMaterial.name();
 
-		final Material foundMaterial = MaterialUtils.getMaterial(idString);
+		final Material foundMaterial = MaterialUtil.getMaterial(idString);
 		final String foundMaterialName = foundMaterial == null ? "null" : foundMaterial.name();
 		Assert.assertEquals("Expected Material '" + awaitedMaterialName + "' but found '" + foundMaterialName + "'", awaitedMaterialName, foundMaterialName);
 	}
@@ -47,7 +47,7 @@ public class MaterialUtilsTest {
 	public static Collection<Object[]> data() throws InventoryUtilException {
 		final Collection<Object[]> data = new ArrayList<>();
 		for (final Material m : Material.values()) {
-			if (!MaterialUtils.isMaterialDeprecated(m)) {
+			if (!MaterialUtil.isMaterialDeprecated(m)) {
 				data.add(new Object[] {
 						m,
 						m.name()

@@ -1,14 +1,14 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - EnchantmentUtils.java               *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.inventory.EnchantmentUtils*
+ * Project file:    NPlugins - NCore - EnchantmentUtil.java                *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.inventory.EnchantmentUtil  *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils.inventory;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+package fr.ribesg.bukkit.ncore.util.inventory;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class EnchantmentUtils {
+public class EnchantmentUtil {
 
 	/**
 	 * A comparator to sort Enchantments by name
@@ -69,9 +69,9 @@ public class EnchantmentUtils {
 	public static Map<Enchantment, Integer> fromString(final String string, final String[] separators) throws InventoryUtilException {
 		final Map<Enchantment, Integer> enchantments = new TreeMap<>(ENCHANTMENT_COMPARATOR);
 		if (!string.isEmpty()) {
-			final String[] enchantmentsPairs = StringUtils.splitKeepEmpty(string, separators[1]);
+			final String[] enchantmentsPairs = StringUtil.splitKeepEmpty(string, separators[1]);
 			for (final String enchantmentPair : enchantmentsPairs) {
-				final String[] enchantmentPairSplit = StringUtils.splitKeepEmpty(enchantmentPair, separators[2]);
+				final String[] enchantmentPairSplit = StringUtil.splitKeepEmpty(enchantmentPair, separators[2]);
 				if (enchantmentPairSplit.length != 2) {
 					throw new InventoryUtilException("Malformed Enchantments field '" + string + "'");
 				} else {

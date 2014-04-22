@@ -10,9 +10,9 @@
 package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.ColorUtils;
-import fr.ribesg.bukkit.ncore.utils.PlayerIdsUtils;
-import fr.ribesg.bukkit.ncore.utils.SignUtils;
+import fr.ribesg.bukkit.ncore.util.ColorUtil;
+import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
+import fr.ribesg.bukkit.ncore.util.SignUtil;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import org.bukkit.Location;
 import org.bukkit.block.Beacon;
@@ -61,32 +61,32 @@ public class ProtectionSignListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onSignChange(final SignChangeEvent event) {
 		final String[] lines = event.getLines();
-		if (ProtectionSignFeature.getProtectionStrings().contains(ColorUtils.stripColorCodes(lines[0]).toLowerCase())) {
+		if (ProtectionSignFeature.getProtectionStrings().contains(ColorUtil.stripColorCodes(lines[0]).toLowerCase())) {
 			// This is a Protection sign
 			final Location loc = event.getBlock().getLocation();
 			if (!Perms.hasProtectionSign(event.getPlayer())) {
 				lines[0] = ProtectionSignFeature.ERROR;
-				lines[1] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine1());
-				lines[2] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine2());
-				lines[3] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine3());
+				lines[1] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine1());
+				lines[2] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine2());
+				lines[3] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine3());
 			} else if (feature.protectsSomething(loc)) {
 				if (feature.canPlaceSign(event.getPlayer().getName(), loc)) {
 					lines[0] = ProtectionSignFeature.PROTECTION;
-					lines[1] = ProtectionSignFeature.SECONDARY_PREFIX + PlayerIdsUtils.getId(ColorUtils.stripColorCodes(lines[1]));
-					lines[2] = ProtectionSignFeature.SECONDARY_PREFIX + PlayerIdsUtils.getId(ColorUtils.stripColorCodes(lines[2]));
-					lines[3] = ProtectionSignFeature.PRIMARY_PREFIX + PlayerIdsUtils.getId(event.getPlayer().getName());
+					lines[1] = ProtectionSignFeature.SECONDARY_PREFIX + PlayerIdsUtil.getId(ColorUtil.stripColorCodes(lines[1]));
+					lines[2] = ProtectionSignFeature.SECONDARY_PREFIX + PlayerIdsUtil.getId(ColorUtil.stripColorCodes(lines[2]));
+					lines[3] = ProtectionSignFeature.PRIMARY_PREFIX + PlayerIdsUtil.getId(event.getPlayer().getName());
 					feature.clearCache(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getWorld().getName());
 				} else {
 					lines[0] = ProtectionSignFeature.ERROR;
-					lines[1] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine1());
-					lines[2] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine2());
-					lines[3] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine3());
+					lines[1] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine1());
+					lines[2] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine2());
+					lines[3] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine3());
 				}
 			} else {
 				lines[0] = ProtectionSignFeature.ERROR;
-				lines[1] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine1());
-				lines[2] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine2());
-				lines[3] = ColorUtils.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine3());
+				lines[1] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine1());
+				lines[2] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine2());
+				lines[3] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine3());
 			}
 			for (int i = 0; i < 4; i++) {
 				event.setLine(i, lines[i]);
@@ -97,7 +97,7 @@ public class ProtectionSignListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBreakBlock(final BlockBreakEvent event) {
 		final Block b = event.getBlock();
-		if (SignUtils.isSign(b)) {
+		if (SignUtil.isSign(b)) {
 			if (!feature.canBreak(b, event.getPlayer())) {
 				feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_breakDenied);
 				event.setCancelled(true);

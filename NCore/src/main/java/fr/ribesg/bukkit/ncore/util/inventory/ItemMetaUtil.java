@@ -1,16 +1,16 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - ItemMetaUtils.java                  *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.inventory.ItemMetaUtils   *
+ * Project file:    NPlugins - NCore - ItemMetaUtil.java                   *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.inventory.ItemMetaUtil     *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils.inventory;
+package fr.ribesg.bukkit.ncore.util.inventory;
 
-import fr.ribesg.bukkit.ncore.utils.ColorUtils;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.util.ColorUtil;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.ConfigurationSection;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class ItemMetaUtils {
+public class ItemMetaUtil {
 
 	// ############ //
 	// ## Global ## //
@@ -68,7 +68,7 @@ public class ItemMetaUtils {
 		final ItemMeta meta = is.getItemMeta();
 		if (meta.hasLore()) {
 			final List<String> lore = meta.getLore();
-			final String separator = StringUtils.getPossibleSeparator(lore, 2);
+			final String separator = StringUtil.getPossibleSeparator(lore, 2);
 			final StringBuilder loreStringBuilder = new StringBuilder();
 			for (final String loreLine : lore) {
 				loreStringBuilder.append(separator).append(loreLine);
@@ -146,7 +146,7 @@ public class ItemMetaUtils {
 		if (loreString.length() > 1) {
 			final List<String> lore = new ArrayList<>();
 			final String separator = loreString.substring(0, 2);
-			Collections.addAll(lore, StringUtils.splitKeepEmpty(loreString.substring(2), separator));
+			Collections.addAll(lore, StringUtil.splitKeepEmpty(loreString.substring(2), separator));
 			meta.setLore(lore);
 		}
 
@@ -181,11 +181,11 @@ public class ItemMetaUtils {
 		}
 
 		if (meta.hasDisplayName()) {
-			createAndGetSection(itemSection, "meta").set("name", ColorUtils.decolorize(meta.getDisplayName()));
+			createAndGetSection(itemSection, "meta").set("name", ColorUtil.decolorize(meta.getDisplayName()));
 		}
 
 		if (meta.hasLore()) {
-			createAndGetSection(itemSection, "meta").set("lore", ColorUtils.decolorize(meta.getLore()));
+			createAndGetSection(itemSection, "meta").set("lore", ColorUtil.decolorize(meta.getLore()));
 		}
 	}
 
@@ -235,12 +235,12 @@ public class ItemMetaUtils {
 
 			final String displayName = metaSection.getString("name", "");
 			if (!displayName.isEmpty()) {
-				meta.setDisplayName(ColorUtils.colorize(displayName));
+				meta.setDisplayName(ColorUtil.colorize(displayName));
 			}
 
 			final List<String> lore = metaSection.getStringList("lore");
 			if (!lore.isEmpty()) {
-				meta.setLore(ColorUtils.colorize(lore));
+				meta.setLore(ColorUtil.colorize(lore));
 			}
 
 			is.setItemMeta(meta);
@@ -261,7 +261,7 @@ public class ItemMetaUtils {
 		stringList.add(author);
 		stringList.addAll(pages);
 
-		final String separator = StringUtils.getPossibleSeparator(stringList, 2);
+		final String separator = StringUtil.getPossibleSeparator(stringList, 2);
 		final StringBuilder builder = new StringBuilder();
 		for (final String string : stringList) {
 			builder.append(separator).append(string);
@@ -271,7 +271,7 @@ public class ItemMetaUtils {
 
 	private static void parseBookMetaString(final String string, final BookMeta meta) {
 		final String separator = string.substring(0, 2);
-		final List<String> stringList = Arrays.asList(StringUtils.splitKeepEmpty(string, separator));
+		final List<String> stringList = Arrays.asList(StringUtil.splitKeepEmpty(string, separator));
 
 		final String title = stringList.remove(0);
 		final String author = stringList.remove(0);
@@ -282,15 +282,15 @@ public class ItemMetaUtils {
 	}
 
 	private static void saveBookMetaToConfigSection(final ConfigurationSection metaSection, final BookMeta meta) {
-		metaSection.set("title", ColorUtils.decolorize(meta.getTitle()));
-		metaSection.set("author", ColorUtils.decolorize(meta.getAuthor()));
-		metaSection.set("pages", ColorUtils.decolorize(meta.getPages()));
+		metaSection.set("title", ColorUtil.decolorize(meta.getTitle()));
+		metaSection.set("author", ColorUtil.decolorize(meta.getAuthor()));
+		metaSection.set("pages", ColorUtil.decolorize(meta.getPages()));
 	}
 
 	private static void loadBookMetaFromConfigSection(final ConfigurationSection metaSection, final BookMeta meta) {
-		final String title = ColorUtils.colorize(metaSection.getString("title"));
-		final String author = ColorUtils.colorize(metaSection.getString("author"));
-		final List<String> pages = ColorUtils.colorize(metaSection.getStringList("pages"));
+		final String title = ColorUtil.colorize(metaSection.getString("title"));
+		final String author = ColorUtil.colorize(metaSection.getString("author"));
+		final List<String> pages = ColorUtil.colorize(metaSection.getStringList("pages"));
 
 		meta.setTitle(title);
 		meta.setAuthor(author);
@@ -306,7 +306,7 @@ public class ItemMetaUtils {
 			return "";
 		} else {
 			final StringBuilder enchantmentsStringBuilder = new StringBuilder();
-			final Map<Enchantment, Integer> sortedEnchantmentMap = new TreeMap<>(EnchantmentUtils.ENCHANTMENT_COMPARATOR);
+			final Map<Enchantment, Integer> sortedEnchantmentMap = new TreeMap<>(EnchantmentUtil.ENCHANTMENT_COMPARATOR);
 			sortedEnchantmentMap.putAll(meta.getStoredEnchants());
 			for (final Map.Entry<Enchantment, Integer> e : sortedEnchantmentMap.entrySet()) {
 				enchantmentsStringBuilder.append(e.getKey().getName());
@@ -320,15 +320,15 @@ public class ItemMetaUtils {
 
 	private static void parseEnchantmentStorageMetaString(final String string, final EnchantmentStorageMeta meta, final String[] separators) throws InventoryUtilException {
 		if (!string.isEmpty()) {
-			final String[] enchantmentsPairs = StringUtils.splitKeepEmpty(string, separators[1]);
+			final String[] enchantmentsPairs = StringUtil.splitKeepEmpty(string, separators[1]);
 			for (final String enchantmentPair : enchantmentsPairs) {
-				final String[] enchantmentPairSplit = StringUtils.splitKeepEmpty(enchantmentPair, separators[2]);
+				final String[] enchantmentPairSplit = StringUtil.splitKeepEmpty(enchantmentPair, separators[2]);
 				if (enchantmentPairSplit.length != 2) {
 					throw new InventoryUtilException("Malformed Enchantments field '" + string + "'");
 				} else {
 					final String enchantmentName = enchantmentPairSplit[0];
 					final String enchantmentLevel = enchantmentPairSplit[1];
-					final Enchantment enchantment = EnchantmentUtils.getEnchantment(enchantmentName);
+					final Enchantment enchantment = EnchantmentUtil.getEnchantment(enchantmentName);
 					if (enchantment == null) {
 						throw new InventoryUtilException("Unknown Enchantment '" + enchantmentName + "' (parsing '\" + string + \"')\"");
 					}
@@ -357,7 +357,7 @@ public class ItemMetaUtils {
 		if (metaSection.isConfigurationSection("storedEnchantments")) {
 			final ConfigurationSection enchantmentsSection = metaSection.getConfigurationSection("storedEnchantments");
 			for (final String enchantmentName : enchantmentsSection.getKeys(false)) {
-				final Enchantment enchantment = EnchantmentUtils.getEnchantment(enchantmentName);
+				final Enchantment enchantment = EnchantmentUtil.getEnchantment(enchantmentName);
 				final int level = enchantmentsSection.getInt(enchantmentName, -1);
 				if (level < 1) {
 					throw new InventoryUtilException("Invalid enchantment level '" + level + "' for enchantment '" + enchantment.getName() + "'");
@@ -393,13 +393,13 @@ public class ItemMetaUtils {
 		allStrings.addAll(effectColors);
 		allStrings.addAll(effectFadeColors);
 
-		final String separator2 = StringUtils.getPossibleSeparator(allStrings, 2);
+		final String separator2 = StringUtil.getPossibleSeparator(allStrings, 2);
 
 		allStrings.add(effectType);
 
 		String separator1;
 		do {
-			separator1 = StringUtils.getPossibleSeparator(allStrings, 2);
+			separator1 = StringUtil.getPossibleSeparator(allStrings, 2);
 		} while (separator1.equals(separator2));
 
 		final StringBuilder builder = new StringBuilder();
@@ -431,7 +431,7 @@ public class ItemMetaUtils {
 
 	private static FireworkEffect parseFireworkEffectString(final String string) {
 		final String separator1 = string.substring(0, 2);
-		final String[] split = StringUtils.splitKeepEmpty(string.substring(2), separator1);
+		final String[] split = StringUtil.splitKeepEmpty(string.substring(2), separator1);
 
 		final FireworkEffect.Type type = FireworkEffect.Type.valueOf(split[0]);
 		final List<Color> colors = new ArrayList<>();
@@ -439,7 +439,7 @@ public class ItemMetaUtils {
 
 		if (!split[1].isEmpty()) {
 			final String separator2 = split[1].substring(0, 2);
-			final String[] colorStrings = StringUtils.splitKeepEmpty(split[1].substring(2), separator2);
+			final String[] colorStrings = StringUtil.splitKeepEmpty(split[1].substring(2), separator2);
 			for (final String colorString : colorStrings) {
 				colors.add(Color.fromRGB(Integer.parseInt(colorString)));
 			}
@@ -447,7 +447,7 @@ public class ItemMetaUtils {
 
 		if (!split[2].isEmpty()) {
 			final String separator2 = split[1].substring(0, 2);
-			final String[] fadeColorStrings = StringUtils.splitKeepEmpty(split[2].substring(2), separator2);
+			final String[] fadeColorStrings = StringUtil.splitKeepEmpty(split[2].substring(2), separator2);
 			for (final String fadeColorString : fadeColorStrings) {
 				colors.add(Color.fromRGB(Integer.parseInt(fadeColorString)));
 			}
@@ -564,7 +564,7 @@ public class ItemMetaUtils {
 	}
 
 	private static void parseFireworkMetaString(final String string, final FireworkMeta meta, final String[] separators) {
-		final String[] split = StringUtils.splitKeepEmpty(string, separators[1]);
+		final String[] split = StringUtil.splitKeepEmpty(string, separators[1]);
 
 		final int power = Integer.parseInt(split[0]);
 		final List<FireworkEffect> effects = new ArrayList<>();
@@ -663,10 +663,10 @@ public class ItemMetaUtils {
 	}
 
 	private static void parsePotionMetaString(final String string, final PotionMeta meta, final String[] separators) {
-		final String[] split = StringUtils.splitKeepEmpty(string, separators[1]);
+		final String[] split = StringUtil.splitKeepEmpty(string, separators[1]);
 
 		for (final String effectString : split) {
-			final String[] effectSplit = StringUtils.splitKeepEmpty(effectString, separators[2]);
+			final String[] effectSplit = StringUtil.splitKeepEmpty(effectString, separators[2]);
 			final PotionEffectType type = PotionEffectType.getByName(effectSplit[0]);
 			final int duration = Integer.parseInt(effectSplit[1]);
 			final int amplifier = Integer.parseInt(effectSplit[2]);
@@ -713,10 +713,10 @@ public class ItemMetaUtils {
 	}
 
 	private static void saveSkullMetaToConfigSection(final ConfigurationSection metaSection, final SkullMeta meta) {
-		metaSection.set("skullOwner", ColorUtils.decolorize(meta.getOwner()));
+		metaSection.set("skullOwner", ColorUtil.decolorize(meta.getOwner()));
 	}
 
 	private static void loadSkullMetaFromConfigSection(final ConfigurationSection metaSection, final SkullMeta meta) {
-		meta.setOwner(ColorUtils.colorize(metaSection.getString("skullOwner")));
+		meta.setOwner(ColorUtil.colorize(metaSection.getString("skullOwner")));
 	}
 }

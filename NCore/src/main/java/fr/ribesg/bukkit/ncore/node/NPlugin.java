@@ -12,7 +12,7 @@ package fr.ribesg.bukkit.ncore.node;
 import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.lang.AbstractMessages;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

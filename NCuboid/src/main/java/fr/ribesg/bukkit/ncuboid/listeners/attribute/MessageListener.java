@@ -10,7 +10,7 @@
 package fr.ribesg.bukkit.ncuboid.listeners.attribute;
 
 import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
-import fr.ribesg.bukkit.ncore.utils.ColorUtils;
+import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
@@ -33,13 +33,13 @@ public class MessageListener extends AbstractListener {
 			if (ext.getFromRegion() != null && !ext.getToRegions().contains(ext.getFromRegion())) {
 				final String farewellMessage = ext.getFromRegion().getStringAttribute(Attribute.FAREWELL_MESSAGE);
 				if (farewellMessage != null) {
-					player.sendMessage(ColorUtils.colorize(farewellMessage));
+					player.sendMessage(ColorUtil.colorize(farewellMessage));
 				}
 			}
 			if (ext.getToRegion() != null && !ext.getFromRegions().contains(ext.getToRegion())) {
 				final String welcomeMessage = ext.getToRegion().getStringAttribute(Attribute.WELCOME_MESSAGE);
 				if (welcomeMessage != null) {
-					player.sendMessage(ColorUtils.colorize(welcomeMessage));
+					player.sendMessage(ColorUtil.colorize(welcomeMessage));
 				}
 			}
 		}

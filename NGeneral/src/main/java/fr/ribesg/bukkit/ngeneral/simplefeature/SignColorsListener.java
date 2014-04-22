@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.ColorUtils;
+import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import org.bukkit.Bukkit;
@@ -27,7 +27,7 @@ public class SignColorsListener implements Listener {
 		if (colorsRegex == null) {
 			final StringBuilder s = new StringBuilder(3 + ChatColor.values().length);
 			s.append("^.*");
-			s.append(ColorUtils.ALTERNATE_COLOR_CHAR_STRING);
+			s.append(ColorUtil.ALTERNATE_COLOR_CHAR_STRING);
 			s.append('[');
 			for (final ChatColor c : ChatColor.values()) {
 				s.append(c.getChar());
@@ -57,7 +57,7 @@ public class SignColorsListener implements Listener {
 		if (containsColors) {
 			if (Perms.hasSignColors(event.getPlayer())) {
 				for (int i = 0; i < 4; i++) {
-					event.setLine(i, ColorUtils.colorize(event.getLine(i)));
+					event.setLine(i, ColorUtil.colorize(event.getLine(i)));
 				}
 			} else {
 				plugin.sendMessage(event.getPlayer(), MessageId.general_signcolors_permissionDenied);

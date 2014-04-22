@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntheendagain.listener;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import org.bukkit.Bukkit;
@@ -66,7 +66,7 @@ public class DamageListener implements Listener {
 			}
 			final EnderDragon dragon = (EnderDragon) event.getEntity();
 			final World endWorld = dragon.getWorld();
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(endWorld.getName()));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
 			if (handler != null) {
 				handler.playerHitED(dragon.getUniqueId(), player.getName(), event.getDamage());
 			}
@@ -75,7 +75,7 @@ public class DamageListener implements Listener {
 		// Player damaged by EnderDragon
 		else if (event.getEntityType() == EntityType.PLAYER && event.getDamager().getType() == EntityType.ENDER_DRAGON) {
 			final World endWorld = event.getEntity().getWorld();
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(endWorld.getName()));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
 			if (handler != null) {
 				event.setDamage(Math.round(event.getDamage() * handler.getConfig().getEdDamageMultiplier()));
 				if (handler.getConfig().getEdPushesPlayers() == 1) {

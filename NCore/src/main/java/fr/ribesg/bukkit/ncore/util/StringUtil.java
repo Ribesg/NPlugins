@@ -1,13 +1,13 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - StringUtils.java                    *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.StringUtils               *
+ * Project file:    NPlugins - NCore - StringUtil.java                     *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.StringUtil                 *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.util;
 
 import org.bukkit.util.Vector;
 
@@ -21,9 +21,9 @@ import java.util.logging.Logger;
  *
  * @author Ribesg
  */
-public class StringUtils {
+public class StringUtil {
 
-	private static final Logger LOGGER = Logger.getLogger(StringUtils.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(StringUtil.class.getName());
 
 	private static final char   SEPARATOR_CHAR        = ';';
 	private static final String SEPARATOR_CHAR_STRING = Character.toString(SEPARATOR_CHAR);

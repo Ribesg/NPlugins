@@ -12,10 +12,10 @@ package fr.ribesg.bukkit.ntheendagain;
 import fr.ribesg.bukkit.ncore.common.collection.pairlist.Pair;
 import fr.ribesg.bukkit.ncore.common.collection.pairlist.PairList;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
-import fr.ribesg.bukkit.ncore.utils.inventory.InventoryUtilException;
-import fr.ribesg.bukkit.ncore.utils.inventory.ItemStackUtils;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
+import fr.ribesg.bukkit.ncore.util.inventory.InventoryUtilException;
+import fr.ribesg.bukkit.ncore.util.inventory.ItemStackUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -158,7 +158,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 
-		final String fileName = StringUtils.toLowerCamelCase(worldName) + "Config.yml";
+		final String fileName = StringUtil.toLowerCamelCase(worldName) + "Config.yml";
 
 		// General
 		setFilterMovedTooQuicklySpam(config.getInt("filterMovedTooQuicklySpam", DEFAULT_filterMovedTooQuicklySpam));
@@ -308,7 +308,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 					plugin.error("Invalid probability value in configuration for world '" + worldName + "' (drop '" + drop + "')");
 				} else {
 					try {
-						final ItemStack is = ItemStackUtils.loadFromConfig(dropSection, "itemStack");
+						final ItemStack is = ItemStackUtil.loadFromConfig(dropSection, "itemStack");
 						dropTable.put(is, probability);
 					} catch (final InventoryUtilException e) {
 						plugin.error("Invalid ItemStack in configuration for world '" + worldName + "' (drop '" + drop + "')");
@@ -636,8 +636,8 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 			meta.setLore(Arrays.asList("Such sword", "Very diamond", "Wow"));
 			is.setItemMeta(meta);
 			exampleDropSection.set("probability", 0.25);
-			ItemStackUtils.saveToConfigSection(exampleDropSection, "itemStack", is);
-			content.append(StringUtils.prependLines(dummyConfig.saveToString(), "# "));
+			ItemStackUtil.saveToConfigSection(exampleDropSection, "itemStack", is);
+			content.append(StringUtil.prependLines(dummyConfig.saveToString(), "# "));
 		} catch (final InventoryUtilException e) {
 			plugin.error("Failed to save example ItemStack!", e);
 		}
@@ -649,7 +649,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 			for (final Pair<ItemStack, Float> p : dropTable) {
 				final ConfigurationSection exampleDropSection = dummySection.createSection("drop" + ++i);
 				exampleDropSection.set("probability", p.getValue());
-				ItemStackUtils.saveToConfigSection(exampleDropSection, "itemStack", p.getKey());
+				ItemStackUtil.saveToConfigSection(exampleDropSection, "itemStack", p.getKey());
 			}
 			content.append(dummyConfig.saveToString());
 		} catch (final InventoryUtilException e) {

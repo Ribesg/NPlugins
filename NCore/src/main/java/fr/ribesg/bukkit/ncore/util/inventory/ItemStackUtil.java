@@ -1,14 +1,14 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - ItemStackUtils.java                 *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.inventory.ItemStackUtils  *
+ * Project file:    NPlugins - NCore - ItemStackUtil.java                  *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.inventory.ItemStackUtil    *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils.inventory;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+package fr.ribesg.bukkit.ncore.util.inventory;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * @author Ribesg
  */
-public class ItemStackUtils {
+public class ItemStackUtil {
 
 	/**
 	 * Different levels of Separators used for the String representation.
@@ -83,10 +83,10 @@ public class ItemStackUtils {
 		final String idString = is.getType().name();
 		final String dataString = Short.toString(is.getDurability());
 		final String amountString = Integer.toString(Math.min(Math.max(is.getAmount(), 1), 64));
-		final String enchantmentsString = EnchantmentUtils.toString(is, SEPARATORS);
-		final String nameString = ItemMetaUtils.getNameString(is);
-		final String loreString = ItemMetaUtils.getLoreString(is);
-		final String specialMetaString = ItemMetaUtils.getSpecialMetaString(is, SEPARATORS);
+		final String enchantmentsString = EnchantmentUtil.toString(is, SEPARATORS);
+		final String nameString = ItemMetaUtil.getNameString(is);
+		final String loreString = ItemMetaUtil.getLoreString(is);
+		final String specialMetaString = ItemMetaUtil.getSpecialMetaString(is, SEPARATORS);
 
 		return idString + SEPARATORS[0] +
 		       dataString + SEPARATORS[0] +
@@ -107,7 +107,7 @@ public class ItemStackUtils {
 	 * @see #toString(ItemStack) for format
 	 */
 	public static ItemStack fromString(final String itemString) throws InventoryUtilException {
-		final String[] parts = StringUtils.splitKeepEmpty(itemString, SEPARATORS[0]);
+		final String[] parts = StringUtil.splitKeepEmpty(itemString, SEPARATORS[0]);
 		if (parts.length != 7) {
 			throw new InventoryUtilException("Invalid amount of fields (parsing '" + itemString + "')");
 		}
@@ -127,7 +127,7 @@ public class ItemStackUtils {
 		if (idString.isEmpty()) {
 			throw new InventoryUtilException("Id is mandatory");
 		} else {
-			id = MaterialUtils.getMaterial(idString);
+			id = MaterialUtil.getMaterial(idString);
 			if (id == null) {
 				throw new InventoryUtilException("Unknown id '" + idString + "' (parsing '" + itemString + "')");
 			}
@@ -155,11 +155,11 @@ public class ItemStackUtils {
 
 		final ItemStack is = new ItemStack(id, amount, data);
 
-		final Map<Enchantment, Integer> enchantments = EnchantmentUtils.fromString(enchantmentsString, SEPARATORS);
+		final Map<Enchantment, Integer> enchantments = EnchantmentUtil.fromString(enchantmentsString, SEPARATORS);
 		is.addUnsafeEnchantments(enchantments);
 
 		final ItemMeta meta = is.getItemMeta();
-		final ItemMeta itemMeta = ItemMetaUtils.fromString(meta, nameString, loreString, specialMetaString, SEPARATORS);
+		final ItemMeta itemMeta = ItemMetaUtil.fromString(meta, nameString, loreString, specialMetaString, SEPARATORS);
 
 		is.setItemMeta(itemMeta);
 
@@ -189,11 +189,11 @@ public class ItemStackUtils {
 		itemSection.set("amount", Math.min(Math.max(is.getAmount(), 1), 64));
 
 		if (!is.getEnchantments().isEmpty()) {
-			EnchantmentUtils.saveToConfigSection(itemSection, is);
+			EnchantmentUtil.saveToConfigSection(itemSection, is);
 		}
 
 		if (is.hasItemMeta()) {
-			ItemMetaUtils.saveToConfigSection(itemSection, is);
+			ItemMetaUtil.saveToConfigSection(itemSection, is);
 		}
 	}
 
@@ -214,7 +214,7 @@ public class ItemStackUtils {
 		final ConfigurationSection itemSection = parentSection.getConfigurationSection(key);
 		final String parsed = " (parsed: Configuration file, under " + parentSection.getCurrentPath() + '.' + key + ')';
 
-		final Material id = MaterialUtils.getMaterial(itemSection.getString("id", ""));
+		final Material id = MaterialUtil.getMaterial(itemSection.getString("id", ""));
 		if (id == null) {
 			throw new InventoryUtilException("Id is mandatory" + parsed);
 		}
@@ -222,7 +222,7 @@ public class ItemStackUtils {
 		final short data = (short) itemSection.getInt("data", 0);
 		final int amount = Math.min(Math.max(itemSection.getInt("amount", 1), 1), 64);
 
-		final Map<Enchantment, Integer> enchantmentsMap = EnchantmentUtils.loadFromConfigSection(itemSection);
+		final Map<Enchantment, Integer> enchantmentsMap = EnchantmentUtil.loadFromConfigSection(itemSection);
 
 		final ItemStack is = new ItemStack(id, amount, data);
 
@@ -230,7 +230,7 @@ public class ItemStackUtils {
 			is.addUnsafeEnchantments(enchantmentsMap);
 		}
 
-		ItemMetaUtils.loadFromConfigSection(itemSection, is);
+		ItemMetaUtil.loadFromConfigSection(itemSection, is);
 
 		return is;
 	}

@@ -11,8 +11,8 @@ package fr.ribesg.bukkit.ncore.updater;
 
 import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.node.Node;
-import fr.ribesg.bukkit.ncore.utils.TimeUtils;
-import fr.ribesg.bukkit.ncore.utils.VersionUtils;
+import fr.ribesg.bukkit.ncore.util.TimeUtil;
+import fr.ribesg.bukkit.ncore.util.VersionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -101,7 +101,7 @@ public class Updater {
 		this.apiKey = apiKey;
 		this.cache = new HashMap<>();
 		this.cacheTimeout = new HashMap<>();
-		this.cacheDuration = TimeUtils.getInMilliseconds(cacheDuration);
+		this.cacheDuration = TimeUtil.getInMilliseconds(cacheDuration);
 		this.updateAvailable = new TreeMap<>();
 
 		this.plugins.put(plugin.getName(), plugin);
@@ -171,8 +171,8 @@ public class Updater {
 			@Override
 			public void run() {
 				for (final JavaPlugin plugin : plugins.values()) {
-					if (plugin != null && (nodeName == null || plugin.getName().equalsIgnoreCase(nodeName)) && VersionUtils.isRelease('v' + plugin.getDescription().getVersion())) {
-						final String version = VersionUtils.getVersion('v' + plugin.getDescription().getVersion());
+					if (plugin != null && (nodeName == null || plugin.getName().equalsIgnoreCase(nodeName)) && VersionUtil.isRelease('v' + plugin.getDescription().getVersion())) {
+						final String version = VersionUtil.getVersion('v' + plugin.getDescription().getVersion());
 						Boolean result = null;
 						FileDescription latestFile = null;
 						try {

@@ -10,7 +10,7 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -197,7 +197,7 @@ public class RegionDbPersistenceHandler {
 						attributes.setLocationAttribute(att, theLocation);
 					}
 				} else if (Attribute.isVectorAttribute(att)) {
-					final Vector theVector = StringUtils.toVector(attributesSection.getString(att.toString(), ""));
+					final Vector theVector = StringUtil.toVector(attributesSection.getString(att.toString(), ""));
 					if (theVector != null) {
 						attributes.setVectorAttribute(att, theVector);
 					}
@@ -222,7 +222,7 @@ public class RegionDbPersistenceHandler {
 						attributes.setLocationAttribute(att, theLocation);
 					}
 				} else if (Attribute.isVectorAttribute(att)) {
-					final Vector theVector = StringUtils.toVector(attributesSection.getString(att.toString(), ""));
+					final Vector theVector = StringUtil.toVector(attributesSection.getString(att.toString(), ""));
 					if (theVector != null) {
 						attributes.setVectorAttribute(att, theVector);
 					}
@@ -375,7 +375,7 @@ public class RegionDbPersistenceHandler {
 				final Vector theVector = region.getVectorAttribute(att);
 				if (theVector != null) {
 					used = true;
-					sec.set(att.toString(), StringUtils.toString(theVector));
+					sec.set(att.toString(), StringUtil.toString(theVector));
 				}
 			} else {
 				// Hello, future

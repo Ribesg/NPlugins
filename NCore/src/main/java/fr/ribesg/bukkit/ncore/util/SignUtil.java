@@ -1,13 +1,13 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - SignUtils.java                      *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.SignUtils                 *
+ * Project file:    NPlugins - NCore - SignUtil.java                       *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.SignUtil                   *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -23,7 +23,7 @@ import java.util.Set;
  *
  * @author Ribesg
  */
-public class SignUtils {
+public class SignUtil {
 
 	/**
 	 * Checks if a block is a Sign.

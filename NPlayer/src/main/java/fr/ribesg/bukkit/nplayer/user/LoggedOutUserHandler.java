@@ -11,7 +11,7 @@ package fr.ribesg.bukkit.nplayer.user;
 import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncore.event.PlayerJoinedEvent;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.TimeUtils;
+import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -82,7 +82,7 @@ public class LoggedOutUserHandler implements Listener {
 	public void lockPlayer(final String userName) {
 		final Player player = plugin.getServer().getPlayerExact(userName);
 		if (player != null) {
-			player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect((int) TimeUtils.getInSeconds("1month"), 9));
+			player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect((int) TimeUtil.getInSeconds("1month"), 9));
 		}
 	}
 

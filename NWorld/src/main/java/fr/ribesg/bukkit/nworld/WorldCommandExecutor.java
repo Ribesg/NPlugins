@@ -11,8 +11,8 @@ package fr.ribesg.bukkit.nworld;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.ArgumentParser;
-import fr.ribesg.bukkit.ncore.utils.WorldUtils;
+import fr.ribesg.bukkit.ncore.util.ArgumentParser;
+import fr.ribesg.bukkit.ncore.util.WorldUtil;
 import fr.ribesg.bukkit.nworld.warp.Warp;
 import fr.ribesg.bukkit.nworld.world.AdditionalWorld;
 import fr.ribesg.bukkit.nworld.world.GeneralWorld;
@@ -189,7 +189,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
-		final String realWorldName = WorldUtils.getRealWorldName(args[0]);
+		final String realWorldName = WorldUtil.getRealWorldName(args[0]);
 		if (realWorldName != null) {
 			plugin.sendMessage(sender, MessageId.world_alreadyExists, realWorldName);
 			return true;
@@ -258,7 +258,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
-		final String realWorldName = WorldUtils.getRealWorldName(args[0]);
+		final String realWorldName = WorldUtil.getRealWorldName(args[0]);
 		if (realWorldName == null) {
 			plugin.sendMessage(sender, MessageId.unknownWorld, args[0]);
 			return true;
@@ -345,7 +345,7 @@ public class WorldCommandExecutor implements CommandExecutor {
 			plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
-		final String realWorldName = WorldUtils.getRealWorldName(args[0]);
+		final String realWorldName = WorldUtil.getRealWorldName(args[0]);
 		if (realWorldName == null) {
 			plugin.sendMessage(sender, MessageId.unknownWorld, args[0]);
 			return true;

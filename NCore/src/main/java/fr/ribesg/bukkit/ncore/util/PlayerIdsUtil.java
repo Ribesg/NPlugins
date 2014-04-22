@@ -1,13 +1,13 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - PlayerIdsUtils.java                 *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.PlayerIdsUtils            *
+ * Project file:    NPlugins - NCore - PlayerIdsUtil.java                  *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.PlayerIdsUtil              *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.util;
 import java.math.BigInteger;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  *
  * @author Ribesg
  */
-public class PlayerIdsUtils {
+public class PlayerIdsUtil {
 
 	private static final Pattern USERNAME_REGEX   = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
 	private static final Pattern SHORT_UUID_REGEX = Pattern.compile("^[a-zA-Z0-9]{32}$");
@@ -70,7 +70,7 @@ public class PlayerIdsUtils {
 	 * false otherwise
 	 */
 	public static boolean isValidNickName(final String nickName) {
-		return USERNAME_REGEX.matcher(ColorUtils.stripColorCodes(nickName)).matches();
+		return USERNAME_REGEX.matcher(ColorUtil.stripColorCodes(nickName)).matches();
 	}
 
 	/**

@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.utils.SignUtils;
+import fr.ribesg.bukkit.ncore.util.SignUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -81,7 +81,7 @@ public class ReceiverSign {
 			}
 		}
 
-		this.chests = SignUtils.getBlocksForLocation(this.location.toBukkitLocation(), getChestMaterials());
+		this.chests = SignUtil.getBlocksForLocation(this.location.toBukkitLocation(), getChestMaterials());
 		this.lastUpdateDate = System.currentTimeMillis();
 	}
 
@@ -101,7 +101,7 @@ public class ReceiverSign {
 
 	public ItemStack send(final ItemStack is) {
 		if ((System.currentTimeMillis() - lastUpdateDate) > 1000L) {
-			this.chests = SignUtils.getBlocksForLocation(this.location.toBukkitLocation(), getChestMaterials());
+			this.chests = SignUtil.getBlocksForLocation(this.location.toBukkitLocation(), getChestMaterials());
 		}
 
 		ItemStack[] result = new ItemStack[] {is};

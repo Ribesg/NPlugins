@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.TimeUtils;
+import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import org.bukkit.command.Command;
@@ -43,7 +43,7 @@ public class NightVisionCommand implements CommandExecutor {
 					player.removePotionEffect(PotionEffectType.NIGHT_VISION);
 					plugin.sendMessage(player, MessageId.general_nightvision_disabled);
 				} else {
-					player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, (int) TimeUtils.getInSeconds("1month"), 9, true), true);
+					player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, (int) TimeUtil.getInSeconds("1month"), 9, true), true);
 					plugin.sendMessage(player, MessageId.general_nightvision_enabled);
 				}
 			}

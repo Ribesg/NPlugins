@@ -1,13 +1,13 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - PlayerUtils.java                    *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.PlayerUtils               *
+ * Project file:    NPlugins - NCore - PlayerUtil.java                     *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.PlayerUtil                 *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.util;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -23,7 +23,7 @@ import java.util.Set;
  *
  * @author Ribesg
  */
-public class PlayerUtils {
+public class PlayerUtil {
 
 	private static final int LINEOFSIGHT_MAXDISTANCE = 120;
 

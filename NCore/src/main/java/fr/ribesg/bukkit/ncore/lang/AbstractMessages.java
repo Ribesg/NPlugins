@@ -9,8 +9,8 @@
 
 package fr.ribesg.bukkit.ncore.lang;
 
-import fr.ribesg.bukkit.ncore.utils.ColorUtils;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.ColorUtil;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -202,7 +202,7 @@ public abstract class AbstractMessages {
 			// Adding Header, colors
 			final String[] resSplit = res.concat(LINE_SEPARATOR).split(LINE_SEPARATOR);
 			for (int i = 0; i < resSplit.length; i++) {
-				resSplit[i] = (m.useHeader() ? messageHeader : "") + ColorUtils.colorize(resSplit[i]);
+				resSplit[i] = (m.useHeader() ? messageHeader : "") + ColorUtil.colorize(resSplit[i]);
 			}
 			return resSplit;
 		} catch (final IllegalArgumentException e) {

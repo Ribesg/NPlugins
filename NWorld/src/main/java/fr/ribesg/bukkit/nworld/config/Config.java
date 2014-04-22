@@ -11,7 +11,7 @@ package fr.ribesg.bukkit.nworld.config;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.nworld.NWorld;
 import fr.ribesg.bukkit.nworld.warp.Warp;
 import fr.ribesg.bukkit.nworld.warp.Warps;

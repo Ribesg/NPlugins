@@ -10,8 +10,8 @@
 package fr.ribesg.bukkit.ntheendagain;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
-import fr.ribesg.bukkit.ncore.utils.WorldUtils;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
+import fr.ribesg.bukkit.ncore.util.WorldUtil;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
@@ -134,7 +134,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 			// The sender already received a message
 			return true;
 		} else {
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(parsedArgs[0]));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(parsedArgs[0]));
 			if (handler != null) {
 				plugin.sendMessage(sender, MessageId.theEndAgain_regenerating, handler.getEndWorld().getName());
 				if (parsedArgs.length > 1 && parsedArgs[1].equalsIgnoreCase("hard")) {
@@ -155,7 +155,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 			// The sender already received a message
 			return true;
 		} else {
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(parsedArgs[0]));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(parsedArgs[0]));
 			if (handler != null) {
 				handler.getRespawnHandler().respawn();
 			} else {
@@ -171,7 +171,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 			// The sender already received a message
 			return true;
 		} else {
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(parsedArgs[0]));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(parsedArgs[0]));
 			if (handler != null) {
 				final Integer nb = handler.getNumberOfAliveEnderDragons();
 				if (nb == 0 || nb == 1) {
@@ -194,7 +194,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		} else {
 			final Player player = (Player) sender;
 			final String worldName = player.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 			if (handler == null) {
 				plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
 				return true;
@@ -218,7 +218,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		} else {
 			final Player player = (Player) sender;
 			final String worldName = player.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 			if (handler == null) {
 				plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
 				return true;
@@ -243,7 +243,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		} else {
 			final Player player = (Player) sender;
 			final String worldName = player.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 			if (handler == null) {
 				plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
 				return true;
@@ -308,7 +308,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 			}
 		} else {
 			final String supposedWorldName = args[0];
-			final String realWorldName = WorldUtils.getRealWorldName(supposedWorldName);
+			final String realWorldName = WorldUtil.getRealWorldName(supposedWorldName);
 			if (realWorldName == null) { // No world argument provided, use Player's world
 				if (senderIsAPlayer) {
 					result = new String[args.length + 1];

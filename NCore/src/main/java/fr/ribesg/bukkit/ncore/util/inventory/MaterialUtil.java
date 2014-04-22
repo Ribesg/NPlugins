@@ -1,18 +1,18 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - MaterialUtils.java                  *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.inventory.MaterialUtils   *
+ * Project file:    NPlugins - NCore - MaterialUtil.java                   *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.inventory.MaterialUtil     *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils.inventory;
+package fr.ribesg.bukkit.ncore.util.inventory;
 import org.bukkit.Material;
 
 import java.lang.reflect.Field;
 
-public class MaterialUtils {
+public class MaterialUtil {
 
 	/**
 	 * Gets a Material from a String, if able to recognize anything in the

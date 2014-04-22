@@ -9,8 +9,8 @@
 
 package fr.ribesg.bukkit.ntalk.format;
 
-import fr.ribesg.bukkit.ncore.utils.AsyncPermAccessor;
-import fr.ribesg.bukkit.ncore.utils.ColorUtils;
+import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
+import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ntalk.Config;
 import fr.ribesg.bukkit.ntalk.NTalk;
 import org.bukkit.command.CommandSender;
@@ -76,7 +76,7 @@ public class Formater {
 		result[0] = unicoder(formatString);
 		result[1] = unicoder(formatString.replaceAll("%%(.*)%%", ""));
 
-		return ColorUtils.colorize(result);
+		return ColorUtil.colorize(result);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class Formater {
 		result[0] = unicoder(formatString);
 		result[1] = unicoder(formatString.replaceAll("%1%(.*)%%", "").replaceAll("%2%(.*)%%", ""));
 
-		return ColorUtils.colorize(result);
+		return ColorUtil.colorize(result);
 	}
 
 	/**

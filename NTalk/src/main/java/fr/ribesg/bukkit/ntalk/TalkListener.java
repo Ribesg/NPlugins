@@ -10,7 +10,7 @@
 package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.ColorUtils;
+import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ntalk.filter.ChatFilter;
 import fr.ribesg.bukkit.ntalk.filter.bean.BanFilter;
 import fr.ribesg.bukkit.ntalk.filter.bean.Filter;
@@ -69,7 +69,7 @@ public class TalkListener implements Listener {
 	public void onPlayerChatThen(final AsyncPlayerChatEvent event) {
 		if (filter != null) {
 			final String message = event.getMessage();
-			final String uncoloredMessage = ColorUtils.stripColorCodes(message);
+			final String uncoloredMessage = ColorUtil.stripColorCodes(message);
 			final Set<Filter> result = filter.check(' ' + uncoloredMessage + ' ');
 			if (!result.isEmpty()) {
 				for (final Filter f : result) {
@@ -163,7 +163,7 @@ public class TalkListener implements Listener {
 		event.setFormat(formats[0]);
 		String message = event.getMessage().trim();
 		if (Perms.hasColor(event.getPlayer(), true)) {
-			message = ColorUtils.colorize(message);
+			message = ColorUtil.colorize(message);
 		}
 		event.setMessage(message); // Reformat the message
 

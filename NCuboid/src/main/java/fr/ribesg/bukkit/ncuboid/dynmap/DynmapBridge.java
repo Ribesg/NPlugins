@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncuboid.dynmap;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidRegion;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
@@ -102,7 +102,7 @@ public class DynmapBridge {
 			return false;
 		} else {
 			// TODO Handle non-area marker if needed
-			final String id = StringUtils.toLowerCamelCase(region.getRegionName());
+			final String id = StringUtil.toLowerCamelCase(region.getRegionName());
 			final AreaMarker marker = this.markerSet.findAreaMarker(id);
 			if (marker == null) {
 				return false;
@@ -118,7 +118,7 @@ public class DynmapBridge {
 	 */
 	private boolean showCuboidRegion(final CuboidRegion region) {
 		// Parameter 1: marker ID
-		final String id = StringUtils.toLowerCamelCase(region.getRegionName());
+		final String id = StringUtil.toLowerCamelCase(region.getRegionName());
 
 		// Parameter 2: marker label
 		final String lbl = region.getRegionName();

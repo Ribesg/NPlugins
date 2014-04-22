@@ -1,13 +1,13 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - ColorUtils.java                     *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.ColorUtils                *
+ * Project file:    NPlugins - NCore - ColorUtil.java                      *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.ColorUtil                  *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.util;
 import org.bukkit.ChatColor;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Ribesg
  */
-public class ColorUtils {
+public class ColorUtil {
 
 	public static final char   ALTERNATE_COLOR_CHAR        = '&';
 	public static final String ALTERNATE_COLOR_CHAR_STRING = Character.toString(ALTERNATE_COLOR_CHAR);

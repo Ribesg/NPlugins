@@ -10,7 +10,7 @@
 package fr.ribesg.bukkit.nworld.world;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
-import fr.ribesg.bukkit.ncore.utils.WorldUtils;
+import fr.ribesg.bukkit.ncore.util.WorldUtil;
 import fr.ribesg.bukkit.nworld.NWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -99,7 +99,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 			type = org.bukkit.WorldType.NORMAL;
 		}
 		try {
-			if (WorldUtils.isLoaded(getWorldName()) != null || WorldUtils.exists(getWorldName()) != null) {
+			if (WorldUtil.isLoaded(getWorldName()) != null || WorldUtil.exists(getWorldName()) != null) {
 				throw new IllegalStateException("World already exists");
 			}
 		} catch (IOException e) {
@@ -130,14 +130,14 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	}
 
 	public boolean isLoaded() {
-		return WorldUtils.isLoaded(getWorldName()) != null;
+		return WorldUtil.isLoaded(getWorldName()) != null;
 	}
 
 	public World load() {
 		try {
 			if (isLoaded()) {
 				throw new IllegalStateException("World already loaded");
-			} else if (WorldUtils.exists(getWorldName()) == null) {
+			} else if (WorldUtil.exists(getWorldName()) == null) {
 				throw new IllegalStateException("World does not exists");
 			}
 		} catch (IOException e) {
@@ -178,7 +178,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 
 	public boolean exists() {
 		try {
-			return WorldUtils.exists(getWorldName()) != null;
+			return WorldUtil.exists(getWorldName()) != null;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;

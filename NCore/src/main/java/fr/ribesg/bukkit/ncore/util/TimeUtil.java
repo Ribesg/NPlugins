@@ -1,13 +1,13 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - TimeUtils.java                      *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.TimeUtils                 *
+ * Project file:    NPlugins - NCore - TimeUtil.java                       *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.TimeUtil                   *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  *
  * @author Ribesg
  */
-public class TimeUtils {
+public class TimeUtil {
 
 	private static final Map<String, String> translatedUnits = new HashMap<>(14);
 

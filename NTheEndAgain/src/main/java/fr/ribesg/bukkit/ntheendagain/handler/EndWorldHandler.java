@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ntheendagain.handler;
 
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.task.RegenTask;
@@ -66,7 +66,7 @@ public class EndWorldHandler {
 	public EndWorldHandler(final NTheEndAgain instance, final World world) {
 		plugin = instance;
 		endWorld = world;
-		camelCaseWorldName = StringUtils.toLowerCamelCase(endWorld.getName());
+		camelCaseWorldName = StringUtil.toLowerCamelCase(endWorld.getName());
 		chunks = new EndChunks(world.getName());
 		config = new Config(plugin, endWorld.getName());
 		dragons = new HashMap<>();

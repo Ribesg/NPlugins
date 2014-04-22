@@ -1,13 +1,13 @@
 /***************************************************************************
- * Project file:    NPlugins - NCore - VersionUtils.java                   *
- * Full Class name: fr.ribesg.bukkit.ncore.utils.VersionUtils              *
+ * Project file:    NPlugins - NCore - VersionUtil.java                    *
+ * Full Class name: fr.ribesg.bukkit.ncore.util.VersionUtil                *
  *                                                                         *
  *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
 
-package fr.ribesg.bukkit.ncore.utils;
+package fr.ribesg.bukkit.ncore.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  *
  * @author Ribesg
  */
-public class VersionUtils {
+public class VersionUtil {
 
 	private static final Pattern VERSION_REGEX = Pattern.compile("^(v\\d+.\\d+.\\d+)");
 

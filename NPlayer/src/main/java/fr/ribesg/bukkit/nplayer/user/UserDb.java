@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.nplayer.user;
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import fr.ribesg.bukkit.ncore.utils.TimeUtils;
+import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class UserDb {
 
-	private final static long TWO_WEEKS = TimeUtils.getInMilliseconds("2weeks");
+	private final static long TWO_WEEKS = TimeUtil.getInMilliseconds("2weeks");
 
 	private final NPlayer                 plugin;
 	private final Map<String, User>       usersPerName;

@@ -10,7 +10,7 @@
 package fr.ribesg.bukkit.nplayer;
 
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
-import fr.ribesg.bukkit.ncore.utils.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NPlayer> {

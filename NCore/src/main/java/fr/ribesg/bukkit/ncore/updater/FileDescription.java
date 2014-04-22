@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.updater;
-import fr.ribesg.bukkit.ncore.utils.VersionUtils;
+import fr.ribesg.bukkit.ncore.util.VersionUtil;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -40,12 +40,12 @@ public class FileDescription {
 		for (final Object o : array.toArray()) {
 			final JSONObject object = (JSONObject) o;
 			final String fileName = (String) object.get(FILENAME_KEY);
-			final String version = VersionUtils.getVersion((String) object.get(VERSION_KEY));
+			final String version = VersionUtil.getVersion((String) object.get(VERSION_KEY));
 			final String bukkitVersion = (String) object.get(BUKKIT_VERSION_KEY);
 			final String type = (String) object.get(TYPE_KEY);
 			final String link = (String) object.get(DOWNLOAD_URL_KEY);
 			final FileDescription fileDescription = new FileDescription(fileName, version, link, type, bukkitVersion);
-			if (VersionUtils.isRelease(version)) {
+			if (VersionUtil.isRelease(version)) {
 				result.put(version, fileDescription);
 			}
 		}

@@ -9,7 +9,7 @@
 
 package fr.ribesg.bukkit.ntheendagain.listener;
 import fr.ribesg.bukkit.ncore.event.theendagain.ChunkRegenEvent;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
@@ -52,7 +52,7 @@ public class ChunkListener implements Listener {
 	public void onEndChunkLoad(final ChunkLoadEvent event) {
 		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
 			final String worldName = event.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 			if (handler != null) {
 				final EndChunks chunks = handler.getChunks();
 				final Chunk chunk = event.getChunk();
@@ -130,7 +130,7 @@ public class ChunkListener implements Listener {
 	public void onEndChunkUnload(final ChunkUnloadEvent event) {
 		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
 			final String worldName = event.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 			if (handler != null) {
 				EndChunk chunk = handler.getChunks().getChunk(event.getChunk());
 				if (chunk == null) {

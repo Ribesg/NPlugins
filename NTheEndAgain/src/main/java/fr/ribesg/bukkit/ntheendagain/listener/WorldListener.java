@@ -8,7 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntheendagain.listener;
-import fr.ribesg.bukkit.ncore.utils.StringUtils;
+import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import org.bukkit.World;
@@ -65,7 +65,7 @@ public class WorldListener implements Listener {
 	public void onWorldUnload(final WorldUnloadEvent event) {
 		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
 			plugin.getLogger().info("Handling " + event.getWorld().getName() + " unload");
-			final EndWorldHandler handler = plugin.getHandler(StringUtils.toLowerCamelCase(event.getWorld().getName()));
+			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(event.getWorld().getName()));
 			if (handler != null) {
 				try {
 					handler.unload(false);

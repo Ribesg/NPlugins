@@ -11,7 +11,7 @@ package fr.ribesg.bukkit.ngeneral.simplefeature;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.world.WorldNode;
-import fr.ribesg.bukkit.ncore.utils.PlayerUtils;
+import fr.ribesg.bukkit.ncore.util.PlayerUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import org.bukkit.Bukkit;
@@ -310,7 +310,7 @@ public class TeleportCommands implements CommandExecutor {
 				return true;
 			} else {
 				final Player player = (Player) sender;
-				final Block targetBlock = PlayerUtils.getTargetBlock(player, null, Integer.MAX_VALUE);
+				final Block targetBlock = PlayerUtil.getTargetBlock(player, null, Integer.MAX_VALUE);
 				if (targetBlock == null) {
 					plugin.sendMessage(player, MessageId.general_tp_noTarget);
 					return true;
@@ -337,7 +337,7 @@ public class TeleportCommands implements CommandExecutor {
 				return true;
 			} else {
 				final Player player = (Player) sender;
-				final Block targetBlock = PlayerUtils.getTargetBlock(player, null, Integer.MAX_VALUE);
+				final Block targetBlock = PlayerUtil.getTargetBlock(player, null, Integer.MAX_VALUE);
 				if (targetBlock == null) {
 					plugin.sendMessage(player, MessageId.general_tp_noTarget);
 					return true;
