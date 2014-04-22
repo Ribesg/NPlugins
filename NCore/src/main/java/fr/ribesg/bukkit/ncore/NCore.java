@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ncore;
 
 import fr.ribesg.bukkit.ncore.common.logging.FilterManager;
 import fr.ribesg.bukkit.ncore.config.Config;
+import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.event.NEventsListener;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.Node;
@@ -81,6 +82,12 @@ public class NCore extends JavaPlugin {
 		if (pluginConfig.getDebugEnabled().contains(getName())) {
 			this.debugEnabled = true;
 			info("DEBUG MODE ENABLED!");
+		}
+
+		try {
+			new UuidDb(this).loadConfig();
+		} catch (final IOException | InvalidConfigurationException e) {
+			logger.log(Level.SEVERE, "An error occured when NCore tried to load uuidDb.yml", e);
 		}
 
 		this.nodes = new HashMap<>();
