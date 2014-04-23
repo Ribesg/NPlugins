@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ncore.util;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -21,8 +22,8 @@ import java.util.regex.Pattern;
  */
 public class PlayerIdsUtil {
 
-	private static final Pattern USERNAME_REGEX   = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
-	private static final Pattern SHORT_UUID_REGEX = Pattern.compile("^[a-zA-Z0-9]{32}$");
+	private static final Pattern USERNAME_REGEX      = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
+	private static final Pattern SHORT_TO_UUID_REGEX = Pattern.compile("^([a-zA-Z0-9]{8})([a-zA-Z0-9]{4})([a-zA-Z0-9]{4})([a-zA-Z0-9]{4})([a-zA-Z0-9]{12})$");
 
 	/**
 	 * Returns a 13-chars (or less) "unique" ID based on a 2-16 chars Username
@@ -105,14 +106,11 @@ public class PlayerIdsUtil {
 	 * @return a UUID representing the same UUID than input
 	 */
 	public static UUID shortUuidToUuid(final String shortUuid) {
-		if (!SHORT_UUID_REGEX.matcher(shortUuid).matches()) {
+		final Matcher matcher = SHORT_TO_UUID_REGEX.matcher(shortUuid);
+		if (!matcher.matches()) {
 			throw new IllegalArgumentException("Not a short UUID: " + shortUuid);
 		}
-		return UUID.fromString(shortUuid.substring(0, 8) + '-' +
-		                       shortUuid.substring(8, 12) + '-' +
-		                       shortUuid.substring(12, 16) + '-' +
-		                       shortUuid.substring(16, 20) + '-' +
-		                       shortUuid.substring(20, 32));
+		return UUID.fromString(matcher.replaceFirst("$1-$2-$3-$4-$5"));
 	}
 
 	/**
