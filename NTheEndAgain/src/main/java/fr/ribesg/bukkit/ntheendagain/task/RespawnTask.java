@@ -43,4 +43,9 @@ public class RespawnTask extends RandomRepeatingTask {
 	protected long getDelay() {
 		return worldHandler.getConfig().getRandomRespawnTimer();
 	}
+
+	@Override
+	protected void setNextConfigTime(final long date) {
+		worldHandler.getConfig().setNextRespawnTaskTime(date);
+	}
 }

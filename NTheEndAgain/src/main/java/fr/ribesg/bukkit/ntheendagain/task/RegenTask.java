@@ -43,4 +43,9 @@ public class RegenTask extends RandomRepeatingTask {
 	protected long getDelay() {
 		return worldHandler.getConfig().getRegenTimer();
 	}
+
+	@Override
+	protected void setNextConfigTime(final long date) {
+		worldHandler.getConfig().setNextRegenTaskTime(date);
+	}
 }
