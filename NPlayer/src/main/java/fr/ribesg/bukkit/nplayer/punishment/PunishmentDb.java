@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.nplayer.punishment;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
+import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -58,7 +59,7 @@ public class PunishmentDb {
 		final List<Punishment> punishments = getAllPunishmentsFromMaps(getPermPunishments(), getTempPunishments());
 
 		for (final Punishment p : punishments) {
-			final String key = p.getPunished().replaceAll("\\.", "-") + '-' + p.getType().toString(); // Should be unique
+			final String key = p.getPunished().replaceAll("\\.", "-") + '-' + p.getType().toString(); // Should be unique // TODO What if I want to ban 24 hours and mute 7 days?
 			final ConfigurationSection pSection = config.createSection(key);
 			pSection.set("punished", p.getPunished());
 			pSection.set("type", p.getType().toString());
@@ -87,7 +88,15 @@ public class PunishmentDb {
 			if (config.isConfigurationSection(key)) {
 				final ConfigurationSection pSection = config.getConfigurationSection(key);
 				Punishment p = null;
-				final String punished = pSection.getString("punished");
+				final String punishedString = pSection.getString("punished");
+				final String punished;
+				if (PlayerIdsUtil.isValidUuid(punishedString)) {
+					punished = punishedString;
+				} else if (PlayerIdsUtil.isValidMinecraftUserName(punishedString)) {
+					punished = UuidDb.getId(punishedString, true).toString();
+				} else {
+					throw new InvalidConfigurationException("Unknown punished '" + punishedString + "' found in punishmentDB.yml");
+				}
 				final PunishmentType type = PunishmentType.valueOf(pSection.getString("type"));
 				final long endDate = Long.parseLong(pSection.getString("endDate"));
 				final String reason = pSection.getString("reason");
