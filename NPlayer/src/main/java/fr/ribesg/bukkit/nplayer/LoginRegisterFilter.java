@@ -15,6 +15,6 @@ public class LoginRegisterFilter implements DenyFilter {
 
 	@Override
 	public boolean denies(final String message) {
-		return message.contains(" issued server command: /login") || message.contains(" issued server command: /login");
+		return message.contains(" issued server command: /login") || message.contains(" issued server command: /register");
 	}
 }
