@@ -16,10 +16,11 @@ import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class GodModeFeature extends Feature {
 
-	private final Set<String> godPlayers;
+	private final Set<UUID> godPlayers;
 
 	public GodModeFeature(final NGeneral instance) {
 		super(instance, FeatureType.GOD_MODE, instance.getPluginConfig().hasGodModeFeature());
@@ -35,22 +36,22 @@ public class GodModeFeature extends Feature {
 		plugin.setCommandExecutor("god", executor);
 	}
 
-	public Set<String> getGodPlayers() {
+	public Set<UUID> getGodPlayers() {
 		return godPlayers;
 	}
 
-	public boolean hasGodMode(final String playerName) {
-		return godPlayers.contains(playerName);
+	public boolean hasGodMode(final Player player) {
+		return godPlayers.contains(player.getUniqueId());
 	}
 
 	public void setGodMode(final Player player, final boolean value) {
 		if (value) {
-			godPlayers.add(player.getName());
+			godPlayers.add(player.getUniqueId());
 			player.setHealth(player.getMaxHealth());
 			player.setFoodLevel(20);
 			player.setSaturation(20.0f);
 		} else {
-			godPlayers.remove(player.getName());
+			godPlayers.remove(player.getUniqueId());
 		}
 	}
 }

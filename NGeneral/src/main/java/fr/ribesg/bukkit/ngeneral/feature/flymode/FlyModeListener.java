@@ -30,14 +30,14 @@ public class FlyModeListener implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
-		if (feature.hasFlyMode(event.getPlayer().getName())) {
+		if (feature.hasFlyMode(event.getPlayer())) {
 			event.getPlayer().setAllowFlight(true);
 		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerQuit(final PlayerQuitEvent event) {
-		if (!Perms.hasFly(event.getPlayer()) && feature.hasFlyMode(event.getPlayer().getName())) {
+		if (!Perms.hasFly(event.getPlayer()) && feature.hasFlyMode(event.getPlayer())) {
 			event.getPlayer().setAllowFlight(false);
 			feature.setFlyMode(event.getPlayer(), false);
 			event.getPlayer().setFallDistance(-100f);
@@ -49,7 +49,7 @@ public class FlyModeListener implements Listener {
 		if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
 			final boolean wasFlying = event.getPlayer().isFlying();
 			final Player player = event.getPlayer();
-			if (Perms.hasFly(event.getPlayer()) && feature.hasFlyMode(event.getPlayer().getName())) {
+			if (Perms.hasFly(event.getPlayer()) && feature.hasFlyMode(event.getPlayer())) {
 				Bukkit.getScheduler().runTaskLater(feature.getPlugin(), new BukkitRunnable() {
 
 					@Override

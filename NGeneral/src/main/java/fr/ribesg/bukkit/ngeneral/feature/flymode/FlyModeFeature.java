@@ -17,10 +17,11 @@ import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class FlyModeFeature extends Feature {
 
-	private final Set<String> flyPlayers;
+	private final Set<UUID> flyPlayers;
 
 	public FlyModeFeature(final NGeneral instance) {
 		super(instance, FeatureType.FLY_MODE, instance.getPluginConfig().hasFlyModeFeature());
@@ -39,7 +40,7 @@ public class FlyModeFeature extends Feature {
 	@Override
 	public void terminate() {
 		for (final Player player : Bukkit.getOnlinePlayers()) {
-			if (!Perms.hasFly(player) && this.hasFlyMode(player.getName())) {
+			if (!Perms.hasFly(player) && this.hasFlyMode(player)) {
 				player.setAllowFlight(false);
 				this.setFlyMode(player, false);
 				player.setFallDistance(-100f);
@@ -47,20 +48,20 @@ public class FlyModeFeature extends Feature {
 		}
 	}
 
-	public Set<String> getFlyPlayers() {
+	public Set<UUID> getFlyPlayers() {
 		return flyPlayers;
 	}
 
-	public boolean hasFlyMode(final String playerName) {
-		return flyPlayers.contains(playerName);
+	public boolean hasFlyMode(final Player player) {
+		return flyPlayers.contains(player.getUniqueId());
 	}
 
 	public void setFlyMode(final Player player, final boolean value) {
 		if (value) {
-			flyPlayers.add(player.getName());
+			flyPlayers.add(player.getUniqueId());
 			player.setAllowFlight(true);
 		} else {
-			flyPlayers.remove(player.getName());
+			flyPlayers.remove(player.getUniqueId());
 			player.setAllowFlight(false);
 		}
 	}

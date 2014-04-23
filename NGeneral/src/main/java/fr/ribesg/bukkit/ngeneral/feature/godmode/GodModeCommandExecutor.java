@@ -58,7 +58,7 @@ public class GodModeCommandExecutor implements CommandExecutor {
 			} else if (args.length == 0) {
 				if (!(sender instanceof Player)) {
 					feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-				} else if (feature.hasGodMode(sender.getName())) {
+				} else if (feature.hasGodMode((Player) sender)) {
 					feature.setGodMode((Player) sender, false);
 					feature.getPlugin().sendMessage(sender, MessageId.general_god_disabled);
 				} else {
@@ -127,7 +127,7 @@ public class GodModeCommandExecutor implements CommandExecutor {
 			if (p == null) {
 				feature.getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 			} else {
-				final boolean actualValue = value == null ? !feature.hasGodMode(p.getName()) : value;
+				final boolean actualValue = value == null ? !feature.hasGodMode(p) : value;
 				feature.setGodMode(p, actualValue);
 				if (actualValue) {
 					feature.getPlugin().sendMessage(sender, MessageId.general_god_enabledFor, p.getName());

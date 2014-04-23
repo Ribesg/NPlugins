@@ -11,7 +11,9 @@ package fr.ribesg.bukkit.ngeneral.config;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
+import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
@@ -22,7 +24,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 public class DbConfig extends AbstractConfig<NGeneral> {
 
@@ -41,7 +45,21 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		// #############
 
 		if (config.isList("flyModePlayers")) {
-			final List<String> flyModePlayers = config.getStringList("flyModePlayers");
+			final List<String> flyModePlayersStrings = config.getStringList("flyModePlayers");
+			final List<UUID> flyModePlayers = new LinkedList<>();
+			for (final String idString : flyModePlayersStrings) {
+				UUID id = null;
+				if (PlayerIdsUtil.isValidUuid(idString)) {
+					id = UUID.fromString(idString);
+				} else if (PlayerIdsUtil.isValidMinecraftUserName(idString)) {
+					id = UuidDb.getId(idString, true);
+				}
+				if (id == null) {
+					throw new InvalidConfigurationException("Unknown playerId '" + idString + "' found in db.yml under section 'flyModePlayers'");
+				} else {
+					flyModePlayers.add(id);
+				}
+			}
 			plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers().addAll(flyModePlayers);
 		}
 
@@ -50,7 +68,21 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		// #############
 
 		if (config.isList("godModePlayers")) {
-			final List<String> godModePlayers = config.getStringList("godModePlayers");
+			final List<String> godModePlayersStrings = config.getStringList("godModePlayers");
+			final List<UUID> godModePlayers = new LinkedList<>();
+			for (final String idString : godModePlayersStrings) {
+				UUID id = null;
+				if (PlayerIdsUtil.isValidUuid(idString)) {
+					id = UUID.fromString(idString);
+				} else if (PlayerIdsUtil.isValidMinecraftUserName(idString)) {
+					id = UuidDb.getId(idString, true);
+				}
+				if (id == null) {
+					throw new InvalidConfigurationException("Unknown playerId '" + idString + "' found in db.yml under section 'godModePlayers'");
+				} else {
+					godModePlayers.add(id);
+				}
+			}
 			plugin.getFeatures().get(GodModeFeature.class).getGodPlayers().addAll(godModePlayers);
 		}
 
@@ -106,8 +138,8 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 
 		if (plugin.getPluginConfig().hasFlyModeFeature()) {
 			content.append("flyModePlayers:\n");
-			for (final String playerName : plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers()) {
-				content.append("- " + playerName + "\n");
+			for (final UUID playerId : plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers()) {
+				content.append("- " + playerId + " # " + UuidDb.getName(playerId) + "\n");
 			}
 			content.append('\n');
 		}
@@ -118,8 +150,8 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 
 		if (plugin.getPluginConfig().hasGodModeFeature()) {
 			content.append("godModePlayers:\n");
-			for (final String playerName : plugin.getFeatures().get(GodModeFeature.class).getGodPlayers()) {
-				content.append("- " + playerName + "\n");
+			for (final UUID playerId : plugin.getFeatures().get(GodModeFeature.class).getGodPlayers()) {
+				content.append("- " + playerId + " # " + UuidDb.getName(playerId) + "\n");
 			}
 			content.append('\n');
 		}

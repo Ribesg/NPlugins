@@ -30,7 +30,7 @@ public class GodModeListener implements Listener {
 	public void onPlayerDamage(final EntityDamageEvent event) {
 		if (event.getEntityType() == EntityType.PLAYER) {
 			final Player player = (Player) event.getEntity();
-			if (feature.hasGodMode(player.getName())) {
+			if (feature.hasGodMode(player)) {
 				event.setCancelled(true);
 				if (event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
 					player.setFireTicks(0);
@@ -43,13 +43,13 @@ public class GodModeListener implements Listener {
 	public void onPlayerStarve(final FoodLevelChangeEvent event) {
 		if (event.getEntityType() == EntityType.PLAYER) {
 			final Player p = (Player) event.getEntity();
-			event.setCancelled(p.getFoodLevel() > event.getFoodLevel() && feature.hasGodMode(p.getName()));
+			event.setCancelled(p.getFoodLevel() > event.getFoodLevel() && feature.hasGodMode(p));
 		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerQuit(final PlayerQuitEvent event) {
-		if (!Perms.hasGod(event.getPlayer()) && feature.hasGodMode(event.getPlayer().getName())) {
+		if (!Perms.hasGod(event.getPlayer()) && feature.hasGodMode(event.getPlayer())) {
 			feature.setGodMode(event.getPlayer(), false);
 		}
 	}

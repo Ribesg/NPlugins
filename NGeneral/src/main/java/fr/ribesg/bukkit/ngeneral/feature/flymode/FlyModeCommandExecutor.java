@@ -58,7 +58,7 @@ public class FlyModeCommandExecutor implements CommandExecutor {
 			} else if (args.length == 0) {
 				if (!(sender instanceof Player)) {
 					feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-				} else if (feature.hasFlyMode(sender.getName())) {
+				} else if (feature.hasFlyMode((Player) sender)) {
 					feature.setFlyMode((Player) sender, false);
 					feature.getPlugin().sendMessage(sender, MessageId.general_fly_disabled);
 				} else {
@@ -127,7 +127,7 @@ public class FlyModeCommandExecutor implements CommandExecutor {
 			if (p == null) {
 				feature.getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 			} else {
-				final boolean actualValue = value == null ? !feature.hasFlyMode(p.getName()) : value;
+				final boolean actualValue = value == null ? !feature.hasFlyMode(p) : value;
 				feature.setFlyMode(p, actualValue);
 				if (actualValue) {
 					feature.getPlugin().sendMessage(sender, MessageId.general_fly_enabledFor, p.getName());
