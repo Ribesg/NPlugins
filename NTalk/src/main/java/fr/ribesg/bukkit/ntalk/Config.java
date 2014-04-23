@@ -10,10 +10,13 @@
 package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
+import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ntalk.format.Format;
 import fr.ribesg.bukkit.ntalk.format.Format.FormatType;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.HashMap;
@@ -21,6 +24,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
 public class Config extends AbstractConfig<NTalk> {
 
@@ -36,8 +40,8 @@ public class Config extends AbstractConfig<NTalk> {
 	private String opGroup;
 
 	// PlayerName;Format
-	private Map<String, Format> playerFormats;
-	private Map<String, String> playerNicknames;
+	private Map<UUID, Format> playerFormats;
+	private Map<UUID, String> playerNicknames;
 
 	// GroupName;Format
 	private Map<String, Format> groupFormats;
@@ -56,12 +60,14 @@ public class Config extends AbstractConfig<NTalk> {
 		setDefaultFormat(new Format(FormatType.GROUP, "default", "", ""));
 		setOpGroup("admin");
 
-		setPlayerFormats(new HashMap<String, Format>());
-		getPlayerFormats().put("Ribesg", new Format(FormatType.PLAYER, "Ribesg", "&c[Dev]&f", ""));
-		getPlayerFormats().put("Notch", new Format(FormatType.PLAYER, "Notch", "&c[God]&f", ""));
+		setPlayerFormats(new HashMap<UUID, Format>());
+		final UUID ribesgId = UuidDb.getId("Ribesg");
+		final UUID notchId = UuidDb.getId("Notch");
+		getPlayerFormats().put(ribesgId, new Format(FormatType.PLAYER, ribesgId.toString(), "&c[Dev]&f", ""));
+		getPlayerFormats().put(notchId, new Format(FormatType.PLAYER, notchId.toString(), "&c[God]&f", ""));
 
-		setPlayerNicknames(new HashMap<String, String>());
-		getPlayerNicknames().put("Notch", "TheNotch");
+		setPlayerNicknames(new HashMap<UUID, String>());
+		getPlayerNicknames().put(notchId, "TheNotch");
 
 		setGroupFormats(new HashMap<String, Format>());
 		getGroupFormats().put("admin", new Format(FormatType.GROUP, "admin", "&c[Admin]&f", ""));
@@ -77,10 +83,10 @@ public class Config extends AbstractConfig<NTalk> {
 	 * @see AbstractConfig#handleValues(YamlConfiguration)
 	 */
 	@Override
-	protected void handleValues(final YamlConfiguration config) {
+	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
-		setPlayerFormats(new HashMap<String, Format>());
-		setPlayerNicknames(new HashMap<String, String>());
+		setPlayerFormats(new HashMap<UUID, Format>());
+		setPlayerNicknames(new HashMap<UUID, String>());
 		setGroupFormats(new HashMap<String, Format>());
 
 		// template. Default: "&f<[prefix][name]%%([realName])%%[suffix]&f> [message]".
@@ -127,16 +133,24 @@ public class Config extends AbstractConfig<NTalk> {
 		// playerFormats.
 		if (config.isConfigurationSection("playerFormats")) {
 			final ConfigurationSection playerFormats = config.getConfigurationSection("playerFormats");
-			for (final String playerName : playerFormats.getKeys(false)) {
-				final ConfigurationSection playerFormat = playerFormats.getConfigurationSection(playerName);
-				final String prefix = playerFormat.getString("prefix", "NOPREFIX");
-				final String nickName = playerFormat.getString("nick", "NONICK");
-				final String suffix = playerFormat.getString("suffix", "NOSUFFIX");
-				if (!prefix.equals("NOPREFIX") || !suffix.equals("NOSUFFIX")) {
-					getPlayerFormats().put(playerName, new Format(FormatType.PLAYER, playerName, prefix.equals("NOPREFIX") ? "" : prefix, suffix.equals("NOSUFFIX") ? "" : suffix));
+			for (final String playerIdString : playerFormats.getKeys(false)) {
+				final ConfigurationSection playerFormat = playerFormats.getConfigurationSection(playerIdString);
+				final UUID playerId;
+				if (PlayerIdsUtil.isValidUuid(playerIdString)) {
+					playerId = UUID.fromString(playerIdString);
+				} else if (PlayerIdsUtil.isValidMinecraftUserName(playerIdString)) {
+					playerId = UuidDb.getId(playerIdString, true);
+				} else {
+					throw new InvalidConfigurationException("Unknown playerId '" + playerIdString + "' found in config.yml under section 'playerFormats'");
 				}
-				if (!nickName.equals("NONICK")) {
-					getPlayerNicknames().put(playerName, nickName);
+				final String prefix = playerFormat.getString("prefix", "_NOPREFIX");
+				final String nickName = playerFormat.getString("nick", "_NONICK");
+				final String suffix = playerFormat.getString("suffix", "_NOSUFFIX");
+				if (!prefix.equals("_NOPREFIX") || !suffix.equals("_NOSUFFIX")) {
+					getPlayerFormats().put(playerId, new Format(FormatType.PLAYER, playerId.toString(), prefix.equals("_NOPREFIX") ? "" : prefix, suffix.equals("_NOSUFFIX") ? "" : suffix));
+				}
+				if (!nickName.equals("_NONICK")) {
+					getPlayerNicknames().put(playerId, nickName);
 				}
 			}
 		}
@@ -233,21 +247,21 @@ public class Config extends AbstractConfig<NTalk> {
 		// player prefixes and suffixes
 		content.append("# Player prefixes, nicknames and suffixes. Use exact player names\n");
 		content.append("playerFormats:\n");
-		final Set<String> playerNames = new HashSet<>();
-		playerNames.addAll(getPlayerFormats().keySet());
-		playerNames.addAll(getPlayerNicknames().keySet());
-		for (final String playerName : playerNames) {
+		final Set<UUID> playerIds = new HashSet<>();
+		playerIds.addAll(getPlayerFormats().keySet());
+		playerIds.addAll(getPlayerNicknames().keySet());
+		for (final UUID playerId : playerIds) {
 			String prefix = "";
 			String nickName = "";
 			String suffix = "";
-			if (getPlayerFormats().containsKey(playerName)) {
-				prefix = getPlayerFormats().get(playerName).getPrefix();
-				suffix = getPlayerFormats().get(playerName).getSuffix();
+			if (getPlayerFormats().containsKey(playerId)) {
+				prefix = getPlayerFormats().get(playerId).getPrefix();
+				suffix = getPlayerFormats().get(playerId).getSuffix();
 			}
-			if (getPlayerNicknames().containsKey(playerName)) {
-				nickName = getPlayerNicknames().get(playerName);
+			if (getPlayerNicknames().containsKey(playerId)) {
+				nickName = getPlayerNicknames().get(playerId);
 			}
-			content.append("  " + playerName + ": \n");
+			content.append("  " + playerId + ": # " + UuidDb.getName(playerId) + "\n");
 			if (prefix.length() > 0) {
 				content.append("    prefix: \"" + prefix + "\"\n");
 			}
@@ -305,19 +319,19 @@ public class Config extends AbstractConfig<NTalk> {
 		this.opGroup = opGroup;
 	}
 
-	public Map<String, Format> getPlayerFormats() {
+	public Map<UUID, Format> getPlayerFormats() {
 		return playerFormats;
 	}
 
-	public void setPlayerFormats(final Map<String, Format> playerFormats) {
+	public void setPlayerFormats(final Map<UUID, Format> playerFormats) {
 		this.playerFormats = playerFormats;
 	}
 
-	public Map<String, String> getPlayerNicknames() {
+	public Map<UUID, String> getPlayerNicknames() {
 		return playerNicknames;
 	}
 
-	public void setPlayerNicknames(final Map<String, String> playerNicknames) {
+	public void setPlayerNicknames(final Map<UUID, String> playerNicknames) {
 		this.playerNicknames = playerNicknames;
 	}
 

@@ -41,8 +41,8 @@ public class Formater {
 	public String[] getFormat(final Player player, final boolean async) {
 		// Get format for this player
 		Format format = cfg.getDefaultFormat();
-		if (cfg.getPlayerFormats().containsKey(player.getName())) {
-			format = cfg.getPlayerFormats().get(player.getName());
+		if (cfg.getPlayerFormats().containsKey(player.getUniqueId())) {
+			format = cfg.getPlayerFormats().get(player.getUniqueId());
 		} else if (async ? AsyncPermAccessor.isOp(player.getName()) : player.isOp()) {
 			if (cfg.getGroupFormats().containsKey(cfg.getOpGroup())) {
 				format = cfg.getGroupFormats().get(cfg.getOpGroup());
@@ -59,7 +59,7 @@ public class Formater {
 		}
 
 		String formatString = cfg.getTemplate();
-		final String playerNickname = cfg.getPlayerNicknames().get(player.getName());
+		final String playerNickname = cfg.getPlayerNicknames().get(player.getUniqueId());
 		formatString = formatString.replaceAll("\\Q[prefix]\\E", format.getPrefix());
 		formatString = formatString.replaceAll("\\Q[suffix]\\E", format.getSuffix());
 		formatString = formatString.replace("[message]", BUKKIT_MESSAGE);
@@ -99,8 +99,8 @@ public class Formater {
 			formatString = formatString.replaceAll("\\Q[suffixFrom]\\E", "");
 			formatString = formatString.replaceAll("%1%(.*)%%", "");
 		} else {
-			if (cfg.getPlayerFormats().containsKey(from.getName())) {
-				formatFrom = cfg.getPlayerFormats().get(from.getName());
+			if (cfg.getPlayerFormats().containsKey(((Player) from).getUniqueId())) {
+				formatFrom = cfg.getPlayerFormats().get(((Player)from).getUniqueId());
 			} else if (from.isOp()) {
 				if (cfg.getGroupFormats().containsKey(cfg.getOpGroup())) {
 					formatFrom = cfg.getGroupFormats().get(cfg.getOpGroup());
@@ -116,7 +116,7 @@ public class Formater {
 				}
 			}
 			final String fromName = from.getName();
-			final String fromNickname = cfg.getPlayerNicknames().get(fromName);
+			final String fromNickname = cfg.getPlayerNicknames().get(((Player)from).getUniqueId());
 			formatString = formatString.replaceAll("\\Q[prefixFrom]\\E", formatFrom.getPrefix());
 			formatString = formatString.replaceAll("\\Q[suffixFrom]\\E", formatFrom.getSuffix());
 			if (fromNickname == null) {
@@ -134,8 +134,8 @@ public class Formater {
 			formatString = formatString.replaceAll("\\Q[suffixTo]\\E", "");
 			formatString = formatString.replaceAll("%2%(.*)%%", "");
 		} else {
-			if (cfg.getPlayerFormats().containsKey(to.getName())) {
-				formatTo = cfg.getPlayerFormats().get(to.getName());
+			if (cfg.getPlayerFormats().containsKey(((Player)to).getUniqueId())) {
+				formatTo = cfg.getPlayerFormats().get(((Player)to).getUniqueId());
 			} else if (to.isOp()) {
 				if (cfg.getGroupFormats().containsKey(cfg.getOpGroup())) {
 					formatTo = cfg.getGroupFormats().get(cfg.getOpGroup());
@@ -151,7 +151,7 @@ public class Formater {
 				}
 			}
 			final String toName = to.getName();
-			final String toNickname = cfg.getPlayerNicknames().get(toName);
+			final String toNickname = cfg.getPlayerNicknames().get(((Player)to).getUniqueId());
 			formatString = formatString.replaceAll("\\Q[prefixTo]\\E", formatTo.getPrefix());
 			formatString = formatString.replaceAll("\\Q[suffixTo]\\E", formatTo.getSuffix());
 			if (toNickname == null) {

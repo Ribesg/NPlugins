@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ntalk;
 
+import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import org.bukkit.Bukkit;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author ribes
@@ -185,7 +187,8 @@ public class TalkCommandExecutor implements CommandExecutor {
 				plugin.sendMessage(sender, MessageId.talk_invalidUsername, realName);
 				return true;
 			}
-			plugin.getPluginConfig().getPlayerNicknames().remove(realName);
+			final UUID id = UuidDb.getId(realName);
+			plugin.getPluginConfig().getPlayerNicknames().remove(id);
 			plugin.sendMessage(sender, MessageId.talk_youDeNickNamed, realName);
 			final Player p = plugin.getServer().getPlayerExact(realName);
 			if (p != null && p != sender) {
@@ -202,7 +205,8 @@ public class TalkCommandExecutor implements CommandExecutor {
 				plugin.sendMessage(sender, MessageId.talk_invalidNickname, nick);
 				return true;
 			}
-			plugin.getPluginConfig().getPlayerNicknames().put(realName, nick);
+			final UUID id = UuidDb.getId(realName);
+			plugin.getPluginConfig().getPlayerNicknames().put(id, nick);
 			plugin.sendMessage(sender, MessageId.talk_youNickNamed, realName, nick);
 			final Player p = plugin.getServer().getPlayerExact(realName);
 			if (p != null && p != sender) {

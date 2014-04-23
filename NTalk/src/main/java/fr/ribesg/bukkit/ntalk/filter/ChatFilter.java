@@ -89,7 +89,7 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 			plugin.getPluginConfig().setChatFiltersEnabled(false);
 			try {
 				plugin.getPluginConfig().writeConfig();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				plugin.getLogger().warning("The following error occured, but it's not really a problem.");
 				e.printStackTrace();
 			}
