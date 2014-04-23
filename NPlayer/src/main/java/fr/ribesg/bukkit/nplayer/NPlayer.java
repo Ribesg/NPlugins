@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.nplayer;
 
+import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.node.player.PlayerNode;
@@ -167,7 +168,7 @@ public class NPlayer extends NPlugin implements PlayerNode {
 			for (final Punishment p : punishmentDb.getAllPunishments()) {
 				if (p.getType() == PunishmentType.JAIL) {
 					final Jail jail = (Jail) p;
-					if (!cuboidNode.jail(jail.getPunished(), jail.getJailPointName())) {
+					if (!cuboidNode.jail(UuidDb.getId(jail.getPunished()), jail.getJailPointName())) {
 						error("Failed to jail player '" + jail.getPunished() + "' in NCuboid!");
 					}
 				}

@@ -18,6 +18,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
+import java.util.UUID;
+
 /**
  * @author Ribesg
  */
@@ -34,10 +36,10 @@ public class PunishmentListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerLogin(final PlayerLoginEvent event) {
 		if (event.getResult() == PlayerLoginEvent.Result.ALLOWED) {
-			final String playerName = event.getPlayer().getName();
+			final UUID id = event.getPlayer().getUniqueId();
 			final String playerIp = event.getAddress().getHostAddress();
-			if (punishmentDb.isNickBanned(playerName)) {
-				final Punishment ban = punishmentDb.get(playerName, PunishmentType.BAN);
+			if (punishmentDb.isIdBanned(id)) {
+				final Punishment ban = punishmentDb.get(id.toString(), PunishmentType.BAN);
 				final String playerBannedMessage;
 				if (ban.isPermanent()) {
 					playerBannedMessage = plugin.getMessages().get(MessageId.player_deniedPermBanned, ban.getReason())[0];

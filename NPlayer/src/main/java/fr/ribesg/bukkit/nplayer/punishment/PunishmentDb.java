@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.punishment;
+import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -17,15 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class PunishmentDb {
 
@@ -35,7 +28,7 @@ public class PunishmentDb {
 	private final Map<String, Set<Punishment>> tempPunishments;
 	private final SortedMap<Long, Punishment>  tempPunishmentEndDateMap;
 
-	private final Map<String, String> leaveMessages;
+	private final Map<UUID, String> leaveMessages;
 
 	public PunishmentDb(final NPlayer instance) {
 		this.plugin = instance;
@@ -150,62 +143,62 @@ public class PunishmentDb {
 		return tempPunishmentEndDateMap;
 	}
 
-	public Map<String, String> getLeaveMessages() {
+	public Map<UUID, String> getLeaveMessages() {
 		return leaveMessages;
 	}
 
-	// ################## //
-	// ## Nickname Ban ## //
-	// ################## //
+	// ############## //
+	// ## UUID Ban ## //
+	// ############## //
 
-	public boolean tempBanNick(final String playerName, final long duration, final String reason) {
-		plugin.entering(getClass(), "tempBanNick");
+	public boolean tempBanId(final UUID id, final long duration, final String reason) {
+		plugin.entering(getClass(), "tempBanId");
 
 		final long newBanEndDate = System.currentTimeMillis() + duration * 1000;
-		final Ban ban = (Ban) get(playerName, PunishmentType.BAN);
+		final Ban ban = (Ban) get(id.toString(), PunishmentType.BAN);
 		if (ban != null) {
 			if (ban.isPermanent() || ban.getEndDate() > newBanEndDate) {
-				plugin.exiting(getClass(), "unBanNick", "Failed: already banned with longer duration");
+				plugin.exiting(getClass(), "unBanId", "Failed: already banned with longer duration");
 				return false;
 			} else {
 				remove(ban);
 			}
 		}
-		add(new Ban(playerName, reason, newBanEndDate));
+		add(new Ban(id.toString(), reason, newBanEndDate));
 
-		plugin.exiting(getClass(), "tempBanNick");
+		plugin.exiting(getClass(), "tempBanId");
 		return true;
 	}
 
-	public boolean permBanNick(final String playerName, final String reason) {
-		plugin.entering(getClass(), "permBanNick");
+	public boolean permBanId(final UUID id, final String reason) {
+		plugin.entering(getClass(), "permBanId");
 
-		if (get(playerName, PunishmentType.BAN) != null) {
-			plugin.exiting(getClass(), "unBanNick", "Failed: already banned");
+		if (get(id.toString(), PunishmentType.BAN) != null) {
+			plugin.exiting(getClass(), "unBanId", "Failed: already banned");
 			return false;
 		}
-		add(new Ban(playerName, reason));
+		add(new Ban(id.toString(), reason));
 
-		plugin.exiting(getClass(), "permBanNick");
+		plugin.exiting(getClass(), "permBanId");
 		return true;
 	}
 
-	public boolean unBanNick(final String playerName) {
-		plugin.entering(getClass(), "unBanNick");
+	public boolean unBanId(final UUID id) {
+		plugin.entering(getClass(), "unBanId");
 
-		final Punishment p = get(playerName, PunishmentType.BAN);
+		final Punishment p = get(id.toString(), PunishmentType.BAN);
 		if (p == null) {
-			plugin.exiting(getClass(), "unBanNick", "Failed: not banned");
+			plugin.exiting(getClass(), "unBanId", "Failed: not banned");
 			return false;
 		}
 		remove(p);
 
-		plugin.exiting(getClass(), "unBanNick");
+		plugin.exiting(getClass(), "unBanId");
 		return true;
 	}
 
-	public boolean isNickBanned(final String playerName) {
-		return get(playerName, PunishmentType.BAN) != null;
+	public boolean isIdBanned(final UUID id) {
+		return get(id.toString(), PunishmentType.BAN) != null;
 	}
 
 	// ############ //
@@ -219,7 +212,7 @@ public class PunishmentDb {
 		final IpBan ipBan = (IpBan) get(ip, PunishmentType.IPBAN);
 		if (ipBan != null) {
 			if (ipBan.isPermanent() || ipBan.getEndDate() > newIpBanEndDate) {
-				plugin.exiting(getClass(), "unBanNick", "Failed: already banned with longer duration");
+				plugin.exiting(getClass(), "tempBanIp", "Failed: already banned with longer duration");
 				return false;
 			} else {
 				remove(ipBan);
@@ -262,122 +255,122 @@ public class PunishmentDb {
 		return get(ip, PunishmentType.IPBAN) != null;
 	}
 
-	// ################### //
-	// ## Nickname Mute ## //
-	// ################### //
+	// ############### //
+	// ## UUID Mute ## //
+	// ############### //
 
-	public boolean tempMuteNick(final String playerName, final long duration, final String reason) {
-		plugin.entering(getClass(), "tempMuteNick");
+	public boolean tempMuteId(final UUID id, final long duration, final String reason) {
+		plugin.entering(getClass(), "tempMuteId");
 
 		final long newMuteEndDate = System.currentTimeMillis() + duration * 1000;
-		final Mute mute = (Mute) get(playerName, PunishmentType.MUTE);
+		final Mute mute = (Mute) get(id.toString(), PunishmentType.MUTE);
 		if (mute != null) {
 			if (mute.isPermanent() || mute.getEndDate() > newMuteEndDate) {
-				plugin.exiting(getClass(), "tempMuteNick", "Failed: already muted with longer duration");
+				plugin.exiting(getClass(), "tempMuteId", "Failed: already muted with longer duration");
 				return false;
 			} else {
 				remove(mute);
 			}
 		}
-		add(new Mute(playerName, reason, newMuteEndDate));
+		add(new Mute(id.toString(), reason, newMuteEndDate));
 
-		plugin.exiting(getClass(), "tempMuteNick");
+		plugin.exiting(getClass(), "tempMuteId");
 		return true;
 	}
 
-	public boolean permMuteNick(final String playerName, final String reason) {
-		plugin.entering(getClass(), "permMuteNick");
+	public boolean permMuteId(final UUID id, final String reason) {
+		plugin.entering(getClass(), "permMuteId");
 
-		if (get(playerName, PunishmentType.MUTE) != null) {
-			plugin.exiting(getClass(), "permMuteNick", "Failed: already muted");
+		if (get(id.toString(), PunishmentType.MUTE) != null) {
+			plugin.exiting(getClass(), "permMuteId", "Failed: already muted");
 			return false;
 		}
-		add(new Mute(playerName, reason));
+		add(new Mute(id.toString(), reason));
 
-		plugin.exiting(getClass(), "permMuteNick");
+		plugin.exiting(getClass(), "permMuteId");
 		return true;
 	}
 
-	public boolean unMuteNick(final String playerName) {
-		plugin.entering(getClass(), "unMuteNick");
+	public boolean unMuteId(final UUID id) {
+		plugin.entering(getClass(), "unMuteId");
 
-		final Punishment p = get(playerName, PunishmentType.MUTE);
+		final Punishment p = get(id.toString(), PunishmentType.MUTE);
 		if (p == null) {
-			plugin.exiting(getClass(), "unMuteNick", "Failed: not muted");
+			plugin.exiting(getClass(), "unMuteId", "Failed: not muted");
 			return false;
 		}
 		remove(p);
 
-		plugin.exiting(getClass(), "unMuteNick");
+		plugin.exiting(getClass(), "unMuteId");
 		return true;
 	}
 
-	public boolean isNickMuted(final String playerName) {
-		return get(playerName, PunishmentType.MUTE) != null;
+	public boolean isIdMuted(final UUID id) {
+		return get(id.toString(), PunishmentType.MUTE) != null;
 	}
 
-	// ########## //
-	// ## Jail ## //
-	// ########## //
+	// ############### //
+	// ## UUID Jail ## //
+	// ############### //
 
-	public boolean tempJailNick(final String playerName, final long duration, final String reason, final String jailPointName) {
-		plugin.entering(getClass(), "tempJailNick");
+	public boolean tempJailId(final UUID id, final long duration, final String reason, final String jailPointName) {
+		plugin.entering(getClass(), "tempJailId");
 
 		final long newJailEndDate = System.currentTimeMillis() + duration * 1000;
-		final Jail jail = (Jail) get(playerName, PunishmentType.JAIL);
+		final Jail jail = (Jail) get(id.toString(), PunishmentType.JAIL);
 		if (jail != null) {
 			if (jail.isPermanent() || jail.getEndDate() > newJailEndDate) {
-				plugin.exiting(getClass(), "tempJailNick", "Failed: already jailed with longer duration");
+				plugin.exiting(getClass(), "tempJailId", "Failed: already jailed with longer duration");
 				return false;
 			} else {
-				if (!plugin.getCuboidNode().unJail(playerName)) {
+				if (!plugin.getCuboidNode().unJail(id)) {
 					plugin.error("Failed to unjail already-jailed player in NCuboid!");
 				}
 				remove(jail);
 			}
 		}
-		add(new Jail(playerName, reason, jailPointName, newJailEndDate));
+		add(new Jail(id.toString(), reason, jailPointName, newJailEndDate));
 
-		if (!plugin.getCuboidNode().jail(playerName, jailPointName)) {
+		if (!plugin.getCuboidNode().jail(id, jailPointName)) {
 			plugin.error("Failed to jail player in NCuboid!");
 		}
 
-		plugin.exiting(getClass(), "tempJailNick");
+		plugin.exiting(getClass(), "tempJailId");
 		return true;
 	}
 
-	public boolean permJailNick(final String playerName, final String reason, final String jailPointName) {
-		plugin.entering(getClass(), "permJailNick");
+	public boolean permJailId(final UUID id, final String reason, final String jailPointName) {
+		plugin.entering(getClass(), "permJailId");
 
-		if (get(playerName, PunishmentType.JAIL) != null) {
-			plugin.exiting(getClass(), "permJailNick", "Failed: already jailed");
+		if (get(id.toString(), PunishmentType.JAIL) != null) {
+			plugin.exiting(getClass(), "permJailId", "Failed: already jailed");
 			return false;
 		}
-		add(new Jail(playerName, reason, jailPointName));
+		add(new Jail(id.toString(), reason, jailPointName));
 
-		if (!plugin.getCuboidNode().jail(playerName, jailPointName)) {
+		if (!plugin.getCuboidNode().jail(id, jailPointName)) {
 			plugin.error("Failed to jail player in NCuboid!");
 		}
 
-		plugin.exiting(getClass(), "permJailNick");
+		plugin.exiting(getClass(), "permJailId");
 		return true;
 	}
 
-	public boolean unJailNick(final String playerName) {
-		plugin.entering(getClass(), "unJailNick");
+	public boolean unJailId(final UUID id) {
+		plugin.entering(getClass(), "unJailId");
 
-		final Punishment p = get(playerName, PunishmentType.JAIL);
+		final Punishment p = get(id.toString(), PunishmentType.JAIL);
 		if (p == null) {
-			plugin.exiting(getClass(), "unJailNick", "Failed: not jailed");
+			plugin.exiting(getClass(), "unJailId", "Failed: not jailed");
 			return false;
 		}
 		remove(p);
 
-		if (!plugin.getCuboidNode().unJail(playerName)) {
+		if (!plugin.getCuboidNode().unJail(id)) {
 			plugin.error("Failed to unjail player in NCuboid!");
 		}
 
-		plugin.exiting(getClass(), "unJailNick");
+		plugin.exiting(getClass(), "unJailId");
 		return true;
 	}
 
@@ -396,7 +389,7 @@ public class PunishmentDb {
 				final Punishment p = it.next();
 				if (!p.isStillActive()) {
 					if (plugin.getCuboidNode() != null && p.getType() == PunishmentType.JAIL) {
-						plugin.getCuboidNode().unJail(p.getPunished());
+						plugin.getCuboidNode().unJail(UuidDb.getId(p.getPunished()));
 					}
 					it.remove();
 				} else if (p.getType() == type) {
@@ -456,7 +449,7 @@ public class PunishmentDb {
 						getPermPunishments().remove(key.toLowerCase());
 					}
 					if (plugin.getCuboidNode() != null && toBeRemoved.getType() == PunishmentType.JAIL) {
-						plugin.getCuboidNode().unJail(toBeRemoved.getPunished());
+						plugin.getCuboidNode().unJail(UuidDb.getId(toBeRemoved.getPunished()));
 					}
 					result = toBeRemoved;
 				}
@@ -469,7 +462,7 @@ public class PunishmentDb {
 						getTempPunishments().remove(key.toLowerCase());
 					}
 					if (plugin.getCuboidNode() != null && toBeRemoved.getType() == PunishmentType.JAIL) {
-						plugin.getCuboidNode().unJail(toBeRemoved.getPunished());
+						plugin.getCuboidNode().unJail(UuidDb.getId(toBeRemoved.getPunished()));
 					}
 					result = toBeRemoved;
 				}

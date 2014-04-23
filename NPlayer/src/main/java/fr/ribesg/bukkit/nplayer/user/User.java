@@ -8,53 +8,48 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.user;
+import fr.ribesg.bukkit.ncore.config.UuidDb;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class User {
 
 	private final LoggedOutUserHandler handler;
 
-	private final String userName;
+	private final UUID   userId;
 	private       String passwordHash;
 
 	private final List<String> knownIps;
 	private       String       lastIp;
-
-	private final Date firstJoin;
-	private       Date lastSeen;
 
 	private Location home;
 
 	private boolean loggedIn;
 	private boolean autoLogout;
 
-	public User(final LoggedOutUserHandler handler, final String userName, final String passwordHash, final String currentIp, final Date firstJoin) {
+	public User(final LoggedOutUserHandler handler, final UUID userId, final String passwordHash, final String currentIp) {
 		this.handler = handler;
-		this.userName = userName;
+		this.userId = userId;
 		this.passwordHash = passwordHash;
 		this.knownIps = new ArrayList<>();
 		this.knownIps.add(currentIp);
 		this.lastIp = currentIp;
-		this.firstJoin = firstJoin;
-		this.lastSeen = firstJoin;
 		this.loggedIn = false;
 		this.autoLogout = true;
 		this.home = null;
 	}
 
-	public User(final LoggedOutUserHandler handler, final String lastIp, final Date firstJoin, final List<String> knownIps, final Date lastSeen, final String passwordHash, final String userName, final boolean autoLogout, final Location home) {
+	public User(final LoggedOutUserHandler handler, final String lastIp, final List<String> knownIps, final String passwordHash, final UUID userId, final boolean autoLogout, final Location home) {
 		this.handler = handler;
 		this.lastIp = lastIp;
-		this.firstJoin = firstJoin;
 		this.knownIps = knownIps;
-		this.lastSeen = lastSeen;
 		this.loggedIn = false;
 		this.passwordHash = passwordHash;
-		this.userName = userName;
+		this.userId = userId;
 		this.autoLogout = autoLogout;
 		this.home = home;
 	}
@@ -70,20 +65,8 @@ public class User {
 		}
 	}
 
-	public Date getFirstJoin() {
-		return firstJoin;
-	}
-
 	public List<String> getKnownIps() {
 		return knownIps;
-	}
-
-	public Date getLastSeen() {
-		return lastSeen;
-	}
-
-	public void setLastSeen(final Date lastSeen) {
-		this.lastSeen = lastSeen;
 	}
 
 	public boolean isLoggedIn() {
@@ -93,9 +76,9 @@ public class User {
 	public void setLoggedIn(final boolean loggedIn) {
 		this.loggedIn = loggedIn;
 		if (loggedIn) {
-			handler.notifyLogin(this);
+			handler.notifyLogin(Bukkit.getPlayerExact(UuidDb.getName(getUserId()))); // TODO Change to getPlayer(UUID)
 		} else {
-			handler.notifyLogout(this);
+			handler.notifyLogout(Bukkit.getPlayerExact(UuidDb.getName(getUserId()))); // TODO Change to getPlayer(UUID)
 		}
 	}
 
@@ -107,8 +90,8 @@ public class User {
 		this.passwordHash = passwordHash;
 	}
 
-	public String getUserName() {
-		return userName;
+	public UUID getUserId() {
+		return userId;
 	}
 
 	public boolean hasAutoLogout() {

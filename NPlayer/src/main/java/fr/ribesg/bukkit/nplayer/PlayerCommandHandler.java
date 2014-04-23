@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer;
+import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncore.util.TimeUtil;
@@ -50,7 +51,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 		// Check if Player's password after first arg
 		if (split.length > 1) {
-			final User user = plugin.getUserDb().get(player.getName());
+			final User user = plugin.getUserDb().get(player.getUniqueId());
 			if (user != null) {
 				final String password = StringUtil.joinStrings(split, 1);
 				final boolean isCorrect = Security.isUserPassword(password, user);
@@ -203,7 +204,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 	private boolean loginCommand(final Player player, final String[] args) {
 		plugin.entering(getClass(), "loginCommand");
 
-		final User user = plugin.getUserDb().get(player.getName());
+		final User user = plugin.getUserDb().get(player.getUniqueId());
 		if (user == null) {
 			plugin.debug("Unregistered user");
 			plugin.sendMessage(player, MessageId.player_registerFirst);
@@ -230,11 +231,11 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 	private boolean registerCommand(final Player player, final String[] args) {
 		plugin.entering(getClass(), "registerCommand");
 
-		User user = plugin.getUserDb().get(player.getName());
+		User user = plugin.getUserDb().get(player.getUniqueId());
 		final String password = StringUtil.joinStrings(args);
 		if (user == null) {
 			plugin.debug("Unregistered user");
-			user = plugin.getUserDb().newUser(player.getName(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
+			user = plugin.getUserDb().newUser(player.getUniqueId(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
 			user.setLoggedIn(true);
 			plugin.sendMessage(player, MessageId.player_welcomeToTheServer);
 		} else if (user.isLoggedIn()) {
@@ -253,7 +254,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 	private boolean logoutCommand(final Player player, final String[] args) {
 		plugin.entering(getClass(), "logoutCommand");
 
-		final User user = plugin.getUserDb().get(player.getName());
+		final User user = plugin.getUserDb().get(player.getUniqueId());
 		if (user == null) {
 			plugin.debug("Unregistered user");
 			plugin.sendMessage(player, MessageId.player_registerFirst);
@@ -333,15 +334,16 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				plugin.sendMessage(player, MessageId.noPermissionForCommand);
 			} else {
 				final String userName = args[0];
-				final User user = plugin.getUserDb().get(userName);
+				final User user = plugin.getUserDb().get(UuidDb.getId(userName));
 				if (user == null) {
 					plugin.sendMessage(player, MessageId.player_unknownUser, userName);
 				} else {
+					final String realUserName = UuidDb.getName(user.getUserId());
 					final Location dest = user.getHome();
 					if (dest == null) {
-						plugin.sendMessage(player, MessageId.player_userHasNoHome, user.getUserName());
+						plugin.sendMessage(player, MessageId.player_userHasNoHome, realUserName);
 					} else {
-						plugin.sendMessage(player, MessageId.player_teleportingToUserHome, user.getUserName());
+						plugin.sendMessage(player, MessageId.player_teleportingToUserHome, realUserName);
 						dest.getChunk().load(true);
 						plugin.getServer().getScheduler().runTask(plugin, new BukkitRunnable() {
 
@@ -354,7 +356,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				}
 			}
 		} else {
-			final User user = plugin.getUserDb().get(player.getName());
+			final User user = plugin.getUserDb().get(player.getUniqueId());
 			if (user == null) {
 				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use the command.");
 				player.sendMessage("§cUnknown error, see console.");
@@ -388,16 +390,16 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				plugin.sendMessage(player, MessageId.noPermissionForCommand);
 			} else {
 				final String userName = args[0];
-				final User user = plugin.getUserDb().get(userName);
+				final User user = plugin.getUserDb().get(UuidDb.getId(userName));
 				if (user == null) {
 					plugin.sendMessage(player, MessageId.player_unknownUser, userName);
 				} else {
 					user.setHome(player.getLocation());
-					plugin.sendMessage(player, MessageId.player_userHomeSet, user.getUserName());
+					plugin.sendMessage(player, MessageId.player_userHomeSet, UuidDb.getName(user.getUserId()));
 				}
 			}
 		} else {
-			final User user = plugin.getUserDb().get(player.getName());
+			final User user = plugin.getUserDb().get(player.getUniqueId());
 			if (user == null) {
 				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use the command.");
 				player.sendMessage("§cUnknown error, see console.");
@@ -420,12 +422,12 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			if (player == null) {
 				plugin.sendMessage(sender, MessageId.player_unknownUser, args[0]);
 			} else {
-				final User user = plugin.getUserDb().get(player.getName());
+				final User user = plugin.getUserDb().get(player.getUniqueId());
 				if (user == null) {
 					plugin.sendMessage(sender, MessageId.player_unknownUser, player.getName());
 				} else {
 					user.setLoggedIn(true);
-					plugin.getLoggedOutUserHandler().notifyLogin(user);
+					plugin.getLoggedOutUserHandler().notifyLogin(player);
 					plugin.sendMessage(sender, MessageId.player_youForcedLogin, player.getName());
 					plugin.sendMessage(player, MessageId.player_somebodyForcedLoginYou, sender.getName());
 				}
@@ -451,18 +453,18 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			final Player target = Bukkit.getPlayerExact(userName);
 			switch (plugin.getPluginConfig().getTooManyAttemptsPunishment()) {
 				case 0:
-					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedKickMessage, userName)[0]);
+					plugin.getPunishmentDb().getLeaveMessages().put(target.getUniqueId(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedKickMessage, userName)[0]);
 					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsKickMessage)[0]);
 					break;
 				case 1:
 					final int duration = plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration();
 					final String durationString = TimeUtil.toString(duration);
-					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName, durationString)[0]);
+					plugin.getPunishmentDb().getLeaveMessages().put(target.getUniqueId(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName, durationString)[0]);
 					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsTempBanMessage, durationString)[0]);
 					plugin.getPunishmentDb().tempBanIp(target.getAddress().getAddress().getHostAddress(), plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration(), plugin.getMessages().get(MessageId.player_loginAttemptsTooMany)[0]);
 					break;
 				case 2:
-					plugin.getPunishmentDb().getLeaveMessages().put(target.getName(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedPermBanMessage, userName)[0]);
+					plugin.getPunishmentDb().getLeaveMessages().put(target.getUniqueId(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedPermBanMessage, userName)[0]);
 					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsPermBanMessage)[0]);
 					plugin.getPunishmentDb().permBanIp(target.getAddress().getAddress().getHostAddress(), plugin.getMessages().get(MessageId.player_loginAttemptsTooMany)[0]);
 					break;
