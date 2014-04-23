@@ -39,11 +39,12 @@ public class RespawnHandler {
 
 	public boolean respawn() {
 		plugin.entering(getClass(), "respawn");
-		boolean result = false;
+		final boolean result;
 
 		if (worldHandler.getConfig().getRegenType() == 1) {
 			plugin.debug("Regen before respan");
 			worldHandler.getRegenHandler().regenThenRespawn();
+			result = true;
 		} else {
 			plugin.debug("Respawn now!");
 			result = respawnDragons();
