@@ -33,6 +33,7 @@ import org.mcstats.Metrics;
 
 import java.io.IOException;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * TODO
@@ -226,27 +227,27 @@ public class NCuboid extends NPlugin implements CuboidNode {
 	}
 
 	@Override
-	public boolean isJailed(final String playerName) {
-		entering(getClass(), "isJailed", "playerName=" + playerName);
-		final boolean result = jails.isJailed(playerName);
+	public boolean isJailed(final UUID id) {
+		entering(getClass(), "isJailed", "id=" + id);
+		final boolean result = jails.isJailed(id);
 		exiting(getClass(), "isJailed", "result=" + result);
 		return result;
 	}
 
 	@Override
-	public boolean jail(final String playerName, final String jailName) {
+	public boolean jail(final UUID id, final String jailName) {
 		if (isDebugEnabled()) {
-			entering(getClass(), "jail", "playerName=" + playerName + ";jaileName=" + jailName);
+			entering(getClass(), "jail", "id=" + id + ";jailName=" + jailName);
 		}
-		final boolean result = jails.jail(playerName, jailName);
+		final boolean result = jails.jail(id, jailName);
 		exiting(getClass(), "jail", "result=" + result);
 		return result;
 	}
 
 	@Override
-	public boolean unJail(final String playerName) {
-		entering(getClass(), "unJail", "playerName=" + playerName);
-		final boolean result = jails.unJail(playerName);
+	public boolean unJail(final UUID id) {
+		entering(getClass(), "unJail", "id=" + id);
+		final boolean result = jails.unJail(id);
 		exiting(getClass(), "unJail", "result=" + result);
 		return result;
 	}
@@ -265,7 +266,7 @@ public class NCuboid extends NPlugin implements CuboidNode {
 			exiting(getClass(), "getJailLocation");
 			return jail.getLocation();
 		} else {
-			exiting(getClass(), "getJailLocation", "Failed: unknown jail");
+			exiting(getClass(), "getJailLocation", "Failed: unknown jail '" + jailName + "'");
 			return null;
 		}
 	}

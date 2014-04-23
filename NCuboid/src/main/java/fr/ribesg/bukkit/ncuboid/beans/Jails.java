@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class Jails {
 
@@ -24,7 +25,7 @@ public class Jails {
 	private final Map<String, Jail>             byName;
 	private final Map<GeneralRegion, Set<Jail>> byRegion;
 
-	private final Map<String, Jail> jailed;
+	private final Map<UUID, Jail> jailed;
 
 	public Jails(final NCuboid instance) {
 		this.plugin = instance;
@@ -132,32 +133,32 @@ public class Jails {
 
 	// Jailed player handling
 
-	public boolean jail(final String playerName, final String jailName) {
+	public boolean jail(final UUID id, final String jailName) {
 		if (plugin.isDebugEnabled()) {
-			plugin.entering(getClass(), "jail", "playerName=" + playerName + ";jailName=" + jailName);
+			plugin.entering(getClass(), "jail", "id=" + id + ";jailName=" + jailName);
 		}
-		if (!isJailed(playerName) && containsName(jailName)) {
-			this.jailed.put(playerName.toLowerCase(), getByName(jailName));
+		if (!isJailed(id) && containsName(jailName)) {
+			this.jailed.put(id, getByName(jailName));
 
 			plugin.exiting(getClass(), "jail");
 			return true;
 		} else {
 			if (plugin.isDebugEnabled()) {
-				plugin.exiting(getClass(), "jail", "Failed: " + (isJailed(playerName) ? "player already jailed" : "unknown jail"));
+				plugin.exiting(getClass(), "jail", "Failed: " + (isJailed(id) ? "player already jailed" : "unknown jail"));
 			}
 			return false;
 		}
 	}
 
-	public boolean unJail(final String playerName) {
-		return this.jailed.remove(playerName.toLowerCase()) != null;
+	public boolean unJail(final UUID id) {
+		return this.jailed.remove(id) != null;
 	}
 
-	public boolean isJailed(final String playerName) {
-		return this.jailed.containsKey(playerName.toLowerCase());
+	public boolean isJailed(final UUID id) {
+		return this.jailed.containsKey(id);
 	}
 
-	public Jail getJailForPlayer(final String playerName) {
-		return this.jailed.get(playerName.toLowerCase());
+	public Jail getJailForPlayer(final UUID id) {
+		return this.jailed.get(id);
 	}
 }

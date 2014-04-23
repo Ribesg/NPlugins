@@ -33,8 +33,8 @@ public class JailFlagListener extends AbstractListener {
 		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			final Player player = event.getPlayer();
-			if (getPlugin().isJailed(player.getName())) {
-				final Jail jail = getPlugin().getJails().getJailForPlayer(player.getName());
+			if (getPlugin().isJailed(player.getUniqueId())) {
+				final Jail jail = getPlugin().getJails().getJailForPlayer(player.getUniqueId());
 				final GeneralRegion region = jail.getRegion();
 				if (ext.getToRegions() == null || !ext.getToRegions().contains(region)) {
 					player.teleport(NLocation.fixDirection(jail.getLocation().toBukkitLocation(), player.getLocation()));
@@ -48,8 +48,8 @@ public class JailFlagListener extends AbstractListener {
 	public void onPlayerTeleport(final ExtendedPlayerTeleportEvent ext) {
 		final PlayerTeleportEvent event = (PlayerTeleportEvent) ext.getBaseEvent();
 		final Player player = event.getPlayer();
-		if (getPlugin().isJailed(player.getName())) {
-			final Jail jail = getPlugin().getJails().getJailForPlayer(player.getName());
+		if (getPlugin().isJailed(player.getUniqueId())) {
+			final Jail jail = getPlugin().getJails().getJailForPlayer(player.getUniqueId());
 			final GeneralRegion region = jail.getRegion();
 			if (ext.getToRegions() == null || !ext.getToRegions().contains(region)) {
 				event.setCancelled(true);

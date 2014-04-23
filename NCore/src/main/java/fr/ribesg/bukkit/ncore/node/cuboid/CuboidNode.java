@@ -13,6 +13,7 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.node.Node;
 
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * API for the NCuboid plugin.
@@ -25,31 +26,31 @@ public interface CuboidNode extends Node {
 	/**
 	 * Checks if a Player is jailed. Not case sensitive.
 	 *
-	 * @param playerName the Player's name
+	 * @param id the Player's UUID
 	 *
 	 * @return true if the Player is jailed, false otherwise
 	 */
-	public boolean isJailed(String playerName);
+	public boolean isJailed(final UUID id);
 
 	/**
 	 * Jails the Player if he's not jailed and if the provided jail name
 	 * exists.
 	 *
-	 * @param playerName the Player's name
-	 * @param jailName   the Jail name
+	 * @param id       the Player's UUID
+	 * @param jailName the Jail name
 	 *
 	 * @return true if the Player can be, and is now considered, jailed
 	 */
-	public boolean jail(String playerName, String jailName);
+	public boolean jail(final UUID id, final String jailName);
 
 	/**
 	 * Unjails a Player
 	 *
-	 * @param playerName the Player's name
+	 * @param id the Player's UUID
 	 *
 	 * @return true if the Player was jailed
 	 */
-	public boolean unJail(String playerName);
+	public boolean unJail(final UUID id);
 
 	/**
 	 * Gets a set of all existing jails.

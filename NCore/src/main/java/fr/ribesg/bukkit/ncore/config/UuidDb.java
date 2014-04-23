@@ -78,6 +78,23 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 		}
 	}
 
+	public static List<String> getPreviousNames(final UUID id) {
+		final PlayerInfo info = instance.byUuid.get(id);
+		if (info == null) {
+			return null;
+		} else {
+			return new LinkedList<>(info.previousNames.values());
+		}
+	}
+
+	public static long getFirstSeen(final UUID id) {
+		return instance.byUuid.containsKey(id) ? instance.byUuid.get(id).firstSeen : -1L;
+	}
+
+	public static long getLastSeen(final UUID id) {
+		return instance.byUuid.containsKey(id) ? instance.byUuid.get(id).lastSeen : -1L;
+	}
+
 	private static Profile getMojangProfile(final String name, final int tries) {
 		Validate.isTrue(tries > 0, "We should at least try once...");
 		LOGGER.info("[UuidDb] Getting UUID from Mojang for Player name '" + name + "'...");
@@ -90,15 +107,6 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 		}
 		LOGGER.error("[UuidDb] Failed to get UUID from Mojang for Player name '" + name + "'!");
 		return null;
-	}
-
-	public static List<String> getPreviousNames(final UUID id) {
-		final PlayerInfo info = instance.byUuid.get(id);
-		if (info == null) {
-			return null;
-		} else {
-			return new LinkedList<>(info.previousNames.values());
-		}
 	}
 
 	private static void register(final Player player) {
