@@ -40,7 +40,7 @@ public class InvisibleFlagListener extends AbstractListener {
 		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			if (invisiblePlayers.contains(event.getPlayer().getName())) {
-				if (ext.getToRegion() == null || ext.getToRegion() != null && !ext.getToRegion().getFlag(Flag.INVISIBLE)) {
+				if (ext.getToRegion() == null || !ext.getToRegion().getFlag(Flag.INVISIBLE)) {
 					showToAll(event.getPlayer());
 					invisiblePlayers.remove(event.getPlayer().getName());
 				}

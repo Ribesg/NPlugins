@@ -15,6 +15,7 @@ import org.bukkit.Location;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class CuboidRegion extends PlayerRegion {
 
@@ -24,9 +25,9 @@ public class CuboidRegion extends PlayerRegion {
 	/**
 	 * Create a new Cuboid Region
 	 */
-	public CuboidRegion(final String cuboidName, final String ownerName, final String worldName, final NLocation minCorner) {
+	public CuboidRegion(final String cuboidName, final UUID ownerId, final String worldName, final NLocation minCorner) {
 
-		super(cuboidName, ownerName, worldName, RegionType.CUBOID);
+		super(cuboidName, ownerId, worldName, RegionType.CUBOID);
 
 		setMinCorner(minCorner);
 		setChunks(null);
@@ -35,9 +36,9 @@ public class CuboidRegion extends PlayerRegion {
 	/**
 	 * Create a Cuboid Region from a save
 	 */
-	public CuboidRegion(final String cuboidName, final String ownerName, final String worldName, final RegionState state, final long totalSize, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts, final NLocation minCorner, final NLocation maxCorner) {
+	public CuboidRegion(final String cuboidName, final UUID ownerId, final String worldName, final RegionState state, final long totalSize, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts, final NLocation minCorner, final NLocation maxCorner) {
 
-		super(cuboidName, ownerName, worldName, state, totalSize, RegionType.CUBOID, rights, priority, flags, flagAtts);
+		super(cuboidName, ownerId, worldName, state, totalSize, RegionType.CUBOID, rights, priority, flags, flagAtts);
 
 		setMinCorner(minCorner);
 		setMaxCorner(maxCorner);

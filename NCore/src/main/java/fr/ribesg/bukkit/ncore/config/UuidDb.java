@@ -12,6 +12,12 @@ import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.util.DateUtil;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
+import fr.ribesg.com.mojang.api.profiles.HttpProfileRepository;
+import fr.ribesg.com.mojang.api.profiles.Profile;
+import fr.ribesg.com.mojang.api.profiles.ProfileRepository;
+import org.apache.commons.lang.Validate;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -34,6 +40,9 @@ import java.util.UUID;
 /** @author Ribesg */
 public class UuidDb extends AbstractConfig<NCore> implements Listener {
 
+	private static final Logger LOGGER = LogManager.getLogger(UuidDb.class);
+
+	private static final ProfileRepository mojangRepo = new HttpProfileRepository("minecraft");
 	private static UuidDb instance;
 
 	public static String getName(final UUID id) {
@@ -42,8 +51,45 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 	}
 
 	public static UUID getId(final String name) {
+		return getId(name, false);
+	}
+
+	public static UUID getId(final String name, final boolean askMojangIfUnknown) {
 		final PlayerInfo info = instance.byName.get(name.toLowerCase());
-		return info == null ? null : info.uuid;
+		if (info != null) {
+			return info.uuid;
+		} else {
+			final UUID id;
+			if (!Bukkit.getOnlineMode()) {
+				id = PlayerIdsUtil.getOfflineUuid(name);
+				register(id, name);
+			} else if (!askMojangIfUnknown) {
+				id = null;
+			} else {
+				final Profile profile = getMojangProfile(name, 3);
+				if (profile == null) {
+					id = null;
+				} else {
+					id = UUID.fromString(profile.getId());
+					register(id, profile.getName());
+				}
+			}
+			return id;
+		}
+	}
+
+	private static Profile getMojangProfile(final String name, final int tries) {
+		Validate.isTrue(tries > 0, "We should at least try once...");
+		LOGGER.info("[UuidDb] Getting UUID from Mojang for Player name '" + name + "'...");
+		for (int i = 0; i < tries; i++) {
+			LOGGER.debug("[UuidDb] Try " + (i + 1) + "...");
+			final Profile[] res = mojangRepo.findProfilesByNames(name);
+			if (res.length > 0) {
+				return res[0];
+			}
+		}
+		LOGGER.error("[UuidDb] Failed to get UUID from Mojang for Player name '" + name + "'!");
+		return null;
 	}
 
 	public static List<String> getPreviousNames(final UUID id) {
@@ -56,18 +102,22 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 	}
 
 	private static void register(final Player player) {
+		register(player.getUniqueId(), player.getName());
+	}
+
+	private static void register(final UUID id, final String name) {
 		final long now = System.currentTimeMillis();
-		final UUID id = player.getUniqueId();
-		final String name = player.getName();
 		PlayerInfo info = instance.byUuid.get(id);
 		if (info == null) {
 			info = new PlayerInfo(id, name, new TreeMap<Long, String>(), now, now);
 			instance.byUuid.put(id, info);
 			instance.byName.put(name.toLowerCase(), info);
 		} else if (!name.equals(info.lastKnownName)) {
+			instance.byName.remove(info.lastKnownName.toLowerCase());
 			info.previousNames.put(now, info.lastKnownName);
 			info.lastKnownName = name;
 			info.lastSeen = now;
+			instance.byName.put(info.lastKnownName.toLowerCase(), info);
 		}
 	}
 

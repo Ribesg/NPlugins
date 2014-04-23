@@ -35,7 +35,7 @@ public class MainCommandExecutor implements CommandExecutor {
 	public MainCommandExecutor(final NCuboid instance) {
 		this.plugin = instance;
 
-		this.aliasesMap = new HashMap<>(5);
+		this.aliasesMap = new HashMap<>(14);
 		this.aliasesMap.put("rld", "reload");
 		this.aliasesMap.put("c", "create");
 		this.aliasesMap.put("d", "delete");
@@ -51,7 +51,7 @@ public class MainCommandExecutor implements CommandExecutor {
 		this.aliasesMap.put("att", "attribute");
 		this.aliasesMap.put("attributes", "attribute");
 
-		this.executorsMap = new HashMap<>(3);
+		this.executorsMap = new HashMap<>(9);
 		this.executorsMap.put("create", new CreateSubcmdExecutor(instance));
 		this.executorsMap.put("delete", new DeleteSubcmdExecutor(instance));
 		this.executorsMap.put("reload", new ReloadSubcmdExecutor(instance));

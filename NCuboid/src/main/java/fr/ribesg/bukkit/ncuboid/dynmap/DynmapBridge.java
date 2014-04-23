@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncuboid.dynmap;
+import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidRegion;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
@@ -165,7 +166,7 @@ public class DynmapBridge {
 		final String wrap = "<br />";
 		final StringBuilder description = new StringBuilder();
 		description.append("<strong>").append(lbl).append("</strong>").append(wrap);
-		description.append("Owner: ").append(region.getOwnerName()).append(wrap);
+		description.append("Owner: ").append(UuidDb.getName(region.getOwnerId())).append(wrap);
 		description.append("Size: ").append(region.getTotalSize()).append(" blocks").append(wrap);
 		description.append("Flags: ");
 		description.append("<ul>");

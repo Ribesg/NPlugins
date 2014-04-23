@@ -38,7 +38,7 @@ public class AttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 			if (c == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
-			} else if (!c.isAdmin(sender)) {
+			} else if (!Perms.hasAdmin(sender) && !(sender instanceof Player && c.isAdmin((Player) sender))) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidAdmin, args[0]);
 				return true;
 			}

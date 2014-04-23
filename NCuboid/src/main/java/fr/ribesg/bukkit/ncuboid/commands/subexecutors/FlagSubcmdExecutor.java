@@ -17,6 +17,7 @@ import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.regex.Pattern;
 
@@ -40,7 +41,7 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 			if (c == null) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
-			} else if (!c.isAdmin(sender)) {
+			} else if (!Perms.hasAdmin(sender) && !(sender instanceof Player && c.isAdmin((Player) sender))) {
 				getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidAdmin, args[0]);
 				return true;
 			}

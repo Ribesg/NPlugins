@@ -62,8 +62,7 @@ public class CreateSubcmdExecutor extends AbstractSubcmdExecutor {
 						getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateOverlap, result.getRegion().getRegionName());
 						break;
 					default:
-						final CuboidRegion selection = (CuboidRegion) getPlugin().getDb().getSelection(player.getName());
-						getPlugin().getDb().removeSelection(player.getName());
+						final CuboidRegion selection = (CuboidRegion) getPlugin().getDb().removeSelection(player.getUniqueId());
 						selection.create(args[0]);
 						getPlugin().getDb().add(selection);
 						getPlugin().sendMessage(player, MessageId.cuboid_cmdCreateCreated, selection.getRegionName());

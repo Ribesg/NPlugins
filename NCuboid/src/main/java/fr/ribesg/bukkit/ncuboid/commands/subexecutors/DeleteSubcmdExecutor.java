@@ -17,6 +17,7 @@ import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 
@@ -36,7 +37,7 @@ public class DeleteSubcmdExecutor extends AbstractSubcmdExecutor {
 				return true;
 			} else {
 				final PlayerRegion r = (PlayerRegion) region;
-				if (Perms.isAdmin(sender) || r.isOwner(sender)) {
+				if (Perms.isAdmin(sender) || sender instanceof Player && r.isOwner((Player) sender)) {
 					getPlugin().getDb().remove(r);
 					getPlugin().sendMessage(sender, MessageId.cuboid_cmdDeleteDeleted, region.getRegionName());
 				} else {

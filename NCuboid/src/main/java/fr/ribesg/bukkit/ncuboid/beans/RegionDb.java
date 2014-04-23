@@ -16,15 +16,23 @@ import fr.ribesg.bukkit.ncuboid.config.GroupConfig;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.UUID;
 
 public class RegionDb implements Iterable<GeneralRegion> {
 
 	private final NCuboid plugin;
 
 	private final Map<String, PlayerRegion>          byName;    // RegionName ; Region
-	private final Map<String, Set<PlayerRegion>>     byOwner;   // OwnerName ; Regions of this owner
-	private final Map<String, PlayerRegion>          tmpRegions; // OwnerName ; Temporary Region (Owner's Selection)
+	private final Map<UUID, Set<PlayerRegion>>       byOwner;   // OwnerId ; Regions of this owner
+	private final Map<UUID, PlayerRegion>            tmpRegions; // OwnerId ; Temporary Region (Owner's Selection)
 	private final Map<ChunkCoord, Set<PlayerRegion>> byChunks;  // Chunk ; Regions in this chunk
 	private final Map<String, WorldRegion>           byWorld;   // WorldName ; Region
 
@@ -55,17 +63,18 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	}
 
 	public void addByOwner(final PlayerRegion region) {
-		if (byOwner.containsKey(region.getOwnerName())) {
-			byOwner.get(region.getOwnerName()).add(region);
+		final UUID id = region.getOwnerId();
+		if (byOwner.containsKey(id)) {
+			byOwner.get(id).add(region);
 		} else {
 			final Set<PlayerRegion> newSet = new HashSet<>();
 			newSet.add(region);
-			byOwner.put(region.getOwnerName(), newSet);
+			byOwner.put(id, newSet);
 		}
 	}
 
 	public void addSelection(final PlayerRegion region) {
-		tmpRegions.put(region.getOwnerName(), region);
+		tmpRegions.put(region.getOwnerId(), region);
 	}
 
 	public void addByChunks(final PlayerRegion region) {
@@ -103,22 +112,20 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	}
 
 	public void removeByOwner(final PlayerRegion region) {
-		if (byOwner.containsKey(region.getOwnerName())) {
-			final Set<PlayerRegion> set = byOwner.get(region.getOwnerName());
+		final UUID id = region.getOwnerId();
+		if (byOwner.containsKey(id)) {
+			final Set<PlayerRegion> set = byOwner.get(id);
 			if (set.contains(region)) {
 				set.remove(region);
 			}
 			if (set.isEmpty()) {
-				byOwner.remove(region.getOwnerName());
+				byOwner.remove(id);
 			}
 		}
 	}
 
-	public PlayerRegion removeSelection(final String ownerName) {
-		if (tmpRegions.containsKey(ownerName)) {
-			return tmpRegions.remove(ownerName);
-		}
-		return null;
+	public PlayerRegion removeSelection(final UUID id) {
+		return tmpRegions.remove(id);
 	}
 
 	public void removeByChunks(final PlayerRegion region) {
@@ -188,12 +195,12 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		}
 	}
 
-	public Set<PlayerRegion> getByOwner(final String ownerName) {
-		return byOwner.get(ownerName);
+	public Set<PlayerRegion> getByOwner(final UUID id) {
+		return byOwner.get(id);
 	}
 
-	public PlayerRegion getSelection(final String ownerName) {
-		return tmpRegions.get(ownerName);
+	public PlayerRegion getSelection(final UUID id) {
+		return tmpRegions.get(id);
 	}
 
 	public WorldRegion getByWorld(final String worldName) {
@@ -266,9 +273,9 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	}
 
 	public CreationResult canCreate(final Player player) {
-		final String playerName = player.getName();
+		final UUID id = player.getUniqueId();
 		final GroupConfig config = plugin.getPluginConfig().getGroupConfig(player);
-		final PlayerRegion r = getSelection(playerName);
+		final PlayerRegion r = getSelection(id);
 
 		if (r == null || r.getState() != PlayerRegion.RegionState.TMPSTATE2) {
 			return new CreationResult(CreationResultEnum.DENIED_NO_SELECTION);
@@ -276,7 +283,7 @@ public class RegionDb implements Iterable<GeneralRegion> {
 
 		// Amount of regions
 		if (config.getMaxRegionNb() != -1) {
-			final int nbRegion = getByOwner(playerName) == null ? 0 : getByOwner(playerName).size();
+			final int nbRegion = getByOwner(id) == null ? 0 : getByOwner(id).size();
 			if (nbRegion >= config.getMaxRegionNb()) {
 				return new CreationResult(CreationResultEnum.DENIED_TOO_MUCH, config.getMaxRegionNb(), nbRegion);
 			}

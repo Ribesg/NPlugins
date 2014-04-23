@@ -41,7 +41,7 @@ public class GodFlagListener extends AbstractListener {
 		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			if (godPlayers.contains(event.getPlayer().getName())) {
-				if (ext.getToRegion() == null || ext.getToRegion() != null && !ext.getToRegion().getFlag(Flag.GOD)) {
+				if (ext.getToRegion() == null || !ext.getToRegion().getFlag(Flag.GOD)) {
 					godPlayers.remove(event.getPlayer().getName());
 				}
 			} else if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.GOD)) {

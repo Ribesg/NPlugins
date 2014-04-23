@@ -10,6 +10,8 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
+import fr.ribesg.bukkit.ncore.config.UuidDb;
+import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import org.bukkit.Location;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class RegionDbPersistenceHandler {
 
@@ -47,7 +50,7 @@ public class RegionDbPersistenceHandler {
 	private static final String PRIORITY   = "priority";
 
 	// PLAYER attributes
-	private static final String OWNER_NAME = "owner";
+	private static final String OWNER_ID   = "owner";
 	private static final String TOTAL_SIZE = "totalSize";
 	private static final String TYPE       = "type";
 
@@ -56,10 +59,9 @@ public class RegionDbPersistenceHandler {
 	private static final String MAX_CORNER = "maxCorner";
 
 	// Common sub-sections
-	private static final String FLAGS          = "flags";
-	private static final String ATTRIBUTES_OLD = "flagAttributes"; // TODO Compatibility thing, remove this in next version
-	private static final String ATTRIBUTES     = "attributes";
-	private static final String RIGHTS         = "rights";
+	private static final String FLAGS      = "flags";
+	private static final String ATTRIBUTES = "attributes";
+	private static final String RIGHTS     = "rights";
 
 	// For rights
 	private static final String ADMINS              = "admins";
@@ -127,7 +129,7 @@ public class RegionDbPersistenceHandler {
 		}
 	}
 
-	private static WorldRegion readWorldRegion(final ConfigurationSection parent, final String name) {
+	private static WorldRegion readWorldRegion(final ConfigurationSection parent, final String name) throws InvalidConfigurationException {
 		final ConfigurationSection worldSection = parent.getConfigurationSection(name);
 
 		final int priority = worldSection.getInt(PRIORITY, 0);
@@ -139,10 +141,19 @@ public class RegionDbPersistenceHandler {
 		return new WorldRegion(name, rights, priority, flags, attributes);
 	}
 
-	private static PlayerRegion readPlayerRegion(final ConfigurationSection parent, final String name) {
+	private static PlayerRegion readPlayerRegion(final ConfigurationSection parent, final String name) throws InvalidConfigurationException {
 		final ConfigurationSection playerSection = parent.getConfigurationSection(name);
 
-		final String ownerName = playerSection.getString(OWNER_NAME);
+		final String ownerIdString = playerSection.getString(OWNER_ID);
+		UUID ownerId = null;
+		if (PlayerIdsUtil.isValidUuid(ownerIdString)) {
+			ownerId = UUID.fromString(ownerIdString);
+		} else if (PlayerIdsUtil.isValidMinecraftUserName(ownerIdString)) {
+			ownerId = UuidDb.getId(name, true);
+		}
+		if (ownerId == null) {
+			throw new InvalidConfigurationException("Unknown ownerId '" + ownerIdString + "' found in regionDb.yml under section '" + playerSection.getCurrentPath() + "'");
+		}
 		final String worldName = playerSection.getString(WORLD_NAME);
 		final long totalSize = playerSection.getLong(TOTAL_SIZE);
 		final int priority = playerSection.getInt(PRIORITY, 0);
@@ -159,7 +170,7 @@ public class RegionDbPersistenceHandler {
 			case CUBOID:
 				final NLocation minCorner = NLocation.toNLocation(playerSection.getString(MIN_CORNER));
 				final NLocation maxCorner = NLocation.toNLocation(playerSection.getString(MAX_CORNER));
-				return new CuboidRegion(name, ownerName, worldName, PlayerRegion.RegionState.NORMAL, totalSize, rights, priority, flags, attributes, minCorner, maxCorner);
+				return new CuboidRegion(name, ownerId, worldName, PlayerRegion.RegionState.NORMAL, totalSize, rights, priority, flags, attributes, minCorner, maxCorner);
 			default:
 				throw new UnsupportedOperationException();
 		}
@@ -207,49 +218,41 @@ public class RegionDbPersistenceHandler {
 			}
 		}
 
-		// TODO Compatibility thing, remove this in next version
-		else if (sec.isConfigurationSection(ATTRIBUTES_OLD)) {
-			final ConfigurationSection attributesSection = sec.getConfigurationSection(ATTRIBUTES_OLD);
-			for (final Attribute att : Attribute.values()) {
-				if (Attribute.isIntegerAttribute(att)) {
-					final Integer theInteger = attributesSection.getInt(att.toString(), Integer.MIN_VALUE);
-					if (theInteger != Integer.MIN_VALUE) {
-						attributes.setIntegerAttribute(att, theInteger);
-					}
-				} else if (Attribute.isLocationAttribute(att)) {
-					final Location theLocation = NLocation.toLocation(attributesSection.getString(att.toString(), ""));
-					if (theLocation != null) {
-						attributes.setLocationAttribute(att, theLocation);
-					}
-				} else if (Attribute.isVectorAttribute(att)) {
-					final Vector theVector = StringUtil.toVector(attributesSection.getString(att.toString(), ""));
-					if (theVector != null) {
-						attributes.setVectorAttribute(att, theVector);
-					}
-				} else {
-					// Hello, future
-				}
-			}
-		}
-		// TODO End Compatibility thing
-
 		return attributes;
 	}
 
-	private static Rights readRights(final ConfigurationSection sec) {
+	private static Rights readRights(final ConfigurationSection sec) throws InvalidConfigurationException {
 		final Rights rights = new Rights();
 		if (sec.isConfigurationSection(RIGHTS)) {
 			final ConfigurationSection rightsSection = sec.getConfigurationSection(RIGHTS);
 			if (rightsSection.isList(ADMINS)) {
 				final List<String> admins = rightsSection.getStringList(ADMINS);
 				for (final String playerName : admins) {
-					rights.addAdmin(playerName);
+					UUID id = null;
+					if (PlayerIdsUtil.isValidUuid(playerName)) {
+						id = UUID.fromString(playerName);
+					} else if (PlayerIdsUtil.isValidMinecraftUserName(playerName)) {
+						id = UuidDb.getId(playerName, true);
+					}
+					if (id == null) {
+						throw new InvalidConfigurationException("Unknown admin playerId '" + playerName + "' found in regionDb.yml under section '" + rightsSection.getCurrentPath() + "'");
+					}
+					rights.addAdmin(id);
 				}
 			}
 			if (rightsSection.isList(USERS)) {
 				final List<String> users = rightsSection.getStringList(USERS);
 				for (final String playerName : users) {
-					rights.addUser(playerName);
+					UUID id = null;
+					if (PlayerIdsUtil.isValidUuid(playerName)) {
+						id = UUID.fromString(playerName);
+					} else if (PlayerIdsUtil.isValidMinecraftUserName(playerName)) {
+						id = UuidDb.getId(playerName, true);
+					}
+					if (id == null) {
+						throw new InvalidConfigurationException("Unknown user playerId '" + playerName + "' found in regionDb.yml under section '" + rightsSection.getCurrentPath() + "'");
+					}
+					rights.addUser(id);
 				}
 			}
 			if (rightsSection.isList(ALLOWED_GROUPS)) {
@@ -314,7 +317,7 @@ public class RegionDbPersistenceHandler {
 	private static void writePlayerRegion(final ConfigurationSection parent, final PlayerRegion region) {
 		final ConfigurationSection sec = parent.createSection(region.getRegionName());
 
-		sec.set(OWNER_NAME, region.getOwnerName());
+		sec.set(OWNER_ID, region.getOwnerId());
 		sec.set(WORLD_NAME, region.getWorldName());
 		sec.set(TOTAL_SIZE, region.getTotalSize());
 		sec.set(PRIORITY, region.getPriority());
@@ -391,16 +394,22 @@ public class RegionDbPersistenceHandler {
 		final ConfigurationSection sec = parent.createSection(RIGHTS);
 		boolean used = false;
 
-		final Set<String> admins = region.getAdmins();
+		final Set<UUID> admins = region.getAdmins();
 		if (admins != null) {
-			final List<String> adminsStringList = new ArrayList<>(admins);
+			final List<String> adminsStringList = new ArrayList<>();
+			for (final UUID id : admins) {
+				adminsStringList.add(id.toString());
+			}
 			sec.set(ADMINS, adminsStringList);
 			used = true;
 		}
 
-		final Set<String> users = region.getUsers();
+		final Set<UUID> users = region.getUsers();
 		if (users != null) {
-			final List<String> usersStringList = new ArrayList<>(users);
+			final List<String> usersStringList = new ArrayList<>();
+			for (final UUID id : users) {
+				usersStringList.add(id.toString());
+			}
 			sec.set(USERS, usersStringList);
 			used = true;
 		}

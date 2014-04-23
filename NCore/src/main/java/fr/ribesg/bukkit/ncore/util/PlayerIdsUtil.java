@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 public class PlayerIdsUtil {
 
 	private static final Pattern USERNAME_REGEX      = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
+	private static final Pattern UUID_REGEX          = Pattern.compile("^([a-zA-Z0-9]{8})-([a-zA-Z0-9]{4})-([a-zA-Z0-9]{4})-([a-zA-Z0-9]{4})-([a-zA-Z0-9]{12})$");
 	private static final Pattern SHORT_TO_UUID_REGEX = Pattern.compile("^([a-zA-Z0-9]{8})([a-zA-Z0-9]{4})([a-zA-Z0-9]{4})([a-zA-Z0-9]{4})([a-zA-Z0-9]{12})$");
 
 	/**
@@ -73,6 +74,17 @@ public class PlayerIdsUtil {
 	 */
 	public static boolean isValidNickName(final String nickName) {
 		return USERNAME_REGEX.matcher(ColorUtil.stripColorCodes(nickName)).matches();
+	}
+
+	/**
+	 * Checks that a String represent a valid UUID (with hyphens).
+	 *
+	 * @param uuidString the String supposed to represent a UUID
+	 *
+	 * @return true if it represents a valid UUID, false otherwise
+	 */
+	public static boolean isValidUuid(final String uuidString) {
+		return UUID_REGEX.matcher(uuidString).matches();
 	}
 
 	/**
