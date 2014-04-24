@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ncore.common;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Represents an operation composed of an asynchronous part and
@@ -18,41 +19,6 @@ import org.bukkit.plugin.Plugin;
  * former completed its execution.
  */
 public abstract class AsyncThenSyncOperation {
-
-	/**
-	 * Represents the synchronous operation part execution.
-	 */
-	private class SyncRunnable implements Runnable {
-
-		private final AsyncThenSyncOperation op;
-
-		private SyncRunnable(final AsyncThenSyncOperation op) {
-			this.op = op;
-		}
-
-		@Override
-		public void run() {
-			op.execSyncThen();
-		}
-	}
-
-	/**
-	 * Represents the asynchronous operation part execution.
-	 */
-	private class AsyncRunnable implements Runnable {
-
-		private final AsyncThenSyncOperation op;
-
-		private AsyncRunnable(final AsyncThenSyncOperation op) {
-			this.op = op;
-		}
-
-		@Override
-		public void run() {
-			op.execAsyncFirst();
-			Bukkit.getScheduler().runTask(op.plugin, new SyncRunnable(op));
-		}
-	}
 
 	private final Plugin  plugin;
 	private       boolean ran;
@@ -94,7 +60,20 @@ public abstract class AsyncThenSyncOperation {
 			throw new IllegalStateException("Can only run once.");
 		}
 		ran = true;
-		Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new AsyncRunnable(this));
+		Bukkit.getScheduler().runTaskAsynchronously(plugin, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				execAsyncFirst();
+				Bukkit.getScheduler().runTask(plugin, new BukkitRunnable() {
+
+					@Override
+					public void run() {
+						execSyncThen();
+					}
+				});
+			}
+		});
 	}
 
 	/**
