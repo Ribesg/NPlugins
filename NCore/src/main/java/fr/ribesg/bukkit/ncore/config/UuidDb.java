@@ -50,11 +50,11 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 		return info == null ? null : info.lastKnownName;
 	}
 
-	public static UUID getId(final String name) {
-		return getId(name, false);
+	public static UUID getId(final String nodeName, final String name) {
+		return getId(nodeName, name, false);
 	}
 
-	public static UUID getId(final String name, final boolean askMojangIfUnknown) {
+	public static UUID getId(final String nodeName, final String name, final boolean askMojangIfUnknown) {
 		final PlayerInfo info = instance.byName.get(name.toLowerCase());
 		if (info != null) {
 			return info.uuid;
@@ -66,7 +66,7 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 			} else if (!askMojangIfUnknown) {
 				id = null;
 			} else {
-				final Profile profile = getMojangProfile(name, 3);
+				final Profile profile = getMojangProfile(nodeName, name, 3);
 				if (profile == null) {
 					id = null;
 				} else {
@@ -99,17 +99,17 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 		return instance.byUuid.containsKey(id) ? instance.byUuid.get(id).lastSeen : -1L;
 	}
 
-	private static Profile getMojangProfile(final String name, final int tries) {
+	private static Profile getMojangProfile(final String nodeName, final String name, final int tries) {
 		Validate.isTrue(tries > 0, "We should at least try once...");
-		LOGGER.info("[UuidDb] Getting UUID from Mojang for Player name '" + name + "'...");
+		LOGGER.info('[' + nodeName + "] [UuidDb] Getting UUID from Mojang for Player name '" + name + "'...");
 		for (int i = 0; i < tries; i++) {
-			LOGGER.debug("[UuidDb] Try " + (i + 1) + "...");
+			LOGGER.debug('[' + nodeName + "] [UuidDb] Try " + (i + 1) + "...");
 			final Profile[] res = mojangRepo.findProfilesByNames(name);
 			if (res.length > 0) {
 				return res[0];
 			}
 		}
-		LOGGER.error("[UuidDb] Failed to get UUID from Mojang for Player name '" + name + "'!");
+		LOGGER.warn('[' + nodeName + "] [UuidDb] Failed to get UUID from Mojang for Player name '" + name + "'!");
 		return null;
 	}
 
