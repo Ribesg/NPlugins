@@ -18,7 +18,7 @@ public class DateUtil {
 	}
 
 	public static String formatDate(final Date date) {
-		return String.format("%tFT%<tRZ", date);
+		return String.format("%tFT%<tRZ", date).replace(':', 'h');
 	}
 
 	public static String formatDate(final long date) {
