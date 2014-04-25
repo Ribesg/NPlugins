@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.nplayer.punishment;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.node.Node;
+import fr.ribesg.bukkit.ncore.util.IPValidator;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -91,7 +92,7 @@ public class PunishmentDb {
 				Punishment p = null;
 				final String punishedString = pSection.getString("punished");
 				final String punished;
-				if (PlayerIdsUtil.isValidUuid(punishedString)) {
+				if (PlayerIdsUtil.isValidUuid(punishedString) || IPValidator.isValidIp(punishedString)) {
 					punished = punishedString;
 				} else if (PlayerIdsUtil.isValidMinecraftUserName(punishedString)) {
 					punished = UuidDb.getId(Node.PLAYER, punishedString, true).toString();
