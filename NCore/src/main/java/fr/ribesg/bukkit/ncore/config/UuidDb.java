@@ -59,7 +59,7 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 		if (info != null) {
 			return info.uuid;
 		} else {
-			final UUID id;
+			UUID id;
 			if (!Bukkit.getOnlineMode()) {
 				id = PlayerIdsUtil.getOfflineUuid(name);
 				register(id, name);
@@ -70,7 +70,11 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 				if (profile == null) {
 					id = null;
 				} else {
-					id = UUID.fromString(profile.getId());
+					try {
+						id = UUID.fromString(profile.getId());
+					} catch (final IllegalArgumentException e) {
+						id = PlayerIdsUtil.shortUuidToUuid(profile.getId());
+					}
 					register(id, profile.getName());
 				}
 			}
