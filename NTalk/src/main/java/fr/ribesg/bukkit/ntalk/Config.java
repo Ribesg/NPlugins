@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class Config extends AbstractConfig<NTalk> {
 
@@ -141,7 +142,8 @@ public class Config extends AbstractConfig<NTalk> {
 				} else if (PlayerIdsUtil.isValidMinecraftUserName(playerIdString)) {
 					playerId = UuidDb.getId(playerIdString, true);
 				} else {
-					throw new InvalidConfigurationException("Unknown playerId '" + playerIdString + "' found in config.yml under section 'playerFormats'");
+					plugin.error(Level.WARNING, "Invalid playerId '" + playerIdString + "' found in config.yml under section 'playerFormats', ignored");
+					continue;
 				}
 				final String prefix = playerFormat.getString("prefix", "_NOPREFIX");
 				final String nickName = playerFormat.getString("nick", "_NONICK");
