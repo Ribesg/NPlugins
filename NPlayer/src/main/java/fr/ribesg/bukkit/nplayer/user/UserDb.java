@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class UserDb {
 
@@ -134,7 +135,8 @@ public class UserDb {
 				id = UuidDb.getId(userIdString, true);
 			}
 			if (id == null) {
-				throw new InvalidConfigurationException("Unknown userId '" + userIdString + "' found in userDb.yml");
+				plugin.error(Level.WARNING, "Invalid userId '" + userIdString + "' found in userDb.yml, ignored");
+				continue;
 			}
 			final String passwordHash = userSection.getString("passwordHash");
 			final String lastIp = userSection.getString("lastIp");
