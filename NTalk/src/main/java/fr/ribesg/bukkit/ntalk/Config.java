@@ -61,8 +61,8 @@ public class Config extends AbstractConfig<NTalk> {
 		setOpGroup("admin");
 
 		setPlayerFormats(new HashMap<UUID, Format>());
-		final UUID ribesgId = UuidDb.getId("Ribesg");
-		final UUID notchId = UuidDb.getId("Notch");
+		final UUID ribesgId = UuidDb.getId("Ribesg", true);
+		final UUID notchId = UuidDb.getId("Notch", true);
 		getPlayerFormats().put(ribesgId, new Format(FormatType.PLAYER, ribesgId.toString(), "&c[Dev]&f", ""));
 		getPlayerFormats().put(notchId, new Format(FormatType.PLAYER, notchId.toString(), "&c[God]&f", ""));
 
