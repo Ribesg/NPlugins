@@ -27,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -153,6 +154,8 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 	private final Map<UUID, PlayerInfo>   byUuid;
 	private final Map<String, PlayerInfo> byName;
 
+	private boolean updated;
+
 	public UuidDb(final NCore instance) {
 		super(instance);
 		if (UuidDb.instance != null) {
@@ -162,7 +165,22 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 		}
 		this.byUuid = new LinkedHashMap<>();
 		this.byName = new LinkedHashMap<>();
+		this.updated = false;
 		Bukkit.getPluginManager().registerEvents(this, instance);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(instance, new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				if (UuidDb.this.updated) {
+					try {
+						UuidDb.this.updated = false;
+						UuidDb.this.writeConfig();
+					} catch (final IOException e) {
+						UuidDb.LOGGER.error("[NCore] An error occured when NCore tried to save uuidDb.yml", e);
+					}
+				}
+			}
+		}, 5 * 60 * 20L, 30 * 20L);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)

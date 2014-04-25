@@ -57,6 +57,7 @@ public class NCore extends JavaPlugin {
 	private Map<String, Node> nodes;
 	private Metrics           metrics;
 	private Config            pluginConfig;
+	private UuidDb            uuidDb;
 	private Updater           updater;
 	private boolean debugEnabled = false;
 
@@ -85,7 +86,8 @@ public class NCore extends JavaPlugin {
 		}
 
 		try {
-			new UuidDb(this).loadConfig();
+			uuidDb = new UuidDb(this);
+			uuidDb.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
 			logger.log(Level.SEVERE, "An error occured when NCore tried to load uuidDb.yml", e);
 		}
@@ -106,7 +108,11 @@ public class NCore extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		// Nothing yet
+		try {
+			uuidDb.writeConfig();
+		} catch (final IOException e) {
+			logger.log(Level.SEVERE, "An error occured when NCore tried to save uuidDb.yml", e);
+		}
 	}
 
 	@Override
