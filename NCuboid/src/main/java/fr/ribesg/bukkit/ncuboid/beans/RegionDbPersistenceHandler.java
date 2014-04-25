@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class RegionDbPersistenceHandler {
 
@@ -69,20 +70,23 @@ public class RegionDbPersistenceHandler {
 	private static final String ALLOWED_GROUPS      = "allowedGroups";
 	private static final String DISALLOWED_COMMANDS = "disallowedCommands";
 
-	public static RegionDb reloadDb(final NCuboid plugin) {
+	private static NCuboid plugin;
+
+	public static RegionDb reloadDb(final NCuboid instance) {
+		plugin = instance;
 		final RegionDb oldDb = plugin.getDb();
 		try {
 			return loadDb(plugin);
-		} catch (IOException | InvalidConfigurationException e) {
-			plugin.getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			plugin.getLogger().severe("This error occured when NCuboid tried to reload regionDB.yml");
-			plugin.getLogger().info("No cuboid has been changed.");
+		} catch (final IOException | InvalidConfigurationException e) {
+			plugin.error("An error occured when NCuboid tried to reload regionDB.yml", e);
+			plugin.info("No cuboid has been changed.");
 			return oldDb;
 		}
 	}
 
-	public static RegionDb loadDb(final NCuboid plugin) throws IOException, InvalidConfigurationException {
+	public static RegionDb loadDb(final NCuboid instance) throws IOException, InvalidConfigurationException {
+		plugin = instance;
+
 		final RegionDb db = new RegionDb(plugin);
 
 		final Path pluginFolder = plugin.getDataFolder().toPath();
@@ -119,7 +123,9 @@ public class RegionDbPersistenceHandler {
 				final ConfigurationSection sec = config.getConfigurationSection(PLAYER_SECTION);
 				for (final String key : sec.getKeys(false)) {
 					final PlayerRegion region = readPlayerRegion(sec, key);
-					db.add(region);
+					if (region != null) {
+						db.add(region);
+					}
 				}
 			}
 
@@ -152,7 +158,8 @@ public class RegionDbPersistenceHandler {
 			ownerId = UuidDb.getId(ownerIdString, true);
 		}
 		if (ownerId == null) {
-			throw new InvalidConfigurationException("Unknown ownerId '" + ownerIdString + "' found in regionDb.yml under section '" + playerSection.getCurrentPath() + "'");
+			plugin.error(Level.WARNING, "Unknown ownerId '" + ownerIdString + "' found in regionDb.yml under section '" + playerSection.getCurrentPath() + "', ignored");
+			return null;
 		}
 		final String worldName = playerSection.getString(WORLD_NAME);
 		final long totalSize = playerSection.getLong(TOTAL_SIZE);
@@ -235,9 +242,10 @@ public class RegionDbPersistenceHandler {
 						id = UuidDb.getId(playerName, true);
 					}
 					if (id == null) {
-						throw new InvalidConfigurationException("Unknown admin playerId '" + playerName + "' found in regionDb.yml under section '" + rightsSection.getCurrentPath() + "'");
+						plugin.error(Level.WARNING, "Unknown admin playerId '" + playerName + "' found in regionDb.yml under section '" + rightsSection.getCurrentPath() + "', ignored");
+					} else {
+						rights.addAdmin(id);
 					}
-					rights.addAdmin(id);
 				}
 			}
 			if (rightsSection.isList(USERS)) {
@@ -250,9 +258,10 @@ public class RegionDbPersistenceHandler {
 						id = UuidDb.getId(playerName, true);
 					}
 					if (id == null) {
-						throw new InvalidConfigurationException("Unknown user playerId '" + playerName + "' found in regionDb.yml under section '" + rightsSection.getCurrentPath() + "'");
+						plugin.error(Level.WARNING, "Unknown user playerId '" + playerName + "' found in regionDb.yml under section '" + rightsSection.getCurrentPath() + "', ignored");
+					} else {
+						rights.addUser(id);
 					}
-					rights.addUser(id);
 				}
 			}
 			if (rightsSection.isList(ALLOWED_GROUPS)) {
