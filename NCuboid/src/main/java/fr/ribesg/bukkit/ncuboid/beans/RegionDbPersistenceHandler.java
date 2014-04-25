@@ -149,7 +149,7 @@ public class RegionDbPersistenceHandler {
 		if (PlayerIdsUtil.isValidUuid(ownerIdString)) {
 			ownerId = UUID.fromString(ownerIdString);
 		} else if (PlayerIdsUtil.isValidMinecraftUserName(ownerIdString)) {
-			ownerId = UuidDb.getId(name, true);
+			ownerId = UuidDb.getId(ownerIdString, true);
 		}
 		if (ownerId == null) {
 			throw new InvalidConfigurationException("Unknown ownerId '" + ownerIdString + "' found in regionDb.yml under section '" + playerSection.getCurrentPath() + "'");
