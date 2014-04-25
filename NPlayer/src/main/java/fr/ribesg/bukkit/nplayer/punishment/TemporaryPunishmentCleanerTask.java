@@ -8,12 +8,15 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.punishment;
+import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.util.IPValidator;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 public class TemporaryPunishmentCleanerTask extends BukkitRunnable {
 
@@ -31,18 +34,22 @@ public class TemporaryPunishmentCleanerTask extends BukkitRunnable {
 		}
 		for (final Punishment p : toBeRemoved) {
 			plugin.getPunishmentDb().remove(p);
+			String punished = p.getPunished();
+			if (!IPValidator.isValidIp(punished)) {
+				punished = UuidDb.getName(UUID.fromString(p.getPunished()));
+			}
 			switch (p.getType()) {
 				case BAN:
-					plugin.broadcastMessage(MessageId.player_unBannedBroadcast, p.getPunished());
+					plugin.broadcastMessage(MessageId.player_unBannedBroadcast, punished);
 					break;
 				case IPBAN:
-					plugin.broadcastMessage(MessageId.player_unBannedIpBroadcast, p.getPunished());
+					plugin.broadcastMessage(MessageId.player_unBannedIpBroadcast, punished);
 					break;
 				case JAIL:
-					plugin.broadcastMessage(MessageId.player_unJailedBroadcast, p.getPunished());
+					plugin.broadcastMessage(MessageId.player_unJailedBroadcast, punished);
 					break;
 				case MUTE:
-					plugin.broadcastMessage(MessageId.player_unMutedBroadcast, p.getPunished());
+					plugin.broadcastMessage(MessageId.player_unMutedBroadcast, punished);
 					break;
 				default:
 					break;
