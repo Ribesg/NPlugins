@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ntalk.format.Format;
@@ -62,8 +63,8 @@ public class Config extends AbstractConfig<NTalk> {
 		setOpGroup("admin");
 
 		setPlayerFormats(new HashMap<UUID, Format>());
-		final UUID ribesgId = UuidDb.getId("Ribesg", true);
-		final UUID notchId = UuidDb.getId("Notch", true);
+		final UUID ribesgId = UuidDb.getId(Node.TALK, "Ribesg", true);
+		final UUID notchId = UuidDb.getId(Node.TALK, "Notch", true);
 		getPlayerFormats().put(ribesgId, new Format(FormatType.PLAYER, ribesgId.toString(), "&c[Dev]&f", ""));
 		getPlayerFormats().put(notchId, new Format(FormatType.PLAYER, notchId.toString(), "&c[God]&f", ""));
 
@@ -140,7 +141,7 @@ public class Config extends AbstractConfig<NTalk> {
 				if (PlayerIdsUtil.isValidUuid(playerIdString)) {
 					playerId = UUID.fromString(playerIdString);
 				} else if (PlayerIdsUtil.isValidMinecraftUserName(playerIdString)) {
-					playerId = UuidDb.getId(playerIdString, true);
+					playerId = UuidDb.getId(Node.TALK, playerIdString, true);
 				} else {
 					plugin.error(Level.WARNING, "Invalid playerId '" + playerIdString + "' found in config.yml under section 'playerFormats', ignored");
 					continue;

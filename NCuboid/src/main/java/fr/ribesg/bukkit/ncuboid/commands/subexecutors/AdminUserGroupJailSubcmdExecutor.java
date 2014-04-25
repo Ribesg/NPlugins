@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
@@ -97,7 +98,7 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 			// Now for each provided playerName
 			for (final String name : args[2].toLowerCase().split(",")) {
 				final Player player = Bukkit.getPlayer(name);
-				final UUID id = player == null ? UuidDb.getId(name) : player.getUniqueId();
+				final UUID id = player == null ? UuidDb.getId(Node.CUBOID, name) : player.getUniqueId();
 				if (id == null) {
 					getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 				} else if (add) {
@@ -146,7 +147,7 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 			// Now for each provided playerName
 			for (final String name : args[2].toLowerCase().split(",")) {
 				final Player player = Bukkit.getPlayer(name);
-				final UUID id = player == null ? UuidDb.getId(name) : player.getUniqueId();
+				final UUID id = player == null ? UuidDb.getId(Node.CUBOID, name) : player.getUniqueId();
 				if (id == null) {
 					getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 				} else if (add) {

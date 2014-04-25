@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.nplayer;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.nplayer.security.Security;
@@ -334,7 +335,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				plugin.sendMessage(player, MessageId.noPermissionForCommand);
 			} else {
 				final String userName = args[0];
-				final User user = plugin.getUserDb().get(UuidDb.getId(userName));
+				final User user = plugin.getUserDb().get(UuidDb.getId(Node.PLAYER, userName));
 				if (user == null) {
 					plugin.sendMessage(player, MessageId.player_unknownUser, userName);
 				} else {
@@ -390,7 +391,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				plugin.sendMessage(player, MessageId.noPermissionForCommand);
 			} else {
 				final String userName = args[0];
-				final User user = plugin.getUserDb().get(UuidDb.getId(userName));
+				final User user = plugin.getUserDb().get(UuidDb.getId(Node.PLAYER, userName));
 				if (user == null) {
 					plugin.sendMessage(player, MessageId.player_unknownUser, userName);
 				} else {

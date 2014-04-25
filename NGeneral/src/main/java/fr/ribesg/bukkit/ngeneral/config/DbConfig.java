@@ -12,6 +12,7 @@ package fr.ribesg.bukkit.ngeneral.config;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
@@ -52,7 +53,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 				if (PlayerIdsUtil.isValidUuid(idString)) {
 					id = UUID.fromString(idString);
 				} else if (PlayerIdsUtil.isValidMinecraftUserName(idString)) {
-					id = UuidDb.getId(idString, true);
+					id = UuidDb.getId(Node.GENERAL, idString, true);
 				}
 				if (id == null) {
 					throw new InvalidConfigurationException("Unknown playerId '" + idString + "' found in db.yml under section 'flyModePlayers'");
@@ -75,7 +76,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 				if (PlayerIdsUtil.isValidUuid(idString)) {
 					id = UUID.fromString(idString);
 				} else if (PlayerIdsUtil.isValidMinecraftUserName(idString)) {
-					id = UuidDb.getId(idString, true);
+					id = UuidDb.getId(Node.GENERAL, idString, true);
 				}
 				if (id == null) {
 					throw new InvalidConfigurationException("Unknown playerId '" + idString + "' found in db.yml under section 'godModePlayers'");

@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
@@ -155,7 +156,7 @@ public class RegionDbPersistenceHandler {
 		if (PlayerIdsUtil.isValidUuid(ownerIdString)) {
 			ownerId = UUID.fromString(ownerIdString);
 		} else if (PlayerIdsUtil.isValidMinecraftUserName(ownerIdString)) {
-			ownerId = UuidDb.getId(ownerIdString, true);
+			ownerId = UuidDb.getId(Node.CUBOID, ownerIdString, true);
 		}
 		if (ownerId == null) {
 			plugin.error(Level.WARNING, "Unknown ownerId '" + ownerIdString + "' found in regionDb.yml under section '" + playerSection.getCurrentPath() + "', ignored");
@@ -239,7 +240,7 @@ public class RegionDbPersistenceHandler {
 					if (PlayerIdsUtil.isValidUuid(playerName)) {
 						id = UUID.fromString(playerName);
 					} else if (PlayerIdsUtil.isValidMinecraftUserName(playerName)) {
-						id = UuidDb.getId(playerName, true);
+						id = UuidDb.getId(Node.CUBOID, playerName, true);
 					}
 					if (id == null) {
 						plugin.error(Level.WARNING, "Unknown admin playerId '" + playerName + "' found in regionDb.yml under section '" + rightsSection.getCurrentPath() + "', ignored");
@@ -255,7 +256,7 @@ public class RegionDbPersistenceHandler {
 					if (PlayerIdsUtil.isValidUuid(playerName)) {
 						id = UUID.fromString(playerName);
 					} else if (PlayerIdsUtil.isValidMinecraftUserName(playerName)) {
-						id = UuidDb.getId(playerName, true);
+						id = UuidDb.getId(Node.CUBOID, playerName, true);
 					}
 					if (id == null) {
 						plugin.error(Level.WARNING, "Unknown user playerId '" + playerName + "' found in regionDb.yml under section '" + rightsSection.getCurrentPath() + "', ignored");

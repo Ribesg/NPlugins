@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.nplayer.punishment;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.nplayer.NPlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -93,7 +94,7 @@ public class PunishmentDb {
 				if (PlayerIdsUtil.isValidUuid(punishedString)) {
 					punished = punishedString;
 				} else if (PlayerIdsUtil.isValidMinecraftUserName(punishedString)) {
-					punished = UuidDb.getId(punishedString, true).toString();
+					punished = UuidDb.getId(Node.PLAYER, punishedString, true).toString();
 				} else {
 					throw new InvalidConfigurationException("Unknown punished '" + punishedString + "' found in punishmentDB.yml");
 				}
@@ -398,7 +399,7 @@ public class PunishmentDb {
 				final Punishment p = it.next();
 				if (!p.isStillActive()) {
 					if (plugin.getCuboidNode() != null && p.getType() == PunishmentType.JAIL) {
-						plugin.getCuboidNode().unJail(UuidDb.getId(p.getPunished()));
+						plugin.getCuboidNode().unJail(UuidDb.getId(Node.PLAYER, p.getPunished()));
 					}
 					it.remove();
 				} else if (p.getType() == type) {
@@ -458,7 +459,7 @@ public class PunishmentDb {
 						getPermPunishments().remove(key.toLowerCase());
 					}
 					if (plugin.getCuboidNode() != null && toBeRemoved.getType() == PunishmentType.JAIL) {
-						plugin.getCuboidNode().unJail(UuidDb.getId(toBeRemoved.getPunished()));
+						plugin.getCuboidNode().unJail(UuidDb.getId(Node.PLAYER, toBeRemoved.getPunished()));
 					}
 					result = toBeRemoved;
 				}
@@ -471,7 +472,7 @@ public class PunishmentDb {
 						getTempPunishments().remove(key.toLowerCase());
 					}
 					if (plugin.getCuboidNode() != null && toBeRemoved.getType() == PunishmentType.JAIL) {
-						plugin.getCuboidNode().unJail(UuidDb.getId(toBeRemoved.getPunished()));
+						plugin.getCuboidNode().unJail(UuidDb.getId(Node.PLAYER, toBeRemoved.getPunished()));
 					}
 					result = toBeRemoved;
 				}

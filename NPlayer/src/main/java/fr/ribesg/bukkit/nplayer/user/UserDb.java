@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.nplayer.user;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.nplayer.NPlayer;
@@ -132,7 +133,7 @@ public class UserDb {
 			if (PlayerIdsUtil.isValidUuid(userIdString)) {
 				id = UUID.fromString(userIdString);
 			} else if (PlayerIdsUtil.isValidMinecraftUserName(userIdString)) {
-				id = UuidDb.getId(userIdString, true);
+				id = UuidDb.getId(Node.PLAYER, userIdString, true);
 			}
 			if (id == null) {
 				plugin.error(Level.WARNING, "Invalid userId '" + userIdString + "' found in userDb.yml, ignored");

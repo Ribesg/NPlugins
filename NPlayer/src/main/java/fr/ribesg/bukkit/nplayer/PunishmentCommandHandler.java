@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.nplayer;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.util.IPValidator;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
@@ -131,7 +132,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 			plugin.exiting(getClass(), "cmdBan", "Invalid arguments");
 			return false;
 		}
-		if (!plugin.getUserDb().isUserKnown(UuidDb.getId(res.punished))) {
+		if (!plugin.getUserDb().isUserKnown(UuidDb.getId(Node.PLAYER, res.punished))) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, res.punished);
 		} else if (res.duration == -1) {
 			if (Perms.hasBanPermanent(sender)) {
@@ -185,7 +186,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 				return true;
 			}
 		} else {
-			final UUID id = UuidDb.getId(res.punished);
+			final UUID id = UuidDb.getId(Node.PLAYER, res.punished);
 			final User user = plugin.getUserDb().get(id);
 			if (user == null) {
 				plugin.sendMessage(sender, MessageId.player_unknownUser, res.punished);
@@ -246,7 +247,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 			plugin.exiting(getClass(), "cmdJail", "Invalid arguments");
 			return false;
 		}
-		if (!plugin.getUserDb().isUserKnown(UuidDb.getId(res.punished))) {
+		if (!plugin.getUserDb().isUserKnown(UuidDb.getId(Node.PLAYER, res.punished))) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, res.punished);
 		} else if (!cuboidNode.getJailsSet().contains(res.jailPointName.toLowerCase())) {
 			plugin.sendMessage(sender, MessageId.player_unknownJail, res.jailPointName);
@@ -290,7 +291,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 			plugin.exiting(getClass(), "cmdMute", "Invalid arguments");
 			return false;
 		}
-		if (!plugin.getUserDb().isUserKnown(UuidDb.getId(res.punished))) {
+		if (!plugin.getUserDb().isUserKnown(UuidDb.getId(Node.PLAYER, res.punished))) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, res.punished);
 		} else if (res.duration == -1) {
 			if (Perms.hasMutePermanent(sender)) {
@@ -330,7 +331,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 			return false;
 		}
 		final String userName = args[0];
-		final UUID id = UuidDb.getId(userName);
+		final UUID id = UuidDb.getId(Node.PLAYER, userName);
 		if (!plugin.getUserDb().isUserKnown(id)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, userName);
 		} else if (db.unBanId(id)) {
@@ -370,7 +371,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 			plugin.exiting(getClass(), "cmdUnJail", "Invalid arguments");
 			return false;
 		}
-		final UUID id = UuidDb.getId(args[0]);
+		final UUID id = UuidDb.getId(Node.PLAYER, args[0]);
 		final String name = UuidDb.getName(id);
 		if (!plugin.getUserDb().isUserKnown(id)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, args[0]);
@@ -391,7 +392,7 @@ public class PunishmentCommandHandler implements CommandExecutor, Listener {
 			plugin.exiting(getClass(), "cmdUnMute", "Invalid arguments");
 			return false;
 		}
-		final UUID id = UuidDb.getId(args[0]);
+		final UUID id = UuidDb.getId(Node.PLAYER, args[0]);
 		final String name = UuidDb.getName(id);
 		if (!plugin.getUserDb().isUserKnown(id)) {
 			plugin.sendMessage(sender, MessageId.player_unknownUser, args[0]);

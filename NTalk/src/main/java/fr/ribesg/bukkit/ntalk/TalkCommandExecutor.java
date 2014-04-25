@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -187,7 +188,7 @@ public class TalkCommandExecutor implements CommandExecutor {
 				plugin.sendMessage(sender, MessageId.talk_invalidUsername, realName);
 				return true;
 			}
-			final UUID id = UuidDb.getId(realName);
+			final UUID id = UuidDb.getId(Node.TALK, realName);
 			plugin.getPluginConfig().getPlayerNicknames().remove(id);
 			plugin.sendMessage(sender, MessageId.talk_youDeNickNamed, realName);
 			final Player p = plugin.getServer().getPlayerExact(realName);
@@ -205,7 +206,7 @@ public class TalkCommandExecutor implements CommandExecutor {
 				plugin.sendMessage(sender, MessageId.talk_invalidNickname, nick);
 				return true;
 			}
-			final UUID id = UuidDb.getId(realName);
+			final UUID id = UuidDb.getId(Node.TALK, realName);
 			plugin.getPluginConfig().getPlayerNicknames().put(id, nick);
 			plugin.sendMessage(sender, MessageId.talk_youNickNamed, realName, nick);
 			final Player p = plugin.getServer().getPlayerExact(realName);
