@@ -101,7 +101,7 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 
 	private static Profile getMojangProfile(final String nodeName, final String name, final int tries) {
 		Validate.isTrue(tries > 0, "We should at least try once...");
-		LOGGER.info('[' + nodeName + "] [UuidDb] Getting UUID from Mojang for Player name '" + name + "'...");
+		LOGGER.debug('[' + nodeName + "] [UuidDb] Getting UUID from Mojang for Player name '" + name + "'...");
 		for (int i = 0; i < tries; i++) {
 			LOGGER.debug('[' + nodeName + "] [UuidDb] Try " + (i + 1) + "...");
 			final Profile[] res = mojangRepo.findProfilesByNames(name);
@@ -109,7 +109,7 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 				return res[0];
 			}
 		}
-		LOGGER.warn('[' + nodeName + "] [UuidDb] Failed to get UUID from Mojang for Player name '" + name + "'!");
+		LOGGER.warn('[' + nodeName + "] Failed to get Mojang's UUID for Player name '" + name + "'!");
 		return null;
 	}
 
