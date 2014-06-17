@@ -155,12 +155,39 @@ public class Config extends AbstractConfig<NCuboid> {
 	}
 
 	public GroupConfig getGroupConfig(final Player player) {
+		final GroupConfig result = new GroupConfig("tmp", 0, 0, 0);
+		boolean found = false;
 		for (final GroupConfig gc : groupConfigs.values()) {
 			if (player.hasPermission(gc.getGroupPerm())) {
-				return gc;
+				found = true;
+				if (result.getMaxRegionNb() != -1) {
+					if (gc.getMaxRegionNb() == -1) {
+						result.setMaxRegionNb(-1);
+					} else {
+						result.setMaxRegionNb(Math.max(result.getMaxRegionNb(), gc.getMaxRegionNb()));
+					}
+				}
+				if (result.getMaxRegion1DSize() != -1) {
+					if (gc.getMaxRegion1DSize() == -1) {
+						result.setMaxRegion1DSize(-1);
+					} else {
+						result.setMaxRegion1DSize(Math.max(result.getMaxRegion1DSize(), gc.getMaxRegion1DSize()));
+					}
+				}
+				if (result.getMaxRegion3DSize() != -1) {
+					if (gc.getMaxRegion3DSize() == -1) {
+						result.setMaxRegion3DSize(-1);
+					} else {
+						result.setMaxRegion3DSize(Math.max(result.getMaxRegion3DSize(), gc.getMaxRegion3DSize()));
+					}
+				}
 			}
 		}
-		LOGGER.warning("Player '" + player.getName() + "' doesn't have any associated group, he will not be able to make regions!");
-		return defaultGroupConfig;
+		if (found) {
+			return result;
+		} else {
+			LOGGER.warning("Player '" + player.getName() + "' doesn't have any associated group, he will not be able to make regions!");
+			return defaultGroupConfig;
+		}
 	}
 }

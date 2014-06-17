@@ -14,9 +14,9 @@ package fr.ribesg.bukkit.ncuboid.config;
 public class GroupConfig {
 
 	private final String groupName;
-	private final int    maxRegionNb;
-	private final int    maxRegion1DSize;
-	private final int    maxRegion3DSize;
+	private       int    maxRegionNb;
+	private       int    maxRegion1DSize;
+	private       int    maxRegion3DSize;
 
 	public GroupConfig(final String groupName, final int maxRegionNb, final int maxRegion1DSize, final int maxRegion3DSize) {
 		this.groupName = groupName;
@@ -37,11 +37,23 @@ public class GroupConfig {
 		return maxRegionNb;
 	}
 
+	public void setMaxRegionNb(final int maxRegionNb) {
+		this.maxRegionNb = maxRegionNb;
+	}
+
 	public int getMaxRegion1DSize() {
 		return maxRegion1DSize;
 	}
 
+	public void setMaxRegion1DSize(final int maxRegion1DSize) {
+		this.maxRegion1DSize = maxRegion1DSize;
+	}
+
 	public int getMaxRegion3DSize() {
 		return maxRegion3DSize;
+	}
+
+	public void setMaxRegion3DSize(final int maxRegion3DSize) {
+		this.maxRegion3DSize = maxRegion3DSize;
 	}
 }
