@@ -118,6 +118,16 @@ public class PermissionsManager {
 	}
 
 	/**
+	 * Adds a Player name - UUID couple to the map.
+	 *
+	 * @param playerName a Player name
+	 * @param id         the corresponding UUID
+	 */
+	public void addPlayerByName(final String playerName, final UUID id) {
+		this.playerNameToUuidMap.put(playerName.toLowerCase(), id);
+	}
+
+	/**
 	 * TODO
 	 *
 	 * @param player
@@ -144,6 +154,7 @@ public class PermissionsManager {
 			playerPermissions.setPermission(e.getKey(), e.getValue());
 		}
 		this.attachmentMap.put(playerUuid, playerPermissions);
+		addPlayerByName(playerName, playerUuid);
 		if (saveNeeded) {
 			this.plugin.savePlayers();
 		}

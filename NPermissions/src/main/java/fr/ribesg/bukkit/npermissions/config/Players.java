@@ -161,6 +161,7 @@ public class Players extends AbstractConfig<NPermissions> {
 				}
 
 				this.manager.getPlayers().put(uuid, player);
+				this.manager.addPlayerByName(playerName, uuid);
 			}
 		}
 	}
