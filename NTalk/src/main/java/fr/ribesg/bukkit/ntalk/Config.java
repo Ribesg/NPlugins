@@ -295,7 +295,7 @@ public class Config extends AbstractConfig<NTalk> {
 		content.append("# - %reason% : will be replaced by the reason\n");
 		content.append("tempBanCommand: " + getTempBanCommand() + "\n\n");
 
-		content.append("# The tempjail command that will be used to mute people\n");
+		content.append("# The tempjail command that will be used to jail people\n");
 		content.append("# It should contain:\n");
 		content.append("# - %player% : will be replaced by the player's name\n");
 		content.append("# - %duration% : will be replaced by the duration, in seconds\n");
