@@ -81,7 +81,7 @@ public class Perms {
 	}
 
 	public static boolean hasSetHomeOthers(final Permissible user) {
-		return user.isOp() || user.hasPermission(CMD_SETHOME_OTHERS) || user.hasPermission(USER) || user.hasPermission(ADMIN);
+		return user.isOp() || user.hasPermission(CMD_SETHOME_OTHERS) || user.hasPermission(ADMIN);
 	}
 
 	public static boolean hasBan(final Permissible user) {
