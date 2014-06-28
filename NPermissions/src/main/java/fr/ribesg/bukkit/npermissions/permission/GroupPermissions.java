@@ -12,7 +12,6 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -28,12 +27,12 @@ public class GroupPermissions extends PermissionsSet {
 	/**
 	 * The default priority for groups is 0
 	 */
-	private static final int DEFAULT_GROUP_PRIORITY = 0;
+	protected static final int DEFAULT_GROUP_PRIORITY = 0;
 
 	/**
 	 * A Collection of all N+1 Groups in this Group's hierarchy
 	 */
-	private final Set<String> superGroups;
+	protected final Set<String> superGroups;
 
 	/**
 	 * Group Permissions constructor.
@@ -116,7 +115,7 @@ public class GroupPermissions extends PermissionsSet {
 	@Override
 	public Map<String, Boolean> computePermissions(Map<String, Boolean> resultMap) {
 		for (final String groupName : this.superGroups) {
-			final GroupPermissions group = manager.getGroups().get(groupName);
+			final GroupPermissions group = this.manager.getGroups().get(groupName);
 			resultMap = group.computePermissions(resultMap);
 		}
 		resultMap.putAll(this.permissions);

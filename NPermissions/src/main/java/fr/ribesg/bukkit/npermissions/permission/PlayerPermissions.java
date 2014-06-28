@@ -22,22 +22,22 @@ public class PlayerPermissions extends PermissionsSet {
 	/**
 	 * The default priority for players is 1
 	 */
-	private static final int DEFAULT_PLAYER_PRIORITY = 1;
+	protected static final int DEFAULT_PLAYER_PRIORITY = 1;
 
 	/**
 	 * This Player's UUID
 	 */
-	private final UUID playerUuid;
+	protected final UUID playerUuid;
 
 	/**
 	 * The main group of attached to this Player
 	 */
-	private String mainGroup;
+	protected String mainGroup;
 
 	/**
 	 * Groups this Player belongs to, not counting the main one
 	 */
-	private final Set<String> groups;
+	protected final Set<String> groups;
 
 	/**
 	 * Player Permissions constructor.
@@ -182,15 +182,18 @@ public class PlayerPermissions extends PermissionsSet {
 	 */
 	@Override
 	public Map<String, Boolean> computePermissions(final Map<String, Boolean> resultMap) {
-		// Create some nice data structure
+		// Create a data structure to store all PermissionsSet related to the Player, grouped and sorted by priority
 		final SortedMap<Integer, Set<PermissionsSet>> prioritizedPermissions = new TreeMap<>();
 
-		// Populate it with all the things
+		// Populate it with all the PermissionsSet related to the Player
+
+		// 1) Main group
 		final GroupPermissions mainGroupPermissionsSet = this.manager.getGroups().get(this.mainGroup);
 		Set<PermissionsSet> set = new HashSet<>();
 		set.add(mainGroupPermissionsSet);
 		prioritizedPermissions.put(mainGroupPermissionsSet.getPriority(), set);
 
+		// 2) Secondary groups
 		for (final String groupName : this.groups) {
 			final GroupPermissions group = this.manager.getGroups().get(groupName);
 			set = prioritizedPermissions.get(group.getPriority());
@@ -201,6 +204,7 @@ public class PlayerPermissions extends PermissionsSet {
 			prioritizedPermissions.put(group.getPriority(), set);
 		}
 
+		// 3) Player Permissions
 		set = prioritizedPermissions.get(this.getPriority());
 		if (set == null) {
 			set = new HashSet<>();
@@ -208,10 +212,12 @@ public class PlayerPermissions extends PermissionsSet {
 		set.add(this);
 		prioritizedPermissions.put(this.getPriority(), set);
 
+		// Now, read all those permissions and apply them
 		for (final Map.Entry<Integer, Set<PermissionsSet>> entry : prioritizedPermissions.entrySet()) {
 			if (entry.getKey() == this.getPriority()) {
 				for (final PermissionsSet perms : entry.getValue()) {
 					if (perms == this) {
+						// Special for the Player Permissions case, we don't want to recursively call this method
 						resultMap.putAll(this.permissions);
 					} else {
 						resultMap.putAll(perms.getComputedPermissions());

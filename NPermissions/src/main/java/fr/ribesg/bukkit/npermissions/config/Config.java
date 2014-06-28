@@ -19,7 +19,7 @@ public class Config extends AbstractConfig<NPermissions> {
 	private String defaultGroup;
 
 	/**
-	 * @param instance
+	 * @param instance the plugin instance
 	 */
 	public Config(final NPermissions instance) {
 		super(instance);

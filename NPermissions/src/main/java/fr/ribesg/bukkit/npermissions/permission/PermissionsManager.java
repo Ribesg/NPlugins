@@ -38,14 +38,29 @@ public class PermissionsManager {
 	private final Map<String, GroupPermissions> groups;
 
 	/**
+	 * Map of per-World Groups with their attached Permissions
+	 */
+	private final Map<String, Map<String, WorldGroupPermissions>> worldGroups;
+
+	/**
 	 * Map of Players with their attached Permissions
 	 */
 	private final Map<UUID, PlayerPermissions> players;
 
 	/**
+	 * Map of per-World Players with their attached Permissions
+	 */
+	private final Map<String, Map<UUID, WorldPlayerPermissions>> worldPlayers;
+
+	/**
 	 * Map of Legacy Players with their attached Permissions
 	 */
 	private final Map<String, LegacyPlayerPermissions> legacyPlayers;
+
+	/**
+	 * Map of per-World Legacy Players with their attached Permissions
+	 */
+	private final Map<String, Map<String, WorldLegacyPlayerPermissions>> worldLegacyPlayers;
 
 	/**
 	 * Map of online Players and their PermissionAttachment
@@ -65,8 +80,11 @@ public class PermissionsManager {
 	public PermissionsManager(final NPermissions instance) {
 		this.plugin = instance;
 		this.groups = new LinkedHashMap<>();
+		this.worldGroups = new LinkedHashMap<>();
 		this.players = new LinkedHashMap<>();
+		this.worldPlayers = new LinkedHashMap<>();
 		this.legacyPlayers = new LinkedHashMap<>();
+		this.worldLegacyPlayers = new LinkedHashMap<>();
 		this.attachmentMap = new HashMap<>();
 	}
 
@@ -89,6 +107,15 @@ public class PermissionsManager {
 	}
 
 	/**
+	 * Gets the map of World Groups with their attached Permissions.
+	 *
+	 * @return the map of World Groups with their attached Permissions
+	 */
+	public Map<String, Map<String, WorldGroupPermissions>> getWorldGroups() {
+		return this.worldGroups;
+	}
+
+	/**
 	 * Gets the map of Players with their attached Permissions.
 	 *
 	 * @return the map of Players with their attached Permissions
@@ -98,12 +125,30 @@ public class PermissionsManager {
 	}
 
 	/**
+	 * Gets the map of World Players with their attached Permissions.
+	 *
+	 * @return the map of World Players with their attached Permissions
+	 */
+	public Map<String, Map<UUID, WorldPlayerPermissions>> getWorldPlayers() {
+		return this.worldPlayers;
+	}
+
+	/**
 	 * Gets the map of Legacy Players with their attached Permissions.
 	 *
 	 * @return the map of Legacy Players with their attached Permissions
 	 */
 	public Map<String, LegacyPlayerPermissions> getLegacyPlayers() {
 		return this.legacyPlayers;
+	}
+
+	/**
+	 * Gets the map of World Legacy Players with their attached Permissions.
+	 *
+	 * @return the map of World Legacy Players with their attached Permissions
+	 */
+	public Map<String, Map<String, WorldLegacyPlayerPermissions>> getWorldLegacyPlayers() {
+		return this.worldLegacyPlayers;
 	}
 
 	/**

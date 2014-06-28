@@ -8,6 +8,7 @@ version: maven-version-number
 load: POSTWORLD
 
 depend: [NCore]
+softdepend: [NWorld]
 
 commands:
   npermissions:
