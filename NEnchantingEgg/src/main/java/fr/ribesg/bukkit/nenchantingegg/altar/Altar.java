@@ -21,7 +21,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -97,6 +96,9 @@ public class Altar {
 			}
 		}
 		loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), hurt ? 5f : 0f, false, false);
+		if (builder != null) {
+			builder.popItems();
+		}
 	}
 
 	public void buildItem(final ItemStack is, final List<ItemStack> items) {

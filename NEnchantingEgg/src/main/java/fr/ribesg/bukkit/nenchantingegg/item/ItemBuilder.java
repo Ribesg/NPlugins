@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.nenchantingegg.item;
 
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -208,6 +209,17 @@ public class ItemBuilder {
 		}
 
 		plugin.exiting(getClass(), "addItem");
+	}
+
+	/**
+	 * Spawn back stored items.
+	 */
+	public void popItems() {
+		final Location loc = altar.getCenterLocation().toBukkitLocation().clone().add(0.5, 3, 0.5);
+		for (final ItemStack is : items) {
+			loc.getWorld().dropItem(loc, is);
+		}
+		items.clear();
 	}
 
 	public void computeItem() {
