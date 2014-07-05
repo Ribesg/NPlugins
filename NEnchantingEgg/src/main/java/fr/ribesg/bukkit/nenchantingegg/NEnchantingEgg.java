@@ -17,6 +17,7 @@ import fr.ribesg.bukkit.nenchantingegg.altar.transition.ActiveToEggProvidedTrans
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.EggProvidedToItemProvidedTransition;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.InactiveToActiveTransition;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.ItemProvidedToLockedTransition;
+import fr.ribesg.bukkit.nenchantingegg.enchantment.Arboricide;
 import fr.ribesg.bukkit.nenchantingegg.lang.Messages;
 import fr.ribesg.bukkit.nenchantingegg.listener.ItemListener;
 import fr.ribesg.bukkit.nenchantingegg.listener.PlayerListener;
@@ -26,6 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.mcstats.Metrics;
 
@@ -53,6 +55,9 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 	private WorldListener  worldListener;
 	private ItemListener   itemListener;
 	private PlayerListener playerListener;
+
+	// Enchantments
+	private Arboricide arboricide;
 
 	@Override
 	protected String getMinCoreVersion() {
@@ -106,6 +111,11 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 		pm.registerEvents(worldListener, this);
 		pm.registerEvents(itemListener, this);
 		pm.registerEvents(playerListener, this);
+
+		debug("Creating enchantments...");
+		arboricide = new Arboricide(this);
+		debug("Registering enchantments...");
+		pm.registerEvents(arboricide, this);
 
 		// debug("Registering commands...");
 		// getCommand("theCommand").setExecutor(new NCommandExecutor(this));
@@ -226,6 +236,10 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	public PlayerListener getPlayerListener() {
 		return playerListener;
+	}
+
+	public Arboricide getArboricide() {
+		return arboricide;
 	}
 
 	@Override

@@ -222,6 +222,9 @@ public class ItemBuilder {
 			// Step 2: boost
 			boost();
 
+			// Step 3: enchant
+			enchant();
+
 			// TODO: Other steps
 
 			// Output the item
@@ -426,5 +429,51 @@ public class ItemBuilder {
 		}
 
 		plugin.exiting(getClass(), "boost");
+	}
+
+	private void enchant() {
+		plugin.entering(getClass(), "enchant");
+
+		if (plugin.isDebugEnabled()) {
+			plugin.debug("Original list of Enchantments:");
+			for (final Map.Entry<Enchantment, Integer> e : mainItem.getEnchantments().entrySet()) {
+				plugin.debug("\t" + e.getKey().getName() + ", level " + e.getValue());
+			}
+		}
+
+		// Count the amount of Ghast Tears sacrificed
+		int ghastTear = 0;
+		final Iterator<ItemStack> it = items.iterator();
+		ItemStack is;
+		while (it.hasNext()) {
+			is = it.next();
+			if (is.getType() == Material.GHAST_TEAR) {
+				ghastTear += is.getAmount();
+				it.remove();
+			}
+		}
+		plugin.debug("Found " + ghastTear + " Ghast Tear(s)");
+
+		// Reduce amounts to max allowed quantity
+		if (ghastTear > 32) {
+			plugin.debug("Fixing Ghast Tear amount to 32");
+			ghastTear = 32;
+		}
+
+		if (ghastTear != 0) {
+
+			// Arboricide
+			if (plugin.getArboricide().canEnchant(this.mainItem)) {
+				plugin.debug("Try to apply Arboricide");
+				if (RANDOM.nextFloat() < ghastTear / 64f * plugin.getPluginConfig().getEnchantmentBoostMultiplier()) {
+					this.mainItem = plugin.getArboricide().enchant(this.mainItem);
+					plugin.debug("Applied Arboricide!");
+				}
+			}
+
+			// TODO Other enchantments here
+		}
+
+		plugin.exiting(getClass(), "enchant");
 	}
 }
