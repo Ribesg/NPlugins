@@ -39,6 +39,10 @@ public class EndChunk {
 		this(container, coords.getX(), coords.getZ(), coords.getWorldName());
 	}
 
+	public EndChunk(final EndChunks container, final Chunk bukkitChunk) {
+		this(container, bukkitChunk.getX(), bukkitChunk.getZ(), bukkitChunk.getWorld().getName());
+	}
+
 	public EndChunk(final EndChunks container, final int x, final int z, final String world) {
 		this.container = container;
 		coords = new ChunkCoord(x, z, world);
@@ -46,16 +50,6 @@ public class EndChunk {
 		isProtected = false;
 		containsCrystal = false;
 		crystals = null;
-		savedDragons = 0;
-	}
-
-	public EndChunk(final EndChunks container, final Chunk bukkitChunk) {
-		this.container = container;
-		coords = new ChunkCoord(bukkitChunk);
-		hasToBeRegen = false;
-		isProtected = false;
-		containsCrystal = false;
-		searchCrystals(bukkitChunk);
 		savedDragons = 0;
 	}
 

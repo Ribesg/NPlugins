@@ -67,7 +67,7 @@ public class EndWorldHandler {
 		plugin = instance;
 		endWorld = world;
 		camelCaseWorldName = StringUtil.toLowerCamelCase(endWorld.getName());
-		chunks = new EndChunks(world.getName());
+		chunks = new EndChunks(this, world.getName());
 		config = new Config(plugin, endWorld.getName());
 		dragons = new HashMap<>();
 		loadedDragons = new HashSet<>();

@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ntheendagain.world;
 
 import fr.ribesg.bukkit.ncore.common.ChunkCoord;
+import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -39,20 +40,24 @@ public class EndChunks implements Iterable<EndChunk> {
 
 	private final static Charset CHARSET = StandardCharsets.UTF_8;
 
+	private final EndWorldHandler handler;
+
 	private final String worldName;
 
 	private final HashMap<ChunkCoord, EndChunk> chunks;
 
 	private int totalSavedDragons;
 
-	public EndChunks(final String worldName) {
+	public EndChunks(final EndWorldHandler handler, final String worldName) {
 		chunks = new HashMap<>();
 		totalSavedDragons = 0;
+		this.handler = handler;
 		this.worldName = worldName;
 	}
 
 	public EndChunk addChunk(final Chunk bukkitChunk) {
 		final EndChunk res = new EndChunk(this, bukkitChunk);
+		res.setProtected(handler.getConfig().getDefaultProtected());
 		addChunk(res);
 		return res;
 	}
@@ -76,6 +81,7 @@ public class EndChunks implements Iterable<EndChunk> {
 		EndChunk res = chunks.get(coord);
 		if (res == null) {
 			res = new EndChunk(this, coord);
+			res.setProtected(handler.getConfig().getDefaultProtected());
 			chunks.put(res.getCoords(), res);
 		}
 		return res;

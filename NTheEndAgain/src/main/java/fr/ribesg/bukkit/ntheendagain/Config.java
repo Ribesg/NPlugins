@@ -102,6 +102,10 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 
 	private final PairList<ItemStack, Float> dropTable;
 
+	// Chunk Protection
+	private final static boolean DEFAULT_defaultProtected = false;
+	private boolean defaultProtected;
+
 	// Data
 	private final static long DEFAULT_nextRegenTaskTime = 0;
 	private long nextRegenTaskTime;
@@ -316,6 +320,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 				}
 			}
 		}
+
+		// Chunk Protection
+		setDefaultProtected(config.getBoolean("defaultProtected", false));
 
 		// Data
 		setNextRegenTaskTime(config.getLong("nextRegenTaskTime", DEFAULT_nextRegenTaskTime));
@@ -657,6 +664,26 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		}
 		content.append("\n");
 
+		// ###################### //
+		// ## CHUNK PROTECTION ## //
+		// ###################### //
+
+		frame = new FrameBuilder();
+		frame.addLine("CHUNK PROTECTION", FrameBuilder.Option.CENTER);
+		for (final String line : frame.build()) {
+			content.append(line);
+			content.append('\n');
+		}
+		content.append('\n');
+
+		// defaultProtected
+		content.append("# Default state of newly first-generated chunks. Default: " + DEFAULT_defaultProtected + "\n");
+		content.append("#\n");
+		content.append("#       true:  Protected from regeneration\n");
+		content.append("#       false: Unprotected from regeneration\n");
+		content.append("#\n");
+		content.append("defaultProtected: " + getDefaultProtected() + "\n\n");
+
 		// ########## //
 		// ## DATA ## //
 		// ########## //
@@ -867,6 +894,16 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 
 	public PairList<ItemStack, Float> getDropTable() {
 		return this.dropTable;
+	}
+
+	// Chunk Protection
+
+	public boolean getDefaultProtected() {
+		return defaultProtected;
+	}
+
+	public void setDefaultProtected(final boolean defaultProtected) {
+		this.defaultProtected = defaultProtected;
 	}
 
 	// Data

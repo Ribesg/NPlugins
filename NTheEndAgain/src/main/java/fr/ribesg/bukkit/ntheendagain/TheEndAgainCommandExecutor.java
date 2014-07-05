@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ntheendagain;
 
+import fr.ribesg.bukkit.ncore.common.ChunkCoord;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncore.util.WorldUtil;
@@ -21,7 +22,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class TheEndAgainCommandExecutor implements CommandExecutor {
 
@@ -76,7 +79,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 								case "info":
 								case "i":
 									if (Perms.hasChunkInfo(sender)) {
-										return cmdChunkInfo(sender);
+										return cmdChunkInfo(sender, Arrays.copyOfRange(args, 2, args.length));
 									} else {
 										plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 										return true;
@@ -84,7 +87,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 								case "protect":
 								case "p":
 									if (Perms.hasChunkProtect(sender)) {
-										return cmdChunkProtect(sender);
+										return cmdChunkProtect(sender, Arrays.copyOfRange(args, 2, args.length));
 									} else {
 										plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 										return true;
@@ -92,7 +95,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 								case "unprotect":
 								case "up":
 									if (Perms.hasChunkUnprotect(sender)) {
-										return cmdChunkUnprotect(sender);
+										return cmdChunkUnprotect(sender, Arrays.copyOfRange(args, 2, args.length));
 									} else {
 										plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 										return true;
@@ -186,9 +189,32 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		return true;
 	}
 
-	private boolean cmdChunkInfo(final CommandSender sender) {
-		// TODO Allow x, y, worldName parameters and so all CommandSender as sender
-		if (!(sender instanceof Player)) {
+	private boolean cmdChunkInfo(final CommandSender sender, final String[] args) {
+		if (args.length > 0) {
+			final List<ChunkCoord> coords = getChunks(sender, args);
+			if (coords == null) {
+				return true;
+			} else if (coords.isEmpty()) {
+				return false;
+			} else {
+				final String worldName = coords.get(0).getWorldName();
+				final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+				if (handler == null) {
+					plugin.sendMessage(sender, MessageId.theEndAgain_notInAnEndWorld);
+					return true;
+				} else {
+					final EndChunks chunks = handler.getChunks();
+					for (final ChunkCoord coord : coords) {
+						final EndChunk chunk = chunks.getChunk(worldName, coord.getX(), coord.getZ());
+						final Integer x = chunk.getX();
+						final Integer z = chunk.getZ();
+						final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkInfo : MessageId.theEndAgain_unprotectedChunkInfo;
+						plugin.sendMessage(sender, id, x.toString(), z.toString(), worldName);
+					}
+					return true;
+				}
+			}
+		} else if (!(sender instanceof Player)) {
 			plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			return true;
 		} else {
@@ -210,9 +236,33 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		}
 	}
 
-	private boolean cmdChunkProtect(final CommandSender sender) {
-		// TODO Allow x, y, worldName parameters and so all CommandSender as sender
-		if (!(sender instanceof Player)) {
+	private boolean cmdChunkProtect(final CommandSender sender, final String[] args) {
+		if (args.length > 0) {
+			final List<ChunkCoord> coords = getChunks(sender, args);
+			if (coords == null) {
+				return true;
+			} else if (coords.isEmpty()) {
+				return false;
+			} else {
+				final String worldName = coords.get(0).getWorldName();
+				final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+				if (handler == null) {
+					plugin.sendMessage(sender, MessageId.theEndAgain_notInAnEndWorld);
+					return true;
+				} else {
+					final EndChunks chunks = handler.getChunks();
+					for (final ChunkCoord coord : coords) {
+						final EndChunk chunk = chunks.getChunk(worldName, coord.getX(), coord.getZ());
+						final Integer x = chunk.getX();
+						final Integer z = chunk.getZ();
+						final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkProtect : MessageId.theEndAgain_unprotectedChunkProtect;
+						plugin.sendMessage(sender, id, x.toString(), z.toString(), worldName);
+						chunk.setProtected(true);
+					}
+					return true;
+				}
+			}
+		} else if (!(sender instanceof Player)) {
 			plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			return true;
 		} else {
@@ -235,9 +285,33 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		}
 	}
 
-	private boolean cmdChunkUnprotect(final CommandSender sender) {
-		// TODO Allow x, y, worldName parameters and so all CommandSender as sender
-		if (!(sender instanceof Player)) {
+	private boolean cmdChunkUnprotect(final CommandSender sender, final String[] args) {
+		if (args.length > 0) {
+			final List<ChunkCoord> coords = getChunks(sender, args);
+			if (coords == null) {
+				return true;
+			} else if (coords.isEmpty()) {
+				return false;
+			} else {
+				final String worldName = coords.get(0).getWorldName();
+				final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+				if (handler == null) {
+					plugin.sendMessage(sender, MessageId.theEndAgain_notInAnEndWorld);
+					return true;
+				} else {
+					final EndChunks chunks = handler.getChunks();
+					for (final ChunkCoord coord : coords) {
+						final EndChunk chunk = chunks.getChunk(worldName, coord.getX(), coord.getZ());
+						final Integer x = chunk.getX();
+						final Integer z = chunk.getZ();
+						final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkUnprotect : MessageId.theEndAgain_unprotectedChunkUnprotect;
+						plugin.sendMessage(sender, id, x.toString(), z.toString(), worldName);
+						chunk.setProtected(false);
+					}
+					return true;
+				}
+			}
+		} else if (!(sender instanceof Player)) {
 			plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			return true;
 		} else {
@@ -325,4 +399,47 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 
 		return result;
 	}
+
+	private List<ChunkCoord> getChunks(final CommandSender sender, final String[] args) {
+		final List<ChunkCoord> coords = new ArrayList<>();
+		if (args.length == 0) {
+			return coords;
+		}
+		final String[] parsedArgs = checkWorldArgument(sender, args); // worldName x z x z
+		if (parsedArgs == null) {
+			return null;
+		} else if (parsedArgs.length == 3) {
+			final String worldName = parsedArgs[0];
+			final int x, z;
+			try {
+				x = Integer.parseInt(parsedArgs[1]);
+				z = Integer.parseInt(parsedArgs[2]);
+				coords.add(new ChunkCoord(x, z, worldName));
+			} catch (final NumberFormatException ignored) {
+				// Don't add anything
+			}
+		} else if (parsedArgs.length == 5) {
+			final String worldName = parsedArgs[0];
+			final int x1, z1, x2, z2;
+			try {
+				x1 = Integer.parseInt(parsedArgs[1]);
+				z1 = Integer.parseInt(parsedArgs[2]);
+				x2 = Integer.parseInt(parsedArgs[3]);
+				z2 = Integer.parseInt(parsedArgs[4]);
+			} catch (final NumberFormatException e) {
+				return coords;
+			}
+			final int minX = Math.min(x1, x2);
+			final int maxX = Math.max(x1, x2);
+			final int minZ = Math.min(z1, z2);
+			final int maxZ = Math.max(z1, z2);
+			for (int x = minX; x <= maxX; x++) {
+				for (int z = minZ; z <= maxZ; z++) {
+					coords.add(new ChunkCoord(x, z, worldName));
+				}
+			}
+		}
+		return coords;
+	}
+
 }
