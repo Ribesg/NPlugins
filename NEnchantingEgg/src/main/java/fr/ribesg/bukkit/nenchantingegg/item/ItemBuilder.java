@@ -331,26 +331,19 @@ public class ItemBuilder {
 		ItemStack is;
 		while (it.hasNext()) {
 			is = it.next();
-			if (is.getType() == Material.MAGMA_CREAM) {
+			if (is.getType() == Material.MAGMA_CREAM && magmaCream < 64) {
 				magmaCream += is.getAmount();
 				it.remove();
-			} else if (is.getType() == Material.EYE_OF_ENDER) {
+			} else if (is.getType() == Material.EYE_OF_ENDER && eyeOfEnder < 64) {
 				eyeOfEnder += is.getAmount();
 				it.remove();
+			}
+			if (magmaCream == 64 && eyeOfEnder == 64) {
+				break;
 			}
 		}
 		plugin.debug("Found " + magmaCream + " Magma Cream(s)");
 		plugin.debug("Found " + eyeOfEnder + " Eye(s) of Ender");
-
-		// Reduce amounts to max allowed quantity
-		if (magmaCream > 64) {
-			plugin.debug("Fixing Magma Cream amount to 64");
-			magmaCream = 64;
-		}
-		if (eyeOfEnder > 64) {
-			plugin.debug("Fixing Eye of Ender amount to 64");
-			eyeOfEnder = 64;
-		}
 
 		// We do nothing if there's none
 		if (magmaCream != 0 || eyeOfEnder != 0) {
@@ -462,22 +455,19 @@ public class ItemBuilder {
 			if (is.getType() == Material.GHAST_TEAR) {
 				ghastTear += is.getAmount();
 				it.remove();
+				if (ghastTear == 16) {
+					break;
+				}
 			}
 		}
 		plugin.debug("Found " + ghastTear + " Ghast Tear(s)");
-
-		// Reduce amounts to max allowed quantity
-		if (ghastTear > 32) {
-			plugin.debug("Fixing Ghast Tear amount to 32");
-			ghastTear = 32;
-		}
 
 		if (ghastTear != 0) {
 
 			// Arboricide
 			if (plugin.getArboricide().canEnchant(this.mainItem)) {
 				plugin.debug("Try to apply Arboricide");
-				if (RANDOM.nextFloat() < ghastTear / 64f * plugin.getPluginConfig().getEnchantmentBoostMultiplier()) {
+				if (RANDOM.nextFloat() < (ghastTear / 16f) * (2f / 3f) * plugin.getPluginConfig().getEnchantmentBoostMultiplier()){
 					this.mainItem = plugin.getArboricide().enchant(this.mainItem);
 					plugin.debug("Applied Arboricide!");
 				}
