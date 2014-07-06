@@ -11,6 +11,8 @@ package fr.ribesg.bukkit.npermissions;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
 /**
@@ -60,14 +62,21 @@ public class NListener implements Listener {
 
 	/**
 	 * Update permissions for Player now that we now in which world he is.
-	 * XXX: Per-world permissions will be done later.
 	 *
 	 * @param event the PlayerJoinEvent
 	 */
-	/*
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoin(final PlayerJoinEvent event) {
 		this.plugin.getManager().registerPlayerForWorld(event.getPlayer());
 	}
-	*/
+
+	/**
+	 * Change permissions for Player when he changes world.
+	 *
+	 * @param event the PlayerChangedWorldEvent
+	 */
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerChangeWorld(final PlayerChangedWorldEvent event) {
+		this.plugin.getManager().handleWorldChange(event.getPlayer());
+	}
 }

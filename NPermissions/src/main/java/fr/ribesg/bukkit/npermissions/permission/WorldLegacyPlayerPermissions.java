@@ -25,4 +25,12 @@ public class WorldLegacyPlayerPermissions extends LegacyPlayerPermissions {
 		this.worldName = worldName;
 		this.parentPlayer = parentPlayer;
 	}
+
+	public String getWorldName() {
+		return worldName;
+	}
+
+	public LegacyPlayerPermissions getParentPlayer() {
+		return parentPlayer;
+	}
 }

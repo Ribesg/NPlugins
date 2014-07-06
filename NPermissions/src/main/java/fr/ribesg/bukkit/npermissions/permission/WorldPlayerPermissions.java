@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.UUID;
 
 public class WorldPlayerPermissions extends PlayerPermissions {
 
@@ -33,6 +34,18 @@ public class WorldPlayerPermissions extends PlayerPermissions {
 	}
 
 	/**
+	 * World Player Permissions constructor using a WorldLegacyPlayerPermissionsSet.
+	 *
+	 * @param playerUuid              the Universally Unique Identifier of the Player
+	 * @param legacyPlayerPermissions the Legacy Player's permissions
+	 */
+	public WorldPlayerPermissions(final UUID playerUuid, final PlayerPermissions worldPlayer, final WorldLegacyPlayerPermissions legacyPlayerPermissions) {
+		super(playerUuid, legacyPlayerPermissions);
+		this.worldName = legacyPlayerPermissions.getWorldName();
+		this.worldPlayer = worldPlayer;
+	}
+
+	/**
 	 * @see PermissionsSet#computePermissions(java.util.Map)
 	 */
 	@Override
@@ -45,14 +58,20 @@ public class WorldPlayerPermissions extends PlayerPermissions {
 		final Map<String, WorldGroupPermissions> worldGroupPermissionsMap = this.manager.getWorldGroups().get(this.worldName);
 
 		// 1) Main group
-		final WorldGroupPermissions mainGroupPermissionsSet = worldGroupPermissionsMap.get(this.mainGroup);
 		Set<PermissionsSet> set = new HashSet<>();
+		GroupPermissions mainGroupPermissionsSet = worldGroupPermissionsMap.get(this.mainGroup);
+		if (mainGroupPermissionsSet == null) {
+			mainGroupPermissionsSet = this.manager.getGroups().get(this.mainGroup);
+		}
 		set.add(mainGroupPermissionsSet);
 		prioritizedPermissions.put(mainGroupPermissionsSet.getPriority(), set);
 
 		// 2) Secondary groups
 		for (final String groupName : this.groups) {
-			final WorldGroupPermissions group = worldGroupPermissionsMap.get(groupName);
+			GroupPermissions group = worldGroupPermissionsMap.get(groupName);
+			if (group == null) {
+				group = this.manager.getGroups().get(groupName);
+			}
 			set = prioritizedPermissions.get(group.getPriority());
 			if (set == null) {
 				set = new HashSet<>();

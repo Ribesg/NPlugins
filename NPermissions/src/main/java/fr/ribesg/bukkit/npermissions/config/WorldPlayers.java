@@ -77,7 +77,11 @@ public class WorldPlayers extends AbstractConfig<NPermissions> {
 							plugin.error("Unknown group '" + mainGroup + "' found in " + this.worldName + "/players.yml as main group of legacy player '" + legacyKey + "', ignored player");
 							continue;
 						}
-						final LegacyPlayerPermissions legacyPlayerPermissions = this.manager.getLegacyPlayers().get(legacyKey);
+						final LegacyPlayerPermissions legacyPlayerPermissions = this.manager.getLegacyPlayers().get(legacyKey.toLowerCase());
+						if (legacyPlayerPermissions == null) {
+							plugin.error("Unknown legacy player '" + legacyKey + "' found in " + this.worldName + "/players.yml, ignored player. It has to be defined in the general Legacy Players list first.");
+							continue;
+						}
 						final WorldLegacyPlayerPermissions worldLegacyPlayer = new WorldLegacyPlayerPermissions(this.worldName, legacyPlayerPermissions, priority);
 
 						for (final String allowedPermission : allow) {

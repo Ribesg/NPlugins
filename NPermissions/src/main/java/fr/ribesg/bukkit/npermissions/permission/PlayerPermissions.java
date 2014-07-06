@@ -64,7 +64,8 @@ public class PlayerPermissions extends PermissionsSet {
 	/**
 	 * Player Permissions constructor using a LegacyPlayerPermissionsSet.
 	 *
-	 * @param playerUuid the Universally Unique Identifier of the Player
+	 * @param playerUuid              the Universally Unique Identifier of the Player
+	 * @param legacyPlayerPermissions the Legacy Player's permissions
 	 */
 	public PlayerPermissions(final UUID playerUuid, final LegacyPlayerPermissions legacyPlayerPermissions) {
 		super(legacyPlayerPermissions.manager, legacyPlayerPermissions.name, legacyPlayerPermissions.priority);

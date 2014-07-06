@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * This class manages Permissions.
@@ -173,14 +174,19 @@ public class PermissionsManager {
 	}
 
 	/**
-	 * TODO
+	 * Registers a Player on login.
 	 *
-	 * @param player
+	 * Handles Legacy Player -> Player conversion for both general and World
+	 * permissions (if any), attach general permissions to the player.
+	 *
+	 * @param player the Player
 	 */
 	public void registerPlayer(final Player player) {
 		boolean saveNeeded = false;
 		final UUID playerUuid = player.getUniqueId();
 		final String playerName = player.getName();
+
+		// General permissions
 		PlayerPermissions playerPermissionsSet = this.players.get(playerUuid);
 		if (playerPermissionsSet == null) {
 			final LegacyPlayerPermissions legacyPlayerPermissionsSet = this.legacyPlayers.remove(playerName.toLowerCase());
@@ -193,6 +199,26 @@ public class PermissionsManager {
 			this.players.put(playerUuid, playerPermissionsSet);
 			saveNeeded = true;
 		}
+
+		// World specific permissions
+		if (plugin.getPluginConfig().hasPerWorldPermissions()) {
+			for (final String worldName : this.worldPlayers.keySet()) {
+				WorldPlayerPermissions worldPlayerPerms = this.worldPlayers.get(worldName).get(playerUuid);
+				if (this.worldLegacyPlayers.containsKey(worldName) && this.worldLegacyPlayers.get(worldName).containsKey(playerName.toLowerCase())) {
+					final WorldLegacyPlayerPermissions worldLegacyPlayerPerms = this.worldLegacyPlayers.get(worldName).remove(playerName.toLowerCase());
+					if (worldPlayerPerms != null) {
+						plugin.error(Level.WARNING, "Legacy Player record already has normal Player record for world '" + worldName + "': " + playerName);
+					} else {
+						worldPlayerPerms = new WorldPlayerPermissions(playerUuid, playerPermissionsSet, worldLegacyPlayerPerms);
+						this.worldPlayers.get(worldName).put(playerUuid, worldPlayerPerms);
+						saveNeeded = true;
+					}
+				}
+			}
+		}
+
+		// Apply general permissions for now
+		// World specific permissions will be handled later, if needed
 		final Map<String, Boolean> permissions = playerPermissionsSet.getComputedPermissions();
 		final PermissionAttachment playerPermissions = player.addAttachment(plugin);
 		for (final Map.Entry<String, Boolean> e : permissions.entrySet()) {
@@ -202,54 +228,85 @@ public class PermissionsManager {
 		addPlayerByName(playerName, playerUuid);
 		if (saveNeeded) {
 			this.plugin.savePlayers();
+			this.plugin.saveWorldPlayers();
 		}
 	}
 
 	/**
-	 * TODO
+	 * Handles a Player after login.
 	 *
-	 * @param uuid
+	 * Handles World specific permissions, if any.
+	 *
+	 * @param player the Player
+	 */
+	public void registerPlayerForWorld(final Player player) {
+		handleWorldChange(player);
+	}
+
+	/**
+	 * Registers a Player again, often after a reload.
+	 *
+	 * @param uuid the Player's UUID
 	 */
 	public void reRegisterPlayer(final UUID uuid) {
 		PermissionAttachment playerAttachment = this.attachmentMap.remove(uuid);
+		final Player player = Bukkit.getPlayer(uuid);
+		final PlayerPermissions playerPermissions = this.players.get(uuid);
 		if (playerAttachment != null) {
-			final Player player = (Player) playerAttachment.getPermissible();
-			final PlayerPermissions playerPermissions = this.players.get(uuid);
+			player.removeAttachment(playerAttachment);
+		}
+		playerAttachment = player.addAttachment(plugin);
+		for (final Map.Entry<String, Boolean> e : playerPermissions.getComputedPermissions().entrySet()) {
+			playerAttachment.setPermission(e.getKey(), e.getValue());
+		}
+		this.attachmentMap.put(uuid, playerAttachment);
+	}
+
+	/**
+	 * Handles a Player's logout.
+	 *
+	 * Detach Player's permissions.
+	 *
+	 * @param player the Player
+	 */
+	public void unRegisterPlayer(final Player player) {
+		final PermissionAttachment playerAttachment = this.attachmentMap.remove(player.getUniqueId());
+		if (playerAttachment != null) {
 			playerAttachment.remove();
+		}
+	}
+
+	/**
+	 * Handles world change.
+	 *
+	 * If enabled, change the Player's permissions to the new world specific
+	 * permissions if any, or to the general permissions otherwise.
+	 *
+	 * @param player the Player
+	 */
+	public void handleWorldChange(final Player player) {
+		if (plugin.getPluginConfig().hasPerWorldPermissions()) {
+			final String worldName = player.getWorld().getName();
+			final UUID playerUuid = player.getUniqueId();
+			PermissionAttachment playerAttachment = this.attachmentMap.remove(playerUuid);
+			PlayerPermissions playerPermissions = this.worldPlayers.get(worldName).get(playerUuid);
+			if (playerPermissions == null) {
+				playerPermissions = this.players.get(playerUuid);
+			}
+			if (playerAttachment != null) {
+				player.removeAttachment(playerAttachment);
+			}
 			playerAttachment = player.addAttachment(plugin);
 			for (final Map.Entry<String, Boolean> e : playerPermissions.getComputedPermissions().entrySet()) {
 				playerAttachment.setPermission(e.getKey(), e.getValue());
 			}
-			this.attachmentMap.put(uuid, playerAttachment);
+			this.attachmentMap.put(playerUuid, playerAttachment);
 		}
 	}
 
 	/**
-	 * TODO
-	 *
-	 * @param player
-	 */
-	public void unRegisterPlayer(final Player player) {
-		this.attachmentMap.remove(player.getUniqueId());
-	}
-
-	/**
-	 * TODO
-	 *
-	 * @param player
-	 */
-	public void handleWorldChange(final Player player) {
-		final UUID playerUuid = player.getUniqueId();
-		final PermissionAttachment playerAttachment = this.attachmentMap.remove(playerUuid);
-		if (playerAttachment == null) {
-			throw new IllegalStateException("Wtf?" /* TODO */);
-		} else {
-			// TODO
-		}
-	}
-
-	/**
-	 * TODO
+	 * Unregisters and registers everybody again, nice just after reloading
+	 * configs from files.
 	 */
 	public void reload() {
 		for (final Player player : Bukkit.getOnlinePlayers()) {

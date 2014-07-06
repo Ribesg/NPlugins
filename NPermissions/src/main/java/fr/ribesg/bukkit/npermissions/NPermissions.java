@@ -107,7 +107,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 				try {
 					this.manager.getWorldGroups().put(world.getName(), new LinkedHashMap<String, WorldGroupPermissions>());
 					final WorldGroups worldGroupsConfig = new WorldGroups(this, world.getName());
-					worldGroupsConfig.loadConfig(world.getName() + File.pathSeparator + "groups.yml");
+					worldGroupsConfig.loadConfig(world.getName() + File.separator + "groups.yml");
 					this.worldGroupsConfigs.put(world.getName(), worldGroupsConfig);
 				} catch (final IOException | InvalidConfigurationException e) {
 					error("An error occured when NPermissions tried to load " + world.getName() + "/groups.yml", e);
@@ -119,7 +119,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 					this.manager.getWorldPlayers().put(world.getName(), new LinkedHashMap<UUID, WorldPlayerPermissions>());
 					this.manager.getWorldLegacyPlayers().put(world.getName(), new LinkedHashMap<String, WorldLegacyPlayerPermissions>());
 					final WorldPlayers worldPlayersConfig = new WorldPlayers(this, world.getName());
-					worldPlayersConfig.loadConfig(world.getName() + File.pathSeparator + "players.yml");
+					worldPlayersConfig.loadConfig(world.getName() + File.separator + "players.yml");
 					this.worldPlayersConfigs.put(world.getName(), worldPlayersConfig);
 				} catch (final IOException | InvalidConfigurationException e) {
 					error("An error occured when NPermissions tried to load players.yml", e);
@@ -171,7 +171,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 		if (this.pluginConfig.hasPerWorldPermissions()) {
 			for (final Map.Entry<String, WorldGroups> entry : this.worldGroupsConfigs.entrySet()) {
 				try {
-					entry.getValue().writeConfig(entry.getKey() + File.pathSeparator + "groups.yml");
+					entry.getValue().writeConfig(entry.getKey() + File.separator + "groups.yml");
 				} catch (final IOException e) {
 					error("An error occured when NPermissions tried to save " + entry.getKey() + "/groups.yml", e);
 				}
@@ -183,7 +183,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 		if (this.pluginConfig.hasPerWorldPermissions()) {
 			for (final Map.Entry<String, WorldPlayers> entry : this.worldPlayersConfigs.entrySet()) {
 				try {
-					entry.getValue().writeConfig(entry.getKey() + File.pathSeparator + "players.yml");
+					entry.getValue().writeConfig(entry.getKey() + File.separator + "players.yml");
 				} catch (final IOException e) {
 					error("An error occured when NPermissions tried to save " + entry.getKey() + "/players.yml", e);
 				}
