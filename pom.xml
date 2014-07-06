@@ -70,7 +70,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.7.9-R0.1</version>
+			<version>1.7.9-R0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mcstats.bukkit</groupId>
@@ -109,8 +109,8 @@
 				</plugin>
 				<plugin>
 					<groupId>com.google.code.maven-replacer-plugin</groupId>
-					<artifactId>maven-replacer-plugin</artifactId>
-					<version>1.4.1</version>
+					<artifactId>replacer</artifactId>
+					<version>1.5.1</version>
 					<executions>
 						<execution>
 							<phase>prepare-package</phase>
@@ -132,7 +132,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>truezip-maven-plugin</artifactId>
-					<version>1.1</version>
+					<version>1.2</version>
 					<executions>
 						<execution>
 							<id>remove-META-INF</id>
