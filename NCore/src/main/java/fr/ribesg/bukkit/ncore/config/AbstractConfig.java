@@ -93,7 +93,7 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 				handleValues(config);
 			} catch (final Throwable t) {
 				// Make a backup copy of the just-read file in case something REALLY wrong happened
-				Files.copy(path, Paths.get(path.getParent().toString(), fileName + '.' + DateUtil.formatNow() + ".bak"));
+				Files.copy(path, Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString(), fileName + '.' + DateUtil.formatNow() + ".bak"));
 				throw t;
 			}
 
