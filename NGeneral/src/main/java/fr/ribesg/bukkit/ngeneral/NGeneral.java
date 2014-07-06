@@ -35,7 +35,7 @@ public class NGeneral extends NPlugin implements GeneralNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.6.2";
+		return "0.6.6";
 	}
 
 	@Override
