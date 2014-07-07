@@ -11,7 +11,9 @@ package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
 import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
 import org.bukkit.Location;
@@ -28,8 +30,13 @@ public class PassFlagListener extends AbstractListener {
 	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
 		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
-			if (ext.getFromRegion() != null && ext.getFromRegion().getFlag(Flag.PASS) && !ext.getFromRegion().equals(ext.getToRegion())) {
-				event.setTo(new Location(event.getFrom().getWorld(), event.getFrom().getBlockX() + 0.5, event.getFrom().getBlockY() + 0.25, event.getFrom().getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
+			final GeneralRegion to = ext.getToRegion();
+			if (to != null && to.getFlag(Flag.PASS) && !ext.getFromRegions().contains(to)) {
+				Location loc = to.getLocationAttribute(Attribute.EXTERNAL_POINT);
+				if (loc == null) {
+					loc = event.getFrom();
+				}
+				event.setTo(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getBlockY() + 0.1, loc.getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
 				ext.setCustomCancelled(true);
 			}
 		}

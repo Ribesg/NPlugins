@@ -30,14 +30,13 @@ public class ClosedFlagListener extends AbstractListener {
 	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
 		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
-			final GeneralRegion r = ext.getFromRegion();
-			if (r != null && r.getFlag(Flag.CLOSED) && !r.equals(ext.getToRegion())) {
-				final Location loc = r.getLocationAttribute(Attribute.INTERNAL_POINT);
+			final GeneralRegion from = ext.getFromRegion();
+			if (from != null && from.getFlag(Flag.CLOSED) && !ext.getToRegions().contains(from)) {
+				Location loc = from.getLocationAttribute(Attribute.INTERNAL_POINT);
 				if (loc == null) {
-					event.setTo(new Location(event.getFrom().getWorld(), event.getFrom().getBlockX() + 0.5, event.getFrom().getBlockY() + 0.1, event.getFrom().getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
-				} else {
-					event.setTo(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getBlockY() + 0.1, loc.getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
+					loc = event.getFrom();
 				}
+				event.setTo(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getBlockY() + 0.1, loc.getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
 				ext.setCustomCancelled(true);
 			}
 		}
