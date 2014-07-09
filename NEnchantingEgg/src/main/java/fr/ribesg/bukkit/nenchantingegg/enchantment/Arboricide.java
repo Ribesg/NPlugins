@@ -37,8 +37,9 @@ public class Arboricide extends NEnchantment {
 	@Override
 	public boolean canEnchant(final ItemStack is) {
 		final Material type = is.getType();
-		return (type == Material.DIAMOND_AXE || type == Material.GOLD_AXE || type == Material.IRON_AXE ||
-		        type == Material.STONE_AXE || type == Material.WOOD_AXE) && is.getEnchantmentLevel(this.requiredEnchantment) == 10;
+		return !this.hasEnchantment(is) && is.getEnchantmentLevel(this.requiredEnchantment) == 10 &&
+		       (type == Material.DIAMOND_AXE || type == Material.GOLD_AXE || type == Material.IRON_AXE ||
+		        type == Material.STONE_AXE || type == Material.WOOD_AXE);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
