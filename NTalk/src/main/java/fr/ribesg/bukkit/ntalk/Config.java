@@ -254,25 +254,27 @@ public class Config extends AbstractConfig<NTalk> {
 		playerIds.addAll(getPlayerFormats().keySet());
 		playerIds.addAll(getPlayerNicknames().keySet());
 		for (final UUID playerId : playerIds) {
-			String prefix = "";
-			String nickName = "";
-			String suffix = "";
-			if (getPlayerFormats().containsKey(playerId)) {
-				prefix = getPlayerFormats().get(playerId).getPrefix();
-				suffix = getPlayerFormats().get(playerId).getSuffix();
-			}
-			if (getPlayerNicknames().containsKey(playerId)) {
-				nickName = getPlayerNicknames().get(playerId);
-			}
-			content.append("  " + playerId + ": # " + UuidDb.getName(playerId) + "\n");
-			if (prefix.length() > 0) {
-				content.append("    prefix: \"" + prefix + "\"\n");
-			}
-			if (nickName.length() > 0) {
-				content.append("    nick: \"" + nickName + "\"\n");
-			}
-			if (suffix.length() > 0) {
-				content.append("    suffix: \"" + suffix + "\"\n");
+			if (playerId != null) {
+				String prefix = "";
+				String nickName = "";
+				String suffix = "";
+				if (getPlayerFormats().containsKey(playerId)) {
+					prefix = getPlayerFormats().get(playerId).getPrefix();
+					suffix = getPlayerFormats().get(playerId).getSuffix();
+				}
+				if (getPlayerNicknames().containsKey(playerId)) {
+					nickName = getPlayerNicknames().get(playerId);
+				}
+				content.append("  " + playerId.toString() + ": # " + UuidDb.getName(playerId) + "\n");
+				if (prefix.length() > 0) {
+					content.append("    prefix: \"" + prefix + "\"\n");
+				}
+				if (nickName.length() > 0) {
+					content.append("    nick: \"" + nickName + "\"\n");
+				}
+				if (suffix.length() > 0) {
+					content.append("    suffix: \"" + suffix + "\"\n");
+				}
 			}
 		}
 		content.append("\n");
