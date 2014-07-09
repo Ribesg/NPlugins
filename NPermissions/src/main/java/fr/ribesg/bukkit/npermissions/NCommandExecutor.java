@@ -145,7 +145,7 @@ public class NCommandExecutor implements CommandExecutor {
 					return true;
 				} else {
 					for (final String id : input) {
-						UUID uuid = null;
+						UUID uuid;
 						try {
 							uuid = UUID.fromString(id);
 						} catch (final IllegalArgumentException e1) {
@@ -156,6 +156,8 @@ public class NCommandExecutor implements CommandExecutor {
 								} catch (final IllegalArgumentException e2) {
 									uuid = this.plugin.getManager().getByPlayerName(id);
 								}
+							} else {
+								uuid = this.plugin.getManager().getByPlayerName(id);
 							}
 						}
 						if (uuid != null) {
