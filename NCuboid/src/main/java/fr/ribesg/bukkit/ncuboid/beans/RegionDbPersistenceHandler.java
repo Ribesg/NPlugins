@@ -327,7 +327,7 @@ public class RegionDbPersistenceHandler {
 	private static void writePlayerRegion(final ConfigurationSection parent, final PlayerRegion region) {
 		final ConfigurationSection sec = parent.createSection(region.getRegionName());
 
-		sec.set(OWNER_ID, region.getOwnerId());
+		sec.set(OWNER_ID, region.getOwnerId().toString());
 		sec.set(WORLD_NAME, region.getWorldName());
 		sec.set(TOTAL_SIZE, region.getTotalSize());
 		sec.set(PRIORITY, region.getPriority());
