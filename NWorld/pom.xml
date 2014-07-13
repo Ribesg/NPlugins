@@ -8,13 +8,13 @@
 	<parent>
 		<groupId>fr.ribesg.bukkit.nplugins</groupId>
 		<artifactId>NPlugins</artifactId>
-		<version>0.6.8-SNAPSHOT</version>
+		<version>0.6.8</version>
 	</parent>
 
 	<groupId>fr.ribesg.bukkit.nworld</groupId>
 	<artifactId>NWorld</artifactId>
 	<name>NWorld</name>
-	<version>0.6.8-SNAPSHOT</version>
+	<version>0.6.8</version>
 
 	<url>https://github.com/Ribesg/NPlugins/tree/master/NWorld</url>
 
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>fr.ribesg.bukkit.ncore</groupId>
 			<artifactId>NCore</artifactId>
-			<version>0.6.8-SNAPSHOT</version>
+			<version>0.6.8</version>
 		</dependency>
 	</dependencies>
 
