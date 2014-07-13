@@ -34,6 +34,9 @@ public class TemporaryPunishmentCleanerTask extends BukkitRunnable {
 		}
 		for (final Punishment p : toBeRemoved) {
 			plugin.getPunishmentDb().remove(p);
+			if (p.getType() == PunishmentType.JAIL) {
+				plugin.getCuboidNode().unJail(UUID.fromString(p.getPunished()));
+			}
 			String punished = p.getPunished();
 			if (!IPValidator.isValidIp(punished)) {
 				punished = UuidDb.getName(UUID.fromString(p.getPunished()));
