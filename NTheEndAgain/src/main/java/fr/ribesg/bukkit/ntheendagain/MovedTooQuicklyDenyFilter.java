@@ -27,7 +27,7 @@ public class MovedTooQuicklyDenyFilter implements DenyFilter {
 
 	@Override
 	public boolean denies(final String message) {
-		if (message.contains(MOVED_TOO_QUICKLY)) {
+		if (message != null && message.contains(MOVED_TOO_QUICKLY)) {
 			final String beforeMovedTooQuickly = message.substring(0, message.indexOf(MOVED_TOO_QUICKLY));
 			final String[] beforeMovedTooQuicklySplit = beforeMovedTooQuickly.split(" ");
 			final String playerName = beforeMovedTooQuicklySplit[beforeMovedTooQuicklySplit.length - 1];

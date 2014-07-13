@@ -75,7 +75,7 @@ public class LoggedOutUserHandler implements Listener {
 
 	public void poisonLoggedOutPlayers() {
 		for (final UUID id : loggedOutPlayers.keySet()) {
-			lockPlayer(Bukkit.getPlayerExact(UuidDb.getName(id))); // TODO Use getPlayer(UUID)
+			lockPlayer(Bukkit.getPlayer(id));
 		}
 	}
 

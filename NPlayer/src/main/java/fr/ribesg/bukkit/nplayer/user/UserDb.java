@@ -79,6 +79,12 @@ public class UserDb {
 		}
 	}
 
+	public void updateIp(final User user, final String ip) {
+		final List<User> users = getByIp(ip);
+		users.add(user);
+		usersPerIp.put(ip, users);
+	}
+
 	public int size() {
 		return usersPerId.size();
 	}

@@ -218,6 +218,7 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				plugin.sendMessage(player, MessageId.player_welcomeBack);
 				user.setLoggedIn(true);
 				user.newIp(player.getAddress().getAddress().getHostAddress());
+				plugin.getUserDb().updateIp(user, player.getAddress().getAddress().getHostAddress());
 			} else {
 				plugin.debug("Incorrect password provided");
 				plugin.sendMessage(player, MessageId.player_wrongPassword);

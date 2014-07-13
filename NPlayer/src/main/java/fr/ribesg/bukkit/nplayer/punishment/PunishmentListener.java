@@ -64,10 +64,10 @@ public class PunishmentListener implements Listener {
 	public void onPlayerChat(final AsyncPlayerChatEvent event) {
 		plugin.entering(getClass(), "onPlayerChat");
 
-		final String playerName = event.getPlayer().getName();
+		final UUID id = event.getPlayer().getUniqueId();
 		final Punishment mute;
 		synchronized (this.punishmentDb) {
-			mute = punishmentDb.get(playerName, PunishmentType.MUTE);
+			mute = punishmentDb.get(id.toString(), PunishmentType.MUTE);
 		}
 		if (mute != null) {
 			if (mute.isPermanent()) {
@@ -87,7 +87,7 @@ public class PunishmentListener implements Listener {
 	public void onPlayerKick(final PlayerKickEvent event) {
 		plugin.entering(getClass(), "onPlayerKick");
 
-		String msg = punishmentDb.getLeaveMessages().remove(event.getPlayer().getName());
+		String msg = punishmentDb.getLeaveMessages().remove(event.getPlayer().getUniqueId());
 		if (msg != null) {
 			if (plugin.isDebugEnabled()) {
 				plugin.debug("Message not null: '" + msg + "'");

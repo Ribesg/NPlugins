@@ -76,9 +76,9 @@ public class User {
 	public void setLoggedIn(final boolean loggedIn) {
 		this.loggedIn = loggedIn;
 		if (loggedIn) {
-			handler.notifyLogin(Bukkit.getPlayerExact(UuidDb.getName(getUserId()))); // TODO Change to getPlayer(UUID)
+			handler.notifyLogin(Bukkit.getPlayer(getUserId()));
 		} else {
-			handler.notifyLogout(Bukkit.getPlayerExact(UuidDb.getName(getUserId()))); // TODO Change to getPlayer(UUID)
+			handler.notifyLogout(Bukkit.getPlayer(getUserId()));
 		}
 	}
 
