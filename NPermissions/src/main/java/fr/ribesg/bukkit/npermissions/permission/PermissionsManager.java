@@ -186,7 +186,7 @@ public class PermissionsManager {
 		final UUID playerUuid = player.getUniqueId();
 		final String playerName = player.getName();
 
-		// General permissions
+		// Get/Generate/Update General permissions
 		PlayerPermissions playerPermissionsSet = this.players.get(playerUuid);
 		if (playerPermissionsSet == null) {
 			final LegacyPlayerPermissions legacyPlayerPermissionsSet = this.legacyPlayers.remove(playerName.toLowerCase());
@@ -200,7 +200,7 @@ public class PermissionsManager {
 			saveNeeded = true;
 		}
 
-		// World specific permissions
+		// Get/Generate/Update World specific permissions
 		if (plugin.getPluginConfig().hasPerWorldPermissions()) {
 			for (final String worldName : this.worldPlayers.keySet()) {
 				WorldPlayerPermissions worldPlayerPerms = this.worldPlayers.get(worldName).get(playerUuid);
@@ -217,8 +217,7 @@ public class PermissionsManager {
 			}
 		}
 
-		// Apply general permissions for now
-		// World specific permissions will be handled later, if needed
+		// Apply general permissions for now, world specific permissions will be handled later, if needed
 		final Map<String, Boolean> permissions = playerPermissionsSet.getComputedPermissions();
 		final PermissionAttachment playerPermissions = player.addAttachment(plugin);
 		for (final Map.Entry<String, Boolean> e : permissions.entrySet()) {
@@ -249,13 +248,24 @@ public class PermissionsManager {
 	 * @param uuid the Player's UUID
 	 */
 	public void reRegisterPlayer(final UUID uuid) {
-		PermissionAttachment playerAttachment = this.attachmentMap.remove(uuid);
 		final Player player = Bukkit.getPlayer(uuid);
-		final PlayerPermissions playerPermissions = this.players.get(uuid);
-		if (playerAttachment != null) {
-			player.removeAttachment(playerAttachment);
+
+		// Remove current permissions
+		unRegisterPlayer(player);
+
+		// Get new permissions
+		PlayerPermissions playerPermissions;
+		if (this.plugin.getPluginConfig().hasPerWorldPermissions()) {
+			playerPermissions = this.worldPlayers.get(player.getWorld().getName()).get(uuid);
+			if (playerPermissions == null) {
+				playerPermissions = this.players.get(uuid);
+			}
+		} else {
+			playerPermissions = this.players.get(uuid);
 		}
-		playerAttachment = player.addAttachment(plugin);
+
+		// Apply new permissions
+		final PermissionAttachment playerAttachment = player.addAttachment(plugin);
 		for (final Map.Entry<String, Boolean> e : playerPermissions.getComputedPermissions().entrySet()) {
 			playerAttachment.setPermission(e.getKey(), e.getValue());
 		}
@@ -294,7 +304,7 @@ public class PermissionsManager {
 				playerPermissions = this.players.get(playerUuid);
 			}
 			if (playerAttachment != null) {
-				player.removeAttachment(playerAttachment);
+				playerAttachment.remove();
 			}
 			playerAttachment = player.addAttachment(plugin);
 			for (final Map.Entry<String, Boolean> e : playerPermissions.getComputedPermissions().entrySet()) {
