@@ -72,6 +72,10 @@ public class PlayerListener implements Listener {
 					@Override
 					public void run() {
 						plugin.entering(getClass(), "Task's run");
+						if (block.getType() != Material.SKULL) {
+							plugin.exiting(getClass(), "Task's run", "Block is no longer a skull!");
+							return;
+						}
 						final Skull skullState = (Skull) block.getState();
 						if (skullState.getSkullType() == SkullType.WITHER) {
 							plugin.debug("Placing a Wither Skull");
