@@ -79,7 +79,7 @@ public class InvisibleFlagListener extends AbstractListener {
 	private void hideToAll(final Player p) {
 		for (final Player other : Bukkit.getOnlinePlayers()) {
 			if (!other.equals(p) && !Perms.hasSeeInvisibleCuboid(other)) {
-				other.showPlayer(p);
+				other.hidePlayer(p);
 			}
 		}
 	}
