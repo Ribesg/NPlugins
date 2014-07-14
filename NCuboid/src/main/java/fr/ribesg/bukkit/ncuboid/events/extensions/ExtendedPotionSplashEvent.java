@@ -9,18 +9,14 @@
 
 package fr.ribesg.bukkit.ncuboid.events.extensions;
 
-import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
@@ -43,11 +39,10 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
 		return negativeEffects;
 	}
 
-	private final Map<LivingEntity, GeneralRegion> entityRegionsMap;
 	private boolean hasNegativeEffect = false;
 
 	public ExtendedPotionSplashEvent(final RegionDb db, final PotionSplashEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		final ThrownPotion potion = event.getPotion();
 		for (final PotionEffect e : potion.getEffects()) {
 			if (getNegativeEffects().contains(e.getType())) {
@@ -55,21 +50,10 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
 				break;
 			}
 		}
-		entityRegionsMap = new HashMap<>();
-		for (final LivingEntity e : event.getAffectedEntities()) {
-			final GeneralRegion cuboid = db.getPriorByLocation(e.getLocation());
-			if (cuboid != null) {
-				entityRegionsMap.put(e, cuboid);
-			}
-		}
-
+		getPlugin().info("" + hasNegativeEffect);
 	}
 
 	public boolean hasNegativeEffect() {
 		return hasNegativeEffect;
-	}
-
-	public Map<LivingEntity, GeneralRegion> getEntityRegionsMap() {
-		return entityRegionsMap;
 	}
 }

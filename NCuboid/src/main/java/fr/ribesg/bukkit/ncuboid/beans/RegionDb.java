@@ -45,6 +45,10 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		plugin = instance;
 	}
 
+	public NCuboid getPlugin() {
+		return plugin;
+	}
+
 	// #################### //
 	// ## ADDING REGIONS ## //
 	// #################### //

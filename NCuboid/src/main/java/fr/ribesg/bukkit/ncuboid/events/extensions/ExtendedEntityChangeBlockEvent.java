@@ -19,7 +19,7 @@ public class ExtendedEntityChangeBlockEvent extends AbstractExtendedEvent {
 	private final GeneralRegion blockRegion;
 
 	public ExtendedEntityChangeBlockEvent(final RegionDb db, final EntityChangeBlockEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		blockRegion = db.getPriorByLocation(event.getBlock().getLocation());
 	}
 

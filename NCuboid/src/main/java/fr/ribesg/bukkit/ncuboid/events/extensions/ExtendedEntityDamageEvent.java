@@ -31,7 +31,7 @@ public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 	private Entity shooter;
 
 	public ExtendedEntityDamageEvent(final RegionDb db, final EntityDamageEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		entityRegions = db.getAllByLocation(event.getEntity().getLocation());
 		entityRegion = db.getPrior(entityRegions);
 		if (event instanceof EntityDamageByEntityEvent) {

@@ -25,7 +25,7 @@ public class ExtendedPlayerTeleportEvent extends AbstractExtendedEvent {
 	private final SortedSet<GeneralRegion> toRegions;
 
 	public ExtendedPlayerTeleportEvent(final RegionDb db, final PlayerTeleportEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		fromRegions = db.getAllByLocation(event.getFrom());
 		fromRegion = db.getPrior(fromRegions);
 		toRegions = db.getAllByLocation(event.getTo());

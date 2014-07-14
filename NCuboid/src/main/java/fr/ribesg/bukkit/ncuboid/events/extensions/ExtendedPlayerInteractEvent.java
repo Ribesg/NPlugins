@@ -26,7 +26,7 @@ public class ExtendedPlayerInteractEvent extends AbstractExtendedEvent {
 
 	// Called only if event.hasBlock()
 	public ExtendedPlayerInteractEvent(final RegionDb db, final PlayerInteractEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		if (event.hasBlock()) {
 			clickedRegions = db.getAllByLocation(event.getClickedBlock().getLocation());
 			clickedRegion = db.getPrior(clickedRegions);

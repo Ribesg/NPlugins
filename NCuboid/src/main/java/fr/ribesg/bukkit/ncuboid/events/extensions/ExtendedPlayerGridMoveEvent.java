@@ -26,7 +26,7 @@ public class ExtendedPlayerGridMoveEvent extends AbstractExtendedEvent {
 	private       boolean                  customCancelled;
 
 	public ExtendedPlayerGridMoveEvent(final RegionDb db, final PlayerGridMoveEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		fromRegions = db.getAllByLocation(event.getFrom());
 		fromRegion = db.getPrior(fromRegions);
 		toRegions = db.getAllByLocation(event.getTo());

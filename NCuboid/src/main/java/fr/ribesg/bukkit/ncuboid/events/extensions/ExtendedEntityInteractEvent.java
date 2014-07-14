@@ -23,7 +23,7 @@ public class ExtendedEntityInteractEvent extends AbstractExtendedEvent {
 	private final SortedSet<GeneralRegion> regions;
 
 	public ExtendedEntityInteractEvent(final RegionDb db, final EntityInteractEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		regions = db.getAllByLocation(event.getBlock().getLocation());
 		region = db.getPrior(regions);
 	}

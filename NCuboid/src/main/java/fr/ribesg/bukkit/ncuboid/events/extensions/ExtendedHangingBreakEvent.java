@@ -23,7 +23,7 @@ public class ExtendedHangingBreakEvent extends AbstractExtendedEvent {
 	private final SortedSet<GeneralRegion> regions;
 
 	public ExtendedHangingBreakEvent(final RegionDb db, final HangingBreakEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		regions = db.getAllByLocation(event.getEntity().getLocation());
 		region = db.getPrior(regions);
 	}

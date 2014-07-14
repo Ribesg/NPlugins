@@ -23,7 +23,7 @@ public class ExtendedPlayerJoinEvent extends AbstractExtendedEvent {
 	private final SortedSet<GeneralRegion> regions;
 
 	public ExtendedPlayerJoinEvent(final RegionDb db, final PlayerJoinEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		regions = db.getAllByLocation(event.getPlayer().getLocation());
 		region = db.getPrior(regions);
 	}

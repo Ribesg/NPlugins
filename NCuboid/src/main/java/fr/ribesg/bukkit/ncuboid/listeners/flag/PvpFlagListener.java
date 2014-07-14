@@ -52,9 +52,9 @@ public class PvpFlagListener extends AbstractListener {
 		if (event.getPotion().getShooter() instanceof Player) {
 			if (ext.hasNegativeEffect()) {
 				GeneralRegion region;
-				for (final LivingEntity e : ext.getEntityRegionsMap().keySet()) {
+				for (final LivingEntity e : event.getAffectedEntities()) {
 					if (e.getType() == EntityType.PLAYER) {
-						region = ext.getEntityRegionsMap().get(e);
+						region = getPlugin().getDb().getPriorByLocation(e.getLocation());
 						if (region != null && region.getFlag(Flag.PVP)) {
 							event.setCancelled(true);
 						}

@@ -85,13 +85,13 @@ public class MobFlagListener extends AbstractListener {
 	public void onPotionSplash(final ExtendedPotionSplashEvent ext) {
 		final PotionSplashEvent event = (PotionSplashEvent) ext.getBaseEvent();
 		final ProjectileSource shooter = event.getPotion().getShooter();
-		if (shooter instanceof Entity && getMobs().contains(((Entity) shooter).getType())) {
+		if (shooter instanceof LivingEntity && getMobs().contains(((Entity) shooter).getType())) {
 			if (ext.hasNegativeEffect()) {
 				GeneralRegion region;
-				for (final LivingEntity e : ext.getEntityRegionsMap().keySet()) {
+				for (final LivingEntity e : event.getAffectedEntities()) {
 					if (e.getType() == EntityType.PLAYER) {
-						region = ext.getEntityRegionsMap().get(e);
-						if (region != null && region.getFlag(Flag.PVP)) {
+						region = getPlugin().getDb().getPriorByLocation(e.getLocation());
+						if (region != null && region.getFlag(Flag.MOB)) {
 							event.setCancelled(true);
 						}
 					}

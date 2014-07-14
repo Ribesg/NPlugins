@@ -19,7 +19,7 @@ public class ExtendedPlayerDropItemEvent extends AbstractExtendedEvent {
 	private final GeneralRegion region;
 
 	public ExtendedPlayerDropItemEvent(final RegionDb db, final PlayerDropItemEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		region = db.getPriorByLocation(event.getPlayer().getLocation());
 	}
 

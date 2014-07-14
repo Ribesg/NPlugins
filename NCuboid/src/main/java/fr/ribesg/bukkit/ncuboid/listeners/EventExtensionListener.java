@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -103,5 +104,11 @@ public class EventExtensionListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onEntityChangeBlock(final EntityChangeBlockEvent event) {
 		Bukkit.getPluginManager().callEvent(new ExtendedEntityChangeBlockEvent(getPlugin().getDb(), event));
+	}
+
+	// PotionSplashEvent
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onPotionSplash(final PotionSplashEvent event) {
+		Bukkit.getPluginManager().callEvent(new ExtendedPotionSplashEvent(getPlugin().getDb(), event));
 	}
 }

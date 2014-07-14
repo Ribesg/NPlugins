@@ -24,7 +24,7 @@ public class ExtendedEntityExplodeEvent extends AbstractExtendedEvent {
 	private final Map<Block, GeneralRegion> blockRegionsMap;
 
 	public ExtendedEntityExplodeEvent(final RegionDb db, final EntityExplodeEvent event) {
-		super(event);
+		super(db.getPlugin(), event);
 		blockRegionsMap = new HashMap<>();
 		for (final Block b : event.blockList()) {
 			final GeneralRegion cuboid = db.getPriorByLocation(b.getLocation());
