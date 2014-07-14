@@ -80,6 +80,11 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 
 				// Set value
 				c.setFlag(f, value);
+
+				if (f == Flag.HIDDEN) {
+					getPlugin().getDynmapBridge().handle(c);
+				}
+
 				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagSet, f.name(), Boolean.toString(value), c.getRegionName());
 				return true;
 			}

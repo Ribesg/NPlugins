@@ -41,6 +41,7 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "regionDB.yml");
 					} else {
 						getPlugin().setDb(db);
+						getPlugin().getDynmapBridge().reinitialize(db);
 						getPlugin().sendMessage(sender, MessageId.cuboid_cmdReloadRegions);
 					}
 					return true;
