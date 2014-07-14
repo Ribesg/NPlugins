@@ -365,7 +365,7 @@ public class Updater {
 	 */
 	private boolean isUpToDate(final String pluginName, final String currentVersion) throws IOException {
 		final FileDescription latestFile = getLatestVersion(pluginName);
-		return latestFile == null || latestFile.getVersion().compareTo(currentVersion) <= 0;
+		return latestFile == null || VersionUtil.compare(currentVersion, latestFile.getVersion()) >= 0;
 	}
 
 	/**
