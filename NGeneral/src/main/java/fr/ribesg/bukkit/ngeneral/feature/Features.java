@@ -46,7 +46,9 @@ public class Features {
 
 	public void terminate() {
 		for (final Feature feature : this.features.values()) {
-			feature.terminate();
+			if (feature.isEnabled()) {
+				feature.terminate();
+			}
 		}
 	}
 
