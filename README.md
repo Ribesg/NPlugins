@@ -21,7 +21,7 @@ Interacting with the NPlugins suite:
 	<dependency>
 		<groupId>fr.ribesg.bukkit.ncore</groupId>
 		<artifactId>NCore</artifactId>
-		<version>0.6.2</version>
+		<version>0.6.8</version>
 	</dependency>
 </dependencies>
 ...
