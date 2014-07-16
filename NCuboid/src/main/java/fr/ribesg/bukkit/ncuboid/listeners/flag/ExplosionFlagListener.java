@@ -10,8 +10,8 @@
 package fr.ribesg.bukkit.ncuboid.listeners.flag;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.Attribute;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityChangeBlockEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
@@ -50,9 +50,15 @@ public class ExplosionFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityDamage(final ExtendedEntityDamageEvent ext) {
 		final EntityDamageEvent event = (EntityDamageEvent) ext.getBaseEvent();
-		if (event.getEntityType() == EntityType.DROPPED_ITEM && event.getCause() == DamageCause.ENTITY_EXPLOSION) {
-			if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.EXPLOSION_ITEM) || ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.EXPLOSION_ITEM)) {
-				event.setCancelled(true);
+		if (event.getCause() == DamageCause.ENTITY_EXPLOSION) {
+			if (event.getEntityType() == EntityType.DROPPED_ITEM) {
+				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.EXPLOSION_ITEM) || ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.EXPLOSION_ITEM)) {
+					event.setCancelled(true);
+				}
+			} else if (event.getEntityType() == EntityType.PLAYER) {
+				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.EXPLOSION_PLAYER) || ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.EXPLOSION_PLAYER)) {
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
