@@ -27,7 +27,7 @@ Interacting with the NPlugins suite:
 </dependencies>
 ...
 ```
-Then you can just listen to available events, or if you want to use some Node API, wait ~5 ticks then get it from the Core.
+Then you can just listen to [available events](http://wiki.ribesg.fr/NPlugins/Developer/Available_Events), or if you want to use some Node API, wait ~5 ticks then get it from the Core.
 
 Snapshots are available too, in the following repository:
 ```xml
