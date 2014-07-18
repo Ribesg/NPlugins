@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Ribesg/NPlugins.svg?branch=master)](https://travis-ci.org/Ribesg/NPlugins)
 NPlugins
 =====
 Informations about the project:  
