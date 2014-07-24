@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
+
 import fr.ribesg.bukkit.ncore.event.PlayerJoinedEvent;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
@@ -17,6 +18,7 @@ import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 
 public class WelcomeListener implements Listener {
 
@@ -52,6 +54,17 @@ public class WelcomeListener implements Listener {
 		final String version = server.getVersion();
 		final String viewDistance = Integer.toString(server.getViewDistance());
 
-		plugin.sendMessage(event.getPlayer(), MessageId.general_welcome, bukkitVersion, ip, maxPlayers, motd, name, onlineMode, onlinePlayersCount, port, serverId, serverName, version, viewDistance);
+		final StringBuilder pluginList = new StringBuilder();
+		final Plugin[] plugins = server.getPluginManager().getPlugins();
+		final String pluginCount = Integer.toString(plugins.length);
+
+		for (int i = 1; i <= plugins.length; i++) {
+			pluginList.append(plugins[i - 1].getName());
+			if (i < plugins.length) {
+				pluginList.append(", ");
+			}
+		}
+
+		plugin.sendMessage(event.getPlayer(), MessageId.general_welcome, bukkitVersion, ip, maxPlayers, motd, name, onlineMode, onlinePlayersCount, port, serverId, serverName, version, viewDistance, pluginList.toString(), pluginCount);
 	}
 }

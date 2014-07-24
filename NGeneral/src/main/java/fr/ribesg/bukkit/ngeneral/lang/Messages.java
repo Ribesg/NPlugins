@@ -57,6 +57,8 @@ public class Messages extends AbstractMessages {
 		variablesList.add("%serverName%");
 		variablesList.add("%version%");
 		variablesList.add("%viewDistance%");
+		variablesList.add("%plugins%");
+		variablesList.add("%pluginCount%");
 
 		final StringBuilder textBuilder = new StringBuilder("&aWelcome to this Server!" + Messages.LINE_SEPARATOR);
 		textBuilder.append("&7This example welcome message will show you all the available variables." + Messages.LINE_SEPARATOR);
