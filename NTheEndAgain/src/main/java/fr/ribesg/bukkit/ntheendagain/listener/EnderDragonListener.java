@@ -183,7 +183,7 @@ public class EnderDragonListener implements Listener {
 						if (percentage < THRESHOLD) {
 							break;
 						} else {
-							plugin.broadcastMessage(playersKilledLine, playerName, FORMAT.format(percentage));
+							plugin.broadcastMessage(playersKilledLine, playerName, FORMAT.format(percentage * 100f));
 						}
 					}
 				}

@@ -72,10 +72,10 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.theEndAgain_droppedDrop, "&aYour inventory is full, dropped something !", true));
 		newMessages.add(new Message(MessageId.theEndAgain_playerKilledTheDragon, "&a%playerName% killed the EnderDragon!", true, "%playerName%"));
 		newMessages.add(new Message(MessageId.theEndAgain_playersKilledTheDragon, "&aThe Ender Dragon is dead! Thanks to:", true));
-		newMessages.add(new Message(MessageId.theEndAgain_playersKilledTheDragon_line, "- &a%playerName% (%percentage%)", true, "%playerName%", "%percentage%"));
+		newMessages.add(new Message(MessageId.theEndAgain_playersKilledTheDragon_line, "- &a%playerName% (%percentage%%)", true, "%playerName%", "%percentage%"));
 		newMessages.add(new Message(MessageId.theEndAgain_playerKilledADragon, "&a%playerName% killed an EnderDragon!", true, "%playerName%"));
 		newMessages.add(new Message(MessageId.theEndAgain_playersKilledADragon, "&aAn Ender Dragon is dead! Thanks to:", true));
-		newMessages.add(new Message(MessageId.theEndAgain_playersKilledADragon_line, "- &a%playerName% (%percentage%)", true, "%playerName%", "%percentage%"));
+		newMessages.add(new Message(MessageId.theEndAgain_playersKilledADragon_line, "- &a%playerName% (%percentage%%)", true, "%playerName%", "%percentage%"));
 
 		return newMessages;
 	}
