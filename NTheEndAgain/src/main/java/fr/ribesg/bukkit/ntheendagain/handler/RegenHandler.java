@@ -217,6 +217,7 @@ public class RegenHandler {
 				for (final Player p : endWorld.getPlayers()) {
 					p.kickPlayer(message);
 				}
+				break;
 			case 1:
 				plugin.debug("Teleporting players...");
 				final World world = Bukkit.getWorlds().get(0);
@@ -231,9 +232,12 @@ public class RegenHandler {
 					p.teleport(spawnLoc);
 					plugin.sendMessage(p, MessageId.theEndAgain_worldRegenerating);
 				}
-			default:
-				// Not possible.
 				break;
+			case 2:
+				// Do nothing
+				break;
+			default:
+				throw new IllegalStateException("Invalid configuration value regenAction found at Runtime, please report this!");
 		}
 
 		plugin.exiting(getClass(), "kickPlayers");

@@ -247,7 +247,11 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		}
 
 		setRegenAction(config.getInt("regenAction", DEFAULT_regenAction));
-		if (!match(getRegenAction(), 0, 1)) {
+		if (!match(getRegenAction(), 0, 2)) {
+			wrongValue(fileName, "regenAction", getRegenAction(), DEFAULT_regenAction);
+			setRegenAction(DEFAULT_regenAction);
+		} else if (getRegenAction() == 2 && getRegenMethod() != 2) {
+			plugin.getLogger().warning("Cannot use regenAction=2 without regenMethod=2!");
 			wrongValue(fileName, "regenAction", getRegenAction(), DEFAULT_regenAction);
 			setRegenAction(DEFAULT_regenAction);
 		}
@@ -529,6 +533,8 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#          WARNING: Mass rejoin after mass kick in the End could cause lag if regenMethod=1\n");
 		content.append("#\n");
 		content.append("#       1: Teleport them to the spawn point of the Main (= first) world.\n");
+		content.append("#\n");
+		content.append("#       2: Do nothing. Can only be used with regenMethod=2\n");
 		content.append("#\n");
 		content.append("regenAction: " + getRegenAction() + "\n\n");
 
