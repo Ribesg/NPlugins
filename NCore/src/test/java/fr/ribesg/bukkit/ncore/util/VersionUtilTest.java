@@ -39,13 +39,16 @@ public class VersionUtilTest {
 		Assert.assertEquals("v0.4.2", VersionUtil.getVersion(releaseString1));
 		Assert.assertEquals("v0.4.2", VersionUtil.getVersion(releaseString2));
 
-		Assert.assertEquals(A_LOWER_THAN_B, VersionUtil.compare("v0.4.2", "v1.4.2"));
+		Assert.assertEquals(A_LOWER_THAN_B, VersionUtil.compare("v0.4.2", "1.4.2"));
 		Assert.assertEquals(A_LOWER_THAN_B, VersionUtil.compare("v0.4.2", "v0.5.2"));
-		Assert.assertEquals(A_LOWER_THAN_B, VersionUtil.compare("v0.4.2", "v0.4.3"));
+		Assert.assertEquals(A_LOWER_THAN_B, VersionUtil.compare("0.4.2", "0.4.3"));
+		Assert.assertEquals(A_LOWER_THAN_B, VersionUtil.compare("v0.4.2", "v0.4.3-SNAPSHOT"));
 		Assert.assertEquals(A_EQUALS_B, VersionUtil.compare("v0.4.2", "v0.4.2"));
-		Assert.assertEquals(A_GREATER_THAN_B, VersionUtil.compare("v1.4.2", "v0.4.2"));
+		Assert.assertEquals(A_EQUALS_B, VersionUtil.compare("0.4.2", "v0.4.2-SNAPSHOT"));
+		Assert.assertEquals(A_GREATER_THAN_B, VersionUtil.compare("v1.4.2", "0.4.2"));
 		Assert.assertEquals(A_GREATER_THAN_B, VersionUtil.compare("v0.5.2", "v0.4.2"));
 		Assert.assertEquals(A_GREATER_THAN_B, VersionUtil.compare("v0.4.3", "v0.4.2"));
+		Assert.assertEquals(A_GREATER_THAN_B, VersionUtil.compare("0.4.3", "v0.4.2-SNAPSHOT"));
 
 		Assert.assertEquals(A_LOWER_THAN_B, VersionUtil.compare("v0.0.9", "v0.0.10"));
 

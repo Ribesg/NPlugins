@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
  */
 public class VersionUtil {
 
-	private static final Pattern VERSION_REGEX       = Pattern.compile("^(v\\d+\\.\\d+\\.\\d+).*$");
-	private static final Pattern VERSION_PARTS_REGEX = Pattern.compile("^v(\\d+)\\.(\\d+)\\.(\\d+).*$");
+	private static final Pattern VERSION_REGEX       = Pattern.compile("^(v?\\d+\\.\\d+\\.\\d+).*$");
+	private static final Pattern VERSION_PARTS_REGEX = Pattern.compile("^v?(\\d+)\\.(\\d+)\\.(\\d+).*$");
 
 	/**
 	 * Check if a version represents a Snapshot version or not.
