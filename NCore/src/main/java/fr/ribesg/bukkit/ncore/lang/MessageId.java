@@ -128,6 +128,13 @@ public enum MessageId {
 	theEndAgain_receivedDrop,
 	theEndAgain_droppedDrop,
 
+	theEndAgain_playerKilledADragon,
+	theEndAgain_playersKilledADragon,
+	theEndAgain_playersKilledADragon_line,
+	theEndAgain_playerKilledTheDragon,
+	theEndAgain_playersKilledTheDragon,
+	theEndAgain_playersKilledTheDragon_line,
+
 	// #################### //
 	// ## NWorld related ## //
 	// #################### //

@@ -35,11 +35,15 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -53,8 +57,9 @@ public class EnderDragonListener implements Listener {
 	 * Players that did less than threshold % of total damages
 	 * have no chance to receive the Egg with custom handling
 	 */
-	private static final float  THRESHOLD = 0.15f;
-	private static final Random RANDOM    = new Random();
+	private static final float         THRESHOLD = 0.15f;
+	private static final Random        RANDOM    = new Random();
+	private static final DecimalFormat FORMAT    = new DecimalFormat("#0.00");
 
 	private final NTheEndAgain plugin;
 
@@ -74,39 +79,50 @@ public class EnderDragonListener implements Listener {
 			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
 			if (handler != null) {
 				final Config config = handler.getConfig();
+
+				/* Compute damages */
+
+				final HashMap<String, Double> dmgMap;
+				try {
+					dmgMap = new HashMap<>(handler.getDragons().get(event.getEntity().getUniqueId()));
+				} catch (final NullPointerException e) {
+					return;
+				}
+
+				// We ignore offline players
+				final Iterator<Entry<String, Double>> it = dmgMap.entrySet().iterator();
+				while (it.hasNext()) {
+					Entry<String, Double> e = it.next();
+					if (plugin.getServer().getPlayerExact(e.getKey()) == null) {
+						it.remove();
+					}
+				}
+
+				// Get total damages done to the ED by Online players
+				double totalDamages = 0;
+				for (final double v : dmgMap.values()) {
+					totalDamages += v;
+				}
+
+				// Create map of damages percentages
+				final Map<String, Float> dmgPercentageMap = new HashMap<>();
+				for (final Entry<String, Double> entry : dmgMap.entrySet()) {
+					dmgPercentageMap.put(entry.getKey(), (float) (entry.getValue() / totalDamages));
+				}
+
+				/* XP Handling */
+
 				switch (config.getEdExpHandling()) {
 					case 0:
 						event.setDroppedExp(config.getEdExpReward());
 						break;
 					case 1:
 						event.setDroppedExp(0);
-						final HashMap<String, Double> dmgMap;
-						try {
-							dmgMap = new HashMap<>(handler.getDragons().get(event.getEntity().getUniqueId()));
-						} catch (final NullPointerException e) {
-							return;
-						}
-
-						// We ignore offline players
-						final Iterator<Entry<String, Double>> it = dmgMap.entrySet().iterator();
-						Entry<String, Double> e;
-						while (it.hasNext()) {
-							e = it.next();
-							if (plugin.getServer().getPlayerExact(e.getKey()) == null) {
-								it.remove();
-							}
-						}
-
-						// Get total damages done to the ED by Online players
-						double totalDamages = 0;
-						for (final double v : dmgMap.values()) {
-							totalDamages += v;
-						}
 
 						// Create map of XP to give
 						final Map<String, Integer> xpMap = new HashMap<>(dmgMap.size());
-						for (final Entry<String, Double> entry : dmgMap.entrySet()) {
-							final int reward = (int) (config.getEdExpReward() * entry.getValue() / totalDamages);
+						for (final Entry<String, Float> entry : dmgPercentageMap.entrySet()) {
+							final int reward = (int) (config.getEdExpReward() * dmgPercentageMap.get(entry.getKey()));
 							xpMap.put(entry.getKey(), Math.min(reward, config.getEdExpReward()));
 						}
 
@@ -135,6 +151,39 @@ public class EnderDragonListener implements Listener {
 							if (RANDOM.nextFloat() <= pair.getValue()) {
 								endWorld.dropItemNaturally(loc, is);
 							}
+						}
+					}
+				}
+
+				final MessageId playerKilled, playersKilled, playersKilledLine;
+				if (config.getRespawnNumber() == 1) {
+					playerKilled = MessageId.theEndAgain_playerKilledTheDragon;
+					playersKilled = MessageId.theEndAgain_playersKilledTheDragon;
+					playersKilledLine = MessageId.theEndAgain_playersKilledTheDragon_line;
+				} else {
+					playerKilled = MessageId.theEndAgain_playerKilledADragon;
+					playersKilled = MessageId.theEndAgain_playersKilledADragon;
+					playersKilledLine = MessageId.theEndAgain_playersKilledADragon_line;
+				}
+				if (dmgPercentageMap.size() == 1) {
+					plugin.broadcastMessage(playerKilled, dmgPercentageMap.entrySet().iterator().next().getKey());
+				} else {
+					plugin.broadcastMessage(playersKilled);
+					final Set<String> players = dmgPercentageMap.keySet();
+					final String[] sortedPlayers = players.toArray(new String[players.size()]);
+					Arrays.sort(sortedPlayers, new Comparator<String>() {
+
+						@Override
+						public int compare(final String a, final String b) {
+							return -Float.compare(dmgPercentageMap.get(a), dmgPercentageMap.get(b));
+						}
+					});
+					for (final String playerName : sortedPlayers) {
+						final float percentage = dmgPercentageMap.get(playerName);
+						if (percentage < THRESHOLD) {
+							break;
+						} else {
+							plugin.broadcastMessage(playersKilledLine, playerName, FORMAT.format(percentage));
 						}
 					}
 				}
