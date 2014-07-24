@@ -13,6 +13,7 @@ import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.lang.AbstractMessages;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
+import fr.ribesg.bukkit.ncore.util.VersionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -158,7 +159,7 @@ public abstract class NPlugin extends JavaPlugin implements Node {
 
 	private boolean badCoreVersion() {
 		linkCore();
-		return getCoreVersion().compareTo(getMinCoreVersion()) < 0;
+		return VersionUtil.compare(getCoreVersion(), getMinCoreVersion()) < 0;
 	}
 
 	public void sendMessage(final CommandSender to, final MessageId messageId, final String... args) {
