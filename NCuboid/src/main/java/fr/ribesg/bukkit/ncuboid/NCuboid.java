@@ -12,6 +12,7 @@ package fr.ribesg.bukkit.ncuboid;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
+import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
 import fr.ribesg.bukkit.ncuboid.beans.Jail;
 import fr.ribesg.bukkit.ncuboid.beans.Jails;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
@@ -28,6 +29,7 @@ import fr.ribesg.bukkit.ncuboid.listeners.attribute.MessageListener;
 import fr.ribesg.bukkit.ncuboid.listeners.flag.*;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.mcstats.Metrics;
 
@@ -217,6 +219,11 @@ public class NCuboid extends NPlugin implements CuboidNode {
 
 	public Jails getJails() {
 		return jails;
+	}
+
+	public boolean shouldShow(final Player player) {
+		final GeneralNode general = getCore().getGeneralNode();
+		return general == null || !general.isSpy(player.getUniqueId());
 	}
 
 	// API for other nodes

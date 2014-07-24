@@ -13,6 +13,7 @@ import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
 import fr.ribesg.bukkit.ngeneral.feature.protectionsign.ProtectionSignFeature;
+import fr.ribesg.bukkit.ngeneral.feature.spymode.SpyModeFeature;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,15 +23,13 @@ import java.util.Map;
  */
 public enum FeatureType {
 
+	AUTO_AFK(AutoAfkFeature.class),
 	FLY_MODE(FlyModeFeature.class),
-
 	GOD_MODE(GodModeFeature.class),
-
 	ITEM_NETWORK(ItemNetworkFeature.class),
-
 	PROTECTION_SIGNS(ProtectionSignFeature.class),
-
-	AUTO_AFK(AutoAfkFeature.class);
+	SPY_MODE(SpyModeFeature.class),
+	;
 
 	/**
 	 * Maps Feature classes to appropriate FeatureType enum value

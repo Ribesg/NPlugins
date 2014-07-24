@@ -162,6 +162,11 @@ public class Messages extends AbstractMessages {
 		newMessages.add(new Message(MessageId.general_food_setBy, "&a%name% set your food level to %value%", true, "%name%", "%value%"));
 		newMessages.add(new Message(MessageId.general_food_set, "&aYou set %name%'s food level to %value%", true, "%name%", "%value%"));
 
+		// Command - SPY
+		newMessages.add(new Message(MessageId.general_spy_disabled, "&aSpy mode disabled", true));
+		newMessages.add(new Message(MessageId.general_spy_enabled, "&aSpy mode enabled", true));
+		newMessages.add(new Message(MessageId.general_spy_enabledPlayer, "&aSpy mode enabled, spying %playerName%", true, "%playerName%"));
+
 		// Feature - SIGN COLORS
 		newMessages.add(new Message(MessageId.general_signcolors_permissionDenied, "&cYou do not have the permission to use colors on signs", true));
 

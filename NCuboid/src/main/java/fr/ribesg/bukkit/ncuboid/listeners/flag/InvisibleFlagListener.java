@@ -69,9 +69,11 @@ public class InvisibleFlagListener extends AbstractListener {
 	}
 
 	private void showToAll(final Player p) {
-		for (final Player other : Bukkit.getOnlinePlayers()) {
-			if (!other.equals(p)) {
-				other.showPlayer(p);
+		if (getPlugin().shouldShow(p)) {
+			for (final Player other : Bukkit.getOnlinePlayers()) {
+				if (!other.equals(p)) {
+					other.showPlayer(p);
+				}
 			}
 		}
 	}

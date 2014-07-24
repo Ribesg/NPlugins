@@ -15,6 +15,7 @@ import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
 import fr.ribesg.bukkit.ngeneral.config.Config;
 import fr.ribesg.bukkit.ngeneral.config.DbConfig;
 import fr.ribesg.bukkit.ngeneral.feature.Features;
+import fr.ribesg.bukkit.ngeneral.feature.spymode.SpyModeFeature;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
 import fr.ribesg.bukkit.ngeneral.simplefeature.*;
 import org.bukkit.command.Command;
@@ -22,6 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class NGeneral extends NPlugin implements GeneralNode {
 
@@ -35,7 +37,7 @@ public class NGeneral extends NPlugin implements GeneralNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.6.6";
+		return "0.6.9";
 	}
 
 	@Override
@@ -183,5 +185,11 @@ public class NGeneral extends NPlugin implements GeneralNode {
 	@Override
 	public String getNodeName() {
 		return GENERAL;
+	}
+
+	@Override
+	public boolean isSpy(final UUID playerId) {
+		final SpyModeFeature spyMode = this.features.get(SpyModeFeature.class);
+		return spyMode != null && spyMode.hasSpyMode(playerId);
 	}
 }

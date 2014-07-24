@@ -33,6 +33,7 @@ public class Perms {
 	private static final String CMD_NIGHT_VISION      = "ngeneral.cmd.nightvision";
 	private static final String CMD_ITEMNETWORK       = "ngeneral.cmd.itemnetwork";
 	private static final String CMD_ITEMNETWORK_ALL   = "ngeneral.cmd.itemnetwork.all";
+	private static final String CMD_SPY               = "ngeneral.cmd.spy";
 	private static final String CMD_TP                = "ngeneral.cmd.tp";
 	private static final String CMD_TPPOS             = "ngeneral.cmd.tppos";
 	private static final String CMD_TPHERE            = "ngeneral.cmd.tphere";
@@ -118,6 +119,10 @@ public class Perms {
 
 	public static boolean hasItemNetworkAll(final Permissible user) {
 		return user.isOp() || user.hasPermission(CMD_ITEMNETWORK_ALL) || user.hasPermission(ADMIN);
+	}
+
+	public static boolean hasSpy(final Permissible user) {
+		return user.isOp() || user.hasPermission(CMD_SPY) || user.hasPermission(ADMIN);
 	}
 
 	public static boolean hasTp(final Permissible user) {

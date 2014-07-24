@@ -411,6 +411,10 @@ public enum MessageId {
 	general_itemnetwork_unknown,
 	general_itemnetwork_created,
 	general_itemnetwork_deleted,
+	
+	general_spy_disabled,
+	general_spy_enabled,
+	general_spy_enabledPlayer,
 
 	// ########################## //
 	// ## NPermissions related ## //

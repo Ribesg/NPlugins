@@ -14,6 +14,7 @@ import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
 import fr.ribesg.bukkit.ngeneral.feature.protectionsign.ProtectionSignFeature;
+import fr.ribesg.bukkit.ngeneral.feature.spymode.SpyModeFeature;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -29,11 +30,12 @@ public class Features {
 		this.features = new EnumMap<>(FeatureType.class);
 
 		// Create Feature instances
+		this.features.put(FeatureType.AUTO_AFK, new AutoAfkFeature(plugin));
 		this.features.put(FeatureType.FLY_MODE, new FlyModeFeature(plugin));
 		this.features.put(FeatureType.GOD_MODE, new GodModeFeature(plugin));
 		this.features.put(FeatureType.ITEM_NETWORK, new ItemNetworkFeature(plugin));
 		this.features.put(FeatureType.PROTECTION_SIGNS, new ProtectionSignFeature(plugin));
-		this.features.put(FeatureType.AUTO_AFK, new AutoAfkFeature(plugin));
+		this.features.put(FeatureType.SPY_MODE, new SpyModeFeature(plugin));
 	}
 
 	public void initialize() {

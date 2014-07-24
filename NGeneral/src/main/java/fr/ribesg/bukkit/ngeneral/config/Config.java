@@ -20,14 +20,15 @@ public class Config extends AbstractConfig<NGeneral> {
 	// Features control
 	private String initialMessage;
 
-	private boolean godModeFeature;
-	private boolean flyModeFeature;
-	private boolean protectionSignFeature;
-	private boolean itemNetworkFeature;
 	private boolean autoAfkFeature;
+	private boolean flyModeFeature;
+	private boolean godModeFeature;
+	private boolean itemNetworkFeature;
+	private boolean protectionSignFeature;
+	private boolean spyModeFeature;
 
-	private int itemNetworkMaxDistance;
 	private int autoAfkDelay;
+	private int itemNetworkMaxDistance;
 
 	private static final String DEFAULT_protectionSignNoPermMsgLine1 = "&4You don't";
 	private static final String DEFAULT_protectionSignNoPermMsgLine2 = "&4have the";
@@ -87,14 +88,15 @@ public class Config extends AbstractConfig<NGeneral> {
 
 		initialMessage = "";
 
-		godModeFeature = true;
-		flyModeFeature = true;
-		protectionSignFeature = true;
-		itemNetworkFeature = true;
 		autoAfkFeature = true;
+		flyModeFeature = true;
+		godModeFeature = true;
+		itemNetworkFeature = true;
+		protectionSignFeature = true;
+		spyModeFeature = true;
 
-		itemNetworkMaxDistance = 100;
 		autoAfkDelay = 120;
+		itemNetworkMaxDistance = 100;
 
 		broadCastOnAfk = true;
 		broadCastOnBusy = true;
@@ -142,33 +144,37 @@ public class Config extends AbstractConfig<NGeneral> {
 		// Possible values: anything, multi-line with ##
 		setInitialMessage(config.getString("initialMessage", ""));
 
-		// godModeFeature. Default: true.
+		// autoAfkFeature. Default: true.
 		// Possible values: true, false
-		setGodModeFeature(config.getBoolean("godModeFeature", true));
+		setAutoAfkFeature(config.getBoolean("autoAfkFeature", true));
 
 		// flyModeFeature. Default: true.
 		// Possible values: true, false
 		setFlyModeFeature(config.getBoolean("flyModeFeature", true));
 
-		// protectionSignFeature. Default: true.
+		// godModeFeature. Default: true.
 		// Possible values: true, false
-		setProtectionSignFeature(config.getBoolean("protectionSignFeature", true));
+		setGodModeFeature(config.getBoolean("godModeFeature", true));
 
 		// itemNetworkFeature. Default: true.
 		// Possible values: true, false
 		setItemNetworkFeature(config.getBoolean("itemNetworkFeature", true));
 
-		// autoAfkFeature. Default: true.
+		// protectionSignFeature. Default: true.
 		// Possible values: true, false
-		setAutoAfkFeature(config.getBoolean("autoAfkFeature", true));
+		setProtectionSignFeature(config.getBoolean("protectionSignFeature", true));
 
-		// itemNetworkMaxDistance. Default: 100
-		// Possible values: any positive int
-		setItemNetworkMaxDistance(config.getInt("itemNetworkMaxDistance", 100));
+		// spyModeFeature. Default: true.
+		// Possible values: true, false
+		setSpyModeFeature(config.getBoolean("spyModeFeature", true));
 
 		// autoAfkDelay. Default: 120
 		// Possible values: any positive int
 		setAutoAfkDelay(config.getInt("autoAfkDelay", 120));
+
+		// itemNetworkMaxDistance. Default: 100
+		// Possible values: any positive int
+		setItemNetworkMaxDistance(config.getInt("itemNetworkMaxDistance", 100));
 
 		// protectionSignNoPermMsgLines.
 		setProtectionSignNoPermMsgLine1(config.getString("protectionSignNoPermMsgLine1", DEFAULT_protectionSignNoPermMsgLine1));
@@ -354,34 +360,38 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("# For example, this is the perfect place to use Rei's Minimap codes.\n");
 		content.append("initialMessage: " + getInitialMessage() + "\n\n");
 
-		// God Mode Feature
-		content.append("# Defines if the GodMode feature is enabled or not\n");
-		content.append("godModeFeature: " + hasGodModeFeature() + "\n\n");
+		// Auto AFK Feature
+		content.append("# Defines if the AutoAfk feature is enabled or not\n");
+		content.append("autoAfkFeature: " + hasAutoAfkFeature() + "\n\n");
 
 		// Fly Mode Feature
 		content.append("# Defines if the FlyMode feature is enabled or not\n");
 		content.append("flyModeFeature: " + hasFlyModeFeature() + "\n\n");
 
-		// Protection Sign Feature
-		content.append("# Defines if the ProtectionSign feature is enabled or not\n");
-		content.append("protectionSignFeature: " + hasProtectionSignFeature() + "\n\n");
+		// God Mode Feature
+		content.append("# Defines if the GodMode feature is enabled or not\n");
+		content.append("godModeFeature: " + hasGodModeFeature() + "\n\n");
 
 		// Item Network Feature
 		content.append("# Defines if the ItemNetwork feature is enabled or not\n");
 		content.append("itemNetworkFeature: " + hasItemNetworkFeature() + "\n\n");
 
-		// Auto AFK Feature
-		content.append("# Defines if the AutoAfk feature is enabled or not\n");
-		content.append("autoAfkFeature: " + hasAutoAfkFeature() + "\n\n");
+		// Protection Sign Feature
+		content.append("# Defines if the ProtectionSign feature is enabled or not\n");
+		content.append("protectionSignFeature: " + hasProtectionSignFeature() + "\n\n");
+
+		// Protection Sign Feature
+		content.append("# Defines if the Spy Mode feature is enabled or not\n");
+		content.append("spyModeFeature: " + hasSpyModeFeature() + "\n\n");
+
+		// Auto AFK Delay
+		content.append("# Time before a player is set to auto-afk\n");
+		content.append("autoAfkDelay: " + getAutoAfkDelay() + "\n\n");
 
 		// Item Network Max Distance
 		content.append("# Maximum allowed distance between an Emitter sign and any\n");
 		content.append("# Receiver sign of the same network\n");
 		content.append("itemNetworkMaxDistance: " + getItemNetworkMaxDistance() + "\n\n");
-
-		// Auto AFK Delay
-		content.append("# Time before a player is set to auto-afk\n");
-		content.append("autoAfkDelay: " + getAutoAfkDelay() + "\n\n");
 
 		// No Permission for Protection Signs message
 		content.append("# Message written on Error signs when player is not allowed to\n");
@@ -485,6 +495,14 @@ public class Config extends AbstractConfig<NGeneral> {
 
 	// Getters and Setters for config values
 
+	public boolean hasAutoAfkFeature() {
+		return autoAfkFeature;
+	}
+
+	public void setAutoAfkFeature(final boolean autoAfkFeature) {
+		this.autoAfkFeature = autoAfkFeature;
+	}
+
 	public boolean hasFlyModeFeature() {
 		return flyModeFeature;
 	}
@@ -501,14 +519,6 @@ public class Config extends AbstractConfig<NGeneral> {
 		this.godModeFeature = godModeFeature;
 	}
 
-	public boolean hasProtectionSignFeature() {
-		return protectionSignFeature;
-	}
-
-	public void setProtectionSignFeature(final boolean protectionSignFeature) {
-		this.protectionSignFeature = protectionSignFeature;
-	}
-
 	public boolean hasItemNetworkFeature() {
 		return itemNetworkFeature;
 	}
@@ -517,20 +527,20 @@ public class Config extends AbstractConfig<NGeneral> {
 		this.itemNetworkFeature = itemNetworkFeature;
 	}
 
-	public boolean hasAutoAfkFeature() {
-		return autoAfkFeature;
+	public boolean hasProtectionSignFeature() {
+		return protectionSignFeature;
 	}
 
-	public void setAutoAfkFeature(final boolean autoAfkFeature) {
-		this.autoAfkFeature = autoAfkFeature;
+	public void setProtectionSignFeature(final boolean protectionSignFeature) {
+		this.protectionSignFeature = protectionSignFeature;
 	}
 
-	public int getItemNetworkMaxDistance() {
-		return itemNetworkMaxDistance;
+	public boolean hasSpyModeFeature() {
+		return spyModeFeature;
 	}
 
-	public void setItemNetworkMaxDistance(final int itemNetworkMaxDistance) {
-		this.itemNetworkMaxDistance = itemNetworkMaxDistance;
+	public void setSpyModeFeature(final boolean spyModeFeature) {
+		this.spyModeFeature = spyModeFeature;
 	}
 
 	public int getAutoAfkDelay() {
@@ -539,6 +549,14 @@ public class Config extends AbstractConfig<NGeneral> {
 
 	public void setAutoAfkDelay(final int autoAfkDelay) {
 		this.autoAfkDelay = autoAfkDelay;
+	}
+
+	public int getItemNetworkMaxDistance() {
+		return itemNetworkMaxDistance;
+	}
+
+	public void setItemNetworkMaxDistance(final int itemNetworkMaxDistance) {
+		this.itemNetworkMaxDistance = itemNetworkMaxDistance;
 	}
 
 	public boolean hasBroadCastOnAfk() {

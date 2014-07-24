@@ -11,6 +11,8 @@ package fr.ribesg.bukkit.ncore.node.general;
 
 import fr.ribesg.bukkit.ncore.node.Node;
 
+import java.util.UUID;
+
 /**
  * API for the NGeneral plugin.
  * Want something to be added here? Just ask me!
@@ -19,4 +21,12 @@ import fr.ribesg.bukkit.ncore.node.Node;
  */
 public interface GeneralNode extends Node {
 
+	/**
+	 * Checks if a Player is in Spy Mode.
+	 *
+	 * @param playerId the player's UUID
+	 *
+	 * @return true if the Player is in Spy Mode, false otherwise
+	 */
+	public boolean isSpy(final UUID playerId);
 }
