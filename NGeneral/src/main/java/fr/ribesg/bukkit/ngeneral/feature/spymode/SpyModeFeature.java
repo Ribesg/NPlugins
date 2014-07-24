@@ -70,15 +70,15 @@ public class SpyModeFeature extends Feature {
 		final NLocation previousLocation = this.spyPlayers.remove(player.getUniqueId());
 		if (previousLocation != null) {
 			player.teleport(previousLocation.toBukkitLocation());
-			Bukkit.getScheduler().runTaskLater(getPlugin(), new BukkitRunnable() {
-
-				@Override
-				public void run() {
-					for (final Player other : Bukkit.getOnlinePlayers()) {
-						other.showPlayer(player);
-					}
-				}
-			}, 1L);
 		}
+		Bukkit.getScheduler().runTaskLater(getPlugin(), new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				for (final Player other : Bukkit.getOnlinePlayers()) {
+					other.showPlayer(player);
+				}
+			}
+		}, 1L);
 	}
 }
