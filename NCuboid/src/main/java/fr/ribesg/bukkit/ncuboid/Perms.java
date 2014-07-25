@@ -9,8 +9,10 @@
 
 package fr.ribesg.bukkit.ncuboid;
 
+import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
 import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 
 import java.util.HashMap;
@@ -107,6 +109,11 @@ public class Perms {
 
 	public static boolean isAdmin(final Permissible user) {
 		return user.isOp() || user.hasPermission(ADMIN);
+	}
+
+	public static boolean isAdmin(final Player player, final boolean async) {
+		final String playerName = player.getName();
+		return async ? (AsyncPermAccessor.isOp(playerName) || AsyncPermAccessor.has(playerName, ADMIN)) : (player.isOp() || player.hasPermission(ADMIN));
 	}
 
 	public static boolean hasFlag(final Permissible user, final Flag f) {

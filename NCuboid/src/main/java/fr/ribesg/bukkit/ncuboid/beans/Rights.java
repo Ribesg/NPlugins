@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncuboid.beans;
 
+import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
 import fr.ribesg.bukkit.ncuboid.Perms;
 import org.bukkit.entity.Player;
 
@@ -34,11 +35,17 @@ public class Rights {
 	}
 
 	public boolean isUser(final Player player) {
-		if (Perms.isAdmin(player) || isUserId(player.getUniqueId())) {
+		return this.isUser(player, false);
+	}
+
+	public boolean isUser(final Player player, final boolean async) {
+		if (Perms.isAdmin(player, async) || isUserId(player.getUniqueId())) {
 			return true;
 		} else if (allowedGroups != null) {
+			final String playerName = player.getName();
 			for (final String groupName : allowedGroups) {
-				if (player.hasPermission("group." + groupName)) {
+				final String permission = "group." + groupName;
+				if (async ? AsyncPermAccessor.has(playerName, permission) : player.hasPermission(permission)) {
 					return true;
 				}
 			}
@@ -51,7 +58,7 @@ public class Rights {
 	}
 
 	public boolean isAdmin(final Player player) {
-		return Perms.isAdmin(player) || isAdminId(player.getUniqueId());
+		return Perms.isAdmin(player, false) || isAdminId(player.getUniqueId());
 	}
 
 	public boolean isAdminId(final UUID id) {
