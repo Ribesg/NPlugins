@@ -21,6 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -169,7 +170,13 @@ public final class AsyncPermAccessor implements Listener {
 		this.plugin = plugin;
 		this.plugins = new HashSet<>();
 		this.plugins.add(this.plugin);
-		this.players = new ConcurrentSkipListSet<>();
+		this.players = new ConcurrentSkipListSet<>(new Comparator<Player>() {
+
+			@Override
+			public int compare(final Player a, final Player b) {
+				return a.getName().compareTo(b.getName());
+			}
+		});
 		Collections.addAll(this.players, Bukkit.getOnlinePlayers());
 		this.playerCount = this.players.size();
 
@@ -279,11 +286,11 @@ public final class AsyncPermAccessor implements Listener {
 			@Override
 			public void run() {
 				int i = 0;
-				while (i++ < 1 + AsyncPermAccessor.this.playerCount / (5 * 20L / delay)) {
-					AsyncPermAccessor.this.updatePlayer(it.next());
+				while (i++ < (AsyncPermAccessor.this.playerCount == 0 ? 0 : (1 + AsyncPermAccessor.this.playerCount / (5 * 20L / delay)))) {
 					if (!it.hasNext()) {
 						it = AsyncPermAccessor.this.players.iterator();
 					}
+					AsyncPermAccessor.this.updatePlayer(it.next());
 				}
 			}
 		}.runTaskTimer(this.plugin, 20L, delay);
