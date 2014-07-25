@@ -10,29 +10,37 @@
 package fr.ribesg.bukkit.ncore.util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * This tool allow Asynchronous access to a Player's permission.
- * The {@link #init(org.bukkit.plugin.Plugin, int)} method should be
+ * The {@link #init(org.bukkit.plugin.Plugin)} method should be
  * called by at least one Plugin synchronously before any sync or async
  * access.
- * <b>
- * Note: There is a maximum of {@link #updateDelay} seconds delay between
- * this tool's state and the reality. This tool should not be used for
- * critical checks.
- * </b>
+ * <p>
+ * Note: There is a delay between this tool's state and the reality. This
+ * tool should not be used for critical checks.
  *
  * @author Ribesg
  */
-public final class AsyncPermAccessor {
+public final class AsyncPermAccessor implements Listener {
 
 	// ########################### //
 	// ## Public static methods ## //
@@ -70,12 +78,13 @@ public final class AsyncPermAccessor {
 	 * <p>
 	 * Should be called sync.
 	 *
-	 * @param updateDelay the delay between updates, in seconds.
-	 *                    The lower, the heaviest.
+	 * @param plugin the plugin on which the taks will be attached
 	 */
-	public static void init(final Plugin plugin, final int updateDelay) {
+	public static void init(final Plugin plugin) {
 		if (instance == null) {
-			instance = new AsyncPermAccessor(plugin, updateDelay);
+			instance = new AsyncPermAccessor(plugin);
+		} else {
+			instance.addPlugin(plugin);
 		}
 	}
 
@@ -94,6 +103,19 @@ public final class AsyncPermAccessor {
 	private static void checkState() {
 		if (instance == null) {
 			throw new IllegalStateException("AsyncPermAccessor has not been initialized");
+		} else {
+			if (!instance.plugin.isEnabled()) {
+				instance.plugins.remove(instance.plugin);
+				instance.task.cancel();
+				try {
+					final Set<Plugin> plugins = instance.plugins;
+					instance.plugin = instance.plugins.iterator().next();
+					instance = new AsyncPermAccessor(instance.plugin);
+					instance.plugins.addAll(plugins);
+				} catch (final NoSuchElementException e) {
+					instance = null;
+				}
+			}
 		}
 	}
 
@@ -102,41 +124,59 @@ public final class AsyncPermAccessor {
 	// ######################## //
 
 	/**
-	 * Will store the permissions per player. Sets will be backed by
-	 * Concurrent maps.
+	 * Stores permissions per player, sets backed by Concurrent maps
 	 */
 	private final ConcurrentMap<String, Set<String>> permissions;
 
 	/**
-	 * Will store all connected op players. This Set will be backed by
-	 * a Concurrent map.
+	 * Stores all connected Ops, backed by a ConcurrentMap
 	 */
 	private final Set<String> ops;
 
 	/**
-	 * The plugin on which the task is attached.
+	 * The plugin on which the task is attached
 	 */
-	private final Plugin plugin;
+	private Plugin plugin;
 
 	/**
-	 * The update rate, in seconds.
+	 * Set of plugins using this tool
 	 */
-	private final int updateDelay;
+	private final Set<Plugin> plugins;
+
+	/**
+	 * Set of online players
+	 */
+	private final Set<Player> players;
+
+	/**
+	 * Amount of online players
+	 */
+	private int playerCount;
+
+	/**
+	 * The updating task
+	 */
+	private BukkitTask task;
 
 	/**
 	 * Construct the AsyncPermAccessor.
 	 *
-	 * @param plugin      the plugin on which the taks will be attached
-	 * @param updateDelay the update rate, in seconds
+	 * @param plugin the plugin on which the taks will be attached
 	 */
-	private AsyncPermAccessor(final Plugin plugin, final int updateDelay) {
+	private AsyncPermAccessor(final Plugin plugin) {
 		this.permissions = new ConcurrentHashMap<>();
 		this.ops = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
 		this.plugin = plugin;
-		this.updateDelay = updateDelay;
+		this.plugins = new HashSet<>();
+		this.plugins.add(this.plugin);
+		this.players = new ConcurrentSkipListSet<>();
+		Collections.addAll(this.players, Bukkit.getOnlinePlayers());
+		this.playerCount = this.players.size();
+
+		Bukkit.getPluginManager().registerEvents(this, this.plugin);
 
 		update();
-		launchUpdateTask();
+		this.task = launchUpdateTask();
 	}
 
 	/**
@@ -154,6 +194,30 @@ public final class AsyncPermAccessor {
 		return this.ops.contains(playerName);
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR)
+	private void onPlayerJoin(final PlayerJoinEvent event) {
+		final Player player = event.getPlayer();
+		this.players.add(player);
+		this.updatePlayer(player);
+		this.playerCount++;
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	private void onPlayerQuit(final PlayerQuitEvent event) {
+		final Player player = event.getPlayer();
+		this.forgetPlayer(player);
+		this.playerCount--;
+	}
+
+	/**
+	 * Adds a plugin to the list of plugins relying on this tool.
+	 *
+	 * @param plugin the plugin
+	 */
+	private void addPlugin(final Plugin plugin) {
+		this.plugins.add(plugin);
+	}
+
 	/**
 	 * Update all permissions and op state of all connected players.
 	 */
@@ -167,38 +231,61 @@ public final class AsyncPermAccessor {
 	 * Update all permissions and op state of the provided player.
 	 */
 	private void updatePlayer(final Player player) {
-		final String playerName = player.getName();
-		if (player.isOp()) {
-			this.ops.add(playerName);
-		} else {
-			this.ops.remove(playerName);
-		}
-		Set<String> playerPerms = this.permissions.get(playerName);
-		if (playerPerms == null) {
-			playerPerms = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
-		} else {
-			playerPerms.clear();
-		}
-		for (final PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
-			if (perm.getValue()) {
-				playerPerms.add(perm.getPermission());
+		if (player.isOnline()) {
+			final String playerName = player.getName();
+			if (player.isOp()) {
+				this.ops.add(playerName);
+			} else {
+				this.ops.remove(playerName);
 			}
+			Set<String> playerPerms = this.permissions.get(playerName);
+			if (playerPerms == null) {
+				playerPerms = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+			} else {
+				playerPerms.clear();
+			}
+			for (final PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
+				if (perm.getValue()) {
+					playerPerms.add(perm.getPermission());
+				}
+			}
+			this.permissions.put(playerName, playerPerms);
+		} else {
+			forgetPlayer(player);
 		}
-		this.permissions.put(playerName, playerPerms);
+	}
+
+	/**
+	 * Forgets about a Player.
+	 *
+	 * @param player the player
+	 */
+	private void forgetPlayer(final Player player) {
+		final String playerName = player.getName();
+		this.players.remove(player);
+		this.ops.remove(playerName);
+		this.permissions.remove(playerName);
 	}
 
 	/**
 	 * Launch the update task.
 	 */
-	private void launchUpdateTask() {
-		final long tickDelay = this.updateDelay * 20L;
-		Bukkit.getScheduler().runTaskTimer(this.plugin, new BukkitRunnable() {
+	private BukkitTask launchUpdateTask() {
+		final int delay = 2;
+		return new BukkitRunnable() {
+
+			private Iterator<Player> it = AsyncPermAccessor.this.players.iterator();
 
 			@Override
 			public void run() {
-				AsyncPermAccessor.this.update();
+				int i = 0;
+				while (i++ < 1 + AsyncPermAccessor.this.playerCount / (5 * 20L / delay)) {
+					AsyncPermAccessor.this.updatePlayer(it.next());
+					if (!it.hasNext()) {
+						it = AsyncPermAccessor.this.players.iterator();
+					}
+				}
 			}
-		}, tickDelay, tickDelay);
+		}.runTaskTimer(this.plugin, 20L, delay);
 	}
-
 }
