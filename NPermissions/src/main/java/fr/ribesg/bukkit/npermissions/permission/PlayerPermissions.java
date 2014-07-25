@@ -118,7 +118,11 @@ public class PlayerPermissions extends PermissionsSet {
 	 * @param mainGroup the new main Group Permissions Set for this Player
 	 */
 	public void setMainGroup(final String mainGroup) {
+		this.permissions.remove("maingroup." + this.mainGroup);
+		this.permissions.remove("group." + this.mainGroup);
 		this.mainGroup = mainGroup.toLowerCase();
+		this.permissions.put("maingroup." + this.mainGroup, true);
+		this.permissions.put("group." + this.mainGroup, true);
 	}
 
 	/**

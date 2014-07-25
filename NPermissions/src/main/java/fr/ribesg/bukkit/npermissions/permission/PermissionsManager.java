@@ -239,7 +239,7 @@ public class PermissionsManager {
 	 * @param player the Player
 	 */
 	public void registerPlayerForWorld(final Player player) {
-		handleWorldChange(player);
+		applyWorldPermissions(player);
 	}
 
 	/**
@@ -249,27 +249,9 @@ public class PermissionsManager {
 	 */
 	public void reRegisterPlayer(final UUID uuid) {
 		final Player player = Bukkit.getPlayer(uuid);
-
-		// Remove current permissions
 		unRegisterPlayer(player);
-
-		// Get new permissions
-		PlayerPermissions playerPermissions;
-		if (this.plugin.getPluginConfig().hasPerWorldPermissions()) {
-			playerPermissions = this.worldPlayers.get(player.getWorld().getName()).get(uuid);
-			if (playerPermissions == null) {
-				playerPermissions = this.players.get(uuid);
-			}
-		} else {
-			playerPermissions = this.players.get(uuid);
-		}
-
-		// Apply new permissions
-		final PermissionAttachment playerAttachment = player.addAttachment(plugin);
-		for (final Map.Entry<String, Boolean> e : playerPermissions.getComputedPermissions().entrySet()) {
-			playerAttachment.setPermission(e.getKey(), e.getValue());
-		}
-		this.attachmentMap.put(uuid, playerAttachment);
+		registerPlayer(player);
+		applyWorldPermissions(player);
 	}
 
 	/**
@@ -287,14 +269,14 @@ public class PermissionsManager {
 	}
 
 	/**
-	 * Handles world change.
+	 * Applies world permissions, if enabled.
 	 *
 	 * If enabled, change the Player's permissions to the new world specific
-	 * permissions if any, or to the general permissions otherwise.
+	 * permissions if any.
 	 *
 	 * @param player the Player
 	 */
-	public void handleWorldChange(final Player player) {
+	public void applyWorldPermissions(final Player player) {
 		if (plugin.getPluginConfig().hasPerWorldPermissions()) {
 			final String worldName = player.getWorld().getName();
 			final UUID playerUuid = player.getUniqueId();

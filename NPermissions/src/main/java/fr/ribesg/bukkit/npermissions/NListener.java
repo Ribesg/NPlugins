@@ -77,6 +77,6 @@ public class NListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerChangeWorld(final PlayerChangedWorldEvent event) {
-		this.plugin.getManager().handleWorldChange(event.getPlayer());
+		this.plugin.getManager().applyWorldPermissions(event.getPlayer());
 	}
 }
