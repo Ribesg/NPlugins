@@ -57,35 +57,36 @@ public class NTalk extends NPlugin implements TalkNode {
 	public boolean onNodeEnable() {
 		// Config
 		try {
+			debug("Loading configuration...");
 			pluginConfig = new Config(this);
 			pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			getLogger().severe("This error occured when NTalk tried to load config.yml");
+			error("An error occured when NTalk tried to load config.yml", e);
 			return false;
 		}
 
 		// Chat filter
 		if (pluginConfig.isChatFiltersEnabled()) {
 			try {
+				debug("Loading Chat Filters...");
 				chatFilter = new ChatFilter(this);
 				chatFilter.loadConfig("filters.yml");
 			} catch (final IOException | InvalidConfigurationException e) {
-				getLogger().severe("An error occured, stacktrace follows:");
-				e.printStackTrace();
-				getLogger().severe("This error occured when NTalk tried to load filters.yml");
+				error("An error occured when NTalk tried to load filters.yml", e);
 				return false;
 			}
 		}
 
+		debug("Building formater...");
 		formater = new Formater(this);
 
 		// Listeners
+		debug("Registering Listeners...");
 		final PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new TalkListener(this), this);
 
 		// Command
+		debug("Registering Commands...");
 		final TalkCommandExecutor executor = new TalkCommandExecutor(this);
 		setCommandExecutor("ntalk", executor);
 		setCommandExecutor("pm", executor);
@@ -94,6 +95,7 @@ public class NTalk extends NPlugin implements TalkNode {
 
 		// We need to access permissions in the AsyncPlayerChatEvent handler
 		// For this purpose, we need to use the AsyncPermAccessor
+		debug("Initializing Asynchronous Permissions Accessor...");
 		AsyncPermAccessor.init(this, 3);
 
 		return true;
@@ -112,7 +114,7 @@ public class NTalk extends NPlugin implements TalkNode {
 		try {
 			getPluginConfig().writeConfig();
 		} catch (final IOException e) {
-			e.printStackTrace();
+			error("An error occured when NTalk tried to save config.yml", e);
 		}
 	}
 
