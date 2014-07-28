@@ -99,6 +99,8 @@ public class AttributeSubcmdExecutor extends AbstractSubcmdExecutor {
 							c.setLocationAttribute(att, loc);
 						} else if ("unset".equalsIgnoreCase(args[2])) {
 							c.setLocationAttribute(att, null);
+						} else {
+							return false;
 						}
 					} else {
 						getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
