@@ -26,6 +26,7 @@ import fr.ribesg.bukkit.ncuboid.listeners.EventExtensionListener;
 import fr.ribesg.bukkit.ncuboid.listeners.PlayerStickListener;
 import fr.ribesg.bukkit.ncuboid.listeners.WorldLoadingListener;
 import fr.ribesg.bukkit.ncuboid.listeners.attribute.MessageListener;
+import fr.ribesg.bukkit.ncuboid.listeners.attribute.RespawnListener;
 import fr.ribesg.bukkit.ncuboid.listeners.flag.*;
 import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -140,6 +141,7 @@ public class NCuboid extends NPlugin implements CuboidNode {
 
 		// Attribute listeners
 		pm.registerEvents(new MessageListener(this), this);
+		pm.registerEvents(new RespawnListener(this), this);
 
 		debug("Registering command...");
 		setCommandExecutor("ncuboid", new MainCommandExecutor(this));
