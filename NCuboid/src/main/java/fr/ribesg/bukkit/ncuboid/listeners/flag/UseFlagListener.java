@@ -35,6 +35,7 @@ public class UseFlagListener extends AbstractListener {
 			denyUseEntities.add(EntityType.BOAT);
 			denyUseEntities.add(EntityType.ITEM_FRAME);
 			denyUseEntities.add(EntityType.MINECART);
+			denyUseEntities.add(EntityType.MINECART_COMMAND);
 			denyUseEntities.add(EntityType.MINECART_FURNACE);
 		}
 		return denyUseEntities;
@@ -47,6 +48,7 @@ public class UseFlagListener extends AbstractListener {
 			denyUseMaterials.add(Material.BED_BLOCK);
 			denyUseMaterials.add(Material.CAKE_BLOCK);
 			denyUseMaterials.add(Material.CAULDRON);
+			denyUseMaterials.add(Material.COMMAND);
 			denyUseMaterials.add(Material.DRAGON_EGG);
 			denyUseMaterials.add(Material.ENCHANTMENT_TABLE);
 			denyUseMaterials.add(Material.ENDER_CHEST);
