@@ -29,6 +29,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This tool allow Asynchronous access to a Player's permission.
@@ -58,6 +60,8 @@ public final class AsyncPermAccessor implements Listener {
 	 */
 	public static boolean has(final String playerName, final String permissionNode) {
 		checkState();
+		// TODO If instance of null, wait for first update completion
+		// TODO Also lock.lock() and lock.unlock() here
 		return instance._has(playerName, permissionNode);
 	}
 
@@ -71,6 +75,8 @@ public final class AsyncPermAccessor implements Listener {
 	 */
 	public static boolean isOp(final String playerName) {
 		checkState();
+		// TODO If instance of null, wait for first update completion
+		// TODO Also lock.lock() and lock.unlock() here
 		return instance._isOp(playerName);
 	}
 
@@ -97,6 +103,11 @@ public final class AsyncPermAccessor implements Listener {
 	 * The unique instance of this tool.
 	 */
 	private static AsyncPermAccessor instance;
+
+	/**
+	 * A lock
+	 */
+	private static final Lock lock = new ReentrantLock();
 
 	/**
 	 * Checks if the tool has been initialized.
@@ -181,8 +192,6 @@ public final class AsyncPermAccessor implements Listener {
 		this.playerCount = this.players.size();
 
 		Bukkit.getPluginManager().registerEvents(this, this.plugin);
-
-		update();
 		this.task = launchUpdateTask();
 	}
 
@@ -282,15 +291,27 @@ public final class AsyncPermAccessor implements Listener {
 		return new BukkitRunnable() {
 
 			private Iterator<Player> it = AsyncPermAccessor.this.players.iterator();
+			private boolean firstRun = true;
 
 			@Override
 			public void run() {
-				int i = 0;
-				while (i++ < (AsyncPermAccessor.this.playerCount == 0 ? 0 : (1 + AsyncPermAccessor.this.playerCount / (5 * 20L / delay)))) {
-					if (!it.hasNext()) {
-						it = AsyncPermAccessor.this.players.iterator();
+				lock.lock();
+				try {
+					if (firstRun) {
+						this.firstRun = false;
+						AsyncPermAccessor.this.update();
+						// TODO Maybe wake up waiting calls now?
+					} else {
+						int i = 0;
+						while (i++ < (AsyncPermAccessor.this.playerCount == 0 ? 0 : (1 + AsyncPermAccessor.this.playerCount / (5 * 20L / delay)))) {
+							if (!this.it.hasNext()) {
+								this.it = AsyncPermAccessor.this.players.iterator();
+							}
+							AsyncPermAccessor.this.updatePlayer(it.next());
+						}
 					}
-					AsyncPermAccessor.this.updatePlayer(it.next());
+				} finally {
+					lock.unlock();
 				}
 			}
 		}.runTaskTimer(this.plugin, 20L, delay);
