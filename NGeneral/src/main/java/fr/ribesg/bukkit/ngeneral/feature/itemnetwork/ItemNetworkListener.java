@@ -119,7 +119,7 @@ public class ItemNetworkListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onInventoryOpen(final InventoryOpenEvent event) {
 		final Inventory inventory = event.getInventory();
 		final InventoryHolder holder = inventory.getHolder();
@@ -240,8 +240,8 @@ public class ItemNetworkListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onBlockBreak(final BlockBreakEvent event) {
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onBlockBreakCheck(final BlockBreakEvent event) {
 		if (SignUtil.isSign(event.getBlock())) {
 			final Sign sign = (Sign) event.getBlock().getState();
 			final String line1 = sign.getLine(0);
@@ -250,17 +250,26 @@ public class ItemNetworkListener implements Listener {
 				if (!Perms.isAdmin(event.getPlayer()) && !PlayerIdsUtil.getId(event.getPlayer().getName()).equals(playerId)) {
 					feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_itemnetwork_youNeedToBeCreator);
 					event.setCancelled(true);
-				} else if (line1.equals(ITEMNETWORK_RECEIVER)) {
-					final String networkName = ColorUtil.stripColorCodes(sign.getLine(1));
-					final NLocation location = new NLocation(event.getBlock().getLocation());
-					final ItemNetwork network = feature.getNetworks().get(networkName);
-					if (network != null) {
-						final Iterator<ReceiverSign> it = network.getReceivers().iterator();
-						while (it.hasNext()) {
-							if (it.next().getLocation().equals(location)) {
-								it.remove();
-								break;
-							}
+				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onBlockBreakRecord(final BlockBreakEvent event) {
+		if (SignUtil.isSign(event.getBlock())) {
+			final Sign sign = (Sign) event.getBlock().getState();
+			final String line1 = sign.getLine(0);
+			if (line1.equals(ITEMNETWORK_RECEIVER)) {
+				final String networkName = ColorUtil.stripColorCodes(sign.getLine(1));
+				final NLocation location = new NLocation(event.getBlock().getLocation());
+				final ItemNetwork network = feature.getNetworks().get(networkName);
+				if (network != null) {
+					final Iterator<ReceiverSign> it = network.getReceivers().iterator();
+					while (it.hasNext()) {
+						if (it.next().getLocation().equals(location)) {
+							it.remove();
+							break;
 						}
 					}
 				}
