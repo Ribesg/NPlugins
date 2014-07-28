@@ -67,7 +67,6 @@ public class UseFlagListener extends AbstractListener {
 			denyUseMaterials.add(Material.TRAP_DOOR);
 			denyUseMaterials.add(Material.WALL_SIGN);
 			denyUseMaterials.add(Material.WOOD_BUTTON);
-			denyUseMaterials.add(Material.WOOD_DOOR);
 			denyUseMaterials.add(Material.WOOD_PLATE);
 			denyUseMaterials.add(Material.WOODEN_DOOR);
 			denyUseMaterials.add(Material.WORKBENCH);
