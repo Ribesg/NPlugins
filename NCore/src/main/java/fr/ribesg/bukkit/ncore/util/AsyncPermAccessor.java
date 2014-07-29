@@ -21,14 +21,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
@@ -122,23 +122,28 @@ public final class AsyncPermAccessor implements Listener {
 			throw new IllegalStateException("AsyncPermAccessor has not been initialized");
 		} else {
 			if (!instance.plugin.isEnabled()) {
-				instance.plugins.remove(instance.plugin);
-				instance.task.cancel();
+				UPDATE_LOCK.writeLock().lock();
 				try {
-					final Set<Plugin> plugins = instance.plugins;
-					instance.plugin = instance.plugins.iterator().next();
-					instance = new AsyncPermAccessor(instance.plugin);
-					instance.plugins.addAll(plugins);
+					instance.plugins.remove(instance.plugin);
+					instance.task.cancel();
 					try {
-						UPDATE_LOCK.wait();
-					} catch (final InterruptedException e) {
-						e.printStackTrace();
+						final Set<Plugin> plugins = instance.plugins;
+						instance.plugin = instance.plugins.iterator().next();
+						instance = new AsyncPermAccessor(instance.plugin);
+						instance.plugins.addAll(plugins);
+						try {
+							UPDATE_LOCK.wait();
+						} catch (final InterruptedException e) {
+							e.printStackTrace();
+						}
+					} catch (final NoSuchElementException e) {
+						instance = null;
 					}
-				} catch (final NoSuchElementException e) {
-					instance = null;
-				}
-				if (instance == null || instance.permissions.isEmpty()) {
-					throw new IllegalStateException("AsyncPermAccessor has an invalid state");
+					if (instance == null || instance.permissions.isEmpty()) {
+						throw new IllegalStateException("AsyncPermAccessor has an invalid state");
+					}
+				} finally {
+					UPDATE_LOCK.writeLock().unlock();
 				}
 			}
 		}
@@ -151,7 +156,7 @@ public final class AsyncPermAccessor implements Listener {
 	/**
 	 * Stores permissions per player, sets backed by Concurrent maps
 	 */
-	private final ConcurrentMap<String, Set<String>> permissions;
+	private final Map<String, Set<String>> permissions;
 
 	/**
 	 * Stores all connected Ops, backed by a ConcurrentMap
@@ -189,7 +194,7 @@ public final class AsyncPermAccessor implements Listener {
 	 * @param plugin the plugin on which the task will be attached
 	 */
 	private AsyncPermAccessor(final Plugin plugin) {
-		this.permissions = new ConcurrentHashMap<>();
+		this.permissions = new HashMap<>();
 		this.ops = new HashSet<>();
 		this.plugin = plugin;
 		this.plugins = new HashSet<>();
