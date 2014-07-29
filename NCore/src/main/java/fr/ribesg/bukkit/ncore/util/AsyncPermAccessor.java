@@ -21,16 +21,15 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * This tool allow Asynchronous access to a Player's permission.
@@ -60,9 +59,12 @@ public final class AsyncPermAccessor implements Listener {
 	 */
 	public static boolean has(final String playerName, final String permissionNode) {
 		checkState();
-		// TODO If instance of null, wait for first update completion
-		// TODO Also lock.lock() and lock.unlock() here
-		return instance._has(playerName, permissionNode);
+		UPDATE_LOCK.readLock().lock();
+		try {
+			return instance._has(playerName, permissionNode);
+		} finally {
+			UPDATE_LOCK.readLock().unlock();
+		}
 	}
 
 	/**
@@ -75,9 +77,12 @@ public final class AsyncPermAccessor implements Listener {
 	 */
 	public static boolean isOp(final String playerName) {
 		checkState();
-		// TODO If instance of null, wait for first update completion
-		// TODO Also lock.lock() and lock.unlock() here
-		return instance._isOp(playerName);
+		UPDATE_LOCK.readLock().lock();
+		try {
+			return instance._isOp(playerName);
+		} finally {
+			UPDATE_LOCK.readLock().unlock();
+		}
 	}
 
 	/**
@@ -107,7 +112,7 @@ public final class AsyncPermAccessor implements Listener {
 	/**
 	 * A lock
 	 */
-	private static final Lock lock = new ReentrantLock();
+	private static final ReentrantReadWriteLock UPDATE_LOCK = new ReentrantReadWriteLock();
 
 	/**
 	 * Checks if the tool has been initialized.
@@ -124,8 +129,16 @@ public final class AsyncPermAccessor implements Listener {
 					instance.plugin = instance.plugins.iterator().next();
 					instance = new AsyncPermAccessor(instance.plugin);
 					instance.plugins.addAll(plugins);
+					try {
+						UPDATE_LOCK.wait();
+					} catch (final InterruptedException e) {
+						e.printStackTrace();
+					}
 				} catch (final NoSuchElementException e) {
 					instance = null;
+				}
+				if (instance == null || instance.permissions.isEmpty()) {
+					throw new IllegalStateException("AsyncPermAccessor has an invalid state");
 				}
 			}
 		}
@@ -158,7 +171,7 @@ public final class AsyncPermAccessor implements Listener {
 	/**
 	 * Set of online players
 	 */
-	private final Set<Player> players;
+	private final List<Player> players;
 
 	/**
 	 * Amount of online players
@@ -173,21 +186,15 @@ public final class AsyncPermAccessor implements Listener {
 	/**
 	 * Construct the AsyncPermAccessor.
 	 *
-	 * @param plugin the plugin on which the taks will be attached
+	 * @param plugin the plugin on which the task will be attached
 	 */
 	private AsyncPermAccessor(final Plugin plugin) {
 		this.permissions = new ConcurrentHashMap<>();
-		this.ops = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+		this.ops = new HashSet<>();
 		this.plugin = plugin;
 		this.plugins = new HashSet<>();
 		this.plugins.add(this.plugin);
-		this.players = new ConcurrentSkipListSet<>(new Comparator<Player>() {
-
-			@Override
-			public int compare(final Player a, final Player b) {
-				return a.getName().compareTo(b.getName());
-			}
-		});
+		this.players = new LinkedList<>();
 		Collections.addAll(this.players, Bukkit.getOnlinePlayers());
 		this.playerCount = this.players.size();
 
@@ -256,7 +263,7 @@ public final class AsyncPermAccessor implements Listener {
 			}
 			Set<String> playerPerms = this.permissions.get(playerName);
 			if (playerPerms == null) {
-				playerPerms = Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+				playerPerms = new HashSet<>();
 			} else {
 				playerPerms.clear();
 			}
@@ -295,12 +302,12 @@ public final class AsyncPermAccessor implements Listener {
 
 			@Override
 			public void run() {
-				lock.lock();
+				UPDATE_LOCK.writeLock().lock();
 				try {
 					if (firstRun) {
 						this.firstRun = false;
 						AsyncPermAccessor.this.update();
-						// TODO Maybe wake up waiting calls now?
+						UPDATE_LOCK.notifyAll();
 					} else {
 						int i = 0;
 						while (i++ < (AsyncPermAccessor.this.playerCount == 0 ? 0 : (1 + AsyncPermAccessor.this.playerCount / (5 * 20L / delay)))) {
@@ -311,7 +318,7 @@ public final class AsyncPermAccessor implements Listener {
 						}
 					}
 				} finally {
-					lock.unlock();
+					UPDATE_LOCK.writeLock().unlock();
 				}
 			}
 		}.runTaskTimer(this.plugin, 20L, delay);
