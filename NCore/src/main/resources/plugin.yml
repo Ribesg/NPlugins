@@ -7,6 +7,8 @@ version: maven-version-number
 
 load: STARTUP
 
+softdepend: [dynmap]
+
 commands:
   debug:
     description: Debug Command

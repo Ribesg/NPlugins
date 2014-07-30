@@ -8,14 +8,13 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncuboid.dynmap;
+import fr.ribesg.bukkit.ncore.common.Dynmap;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidRegion;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.plugin.Plugin;
 import org.dynmap.DynmapCommonAPI;
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.Marker;
@@ -37,10 +36,9 @@ public class DynmapBridge {
 	private boolean initialized;
 
 	public DynmapBridge() {
-		final Plugin dynmapPlugin = Bukkit.getPluginManager().getPlugin(DYNMAP_PLUGIN_NAME);
 		MarkerSet markerSet = null;
-		if (dynmapPlugin != null) {
-			final DynmapCommonAPI api = (DynmapCommonAPI) dynmapPlugin;
+		if (Dynmap.init()) {
+			final DynmapCommonAPI api = Dynmap.getApi();
 			final MarkerAPI markerApi = api.getMarkerAPI();
 			markerSet = markerApi.getMarkerSet(MARKERSET_ID);
 			if (markerSet == null) {
