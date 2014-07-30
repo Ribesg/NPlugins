@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ncore.node.cuboid;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.node.Node;
+import org.bukkit.entity.Player;
 
 import java.util.Set;
 import java.util.UUID;
@@ -67,4 +68,14 @@ public interface CuboidNode extends Node {
 	 * @return the Location of the jail, or null if it does not exist
 	 */
 	public NLocation getJailLocation(final String jailName);
+
+	/**
+	 * Checks if a Player is in a Region with INVISIBLE Flag.
+	 *
+	 * @param player the player
+	 *
+	 * @return true if the Player is in a Region with INVISIBLE Flag,
+	 * false otherwise
+	 */
+	public boolean isInInvisibleRegion(final Player player);
 }

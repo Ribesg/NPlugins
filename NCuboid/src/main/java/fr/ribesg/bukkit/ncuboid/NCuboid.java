@@ -13,6 +13,8 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
+import fr.ribesg.bukkit.ncuboid.beans.Flag;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.Jail;
 import fr.ribesg.bukkit.ncuboid.beans.Jails;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
@@ -278,5 +280,15 @@ public class NCuboid extends NPlugin implements CuboidNode {
 			exiting(getClass(), "getJailLocation", "Failed: unknown jail '" + jailName + "'");
 			return null;
 		}
+	}
+
+	@Override
+	public boolean isInInvisibleRegion(final Player player) {
+		for (final GeneralRegion r : this.db.getAllByLocation(player.getLocation())) {
+			if (r.getFlag(Flag.INVISIBLE)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

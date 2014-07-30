@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ngeneral.feature.spymode;
 import fr.ribesg.bukkit.ncore.common.Dynmap;
 import fr.ribesg.bukkit.ncore.common.NLocation;
+import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import fr.ribesg.bukkit.ngeneral.feature.Feature;
@@ -68,7 +69,6 @@ public class SpyModeFeature extends Feature {
 	}
 
 	public void unSetSpyMode(final Player spy) {
-		// TODO Should check if we're not in an INVISIBLE NCuboid Region first
 		final NLocation previousLocation = this.spyPlayers.remove(spy.getUniqueId());
 		if (previousLocation != null) {
 			spy.teleport(previousLocation.toBukkitLocation());
@@ -77,8 +77,11 @@ public class SpyModeFeature extends Feature {
 
 			@Override
 			public void run() {
-				for (final Player other : Bukkit.getOnlinePlayers()) {
-					other.showPlayer(spy);
+				final CuboidNode cuboid = getPlugin().getCore().getCuboidNode();
+				if (cuboid == null || !cuboid.isInInvisibleRegion(spy)) {
+					for (final Player other : Bukkit.getOnlinePlayers()) {
+						other.showPlayer(spy);
+					}
 				}
 				Dynmap.showPlayer(spy);
 			}
