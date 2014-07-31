@@ -131,10 +131,12 @@ public final class AsyncPermAccessor implements Listener {
 						instance.plugin = instance.plugins.iterator().next();
 						instance = new AsyncPermAccessor(instance.plugin);
 						instance.plugins.addAll(plugins);
-						try {
-							UPDATE_LOCK.wait();
-						} catch (final InterruptedException e) {
-							e.printStackTrace();
+						synchronized (UPDATE_LOCK) {
+							try {
+								UPDATE_LOCK.wait();
+							} catch (final InterruptedException e) {
+								e.printStackTrace();
+							}
 						}
 					} catch (final NoSuchElementException e) {
 						instance = null;
@@ -312,7 +314,9 @@ public final class AsyncPermAccessor implements Listener {
 					if (firstRun) {
 						this.firstRun = false;
 						AsyncPermAccessor.this.update();
-						UPDATE_LOCK.notifyAll();
+						synchronized (UPDATE_LOCK) {
+							UPDATE_LOCK.notifyAll();
+						}
 					} else {
 						int i = 0;
 						while (i++ < (AsyncPermAccessor.this.playerCount == 0 ? 0 : (1 + AsyncPermAccessor.this.playerCount / (5 * 20L / delay)))) {
