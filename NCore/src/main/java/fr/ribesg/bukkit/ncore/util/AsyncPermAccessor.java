@@ -21,14 +21,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
@@ -178,7 +178,7 @@ public final class AsyncPermAccessor implements Listener {
 	/**
 	 * Set of online players
 	 */
-	private final List<Player> players;
+	private final Set<Player> players;
 
 	/**
 	 * Amount of online players
@@ -201,7 +201,13 @@ public final class AsyncPermAccessor implements Listener {
 		this.plugin = plugin;
 		this.plugins = new HashSet<>();
 		this.plugins.add(this.plugin);
-		this.players = new LinkedList<>();
+		this.players = new ConcurrentSkipListSet<>(new Comparator<Player>() {
+
+			@Override
+			public int compare(final Player a, final Player b) {
+				return a.getName().compareTo(b.getName());
+			}
+		});
 		Collections.addAll(this.players, Bukkit.getOnlinePlayers());
 		this.playerCount = this.players.size();
 
