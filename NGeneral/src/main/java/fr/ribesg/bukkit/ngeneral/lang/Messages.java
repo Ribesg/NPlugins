@@ -62,7 +62,7 @@ public class Messages extends AbstractMessages {
 
 		final StringBuilder textBuilder = new StringBuilder("&aWelcome to this Server!" + Messages.LINE_SEPARATOR);
 		textBuilder.append("&7This example welcome message will show you all the available variables." + Messages.LINE_SEPARATOR);
-		textBuilder.append("&7Your not forced to use all (or even any) of them!" + Messages.LINE_SEPARATOR);
+		textBuilder.append("&7You're not forced to use all (or even any) of them!" + Messages.LINE_SEPARATOR);
 		for (final String v : variablesList) {
 			textBuilder.append("&a").append(v.substring(1, v.length() - 1)).append(": &c").append(v).append(Messages.LINE_SEPARATOR);
 		}
