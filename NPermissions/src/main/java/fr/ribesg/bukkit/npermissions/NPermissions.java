@@ -50,7 +50,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.6.6";
+		return "0.6.9";
 	}
 
 	@Override

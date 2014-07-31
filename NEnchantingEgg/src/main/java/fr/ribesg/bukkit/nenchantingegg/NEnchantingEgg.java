@@ -61,7 +61,7 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	@Override
 	protected String getMinCoreVersion() {
-		return "0.6.6";
+		return "0.6.9";
 	}
 
 	@Override
