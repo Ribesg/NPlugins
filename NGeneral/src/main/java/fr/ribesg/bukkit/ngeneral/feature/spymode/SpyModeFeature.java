@@ -37,6 +37,8 @@ public class SpyModeFeature extends Feature {
 		final SpyModeListener listener = new SpyModeListener(this);
 		final SpyModeCommandExecutor executor = new SpyModeCommandExecutor(this);
 
+		Dynmap.init();
+
 		Bukkit.getPluginManager().registerEvents(listener, plugin);
 		plugin.setCommandExecutor("spy", executor);
 	}

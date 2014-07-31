@@ -27,19 +27,19 @@ public class Dynmap {
 	}
 
 	public static boolean hasDynmap() {
-		return Dynmap.instance._hasDynmap();
+		return Dynmap.instance != null && Dynmap.instance._hasDynmap();
 	}
 
 	public static DynmapCommonAPI getApi() {
-		return Dynmap.instance.api;
+		return Dynmap.hasDynmap() ? Dynmap.instance.api : null;
 	}
 
 	public static boolean showPlayer(final Player player) {
-		return Dynmap.instance._showPlayer(player);
+		return Dynmap.hasDynmap() && Dynmap.instance._showPlayer(player);
 	}
 
 	public static boolean hidePlayer(final Player player) {
-		return Dynmap.instance._hidePlayer(player);
+		return Dynmap.hasDynmap() && Dynmap.instance._hidePlayer(player);
 	}
 
 	private final DynmapCommonAPI api;
