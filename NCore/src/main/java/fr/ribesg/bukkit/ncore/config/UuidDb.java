@@ -215,7 +215,9 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 			}
 			final PlayerInfo info = new PlayerInfo(id, lastKnownName, previousNames, firstSeen, lastSeen);
 			byUuid.put(id, info);
-			byName.put(lastKnownName.toLowerCase(), info);
+			if (lastKnownName != null) {
+				byName.put(lastKnownName.toLowerCase(), info);
+			}
 		}
 	}
 
