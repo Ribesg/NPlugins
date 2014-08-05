@@ -59,6 +59,12 @@ public class Messages extends AbstractMessages {
 		variablesList.add("%viewDistance%");
 		variablesList.add("%plugins%");
 		variablesList.add("%pluginCount%");
+		variablesList.add("%playerName%");
+		variablesList.add("%playerIp%");
+		variablesList.add("%playerGamemode%");
+		variablesList.add("%playerWorld%");
+		variablesList.add("%playerWorldType%");
+		variablesList.add("%playerWorldDifficulty%");
 
 		final StringBuilder textBuilder = new StringBuilder("&aWelcome to this Server!" + Messages.LINE_SEPARATOR);
 		textBuilder.append("&7This example welcome message will show you all the available variables." + Messages.LINE_SEPARATOR);
@@ -69,6 +75,17 @@ public class Messages extends AbstractMessages {
 		textBuilder.append("&aTell me if you have an idea of a fun variable!");
 
 		newMessages.add(new Message(MessageId.general_welcome, textBuilder.toString(), false, variablesList.toArray(new String[variablesList.size()])));
+
+		newMessages.add(new Message(MessageId.general_welcome_gameMode_survival, "Survival", false));
+		newMessages.add(new Message(MessageId.general_welcome_gameMode_creative, "Creative", false));
+		newMessages.add(new Message(MessageId.general_welcome_gameMode_adventure, "Adventure", false));
+		newMessages.add(new Message(MessageId.general_welcome_worldType_normal, "Normal", false));
+		newMessages.add(new Message(MessageId.general_welcome_worldType_nether, "Nether", false));
+		newMessages.add(new Message(MessageId.general_welcome_worldType_end, "End", false));
+		newMessages.add(new Message(MessageId.general_welcome_difficulty_peaceful, "Peaceful", false));
+		newMessages.add(new Message(MessageId.general_welcome_difficulty_easy, "Easy", false));
+		newMessages.add(new Message(MessageId.general_welcome_difficulty_normal, "Normal", false));
+		newMessages.add(new Message(MessageId.general_welcome_difficulty_hard, "Hard", false));
 
 		// Command - RELOAD
 		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded!", true));

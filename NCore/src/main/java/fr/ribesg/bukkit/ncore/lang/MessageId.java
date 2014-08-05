@@ -321,6 +321,16 @@ public enum MessageId {
 	// ###################### //
 
 	general_welcome,
+	general_welcome_gameMode_survival,
+	general_welcome_gameMode_creative,
+	general_welcome_gameMode_adventure,
+	general_welcome_worldType_normal,
+	general_welcome_worldType_nether,
+	general_welcome_worldType_end,
+	general_welcome_difficulty_peaceful,
+	general_welcome_difficulty_easy,
+	general_welcome_difficulty_normal,
+	general_welcome_difficulty_hard,
 
 	general_god_enabled,
 	general_god_disabled,
@@ -411,7 +421,7 @@ public enum MessageId {
 	general_itemnetwork_unknown,
 	general_itemnetwork_created,
 	general_itemnetwork_deleted,
-	
+
 	general_spy_disabled,
 	general_spy_enabled,
 	general_spy_enabledPlayer,

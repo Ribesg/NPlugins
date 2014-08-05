@@ -15,6 +15,7 @@ import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -54,6 +55,56 @@ public class WelcomeListener implements Listener {
 		final String version = server.getVersion();
 		final String viewDistance = Integer.toString(server.getViewDistance());
 
+		final Player player = event.getPlayer();
+		final String playerName = player.getName();
+		final String playerIp = player.getAddress().getAddress().getHostAddress();
+		final String playerGamemode;
+		switch (player.getGameMode()) {
+			case SURVIVAL:
+				playerGamemode = plugin.getMessages().get(MessageId.general_welcome_gameMode_survival)[0];
+				break;
+			case CREATIVE:
+				playerGamemode = plugin.getMessages().get(MessageId.general_welcome_gameMode_creative)[0];
+				break;
+			case ADVENTURE:
+				playerGamemode = plugin.getMessages().get(MessageId.general_welcome_gameMode_adventure)[0];
+				break;
+			default:
+				throw new RuntimeException("wat.");
+		}
+		final String playerWorld = player.getWorld().getName();
+		final String playerWorldType;
+		switch (event.getPlayer().getWorld().getEnvironment()) {
+			case NORMAL:
+				playerWorldType = plugin.getMessages().get(MessageId.general_welcome_worldType_normal)[0];
+				break;
+			case NETHER:
+				playerWorldType = plugin.getMessages().get(MessageId.general_welcome_worldType_nether)[0];
+				break;
+			case THE_END:
+				playerWorldType = plugin.getMessages().get(MessageId.general_welcome_worldType_end)[0];
+				break;
+			default:
+				throw new RuntimeException("wat.");
+		}
+		final String playerWorldDifficulty;
+		switch (player.getWorld().getDifficulty()) {
+			case PEACEFUL:
+				playerWorldDifficulty = plugin.getMessages().get(MessageId.general_welcome_difficulty_peaceful)[0];
+				break;
+			case EASY:
+				playerWorldDifficulty = plugin.getMessages().get(MessageId.general_welcome_difficulty_easy)[0];
+				break;
+			case NORMAL:
+				playerWorldDifficulty = plugin.getMessages().get(MessageId.general_welcome_difficulty_normal)[0];
+				break;
+			case HARD:
+				playerWorldDifficulty = plugin.getMessages().get(MessageId.general_welcome_difficulty_hard)[0];
+				break;
+			default:
+				throw new RuntimeException("wat.");
+		}
+
 		final StringBuilder pluginList = new StringBuilder();
 		final Plugin[] plugins = server.getPluginManager().getPlugins();
 		final String pluginCount = Integer.toString(plugins.length);
@@ -65,6 +116,27 @@ public class WelcomeListener implements Listener {
 			}
 		}
 
-		plugin.sendMessage(event.getPlayer(), MessageId.general_welcome, bukkitVersion, ip, maxPlayers, motd, name, onlineMode, onlinePlayersCount, port, serverId, serverName, version, viewDistance, pluginList.toString(), pluginCount);
+		plugin.sendMessage(event.getPlayer(), MessageId.general_welcome,
+				bukkitVersion,
+				ip,
+				maxPlayers,
+				motd,
+				name,
+				onlineMode,
+				onlinePlayersCount,
+				port,
+				serverId,
+				serverName,
+				version,
+				viewDistance,
+				pluginList.toString(),
+				pluginCount,
+				playerName,
+				playerIp,
+				playerGamemode,
+				playerWorld,
+				playerWorldType,
+				playerWorldDifficulty
+		);
 	}
 }
