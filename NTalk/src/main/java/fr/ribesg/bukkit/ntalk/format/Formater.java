@@ -75,6 +75,7 @@ public class Formater {
 		final String playerNickname = this.config.getPlayerNicknames().get(player.getUniqueId());
 		formatString = formatString.replaceAll("\\Q[prefix]\\E", format.getPrefix());
 		formatString = formatString.replaceAll("\\Q[suffix]\\E", format.getSuffix());
+		formatString = replaceVariables(player, formatString);
 		formatString = formatString.replace("[message]", BUKKIT_MESSAGE);
 		if (playerNickname == null) {
 			formatString = formatString.replace("[name]", BUKKIT_PLAYERNAME);
@@ -149,6 +150,7 @@ public class Formater {
 			final String fromNickname = this.config.getPlayerNicknames().get(((Player) from).getUniqueId());
 			formatString = formatString.replaceAll("\\Q[prefixFrom]\\E", formatFrom.getPrefix());
 			formatString = formatString.replaceAll("\\Q[suffixFrom]\\E", formatFrom.getSuffix());
+			formatString = replaceVariables((Player) from, formatString);
 			if (fromNickname == null) {
 				formatString = formatString.replace("[nameFrom]", fromName);
 				formatString = formatString.replaceAll("%1%(.*)%%", "");
@@ -196,6 +198,7 @@ public class Formater {
 			final String toNickname = this.config.getPlayerNicknames().get(((Player) to).getUniqueId());
 			formatString = formatString.replaceAll("\\Q[prefixTo]\\E", formatTo.getPrefix());
 			formatString = formatString.replaceAll("\\Q[suffixTo]\\E", formatTo.getSuffix());
+			formatString = replaceVariables((Player) to, formatString);
 			if (toNickname == null) {
 				formatString = formatString.replace("[nameTo]", toName);
 				formatString = formatString.replaceAll("%2%(.*)%%", "");
@@ -216,6 +219,21 @@ public class Formater {
 
 		plugin.exiting(getClass(), "parsePM");
 		return ColorUtil.colorize(result);
+	}
+
+	/**
+	 * Replaces various variables in a prefix/suffix
+	 *
+	 * @param player the Player involved
+	 * @param input  the String input
+	 *
+	 * @return the String output
+	 */
+	private String replaceVariables(final Player player, final String input) {
+		String output = input;
+		output = output.replace("[worldName]", player.getWorld().getName());
+		// TODO Eventually add other variables
+		return output;
 	}
 
 	/**
