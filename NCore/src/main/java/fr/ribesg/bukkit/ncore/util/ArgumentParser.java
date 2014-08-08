@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,9 +86,9 @@ public class ArgumentParser {
 	 */
 	private ArgumentParser(final String[] args) {
 		this.initialArgs = args;
-		parsedArgs = new ArrayList<>(initialArgs.length);
-		fallBackBuffer = new ArrayList<>(initialArgs.length);
-		quotedArgsBuffer = new StringBuilder();
+		this.parsedArgs = new ArrayList<>(this.initialArgs.length);
+		this.fallBackBuffer = new ArrayList<>(this.initialArgs.length);
+		this.quotedArgsBuffer = new StringBuilder();
 	}
 
 	/**
@@ -96,15 +97,15 @@ public class ArgumentParser {
 	 * @return The final result of this ArgumentParser
 	 */
 	private String[] joinArgsWithQuotes() {
-		quoteState = QuoteState.NO_QUOTES;
+		this.quoteState = QuoteState.NO_QUOTES;
 
-		for (final String arg : initialArgs) {
-			parseSingleArg(arg);
+		for (final String arg : this.initialArgs) {
+			this.parseSingleArg(arg);
 		}
 
-		dealWithAnyUnclosedQuotes();
+		this.dealWithAnyUnclosedQuotes();
 
-		return parsedArgs.toArray(new String[parsedArgs.size()]);
+		return this.parsedArgs.toArray(new String[this.parsedArgs.size()]);
 	}
 
 	/**
@@ -117,14 +118,14 @@ public class ArgumentParser {
 			return;
 		}
 
-		fallBackBuffer.add(arg);
-		switch (quoteState) {
+		this.fallBackBuffer.add(arg);
+		switch (this.quoteState) {
 			case NO_QUOTES:
-				parseUnquotedArg(arg);
+				this.parseUnquotedArg(arg);
 				break;
 			default:
-				quotedArgsBuffer.append(' ');
-				parseQuotedArg(arg);
+				this.quotedArgsBuffer.append(' ');
+				this.parseQuotedArg(arg);
 				break;
 		}
 	}
@@ -137,15 +138,15 @@ public class ArgumentParser {
 	private void parseUnquotedArg(String arg) {
 		final char firstChar = arg.charAt(0);
 		if (firstChar == '\'') {
-			quoteState = QuoteState.SINGLE_QUOTES;
-			arg = removeInitialQuote(arg);
-			parseQuotedArg(arg);
+			this.quoteState = QuoteState.SINGLE_QUOTES;
+			arg = this.removeInitialQuote(arg);
+			this.parseQuotedArg(arg);
 		} else if (firstChar == '\"') {
-			quoteState = QuoteState.DOUBLE_QUOTES;
-			arg = removeInitialQuote(arg);
-			parseQuotedArg(arg);
+			this.quoteState = QuoteState.DOUBLE_QUOTES;
+			arg = this.removeInitialQuote(arg);
+			this.parseQuotedArg(arg);
 		} else {
-			parsedArgs.add(arg);
+			this.parsedArgs.add(arg);
 		}
 	}
 
@@ -174,13 +175,13 @@ public class ArgumentParser {
 		}
 
 		final char lastChar = arg.charAt(arg.length() - 1);
-		if (charIsQuoteMatchingState(lastChar) && endQuoteIsNotEscaped(arg)) {
-			arg = removeFinalQuote(arg);
-			quotedArgsBuffer.append(arg);
-			parsedArgs.add(quotedArgsBuffer.toString());
-			resetQuotedArgTracking();
+		if (this.charIsQuoteMatchingState(lastChar) && this.endQuoteIsNotEscaped(arg)) {
+			arg = this.removeFinalQuote(arg);
+			this.quotedArgsBuffer.append(arg);
+			this.parsedArgs.add(this.quotedArgsBuffer.toString());
+			this.resetQuotedArgTracking();
 		} else {
-			quotedArgsBuffer.append(arg);
+			this.quotedArgsBuffer.append(arg);
 		}
 	}
 
@@ -192,7 +193,7 @@ public class ArgumentParser {
 	 * @return True if this char matches the char that opened the current quoted String, false otherwise.
 	 */
 	private boolean charIsQuoteMatchingState(final char c) {
-		return (c == '\'' && quoteState == QuoteState.SINGLE_QUOTES) || (c == '\"' && quoteState == QuoteState.DOUBLE_QUOTES);
+		return c == '\'' && this.quoteState == QuoteState.SINGLE_QUOTES || c == '\"' && this.quoteState == QuoteState.DOUBLE_QUOTES;
 	}
 
 	/**
@@ -224,9 +225,9 @@ public class ArgumentParser {
 	 * Resets buffers and state
 	 */
 	private void resetQuotedArgTracking() {
-		quotedArgsBuffer.delete(0, quotedArgsBuffer.length());
-		fallBackBuffer.clear();
-		quoteState = QuoteState.NO_QUOTES;
+		this.quotedArgsBuffer.delete(0, this.quotedArgsBuffer.length());
+		this.fallBackBuffer.clear();
+		this.quoteState = QuoteState.NO_QUOTES;
 	}
 
 	/**
@@ -234,8 +235,8 @@ public class ArgumentParser {
 	 * Called once we checked all args.
 	 */
 	private void dealWithAnyUnclosedQuotes() {
-		if (quoteState != QuoteState.NO_QUOTES && !fallBackBuffer.isEmpty()) {
-			parsedArgs.addAll(fallBackBuffer);
+		if (this.quoteState != QuoteState.NO_QUOTES && !this.fallBackBuffer.isEmpty()) {
+			this.parsedArgs.addAll(this.fallBackBuffer);
 		}
 	}
 }

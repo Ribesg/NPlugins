@@ -8,15 +8,17 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util.inventory;
+
 import fr.ribesg.bukkit.ncore.util.StringUtil;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 
 public class EnchantmentUtil {
 
@@ -64,7 +66,7 @@ public class EnchantmentUtil {
 	 *
 	 * @return a map of enchantments and their associated levels
 	 *
-	 * @throws InventoryUtilException
+	 * @throws InventoryUtilException if something goes wrong
 	 */
 	public static Map<Enchantment, Integer> fromString(final String string, final String[] separators) throws InventoryUtilException {
 		final Map<Enchantment, Integer> enchantments = new TreeMap<>(ENCHANTMENT_COMPARATOR);
@@ -73,7 +75,7 @@ public class EnchantmentUtil {
 			for (final String enchantmentPair : enchantmentsPairs) {
 				final String[] enchantmentPairSplit = StringUtil.splitKeepEmpty(enchantmentPair, separators[2]);
 				if (enchantmentPairSplit.length != 2) {
-					throw new InventoryUtilException("Malformed Enchantments field '" + string + "'");
+					throw new InventoryUtilException("Malformed Enchantments field '" + string + '\'');
 				} else {
 					final String enchantmentName = enchantmentPairSplit[0];
 					final String enchantmentLevel = enchantmentPairSplit[1];
@@ -111,7 +113,7 @@ public class EnchantmentUtil {
 				final Enchantment enchantment = getEnchantment(enchantmentName);
 				final int level = enchantmentsSection.getInt(enchantmentName, -1);
 				if (level < 1) {
-					throw new InventoryUtilException("Invalid enchantment level '" + level + "' for enchantment '" + enchantment.getName() + "'");
+					throw new InventoryUtilException("Invalid enchantment level '" + level + "' for enchantment '" + enchantment.getName() + '\'');
 				} else {
 					result.put(enchantment, level);
 				}
@@ -139,5 +141,4 @@ public class EnchantmentUtil {
 		}
 		return result;
 	}
-
 }

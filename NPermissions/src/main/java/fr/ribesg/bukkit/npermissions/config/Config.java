@@ -12,6 +12,7 @@ package fr.ribesg.bukkit.npermissions.config;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.npermissions.NPermissions;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NPermissions> {
@@ -28,18 +29,12 @@ public class Config extends AbstractConfig<NPermissions> {
 		this.perWorldPermissions = false;
 	}
 
-	/**
-	 * @see AbstractConfig#handleValues(YamlConfiguration)
-	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 		this.defaultGroup = config.getString("defaultGroup", "user");
 		this.perWorldPermissions = config.getBoolean("perWorldPermissions", false);
 	}
 
-	/**
-	 * @see AbstractConfig#getConfigString()
-	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
@@ -71,6 +66,6 @@ public class Config extends AbstractConfig<NPermissions> {
 	}
 
 	public boolean hasPerWorldPermissions() {
-		return perWorldPermissions;
+		return this.perWorldPermissions;
 	}
 }

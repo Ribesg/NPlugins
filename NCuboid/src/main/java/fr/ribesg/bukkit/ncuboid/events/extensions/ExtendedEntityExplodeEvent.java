@@ -12,11 +12,12 @@ package fr.ribesg.bukkit.ncuboid.events.extensions;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
-import org.bukkit.block.Block;
-import org.bukkit.event.entity.EntityExplodeEvent;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.block.Block;
+import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class ExtendedEntityExplodeEvent extends AbstractExtendedEvent {
 
@@ -25,21 +26,21 @@ public class ExtendedEntityExplodeEvent extends AbstractExtendedEvent {
 
 	public ExtendedEntityExplodeEvent(final RegionDb db, final EntityExplodeEvent event) {
 		super(db.getPlugin(), event);
-		blockRegionsMap = new HashMap<>();
+		this.blockRegionsMap = new HashMap<>();
 		for (final Block b : event.blockList()) {
 			final GeneralRegion cuboid = db.getPriorByLocation(b.getLocation());
 			if (cuboid != null) {
-				blockRegionsMap.put(b, cuboid);
+				this.blockRegionsMap.put(b, cuboid);
 			}
 		}
-		entityRegion = blockRegionsMap.get(event.getLocation().getBlock());
+		this.entityRegion = this.blockRegionsMap.get(event.getLocation().getBlock());
 	}
 
 	public Map<Block, GeneralRegion> getBlockRegionsMap() {
-		return blockRegionsMap;
+		return this.blockRegionsMap;
 	}
 
 	public GeneralRegion getEntityRegion() {
-		return entityRegion;
+		return this.entityRegion;
 	}
 }

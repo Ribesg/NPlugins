@@ -8,19 +8,22 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.util.SignUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
+
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 public class ReceiverSign {
 
@@ -30,21 +33,21 @@ public class ReceiverSign {
 
 	private static Set<Material> getChestMaterials() {
 		if (chestMaterials == null) {
-			chestMaterials = new HashSet<>();
-			chestMaterials.add(Material.CHEST);
-			chestMaterials.add(Material.TRAPPED_CHEST);
+			chestMaterials = EnumSet.of(
+					Material.CHEST,
+					Material.TRAPPED_CHEST
+			);
 		}
 		return chestMaterials;
 	}
 
-	private final NGeneral          plugin;
 	private final NLocation         location;
 	private final Set<Material>     acceptedMaterials;
 	private final Set<MaterialData> acceptedMaterialDatas;
 	private final boolean           acceptsAll;
 
-	private List<Block> chests;
-	private long        lastUpdateDate;
+	private       List<Block> chests;
+	private final long        lastUpdateDate;
 
 	/**
 	 * Builds a new ReceiverSign that accepts only some types of Materials.
@@ -53,7 +56,6 @@ public class ReceiverSign {
 	 * @param acceptsString the Materials that this ReceiverSign accepts
 	 */
 	public ReceiverSign(final NGeneral plugin, final NLocation location, final String acceptsString) {
-		this.plugin = plugin;
 		this.location = location;
 
 		if (!ACCEPTED_MATERIALS_REGEX.matcher(acceptsString).matches()) {
@@ -65,15 +67,15 @@ public class ReceiverSign {
 			this.acceptedMaterialDatas = null;
 		} else {
 			this.acceptsAll = false;
-			this.acceptedMaterials = new HashSet<>();
+			this.acceptedMaterials = EnumSet.noneOf(Material.class);
 			this.acceptedMaterialDatas = new HashSet<>();
 			for (final String s : acceptsString.split(";")) {
 				if (s.contains(":")) {
-					acceptedMaterialDatas.add(new MaterialData(Integer.parseInt(s.split(":")[0]), (byte) Integer.parseInt(s.split(":")[1])));
+					this.acceptedMaterialDatas.add(new MaterialData(Integer.parseInt(s.split(":")[0]), (byte)Integer.parseInt(s.split(":")[1])));
 				} else {
 					final Material material = Material.getMaterial(Integer.parseInt(s));
 					if (material != null) {
-						acceptedMaterials.add(material);
+						this.acceptedMaterials.add(material);
 					} else {
 						plugin.error("Unable to find Material enum value for id " + s);
 					}
@@ -100,14 +102,14 @@ public class ReceiverSign {
 	}
 
 	public ItemStack send(final ItemStack is) {
-		if ((System.currentTimeMillis() - lastUpdateDate) > 1000L) {
+		if (System.currentTimeMillis() - this.lastUpdateDate > 1000L) {
 			this.chests = SignUtil.getBlocksForLocation(this.location.toBukkitLocation(), getChestMaterials());
 		}
 
-		ItemStack[] result = new ItemStack[] {is};
+		ItemStack[] result = {is};
 
 		for (final Block b : this.chests) {
-			final InventoryHolder holder = (InventoryHolder) b.getState();
+			final InventoryHolder holder = (InventoryHolder)b.getState();
 			result = holder.getInventory().addItem(is).values().toArray(new ItemStack[1]);
 			if (result[0] == null) {
 				break;
@@ -122,17 +124,17 @@ public class ReceiverSign {
 	}
 
 	public String getAcceptsString() {
-		if (acceptsAll) {
+		if (this.acceptsAll) {
 			return "*";
 		} else {
 			final StringBuilder result = new StringBuilder();
-			if (acceptedMaterials != null) {
-				for (final Material m : acceptedMaterials) {
+			if (this.acceptedMaterials != null) {
+				for (final Material m : this.acceptedMaterials) {
 					result.append(m.getId()).append(';');
 				}
 			}
-			if (acceptedMaterialDatas != null) {
-				for (final MaterialData md : acceptedMaterialDatas) {
+			if (this.acceptedMaterialDatas != null) {
+				for (final MaterialData md : this.acceptedMaterialDatas) {
 					result.append(md.getItemTypeId()).append(':').append(md.getData()).append(';');
 				}
 			}

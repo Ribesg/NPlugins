@@ -8,20 +8,31 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.punishment;
+
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.IPValidator;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.nplayer.NPlayer;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.UUID;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class PunishmentDb {
 
@@ -46,7 +57,7 @@ public class PunishmentDb {
 	// ##################### //
 
 	public void saveConfig() throws IOException {
-		saveConfig(Paths.get(plugin.getDataFolder().getPath(), "punishmentDB.yml"));
+		this.saveConfig(Paths.get(this.plugin.getDataFolder().getPath(), "punishmentDB.yml"));
 	}
 
 	private void saveConfig(final Path filePath) throws IOException {
@@ -58,7 +69,7 @@ public class PunishmentDb {
 		}
 		final YamlConfiguration config = new YamlConfiguration();
 
-		final List<Punishment> punishments = getAllPunishmentsFromMaps(getPermPunishments(), getTempPunishments());
+		final List<Punishment> punishments = getAllPunishmentsFromMaps(this.permPunishments, this.tempPunishments);
 
 		for (final Punishment p : punishments) {
 			final String key = p.getPunished().replaceAll("\\.", "-") + '-' + p.getType().toString(); // Should be unique // TODO What if I want to ban 24 hours and mute 7 days?
@@ -68,7 +79,7 @@ public class PunishmentDb {
 			pSection.set("endDate", p.getEndDate());
 			pSection.set("reason", p.getReason());
 			if (p.getType() == PunishmentType.JAIL) {
-				pSection.set("jailPointName", ((Jail) p).getJailPointName());
+				pSection.set("jailPointName", ((Jail)p).getJailPointName());
 			}
 		}
 
@@ -76,7 +87,7 @@ public class PunishmentDb {
 	}
 
 	public void loadConfig() throws IOException, InvalidConfigurationException {
-		loadConfig(Paths.get(plugin.getDataFolder().getPath(), "punishmentDB.yml"));
+		this.loadConfig(Paths.get(this.plugin.getDataFolder().getPath(), "punishmentDB.yml"));
 	}
 
 	private void loadConfig(final Path filePath) throws IOException, InvalidConfigurationException {
@@ -117,10 +128,9 @@ public class PunishmentDb {
 						p = new Jail(punished, reason, jailPointName, endDate);
 						break;
 				}
-				add(p);
+				this.add(p);
 			}
 		}
-
 	}
 
 	// ############# //
@@ -139,23 +149,23 @@ public class PunishmentDb {
 	}
 
 	public List<Punishment> getAllPunishments() {
-		return getAllPunishmentsFromMaps(permPunishments, tempPunishments);
+		return getAllPunishmentsFromMaps(this.permPunishments, this.tempPunishments);
 	}
 
 	public Map<String, Set<Punishment>> getPermPunishments() {
-		return permPunishments;
+		return this.permPunishments;
 	}
 
 	public Map<String, Set<Punishment>> getTempPunishments() {
-		return tempPunishments;
+		return this.tempPunishments;
 	}
 
 	public SortedMap<Long, Punishment> getTempPunishmentEndDateMap() {
-		return tempPunishmentEndDateMap;
+		return this.tempPunishmentEndDateMap;
 	}
 
 	public Map<UUID, String> getLeaveMessages() {
-		return leaveMessages;
+		return this.leaveMessages;
 	}
 
 	// ############## //
@@ -163,53 +173,53 @@ public class PunishmentDb {
 	// ############## //
 
 	public boolean tempBanId(final UUID id, final long duration, final String reason) {
-		plugin.entering(getClass(), "tempBanId");
+		this.plugin.entering(this.getClass(), "tempBanId");
 
 		final long newBanEndDate = System.currentTimeMillis() + duration * 1000;
-		final Ban ban = (Ban) get(id.toString(), PunishmentType.BAN);
+		final Ban ban = (Ban)this.get(id.toString(), PunishmentType.BAN);
 		if (ban != null) {
 			if (ban.isPermanent() || ban.getEndDate() > newBanEndDate) {
-				plugin.exiting(getClass(), "unBanId", "Failed: already banned with longer duration");
+				this.plugin.exiting(this.getClass(), "unBanId", "Failed: already banned with longer duration");
 				return false;
 			} else {
-				remove(ban);
+				this.remove(ban);
 			}
 		}
-		add(new Ban(id.toString(), reason, newBanEndDate));
+		this.add(new Ban(id.toString(), reason, newBanEndDate));
 
-		plugin.exiting(getClass(), "tempBanId");
+		this.plugin.exiting(this.getClass(), "tempBanId");
 		return true;
 	}
 
 	public boolean permBanId(final UUID id, final String reason) {
-		plugin.entering(getClass(), "permBanId");
+		this.plugin.entering(this.getClass(), "permBanId");
 
-		if (get(id.toString(), PunishmentType.BAN) != null) {
-			plugin.exiting(getClass(), "unBanId", "Failed: already banned");
+		if (this.get(id.toString(), PunishmentType.BAN) != null) {
+			this.plugin.exiting(this.getClass(), "unBanId", "Failed: already banned");
 			return false;
 		}
-		add(new Ban(id.toString(), reason));
+		this.add(new Ban(id.toString(), reason));
 
-		plugin.exiting(getClass(), "permBanId");
+		this.plugin.exiting(this.getClass(), "permBanId");
 		return true;
 	}
 
 	public boolean unBanId(final UUID id) {
-		plugin.entering(getClass(), "unBanId");
+		this.plugin.entering(this.getClass(), "unBanId");
 
-		final Punishment p = get(id.toString(), PunishmentType.BAN);
+		final Punishment p = this.get(id.toString(), PunishmentType.BAN);
 		if (p == null) {
-			plugin.exiting(getClass(), "unBanId", "Failed: not banned");
+			this.plugin.exiting(this.getClass(), "unBanId", "Failed: not banned");
 			return false;
 		}
-		remove(p);
+		this.remove(p);
 
-		plugin.exiting(getClass(), "unBanId");
+		this.plugin.exiting(this.getClass(), "unBanId");
 		return true;
 	}
 
 	public boolean isIdBanned(final UUID id) {
-		return get(id.toString(), PunishmentType.BAN) != null;
+		return this.get(id.toString(), PunishmentType.BAN) != null;
 	}
 
 	// ############ //
@@ -217,53 +227,53 @@ public class PunishmentDb {
 	// ############ //
 
 	public boolean tempBanIp(final String ip, final long duration, final String reason) {
-		plugin.entering(getClass(), "tempBanIp");
+		this.plugin.entering(this.getClass(), "tempBanIp");
 
 		final long newIpBanEndDate = System.currentTimeMillis() + duration * 1000;
-		final IpBan ipBan = (IpBan) get(ip, PunishmentType.IPBAN);
+		final IpBan ipBan = (IpBan)this.get(ip, PunishmentType.IPBAN);
 		if (ipBan != null) {
 			if (ipBan.isPermanent() || ipBan.getEndDate() > newIpBanEndDate) {
-				plugin.exiting(getClass(), "tempBanIp", "Failed: already banned with longer duration");
+				this.plugin.exiting(this.getClass(), "tempBanIp", "Failed: already banned with longer duration");
 				return false;
 			} else {
-				remove(ipBan);
+				this.remove(ipBan);
 			}
 		}
-		add(new IpBan(ip.toLowerCase(), reason, newIpBanEndDate));
+		this.add(new IpBan(ip.toLowerCase(), reason, newIpBanEndDate));
 
-		plugin.exiting(getClass(), "tempBanIp");
+		this.plugin.exiting(this.getClass(), "tempBanIp");
 		return true;
 	}
 
 	public boolean permBanIp(final String ip, final String reason) {
-		plugin.entering(getClass(), "permBanIp");
+		this.plugin.entering(this.getClass(), "permBanIp");
 
-		if (get(ip, PunishmentType.IPBAN) != null) {
-			plugin.exiting(getClass(), "permBanIp", "Failed: already banned");
+		if (this.get(ip, PunishmentType.IPBAN) != null) {
+			this.plugin.exiting(this.getClass(), "permBanIp", "Failed: already banned");
 			return false;
 		}
-		add(new IpBan(ip.toLowerCase(), reason));
+		this.add(new IpBan(ip.toLowerCase(), reason));
 
-		plugin.exiting(getClass(), "permBanIp");
+		this.plugin.exiting(this.getClass(), "permBanIp");
 		return true;
 	}
 
 	public boolean unBanIp(final String ip) {
-		plugin.entering(getClass(), "unBanIp");
+		this.plugin.entering(this.getClass(), "unBanIp");
 
-		final Punishment p = get(ip, PunishmentType.IPBAN);
+		final Punishment p = this.get(ip, PunishmentType.IPBAN);
 		if (p == null) {
-			plugin.exiting(getClass(), "unBanIp", "Failed: not banned");
+			this.plugin.exiting(this.getClass(), "unBanIp", "Failed: not banned");
 			return false;
 		}
-		remove(p);
+		this.remove(p);
 
-		plugin.exiting(getClass(), "unBanIp");
+		this.plugin.exiting(this.getClass(), "unBanIp");
 		return true;
 	}
 
 	public boolean isIpBanned(final String ip) {
-		return get(ip, PunishmentType.IPBAN) != null;
+		return this.get(ip, PunishmentType.IPBAN) != null;
 	}
 
 	// ############### //
@@ -271,53 +281,53 @@ public class PunishmentDb {
 	// ############### //
 
 	public boolean tempMuteId(final UUID id, final long duration, final String reason) {
-		plugin.entering(getClass(), "tempMuteId");
+		this.plugin.entering(this.getClass(), "tempMuteId");
 
 		final long newMuteEndDate = System.currentTimeMillis() + duration * 1000;
-		final Mute mute = (Mute) get(id.toString(), PunishmentType.MUTE);
+		final Mute mute = (Mute)this.get(id.toString(), PunishmentType.MUTE);
 		if (mute != null) {
 			if (mute.isPermanent() || mute.getEndDate() > newMuteEndDate) {
-				plugin.exiting(getClass(), "tempMuteId", "Failed: already muted with longer duration");
+				this.plugin.exiting(this.getClass(), "tempMuteId", "Failed: already muted with longer duration");
 				return false;
 			} else {
-				remove(mute);
+				this.remove(mute);
 			}
 		}
-		add(new Mute(id.toString(), reason, newMuteEndDate));
+		this.add(new Mute(id.toString(), reason, newMuteEndDate));
 
-		plugin.exiting(getClass(), "tempMuteId");
+		this.plugin.exiting(this.getClass(), "tempMuteId");
 		return true;
 	}
 
 	public boolean permMuteId(final UUID id, final String reason) {
-		plugin.entering(getClass(), "permMuteId");
+		this.plugin.entering(this.getClass(), "permMuteId");
 
-		if (get(id.toString(), PunishmentType.MUTE) != null) {
-			plugin.exiting(getClass(), "permMuteId", "Failed: already muted");
+		if (this.get(id.toString(), PunishmentType.MUTE) != null) {
+			this.plugin.exiting(this.getClass(), "permMuteId", "Failed: already muted");
 			return false;
 		}
-		add(new Mute(id.toString(), reason));
+		this.add(new Mute(id.toString(), reason));
 
-		plugin.exiting(getClass(), "permMuteId");
+		this.plugin.exiting(this.getClass(), "permMuteId");
 		return true;
 	}
 
 	public boolean unMuteId(final UUID id) {
-		plugin.entering(getClass(), "unMuteId");
+		this.plugin.entering(this.getClass(), "unMuteId");
 
-		final Punishment p = get(id.toString(), PunishmentType.MUTE);
+		final Punishment p = this.get(id.toString(), PunishmentType.MUTE);
 		if (p == null) {
-			plugin.exiting(getClass(), "unMuteId", "Failed: not muted");
+			this.plugin.exiting(this.getClass(), "unMuteId", "Failed: not muted");
 			return false;
 		}
-		remove(p);
+		this.remove(p);
 
-		plugin.exiting(getClass(), "unMuteId");
+		this.plugin.exiting(this.getClass(), "unMuteId");
 		return true;
 	}
 
 	public boolean isIdMuted(final UUID id) {
-		return get(id.toString(), PunishmentType.MUTE) != null;
+		return this.get(id.toString(), PunishmentType.MUTE) != null;
 	}
 
 	// ############### //
@@ -325,63 +335,63 @@ public class PunishmentDb {
 	// ############### //
 
 	public boolean tempJailId(final UUID id, final long duration, final String reason, final String jailPointName) {
-		plugin.entering(getClass(), "tempJailId");
+		this.plugin.entering(this.getClass(), "tempJailId");
 
 		final long newJailEndDate = System.currentTimeMillis() + duration * 1000;
-		final Jail jail = (Jail) get(id.toString(), PunishmentType.JAIL);
+		final Jail jail = (Jail)this.get(id.toString(), PunishmentType.JAIL);
 		if (jail != null) {
 			if (jail.isPermanent() || jail.getEndDate() > newJailEndDate) {
-				plugin.exiting(getClass(), "tempJailId", "Failed: already jailed with longer duration");
+				this.plugin.exiting(this.getClass(), "tempJailId", "Failed: already jailed with longer duration");
 				return false;
 			} else {
-				if (!plugin.getCuboidNode().unJail(id)) {
-					plugin.error("Failed to unjail already-jailed player in NCuboid!");
+				if (!this.plugin.getCuboidNode().unJail(id)) {
+					this.plugin.error("Failed to unjail already-jailed player in NCuboid!");
 				}
-				remove(jail);
+				this.remove(jail);
 			}
 		}
-		add(new Jail(id.toString(), reason, jailPointName, newJailEndDate));
+		this.add(new Jail(id.toString(), reason, jailPointName, newJailEndDate));
 
-		if (!plugin.getCuboidNode().jail(id, jailPointName)) {
-			plugin.error("Failed to jail player in NCuboid!");
+		if (!this.plugin.getCuboidNode().jail(id, jailPointName)) {
+			this.plugin.error("Failed to jail player in NCuboid!");
 		}
 
-		plugin.exiting(getClass(), "tempJailId");
+		this.plugin.exiting(this.getClass(), "tempJailId");
 		return true;
 	}
 
 	public boolean permJailId(final UUID id, final String reason, final String jailPointName) {
-		plugin.entering(getClass(), "permJailId");
+		this.plugin.entering(this.getClass(), "permJailId");
 
-		if (get(id.toString(), PunishmentType.JAIL) != null) {
-			plugin.exiting(getClass(), "permJailId", "Failed: already jailed");
+		if (this.get(id.toString(), PunishmentType.JAIL) != null) {
+			this.plugin.exiting(this.getClass(), "permJailId", "Failed: already jailed");
 			return false;
 		}
-		add(new Jail(id.toString(), reason, jailPointName));
+		this.add(new Jail(id.toString(), reason, jailPointName));
 
-		if (!plugin.getCuboidNode().jail(id, jailPointName)) {
-			plugin.error("Failed to jail player in NCuboid!");
+		if (!this.plugin.getCuboidNode().jail(id, jailPointName)) {
+			this.plugin.error("Failed to jail player in NCuboid!");
 		}
 
-		plugin.exiting(getClass(), "permJailId");
+		this.plugin.exiting(this.getClass(), "permJailId");
 		return true;
 	}
 
 	public boolean unJailId(final UUID id) {
-		plugin.entering(getClass(), "unJailId");
+		this.plugin.entering(this.getClass(), "unJailId");
 
-		final Punishment p = get(id.toString(), PunishmentType.JAIL);
+		final Punishment p = this.get(id.toString(), PunishmentType.JAIL);
 		if (p == null) {
-			plugin.exiting(getClass(), "unJailId", "Failed: not jailed");
+			this.plugin.exiting(this.getClass(), "unJailId", "Failed: not jailed");
 			return false;
 		}
-		remove(p);
+		this.remove(p);
 
-		if (!plugin.getCuboidNode().unJail(id)) {
-			plugin.error("Failed to unjail player in NCuboid!");
+		if (!this.plugin.getCuboidNode().unJail(id)) {
+			this.plugin.error("Failed to unjail player in NCuboid!");
 		}
 
-		plugin.exiting(getClass(), "unJailId");
+		this.plugin.exiting(this.getClass(), "unJailId");
 		return true;
 	}
 
@@ -390,17 +400,17 @@ public class PunishmentDb {
 	// ######################## //
 
 	public Punishment get(final String key, final PunishmentType type) {
-		plugin.entering(getClass(), "get", "key=" + key + ";type=" + type);
+		this.plugin.entering(this.getClass(), "get", "key=" + key + ";type=" + type);
 		Punishment result = null;
 
-		final Set<Punishment> temporary = getTempPunishments().get(key.toLowerCase());
+		final Set<Punishment> temporary = this.tempPunishments.get(key.toLowerCase());
 		if (temporary != null) {
 			final Iterator<Punishment> it = temporary.iterator();
 			while (it.hasNext()) {
 				final Punishment p = it.next();
 				if (!p.isStillActive()) {
-					if (plugin.getCuboidNode() != null && p.getType() == PunishmentType.JAIL) {
-						plugin.getCuboidNode().unJail(UuidDb.getId(Node.PLAYER, p.getPunished()));
+					if (this.plugin.getCuboidNode() != null && p.getType() == PunishmentType.JAIL) {
+						this.plugin.getCuboidNode().unJail(UuidDb.getId(Node.PLAYER, p.getPunished()));
 					}
 					it.remove();
 				} else if (p.getType() == type) {
@@ -409,11 +419,11 @@ public class PunishmentDb {
 				}
 			}
 			if (temporary.isEmpty()) {
-				getTempPunishments().remove(key.toLowerCase());
+				this.tempPunishments.remove(key.toLowerCase());
 			}
 		}
 		if (result == null) {
-			final Set<Punishment> permanent = getPermPunishments().get(key.toLowerCase());
+			final Set<Punishment> permanent = this.permPunishments.get(key.toLowerCase());
 			if (permanent != null) {
 				for (final Punishment p : permanent) {
 					if (p.getType() == type) {
@@ -424,61 +434,61 @@ public class PunishmentDb {
 			}
 		}
 
-		plugin.exiting(getClass(), "get", "result=" + result);
+		this.plugin.exiting(this.getClass(), "get", "result=" + result);
 		return result;
 	}
 
 	public void add(final Punishment punishment) {
 		if (punishment.isPermanent()) {
-			Set<Punishment> playerPunishments = getPermPunishments().get(punishment.getPunished().toLowerCase());
+			Set<Punishment> playerPunishments = this.permPunishments.get(punishment.getPunished().toLowerCase());
 			if (playerPunishments == null) {
 				playerPunishments = new HashSet<>();
 			}
 			playerPunishments.add(punishment);
-			getPermPunishments().put(punishment.getPunished().toLowerCase(), playerPunishments);
+			this.permPunishments.put(punishment.getPunished().toLowerCase(), playerPunishments);
 		} else {
-			Set<Punishment> playerPunishments = getTempPunishments().get(punishment.getPunished().toLowerCase());
+			Set<Punishment> playerPunishments = this.tempPunishments.get(punishment.getPunished().toLowerCase());
 			if (playerPunishments == null) {
 				playerPunishments = new HashSet<>();
 			}
 			playerPunishments.add(punishment);
-			getTempPunishments().put(punishment.getPunished().toLowerCase(), playerPunishments);
-			getTempPunishmentEndDateMap().put(punishment.getEndDate(), punishment);
+			this.tempPunishments.put(punishment.getPunished().toLowerCase(), playerPunishments);
+			this.tempPunishmentEndDateMap.put(punishment.getEndDate(), punishment);
 		}
 	}
 
 	public Punishment remove(final Punishment toBeRemoved) {
-		plugin.entering(getClass(), "remove", "toBeRemoved=" + toBeRemoved);
+		this.plugin.entering(this.getClass(), "remove", "toBeRemoved=" + toBeRemoved);
 		Punishment result = null;
 
 		final String key = toBeRemoved.getPunished();
 		if (toBeRemoved.isPermanent()) {
-			final Set<Punishment> permanent = getPermPunishments().get(key.toLowerCase());
+			final Set<Punishment> permanent = this.permPunishments.get(key.toLowerCase());
 			if (permanent != null) {
 				if (permanent.remove(toBeRemoved)) {
 					if (permanent.isEmpty()) {
-						getPermPunishments().remove(key.toLowerCase());
+						this.permPunishments.remove(key.toLowerCase());
 					}
-					if (plugin.getCuboidNode() != null && toBeRemoved.getType() == PunishmentType.JAIL) {
-						plugin.getCuboidNode().unJail(UuidDb.getId(Node.PLAYER, toBeRemoved.getPunished()));
+					if (this.plugin.getCuboidNode() != null && toBeRemoved.getType() == PunishmentType.JAIL) {
+						this.plugin.getCuboidNode().unJail(UuidDb.getId(Node.PLAYER, toBeRemoved.getPunished()));
 					}
 					result = toBeRemoved;
 				}
 			}
 		} else {
-			final Set<Punishment> temporary = getTempPunishments().get(key.toLowerCase());
+			final Set<Punishment> temporary = this.tempPunishments.get(key.toLowerCase());
 			if (temporary != null) {
 				if (temporary.remove(toBeRemoved)) {
 					if (temporary.isEmpty()) {
-						getTempPunishments().remove(key.toLowerCase());
+						this.tempPunishments.remove(key.toLowerCase());
 					}
-					if (plugin.getCuboidNode() != null && toBeRemoved.getType() == PunishmentType.JAIL) {
-						plugin.getCuboidNode().unJail(UuidDb.getId(Node.PLAYER, toBeRemoved.getPunished()));
+					if (this.plugin.getCuboidNode() != null && toBeRemoved.getType() == PunishmentType.JAIL) {
+						this.plugin.getCuboidNode().unJail(UuidDb.getId(Node.PLAYER, toBeRemoved.getPunished()));
 					}
 					result = toBeRemoved;
 				}
 			}
-			final Iterator<Map.Entry<Long, Punishment>> it = getTempPunishmentEndDateMap().entrySet().iterator();
+			final Iterator<Map.Entry<Long, Punishment>> it = this.tempPunishmentEndDateMap.entrySet().iterator();
 			while (it.hasNext()) {
 				if (it.next().getKey() == toBeRemoved.getEndDate()) {
 					it.remove();
@@ -487,7 +497,7 @@ public class PunishmentDb {
 			}
 		}
 
-		plugin.exiting(getClass(), "remove", "result=" + result);
+		this.plugin.exiting(this.getClass(), "remove", "result=" + result);
 		return result;
 	}
 }

@@ -8,9 +8,11 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.updater;
+
 public class DownloadFailedException extends Exception {
 
 	public DownloadFailedException() {
+		super();
 	}
 
 	public DownloadFailedException(final String message) {

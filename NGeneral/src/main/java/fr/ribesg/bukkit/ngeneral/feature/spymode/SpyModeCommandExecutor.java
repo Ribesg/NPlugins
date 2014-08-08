@@ -8,8 +8,10 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.spymode;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,28 +28,28 @@ public class SpyModeCommandExecutor implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if (command.getName().equals("spy")) {
+		if ("spy".equals(command.getName())) {
 			if (!Perms.hasSpy(sender)) {
-				feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+				this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 				return true;
 			} else if (!(sender instanceof Player)) {
-				feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+				this.feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 				return true;
 			} else {
-				final Player player = (Player) sender;
-				if (feature.hasSpyMode(player.getUniqueId())) {
-					feature.unSetSpyMode(player);
-					feature.getPlugin().sendMessage(player, MessageId.general_spy_disabled);
+				final Player player = (Player)sender;
+				if (this.feature.hasSpyMode(player.getUniqueId())) {
+					this.feature.unSetSpyMode(player);
+					this.feature.getPlugin().sendMessage(player, MessageId.general_spy_disabled);
 				} else if (args.length == 0) {
-					feature.setSpyMode(player, null);
-					feature.getPlugin().sendMessage(player, MessageId.general_spy_enabled);
+					this.feature.setSpyMode(player, null);
+					this.feature.getPlugin().sendMessage(player, MessageId.general_spy_enabled);
 				} else {
 					final Player spied = Bukkit.getPlayer(args[0]);
 					if (spied == null) {
-						feature.getPlugin().sendMessage(player, MessageId.noPlayerFoundForGivenName, args[0]);
+						this.feature.getPlugin().sendMessage(player, MessageId.noPlayerFoundForGivenName, args[0]);
 					} else {
-						feature.setSpyMode(player, spied);
-						feature.getPlugin().sendMessage(player, MessageId.general_spy_enabledPlayer, spied.getName());
+						this.feature.setSpyMode(player, spied);
+						this.feature.getPlugin().sendMessage(player, MessageId.general_spy_enabledPlayer, spied.getName());
 					}
 				}
 				return true;

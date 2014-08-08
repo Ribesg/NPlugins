@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.event.theendagain;
+
 import org.bukkit.Chunk;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -33,6 +34,7 @@ public class ChunkRegenEvent extends Event implements Cancellable {
 	private       boolean cancelled;
 
 	public ChunkRegenEvent(final Chunk chunk) {
+		super();
 		this.chunk = chunk;
 		this.cancelled = false;
 	}
@@ -48,12 +50,12 @@ public class ChunkRegenEvent extends Event implements Cancellable {
 	 * @return the chunk that is about to be regen (or not)
 	 */
 	public Chunk getChunk() {
-		return chunk;
+		return this.chunk;
 	}
 
 	@Override
 	public boolean isCancelled() {
-		return cancelled;
+		return this.cancelled;
 	}
 
 	@Override

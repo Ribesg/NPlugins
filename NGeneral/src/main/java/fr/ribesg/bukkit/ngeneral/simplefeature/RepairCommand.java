@@ -8,9 +8,11 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,24 +27,24 @@ public class RepairCommand implements CommandExecutor {
 
 	public RepairCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.setCommandExecutor(COMMAND, this);
+		this.plugin.setCommandExecutor(COMMAND, this);
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		if (command.getName().equals(COMMAND)) {
 			if (!Perms.hasRepair(sender)) {
-				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+				this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			} else if (!(sender instanceof Player)) {
-				plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+				this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			} else {
-				final Player player = (Player) sender;
+				final Player player = (Player)sender;
 				final ItemStack is = player.getItemInHand();
 				if (is == null || is.getType().getMaxDurability() == 0) {
-					plugin.sendMessage(sender, MessageId.general_repair_cannot);
+					this.plugin.sendMessage(sender, MessageId.general_repair_cannot);
 				} else {
-					is.setDurability((short) 0);
-					plugin.sendMessage(sender, MessageId.general_repair_done);
+					is.setDurability((short)0);
+					this.plugin.sendMessage(sender, MessageId.general_repair_done);
 				}
 			}
 			return true;
@@ -50,5 +52,4 @@ public class RepairCommand implements CommandExecutor {
 			return false;
 		}
 	}
-
 }

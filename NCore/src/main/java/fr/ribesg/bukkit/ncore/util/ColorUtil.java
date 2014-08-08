@@ -8,9 +8,10 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
-import org.bukkit.ChatColor;
 
 import java.util.List;
+
+import org.bukkit.ChatColor;
 
 /**
  * Utility class to handle both Bukkit's and custom color codes.
@@ -146,5 +147,4 @@ public class ColorUtil {
 		}
 		return toStrip;
 	}
-
 }

@@ -22,30 +22,30 @@ public class RegenTask extends RandomRepeatingTask {
 
 	@Override
 	public boolean exec() {
-		worldHandler.getPlugin().entering(getClass(), "exec");
+		this.worldHandler.getPlugin().entering(this.getClass(), "exec");
 
-		worldHandler.getRegenHandler().regen();
+		this.worldHandler.getRegenHandler().regen();
 
-		worldHandler.getPlugin().exiting(getClass(), "exec");
+		this.worldHandler.getPlugin().exiting(this.getClass(), "exec");
 		return true;
 	}
 
 	@Override
 	protected long getInitialDelay() {
-		long nextRegenTaskTime = worldHandler.getConfig().getNextRegenTaskTime();
-		if (worldHandler.getConfig().getRegenType() == 2) {
+		long nextRegenTaskTime = this.worldHandler.getConfig().getNextRegenTaskTime();
+		if (this.worldHandler.getConfig().getRegenType() == 2) {
 			nextRegenTaskTime = 0;
 		}
-		return buildInitialDelay(nextRegenTaskTime);
+		return this.buildInitialDelay(nextRegenTaskTime);
 	}
 
 	@Override
 	protected long getDelay() {
-		return worldHandler.getConfig().getRegenTimer();
+		return this.worldHandler.getConfig().getRegenTimer();
 	}
 
 	@Override
 	protected void setNextConfigTime(final long date) {
-		worldHandler.getConfig().setNextRegenTaskTime(date);
+		this.worldHandler.getConfig().setNextRegenTaskTime(date);
 	}
 }

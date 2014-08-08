@@ -8,16 +8,17 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nenchantingegg.enchantment;
+
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public abstract class NEnchantment implements Listener {
 

@@ -8,24 +8,27 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.common.collection.pairlist.Pair;
 import fr.ribesg.bukkit.ncore.common.collection.pairlist.PairList;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
+import org.bukkit.inventory.ItemStack;
 
 public class ItemNetwork {
 
@@ -57,7 +60,7 @@ public class ItemNetwork {
 	/**
 	 * Items passed to this method will be added to a concurrent buffer.
 	 * An asynchronous task will then handle them ASAP and call the
-	 * {@link #send(java.util.Map, java.util.Map)} method with every needed
+	 * {@link #send(Map, Map)} method with every needed
 	 * informations.
 	 * <p/>
 	 * Note: Items passed to this method should no longer be in the origin
@@ -78,8 +81,8 @@ public class ItemNetwork {
 	 * @param toBeSent the map of Items
 	 */
 	/* package */ void send(final Map<NLocation, PairList<ItemStack, List<ReceiverSign>>> toBeSent, final Map<NLocation, List<ItemStack>> notSendable) {
-		for (final NLocation origin : toBeSent.keySet()) {
-			final PairList<ItemStack, List<ReceiverSign>> items = toBeSent.get(origin);
+		for (final Entry<NLocation, PairList<ItemStack, List<ReceiverSign>>> nLocationPairListEntry : toBeSent.entrySet()) {
+			final PairList<ItemStack, List<ReceiverSign>> items = nLocationPairListEntry.getValue();
 			for (final Pair<ItemStack, List<ReceiverSign>> p : items) {
 				boolean sent = false;
 				ItemStack toSend = p.getKey();
@@ -90,21 +93,21 @@ public class ItemNetwork {
 					}
 				}
 				if (!sent) {
-					List<ItemStack> notSent = notSendable.get(origin);
+					List<ItemStack> notSent = notSendable.get(nLocationPairListEntry.getKey());
 					if (notSent == null) {
 						notSent = new ArrayList<>();
-						notSendable.put(origin, notSent);
+						notSendable.put(nLocationPairListEntry.getKey(), notSent);
 					}
 					notSent.add(p.getKey());
 				}
 			}
 		}
 
-		for (final NLocation origin : notSendable.keySet()) {
-			final List<ItemStack> notSent = notSendable.get(origin);
-			final Block block = origin.toBukkitLocation().getBlock();
+		for (final Entry<NLocation, List<ItemStack>> nLocationListEntry : notSendable.entrySet()) {
+			final List<ItemStack> notSent = nLocationListEntry.getValue();
+			final Block block = nLocationListEntry.getKey().toBukkitLocation().getBlock();
 			if (block.getType() == Material.CHEST) {
-				final Chest chest = (Chest) block.getState();
+				final Chest chest = (Chest)block.getState();
 				final Map<Integer, ItemStack> remaining = chest.getInventory().addItem(notSent.toArray(new ItemStack[notSent.size()]));
 				if (!remaining.isEmpty()) {
 					final Location loc = block.getLocation().add(0.5, 0.5, 0.5);
@@ -121,10 +124,10 @@ public class ItemNetwork {
 		}
 
 		for (final NLocation origin : toBeSent.keySet()) {
-			feature.unlock(origin);
+			this.feature.unlock(origin);
 		}
 		for (final NLocation origin : notSendable.keySet()) {
-			feature.unlock(origin);
+			this.feature.unlock(origin);
 		}
 	}
 
@@ -137,11 +140,11 @@ public class ItemNetwork {
 	 * @return true if the location is too far, false otherwise
 	 */
 	public boolean isTooFar(final Location loc) {
-		final int maxDistance = feature.getPlugin().getPluginConfig().getItemNetworkMaxDistance();
+		final int maxDistance = this.feature.getPlugin().getPluginConfig().getItemNetworkMaxDistance();
 		final int squaredMaxDistance = maxDistance * maxDistance;
 		final NLocation nLoc = new NLocation(loc);
 		try {
-			for (final ReceiverSign r : getReceivers()) {
+			for (final ReceiverSign r : this.receivers) {
 				if (r.getLocation().distance2DSquared(nLoc) > squaredMaxDistance) {
 					return true;
 				}
@@ -153,7 +156,7 @@ public class ItemNetwork {
 	}
 
 	public ItemNetworkFeature getFeature() {
-		return feature;
+		return this.feature;
 	}
 
 	public String getName() {

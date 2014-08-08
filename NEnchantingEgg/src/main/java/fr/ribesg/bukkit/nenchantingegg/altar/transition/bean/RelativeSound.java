@@ -25,14 +25,14 @@ public class RelativeSound extends RelativeLocation {
 	}
 
 	public float getPitch() {
-		return pitch;
+		return this.pitch;
 	}
 
 	public Sound getSound() {
-		return sound;
+		return this.sound;
 	}
 
 	public float getVolume() {
-		return volume;
+		return this.volume;
 	}
 }

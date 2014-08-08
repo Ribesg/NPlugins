@@ -9,10 +9,10 @@
 
 package fr.ribesg.bukkit.nenchantingegg.altar.transition.bean;
 
+import java.util.Set;
+
 import org.bukkit.FireworkEffect;
 import org.bukkit.util.Vector;
-
-import java.util.Set;
 
 public class RelativeFirework extends RelativeLocation {
 
@@ -28,18 +28,18 @@ public class RelativeFirework extends RelativeLocation {
 		super(x, y, z);
 		this.effects = effects;
 		this.velocity = velocity;
-		hasVelocity = velocity != null;
+		this.hasVelocity = velocity != null;
 	}
 
 	public boolean hasVelocity() {
-		return hasVelocity;
+		return this.hasVelocity;
 	}
 
 	public Set<FireworkEffect> getEffects() {
-		return effects;
+		return this.effects;
 	}
 
 	public Vector getVelocity() {
-		return velocity;
+		return this.velocity;
 	}
 }

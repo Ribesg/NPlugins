@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntalk.filter.bean;
+
 import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
 import java.util.Map;
@@ -25,7 +26,7 @@ public class ReplaceFilter extends Filter {
 	}
 
 	public String getReplacement() {
-		return replacement;
+		return this.replacement;
 	}
 
 	// ############ //
@@ -35,7 +36,7 @@ public class ReplaceFilter extends Filter {
 	@Override
 	public Map<String, Object> getConfigMap() {
 		final Map<String, Object> map = super.getConfigMap();
-		map.put("replacement", replacement);
+		map.put("replacement", this.replacement);
 		return map;
 	}
 
@@ -45,9 +46,9 @@ public class ReplaceFilter extends Filter {
 
 	public static ReplaceFilter loadFromConfig(final String key, final Map<String, Object> values) {
 		try {
-			final String filteredString = (String) values.get("filteredString");
-			final boolean regex = (boolean) values.get("isRegex");
-			final String replacement = (String) values.get("replacement");
+			final String filteredString = (String)values.get("filteredString");
+			final boolean regex = (boolean)values.get("isRegex");
+			final String replacement = (String)values.get("replacement");
 			return new ReplaceFilter(key, filteredString, regex, replacement);
 		} catch (final NullPointerException | ClassCastException e) {
 			throw new IllegalArgumentException("Missing value", e);

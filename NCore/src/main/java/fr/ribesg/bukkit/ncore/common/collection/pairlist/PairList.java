@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.common.collection.pairlist;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,7 @@ public class PairList<K, V> implements Iterable<Pair<K, V>> {
 	}
 
 	public Iterator<Pair<K, V>> iterator() {
-		return pairList.iterator();
+		return this.pairList.iterator();
 	}
 
 	public void clear() {
@@ -41,14 +42,14 @@ public class PairList<K, V> implements Iterable<Pair<K, V>> {
 	}
 
 	public Pair<K, V> get(final int index) {
-		return pairList.get(index);
+		return this.pairList.get(index);
 	}
 
 	public K getKey(final int index) {
-		return get(index).getKey();
+		return this.get(index).getKey();
 	}
 
 	public V getValue(final int index) {
-		return get(index).getValue();
+		return this.get(index).getValue();
 	}
 }

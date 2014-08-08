@@ -12,10 +12,11 @@ package fr.ribesg.bukkit.ncuboid.events.extensions;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.Set;
 import java.util.SortedSet;
+
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class ExtendedPlayerJoinEvent extends AbstractExtendedEvent {
 
@@ -24,15 +25,15 @@ public class ExtendedPlayerJoinEvent extends AbstractExtendedEvent {
 
 	public ExtendedPlayerJoinEvent(final RegionDb db, final PlayerJoinEvent event) {
 		super(db.getPlugin(), event);
-		regions = db.getAllByLocation(event.getPlayer().getLocation());
-		region = db.getPrior(regions);
+		this.regions = db.getAllByLocation(event.getPlayer().getLocation());
+		this.region = db.getPrior(this.regions);
 	}
 
 	public GeneralRegion getRegion() {
-		return region;
+		return this.region;
 	}
 
 	public Set<GeneralRegion> getRegions() {
-		return regions;
+		return this.regions;
 	}
 }

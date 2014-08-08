@@ -16,9 +16,6 @@ import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ntalk.format.Format;
 import fr.ribesg.bukkit.ntalk.format.Format.FormatType;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +24,10 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NTalk> {
 
@@ -57,60 +58,57 @@ public class Config extends AbstractConfig<NTalk> {
 	public Config(final NTalk instance) {
 		super(instance);
 
-		setTemplate(defaultTemplate);
-		setPmTemplate(defaultPmTemplate);
-		setDefaultFormat(new Format(FormatType.GROUP, "default", "", ""));
-		setOpGroup("admin");
+		this.setTemplate(defaultTemplate);
+		this.setPmTemplate(defaultPmTemplate);
+		this.setDefaultFormat(new Format(FormatType.GROUP, "default", "", ""));
+		this.setOpGroup("admin");
 
-		setPlayerFormats(new HashMap<UUID, Format>());
+		this.setPlayerFormats(new HashMap<UUID, Format>());
 		final UUID ribesgId = UuidDb.getId(Node.TALK, "Ribesg", true);
 		final UUID notchId = UuidDb.getId(Node.TALK, "Notch", true);
-		getPlayerFormats().put(ribesgId, new Format(FormatType.PLAYER, ribesgId.toString(), "&c[Dev]&f", ""));
-		getPlayerFormats().put(notchId, new Format(FormatType.PLAYER, notchId.toString(), "&c[God]&f", ""));
+		this.playerFormats.put(ribesgId, new Format(FormatType.PLAYER, ribesgId.toString(), "&c[Dev]&f", ""));
+		this.playerFormats.put(notchId, new Format(FormatType.PLAYER, notchId.toString(), "&c[God]&f", ""));
 
-		setPlayerNicknames(new HashMap<UUID, String>());
-		getPlayerNicknames().put(notchId, "TheNotch");
+		this.setPlayerNicknames(new HashMap<UUID, String>());
+		this.playerNicknames.put(notchId, "TheNotch");
 
-		setGroupFormats(new HashMap<String, Format>());
-		getGroupFormats().put("admin", new Format(FormatType.GROUP, "admin", "&c[Admin]&f", ""));
-		getGroupFormats().put("user", new Format(FormatType.GROUP, "user", "&c[User]&f", ""));
+		this.setGroupFormats(new HashMap<String, Format>());
+		this.groupFormats.put("admin", new Format(FormatType.GROUP, "admin", "&c[Admin]&f", ""));
+		this.groupFormats.put("user", new Format(FormatType.GROUP, "user", "&c[User]&f", ""));
 
-		setChatFiltersEnabled(true);
-		setTempMuteCommand(defaultTempMuteCommand);
-		setTempBanCommand(defaultTempBanCommand);
-		setTempJailCommand(defaultTempJailCommand);
+		this.setChatFiltersEnabled(true);
+		this.setTempMuteCommand(defaultTempMuteCommand);
+		this.setTempBanCommand(defaultTempBanCommand);
+		this.setTempJailCommand(defaultTempJailCommand);
 	}
 
-	/**
-	 * @see AbstractConfig#handleValues(YamlConfiguration)
-	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
-		setPlayerFormats(new HashMap<UUID, Format>());
-		setPlayerNicknames(new HashMap<UUID, String>());
-		setGroupFormats(new HashMap<String, Format>());
+		this.setPlayerFormats(new HashMap<UUID, Format>());
+		this.setPlayerNicknames(new HashMap<UUID, String>());
+		this.setGroupFormats(new HashMap<String, Format>());
 
 		// template. Default: "&f<[prefix][name]%%([realName])%%[suffix]&f> [message]".
 		// Possible values: Any String containing at least "[name]" and "[message]""
-		setTemplate(config.getString("template", defaultTemplate));
-		if (!getTemplate().contains("[name]") || !getTemplate().contains("[message]")) {
-			wrongValue("config.yml", "template", getTemplate(), defaultTemplate);
-			setTemplate(defaultTemplate);
+		this.setTemplate(config.getString("template", defaultTemplate));
+		if (!this.template.contains("[name]") || !this.template.contains("[message]")) {
+			this.wrongValue("config.yml", "template", this.template, defaultTemplate);
+			this.setTemplate(defaultTemplate);
 		}
 
 		// pmTemplate. Default: "&f<[prefixFrom][nameFrom]%1%([realNameFrom])%%[suffixFrom]&c -> &f[prefixTo][nameTo]%2%([realNameTo])%%[suffixTo]&f> [message]".
 		// Possible values: Any String containing at least "[nameFrom]", "[nameTo]" and "[message]"
-		setPmTemplate(config.getString("pmTemplate", defaultPmTemplate));
-		if (!getPmTemplate().contains("[nameFrom]") || !getPmTemplate().contains("[nameTo]") || !getPmTemplate().contains("[message]")) {
-			wrongValue("config.yml", "pmTemplate", getPmTemplate(), defaultPmTemplate);
-			setPmTemplate(defaultPmTemplate);
+		this.setPmTemplate(config.getString("pmTemplate", defaultPmTemplate));
+		if (!this.pmTemplate.contains("[nameFrom]") || !this.pmTemplate.contains("[nameTo]") || !this.pmTemplate.contains("[message]")) {
+			this.wrongValue("config.yml", "pmTemplate", this.pmTemplate, defaultPmTemplate);
+			this.setPmTemplate(defaultPmTemplate);
 		}
 
 		// opGroup. Default: "admin".
 		// Possible values: Any group defined in the config
 		// NOTE: We later check if the value is valid (after loading groups)
-		setOpGroup(config.getString("opGroup", getOpGroup()));
+		this.setOpGroup(config.getString("opGroup", this.opGroup));
 
 		// defaultFormat. Default: empty prefix and suffix.
 		// Possible values: any String for prefix and suffix
@@ -118,7 +116,7 @@ public class Config extends AbstractConfig<NTalk> {
 			final ConfigurationSection defaultFormat = config.getConfigurationSection("defaultFormat");
 			final String prefix = defaultFormat.getString("prefix", "");
 			final String suffix = defaultFormat.getString("suffix", "");
-			setDefaultFormat(new Format(FormatType.GROUP, "default", prefix, suffix));
+			this.setDefaultFormat(new Format(FormatType.GROUP, "default", prefix, suffix));
 		}
 
 		// groupFormats.
@@ -128,7 +126,7 @@ public class Config extends AbstractConfig<NTalk> {
 				final ConfigurationSection groupFormat = groupFormats.getConfigurationSection(groupName);
 				final String prefix = groupFormat.getString("prefix", "");
 				final String suffix = groupFormat.getString("suffix", "");
-				getGroupFormats().put(groupName, new Format(FormatType.GROUP, groupName, prefix, suffix));
+				this.groupFormats.put(groupName, new Format(FormatType.GROUP, groupName, prefix, suffix));
 			}
 		}
 
@@ -143,63 +141,60 @@ public class Config extends AbstractConfig<NTalk> {
 				} else if (PlayerIdsUtil.isValidMinecraftUserName(playerIdString)) {
 					playerId = UuidDb.getId(Node.TALK, playerIdString, true);
 				} else {
-					plugin.error(Level.WARNING, "Invalid playerId '" + playerIdString + "' found in config.yml under section 'playerFormats', ignored");
+					this.plugin.error(Level.WARNING, "Invalid playerId '" + playerIdString + "' found in config.yml under section 'playerFormats', ignored");
 					continue;
 				}
 				final String prefix = playerFormat.getString("prefix", "_NOPREFIX");
 				final String nickName = playerFormat.getString("nick", "_NONICK");
 				final String suffix = playerFormat.getString("suffix", "_NOSUFFIX");
-				if (!prefix.equals("_NOPREFIX") || !suffix.equals("_NOSUFFIX")) {
-					getPlayerFormats().put(playerId, new Format(FormatType.PLAYER, playerId.toString(), prefix.equals("_NOPREFIX") ? "" : prefix, suffix.equals("_NOSUFFIX") ? "" : suffix));
+				if (!"_NOPREFIX".equals(prefix) || !"_NOSUFFIX".equals(suffix)) {
+					this.playerFormats.put(playerId, new Format(FormatType.PLAYER, playerId.toString(), "_NOPREFIX".equals(prefix) ? "" : prefix, "_NOSUFFIX".equals(suffix) ? "" : suffix));
 				}
-				if (!nickName.equals("_NONICK")) {
-					getPlayerNicknames().put(playerId, nickName);
+				if (!"_NONICK".equals(nickName)) {
+					this.playerNicknames.put(playerId, nickName);
 				}
 			}
 		}
 
 		// Check for opGroup
-		if (getGroupFormats().get(getOpGroup()) == null) {
+		if (this.groupFormats.get(this.opGroup) == null) {
 			// Reset to admin group, and add it if it does not exists
-			if (!getGroupFormats().containsKey("admin")) {
-				getGroupFormats().put("admin", new Format(FormatType.GROUP, "admin", "&c[Admin]&f", ""));
+			if (!this.groupFormats.containsKey("admin")) {
+				this.groupFormats.put("admin", new Format(FormatType.GROUP, "admin", "&c[Admin]&f", ""));
 			}
-			wrongValue("config.yml", "opGroup", getOpGroup(), "admin");
-			setOpGroup("admin");
+			this.wrongValue("config.yml", "opGroup", this.opGroup, "admin");
+			this.setOpGroup("admin");
 		}
 
 		// Chat filter
-		setChatFiltersEnabled(config.getBoolean("enableChatFilter", true));
+		this.setChatFiltersEnabled(config.getBoolean("enableChatFilter", true));
 
-		setTempMuteCommand(config.getString("tempMuteCommand", defaultTempMuteCommand));
-		if (!getTempMuteCommand().contains("%player%") ||
-		    !getTempMuteCommand().contains("%duration%") ||
-		    !getTempMuteCommand().contains("%reason%")) {
-			wrongValue("config.yml", "tempMuteCommand", getTempMuteCommand(), defaultTempMuteCommand);
-			setTempMuteCommand(defaultTempMuteCommand);
+		this.setTempMuteCommand(config.getString("tempMuteCommand", defaultTempMuteCommand));
+		if (!this.tempMuteCommand.contains("%player%") ||
+		    !this.tempMuteCommand.contains("%duration%") ||
+		    !this.tempMuteCommand.contains("%reason%")) {
+			this.wrongValue("config.yml", "tempMuteCommand", this.tempMuteCommand, defaultTempMuteCommand);
+			this.setTempMuteCommand(defaultTempMuteCommand);
 		}
 
-		setTempBanCommand(config.getString("tempBanCommand", defaultTempBanCommand));
-		if (!getTempBanCommand().contains("%player%") ||
-		    !getTempBanCommand().contains("%duration%") ||
-		    !getTempBanCommand().contains("%reason%")) {
-			wrongValue("config.yml", "tempBanCommand", getTempBanCommand(), defaultTempBanCommand);
-			setTempBanCommand(defaultTempBanCommand);
+		this.setTempBanCommand(config.getString("tempBanCommand", defaultTempBanCommand));
+		if (!this.tempBanCommand.contains("%player%") ||
+		    !this.tempBanCommand.contains("%duration%") ||
+		    !this.tempBanCommand.contains("%reason%")) {
+			this.wrongValue("config.yml", "tempBanCommand", this.tempBanCommand, defaultTempBanCommand);
+			this.setTempBanCommand(defaultTempBanCommand);
 		}
 
-		setTempJailCommand(config.getString("tempJailCommand", defaultTempJailCommand));
-		if (!getTempJailCommand().contains("%player%") ||
-		    !getTempJailCommand().contains("%duration%") ||
-		    !getTempJailCommand().contains("%jailName%") ||
-		    !getTempJailCommand().contains("%reason%")) {
-			wrongValue("config.yml", "tempJailCommand", getTempJailCommand(), defaultTempJailCommand);
-			setTempJailCommand(defaultTempJailCommand);
+		this.setTempJailCommand(config.getString("tempJailCommand", defaultTempJailCommand));
+		if (!this.tempJailCommand.contains("%player%") ||
+		    !this.tempJailCommand.contains("%duration%") ||
+		    !this.tempJailCommand.contains("%jailName%") ||
+		    !this.tempJailCommand.contains("%reason%")) {
+			this.wrongValue("config.yml", "tempJailCommand", this.tempJailCommand, defaultTempJailCommand);
+			this.setTempJailCommand(defaultTempJailCommand);
 		}
 	}
 
-	/**
-	 * @see AbstractConfig#getConfigString()
-	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
@@ -216,86 +211,86 @@ public class Config extends AbstractConfig<NTalk> {
 
 		// template for chat messages
 		content.append("# The template used to parse chat messages\n");
-		content.append("# Default : " + defaultTemplate + "\n");
-		content.append("template: \"" + getTemplate() + "\"\n\n");
+		content.append("# Default : " + defaultTemplate + '\n');
+		content.append("template: \"" + this.template + "\"\n\n");
 
 		// template for private messages
 		content.append("# The template used to parse private messages\n");
-		content.append("# Default : " + defaultPmTemplate + "\n");
-		content.append("pmTemplate: \"" + getPmTemplate() + "\"\n\n");
+		content.append("# Default : " + defaultPmTemplate + '\n');
+		content.append("pmTemplate: \"" + this.pmTemplate + "\"\n\n");
 
 		// the group used for Op players
 		content.append("# The group used for Op players\n");
-		content.append("opGroup: \"" + getOpGroup() + "\"\n\n");
+		content.append("opGroup: \"" + this.opGroup + "\"\n\n");
 
 		// default prefix & suffix for player without any group permission or custom prefix and suffix
 		content.append("# Default prefix and suffix used for player without custom prefix/suffix or group\n");
 		content.append("# Default : both empty\n");
 		content.append("defaultFormat: \n");
-		content.append("  prefix: \"" + getDefaultFormat().getPrefix() + "\"\n");
-		content.append("  suffix: \"" + getDefaultFormat().getSuffix() + "\"\n\n");
+		content.append("  prefix: \"" + this.defaultFormat.getPrefix() + "\"\n");
+		content.append("  suffix: \"" + this.defaultFormat.getSuffix() + "\"\n\n");
 
 		// group prefixes and suffixes
 		content.append("# Group prefixes and suffixes. Use exact group names as written in your permissions files\n");
 		content.append("# For example, prefixes and suffixes for group 'test' will be applied to players\n");
 		content.append("# with permission 'maingroup.test'\n");
 		content.append("groupFormats:\n");
-		for (final Entry<String, Format> e : getGroupFormats().entrySet()) {
+		for (final Entry<String, Format> e : this.groupFormats.entrySet()) {
 			content.append("  " + e.getKey() + ": \n");
 			content.append("    prefix: \"" + e.getValue().getPrefix() + "\"\n");
 			content.append("    suffix: \"" + e.getValue().getSuffix() + "\"\n");
 		}
-		content.append("\n");
+		content.append('\n');
 
 		// player prefixes and suffixes
 		content.append("# Player prefixes, nicknames and suffixes. Use exact player names\n");
 		content.append("playerFormats:\n");
 		final Set<UUID> playerIds = new HashSet<>();
-		playerIds.addAll(getPlayerFormats().keySet());
-		playerIds.addAll(getPlayerNicknames().keySet());
+		playerIds.addAll(this.playerFormats.keySet());
+		playerIds.addAll(this.playerNicknames.keySet());
 		for (final UUID playerId : playerIds) {
 			if (playerId != null) {
 				String prefix = "";
 				String nickName = "";
 				String suffix = "";
-				if (getPlayerFormats().containsKey(playerId)) {
-					prefix = getPlayerFormats().get(playerId).getPrefix();
-					suffix = getPlayerFormats().get(playerId).getSuffix();
+				if (this.playerFormats.containsKey(playerId)) {
+					prefix = this.playerFormats.get(playerId).getPrefix();
+					suffix = this.playerFormats.get(playerId).getSuffix();
 				}
-				if (getPlayerNicknames().containsKey(playerId)) {
-					nickName = getPlayerNicknames().get(playerId);
+				if (this.playerNicknames.containsKey(playerId)) {
+					nickName = this.playerNicknames.get(playerId);
 				}
-				content.append("  " + playerId.toString() + ": # " + UuidDb.getName(playerId) + "\n");
-				if (prefix.length() > 0) {
+				content.append("  " + playerId + ": # " + UuidDb.getName(playerId) + '\n');
+				if (!prefix.isEmpty()) {
 					content.append("    prefix: \"" + prefix + "\"\n");
 				}
-				if (nickName.length() > 0) {
+				if (!nickName.isEmpty()) {
 					content.append("    nick: \"" + nickName + "\"\n");
 				}
-				if (suffix.length() > 0) {
+				if (!suffix.isEmpty()) {
 					content.append("    suffix: \"" + suffix + "\"\n");
 				}
 			}
 		}
-		content.append("\n");
+		content.append('\n');
 
 		// Chat filter
 		content.append("# Globally toggle the Chat Filter system.\n");
-		content.append("enableChatFilter: " + isChatFiltersEnabled() + "\n\n");
+		content.append("enableChatFilter: " + this.chatFiltersEnabled + "\n\n");
 
 		content.append("# The tempmute command that will be used to mute people\n");
 		content.append("# It should contain:\n");
 		content.append("# - %player% : will be replaced by the player's name\n");
 		content.append("# - %duration% : will be replaced by the duration, in seconds\n");
 		content.append("# - %reason% : will be replaced by the reason\n");
-		content.append("tempMuteCommand: " + getTempMuteCommand() + "\n\n");
+		content.append("tempMuteCommand: " + this.tempMuteCommand + "\n\n");
 
 		content.append("# The tempban command that will be used to ban people\n");
 		content.append("# It should contain:\n");
 		content.append("# - %player% : will be replaced by the player's name\n");
 		content.append("# - %duration% : will be replaced by the duration, in seconds\n");
 		content.append("# - %reason% : will be replaced by the reason\n");
-		content.append("tempBanCommand: " + getTempBanCommand() + "\n\n");
+		content.append("tempBanCommand: " + this.tempBanCommand + "\n\n");
 
 		content.append("# The tempjail command that will be used to jail people\n");
 		content.append("# It should contain:\n");
@@ -303,13 +298,13 @@ public class Config extends AbstractConfig<NTalk> {
 		content.append("# - %duration% : will be replaced by the duration, in seconds\n");
 		content.append("# - %jailName% : will be replaced by the jail name\n");
 		content.append("# - %reason% : will be replaced by the reason\n");
-		content.append("tempJailCommand: " + getTempJailCommand() + "\n\n");
+		content.append("tempJailCommand: " + this.tempJailCommand + "\n\n");
 
 		return content.toString();
 	}
 
 	public Map<String, Format> getGroupFormats() {
-		return groupFormats;
+		return this.groupFormats;
 	}
 
 	public void setGroupFormats(final Map<String, Format> groupFormats) {
@@ -317,7 +312,7 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public String getOpGroup() {
-		return opGroup;
+		return this.opGroup;
 	}
 
 	public void setOpGroup(final String opGroup) {
@@ -325,7 +320,7 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public Map<UUID, Format> getPlayerFormats() {
-		return playerFormats;
+		return this.playerFormats;
 	}
 
 	public void setPlayerFormats(final Map<UUID, Format> playerFormats) {
@@ -333,7 +328,7 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public Map<UUID, String> getPlayerNicknames() {
-		return playerNicknames;
+		return this.playerNicknames;
 	}
 
 	public void setPlayerNicknames(final Map<UUID, String> playerNicknames) {
@@ -341,7 +336,7 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public String getPmTemplate() {
-		return pmTemplate;
+		return this.pmTemplate;
 	}
 
 	public void setPmTemplate(final String pmTemplate) {
@@ -349,7 +344,7 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public String getTemplate() {
-		return template;
+		return this.template;
 	}
 
 	public void setTemplate(final String template) {
@@ -357,7 +352,7 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public Format getDefaultFormat() {
-		return defaultFormat;
+		return this.defaultFormat;
 	}
 
 	public void setDefaultFormat(final Format defaultFormat) {
@@ -365,7 +360,7 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public boolean isChatFiltersEnabled() {
-		return chatFiltersEnabled;
+		return this.chatFiltersEnabled;
 	}
 
 	public void setChatFiltersEnabled(final boolean chatFiltersEnabled) {
@@ -373,11 +368,11 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public String getTempMuteCommand() {
-		return tempMuteCommand;
+		return this.tempMuteCommand;
 	}
 
 	public String getTempMuteCommand(final String playerName, final long duration, final String reason) {
-		String result = getTempMuteCommand();
+		String result = this.tempMuteCommand;
 		result = result.replace("%player%", playerName);
 		result = result.replace("%duration%", Long.toString(duration));
 		result = result.replace("%reason%", reason);
@@ -389,11 +384,11 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public String getTempBanCommand() {
-		return tempBanCommand;
+		return this.tempBanCommand;
 	}
 
 	public String getTempBanCommand(final String playerName, final long duration, final String reason) {
-		String result = getTempBanCommand();
+		String result = this.tempBanCommand;
 		result = result.replace("%player%", playerName);
 		result = result.replace("%duration%", Long.toString(duration));
 		result = result.replace("%reason%", reason);
@@ -405,11 +400,11 @@ public class Config extends AbstractConfig<NTalk> {
 	}
 
 	public String getTempJailCommand() {
-		return tempJailCommand;
+		return this.tempJailCommand;
 	}
 
 	public String getTempJailCommand(final String playerName, final long duration, final String jailName, final String reason) {
-		String result = getTempJailCommand();
+		String result = this.tempJailCommand;
 		result = result.replace("%player%", playerName);
 		result = result.replace("%duration%", Long.toString(duration));
 		result = result.replace("%jailName%", jailName);

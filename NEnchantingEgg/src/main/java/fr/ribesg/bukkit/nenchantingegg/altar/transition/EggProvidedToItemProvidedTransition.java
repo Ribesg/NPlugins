@@ -21,10 +21,6 @@ import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.EffectStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.FallingBlockStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.SoundStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.Step;
-import org.bukkit.Effect;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,10 +28,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.bukkit.Effect;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.util.Vector;
+
 // TODO
 public class EggProvidedToItemProvidedTransition extends Transition {
 
-	private static Map<Integer, Float> zeldaSound = null;
+	private static Map<Integer, Float> zeldaSound;
 
 	private static Map<Integer, Float> getZeldaSound() {
 		if (zeldaSound == null) {
@@ -58,8 +59,8 @@ public class EggProvidedToItemProvidedTransition extends Transition {
 
 	@Override
 	protected void setFromToStates() {
-		fromState = AltarState.EGG_PROVIDED;
-		toState = AltarState.ITEM_PROVIDED;
+		this.fromState = AltarState.EGG_PROVIDED;
+		this.toState = AltarState.ITEM_PROVIDED;
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public class EggProvidedToItemProvidedTransition extends Transition {
 
 		// ##########################################
 		// Egg
-		steps.add(new BlockStep(0, new RelativeBlock(0, 1, 0, Material.AIR, (byte) 0)));
+		steps.add(new BlockStep(0, new RelativeBlock(0, 1, 0, Material.AIR, (byte)0)));
 		steps.add(new EffectStep(0, new RelativeEffect(0, 1, 0, Effect.MOBSPAWNER_FLAMES)));
 		steps.add(new SoundStep(0, new RelativeSound(0, 1, 0, Sound.EXPLODE, 0.5f, 0.5f)));
 

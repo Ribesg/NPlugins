@@ -8,16 +8,18 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.flymode;
+
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import fr.ribesg.bukkit.ngeneral.feature.Feature;
 import fr.ribesg.bukkit.ngeneral.feature.FeatureType;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class FlyModeFeature extends Feature {
 
@@ -25,7 +27,7 @@ public class FlyModeFeature extends Feature {
 
 	public FlyModeFeature(final NGeneral instance) {
 		super(instance, FeatureType.FLY_MODE, instance.getPluginConfig().hasFlyModeFeature());
-		flyPlayers = new HashSet<>();
+		this.flyPlayers = new HashSet<>();
 	}
 
 	@Override
@@ -33,8 +35,8 @@ public class FlyModeFeature extends Feature {
 		final FlyModeListener listener = new FlyModeListener(this);
 		final FlyModeCommandExecutor executor = new FlyModeCommandExecutor(this);
 
-		Bukkit.getPluginManager().registerEvents(listener, plugin);
-		plugin.setCommandExecutor("fly", executor);
+		Bukkit.getPluginManager().registerEvents(listener, this.plugin);
+		this.plugin.setCommandExecutor("fly", executor);
 	}
 
 	@Override
@@ -49,19 +51,19 @@ public class FlyModeFeature extends Feature {
 	}
 
 	public Set<UUID> getFlyPlayers() {
-		return flyPlayers;
+		return this.flyPlayers;
 	}
 
 	public boolean hasFlyMode(final Player player) {
-		return flyPlayers.contains(player.getUniqueId());
+		return this.flyPlayers.contains(player.getUniqueId());
 	}
 
 	public void setFlyMode(final Player player, final boolean value) {
 		if (value) {
-			flyPlayers.add(player.getUniqueId());
+			this.flyPlayers.add(player.getUniqueId());
 			player.setAllowFlight(true);
 		} else {
-			flyPlayers.remove(player.getUniqueId());
+			this.flyPlayers.remove(player.getUniqueId());
 			player.setAllowFlight(false);
 		}
 	}

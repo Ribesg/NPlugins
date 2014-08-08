@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer;
+
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.Node;
@@ -15,6 +16,12 @@ import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.nplayer.security.Security;
 import fr.ribesg.bukkit.nplayer.user.User;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -26,11 +33,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PlayerCommandHandler implements CommandExecutor, Listener {
 
@@ -45,33 +47,33 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onPlayerChat(final AsyncPlayerChatEvent event) {
-		plugin.entering(getClass(), "onPlayerChat");
+		this.plugin.entering(this.getClass(), "onPlayerChat");
 
 		final Player player = event.getPlayer();
 		final String[] split = event.getMessage().split(" ");
 
 		// Check if Player's password after first arg
 		if (split.length > 1) {
-			final User user = plugin.getUserDb().get(player.getUniqueId());
+			final User user = this.plugin.getUserDb().get(player.getUniqueId());
 			if (user != null) {
 				final String password = StringUtil.joinStrings(split, 1);
 				final boolean isCorrect = Security.isUserPassword(password, user);
 				if (isCorrect) {
-					plugin.debug("Player typed his password, don't output it");
+					this.plugin.debug("Player typed his password, don't output it");
 					event.setMessage(split[0] + " ****************");
 				}
 			}
 		}
 
-		plugin.exiting(getClass(), "onPlayerChat");
+		this.plugin.exiting(this.getClass(), "onPlayerChat");
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		plugin.entering(getClass(), "onCommand");
+		this.plugin.entering(this.getClass(), "onCommand");
 		boolean result = false;
 
-		plugin.debug("Executing command " + command.getName() + " with arguments " + Arrays.toString(args));
+		this.plugin.debug("Executing command " + command.getName() + " with arguments " + Arrays.toString(args));
 		switch (command.getName()) {
 			case "nplayer":
 				if (args.length < 1) {
@@ -82,9 +84,9 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 					case "reload":
 					case "rld":
 						if (Perms.hasReload(sender)) {
-							result = reloadCommand(sender, args);
+							result = this.reloadCommand(sender, args);
 						} else {
-							plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+							this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 							result = true;
 						}
 						break;
@@ -95,89 +97,89 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			case "login":
 				if (sender instanceof Player) {
 					if (Perms.hasLogin(sender)) {
-						result = loginCommand((Player) sender, args);
+						result = this.loginCommand((Player)sender, args);
 					} else {
-						plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+						this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 						result = true;
 					}
 				} else {
-					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+					this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 					result = true;
 				}
 				break;
 			case "register":
 				if (sender instanceof Player) {
 					if (Perms.hasRegister(sender)) {
-						result = registerCommand((Player) sender, args);
+						result = this.registerCommand((Player)sender, args);
 					} else {
-						plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+						this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 						result = true;
 					}
 				} else {
-					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+					this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 					result = true;
 				}
 				break;
 			case "logout":
 				if (sender instanceof Player) {
 					if (Perms.hasLogout(sender)) {
-						result = logoutCommand((Player) sender, args);
+						result = this.logoutCommand((Player)sender, args);
 					} else {
-						plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+						this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 						result = true;
 					}
 				} else {
-					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+					this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 					result = true;
 				}
 				break;
 			case "info":
 				if (Perms.hasInfo(sender)) {
-					result = infoCommand(sender, args);
+					result = this.infoCommand(sender, args);
 				} else {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
 				}
 				break;
 			case "home":
 				if (sender instanceof Player) {
 					if (Perms.hasHome(sender)) {
-						result = homeCommand((Player) sender, args);
+						result = this.homeCommand((Player)sender, args);
 					} else {
-						plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+						this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 						result = true;
 					}
 				} else {
-					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+					this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 					result = true;
 				}
 				break;
 			case "sethome":
 				if (sender instanceof Player) {
 					if (Perms.hasSetHome(sender)) {
-						result = setHomeCommand((Player) sender, args);
+						result = this.setHomeCommand((Player)sender, args);
 					} else {
-						plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+						this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 						result = true;
 					}
 				} else {
-					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+					this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 					result = true;
 				}
 				break;
 			case "forcelogin":
 				if (Perms.hasForceLogin(sender)) {
-					result = forceLoginCommand(sender, args);
+					result = this.forceLoginCommand(sender, args);
 				} else {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					result = true;
 				}
 				break;
 		}
 
-		plugin.debug("Command execution result: " + result);
+		this.plugin.debug("Command execution result: " + result);
 
-		plugin.exiting(getClass(), "onCommand");
+		this.plugin.exiting(this.getClass(), "onCommand");
 		return result;
 	}
 
@@ -190,11 +192,11 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			case "mess":
 			case "mes":
 				try {
-					plugin.loadMessages();
-					plugin.sendMessage(sender, MessageId.cmdReloadMessages);
+					this.plugin.loadMessages();
+					this.plugin.sendMessage(sender, MessageId.cmdReloadMessages);
 				} catch (final IOException e) {
-					plugin.error("An error occured when NPlayer tried to load messages.yml", e);
-					plugin.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+					this.plugin.error("An error occured when NPlayer tried to load messages.yml", e);
+					this.plugin.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
 				}
 				return true;
 			default:
@@ -203,98 +205,98 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 	}
 
 	private boolean loginCommand(final Player player, final String[] args) {
-		plugin.entering(getClass(), "loginCommand");
+		this.plugin.entering(this.getClass(), "loginCommand");
 
-		final User user = plugin.getUserDb().get(player.getUniqueId());
+		final User user = this.plugin.getUserDb().get(player.getUniqueId());
 		if (user == null) {
-			plugin.debug("Unregistered user");
-			plugin.sendMessage(player, MessageId.player_registerFirst);
+			this.plugin.debug("Unregistered user");
+			this.plugin.sendMessage(player, MessageId.player_registerFirst);
 		} else {
-			plugin.debug("Registered user");
+			this.plugin.debug("Registered user");
 			final String password = StringUtil.joinStrings(args);
 			final boolean isCorrect = Security.isUserPassword(password, user);
 			if (isCorrect) {
-				plugin.debug("Correct password provided");
-				plugin.sendMessage(player, MessageId.player_welcomeBack);
+				this.plugin.debug("Correct password provided");
+				this.plugin.sendMessage(player, MessageId.player_welcomeBack);
 				user.setLoggedIn(true);
 				user.newIp(player.getAddress().getAddress().getHostAddress());
-				plugin.getUserDb().updateIp(user, player.getAddress().getAddress().getHostAddress());
+				this.plugin.getUserDb().updateIp(user, player.getAddress().getAddress().getHostAddress());
 			} else {
-				plugin.debug("Incorrect password provided");
-				plugin.sendMessage(player, MessageId.player_wrongPassword);
-				loginAttempt(player.getName());
+				this.plugin.debug("Incorrect password provided");
+				this.plugin.sendMessage(player, MessageId.player_wrongPassword);
+				this.loginAttempt(player.getName());
 			}
 		}
 
-		plugin.exiting(getClass(), "loginCommand");
+		this.plugin.exiting(this.getClass(), "loginCommand");
 		return true;
 	}
 
 	private boolean registerCommand(final Player player, final String[] args) {
-		plugin.entering(getClass(), "registerCommand");
+		this.plugin.entering(this.getClass(), "registerCommand");
 
-		User user = plugin.getUserDb().get(player.getUniqueId());
+		User user = this.plugin.getUserDb().get(player.getUniqueId());
 		final String password = StringUtil.joinStrings(args);
 		if (user == null) {
-			plugin.debug("Unregistered user");
-			user = plugin.getUserDb().newUser(player.getUniqueId(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
+			this.plugin.debug("Unregistered user");
+			user = this.plugin.getUserDb().newUser(player.getUniqueId(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
 			user.setLoggedIn(true);
-			plugin.sendMessage(player, MessageId.player_welcomeToTheServer);
+			this.plugin.sendMessage(player, MessageId.player_welcomeToTheServer);
 		} else if (user.isLoggedIn()) {
-			plugin.debug("Registered and logged-in user, change password");
+			this.plugin.debug("Registered and logged-in user, change password");
 			user.setPasswordHash(Security.hash(password));
-			plugin.sendMessage(player, MessageId.player_passwordChanged);
+			this.plugin.sendMessage(player, MessageId.player_passwordChanged);
 		} else {
-			plugin.debug("Registered non-logged-in user");
-			plugin.sendMessage(player, MessageId.player_alreadyRegistered);
+			this.plugin.debug("Registered non-logged-in user");
+			this.plugin.sendMessage(player, MessageId.player_alreadyRegistered);
 		}
 
-		plugin.exiting(getClass(), "registerCommand");
+		this.plugin.exiting(this.getClass(), "registerCommand");
 		return true;
 	}
 
 	private boolean logoutCommand(final Player player, final String[] args) {
-		plugin.entering(getClass(), "logoutCommand");
+		this.plugin.entering(this.getClass(), "logoutCommand");
 
-		final User user = plugin.getUserDb().get(player.getUniqueId());
+		final User user = this.plugin.getUserDb().get(player.getUniqueId());
 		if (user == null) {
-			plugin.debug("Unregistered user");
-			plugin.sendMessage(player, MessageId.player_registerFirst);
+			this.plugin.debug("Unregistered user");
+			this.plugin.sendMessage(player, MessageId.player_registerFirst);
 		} else if (!user.isLoggedIn()) {
-			plugin.debug("Registered non-logged-in user");
-			plugin.sendMessage(player, MessageId.player_loginFirst);
+			this.plugin.debug("Registered non-logged-in user");
+			this.plugin.sendMessage(player, MessageId.player_loginFirst);
 		} else {
-			plugin.debug("Registered logged-in user");
+			this.plugin.debug("Registered logged-in user");
 			boolean autoLogout = false;
 			boolean toggle = false;
 			boolean enable = false;
 			boolean disable = false;
 			if (args != null && args.length > 0) {
-				plugin.debug("Additional arguments");
+				this.plugin.debug("Additional arguments");
 				for (int i = 0; i < args.length; i++) {
 					args[i] = args[i].toLowerCase();
 				}
 				if (args.length == 1) {
-					if (args[0].equals("autologout") || args[0].equals("auto")) {
-						plugin.debug("Toggle auto-logout");
+					if ("autologout".equals(args[0]) || "auto".equals(args[0])) {
+						this.plugin.debug("Toggle auto-logout");
 						autoLogout = true;
 						toggle = true;
 					}
 				} else if (args.length == 2) {
-					if (args[0].equals("autologout") || args[0].equals("auto")) {
+					if ("autologout".equals(args[0]) || "auto".equals(args[0])) {
 						autoLogout = true;
-						if (args[1].equals("enable")) {
-							plugin.debug("Enable auto-logout");
+						if ("enable".equals(args[1])) {
+							this.plugin.debug("Enable auto-logout");
 							enable = true;
-						} else if (args[1].equals("disable")) {
-							plugin.debug("Disable auto-logout");
+						} else if ("disable".equals(args[1])) {
+							this.plugin.debug("Disable auto-logout");
 							disable = true;
 						}
 					}
 				}
 			}
 			if (autoLogout) {
-				plugin.debug("Modifying auto-logout state");
+				this.plugin.debug("Modifying auto-logout state");
 				if (toggle) {
 					user.setAutoLogout(!user.hasAutoLogout());
 				} else if (enable) {
@@ -303,51 +305,51 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 					user.setAutoLogout(false);
 				}
 				if (user.hasAutoLogout()) {
-					plugin.sendMessage(player, MessageId.player_autoLogoutEnabled);
+					this.plugin.sendMessage(player, MessageId.player_autoLogoutEnabled);
 				} else {
-					plugin.sendMessage(player, MessageId.player_autoLogoutDisabled);
+					this.plugin.sendMessage(player, MessageId.player_autoLogoutDisabled);
 				}
 			} else {
-				plugin.debug("Logging out");
+				this.plugin.debug("Logging out");
 				user.setLoggedIn(false);
-				plugin.sendMessage(player, MessageId.player_loggedOut);
+				this.plugin.sendMessage(player, MessageId.player_loggedOut);
 			}
 		}
 
-		plugin.exiting(getClass(), "logoutCommand");
+		this.plugin.exiting(this.getClass(), "logoutCommand");
 		return true;
 	}
 
 	private boolean infoCommand(final CommandSender sender, final String[] args) {
-		plugin.entering(getClass(), "infoCommand");
+		this.plugin.entering(this.getClass(), "infoCommand");
 
 		final boolean isAdmin = Perms.hasInfoAdmin(sender);
 		sender.sendMessage("/info command STILL TODO");
 
-		plugin.exiting(getClass(), "infoCommand");
+		this.plugin.exiting(this.getClass(), "infoCommand");
 		return false; // TODO
 	}
 
 	private boolean homeCommand(final Player player, final String[] args) {
-		plugin.entering(getClass(), "homeCommand");
+		this.plugin.entering(this.getClass(), "homeCommand");
 
 		if (args.length > 0) {
 			if (!Perms.hasHomeOthers(player)) {
-				plugin.sendMessage(player, MessageId.noPermissionForCommand);
+				this.plugin.sendMessage(player, MessageId.noPermissionForCommand);
 			} else {
 				final String userName = args[0];
-				final User user = plugin.getUserDb().get(UuidDb.getId(Node.PLAYER, userName));
+				final User user = this.plugin.getUserDb().get(UuidDb.getId(Node.PLAYER, userName));
 				if (user == null) {
-					plugin.sendMessage(player, MessageId.player_unknownUser, userName);
+					this.plugin.sendMessage(player, MessageId.player_unknownUser, userName);
 				} else {
 					final String realUserName = UuidDb.getName(user.getUserId());
 					final Location dest = user.getHome();
 					if (dest == null) {
-						plugin.sendMessage(player, MessageId.player_userHasNoHome, realUserName);
+						this.plugin.sendMessage(player, MessageId.player_userHasNoHome, realUserName);
 					} else {
-						plugin.sendMessage(player, MessageId.player_teleportingToUserHome, realUserName);
+						this.plugin.sendMessage(player, MessageId.player_teleportingToUserHome, realUserName);
 						dest.getChunk().load(true);
-						plugin.getServer().getScheduler().runTask(plugin, new BukkitRunnable() {
+						this.plugin.getServer().getScheduler().runTask(this.plugin, new BukkitRunnable() {
 
 							@Override
 							public void run() {
@@ -358,18 +360,18 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 				}
 			}
 		} else {
-			final User user = plugin.getUserDb().get(player.getUniqueId());
+			final User user = this.plugin.getUserDb().get(player.getUniqueId());
 			if (user == null) {
-				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use the command.");
+				this.plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use the command.");
 				player.sendMessage("§cUnknown error, see console.");
 			} else {
 				final Location dest = user.getHome();
 				if (dest == null) {
-					plugin.sendMessage(player, MessageId.player_youHaveNoHome);
+					this.plugin.sendMessage(player, MessageId.player_youHaveNoHome);
 				} else {
-					plugin.sendMessage(player, MessageId.player_teleportingToYourHome);
+					this.plugin.sendMessage(player, MessageId.player_teleportingToYourHome);
 					dest.getChunk().load(true);
-					plugin.getServer().getScheduler().runTask(plugin, new BukkitRunnable() {
+					this.plugin.getServer().getScheduler().runTask(this.plugin, new BukkitRunnable() {
 
 						@Override
 						public void run() {
@@ -380,103 +382,103 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
 			}
 		}
 
-		plugin.exiting(getClass(), "homeCommand");
+		this.plugin.exiting(this.getClass(), "homeCommand");
 		return true;
 	}
 
 	private boolean setHomeCommand(final Player player, final String[] args) {
-		plugin.entering(getClass(), "setHomeCommand");
+		this.plugin.entering(this.getClass(), "setHomeCommand");
 
 		if (args.length > 0) {
 			if (!Perms.hasSetHomeOthers(player)) {
-				plugin.sendMessage(player, MessageId.noPermissionForCommand);
+				this.plugin.sendMessage(player, MessageId.noPermissionForCommand);
 			} else {
 				final String userName = args[0];
-				final User user = plugin.getUserDb().get(UuidDb.getId(Node.PLAYER, userName));
+				final User user = this.plugin.getUserDb().get(UuidDb.getId(Node.PLAYER, userName));
 				if (user == null) {
-					plugin.sendMessage(player, MessageId.player_unknownUser, userName);
+					this.plugin.sendMessage(player, MessageId.player_unknownUser, userName);
 				} else {
 					user.setHome(player.getLocation());
-					plugin.sendMessage(player, MessageId.player_userHomeSet, UuidDb.getName(user.getUserId()));
+					this.plugin.sendMessage(player, MessageId.player_userHomeSet, UuidDb.getName(user.getUserId()));
 				}
 			}
 		} else {
-			final User user = plugin.getUserDb().get(player.getUniqueId());
+			final User user = this.plugin.getUserDb().get(player.getUniqueId());
 			if (user == null) {
-				plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use the command.");
+				this.plugin.getLogger().severe("Unknown error while executing command /home : user does not exists but still managed to use the command.");
 				player.sendMessage("§cUnknown error, see console.");
 			} else {
 				user.setHome(player.getLocation());
-				plugin.sendMessage(player, MessageId.player_yourHomeSet);
+				this.plugin.sendMessage(player, MessageId.player_yourHomeSet);
 			}
 		}
 
-		plugin.exiting(getClass(), "setHomeCommand");
+		this.plugin.exiting(this.getClass(), "setHomeCommand");
 		return true;
 	}
 
 	private boolean forceLoginCommand(final CommandSender sender, final String[] args) {
-		plugin.entering(getClass(), "forceLoginCommand");
+		this.plugin.entering(this.getClass(), "forceLoginCommand");
 		boolean result = false;
 
 		if (args.length == 1) {
 			final Player player = Bukkit.getPlayer(args[0]);
 			if (player == null) {
-				plugin.sendMessage(sender, MessageId.player_unknownUser, args[0]);
+				this.plugin.sendMessage(sender, MessageId.player_unknownUser, args[0]);
 			} else {
-				final User user = plugin.getUserDb().get(player.getUniqueId());
+				final User user = this.plugin.getUserDb().get(player.getUniqueId());
 				if (user == null) {
-					plugin.sendMessage(sender, MessageId.player_unknownUser, player.getName());
+					this.plugin.sendMessage(sender, MessageId.player_unknownUser, player.getName());
 				} else {
 					user.setLoggedIn(true);
-					plugin.getLoggedOutUserHandler().notifyLogin(player);
-					plugin.sendMessage(sender, MessageId.player_youForcedLogin, player.getName());
-					plugin.sendMessage(player, MessageId.player_somebodyForcedLoginYou, sender.getName());
+					this.plugin.getLoggedOutUserHandler().notifyLogin(player);
+					this.plugin.sendMessage(sender, MessageId.player_youForcedLogin, player.getName());
+					this.plugin.sendMessage(player, MessageId.player_somebodyForcedLoginYou, sender.getName());
 				}
 			}
 
 			result = true;
 		}
 
-		plugin.exiting(getClass(), "forceLoginCommand");
+		this.plugin.exiting(this.getClass(), "forceLoginCommand");
 		return result;
 	}
 
 	private void loginAttempt(final String userName) {
-		plugin.entering(getClass(), "loginAttempt");
+		this.plugin.entering(this.getClass(), "loginAttempt");
 
 		int nb = 0;
-		if (loginAttempts.containsKey(userName)) {
-			nb = loginAttempts.get(userName);
+		if (this.loginAttempts.containsKey(userName)) {
+			nb = this.loginAttempts.get(userName);
 		}
 		nb++;
-		if (nb > plugin.getPluginConfig().getMaximumLoginAttempts()) {
-			plugin.debug("Reached maximum allowed login attempts");
+		if (nb > this.plugin.getPluginConfig().getMaximumLoginAttempts()) {
+			this.plugin.debug("Reached maximum allowed login attempts");
 			final Player target = Bukkit.getPlayerExact(userName);
-			switch (plugin.getPluginConfig().getTooManyAttemptsPunishment()) {
+			switch (this.plugin.getPluginConfig().getTooManyAttemptsPunishment()) {
 				case 0:
-					plugin.getPunishmentDb().getLeaveMessages().put(target.getUniqueId(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedKickMessage, userName)[0]);
-					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsKickMessage)[0]);
+					this.plugin.getPunishmentDb().getLeaveMessages().put(target.getUniqueId(), this.plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedKickMessage, userName)[0]);
+					target.kickPlayer(this.plugin.getMessages().get(MessageId.player_loginAttemptsKickMessage)[0]);
 					break;
 				case 1:
-					final int duration = plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration();
+					final int duration = this.plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration();
 					final String durationString = TimeUtil.toString(duration);
-					plugin.getPunishmentDb().getLeaveMessages().put(target.getUniqueId(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName, durationString)[0]);
-					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsTempBanMessage, durationString)[0]);
-					plugin.getPunishmentDb().tempBanIp(target.getAddress().getAddress().getHostAddress(), plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration(), plugin.getMessages().get(MessageId.player_loginAttemptsTooMany)[0]);
+					this.plugin.getPunishmentDb().getLeaveMessages().put(target.getUniqueId(), this.plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedTempBanMessage, userName, durationString)[0]);
+					target.kickPlayer(this.plugin.getMessages().get(MessageId.player_loginAttemptsTempBanMessage, durationString)[0]);
+					this.plugin.getPunishmentDb().tempBanIp(target.getAddress().getAddress().getHostAddress(), this.plugin.getPluginConfig().getTooManyAttemptsPunishmentDuration(), this.plugin.getMessages().get(MessageId.player_loginAttemptsTooMany)[0]);
 					break;
 				case 2:
-					plugin.getPunishmentDb().getLeaveMessages().put(target.getUniqueId(), plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedPermBanMessage, userName)[0]);
-					target.kickPlayer(plugin.getMessages().get(MessageId.player_loginAttemptsPermBanMessage)[0]);
-					plugin.getPunishmentDb().permBanIp(target.getAddress().getAddress().getHostAddress(), plugin.getMessages().get(MessageId.player_loginAttemptsTooMany)[0]);
+					this.plugin.getPunishmentDb().getLeaveMessages().put(target.getUniqueId(), this.plugin.getMessages().get(MessageId.player_loginAttemptsBroadcastedPermBanMessage, userName)[0]);
+					target.kickPlayer(this.plugin.getMessages().get(MessageId.player_loginAttemptsPermBanMessage)[0]);
+					this.plugin.getPunishmentDb().permBanIp(target.getAddress().getAddress().getHostAddress(), this.plugin.getMessages().get(MessageId.player_loginAttemptsTooMany)[0]);
 					break;
 				default:
 					break;
 			}
-			loginAttempts.put(userName, plugin.getPluginConfig().getMaximumLoginAttempts() - 1);
+			this.loginAttempts.put(userName, this.plugin.getPluginConfig().getMaximumLoginAttempts() - 1);
 		}
-		loginAttempts.put(userName, nb);
+		this.loginAttempts.put(userName, nb);
 
-		plugin.exiting(getClass(), "loginAttempt");
+		this.plugin.exiting(this.getClass(), "loginAttempt");
 	}
 }

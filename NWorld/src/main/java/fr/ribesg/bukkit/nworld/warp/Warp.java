@@ -8,7 +8,9 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nworld.warp;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
+
 import org.bukkit.Location;
 
 /**
@@ -31,7 +33,7 @@ public class Warp implements Comparable<Warp> {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(final String name) {
@@ -39,7 +41,7 @@ public class Warp implements Comparable<Warp> {
 	}
 
 	public NLocation getLocation() {
-		return location;
+		return this.location;
 	}
 
 	public void setLocation(final NLocation location) {
@@ -47,11 +49,11 @@ public class Warp implements Comparable<Warp> {
 	}
 
 	public void setLocation(final Location location) {
-		setLocation(new NLocation(location));
+		this.setLocation(new NLocation(location));
 	}
 
 	public boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
 	public void setEnabled(final boolean enabled) {
@@ -59,7 +61,7 @@ public class Warp implements Comparable<Warp> {
 	}
 
 	public String getRequiredPermission() {
-		return requiredPermission;
+		return this.requiredPermission;
 	}
 
 	public void setRequiredPermission(final String requiredPermission) {
@@ -67,7 +69,7 @@ public class Warp implements Comparable<Warp> {
 	}
 
 	public boolean isHidden() {
-		return hidden;
+		return this.hidden;
 	}
 
 	public void setHidden(final boolean hidden) {
@@ -76,6 +78,6 @@ public class Warp implements Comparable<Warp> {
 
 	@Override
 	public int compareTo(final Warp o) {
-		return name.compareTo(o.name);
+		return this.name.compareTo(o.name);
 	}
 }

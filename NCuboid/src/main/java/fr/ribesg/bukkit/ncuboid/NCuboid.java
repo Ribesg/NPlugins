@@ -29,16 +29,38 @@ import fr.ribesg.bukkit.ncuboid.listeners.PlayerStickListener;
 import fr.ribesg.bukkit.ncuboid.listeners.WorldLoadingListener;
 import fr.ribesg.bukkit.ncuboid.listeners.attribute.MessageListener;
 import fr.ribesg.bukkit.ncuboid.listeners.attribute.RespawnListener;
-import fr.ribesg.bukkit.ncuboid.listeners.flag.*;
-import org.bukkit.World;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
-import org.mcstats.Metrics;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.BoosterFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.BuildFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.ChatFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.ChestFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.ClosedFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.CreativeFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.DropFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.EndermanGriefFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.ExplosionFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.FarmFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.FireFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.GodFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.InvisibleFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.JailFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.MobFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.PassFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.PvpFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.SnowFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.TeleportFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.UseFlagListener;
+import fr.ribesg.bukkit.ncuboid.listeners.flag.WarpgateFlagListener;
 
 import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
+
+import org.mcstats.Metrics;
 
 /**
  * TODO
@@ -70,9 +92,9 @@ public class NCuboid extends NPlugin implements CuboidNode {
 
 	@Override
 	public void loadMessages() throws IOException {
-		debug("Loading plugin Messages...");
-		if (!getDataFolder().isDirectory()) {
-			getDataFolder().mkdir();
+		this.debug("Loading plugin Messages...");
+		if (!this.getDataFolder().isDirectory()) {
+			this.getDataFolder().mkdir();
 		}
 
 		final Messages messages = new Messages();
@@ -81,38 +103,35 @@ public class NCuboid extends NPlugin implements CuboidNode {
 		this.messages = messages;
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeEnable()
-	 */
 	@Override
 	protected boolean onNodeEnable() {
-		entering(getClass(), "onNodeEnable");
+		this.entering(this.getClass(), "onNodeEnable");
 
-		debug("Loading plugin configuration...");
+		this.debug("Loading plugin configuration...");
 		try {
-			pluginConfig = new Config(this);
-			pluginConfig.loadConfig();
+			this.pluginConfig = new Config(this);
+			this.pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			error("An error occured when NCuboid tried to load config.yml", e);
+			this.error("An error occured when NCuboid tried to load config.yml", e);
 			return false;
 		}
 
-		debug("Creating Dynmap Bridge...");
+		this.debug("Creating Dynmap Bridge...");
 		this.dynmapBridge = new DynmapBridge();
 
-		debug("Creating Jail system...");
-		jails = new Jails(this);
+		this.debug("Creating Jail system...");
+		this.jails = new Jails(this);
 
-		debug("Loading Regions...");
+		this.debug("Loading Regions...");
 		try {
-			db = RegionDbPersistenceHandler.loadDb(this);
+			this.db = RegionDbPersistenceHandler.loadDb(this);
 		} catch (final IOException | InvalidConfigurationException e) {
-			error("An error occured when NCuboid tried to load cuboidDB.yml", e);
+			this.error("An error occured when NCuboid tried to load cuboidDB.yml", e);
 			return false;
 		}
 
-		debug("Creating and registering listeners...");
-		final PluginManager pm = getServer().getPluginManager();
+		this.debug("Creating and registering listeners...");
+		final PluginManager pm = this.getServer().getPluginManager();
 
 		pm.registerEvents(new EventExtensionListener(this), this);
 		pm.registerEvents(new PlayerStickListener(this), this);
@@ -145,63 +164,57 @@ public class NCuboid extends NPlugin implements CuboidNode {
 		pm.registerEvents(new MessageListener(this), this);
 		pm.registerEvents(new RespawnListener(this), this);
 
-		debug("Registering command...");
-		setCommandExecutor("ncuboid", new MainCommandExecutor(this));
+		this.debug("Registering command...");
+		this.setCommandExecutor("ncuboid", new MainCommandExecutor(this));
 
-		debug("Initializing Dynmap bridge...");
+		this.debug("Initializing Dynmap bridge...");
 		this.dynmapBridge.initialize(this.db);
 
-		debug("Initializing Metrics...");
-		final Metrics.Graph g = getMetrics().createGraph("Amount of Regions");
+		this.debug("Initializing Metrics...");
+		final Metrics.Graph g = this.getMetrics().createGraph("Amount of Regions");
 		g.addPlotter(new Metrics.Plotter() {
 
 			@Override
 			public int getValue() {
-				return getDb().size();
+				return fr.ribesg.bukkit.ncuboid.NCuboid.this.getDb().size();
 			}
 		});
 
-		exiting(getClass(), "onNodeEnable");
+		this.exiting(this.getClass(), "onNodeEnable");
 		return true;
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
-	 */
 	@Override
 	protected void handleOtherNodes() {
-		entering(getClass(), "handleOtherNodes");
+		this.entering(this.getClass(), "handleOtherNodes");
 
-		debug("Seeking new worlds...");
-		for (final World world : getServer().getWorlds()) {
-			if (db.getByWorld(world.getName()) == null) {
-				debug("  New world found: " + world.getName());
-				db.addByWorld(new WorldRegion(world.getName()));
+		this.debug("Seeking new worlds...");
+		for (final World world : this.getServer().getWorlds()) {
+			if (this.db.getByWorld(world.getName()) == null) {
+				this.debug("  New world found: " + world.getName());
+				this.db.addByWorld(new WorldRegion(world.getName()));
 			}
 		}
 
-		exiting(getClass(), "handleOtherNodes");
+		this.exiting(this.getClass(), "handleOtherNodes");
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#onNodeDisable()
-	 */
 	@Override
 	protected void onNodeDisable() {
-		entering(getClass(), "onNodeDisable");
+		this.entering(this.getClass(), "onNodeDisable");
 
-		debug("Saving Regions...");
+		this.debug("Saving Regions...");
 		try {
-			RegionDbPersistenceHandler.saveDb(this, getDb());
+			RegionDbPersistenceHandler.saveDb(this, this.db);
 		} catch (final IOException e) {
-			error("An error occured when NCuboid tried to save cuboidDB.yml", e);
+			this.error("An error occured when NCuboid tried to save cuboidDB.yml", e);
 		}
 
-		exiting(getClass(), "onNodeDisable");
+		this.exiting(this.getClass(), "onNodeDisable");
 	}
 
 	public RegionDb getDb() {
-		return db;
+		return this.db;
 	}
 
 	public void setDb(final RegionDb db) {
@@ -210,23 +223,23 @@ public class NCuboid extends NPlugin implements CuboidNode {
 
 	@Override
 	public Messages getMessages() {
-		return messages;
+		return this.messages;
 	}
 
 	public Config getPluginConfig() {
-		return pluginConfig;
+		return this.pluginConfig;
 	}
 
 	public DynmapBridge getDynmapBridge() {
-		return dynmapBridge;
+		return this.dynmapBridge;
 	}
 
 	public Jails getJails() {
-		return jails;
+		return this.jails;
 	}
 
 	public boolean shouldShow(final Player player) {
-		final GeneralNode general = getCore().getGeneralNode();
+		final GeneralNode general = this.getCore().getGeneralNode();
 		return general == null || !general.isSpy(player.getUniqueId());
 	}
 
@@ -239,45 +252,45 @@ public class NCuboid extends NPlugin implements CuboidNode {
 
 	@Override
 	public boolean isJailed(final UUID id) {
-		entering(getClass(), "isJailed", "id=" + id);
-		final boolean result = jails.isJailed(id);
-		exiting(getClass(), "isJailed", "result=" + result);
+		this.entering(this.getClass(), "isJailed", "id=" + id);
+		final boolean result = this.jails.isJailed(id);
+		this.exiting(this.getClass(), "isJailed", "result=" + result);
 		return result;
 	}
 
 	@Override
 	public boolean jail(final UUID id, final String jailName) {
-		if (isDebugEnabled()) {
-			entering(getClass(), "jail", "id=" + id + ";jailName=" + jailName);
+		if (this.isDebugEnabled()) {
+			this.entering(this.getClass(), "jail", "id=" + id + ";jailName=" + jailName);
 		}
-		final boolean result = jails.jail(id, jailName);
-		exiting(getClass(), "jail", "result=" + result);
+		final boolean result = this.jails.jail(id, jailName);
+		this.exiting(this.getClass(), "jail", "result=" + result);
 		return result;
 	}
 
 	@Override
 	public boolean unJail(final UUID id) {
-		entering(getClass(), "unJail", "id=" + id);
-		final boolean result = jails.unJail(id);
-		exiting(getClass(), "unJail", "result=" + result);
+		this.entering(this.getClass(), "unJail", "id=" + id);
+		final boolean result = this.jails.unJail(id);
+		this.exiting(this.getClass(), "unJail", "result=" + result);
 		return result;
 	}
 
 	@Override
 	public Set<String> getJailsSet() {
-		return jails.getJailNames();
+		return this.jails.getJailNames();
 	}
 
 	@Override
 	public NLocation getJailLocation(final String jailName) {
-		entering(getClass(), "getJailLocation", "jailName=" + jailName);
+		this.entering(this.getClass(), "getJailLocation", "jailName=" + jailName);
 
-		final Jail jail = jails.getByName(jailName);
+		final Jail jail = this.jails.getByName(jailName);
 		if (jail != null) {
-			exiting(getClass(), "getJailLocation");
+			this.exiting(this.getClass(), "getJailLocation");
 			return jail.getLocation();
 		} else {
-			exiting(getClass(), "getJailLocation", "Failed: unknown jail '" + jailName + "'");
+			this.exiting(this.getClass(), "getJailLocation", "Failed: unknown jail '" + jailName + '\'');
 			return null;
 		}
 	}

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.common;
+
 /**
  * This class can be used to work with the Time in Minecraft.
  * It contains some magic values about "real" day/night time.
@@ -131,6 +132,8 @@ public enum MinecraftTime {
 	 * Checks if the provided time corresponds to this Enum value
 	 *
 	 * @param time some absolute or relative time
+	 *
+	 * @return true if the provided time corresponds to this Enum value
 	 */
 	private boolean is(final long time) {
 		final long notFullTime = time % DAY_LENGTH;

@@ -8,15 +8,16 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Utility class containing some tools to play with Signs.
@@ -293,14 +294,14 @@ public class SignUtil {
 	private static void checkAddSign(final List<Sign> list, final World w, final int x, final int y, final int z, final int rX, final int rY, final int rZ) {
 		final Material m = w.getBlockAt(x + rX, y + rY, z + rZ).getType();
 		if (m == Material.SIGN_POST || m == Material.WALL_SIGN) {
-			list.add((Sign) w.getBlockAt(x + rX, y + rY, z + rZ).getState());
+			list.add((Sign)w.getBlockAt(x + rX, y + rY, z + rZ).getState());
 		}
 	}
 
 	/**
 	 * Checks if the block at ( x+rX ; y+rY ; z+rZ ) is a Sign. Adds found Sign block to list.
 	 * <p>
-	 * Compared to {@link #checkAddSign(java.util.List, org.bukkit.World, int, int, int, int, int, int)}, this
+	 * Compared to {@link #checkAddSign(List, World, int, int, int, int, int, int)}, this
 	 * method returns a boolean that indicates if the block found was of provided type chestId or not.
 	 * It's used to consider double chest (a Chest next to a Trapped Chest is not a Double Chest).
 	 *
@@ -319,7 +320,7 @@ public class SignUtil {
 	private static boolean checkAddSignChest(final List<Sign> list, final World w, final int x, final int y, final int z, final int rX, final int rY, final int rZ, final Material blockMat) {
 		final Material m = w.getBlockAt(x + rX, y + rY, z + rZ).getType();
 		if (m == Material.SIGN_POST || m == Material.WALL_SIGN) {
-			list.add((Sign) w.getBlockAt(x + rX, y + rY, z + rZ).getState());
+			list.add((Sign)w.getBlockAt(x + rX, y + rY, z + rZ).getState());
 		} else if (m == blockMat) {
 			return true;
 		}

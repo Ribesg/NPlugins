@@ -10,9 +10,10 @@
 package fr.ribesg.bukkit.ncuboid.commands;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
+
+import org.bukkit.command.CommandSender;
 
 public abstract class AbstractSubcmdExecutor {
 
@@ -24,7 +25,7 @@ public abstract class AbstractSubcmdExecutor {
 	}
 
 	public NCuboid getPlugin() {
-		return plugin;
+		return this.plugin;
 	}
 
 	/**
@@ -35,10 +36,10 @@ public abstract class AbstractSubcmdExecutor {
 	}
 
 	public boolean execute(final CommandSender sender, final String[] superCommandArgs) {
-		final boolean result = exec(sender, Arrays.copyOfRange(superCommandArgs, 1, superCommandArgs.length));
+		final boolean result = this.exec(sender, Arrays.copyOfRange(superCommandArgs, 1, superCommandArgs.length));
 		if (!result) {
 			for (final String line : this.usage) {
-				sender.sendMessage(getPlugin().getMessages().getMessageHeader() + line);
+				sender.sendMessage(this.plugin.getMessages().getMessageHeader() + line);
 			}
 		}
 		return true;

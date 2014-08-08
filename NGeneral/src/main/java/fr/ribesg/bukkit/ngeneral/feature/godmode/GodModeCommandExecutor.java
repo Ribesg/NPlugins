@@ -8,16 +8,18 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.godmode;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class GodModeCommandExecutor implements CommandExecutor {
 
@@ -51,47 +53,47 @@ public class GodModeCommandExecutor implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if (command.getName().equals("god")) {
+		if ("god".equals(command.getName())) {
 			if (!Perms.hasGod(sender)) {
-				feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+				this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 				return true;
 			} else if (args.length == 0) {
 				if (!(sender instanceof Player)) {
-					feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-				} else if (feature.hasGodMode((Player) sender)) {
-					feature.setGodMode((Player) sender, false);
-					feature.getPlugin().sendMessage(sender, MessageId.general_god_disabled);
+					this.feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+				} else if (this.feature.hasGodMode((Player)sender)) {
+					this.feature.setGodMode((Player)sender, false);
+					this.feature.getPlugin().sendMessage(sender, MessageId.general_god_disabled);
 				} else {
-					feature.setGodMode((Player) sender, true);
-					feature.getPlugin().sendMessage(sender, MessageId.general_god_enabled);
+					this.feature.setGodMode((Player)sender, true);
+					this.feature.getPlugin().sendMessage(sender, MessageId.general_god_enabled);
 				}
 				return true;
 			} else if (args.length == 1) {
 				final String arg0 = args[0].toLowerCase();
 				if (getEnabled().contains(arg0)) {
 					if (!(sender instanceof Player)) {
-						feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+						this.feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 					} else {
-						feature.setGodMode((Player) sender, true);
-						feature.getPlugin().sendMessage(sender, MessageId.general_god_enabled);
+						this.feature.setGodMode((Player)sender, true);
+						this.feature.getPlugin().sendMessage(sender, MessageId.general_god_enabled);
 					}
 				} else if (getDisabled().contains(arg0)) {
 					if (!(sender instanceof Player)) {
-						feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+						this.feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 					} else {
-						feature.setGodMode((Player) sender, false);
-						feature.getPlugin().sendMessage(sender, MessageId.general_god_disabled);
+						this.feature.setGodMode((Player)sender, false);
+						this.feature.getPlugin().sendMessage(sender, MessageId.general_god_disabled);
 					}
 				} else if (Perms.hasGodOthers(sender)) {
 					final String[] names = arg0.split(",");
-					setAll(sender, names, null);
+					this.setAll(sender, names, null);
 				} else {
-					feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+					this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 				}
 				return true;
 			} else if (args.length == 2) {
 				if (!Perms.hasGodOthers(sender)) {
-					feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+					this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 				} else {
 					final String arg0 = args[0].toLowerCase();
 					final Boolean value;
@@ -104,7 +106,7 @@ public class GodModeCommandExecutor implements CommandExecutor {
 						return false;
 					}
 					final String[] names = arg1.split(",");
-					setAll(sender, names, value);
+					this.setAll(sender, names, value);
 				}
 				return true;
 			} else {
@@ -125,16 +127,16 @@ public class GodModeCommandExecutor implements CommandExecutor {
 		for (final String name : playerNames) {
 			final Player p = Bukkit.getPlayer(name);
 			if (p == null) {
-				feature.getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
+				this.feature.getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 			} else {
-				final boolean actualValue = value == null ? !feature.hasGodMode(p) : value;
-				feature.setGodMode(p, actualValue);
+				final boolean actualValue = value == null ? !this.feature.hasGodMode(p) : value;
+				this.feature.setGodMode(p, actualValue);
 				if (actualValue) {
-					feature.getPlugin().sendMessage(sender, MessageId.general_god_enabledFor, p.getName());
-					feature.getPlugin().sendMessage(p, MessageId.general_god_enabledBy, sender.getName());
+					this.feature.getPlugin().sendMessage(sender, MessageId.general_god_enabledFor, p.getName());
+					this.feature.getPlugin().sendMessage(p, MessageId.general_god_enabledBy, sender.getName());
 				} else {
-					feature.getPlugin().sendMessage(sender, MessageId.general_god_disabledFor, p.getName());
-					feature.getPlugin().sendMessage(p, MessageId.general_god_disabledBy, sender.getName());
+					this.feature.getPlugin().sendMessage(sender, MessageId.general_god_disabledFor, p.getName());
+					this.feature.getPlugin().sendMessage(p, MessageId.general_god_disabledBy, sender.getName());
 				}
 			}
 		}

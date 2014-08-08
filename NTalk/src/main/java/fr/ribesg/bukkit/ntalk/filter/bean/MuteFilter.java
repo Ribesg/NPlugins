@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntalk.filter.bean;
+
 import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
 import java.util.Map;
@@ -27,9 +28,9 @@ public class MuteFilter extends TimedFilter {
 
 	public static MuteFilter loadFromConfig(final String key, final Map<String, Object> values) {
 		try {
-			final String filteredString = (String) values.get("filteredString");
-			final boolean regex = (boolean) values.get("isRegex");
-			final long duration = (int) values.get("duration");
+			final String filteredString = (String)values.get("filteredString");
+			final boolean regex = (boolean)values.get("isRegex");
+			final long duration = (int)values.get("duration");
 			return new MuteFilter(key, filteredString, regex, duration);
 		} catch (final NullPointerException e) {
 			throw new IllegalArgumentException("Missing value", e);

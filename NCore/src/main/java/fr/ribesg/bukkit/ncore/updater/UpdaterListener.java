@@ -8,9 +8,11 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.updater;
+
 import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.Perms;
 import fr.ribesg.bukkit.ncore.event.PlayerJoinedEvent;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,14 +23,14 @@ public class UpdaterListener implements Listener {
 	private final NCore plugin;
 
 	public UpdaterListener(final NCore instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoined(final PlayerJoinedEvent event) {
 		final Player player = event.getPlayer();
-		if (Perms.hasUpdaterNotice(player) && plugin.getUpdater() != null) {
-			plugin.getUpdater().notice(player);
+		if (Perms.hasUpdaterNotice(player) && this.plugin.getUpdater() != null) {
+			this.plugin.getUpdater().notice(player);
 		}
 	}
 }

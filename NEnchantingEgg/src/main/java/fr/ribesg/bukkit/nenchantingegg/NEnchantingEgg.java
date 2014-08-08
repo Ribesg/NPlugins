@@ -23,15 +23,16 @@ import fr.ribesg.bukkit.nenchantingegg.listener.ItemListener;
 import fr.ribesg.bukkit.nenchantingegg.listener.PlayerListener;
 import fr.ribesg.bukkit.nenchantingegg.listener.WorldListener;
 import fr.ribesg.bukkit.nenchantingegg.task.TimeListenerTask;
+
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
-import org.mcstats.Metrics;
 
-import java.io.IOException;
+import org.mcstats.Metrics;
 
 public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
@@ -66,9 +67,9 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	@Override
 	protected void loadMessages() throws IOException {
-		debug("Loading plugin Messages...");
-		if (!getDataFolder().isDirectory()) {
-			getDataFolder().mkdir();
+		this.debug("Loading plugin Messages...");
+		if (!this.getDataFolder().isDirectory()) {
+			this.getDataFolder().mkdir();
 		}
 
 		final Messages messages = new Messages();
@@ -79,67 +80,67 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	@Override
 	public boolean onNodeEnable() {
-		entering(getClass(), "onNodeEnable");
+		this.entering(this.getClass(), "onNodeEnable");
 
-		debug("Initializing transitions...");
-		inactiveToActiveTransition = new InactiveToActiveTransition(this);
-		activeToEggProvidedTransition = new ActiveToEggProvidedTransition(this);
-		eggProvidedToItemProvidedTransition = new EggProvidedToItemProvidedTransition(this);
-		itemProvidedToLockedTransition = new ItemProvidedToLockedTransition(this);
+		this.debug("Initializing transitions...");
+		this.inactiveToActiveTransition = new InactiveToActiveTransition(this);
+		this.activeToEggProvidedTransition = new ActiveToEggProvidedTransition(this);
+		this.eggProvidedToItemProvidedTransition = new EggProvidedToItemProvidedTransition(this);
+		this.itemProvidedToLockedTransition = new ItemProvidedToLockedTransition(this);
 
-		debug("Creating altars handler...");
-		altars = new Altars(this);
+		this.debug("Creating altars handler...");
+		this.altars = new Altars(this);
 
-		debug("Loading plugin config...");
+		this.debug("Loading plugin config...");
 		try {
-			pluginConfig = new Config(this);
-			pluginConfig.loadConfig();
+			this.pluginConfig = new Config(this);
+			this.pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			error("An error occured when NEnchantingEgg tried to load config.yml", e);
+			this.error("An error occured when NEnchantingEgg tried to load config.yml", e);
 			return false;
 		}
 
-		debug("Enabling altars...");
-		altars.onEnable();
+		this.debug("Enabling altars...");
+		this.altars.onEnable();
 
-		final PluginManager pm = getServer().getPluginManager();
-		debug("Creating listeners...");
-		worldListener = new WorldListener(this);
-		itemListener = new ItemListener(this);
-		playerListener = new PlayerListener(this);
-		debug("Registering listeners...");
-		pm.registerEvents(worldListener, this);
-		pm.registerEvents(itemListener, this);
-		pm.registerEvents(playerListener, this);
+		final PluginManager pm = this.getServer().getPluginManager();
+		this.debug("Creating listeners...");
+		this.worldListener = new WorldListener(this);
+		this.itemListener = new ItemListener(this);
+		this.playerListener = new PlayerListener(this);
+		this.debug("Registering listeners...");
+		pm.registerEvents(this.worldListener, this);
+		pm.registerEvents(this.itemListener, this);
+		pm.registerEvents(this.playerListener, this);
 
-		debug("Creating enchantments...");
-		arboricide = new Arboricide(this);
-		debug("Registering enchantments...");
-		pm.registerEvents(arboricide, this);
+		this.debug("Creating enchantments...");
+		this.arboricide = new Arboricide(this);
+		this.debug("Registering enchantments...");
+		pm.registerEvents(this.arboricide, this);
 
 		// debug("Registering commands...");
 		// getCommand("theCommand").setExecutor(new NCommandExecutor(this));
 
-		debug("Starting TimeListenerTask...");
+		this.debug("Starting TimeListenerTask...");
 		Bukkit.getScheduler().runTaskTimer(this, new TimeListenerTask(this), 100L, 50);
 
-		debug("Handling Metrics...");
-		final Metrics.Graph g = getMetrics().createGraph("Amount of Altars");
+		this.debug("Handling Metrics...");
+		final Metrics.Graph g = this.getMetrics().createGraph("Amount of Altars");
 		g.addPlotter(new Metrics.Plotter() {
 
 			@Override
 			public int getValue() {
-				return getAltars().getAltars().size();
+				return fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg.this.getAltars().getAltars().size();
 			}
 		});
 
-		exiting(getClass(), "onNodeEnable");
+		this.exiting(this.getClass(), "onNodeEnable");
 		return true;
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
-		if (cmd.getName().equals("nenchantingegg")) {
+		if ("nenchantingegg".equals(cmd.getName())) {
 			if (args.length < 1) {
 				return false;
 			}
@@ -155,18 +156,18 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 							case "mess":
 							case "mes":
 								try {
-									loadMessages();
-									sendMessage(sender, MessageId.cmdReloadMessages);
+									this.loadMessages();
+									this.sendMessage(sender, MessageId.cmdReloadMessages);
 								} catch (final IOException e) {
-									error("An error occured when NEnchantingEgg tried to load messages.yml", e);
-									sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+									this.error("An error occured when NEnchantingEgg tried to load messages.yml", e);
+									this.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
 								}
 								return true;
 							default:
 								return false;
 						}
 					} else {
-						sendMessage(sender, MessageId.noPermissionForCommand);
+						this.sendMessage(sender, MessageId.noPermissionForCommand);
 						return true;
 					}
 				default:
@@ -177,9 +178,6 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 		}
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
-	 */
 	@Override
 	protected void handleOtherNodes() {
 		// Nothing to do here for now
@@ -187,68 +185,68 @@ public class NEnchantingEgg extends NPlugin implements EnchantingEggNode {
 
 	@Override
 	public void onNodeDisable() {
-		entering(getClass(), "onNodeDisable");
+		this.entering(this.getClass(), "onNodeDisable");
 
-		debug("Cancelling tasks...");
+		this.debug("Cancelling tasks...");
 		Bukkit.getScheduler().cancelTasks(this);
 
-		debug("Disbaling altars...");
-		altars.onDisable();
+		this.debug("Disbaling altars...");
+		this.altars.onDisable();
 
-		debug("Saving plugin config...");
+		this.debug("Saving plugin config...");
 		try {
-			getPluginConfig().writeConfig();
+			this.pluginConfig.writeConfig();
 		} catch (final IOException e) {
-			error("An error occured when NEnchantingEgg tried to save config.yml", e);
+			this.error("An error occured when NEnchantingEgg tried to save config.yml", e);
 		}
 
-		altars = null;
-		exiting(getClass(), "onNodeDisable");
+		this.altars = null;
+		this.exiting(this.getClass(), "onNodeDisable");
 	}
 
 	public ActiveToEggProvidedTransition getActiveToEggProvidedTransition() {
-		return activeToEggProvidedTransition;
+		return this.activeToEggProvidedTransition;
 	}
 
 	public Altars getAltars() {
-		return altars;
+		return this.altars;
 	}
 
 	public EggProvidedToItemProvidedTransition getEggProvidedToItemProvidedTransition() {
-		return eggProvidedToItemProvidedTransition;
+		return this.eggProvidedToItemProvidedTransition;
 	}
 
 	public InactiveToActiveTransition getInactiveToActiveTransition() {
-		return inactiveToActiveTransition;
+		return this.inactiveToActiveTransition;
 	}
 
 	public ItemProvidedToLockedTransition getItemProvidedToLockedTransition() {
-		return itemProvidedToLockedTransition;
+		return this.itemProvidedToLockedTransition;
 	}
 
 	public WorldListener getWorldListener() {
-		return worldListener;
+		return this.worldListener;
 	}
 
 	public ItemListener getItemListener() {
-		return itemListener;
+		return this.itemListener;
 	}
 
 	public PlayerListener getPlayerListener() {
-		return playerListener;
+		return this.playerListener;
 	}
 
 	public Arboricide getArboricide() {
-		return arboricide;
+		return this.arboricide;
 	}
 
 	@Override
 	public Messages getMessages() {
-		return messages;
+		return this.messages;
 	}
 
 	public Config getPluginConfig() {
-		return pluginConfig;
+		return this.pluginConfig;
 	}
 
 	// API for other nodes

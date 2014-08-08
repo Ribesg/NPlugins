@@ -12,10 +12,11 @@ package fr.ribesg.bukkit.ncuboid.events.extensions;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.util.Set;
 import java.util.SortedSet;
+
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class ExtendedPlayerInteractEntityEvent extends AbstractExtendedEvent {
 
@@ -24,15 +25,15 @@ public class ExtendedPlayerInteractEntityEvent extends AbstractExtendedEvent {
 
 	public ExtendedPlayerInteractEntityEvent(final RegionDb db, final PlayerInteractEntityEvent event) {
 		super(db.getPlugin(), event);
-		regions = db.getAllByLocation(event.getRightClicked().getLocation());
-		region = db.getPrior(regions);
+		this.regions = db.getAllByLocation(event.getRightClicked().getLocation());
+		this.region = db.getPrior(this.regions);
 	}
 
 	public GeneralRegion getRegion() {
-		return region;
+		return this.region;
 	}
 
 	public Set<GeneralRegion> getRegions() {
-		return regions;
+		return this.regions;
 	}
 }

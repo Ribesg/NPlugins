@@ -16,6 +16,7 @@ import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,7 +29,7 @@ public class PassFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
-		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
+		final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			final GeneralRegion to = ext.getToRegion();
 			if (to != null && to.getFlag(Flag.PASS) && !ext.getFromRegions().contains(to)) {

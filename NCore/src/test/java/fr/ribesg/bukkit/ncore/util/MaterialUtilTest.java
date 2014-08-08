@@ -8,17 +8,20 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
+
 import fr.ribesg.bukkit.ncore.util.inventory.InventoryUtilException;
 import fr.ribesg.bukkit.ncore.util.inventory.MaterialUtil;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.bukkit.Material;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * @author Ribesg
@@ -36,11 +39,11 @@ public class MaterialUtilTest {
 
 	@Test
 	public void testGetMaterial() throws InventoryUtilException {
-		final String awaitedMaterialName = awaitedMaterial.name();
+		final String awaitedMaterialName = this.awaitedMaterial.name();
 
-		final Material foundMaterial = MaterialUtil.getMaterial(idString);
+		final Material foundMaterial = MaterialUtil.getMaterial(this.idString);
 		final String foundMaterialName = foundMaterial == null ? "null" : foundMaterial.name();
-		Assert.assertEquals("Expected Material '" + awaitedMaterialName + "' but found '" + foundMaterialName + "'", awaitedMaterialName, foundMaterialName);
+		Assert.assertEquals("Expected Material '" + awaitedMaterialName + "' but found '" + foundMaterialName + '\'', awaitedMaterialName, foundMaterialName);
 	}
 
 	@Parameters
@@ -48,11 +51,11 @@ public class MaterialUtilTest {
 		final Collection<Object[]> data = new ArrayList<>();
 		for (final Material m : Material.values()) {
 			if (!MaterialUtil.isMaterialDeprecated(m)) {
-				data.add(new Object[] {
+				data.add(new Object[]{
 						m,
 						m.name()
 				});
-				data.add(new Object[] {
+				data.add(new Object[]{
 						m,
 						Integer.toString(m.getId())
 				});

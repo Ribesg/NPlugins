@@ -8,9 +8,10 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.permission;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.LinkedList;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * Represents the Permissions attached to a Legacy Player.
@@ -46,7 +47,7 @@ public class LegacyPlayerPermissions extends PlayerPermissions {
 	public void save(final ConfigurationSection parentSection) {
 		final ConfigurationSection thisSection = parentSection.createSection(this.getPlayerName());
 		thisSection.set("mainGroup", this.getMainGroup());
-		if (this.getGroups().size() > 0) {
+		if (!this.getGroups().isEmpty()) {
 			thisSection.set("groups", new LinkedList<>(this.getGroups()));
 		}
 		super.saveCommon(thisSection);

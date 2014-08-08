@@ -12,13 +12,14 @@ package fr.ribesg.bukkit.ncuboid.events.extensions;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
+
+import java.util.Set;
+import java.util.SortedSet;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-
-import java.util.Set;
-import java.util.SortedSet;
 
 public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 
@@ -27,51 +28,51 @@ public class ExtendedEntityDamageEvent extends AbstractExtendedEvent {
 	private final GeneralRegion            entityRegion;
 	private       GeneralRegion            damagerRegion;
 
-	private boolean damagerProjectile = false;
-	private Entity shooter;
+	private boolean damagerProjectile;
+	private Entity  shooter;
 
 	public ExtendedEntityDamageEvent(final RegionDb db, final EntityDamageEvent event) {
 		super(db.getPlugin(), event);
-		entityRegions = db.getAllByLocation(event.getEntity().getLocation());
-		entityRegion = db.getPrior(entityRegions);
+		this.entityRegions = db.getAllByLocation(event.getEntity().getLocation());
+		this.entityRegion = db.getPrior(this.entityRegions);
 		if (event instanceof EntityDamageByEntityEvent) {
-			Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+			Entity damager = ((EntityDamageByEntityEvent)event).getDamager();
 			if (damager instanceof Projectile) {
-				final Projectile projectile = (Projectile) damager;
+				final Projectile projectile = (Projectile)damager;
 				if (projectile.getShooter() instanceof Entity) {
-					damager = (Entity) projectile.getShooter();
+					damager = (Entity)projectile.getShooter();
 				}
-				damagerProjectile = true;
-				shooter = damager;
+				this.damagerProjectile = true;
+				this.shooter = damager;
 			}
 			if (damager != null) {
-				damagerRegions = db.getAllByLocation(damager.getLocation());
-				damagerRegion = db.getPrior(damagerRegions);
+				this.damagerRegions = db.getAllByLocation(damager.getLocation());
+				this.damagerRegion = db.getPrior(this.damagerRegions);
 			}
 		}
 	}
 
 	public GeneralRegion getDamagerRegion() {
-		return damagerRegion;
+		return this.damagerRegion;
 	}
 
 	public Set<GeneralRegion> getDamagerRegions() {
-		return damagerRegions;
+		return this.damagerRegions;
 	}
 
 	public boolean isDamagerProjectile() {
-		return damagerProjectile;
+		return this.damagerProjectile;
 	}
 
 	public GeneralRegion getEntityRegion() {
-		return entityRegion;
+		return this.entityRegion;
 	}
 
 	public Set<GeneralRegion> getEntityRegions() {
-		return entityRegions;
+		return this.entityRegions;
 	}
 
 	public Entity getShooter() {
-		return shooter;
+		return this.shooter;
 	}
 }

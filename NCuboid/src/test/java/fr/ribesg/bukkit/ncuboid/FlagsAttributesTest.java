@@ -13,23 +13,25 @@ import fr.ribesg.bukkit.ncore.common.AbstractReflectionTest;
 import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.Flags;
-import org.junit.Assert;
-import org.junit.Test;
 
 import java.util.EnumMap;
 import java.util.Map;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 public class FlagsAttributesTest extends AbstractReflectionTest {
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void checkPermForEachFlag() {
 		// Initialize maps by first call
-		executeStaticMethod(Perms.class, "getFlagPermission", new Class[] {Flag.class}, new Object[] {null});
-		executeStaticMethod(Perms.class, "getAttributePermission", new Class[] {Attribute.class}, new Object[] {null});
+		this.executeStaticMethod(Perms.class, "getFlagPermission", new Class[]{Flag.class}, new Object[]{null});
+		this.executeStaticMethod(Perms.class, "getAttributePermission", new Class[]{Attribute.class}, new Object[]{null});
 
 		// Get maps
-		final Map<Flag, String> flagPermissions = (Map<Flag, String>) getStaticFieldValue(Perms.class, "flagPermissions");
-		final Map<Attribute, String> flagAttributesPermissions = (Map<Attribute, String>) getStaticFieldValue(Perms.class, "attributesPermissions");
+		final Map<Flag, String> flagPermissions = (Map<Flag, String>)this.getStaticFieldValue(Perms.class, "flagPermissions");
+		final Map<Attribute, String> flagAttributesPermissions = (Map<Attribute, String>)this.getStaticFieldValue(Perms.class, "attributesPermissions");
 
 		// Check content. We only need to check the size as those are Maps, so there's no duplicated key. If
 		// the size is ok then everything is here.
@@ -38,9 +40,10 @@ public class FlagsAttributesTest extends AbstractReflectionTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void checkDefaultFlagsMap() {
 		// Get the map
-		final EnumMap<Flag, String> defaultFlagMap = (EnumMap<Flag, String>) executeStaticMethod(Flags.class, "getDefaultFlagMap", null);
+		final EnumMap<Flag, String> defaultFlagMap = (EnumMap<Flag, String>)this.executeStaticMethod(Flags.class, "getDefaultFlagMap", null);
 
 		// Check content. We only need to check the size as it's an EnumMap, so there's no duplicated key. If
 		// the size is ok then everything is here.

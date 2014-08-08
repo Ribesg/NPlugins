@@ -8,9 +8,12 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer;
+
 import fr.ribesg.bukkit.ncore.common.logging.DenyFilter;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class LoginRegisterFilter implements DenyFilter {
 
 	@Override

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.config;
+
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
@@ -16,13 +17,14 @@ import fr.ribesg.bukkit.npermissions.permission.LegacyPlayerPermissions;
 import fr.ribesg.bukkit.npermissions.permission.PermissionException;
 import fr.ribesg.bukkit.npermissions.permission.PermissionsManager;
 import fr.ribesg.bukkit.npermissions.permission.PlayerPermissions;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * @author Ribesg
@@ -49,7 +51,7 @@ public class Players extends AbstractConfig<NPermissions> {
 			notch.add("world.rule", true);
 			notch.add("mojang.sell", true);
 		} catch (final PermissionException e) {
-			plugin.error(e.getMessage(), e);
+			this.plugin.error(e.getMessage(), e);
 		}
 		notch.addGroup("example");
 		this.manager.getPlayers().put(notch.getPlayerUuid(), notch);
@@ -67,22 +69,22 @@ public class Players extends AbstractConfig<NPermissions> {
 
 		for (final String key : config.getKeys(false)) {
 			if (!config.isConfigurationSection(key)) {
-				plugin.error(Level.WARNING, "Unknown key '" + key + "' found in players.yml, ignored");
+				this.plugin.error(Level.WARNING, "Unknown key '" + key + "' found in players.yml, ignored");
 			} else if ("_legacy".equals(key)) {
 				final ConfigurationSection legacyPlayersSection = config.getConfigurationSection(key);
 				for (final String legacyKey : legacyPlayersSection.getKeys(false)) {
 					if (!legacyPlayersSection.isConfigurationSection(legacyKey)) {
-						plugin.error(Level.WARNING, "Unknown key '" + legacyKey + "' found in players.yml under _legacy, ignored");
+						this.plugin.error(Level.WARNING, "Unknown key '" + legacyKey + "' found in players.yml under _legacy, ignored");
 					} else {
 						final ConfigurationSection legacyPlayerSection = legacyPlayersSection.getConfigurationSection(legacyKey);
-						final String mainGroup = legacyPlayerSection.getString("mainGroup", plugin.getPluginConfig().getDefaultGroup()).toLowerCase();
+						final String mainGroup = legacyPlayerSection.getString("mainGroup", this.plugin.getPluginConfig().getDefaultGroup()).toLowerCase();
 						final int priority = legacyPlayerSection.getInt("priority", 1);
 						final List<String> groups = legacyPlayerSection.getStringList("groups");
 						final List<String> allow = legacyPlayerSection.getStringList("allow");
 						final List<String> deny = legacyPlayerSection.getStringList("deny");
 
-						if (!manager.getGroups().containsKey(mainGroup)) {
-							plugin.error("Unknown group '" + mainGroup + "' found in players.yml as main group of legacy player '" + legacyKey + "', ignored player");
+						if (!this.manager.getGroups().containsKey(mainGroup)) {
+							this.plugin.error("Unknown group '" + mainGroup + "' found in players.yml as main group of legacy player '" + legacyKey + "', ignored player");
 							continue;
 						}
 						final LegacyPlayerPermissions legacyPlayer = new LegacyPlayerPermissions(this.manager, legacyKey, priority, mainGroup);
@@ -91,7 +93,7 @@ public class Players extends AbstractConfig<NPermissions> {
 							try {
 								legacyPlayer.add(allowedPermission, true);
 							} catch (final PermissionException e) {
-								plugin.error("Error while loading player '" + legacyPlayer + "': " + e.getMessage(), e);
+								this.plugin.error("Error while loading player '" + legacyPlayer + "': " + e.getMessage(), e);
 							}
 						}
 
@@ -99,13 +101,13 @@ public class Players extends AbstractConfig<NPermissions> {
 							try {
 								legacyPlayer.add(deniedPermission, false);
 							} catch (final PermissionException e) {
-								plugin.error("Error while loading player '" + legacyPlayer + "': " + e.getMessage(), e);
+								this.plugin.error("Error while loading player '" + legacyPlayer + "': " + e.getMessage(), e);
 							}
 						}
 
 						for (final String group : groups) {
-							if (!manager.getGroups().containsKey(group.toLowerCase())) {
-								plugin.error("Unknown group '" + group + "' found in players.yml as secondary group of player '" + legacyPlayer + "', ignored group");
+							if (!this.manager.getGroups().containsKey(group.toLowerCase())) {
+								this.plugin.error("Unknown group '" + group + "' found in players.yml as secondary group of player '" + legacyPlayer + "', ignored group");
 							} else {
 								legacyPlayer.addGroup(group);
 							}
@@ -121,7 +123,7 @@ public class Players extends AbstractConfig<NPermissions> {
 				try {
 					uuid = UUID.fromString(key);
 				} catch (final IllegalArgumentException e) {
-					plugin.error("Malformed UUID '" + key + "' in players.yml (for player '" + playerName + "')");
+					this.plugin.error("Malformed UUID '" + key + "' in players.yml (for player '" + playerName + "')");
 					continue;
 				}
 				final String mainGroup = playerSection.getString("mainGroup");
@@ -130,8 +132,8 @@ public class Players extends AbstractConfig<NPermissions> {
 				final List<String> allow = playerSection.getStringList("allow");
 				final List<String> deny = playerSection.getStringList("deny");
 
-				if (!manager.getGroups().containsKey(mainGroup)) {
-					plugin.error("Unknown group '" + mainGroup + "' found in players.yml as main group of player '" + playerName + "' with UUID '" + key + "', ignored player");
+				if (!this.manager.getGroups().containsKey(mainGroup)) {
+					this.plugin.error("Unknown group '" + mainGroup + "' found in players.yml as main group of player '" + playerName + "' with UUID '" + key + "', ignored player");
 					continue;
 				}
 				final PlayerPermissions player = new PlayerPermissions(this.manager, uuid, playerName, priority, mainGroup);
@@ -140,7 +142,7 @@ public class Players extends AbstractConfig<NPermissions> {
 					try {
 						player.add(allowedPermission, true);
 					} catch (final PermissionException e) {
-						plugin.error("Error while loading player '" + playerName + "' (" + key + "): " + e.getMessage(), e);
+						this.plugin.error("Error while loading player '" + playerName + "' (" + key + "): " + e.getMessage(), e);
 					}
 				}
 
@@ -148,13 +150,13 @@ public class Players extends AbstractConfig<NPermissions> {
 					try {
 						player.add(deniedPermission, false);
 					} catch (final PermissionException e) {
-						plugin.error("Error while loading player '" + playerName + "' (" + key + "): " + e.getMessage(), e);
+						this.plugin.error("Error while loading player '" + playerName + "' (" + key + "): " + e.getMessage(), e);
 					}
 				}
 
 				for (final String group : groups) {
-					if (!manager.getGroups().containsKey(group.toLowerCase())) {
-						plugin.error("Unknown group '" + group + "' found in players.yml as secondary group of player '" + playerName + "' with UUID '" + key + "', ignored group");
+					if (!this.manager.getGroups().containsKey(group.toLowerCase())) {
+						this.plugin.error("Unknown group '" + group + "' found in players.yml as secondary group of player '" + playerName + "' with UUID '" + key + "', ignored group");
 					} else {
 						player.addGroup(group);
 					}
@@ -191,7 +193,7 @@ public class Players extends AbstractConfig<NPermissions> {
 			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			player.save(dummySection);
-			content.append(dummySection.saveToString()).append("\n");
+			content.append(dummySection.saveToString()).append('\n');
 		}
 
 		content.append("_legacy:\n");
@@ -203,7 +205,7 @@ public class Players extends AbstractConfig<NPermissions> {
 			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			legacyPlayer.save(dummySection);
-			content.append(StringUtil.prependLines(dummySection.saveToString(), "  ")).append("\n");
+			content.append(StringUtil.prependLines(dummySection.saveToString(), "  ")).append('\n');
 		}
 
 		return content.toString();

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.config;
+
 import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.util.DateUtil;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
@@ -15,9 +16,20 @@ import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.com.mojang.api.profiles.HttpProfileRepository;
 import fr.ribesg.com.mojang.api.profiles.Profile;
 import fr.ribesg.com.mojang.api.profiles.ProfileRepository;
+
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.UUID;
+
 import org.apache.commons.lang.Validate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -29,16 +41,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.UUID;
-
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class UuidDb extends AbstractConfig<NCore> implements Listener {
 
 	private static final Logger LOGGER = LogManager.getLogger(UuidDb.class);
@@ -190,12 +195,12 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 
 	@Override
 	public void loadConfig() throws IOException, InvalidConfigurationException {
-		loadConfig("uuidDb.yml");
+		this.loadConfig("uuidDb.yml");
 	}
 
 	@Override
 	public void writeConfig() throws IOException {
-		writeConfig("uuidDb.yml");
+		this.writeConfig("uuidDb.yml");
 	}
 
 	@Override
@@ -214,9 +219,9 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 				}
 			}
 			final PlayerInfo info = new PlayerInfo(id, lastKnownName, previousNames, firstSeen, lastSeen);
-			byUuid.put(id, info);
+			this.byUuid.put(id, info);
 			if (lastKnownName != null) {
-				byName.put(lastKnownName.toLowerCase(), info);
+				this.byName.put(lastKnownName.toLowerCase(), info);
 			}
 		}
 	}
@@ -238,14 +243,14 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 
 		// Actual content
 		content.append("# Please don't modify this file, you could break everything.\n\n");
-		for (final PlayerInfo info : byUuid.values()) {
+		for (final PlayerInfo info : this.byUuid.values()) {
 			content.append("# Player '" + info.lastKnownName + "'\n");
 			content.append("# Offline-mode UUID: " + PlayerIdsUtil.getOfflineUuid(info.lastKnownName) + '\n');
-			content.append(info.uuid.toString() + ":\n");
+			content.append(info.uuid + ":\n");
 			content.append("  lastKnownName: " + info.lastKnownName + '\n');
 			content.append("  firstSeen: " + info.firstSeen + " # " + DateUtil.formatDate(info.firstSeen) + '\n');
 			content.append("  lastSeen: " + info.lastSeen + " # " + DateUtil.formatDate(info.lastSeen) + '\n');
-			if (info.previousNames.size() > 0) {
+			if (!info.previousNames.isEmpty()) {
 				content.append("  previousNames:\n");
 				for (final Map.Entry<Long, String> e : info.previousNames.entrySet()) {
 					content.append("    " + e.getValue() + ": " + e.getKey() + " # Changed on " + DateUtil.formatDate(e.getKey()) + '\n');

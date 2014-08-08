@@ -9,12 +9,12 @@
 
 package fr.ribesg.bukkit.ncore.util;
 
-import org.bukkit.util.Vector;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
+
+import org.bukkit.util.Vector;
 
 /**
  * Some simple methods that could be used in every plugin
@@ -97,7 +97,7 @@ public class StringUtil {
 		final String workingString = originalString.replace('_', ' ');
 		final StringBuilder s = new StringBuilder();
 		for (final String word : workingString.split(" ")) {
-			if (word.length() > 0) {
+			if (!word.isEmpty()) {
 				s.append(word.substring(0, 1).toUpperCase());
 				s.append(word.substring(1).toLowerCase());
 			}
@@ -225,7 +225,7 @@ public class StringUtil {
 	 * @return the original String with prefix applied
 	 */
 	public static String prependLines(final String string, final String prefix) {
-		String result = prefix + string.replaceAll("\r\n", "\n").replaceAll("\n", "\n" + prefix);
+		String result = prefix + string.replaceAll("\r\n", "\n").replaceAll("\n", '\n' + prefix);
 		if (result.endsWith(prefix)) {
 			result = result.substring(0, result.length() - prefix.length() + 1);
 		}

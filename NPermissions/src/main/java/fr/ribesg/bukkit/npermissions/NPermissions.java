@@ -21,16 +21,17 @@ import fr.ribesg.bukkit.npermissions.permission.PermissionsManager;
 import fr.ribesg.bukkit.npermissions.permission.WorldGroupPermissions;
 import fr.ribesg.bukkit.npermissions.permission.WorldLegacyPlayerPermissions;
 import fr.ribesg.bukkit.npermissions.permission.WorldPlayerPermissions;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.plugin.PluginManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.plugin.PluginManager;
 
 public class NPermissions extends NPlugin implements PermissionsNode {
 
@@ -55,9 +56,9 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 
 	@Override
 	protected void loadMessages() throws IOException {
-		debug("Loading plugin Messages...");
-		if (!getDataFolder().isDirectory()) {
-			getDataFolder().mkdir();
+		this.debug("Loading plugin Messages...");
+		if (!this.getDataFolder().isDirectory()) {
+			this.getDataFolder().mkdir();
 		}
 
 		final Messages messages = new Messages();
@@ -73,7 +74,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 			this.pluginConfig = new Config(this);
 			this.pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			error("An error occured when NPermissions tried to load config.yml", e);
+			this.error("An error occured when NPermissions tried to load config.yml", e);
 			return false;
 		}
 
@@ -84,7 +85,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 			this.groupsConfig = new Groups(this);
 			this.groupsConfig.loadConfig("groups.yml");
 		} catch (final IOException | InvalidConfigurationException e) {
-			error("An error occured when NPermissions tried to load groups.yml", e);
+			this.error("An error occured when NPermissions tried to load groups.yml", e);
 			return false;
 		}
 
@@ -93,7 +94,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 			this.playersConfig = new Players(this);
 			this.playersConfig.loadConfig("players.yml");
 		} catch (final IOException | InvalidConfigurationException e) {
-			error("An error occured when NPermissions tried to load players.yml", e);
+			this.error("An error occured when NPermissions tried to load players.yml", e);
 			return false;
 		}
 
@@ -110,7 +111,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 					worldGroupsConfig.loadConfig(world.getName() + File.separator + "groups.yml");
 					this.worldGroupsConfigs.put(world.getName(), worldGroupsConfig);
 				} catch (final IOException | InvalidConfigurationException e) {
-					error("An error occured when NPermissions tried to load " + world.getName() + "/groups.yml", e);
+					this.error("An error occured when NPermissions tried to load " + world.getName() + "/groups.yml", e);
 					return false;
 				}
 
@@ -122,26 +123,22 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 					worldPlayersConfig.loadConfig(world.getName() + File.separator + "players.yml");
 					this.worldPlayersConfigs.put(world.getName(), worldPlayersConfig);
 				} catch (final IOException | InvalidConfigurationException e) {
-					error("An error occured when NPermissions tried to load players.yml", e);
+					this.error("An error occured when NPermissions tried to load players.yml", e);
 					return false;
 				}
 			}
-
 		}
 
 		final PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new NListener(this), this);
 
 		final NCommandExecutor executor = new NCommandExecutor(this);
-		setCommandExecutor("npermissions", executor);
-		setCommandExecutor("setgroup", executor);
+		this.setCommandExecutor("npermissions", executor);
+		this.setCommandExecutor("setgroup", executor);
 
 		return true;
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
-	 */
 	@Override
 	protected void handleOtherNodes() {
 		// Nothing to do here for now
@@ -153,17 +150,17 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 
 	public void saveGroups() {
 		try {
-			groupsConfig.writeConfig("groups.yml");
+			this.groupsConfig.writeConfig("groups.yml");
 		} catch (final IOException e) {
-			error("An error occured when NPermissions tried to save groups.yml", e);
+			this.error("An error occured when NPermissions tried to save groups.yml", e);
 		}
 	}
 
 	public void savePlayers() {
 		try {
-			playersConfig.writeConfig("players.yml");
+			this.playersConfig.writeConfig("players.yml");
 		} catch (final IOException e) {
-			error("An error occured when NPermissions tried to save players.yml", e);
+			this.error("An error occured when NPermissions tried to save players.yml", e);
 		}
 	}
 
@@ -173,7 +170,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 				try {
 					entry.getValue().writeConfig(entry.getKey() + File.separator + "groups.yml");
 				} catch (final IOException e) {
-					error("An error occured when NPermissions tried to save " + entry.getKey() + "/groups.yml", e);
+					this.error("An error occured when NPermissions tried to save " + entry.getKey() + "/groups.yml", e);
 				}
 			}
 		}
@@ -185,7 +182,7 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 				try {
 					entry.getValue().writeConfig(entry.getKey() + File.separator + "players.yml");
 				} catch (final IOException e) {
-					error("An error occured when NPermissions tried to save " + entry.getKey() + "/players.yml", e);
+					this.error("An error occured when NPermissions tried to save " + entry.getKey() + "/players.yml", e);
 				}
 			}
 		}
@@ -193,23 +190,23 @@ public class NPermissions extends NPlugin implements PermissionsNode {
 
 	@Override
 	public Messages getMessages() {
-		return messages;
+		return this.messages;
 	}
 
 	public Config getPluginConfig() {
-		return pluginConfig;
+		return this.pluginConfig;
 	}
 
 	public Groups getGroupsConfig() {
-		return groupsConfig;
+		return this.groupsConfig;
 	}
 
 	public Players getPlayersConfig() {
-		return playersConfig;
+		return this.playersConfig;
 	}
 
 	public PermissionsManager getManager() {
-		return manager;
+		return this.manager;
 	}
 
 	// API for other nodes

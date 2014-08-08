@@ -59,11 +59,11 @@ public class Message {
 	 * @return a String representation of what arguments were awaited
 	 */
 	public String getAwaitedArgsString() {
-		if (awaitedArgs == null || awaitedArgs.length == 0) {
+		if (this.awaitedArgs == null || this.awaitedArgs.length == 0) {
 			return "none";
 		} else {
 			final StringBuilder s = new StringBuilder();
-			for (final String arg : awaitedArgs) {
+			for (final String arg : this.awaitedArgs) {
 				s.append(arg);
 				s.append(" ; ");
 			}
@@ -75,10 +75,10 @@ public class Message {
 	 * @return the number of arguments awaited
 	 */
 	public int getAwaitedArgsNb() {
-		if (awaitedArgs == null || awaitedArgs.length == 0) {
+		if (this.awaitedArgs == null || this.awaitedArgs.length == 0) {
 			return 0;
 		} else {
-			return awaitedArgs.length;
+			return this.awaitedArgs.length;
 		}
 	}
 
@@ -110,7 +110,7 @@ public class Message {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (id == null ? 0 : id.hashCode());
+		result = prime * result + (this.id == null ? 0 : this.id.hashCode());
 		return result;
 	}
 
@@ -122,10 +122,10 @@ public class Message {
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		final Message other = (Message) obj;
-		return id == other.id;
+		final Message other = (Message)obj;
+		return this.id == other.id;
 	}
 }

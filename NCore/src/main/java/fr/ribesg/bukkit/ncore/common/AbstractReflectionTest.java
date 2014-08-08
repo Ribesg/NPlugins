@@ -18,23 +18,23 @@ import java.lang.reflect.Method;
  */
 public abstract class AbstractReflectionTest {
 
-	protected Object executeStaticMethod(final Class clazz, final String methodName, final Class[] argClasses, final Object... args) {
+	protected Object executeStaticMethod(final Class<?> clazz, final String methodName, final Class<?>[] argClasses, final Object... args) {
 		try {
 			final Method method = clazz.getDeclaredMethod(methodName, argClasses);
 			method.setAccessible(true);
 			return method.invoke(null, args);
 		} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-			throw new RuntimeException("Failed to access method '" + methodName + "'", e);
+			throw new RuntimeException("Failed to access method '" + methodName + '\'', e);
 		}
 	}
 
-	protected Object executeMethod(final Object obj, final String methodName, final Class[] argClasses, final Object... args) {
+	protected Object executeMethod(final Object obj, final String methodName, final Class<?>[] argClasses, final Object... args) {
 		try {
 			final Method method = obj.getClass().getDeclaredMethod(methodName, argClasses);
 			method.setAccessible(true);
 			return method.invoke(obj, args);
 		} catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
-			throw new RuntimeException("Failed to access method '" + methodName + "'", e);
+			throw new RuntimeException("Failed to access method '" + methodName + '\'', e);
 		}
 	}
 
@@ -44,7 +44,7 @@ public abstract class AbstractReflectionTest {
 			field.setAccessible(true);
 			return field.get(null);
 		} catch (IllegalAccessException | NoSuchFieldException e) {
-			throw new RuntimeException("Failed to field method '" + fieldName + "'", e);
+			throw new RuntimeException("Failed to field method '" + fieldName + '\'', e);
 		}
 	}
 
@@ -54,7 +54,7 @@ public abstract class AbstractReflectionTest {
 			field.setAccessible(true);
 			return field.get(obj);
 		} catch (IllegalAccessException | NoSuchFieldException e) {
-			throw new RuntimeException("Failed to field method '" + fieldName + "'", e);
+			throw new RuntimeException("Failed to field method '" + fieldName + '\'', e);
 		}
 	}
 }

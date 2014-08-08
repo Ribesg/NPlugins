@@ -13,6 +13,11 @@ import fr.ribesg.bukkit.ncore.common.ChunkCoord;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,21 +30,17 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 public class WorldListener implements Listener {
 
 	private final NEnchantingEgg plugin;
 
 	public WorldListener(final NEnchantingEgg instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityExplode(final EntityExplodeEvent event) {
-		plugin.entering(getClass(), "onEntityExplode");
+		this.plugin.entering(this.getClass(), "onEntityExplode");
 
 		// Get the chunks considered in this event
 		final Set<Chunk> chunks = new HashSet<>();
@@ -47,8 +48,8 @@ public class WorldListener implements Listener {
 		for (final Block b : event.blockList()) {
 			c = b.getLocation().getChunk();
 			if (!chunks.contains(c)) {
-				if (plugin.isDebugEnabled()) {
-					plugin.debug("Considering chunk (" + c.getX() + ";" + c.getZ() + ")");
+				if (this.plugin.isDebugEnabled()) {
+					this.plugin.debug("Considering chunk (" + c.getX() + ';' + c.getZ() + ')');
 				}
 				chunks.add(c);
 			}
@@ -60,10 +61,10 @@ public class WorldListener implements Listener {
 		Altar altar;
 		for (final Chunk chunk : chunks) {
 			coord = new ChunkCoord(chunk);
-			altar = plugin.getAltars().get(coord);
+			altar = this.plugin.getAltars().get(coord);
 			if (altar != null) {
-				if (plugin.isDebugEnabled()) {
-					plugin.debug("Considering altar at location " + altar.getCenterLocation().toString());
+				if (this.plugin.isDebugEnabled()) {
+					this.plugin.debug("Considering altar at location " + altar.getCenterLocation());
 				}
 				altars.add(altar);
 			}
@@ -76,8 +77,8 @@ public class WorldListener implements Listener {
 			b = it.next();
 			for (final Altar a : altars) {
 				if (a.isAltarXYZ(b.getX() - a.getCenterLocation().getBlockX(), b.getY() - a.getCenterLocation().getBlockY(), b.getZ() - a.getCenterLocation().getBlockZ())) {
-					if (plugin.isDebugEnabled()) {
-						plugin.debug("Protecting block at location " + NLocation.toString(b.getLocation()));
+					if (this.plugin.isDebugEnabled()) {
+						this.plugin.debug("Protecting block at location " + NLocation.toString(b.getLocation()));
 					}
 					it.remove();
 					break;
@@ -85,19 +86,19 @@ public class WorldListener implements Listener {
 			}
 		}
 
-		plugin.exiting(getClass(), "onEntityExplode");
+		this.plugin.exiting(this.getClass(), "onEntityExplode");
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onChunkLoad(final ChunkLoadEvent event) {
-		plugin.getAltars().chunkLoad(new ChunkCoord(event.getChunk()));
+		this.plugin.getAltars().chunkLoad(new ChunkCoord(event.getChunk()));
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onSnowForm(final BlockFormEvent event) {
 		if (event.getNewState().getType() == Material.SNOW) {
 			final Location loc = event.getBlock().getLocation();
-			final Altar altar = plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
+			final Altar altar = this.plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
 			if (altar != null && altar.preventsBlockPlacement(loc)) {
 				event.setCancelled(true);
 			}
@@ -107,7 +108,7 @@ public class WorldListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onFlow(final BlockFromToEvent event) {
 		final Location loc = event.getToBlock().getLocation();
-		final Altar altar = plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
+		final Altar altar = this.plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
 		if (altar != null && altar.preventsBlockPlacement(loc)) {
 			event.setCancelled(true);
 		}

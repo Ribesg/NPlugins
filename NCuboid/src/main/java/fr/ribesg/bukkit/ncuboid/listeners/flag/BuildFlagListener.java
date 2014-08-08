@@ -17,6 +17,7 @@ import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedHangingBreakEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -44,7 +45,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
-		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getBlockClicked().getRelative(event.getBlockFace()).getLocation());
+		final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getBlockClicked().getRelative(event.getBlockFace()).getLocation());
 		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(event.getPlayer())) {
 			event.setCancelled(true);
 		}
@@ -52,7 +53,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerBucketFill(final PlayerBucketFillEvent event) {
-		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getBlockClicked().getLocation());
+		final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getBlockClicked().getLocation());
 		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(event.getPlayer())) {
 			event.setCancelled(true);
 		}
@@ -61,7 +62,7 @@ public class BuildFlagListener extends AbstractListener {
 	// We don't care if hasBlock()==false, so ignoreCancelled is true
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteract(final ExtendedPlayerInteractEvent ext) {
-		final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
+		final PlayerInteractEvent event = (PlayerInteractEvent)ext.getBaseEvent();
 		final Player player = event.getPlayer();
 		if (event.hasBlock()) {
 			if (event.hasItem() && event.getItem().getType() == Material.STICK) {
@@ -118,7 +119,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event) {
-		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
+		final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
 		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(event.getPlayer())) {
 			event.setCancelled(true);
 		}
@@ -126,7 +127,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent event) {
-		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
+		final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
 		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(event.getPlayer())) {
 			event.setCancelled(true);
 		}
@@ -134,7 +135,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockDamage(final BlockDamageEvent event) {
-		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
+		final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
 		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(event.getPlayer())) {
 			event.setCancelled(true);
 		}
@@ -143,9 +144,9 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onHangingBreakByEntity(final ExtendedHangingBreakEvent ext) {
 		if (ext.getBaseEvent() instanceof HangingBreakByEntityEvent) {
-			final HangingBreakByEntityEvent event = (HangingBreakByEntityEvent) ext.getBaseEvent();
+			final HangingBreakByEntityEvent event = (HangingBreakByEntityEvent)ext.getBaseEvent();
 			if (event.getRemover().getType() == EntityType.PLAYER) {
-				final Player player = (Player) event.getRemover();
+				final Player player = (Player)event.getRemover();
 				if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.BUILD) && !ext.getRegion().isUser(player)) {
 					event.setCancelled(true);
 				}
@@ -159,7 +160,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
-		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
+		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent)ext.getBaseEvent();
 		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.BUILD) && !ext.getRegion().isUser(event.getPlayer())) {
 			event.setCancelled(true);
 		}
@@ -168,10 +169,10 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
 		if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
-			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
+			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent)ext.getBaseEvent();
 			if (event.getEntityType() == EntityType.ITEM_FRAME) {
 				if (event.getDamager().getType() == EntityType.PLAYER) {
-					final Player player = (Player) event.getDamager();
+					final Player player = (Player)event.getDamager();
 					if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.BUILD) && !ext.getEntityRegion().isUser(player)) {
 						event.setCancelled(true);
 					}
@@ -186,7 +187,7 @@ public class BuildFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onHangingPlace(final HangingPlaceEvent event) {
-		final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getEntity().getLocation());
+		final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getEntity().getLocation());
 		if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(event.getPlayer())) {
 			event.setCancelled(true);
 		}
@@ -195,8 +196,8 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onVehicleDestroy(final VehicleDestroyEvent event) {
 		if (event.getAttacker() != null && event.getAttacker().getType() == EntityType.PLAYER) {
-			final Player player = (Player) event.getAttacker();
-			final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getVehicle().getLocation());
+			final Player player = (Player)event.getAttacker();
+			final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getVehicle().getLocation());
 			if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(player)) {
 				event.setCancelled(true);
 			}
@@ -206,7 +207,7 @@ public class BuildFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onStructureGrow(final StructureGrowEvent event) {
 		if (event.isFromBonemeal()) {
-			final GeneralRegion region = getPlugin().getDb().getPriorByLocation(event.getLocation());
+			final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getLocation());
 			if (region != null && region.getFlag(Flag.BUILD) && !region.isUser(event.getPlayer())) {
 				event.setCancelled(true);
 			}

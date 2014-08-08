@@ -13,207 +13,207 @@ Overall document style
 */
 
 body {
-	background-color : #FFFFFF;
-	color            : #353833;
-	font-family      : sans-serif;
-	font-size        : 15px;
-	margin           : 0;
+    background-color: #FFFFFF;
+    color: #353833;
+    font-family: sans-serif;
+    font-size: 15px;
+    margin: 0;
 }
 
 a:link,
 a:visited {
-	text-decoration : none;
-	color           : #4A6782;
+    text-decoration: none;
+    color: #4A6782;
 }
 
 a:hover,
 a:focus {
-	text-decoration : none;
-	color           : #BB7A2A;
+    text-decoration: none;
+    color: #BB7A2A;
 }
 
 a:active {
-	text-decoration : none;
-	color           : #4A6782;
+    text-decoration: none;
+    color: #4A6782;
 }
 
 a[name] {
-	color : #353833;
+    color: #353833;
 }
 
 a[name]:hover {
-	text-decoration : none;
-	color           : #353833;
+    text-decoration: none;
+    color: #353833;
 }
 
 pre {
-	font-family : monospace;
-	font-size   : 15px;
+    font-family: monospace;
+    font-size: 15px;
 }
 
 h1 {
-	font-size : 20px;
+    font-size: 20px;
 }
 
 h2 {
-	font-size : 18px;
+    font-size: 18px;
 }
 
 h3 {
-	font-size  : 16px;
-	font-style : italic;
+    font-size: 16px;
+    font-style: italic;
 }
 
 h4 {
-	font-size : 13px;
+    font-size: 13px;
 }
 
 h5 {
-	font-size : 12px;
+    font-size: 12px;
 }
 
 h6 {
-	font-size : 11px;
+    font-size: 11px;
 }
 
 ul {
-	list-style-type : disc;
+    list-style-type: disc;
 }
 
 code,
 tt {
-	font-family : monospace;
-	font-size   : 15px;
-	padding-top : 4px;
-	margin-top  : 8px;
-	line-height : 1.4em;
+    font-family: monospace;
+    font-size: 15px;
+    padding-top: 4px;
+    margin-top: 8px;
+    line-height: 1.4em;
 }
 
 dt code {
-	font-family : monospace;
-	font-size   : 15px;
-	padding-top : 4px;
+    font-family: monospace;
+    font-size: 15px;
+    padding-top: 4px;
 }
 
 table tr td dt code {
-	font-family    : monospace;
-	font-size      : 15px;
-	vertical-align : top;
-	padding-top    : 4px;
+    font-family: monospace;
+    font-size: 15px;
+    vertical-align: top;
+    padding-top: 4px;
 }
 
 sup {
-	font-size : 8px;
+    font-size: 8px;
 }
 
 .clear {
-	clear    : both;
-	height   : 0;
-	overflow : hidden;
+    clear: both;
+    height: 0;
+    overflow: hidden;
 }
 
 .aboutLanguage {
-	float      : right;
-	padding    : 0 21px;
-	font-size  : 11px;
-	z-index    : 200;
-	margin-top : -9px;
+    float: right;
+    padding: 0 21px;
+    font-size: 11px;
+    z-index: 200;
+    margin-top: -9px;
 }
 
 .legalCopy {
-	margin-left : .5em;
+    margin-left: .5em;
 }
 
 .bar a,
 .bar a:link,
 .bar a:visited,
 .bar a:active {
-	color           : #FFFFFF;
-	text-decoration : none;
+    color: #FFFFFF;
+    text-decoration: none;
 }
 
 .bar a:hover,
 .bar a:focus {
-	color : #BB7A2A;
+    color: #BB7A2A;
 }
 
 .tab {
-	background-color : #0066FF;
-	color            : #FFFFFF;
-	padding          : 8px;
-	width            : 5em;
-	font-weight      : bold;
+    background-color: #0066FF;
+    color: #FFFFFF;
+    padding: 8px;
+    width: 5em;
+    font-weight: bold;
 }
 
 /*
 Navigation bar styles
 */
 .bar {
-	background-color : #4D7A97;
-	color            : #FFFFFF;
-	padding          : .8em .5em .4em .8em;
-	height           : auto; /*height:1.8em;*/
-	font-size        : 11px;
-	margin           : 0;
+    background-color: #4D7A97;
+    color: #FFFFFF;
+    padding: .8em .5em .4em .8em;
+    height: auto; /*height:1.8em;*/
+    font-size: 11px;
+    margin: 0;
 }
 
 .topNav {
-	background-color : #4D7A97;
-	color            : #FFFFFF;
-	float            : left;
-	width            : 100%;
-	clear            : right;
-	height           : 2.8em;
-	padding          : 10px 0 0;
-	overflow         : hidden;
-	font-size        : 12px;
+    background-color: #4D7A97;
+    color: #FFFFFF;
+    float: left;
+    width: 100%;
+    clear: right;
+    height: 2.8em;
+    padding: 10px 0 0;
+    overflow: hidden;
+    font-size: 12px;
 }
 
 .bottomNav {
-	margin-top       : 10px;
-	background-color : #4D7A97;
-	color            : #FFFFFF;
-	float            : left;
-	width            : 100%;
-	clear            : right;
-	height           : 2.8em;
-	padding          : 10px 0 0;
-	overflow         : hidden;
-	font-size        : 12px;
+    margin-top: 10px;
+    background-color: #4D7A97;
+    color: #FFFFFF;
+    float: left;
+    width: 100%;
+    clear: right;
+    height: 2.8em;
+    padding: 10px 0 0;
+    overflow: hidden;
+    font-size: 12px;
 }
 
 .subNav {
-	background-color : #DEE3E9;
-	float            : left;
-	width            : 100%;
-	overflow         : hidden;
-	font-size        : 12px;
+    background-color: #DEE3E9;
+    float: left;
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
 }
 
 .subNav div {
-	clear          : left;
-	float          : left;
-	padding        : 0 0 5px 6px;
-	text-transform : uppercase;
+    clear: left;
+    float: left;
+    padding: 0 0 5px 6px;
+    text-transform: uppercase;
 }
 
 ul.navList,
 ul.subNavList {
-	float   : left;
-	margin  : 0 25px 0 0;
-	padding : 0;
+    float: left;
+    margin: 0 25px 0 0;
+    padding: 0;
 }
 
 ul.navList li {
-	list-style     : none;
-	float          : left;
-	padding        : 5px 6px;
-	text-transform : uppercase;
+    list-style: none;
+    float: left;
+    padding: 5px 6px;
+    text-transform: uppercase;
 }
 
 ul.subNavList li {
-	list-style : none;
-	float      : left;
+    list-style: none;
+    float: left;
 }
 
 .topNav a:link,
@@ -222,29 +222,29 @@ ul.subNavList li {
 .bottomNav a:link,
 .bottomNav a:active,
 .bottomNav a:visited {
-	color           : #FFFFFF;
-	text-decoration : none;
-	text-transform  : uppercase;
+    color: #FFFFFF;
+    text-decoration: none;
+    text-transform: uppercase;
 }
 
 .topNav a:hover,
 .bottomNav a:hover {
-	text-decoration : none;
-	color           : #BB7A2A;
-	text-transform  : uppercase;
+    text-decoration: none;
+    color: #BB7A2A;
+    text-transform: uppercase;
 }
 
 .navBarCell1Rev {
-	background-color : #F8981D;
-	color            : #253441;
-	margin           : auto 5px;
+    background-color: #F8981D;
+    color: #253441;
+    margin: auto 5px;
 }
 
 .skipNav {
-	position : absolute;
-	top      : auto;
-	left     : -9999px;
-	overflow : hidden;
+    position: absolute;
+    top: auto;
+    left: -9999px;
+    overflow: hidden;
 }
 
 /*
@@ -252,46 +252,46 @@ Page header and footer styles
 */
 .header,
 .footer {
-	clear   : both;
-	margin  : 0 20px;
-	padding : 5px 0 0 0;
+    clear: both;
+    margin: 0 20px;
+    padding: 5px 0 0 0;
 }
 
 .indexHeader {
-	margin   : 10px;
-	position : relative;
+    margin: 10px;
+    position: relative;
 }
 
 .indexHeader span {
-	margin-right : 15px;
+    margin-right: 15px;
 }
 
 .indexHeader h1 {
-	font-size : 13px;
+    font-size: 13px;
 }
 
 .title {
-	color  : #2C4557;
-	margin : 10px 0;
+    color: #2C4557;
+    margin: 10px 0;
 }
 
 .subTitle {
-	margin : 5px 0 0 0;
+    margin: 5px 0 0 0;
 }
 
 .header ul {
-	margin  : 0 0 15px 0;
-	padding : 0;
+    margin: 0 0 15px 0;
+    padding: 0;
 }
 
 .footer ul {
-	margin : 20px 0 5px 0;
+    margin: 20px 0 5px 0;
 }
 
 .header ul li,
 .footer ul li {
-	list-style : none;
-	font-size  : 13px;
+    list-style: none;
+    font-size: 13px;
 }
 
 /*
@@ -299,26 +299,26 @@ Heading styles
 */
 div.details ul.blockList ul.blockList ul.blockList li.blockList h4,
 div.details ul.blockList ul.blockList ul.blockListLast li.blockList h4 {
-	background-color : #DEE3E9;
-	border           : 1px solid #D0D9E0;
-	margin           : 0 0 6px -8px;
-	padding          : 7px 5px;
+    background-color: #DEE3E9;
+    border: 1px solid #D0D9E0;
+    margin: 0 0 6px -8px;
+    padding: 7px 5px;
 }
 
 ul.blockList ul.blockList ul.blockList li.blockList h3 {
-	background-color : #DEE3E9;
-	border           : 1px solid #D0D9E0;
-	margin           : 0 0 6px -8px;
-	padding          : 7px 5px;
+    background-color: #DEE3E9;
+    border: 1px solid #D0D9E0;
+    margin: 0 0 6px -8px;
+    padding: 7px 5px;
 }
 
 ul.blockList ul.blockList li.blockList h3 {
-	padding : 0;
-	margin  : 15px 0;
+    padding: 0;
+    margin: 15px 0;
 }
 
 ul.blockList li.blockList h2 {
-	padding : 0 0 20px 0;
+    padding: 0 0 20px 0;
 }
 
 /*
@@ -329,131 +329,131 @@ Page layout container styles
 .classUseContainer,
 .serializedFormContainer,
 .constantValuesContainer {
-	clear    : both;
-	padding  : 10px 20px;
-	position : relative;
+    clear: both;
+    padding: 10px 20px;
+    position: relative;
 }
 
 .indexContainer {
-	margin    : 10px;
-	position  : relative;
-	font-size : 12px;
+    margin: 10px;
+    position: relative;
+    font-size: 12px;
 }
 
 .indexContainer h2 {
-	font-size : 13px;
-	padding   : 0 0 3px 0;
+    font-size: 13px;
+    padding: 0 0 3px 0;
 }
 
 .indexContainer ul {
-	margin  : 0;
-	padding : 0;
+    margin: 0;
+    padding: 0;
 }
 
 .indexContainer ul li {
-	list-style  : none;
-	padding-top : 2px;
+    list-style: none;
+    padding-top: 2px;
 }
 
 .contentContainer .description dl dt,
 .contentContainer .details dl dt,
 .serializedFormContainer dl dt {
-	font-size   : 12px;
-	font-weight : bold;
-	margin      : 10px 0 0 0;
-	color       : #4E4E4E;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 10px 0 0 0;
+    color: #4E4E4E;
 }
 
 .contentContainer .description dl dd,
 .contentContainer .details dl dd,
 .serializedFormContainer dl dd {
-	margin      : 5px 0 10px 0;
-	font-size   : 15px;
-	font-family : monospace;
+    margin: 5px 0 10px 0;
+    font-size: 15px;
+    font-family: monospace;
 }
 
 .serializedFormContainer dl.nameValue dt {
-	margin-left : 1px;
-	font-size   : 1.1em;
-	display     : inline;
-	font-weight : bold;
+    margin-left: 1px;
+    font-size: 1.1em;
+    display: inline;
+    font-weight: bold;
 }
 
 .serializedFormContainer dl.nameValue dd {
-	margin    : 0 0 0 1px;
-	font-size : 1.1em;
-	display   : inline;
+    margin: 0 0 0 1px;
+    font-size: 1.1em;
+    display: inline;
 }
 
 /*
 List styles
 */
 ul.horizontal li {
-	display   : inline;
-	font-size : 0.9em;
+    display: inline;
+    font-size: 0.9em;
 }
 
 ul.inheritance {
-	margin  : 0;
-	padding : 0;
+    margin: 0;
+    padding: 0;
 }
 
 ul.inheritance li {
-	display    : inline;
-	list-style : none;
+    display: inline;
+    list-style: none;
 }
 
 ul.inheritance li ul.inheritance {
-	margin-left  : 15px;
-	padding-left : 15px;
-	padding-top  : 1px;
+    margin-left: 15px;
+    padding-left: 15px;
+    padding-top: 1px;
 }
 
 ul.blockList,
 ul.blockListLast {
-	margin  : 10px 0 10px 0;
-	padding : 0;
+    margin: 10px 0 10px 0;
+    padding: 0;
 }
 
 ul.blockList li.blockList,
 ul.blockListLast li.blockList {
-	list-style    : none;
-	margin-bottom : 15px;
-	line-height   : 1.4;
+    list-style: none;
+    margin-bottom: 15px;
+    line-height: 1.4;
 }
 
 ul.blockList ul.blockList li.blockList,
 ul.blockList ul.blockListLast li.blockList {
-	padding          : 0 20px 5px 10px;
-	border           : 1px solid #EDEDED;
-	background-color : #F8F8F8;
+    padding: 0 20px 5px 10px;
+    border: 1px solid #EDEDED;
+    background-color: #F8F8F8;
 }
 
 ul.blockList ul.blockList ul.blockList li.blockList,
 ul.blockList ul.blockList ul.blockListLast li.blockList {
-	padding          : 0 0 5px 8px;
-	background-color : #FFFFFF;
-	border           : none;
+    padding: 0 0 5px 8px;
+    background-color: #FFFFFF;
+    border: none;
 }
 
 ul.blockList ul.blockList ul.blockList ul.blockList li.blockList {
-	margin-left    : 0;
-	padding-left   : 0;
-	padding-bottom : 15px;
-	border         : none;
+    margin-left: 0;
+    padding-left: 0;
+    padding-bottom: 15px;
+    border: none;
 }
 
 ul.blockList ul.blockList ul.blockList ul.blockList li.blockListLast {
-	list-style     : none;
-	border-bottom  : none;
-	padding-bottom : 0;
+    list-style: none;
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
 table tr td dl,
 table tr td dl dt,
 table tr td dl dd {
-	margin-top    : 0;
-	margin-bottom : 1px;
+    margin-top: 0;
+    margin-bottom: 1px;
 }
 
 /*
@@ -465,15 +465,15 @@ Table styles
 .useSummary,
 .constantsSummary,
 .deprecatedSummary {
-	width         : 100%;
-	border-left   : 1px solid #EEEEEE;
-	border-right  : 1px solid #EEEEEE;
-	border-bottom : 1px solid #EEEEEE;
+    width: 100%;
+    border-left: 1px solid #EEEEEE;
+    border-right: 1px solid #EEEEEE;
+    border-bottom: 1px solid #EEEEEE;
 }
 
 .overviewSummary,
 .memberSummary {
-	padding : 0;
+    padding: 0;
 }
 
 .overviewSummary caption,
@@ -482,16 +482,16 @@ Table styles
 .useSummary caption,
 .constantsSummary caption,
 .deprecatedSummary caption {
-	position          : relative;
-	text-align        : left;
-	background-repeat : no-repeat;
-	color             : #253441;
-	font-weight       : bold;
-	clear             : none;
-	overflow          : hidden;
-	padding           : 10px 0 0 1px;
-	margin            : 0;
-	white-space       : pre;
+    position: relative;
+    text-align: left;
+    background-repeat: no-repeat;
+    color: #253441;
+    font-weight: bold;
+    clear: none;
+    overflow: hidden;
+    padding: 10px 0 0 1px;
+    margin: 0;
+    white-space: pre;
 }
 
 .overviewSummary caption a:link,
@@ -518,7 +518,7 @@ Table styles
 .useSummary caption a:visited,
 .constantsSummary caption a:visited,
 .deprecatedSummary caption a:visited {
-	color : #FFFFFF;
+    color: #FFFFFF;
 }
 
 .overviewSummary caption span,
@@ -527,47 +527,47 @@ Table styles
 .useSummary caption span,
 .constantsSummary caption span,
 .deprecatedSummary caption span {
-	white-space      : nowrap;
-	padding          : 5px 12px 7px;
-	display          : inline-block;
-	float            : left;
-	background-color : #F8981D;
-	border           : none;
-	height           : 16px;
+    white-space: nowrap;
+    padding: 5px 12px 7px;
+    display: inline-block;
+    float: left;
+    background-color: #F8981D;
+    border: none;
+    height: 16px;
 }
 
 .memberSummary caption span.activeTableTab span {
-	white-space      : nowrap;
-	padding-top      : 5px;
-	padding-left     : 12px;
-	padding-right    : 12px;
-	margin-right     : 3px;
-	display          : inline-block;
-	float            : left;
-	background-color : #F8981D;
-	height           : 16px;
+    white-space: nowrap;
+    padding-top: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-right: 3px;
+    display: inline-block;
+    float: left;
+    background-color: #F8981D;
+    height: 16px;
 }
 
 .memberSummary caption span.tableTab span {
-	white-space      : nowrap;
-	padding-top      : 5px;
-	padding-left     : 12px;
-	padding-right    : 12px;
-	margin-right     : 3px;
-	display          : inline-block;
-	float            : left;
-	background-color : #4D7A97;
-	height           : 16px;
+    white-space: nowrap;
+    padding-top: 5px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-right: 3px;
+    display: inline-block;
+    float: left;
+    background-color: #4D7A97;
+    height: 16px;
 }
 
 .memberSummary caption span.tableTab,
 .memberSummary caption span.activeTableTab {
-	padding-top      : 0;
-	padding-left     : 0;
-	padding-right    : 0;
-	background-image : none;
-	float            : none;
-	display          : inline;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+    background-image: none;
+    float: none;
+    display: inline;
 }
 
 .overviewSummary .tabEnd,
@@ -576,29 +576,29 @@ Table styles
 .useSummary .tabEnd,
 .constantsSummary .tabEnd,
 .deprecatedSummary .tabEnd {
-	display          : none;
-	width            : 5px;
-	position         : relative;
-	float            : left;
-	background-color : #F8981D;
+    display: none;
+    width: 5px;
+    position: relative;
+    float: left;
+    background-color: #F8981D;
 }
 
 .memberSummary .activeTableTab .tabEnd {
-	display          : none;
-	width            : 5px;
-	margin-right     : 3px;
-	position         : relative;
-	float            : left;
-	background-color : #F8981D;
+    display: none;
+    width: 5px;
+    margin-right: 3px;
+    position: relative;
+    float: left;
+    background-color: #F8981D;
 }
 
 .memberSummary .tableTab .tabEnd {
-	display          : none;
-	width            : 5px;
-	margin-right     : 3px;
-	position         : relative;
-	background-color : #4D7A97;
-	float            : left;
+    display: none;
+    width: 5px;
+    margin-right: 3px;
+    position: relative;
+    background-color: #4D7A97;
+    float: left;
 
 }
 
@@ -608,9 +608,9 @@ Table styles
 .useSummary td,
 .constantsSummary td,
 .deprecatedSummary td {
-	text-align : left;
-	padding    : 0 0 12px 10px;
-	width      : 100%;
+    text-align: left;
+    padding: 0 0 12px 10px;
+    width: 100%;
 }
 
 th.colOne,
@@ -623,35 +623,35 @@ td.colFirst,
 td.colLast,
 .useSummary td,
 .constantsSummary td {
-	vertical-align : top;
-	padding-right  : 0;
-	padding-top    : 8px;
-	padding-bottom : 3px;
+    vertical-align: top;
+    padding-right: 0;
+    padding-top: 8px;
+    padding-bottom: 3px;
 }
 
 th.colFirst,
 th.colLast,
 th.colOne,
 .constantsSummary th {
-	background : #DEE3E9;
-	text-align : left;
-	padding    : 8px 3px 3px 7px;
+    background: #DEE3E9;
+    text-align: left;
+    padding: 8px 3px 3px 7px;
 }
 
 td.colFirst,
 th.colFirst {
-	white-space : nowrap;
-	font-size   : 13px;
+    white-space: nowrap;
+    font-size: 13px;
 }
 
 td.colLast,
 th.colLast {
-	font-size : 13px;
+    font-size: 13px;
 }
 
 td.colOne,
 th.colOne {
-	font-size : 13px;
+    font-size: 13px;
 }
 
 .overviewSummary td.colFirst,
@@ -663,8 +663,8 @@ th.colOne {
 .memberSummary td.colOne,
 .memberSummary th.colOne,
 .typeSummary td.colFirst {
-	width          : 25%;
-	vertical-align : top;
+    width: 25%;
+    vertical-align: top;
 }
 
 td.colOne a:link,
@@ -683,72 +683,72 @@ td.colLast a:hover,
 .constantValuesContainer td a:active,
 .constantValuesContainer td a:visited,
 .constantValuesContainer td a:hover {
-	font-weight : bold;
+    font-weight: bold;
 }
 
 .tableSubHeadingColor {
-	background-color : #EEEEFF;
+    background-color: #EEEEFF;
 }
 
 .altColor {
-	background-color : #FFFFFF;
+    background-color: #FFFFFF;
 }
 
 .rowColor {
-	background-color : #EEEEEF;
+    background-color: #EEEEEF;
 }
 
 /*
 Content styles
 */
 .description pre {
-	margin-top : 0;
+    margin-top: 0;
 }
 
 .deprecatedContent {
-	margin  : 0;
-	padding : 10px 0;
+    margin: 0;
+    padding: 10px 0;
 }
 
 .docSummary {
-	padding : 0;
+    padding: 0;
 }
 
 ul.blockList ul.blockList ul.blockList li.blockList h3 {
-	font-style : normal;
+    font-style: normal;
 }
 
 div.block {
-	font-size   : 15px;
-	font-family : sans-serif;
+    font-size: 15px;
+    font-family: sans-serif;
 }
 
 td.colLast div {
-	padding-top : 0;
+    padding-top: 0;
 }
 
 td.colLast a {
-	padding-bottom : 3px;
+    padding-bottom: 3px;
 }
 
 /*
 Formatting effect styles
 */
 .sourceLineNo {
-	color   : green;
-	padding : 0 30px 0 0;
+    color: green;
+    padding: 0 30px 0 0;
 }
 
 h1.hidden {
-	visibility : hidden;
-	overflow   : hidden;
-	font-size  : 10px;
+    visibility: hidden;
+    overflow: hidden;
+    font-size: 10px;
 }
 
 .block {
-	display : block;
-	margin  : 3px 10px 2px 0;
-	color   : #474747;
+    display: block;
+    margin: 3px 10px 2px 0;
+    color: #474747;
 }
 
 .deprecatedLabel,
@@ -764,21 +764,21 @@ h1.hidden {
 .throwsLabel,
 .typeNameLabel,
 .typeNameLink {
-	font-weight : bold;
+    font-weight: bold;
 }
 
 .deprecationComment,
 .emphasizedPhrase,
 .interfaceName {
-	font-style : italic;
+    font-style: italic;
 }
 
 div.block div.block span.deprecationComment,
 div.block div.block span.emphasizedPhrase,
 div.block div.block span.interfaceName {
-	font-style : normal;
+    font-style: normal;
 }
 
 div.contentContainer ul.blockList li.blockList h2 {
-	padding-bottom : 0;
+    padding-bottom: 0;
 }

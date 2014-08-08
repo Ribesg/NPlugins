@@ -8,7 +8,9 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntheendagain.task;
+
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -22,6 +24,7 @@ public abstract class RandomRepeatingTask extends BukkitRunnable {
 	protected final EndWorldHandler worldHandler;
 
 	protected RandomRepeatingTask(final EndWorldHandler worldHandler) {
+		super();
 		this.worldHandler = worldHandler;
 	}
 
@@ -31,15 +34,15 @@ public abstract class RandomRepeatingTask extends BukkitRunnable {
 	 * @param plugin the plugin to attach the task
 	 */
 	public BukkitTask schedule(final JavaPlugin plugin) {
-		return Bukkit.getScheduler().runTaskLater(plugin, this, getInitialDelay());
+		return Bukkit.getScheduler().runTaskLater(plugin, this, this.getInitialDelay());
 	}
 
 	@Override
 	public void run() {
-		final boolean success = exec();
-		final long delay = getDelay();
-		Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), this, delay * 20);
-		setNextConfigTime(System.nanoTime() + (success ? delay : 0) * 1_000_000_000);
+		final boolean success = this.exec();
+		final long delay = this.getDelay();
+		Bukkit.getScheduler().runTaskLater(this.worldHandler.getPlugin(), this, delay * 20);
+		this.setNextConfigTime(System.nanoTime() + (success ? delay : 0) * 1_000_000_000);
 	}
 
 	/**

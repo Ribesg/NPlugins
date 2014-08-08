@@ -8,20 +8,23 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncuboid.dynmap;
+
 import fr.ribesg.bukkit.ncore.common.Dynmap;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncuboid.beans.CuboidRegion;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
+
+import java.util.logging.Logger;
+
 import org.bukkit.Color;
+
 import org.dynmap.DynmapCommonAPI;
 import org.dynmap.markers.AreaMarker;
 import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
-
-import java.util.logging.Logger;
 
 public class DynmapBridge {
 
@@ -73,9 +76,9 @@ public class DynmapBridge {
 	public boolean handle(final GeneralRegion region) {
 		if (region.isDynmapable()) {
 			if (region.getFlag(Flag.HIDDEN)) {
-				return hide(region);
+				return this.hide(region);
 			} else {
-				return show(region);
+				return this.show(region);
 			}
 		} else {
 			return false;
@@ -88,7 +91,7 @@ public class DynmapBridge {
 		} else {
 			switch (region.getType()) {
 				case CUBOID:
-					return showCuboidRegion((CuboidRegion) region);
+					return this.showCuboidRegion((CuboidRegion)region);
 				default:
 					LOGGER.severe("Unable to dynmapize a region of type '" + region.getType() + "'!");
 					return false;
@@ -170,7 +173,7 @@ public class DynmapBridge {
 		description.append("<ul>");
 		for (final Flag f : Flag.values()) {
 			if (region.getFlag(f)) {
-				description.append("  <li>").append(f.toString()).append("</li>");
+				description.append("  <li>").append(f).append("</li>");
 			}
 		}
 		description.append("<ul>");
@@ -185,7 +188,7 @@ public class DynmapBridge {
 	}
 
 	public boolean isInitialized() {
-		return initialized;
+		return this.initialized;
 	}
 
 	public void setInitialized(final boolean initialized) {

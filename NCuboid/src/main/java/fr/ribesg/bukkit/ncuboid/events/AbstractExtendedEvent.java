@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ncuboid.events;
 
 import fr.ribesg.bukkit.ncuboid.NCuboid;
+
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -39,15 +40,16 @@ public abstract class AbstractExtendedEvent extends Event {
 	private final Event baseEvent;
 
 	public AbstractExtendedEvent(final NCuboid instance, final Event event) {
-		plugin = instance;
-		baseEvent = event;
+		super();
+		this.plugin = instance;
+		this.baseEvent = event;
 	}
 
 	public NCuboid getPlugin() {
-		return plugin;
+		return this.plugin;
 	}
 
 	public Event getBaseEvent() {
-		return baseEvent;
+		return this.baseEvent;
 	}
 }

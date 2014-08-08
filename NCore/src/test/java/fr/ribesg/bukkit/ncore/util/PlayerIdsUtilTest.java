@@ -9,10 +9,10 @@
 
 package fr.ribesg.bukkit.ncore.util;
 
+import java.util.UUID;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.UUID;
 
 public class PlayerIdsUtilTest {
 

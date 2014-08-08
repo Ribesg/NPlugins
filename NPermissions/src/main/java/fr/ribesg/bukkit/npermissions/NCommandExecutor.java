@@ -8,17 +8,19 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.npermissions.permission.LegacyPlayerPermissions;
 import fr.ribesg.bukkit.npermissions.permission.PlayerPermissions;
+
+import java.io.IOException;
+import java.util.UUID;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
-
-import java.io.IOException;
-import java.util.UUID;
 
 public class NCommandExecutor implements CommandExecutor {
 
@@ -55,15 +57,15 @@ public class NCommandExecutor implements CommandExecutor {
 						case "messages":
 						case "mess":
 						case "mes":
-							return cmdReloadMessages(sender, args);
+							return this.cmdReloadMessages(sender, args);
 						case "groups":
 						case "group":
 						case "g":
-							return cmdReloadGroups(sender, args);
+							return this.cmdReloadGroups(sender, args);
 						case "players":
 						case "player":
 						case "p":
-							return cmdReloadPlayers(sender, args);
+							return this.cmdReloadPlayers(sender, args);
 						default:
 							return false;
 					}
@@ -130,7 +132,7 @@ public class NCommandExecutor implements CommandExecutor {
 			} else {
 				final boolean force;
 				if (args.length == 3) {
-					if (args[2].equalsIgnoreCase("force")) {
+					if ("force".equalsIgnoreCase(args[2])) {
 						force = true;
 					} else {
 						return false;
@@ -138,7 +140,7 @@ public class NCommandExecutor implements CommandExecutor {
 				} else {
 					force = false;
 				}
-				final String[] input = args[0].contains(",") ? args[0].split(",") : new String[] {args[0]};
+				final String[] input = args[0].contains(",") ? args[0].split(",") : new String[]{args[0]};
 				final String groupName = args[1].toLowerCase();
 				if (!this.plugin.getManager().getGroups().containsKey(groupName)) {
 					this.plugin.sendMessage(sender, MessageId.permissions_unknownGroup, groupName);

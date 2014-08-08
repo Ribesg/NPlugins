@@ -13,6 +13,7 @@ import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
 import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ntalk.Config;
 import fr.ribesg.bukkit.ntalk.NTalk;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -41,33 +42,33 @@ public class Formater {
 	 * the format minus the realName part
 	 */
 	public String[] getFormat(final Player player, final boolean async) {
-		plugin.entering(getClass(), "getFormat", "player=" + player.getName() + '/' + player.getUniqueId() + ";async=" + true);
+		this.plugin.entering(this.getClass(), "getFormat", "player=" + player.getName() + '/' + player.getUniqueId() + ";async=" + true);
 
 		Format format = this.config.getDefaultFormat();
 		if (this.config.getPlayerFormats().containsKey(player.getUniqueId())) {
-			plugin.debug("Using player format");
+			this.plugin.debug("Using player format");
 			format = this.config.getPlayerFormats().get(player.getUniqueId());
 		} else if (async ? AsyncPermAccessor.isOp(player.getName()) : player.isOp()) {
-			plugin.debug("Player is Op:");
+			this.plugin.debug("Player is Op:");
 			if (this.config.getGroupFormats().containsKey(this.config.getOpGroup())) {
-				plugin.debug(" Using group format of group " + this.config.getOpGroup());
+				this.plugin.debug(" Using group format of group " + this.config.getOpGroup());
 				format = this.config.getGroupFormats().get(this.config.getOpGroup());
 			} else {
-				plugin.debug(" Using default format");
+				this.plugin.debug(" Using default format");
 				format = this.config.getDefaultFormat();
 			}
 		} else {
-			plugin.debug("Searching group format...");
+			this.plugin.debug("Searching group format...");
 			for (final String groupName : this.config.getGroupFormats().keySet()) {
-				plugin.debug(" Checking group " + groupName + "...");
+				this.plugin.debug(" Checking group " + groupName + "...");
 				if (async ? AsyncPermAccessor.has(player.getName(), "maingroup." + groupName.toLowerCase()) : player.hasPermission("maingroup." + groupName.toLowerCase())) {
-					plugin.debug("  Using group format of group " + groupName);
+					this.plugin.debug("  Using group format of group " + groupName);
 					format = this.config.getGroupFormats().get(groupName);
 					break;
 				}
 			}
 			if (format == this.config.getDefaultFormat()) {
-				plugin.debug(" No group found for Player " + player.getName() + ", using default format");
+				this.plugin.debug(" No group found for Player " + player.getName() + ", using default format");
 			}
 		}
 
@@ -75,7 +76,7 @@ public class Formater {
 		final String playerNickname = this.config.getPlayerNicknames().get(player.getUniqueId());
 		formatString = formatString.replaceAll("\\Q[prefix]\\E", format.getPrefix());
 		formatString = formatString.replaceAll("\\Q[suffix]\\E", format.getSuffix());
-		formatString = replaceVariables(player, formatString);
+		formatString = this.replaceVariables(player, formatString);
 		formatString = formatString.replace("[message]", BUKKIT_MESSAGE);
 		if (playerNickname == null) {
 			formatString = formatString.replace("[name]", BUKKIT_PLAYERNAME);
@@ -86,13 +87,13 @@ public class Formater {
 			formatString = formatString.replace("[realName]", BUKKIT_PLAYERNAME);
 		}
 
-		plugin.debug("Final format string: " + formatString);
+		this.plugin.debug("Final format string: " + formatString);
 
 		final String[] result = new String[2];
-		result[0] = unicoder(formatString);
-		result[1] = unicoder(formatString.replaceAll("%%(.*)%%", ""));
+		result[0] = this.unicoder(formatString);
+		result[1] = this.unicoder(formatString.replaceAll("%%(.*)%%", ""));
 
-		plugin.exiting(getClass(), "getFormat");
+		this.plugin.exiting(this.getClass(), "getFormat");
 		return ColorUtil.colorize(result);
 	}
 
@@ -108,49 +109,49 @@ public class Formater {
 	 * containing the formatted String minus the realName parts
 	 */
 	public String[] parsePM(final CommandSender from, final CommandSender to, final String message) {
-		plugin.entering(getClass(), "parsePM", "from=" + from.getName() + ";to=" + to.getName());
+		this.plugin.entering(this.getClass(), "parsePM", "from=" + from.getName() + ";to=" + to.getName());
 
 		Format formatFrom = this.config.getDefaultFormat(), formatTo = this.config.getDefaultFormat();
 		String formatString = this.config.getPmTemplate(); // The final String
 		if (!(from instanceof Player)) {
-			plugin.debug("From is not a Player");
+			this.plugin.debug("From is not a Player");
 			formatString = formatString.replaceAll("\\Q[prefixFrom]\\E", "");
 			formatString = formatString.replace("[nameFrom]", "&cCONSOLE");
 			formatString = formatString.replaceAll("\\Q[suffixFrom]\\E", "");
 			formatString = formatString.replaceAll("%1%(.*)%%", "");
 		} else {
-			plugin.debug("From is a Player");
-			if (this.config.getPlayerFormats().containsKey(((Player) from).getUniqueId())) {
-				plugin.debug(" Using player format");
-				formatFrom = this.config.getPlayerFormats().get(((Player) from).getUniqueId());
+			this.plugin.debug("From is a Player");
+			if (this.config.getPlayerFormats().containsKey(((Player)from).getUniqueId())) {
+				this.plugin.debug(" Using player format");
+				formatFrom = this.config.getPlayerFormats().get(((Player)from).getUniqueId());
 			} else if (from.isOp()) {
-				plugin.debug(" Player is Op:");
+				this.plugin.debug(" Player is Op:");
 				if (this.config.getGroupFormats().containsKey(this.config.getOpGroup())) {
-					plugin.debug("  Using group format of group " + this.config.getOpGroup());
+					this.plugin.debug("  Using group format of group " + this.config.getOpGroup());
 					formatFrom = this.config.getGroupFormats().get(this.config.getOpGroup());
 				} else {
-					plugin.debug("  Using default format");
+					this.plugin.debug("  Using default format");
 					formatFrom = this.config.getDefaultFormat();
 				}
 			} else {
-				plugin.debug(" Searching group format...");
+				this.plugin.debug(" Searching group format...");
 				for (final String groupName : this.config.getGroupFormats().keySet()) {
-					plugin.debug(" Checking group " + groupName + "...");
+					this.plugin.debug(" Checking group " + groupName + "...");
 					if (from.hasPermission("maingroup." + groupName)) {
-						plugin.debug("  Using group format of group " + groupName);
+						this.plugin.debug("  Using group format of group " + groupName);
 						formatFrom = this.config.getGroupFormats().get(groupName);
 						break;
 					}
 				}
 				if (formatFrom == this.config.getDefaultFormat()) {
-					plugin.debug("  No group found for 'From' Player " + from.getName() + ", using default format");
+					this.plugin.debug("  No group found for 'From' Player " + from.getName() + ", using default format");
 				}
 			}
 			final String fromName = from.getName();
-			final String fromNickname = this.config.getPlayerNicknames().get(((Player) from).getUniqueId());
+			final String fromNickname = this.config.getPlayerNicknames().get(((Player)from).getUniqueId());
 			formatString = formatString.replaceAll("\\Q[prefixFrom]\\E", formatFrom.getPrefix());
 			formatString = formatString.replaceAll("\\Q[suffixFrom]\\E", formatFrom.getSuffix());
-			formatString = replaceVariables((Player) from, formatString);
+			formatString = this.replaceVariables((Player)from, formatString);
 			if (fromNickname == null) {
 				formatString = formatString.replace("[nameFrom]", fromName);
 				formatString = formatString.replaceAll("%1%(.*)%%", "");
@@ -161,44 +162,44 @@ public class Formater {
 			}
 		}
 		if (!(to instanceof Player)) {
-			plugin.debug("To is not a Player");
+			this.plugin.debug("To is not a Player");
 			formatString = formatString.replaceAll("\\Q[prefixTo]\\E", "");
 			formatString = formatString.replace("[nameTo]", "&cCONSOLE");
 			formatString = formatString.replaceAll("\\Q[suffixTo]\\E", "");
 			formatString = formatString.replaceAll("%2%(.*)%%", "");
 		} else {
-			plugin.debug("To is a Player");
-			if (this.config.getPlayerFormats().containsKey(((Player) to).getUniqueId())) {
-				plugin.debug(" Using player format");
-				formatTo = this.config.getPlayerFormats().get(((Player) to).getUniqueId());
+			this.plugin.debug("To is a Player");
+			if (this.config.getPlayerFormats().containsKey(((Player)to).getUniqueId())) {
+				this.plugin.debug(" Using player format");
+				formatTo = this.config.getPlayerFormats().get(((Player)to).getUniqueId());
 			} else if (to.isOp()) {
-				plugin.debug(" Player is Op:");
+				this.plugin.debug(" Player is Op:");
 				if (this.config.getGroupFormats().containsKey(this.config.getOpGroup())) {
-					plugin.debug("  Using group format of group " + this.config.getOpGroup());
+					this.plugin.debug("  Using group format of group " + this.config.getOpGroup());
 					formatTo = this.config.getGroupFormats().get(this.config.getOpGroup());
 				} else {
-					plugin.debug("  Using default format");
+					this.plugin.debug("  Using default format");
 					formatTo = this.config.getDefaultFormat();
 				}
 			} else {
-				plugin.debug(" Searching group format...");
+				this.plugin.debug(" Searching group format...");
 				for (final String groupName : this.config.getGroupFormats().keySet()) {
-					plugin.debug(" Checking group " + groupName + "...");
+					this.plugin.debug(" Checking group " + groupName + "...");
 					if (to.hasPermission("maingroup." + groupName)) {
-						plugin.debug("  Using group format of group " + groupName);
+						this.plugin.debug("  Using group format of group " + groupName);
 						formatTo = this.config.getGroupFormats().get(groupName);
 						break;
 					}
 				}
 				if (formatTo == this.config.getDefaultFormat()) {
-					plugin.debug("  No group found for 'To' Player " + to.getName() + ", using default format");
+					this.plugin.debug("  No group found for 'To' Player " + to.getName() + ", using default format");
 				}
 			}
 			final String toName = to.getName();
-			final String toNickname = this.config.getPlayerNicknames().get(((Player) to).getUniqueId());
+			final String toNickname = this.config.getPlayerNicknames().get(((Player)to).getUniqueId());
 			formatString = formatString.replaceAll("\\Q[prefixTo]\\E", formatTo.getPrefix());
 			formatString = formatString.replaceAll("\\Q[suffixTo]\\E", formatTo.getSuffix());
-			formatString = replaceVariables((Player) to, formatString);
+			formatString = this.replaceVariables((Player)to, formatString);
 			if (toNickname == null) {
 				formatString = formatString.replace("[nameTo]", toName);
 				formatString = formatString.replaceAll("%2%(.*)%%", "");
@@ -211,13 +212,13 @@ public class Formater {
 
 		formatString = formatString.replace("[message]", message);
 
-		plugin.debug("Final format string: " + formatString);
+		this.plugin.debug("Final format string: " + formatString);
 
 		final String[] result = new String[2];
-		result[0] = unicoder(formatString);
-		result[1] = unicoder(formatString.replaceAll("%1%(.*)%%", "").replaceAll("%2%(.*)%%", ""));
+		result[0] = this.unicoder(formatString);
+		result[1] = this.unicoder(formatString.replaceAll("%1%(.*)%%", "").replaceAll("%2%(.*)%%", ""));
 
-		plugin.exiting(getClass(), "parsePM");
+		this.plugin.exiting(this.getClass(), "parsePM");
 		return ColorUtil.colorize(result);
 	}
 

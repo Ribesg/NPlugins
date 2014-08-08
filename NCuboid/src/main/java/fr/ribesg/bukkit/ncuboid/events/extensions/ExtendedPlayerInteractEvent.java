@@ -12,10 +12,11 @@ package fr.ribesg.bukkit.ncuboid.events.extensions;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.Set;
 import java.util.SortedSet;
+
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class ExtendedPlayerInteractEvent extends AbstractExtendedEvent {
 
@@ -28,31 +29,31 @@ public class ExtendedPlayerInteractEvent extends AbstractExtendedEvent {
 	public ExtendedPlayerInteractEvent(final RegionDb db, final PlayerInteractEvent event) {
 		super(db.getPlugin(), event);
 		if (event.hasBlock()) {
-			clickedRegions = db.getAllByLocation(event.getClickedBlock().getLocation());
-			clickedRegion = db.getPrior(clickedRegions);
-			relativeClickedRegions = db.getAllByLocation(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
-			relativeClickedRegion = db.getPrior(relativeClickedRegions);
+			this.clickedRegions = db.getAllByLocation(event.getClickedBlock().getLocation());
+			this.clickedRegion = db.getPrior(this.clickedRegions);
+			this.relativeClickedRegions = db.getAllByLocation(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
+			this.relativeClickedRegion = db.getPrior(this.relativeClickedRegions);
 		} else {
-			clickedRegions = null;
-			clickedRegion = null;
-			relativeClickedRegion = null;
-			relativeClickedRegions = null;
+			this.clickedRegions = null;
+			this.clickedRegion = null;
+			this.relativeClickedRegion = null;
+			this.relativeClickedRegions = null;
 		}
 	}
 
 	public GeneralRegion getClickedRegion() {
-		return clickedRegion;
+		return this.clickedRegion;
 	}
 
 	public Set<GeneralRegion> getClickedRegions() {
-		return clickedRegions;
+		return this.clickedRegions;
 	}
 
 	public GeneralRegion getRelativeClickedRegion() {
-		return relativeClickedRegion;
+		return this.relativeClickedRegion;
 	}
 
 	public Set<GeneralRegion> getRelativeClickedRegions() {
-		return relativeClickedRegions;
+		return this.relativeClickedRegions;
 	}
 }

@@ -10,12 +10,13 @@
 package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 public abstract class GeneralRegion extends Region implements Comparable<GeneralRegion> {
 
@@ -48,8 +49,9 @@ public abstract class GeneralRegion extends Region implements Comparable<General
 	}
 
 	public GeneralRegion(final String worldName, final RegionType type, final Rights rights, final int priority, final Flags flags, final Attributes attributes) {
-		setWorldName(worldName);
-		setType(type);
+		super();
+		this.setWorldName(worldName);
+		this.setType(type);
 		switch (type) {
 			case CUBOID:
 				this.dynmapable = true;
@@ -60,14 +62,14 @@ public abstract class GeneralRegion extends Region implements Comparable<General
 				break;
 		}
 		this.rights = rights;
-		setPriority(priority);
+		this.setPriority(priority);
 		this.flags = flags;
 		this.attributes = attributes;
 	}
 
 	// Location check
 	public boolean contains(final Location loc) {
-		return contains(new NLocation(loc));
+		return this.contains(new NLocation(loc));
 	}
 
 	public abstract boolean contains(final NLocation loc);
@@ -77,11 +79,11 @@ public abstract class GeneralRegion extends Region implements Comparable<General
 	public abstract long getTotalSize();
 
 	public Attributes getAttributes() {
-		return attributes;
+		return this.attributes;
 	}
 
 	public int getPriority() {
-		return priority;
+		return this.priority;
 	}
 
 	public void setPriority(final int priority) {
@@ -89,7 +91,7 @@ public abstract class GeneralRegion extends Region implements Comparable<General
 	}
 
 	public RegionType getType() {
-		return type;
+		return this.type;
 	}
 
 	public void setType(final RegionType type) {
@@ -97,7 +99,7 @@ public abstract class GeneralRegion extends Region implements Comparable<General
 	}
 
 	public String getWorldName() {
-		return worldName;
+		return this.worldName;
 	}
 
 	public void setWorldName(final String worldName) {
@@ -109,128 +111,128 @@ public abstract class GeneralRegion extends Region implements Comparable<General
 	}
 
 	public boolean getFlag(final Flag f) {
-		return flags.getFlag(f);
+		return this.flags.getFlag(f);
 	}
 
 	public void setFlag(final Flag f, final boolean b) {
-		flags.setFlag(f, b);
+		this.flags.setFlag(f, b);
 	}
 
 	public String getStringAttribute(final Attribute att) {
-		return attributes.getStringAttribute(att);
+		return this.attributes.getStringAttribute(att);
 	}
 
 	public void setStringAttribute(final Attribute att, final String s) {
-		attributes.setStringAttribute(att, s);
+		this.attributes.setStringAttribute(att, s);
 	}
 
 	public Integer getIntegerAttribute(final Attribute att) {
-		return attributes.getIntegerAttribute(att);
+		return this.attributes.getIntegerAttribute(att);
 	}
 
 	public void setIntegerAttribute(final Attribute att, final Integer i) {
-		attributes.setIntegerAttribute(att, i);
+		this.attributes.setIntegerAttribute(att, i);
 	}
 
 	public Location getLocationAttribute(final Attribute att) {
-		return attributes.getLocationAttribute(att);
+		return this.attributes.getLocationAttribute(att);
 	}
 
 	public void setLocationAttribute(final Attribute att, final Location loc) {
-		attributes.setLocationAttribute(att, loc);
+		this.attributes.setLocationAttribute(att, loc);
 	}
 
 	public Vector getVectorAttribute(final Attribute att) {
-		return attributes.getVectorAttribute(att);
+		return this.attributes.getVectorAttribute(att);
 	}
 
 	public void setVectorAttribute(final Attribute att, final Vector v) {
-		attributes.setVectorAttribute(att, v);
+		this.attributes.setVectorAttribute(att, v);
 	}
 
 	public String getStringRepresentation(final Attribute att) {
-		return attributes.getStringRepresentation(att);
+		return this.attributes.getStringRepresentation(att);
 	}
 
 	public boolean isUser(final Player player) {
-		return rights.isUser(player);
+		return this.rights.isUser(player);
 	}
 
 	public boolean isUser(final Player player, final boolean async) {
-		return rights.isUser(player, async);
+		return this.rights.isUser(player, async);
 	}
 
 	public boolean isUserId(final UUID id) {
-		return rights.isUserId(id);
+		return this.rights.isUserId(id);
 	}
 
 	public boolean isAdmin(final Player player) {
-		return rights.isAdmin(player);
+		return this.rights.isAdmin(player);
 	}
 
 	public boolean isAdminId(final UUID id) {
-		return rights.isAdminId(id);
+		return this.rights.isAdminId(id);
 	}
 
 	public boolean isAllowedGroup(final String groupName) {
-		return rights.isAllowedGroup(groupName);
+		return this.rights.isAllowedGroup(groupName);
 	}
 
 	public boolean isAllowedCommand(final String command) {
-		return rights.isAllowedCommand(command);
+		return this.rights.isAllowedCommand(command);
 	}
 
 	public Set<UUID> getUsers() {
-		return rights.getUsers();
+		return this.rights.getUsers();
 	}
 
 	public Set<UUID> getAdmins() {
-		return rights.getAdmins();
+		return this.rights.getAdmins();
 	}
 
 	public Set<String> getAllowedGroups() {
-		return rights.getAllowedGroups();
+		return this.rights.getAllowedGroups();
 	}
 
 	public Set<String> getDisallowedCommands() {
-		return rights.getDisallowedCommands();
+		return this.rights.getDisallowedCommands();
 	}
 
 	public void removeUser(final UUID id) {
-		rights.removeUser(id);
+		this.rights.removeUser(id);
 	}
 
 	public void addUser(final UUID id) {
-		rights.addUser(id);
+		this.rights.addUser(id);
 	}
 
 	public void addAdmin(final UUID id) {
-		rights.addAdmin(id);
+		this.rights.addAdmin(id);
 	}
 
 	public void removeAdmin(final UUID id) {
-		rights.removeAdmin(id);
+		this.rights.removeAdmin(id);
 	}
 
 	public void allowGroup(final String groupName) {
-		rights.allowGroup(groupName);
+		this.rights.allowGroup(groupName);
 	}
 
 	public void denyGroup(final String groupName) {
-		rights.denyGroup(groupName);
+		this.rights.denyGroup(groupName);
 	}
 
 	public void allowCommand(final String command) {
-		rights.allowCommand(command);
+		this.rights.allowCommand(command);
 	}
 
 	public void denyCommand(final String command) {
-		rights.denyCommand(command);
+		this.rights.denyCommand(command);
 	}
 
 	@Override
 	public int compareTo(final GeneralRegion o) {
-		int res = Integer.compare(this.getPriority(), o.getPriority());
+		int res = Integer.compare(this.priority, o.priority);
 		if (res != 0) {
 			return -res;
 		} else {

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.permission;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -46,7 +47,7 @@ public class WorldPlayerPermissions extends PlayerPermissions {
 	}
 
 	/**
-	 * @see PermissionsSet#computePermissions(java.util.Map)
+	 * @see PermissionsSet#computePermissions(Map)
 	 */
 	@Override
 	public Map<String, Boolean> computePermissions(final Map<String, Boolean> resultMap) {

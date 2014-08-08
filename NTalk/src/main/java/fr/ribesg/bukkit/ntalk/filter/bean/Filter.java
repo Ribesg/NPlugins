@@ -8,14 +8,16 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntalk.filter.bean;
+
 import fr.ribesg.bukkit.ncore.common.collection.trie.TrieElement;
 import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 /**
  * @author Ribesg
@@ -41,26 +43,26 @@ public abstract class Filter implements TrieElement {
 	}
 
 	public String getFilteredString() {
-		return filteredString;
+		return this.filteredString;
 	}
 
 	public Pattern getFilteredStringRegexPattern() {
-		return filteredStringRegexPattern;
+		return this.filteredStringRegexPattern;
 	}
 
 	public char[] getCharSequence() {
-		if (isRegex()) {
+		if (this.regex) {
 			throw new IllegalStateException("A regex can't be used in a Trie");
 		}
-		return getFilteredString().toCharArray();
+		return this.filteredString.toCharArray();
 	}
 
 	public boolean isRegex() {
-		return regex;
+		return this.regex;
 	}
 
 	public ChatFilterResult getResponseType() {
-		return responseType;
+		return this.responseType;
 	}
 
 	// ############ //
@@ -72,9 +74,9 @@ public abstract class Filter implements TrieElement {
 	 */
 	public Map<String, Object> getConfigMap() {
 		final Map<String, Object> map = new LinkedHashMap<>();
-		map.put("filteredString", filteredString);
-		map.put("type", responseType.name());
-		map.put("isRegex", regex);
+		map.put("filteredString", this.filteredString);
+		map.put("type", this.responseType.name());
+		map.put("isRegex", this.regex);
 		return map;
 	}
 
@@ -85,7 +87,7 @@ public abstract class Filter implements TrieElement {
 	public static Filter loadFromConfig(final String key, final ConfigurationSection keySection) throws InvalidConfigurationException {
 		try {
 			final Map<String, Object> map = keySection.getValues(false);
-			switch (ChatFilterResult.valueOf((String) map.get("type"))) {
+			switch (ChatFilterResult.valueOf((String)map.get("type"))) {
 				case TEMPORARY_BAN:
 					return BanFilter.loadFromConfig(key, map);
 				case DENY:
@@ -102,7 +104,7 @@ public abstract class Filter implements TrieElement {
 					return null;
 			}
 		} catch (final IllegalArgumentException e) {
-			throw new InvalidConfigurationException("Missing value in configuration of filter for '" + key + "'", e);
+			throw new InvalidConfigurationException("Missing value in configuration of filter for '" + key + '\'', e);
 		}
 	}
 }

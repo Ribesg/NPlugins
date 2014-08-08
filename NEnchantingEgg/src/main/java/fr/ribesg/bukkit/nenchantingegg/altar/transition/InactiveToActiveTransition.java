@@ -18,12 +18,13 @@ import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.BlockStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.EffectStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.SoundStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.Step;
-import org.bukkit.Effect;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import org.bukkit.Effect;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 
 public class InactiveToActiveTransition extends Transition {
 
@@ -33,8 +34,8 @@ public class InactiveToActiveTransition extends Transition {
 
 	@Override
 	protected void setFromToStates() {
-		fromState = AltarState.INACTIVE;
-		toState = AltarState.ACTIVE;
+		this.fromState = AltarState.INACTIVE;
+		this.toState = AltarState.ACTIVE;
 	}
 
 	@Override

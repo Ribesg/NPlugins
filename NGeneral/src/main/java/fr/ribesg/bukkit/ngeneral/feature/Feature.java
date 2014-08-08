@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature;
+
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 
 /**
@@ -33,11 +34,11 @@ public abstract class Feature {
 	}
 
 	public FeatureType getType() {
-		return type;
+		return this.type;
 	}
 
 	public Boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
 	/**

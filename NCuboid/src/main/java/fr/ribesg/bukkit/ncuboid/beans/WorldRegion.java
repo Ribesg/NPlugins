@@ -19,9 +19,9 @@ public class WorldRegion extends GeneralRegion {
 
 		// Default flags are a little different for worlds
 		// TODO Make this configurable
-		setFlag(Flag.BUILD, false);
-		setFlag(Flag.CHEST, false);
-		setFlag(Flag.USE, false);
+		this.setFlag(Flag.BUILD, false);
+		this.setFlag(Flag.CHEST, false);
+		this.setFlag(Flag.USE, false);
 	}
 
 	public WorldRegion(final String worldName, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts) {
@@ -30,12 +30,12 @@ public class WorldRegion extends GeneralRegion {
 
 	@Override
 	public boolean contains(final NLocation loc) {
-		return getWorldName().equals(loc.getWorldName());
+		return this.getWorldName().equals(loc.getWorldName());
 	}
 
 	@Override
 	public String getRegionName() {
-		return "world_" + getWorldName();
+		return "world_" + this.getWorldName();
 	}
 
 	@Override

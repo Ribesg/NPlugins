@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.punishment;
+
 public class Ban extends Punishment {
 
 	public Ban(final String banned, final String reason) {
@@ -21,10 +22,10 @@ public class Ban extends Punishment {
 	@Override
 	public String toString() {
 		return "Ban{" +
-		       "punished='" + punished + '\'' +
-		       ", type=" + type +
-		       ", endDate=" + endDate +
-		       ", reason='" + reason + '\'' +
+		       "punished='" + this.punished + '\'' +
+		       ", type=" + this.type +
+		       ", endDate=" + this.endDate +
+		       ", reason='" + this.reason + '\'' +
 		       '}';
 	}
 }

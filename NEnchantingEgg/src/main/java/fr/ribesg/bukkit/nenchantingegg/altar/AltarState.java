@@ -12,12 +12,13 @@ package fr.ribesg.bukkit.nenchantingegg.altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.BlockData;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeSkullBlock;
-import org.bukkit.Material;
-import org.bukkit.SkullType;
-import org.bukkit.block.BlockFace;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import org.bukkit.Material;
+import org.bukkit.SkullType;
+import org.bukkit.block.BlockFace;
 
 /**
  * Represents the state of an Altar.
@@ -165,7 +166,7 @@ public enum AltarState {
 			//
 			// O -> Obsidian
 
-			inactiveStateBlocks.add(new RelativeBlock(0, 1, 0, Material.AIR, (byte) 0));
+			inactiveStateBlocks.add(new RelativeBlock(0, 1, 0, Material.AIR, (byte)0));
 
 			inactiveStateBlocks.add(new RelativeBlock(-3, 1, 0, Material.OBSIDIAN));
 
@@ -229,7 +230,6 @@ public enum AltarState {
 			// O -> Obsidian
 
 			inactiveStateBlocks.add(new RelativeBlock(-3, 4, 0, Material.OBSIDIAN));
-
 		}
 		return inactiveStateBlocks;
 	}

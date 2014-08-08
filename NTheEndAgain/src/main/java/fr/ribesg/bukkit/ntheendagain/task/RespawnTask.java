@@ -22,30 +22,30 @@ public class RespawnTask extends RandomRepeatingTask {
 
 	@Override
 	public boolean exec() {
-		worldHandler.getPlugin().entering(getClass(), "exec");
+		this.worldHandler.getPlugin().entering(this.getClass(), "exec");
 
-		final boolean res = worldHandler.getRespawnHandler().respawn();
+		final boolean res = this.worldHandler.getRespawnHandler().respawn();
 
-		worldHandler.getPlugin().exiting(getClass(), "exec", Boolean.toString(res));
+		this.worldHandler.getPlugin().exiting(this.getClass(), "exec", Boolean.toString(res));
 		return res;
 	}
 
 	@Override
 	protected long getInitialDelay() {
-		long nextRespawnTaskTime = worldHandler.getConfig().getNextRespawnTaskTime();
-		if (worldHandler.getConfig().getRespawnType() == 4) {
+		long nextRespawnTaskTime = this.worldHandler.getConfig().getNextRespawnTaskTime();
+		if (this.worldHandler.getConfig().getRespawnType() == 4) {
 			nextRespawnTaskTime = 0;
 		}
-		return buildInitialDelay(nextRespawnTaskTime);
+		return this.buildInitialDelay(nextRespawnTaskTime);
 	}
 
 	@Override
 	protected long getDelay() {
-		return worldHandler.getConfig().getRandomRespawnTimer();
+		return this.worldHandler.getConfig().getRandomRespawnTimer();
 	}
 
 	@Override
 	protected void setNextConfigTime(final long date) {
-		worldHandler.getConfig().setNextRespawnTaskTime(date);
+		this.worldHandler.getConfig().setNextRespawnTaskTime(date);
 	}
 }

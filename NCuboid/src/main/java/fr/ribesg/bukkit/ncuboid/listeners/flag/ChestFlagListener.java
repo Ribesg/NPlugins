@@ -15,6 +15,7 @@ import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,7 +32,7 @@ public class ChestFlagListener extends AbstractListener {
 	// We don't care if hasBlock()==false, so ignoreCancelled is true
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteract(final ExtendedPlayerInteractEvent ext) {
-		final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
+		final PlayerInteractEvent event = (PlayerInteractEvent)ext.getBaseEvent();
 		if (event.hasBlock()) {
 			if (ext.getClickedRegion() != null && ext.getClickedRegion().getFlag(Flag.CHEST) && !ext.getClickedRegion().isUser(event.getPlayer())) {
 				switch (event.getClickedBlock().getType()) {
@@ -55,7 +56,7 @@ public class ChestFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
-		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
+		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent)ext.getBaseEvent();
 		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.CHEST) && !ext.getRegion().isUser(event.getPlayer())) {
 			switch (event.getRightClicked().getType()) {
 				case ITEM_FRAME:
@@ -72,7 +73,7 @@ public class ChestFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityExplode(final ExtendedEntityExplodeEvent ext) {
-		final EntityExplodeEvent event = (EntityExplodeEvent) ext.getBaseEvent();
+		final EntityExplodeEvent event = (EntityExplodeEvent)ext.getBaseEvent();
 		for (final Block b : ext.getBlockRegionsMap().keySet()) {
 			if (ext.getBlockRegionsMap().get(b).getFlag(Flag.CHEST)) {
 				switch (b.getType()) {

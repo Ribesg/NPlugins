@@ -12,11 +12,12 @@ package fr.ribesg.bukkit.ncuboid.beans;
 import fr.ribesg.bukkit.ncore.common.ChunkCoord;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
-import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.entity.Player;
 
 public abstract class PlayerRegion extends GeneralRegion {
 
@@ -48,9 +49,9 @@ public abstract class PlayerRegion extends GeneralRegion {
 	 */
 	public PlayerRegion(final String regionName, final UUID ownerId, final String worldName, final RegionType type) {
 		super(worldName, type, 1);
-		setRegionName(regionName);
-		setOwnerId(ownerId);
-		setState(RegionState.TMPSTATE1);
+		this.setRegionName(regionName);
+		this.setOwnerId(ownerId);
+		this.setState(RegionState.TMPSTATE1);
 	}
 
 	/**
@@ -59,10 +60,10 @@ public abstract class PlayerRegion extends GeneralRegion {
 	public PlayerRegion(final String regionName, final UUID ownerId, final String worldName, final RegionState state, final long totalSize, final RegionType type, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts) {
 
 		super(worldName, type, rights, priority, flags, flagAtts);
-		setRegionName(regionName);
-		setOwnerId(ownerId);
-		setState(state);
-		setTotalSize(totalSize);
+		this.setRegionName(regionName);
+		this.setOwnerId(ownerId);
+		this.setState(state);
+		this.setTotalSize(totalSize);
 	}
 
 	/**
@@ -71,14 +72,14 @@ public abstract class PlayerRegion extends GeneralRegion {
 	 * @param regionName the name of the new Region
 	 */
 	public void create(final String regionName) {
-		setRegionName(regionName);
-		setState(RegionState.NORMAL);
+		this.setRegionName(regionName);
+		this.setState(RegionState.NORMAL);
 	}
 
 	// Location check
 	@Override
 	public boolean contains(final NLocation loc) {
-		return loc.getWorldName().equals(getWorldName()) && contains(loc.getX(), loc.getY(), loc.getZ());
+		return loc.getWorldName().equals(this.getWorldName()) && this.contains(loc.getX(), loc.getY(), loc.getZ());
 	}
 
 	public abstract boolean contains(final double x, final double y, final double z);
@@ -87,13 +88,13 @@ public abstract class PlayerRegion extends GeneralRegion {
 
 	// Info
 	public String getInfoLine() {
-		return "- " + getRegionName() + " (" + UuidDb.getName(this.ownerId) + ") " + getSizeString();
+		return "- " + this.regionName + " (" + UuidDb.getName(this.ownerId) + ") " + this.getSizeString();
 	}
 
 	public abstract String getSizeString();
 
 	public boolean isOwner(final Player player) {
-		return isOwnerId(player.getUniqueId());
+		return this.isOwnerId(player.getUniqueId());
 	}
 
 	public boolean isOwnerId(final UUID id) {
@@ -101,7 +102,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 	}
 
 	public Set<ChunkCoord> getChunks() {
-		return chunks;
+		return this.chunks;
 	}
 
 	protected void setChunks(final Set<ChunkCoord> chunks) {
@@ -109,7 +110,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 	}
 
 	public String getRegionName() {
-		return regionName;
+		return this.regionName;
 	}
 
 	public void setRegionName(final String regionName) {
@@ -117,7 +118,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 	}
 
 	public UUID getOwnerId() {
-		return ownerId;
+		return this.ownerId;
 	}
 
 	public void setOwnerId(final UUID ownerId) {
@@ -125,7 +126,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 	}
 
 	public RegionState getState() {
-		return state;
+		return this.state;
 	}
 
 	protected void setState(final RegionState state) {
@@ -135,7 +136,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 	public abstract long getMaxLength();
 
 	public long getTotalSize() {
-		return totalSize;
+		return this.totalSize;
 	}
 
 	protected void setTotalSize(final long totalSize) {
@@ -144,22 +145,22 @@ public abstract class PlayerRegion extends GeneralRegion {
 
 	@Override
 	public boolean isUser(final Player player) {
-		return isOwnerId(player.getUniqueId()) || super.isUser(player);
+		return this.isOwnerId(player.getUniqueId()) || super.isUser(player);
 	}
 
 	@Override
 	public boolean isUserId(final UUID id) {
-		return isOwnerId(id) || super.isUserId(id);
+		return this.isOwnerId(id) || super.isUserId(id);
 	}
 
 	@Override
 	public boolean isAdmin(final Player player) {
-		return isOwnerId(player.getUniqueId()) || super.isAdmin(player);
+		return this.isOwnerId(player.getUniqueId()) || super.isAdmin(player);
 	}
 
 	@Override
 	public boolean isAdminId(final UUID id) {
-		return isOwnerId(id) || super.isAdminId(id);
+		return this.isOwnerId(id) || super.isAdminId(id);
 	}
 
 	@Override
@@ -169,7 +170,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		if (users != null) {
 			result.addAll(users);
 		}
-		result.add(getOwnerId());
+		result.add(this.ownerId);
 		return result;
 	}
 
@@ -180,7 +181,7 @@ public abstract class PlayerRegion extends GeneralRegion {
 		if (admins != null) {
 			result.addAll(admins);
 		}
-		result.add(getOwnerId());
+		result.add(this.ownerId);
 		return result;
 	}
 }

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
@@ -17,6 +18,15 @@ import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
 import fr.ribesg.bukkit.ngeneral.feature.Feature;
 import fr.ribesg.bukkit.ngeneral.feature.FeatureType;
+
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -28,13 +38,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 public class ProtectionSignFeature extends Feature {
 
 	// ############### //
@@ -44,7 +47,7 @@ public class ProtectionSignFeature extends Feature {
 	/**
 	 * First line of a Protection sign - Exactly 16 chars
 	 */
-	/* package */ static final String PROTECTION       = "[" + ChatColor.GREEN + "Private" + ChatColor.BLACK + "]";
+	/* package */ static final String PROTECTION       = "[" + ChatColor.GREEN + "Private" + ChatColor.BLACK + ']';
 	/**
 	 * Prefix of the Protection sign Owner name
 	 */
@@ -57,12 +60,12 @@ public class ProtectionSignFeature extends Feature {
 	/**
 	 * First line of an Error sign
 	 */
-	/* package */ static final String ERROR = "[" + ChatColor.DARK_RED + "Error" + ChatColor.RESET + "]";
+	/* package */ static final String ERROR = "[" + ChatColor.DARK_RED + "Error" + ChatColor.RESET + ']';
 
 	/**
 	 * Amount of time to keep cached results
 	 */
-	private static final int CACHE_TIME = (int) TimeUtil.getInMilliseconds("1minute");
+	private static final int CACHE_TIME = (int)TimeUtil.getInMilliseconds("1minute");
 
 	// ################### //
 	// ## Constant sets ## //
@@ -98,18 +101,19 @@ public class ProtectionSignFeature extends Feature {
 	 */
 	public static Set<Material> getProtectedMaterials() {
 		if (protectedMaterials == null) {
-			protectedMaterials = new HashSet<>(11);
-			protectedMaterials.add(Material.BEACON);
-			protectedMaterials.add(Material.BREWING_STAND);
-			protectedMaterials.add(Material.BURNING_FURNACE);
-			protectedMaterials.add(Material.CHEST);
-			protectedMaterials.add(Material.COMMAND);
-			protectedMaterials.add(Material.DISPENSER);
-			protectedMaterials.add(Material.DROPPER);
-			protectedMaterials.add(Material.FURNACE);
-			protectedMaterials.add(Material.HOPPER);
-			protectedMaterials.add(Material.JUKEBOX);
-			protectedMaterials.add(Material.TRAPPED_CHEST);
+			protectedMaterials = EnumSet.of(
+					Material.BEACON,
+					Material.BREWING_STAND,
+					Material.BURNING_FURNACE,
+					Material.CHEST,
+					Material.COMMAND,
+					Material.DISPENSER,
+					Material.DROPPER,
+					Material.FURNACE,
+					Material.HOPPER,
+					Material.JUKEBOX,
+					Material.TRAPPED_CHEST
+			);
 		}
 		return protectedMaterials;
 	}
@@ -142,27 +146,27 @@ public class ProtectionSignFeature extends Feature {
 	public void initialize() {
 		final ProtectionSignListener listener = new ProtectionSignListener(this);
 
-		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
+		Bukkit.getPluginManager().registerEvents(listener, this.getPlugin());
 
 		this.cacheFreeTask = new BukkitRunnable() {
 
 			@Override
 			public void run() {
 				final long now = System.currentTimeMillis();
-				final Iterator<Map.Entry<NLocation, ProtectionState>> it = isProtectedCache.entrySet().iterator();
+				final Iterator<Map.Entry<NLocation, ProtectionState>> it = fr.ribesg.bukkit.ngeneral.feature.protectionsign.ProtectionSignFeature.this.isProtectedCache.entrySet().iterator();
 				while (it.hasNext()) {
 					if (it.next().getValue().timeout <= now) {
 						it.remove();
 					}
 				}
 			}
-		}.runTaskTimer(plugin, 10 * 20L, 10 * 20L);
+		}.runTaskTimer(this.plugin, 10 * 20L, 10 * 20L);
 	}
 
 	@Override
 	public void terminate() {
-		if (cacheFreeTask != null) {
-			cacheFreeTask.cancel();
+		if (this.cacheFreeTask != null) {
+			this.cacheFreeTask.cancel();
 		}
 	}
 
@@ -196,7 +200,7 @@ public class ProtectionSignFeature extends Feature {
 		final Material blockType = b.getType();
 		final String userId = player != null ? PlayerIdsUtil.getId(player.getName()) : null;
 		if (blockType == Material.SIGN_POST || blockType == Material.WALL_SIGN) {
-			final Sign sign = (Sign) b.getState();
+			final Sign sign = (Sign)b.getState();
 			return !sign.getLine(0).equals(PROTECTION) ||
 			       player != null && ColorUtil.stripColorCodes(sign.getLine(3)).equals(userId) ||
 			       player != null && Perms.hasProtectionSignBreak(player);
@@ -288,7 +292,7 @@ public class ProtectionSignFeature extends Feature {
 	 */
 	public String isProtected(final Block b) {
 		final NLocation loc = new NLocation(b.getLocation());
-		final ProtectionState state = isProtectedCache.get(loc);
+		final ProtectionState state = this.isProtectedCache.get(loc);
 		if (state != null && state.timeout > System.currentTimeMillis()) {
 			return state.protectedBy;
 		} else {
@@ -308,7 +312,7 @@ public class ProtectionSignFeature extends Feature {
 					}
 				}
 			}
-			isProtectedCache.put(loc, new ProtectionState(result, System.currentTimeMillis() + CACHE_TIME));
+			this.isProtectedCache.put(loc, new ProtectionState(result, System.currentTimeMillis() + CACHE_TIME));
 			return result;
 		}
 	}
@@ -335,33 +339,32 @@ public class ProtectionSignFeature extends Feature {
 		final String userId = PlayerIdsUtil.getId(playerName);
 		String protecterId;
 
-		protecterId = isProtected(w.getBlockAt(x - 1, y, z));
+		protecterId = this.isProtected(w.getBlockAt(x - 1, y, z));
 		if (protecterId != null && !protecterId.equals(userId)) {
 			return false;
 		}
 
-		protecterId = isProtected(w.getBlockAt(x + 1, y, z));
+		protecterId = this.isProtected(w.getBlockAt(x + 1, y, z));
 		if (protecterId != null && !protecterId.equals(userId)) {
 			return false;
 		}
 
-		protecterId = isProtected(w.getBlockAt(x, y - 1, z));
+		protecterId = this.isProtected(w.getBlockAt(x, y - 1, z));
 		if (protecterId != null && !protecterId.equals(userId)) {
 			return false;
 		}
 
-		protecterId = isProtected(w.getBlockAt(x, y + 1, z));
+		protecterId = this.isProtected(w.getBlockAt(x, y + 1, z));
 		if (protecterId != null && !protecterId.equals(userId)) {
 			return false;
 		}
 
-		protecterId = isProtected(w.getBlockAt(x, y, z - 1));
+		protecterId = this.isProtected(w.getBlockAt(x, y, z - 1));
 		if (protecterId != null && !protecterId.equals(userId)) {
 			return false;
 		}
 
-		protecterId = isProtected(w.getBlockAt(x, y, z + 1));
+		protecterId = this.isProtected(w.getBlockAt(x, y, z + 1));
 		return !(protecterId != null && !protecterId.equals(userId));
-
 	}
 }

@@ -8,9 +8,11 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,7 +21,7 @@ import org.bukkit.entity.Player;
 
 public class HealFoodCommands implements CommandExecutor {
 
-	private static final String[] COMMANDS = new String[] {
+	private static final String[] COMMANDS = {
 			"heal",
 			"feed",
 			"health",
@@ -31,7 +33,7 @@ public class HealFoodCommands implements CommandExecutor {
 	public HealFoodCommands(final NGeneral instance) {
 		this.plugin = instance;
 		for (final String command : COMMANDS) {
-			plugin.setCommandExecutor(command, this);
+			this.plugin.setCommandExecutor(command, this);
 		}
 	}
 
@@ -40,30 +42,30 @@ public class HealFoodCommands implements CommandExecutor {
 		switch (cmd.getName()) {
 			case "heal":
 				if (Perms.hasHeal(sender)) {
-					return cmdHeal(sender, args);
+					return this.cmdHeal(sender, args);
 				} else {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
 			case "feed":
 				if (Perms.hasFeed(sender)) {
-					return cmdFeed(sender, args);
+					return this.cmdFeed(sender, args);
 				} else {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
 			case "health":
 				if (Perms.hasHealth(sender)) {
-					return cmdHealth(sender, args);
+					return this.cmdHealth(sender, args);
 				} else {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
 			case "food":
 				if (Perms.hasFood(sender)) {
-					return cmdFood(sender, args);
+					return this.cmdFood(sender, args);
 				} else {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
 			default:
@@ -74,22 +76,22 @@ public class HealFoodCommands implements CommandExecutor {
 	private boolean cmdHeal(final CommandSender sender, final String[] args) {
 		if (args.length == 0) {
 			if (!(sender instanceof Player)) {
-				plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+				this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			} else {
-				final Player player = (Player) sender;
+				final Player player = (Player)sender;
 				player.setHealth(player.getMaxHealth());
-				plugin.sendMessage(player, MessageId.general_heal_autoHeal);
+				this.plugin.sendMessage(player, MessageId.general_heal_autoHeal);
 			}
 		} else {
 			for (final String arg : args) {
 				for (final String playerName : arg.split(",")) {
 					final Player player = Bukkit.getPlayer(playerName);
 					if (player == null) {
-						plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, playerName);
+						this.plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, playerName);
 					} else {
 						player.setHealth(player.getMaxHealth());
-						plugin.sendMessage(player, MessageId.general_heal_healedBy, sender.getName());
-						plugin.sendMessage(sender, MessageId.general_heal_healed, player.getName());
+						this.plugin.sendMessage(player, MessageId.general_heal_healedBy, sender.getName());
+						this.plugin.sendMessage(sender, MessageId.general_heal_healed, player.getName());
 					}
 				}
 			}
@@ -100,24 +102,24 @@ public class HealFoodCommands implements CommandExecutor {
 	private boolean cmdFeed(final CommandSender sender, final String[] args) {
 		if (args.length == 0) {
 			if (!(sender instanceof Player)) {
-				plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+				this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			} else {
-				final Player player = (Player) sender;
+				final Player player = (Player)sender;
 				player.setFoodLevel(20);
 				player.setSaturation(20f);
-				plugin.sendMessage(player, MessageId.general_feed_autoFeed);
+				this.plugin.sendMessage(player, MessageId.general_feed_autoFeed);
 			}
 		} else {
 			for (final String arg : args) {
 				for (final String playerName : arg.split(",")) {
 					final Player player = Bukkit.getPlayer(playerName);
 					if (player == null) {
-						plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, playerName);
+						this.plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, playerName);
 					} else {
 						player.setFoodLevel(20);
 						player.setSaturation(20f);
-						plugin.sendMessage(player, MessageId.general_feed_fedBy, sender.getName());
-						plugin.sendMessage(sender, MessageId.general_feed_fed, player.getName());
+						this.plugin.sendMessage(player, MessageId.general_feed_fedBy, sender.getName());
+						this.plugin.sendMessage(sender, MessageId.general_feed_fed, player.getName());
 					}
 				}
 			}
@@ -140,12 +142,12 @@ public class HealFoodCommands implements CommandExecutor {
 			}
 			if (args.length == 1) {
 				if (!(sender instanceof Player)) {
-					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+					this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 				} else {
-					final Player player = (Player) sender;
-					final int realValue = (int) Math.min(value, player.getMaxHealth());
+					final Player player = (Player)sender;
+					final int realValue = (int)Math.min(value, player.getMaxHealth());
 					player.setHealth(realValue);
-					plugin.sendMessage(player, MessageId.general_health_autoSet, Integer.toString(realValue));
+					this.plugin.sendMessage(player, MessageId.general_health_autoSet, Integer.toString(realValue));
 				}
 			} else {
 				for (int i = 0; i < args.length - 1; i++) {
@@ -153,12 +155,12 @@ public class HealFoodCommands implements CommandExecutor {
 					for (final String playerName : arg.split(",")) {
 						final Player player = Bukkit.getPlayer(playerName);
 						if (player == null) {
-							plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, playerName);
+							this.plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, playerName);
 						} else {
-							final int realValue = (int) Math.min(value, player.getMaxHealth());
+							final int realValue = (int)Math.min(value, player.getMaxHealth());
 							player.setHealth(realValue);
-							plugin.sendMessage(player, MessageId.general_health_setBy, sender.getName(), Integer.toString(realValue));
-							plugin.sendMessage(sender, MessageId.general_health_set, player.getName(), Integer.toString(realValue));
+							this.plugin.sendMessage(player, MessageId.general_health_setBy, sender.getName(), Integer.toString(realValue));
+							this.plugin.sendMessage(sender, MessageId.general_health_set, player.getName(), Integer.toString(realValue));
 						}
 					}
 				}
@@ -182,12 +184,12 @@ public class HealFoodCommands implements CommandExecutor {
 			}
 			if (args.length == 1) {
 				if (!(sender instanceof Player)) {
-					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+					this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 				} else {
-					final Player player = (Player) sender;
+					final Player player = (Player)sender;
 					player.setFoodLevel(value);
 					player.setSaturation(value);
-					plugin.sendMessage(player, MessageId.general_food_autoSet, Integer.toString(value));
+					this.plugin.sendMessage(player, MessageId.general_food_autoSet, Integer.toString(value));
 				}
 			} else {
 				for (int i = 0; i < args.length - 1; i++) {
@@ -195,12 +197,12 @@ public class HealFoodCommands implements CommandExecutor {
 					for (final String playerName : arg.split(",")) {
 						final Player player = Bukkit.getPlayer(playerName);
 						if (player == null) {
-							plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, playerName);
+							this.plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, playerName);
 						} else {
 							player.setFoodLevel(value);
 							player.setSaturation(value);
-							plugin.sendMessage(player, MessageId.general_food_setBy, sender.getName(), Integer.toString(value));
-							plugin.sendMessage(sender, MessageId.general_food_set, player.getName(), Integer.toString(value));
+							this.plugin.sendMessage(player, MessageId.general_food_setBy, sender.getName(), Integer.toString(value));
+							this.plugin.sendMessage(sender, MessageId.general_food_set, player.getName(), Integer.toString(value));
 						}
 					}
 				}

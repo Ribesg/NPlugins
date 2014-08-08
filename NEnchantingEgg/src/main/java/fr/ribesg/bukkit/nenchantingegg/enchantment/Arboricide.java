@@ -8,8 +8,17 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nenchantingegg.enchantment;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -20,13 +29,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 public class Arboricide extends NEnchantment {
 
@@ -84,7 +86,7 @@ public class Arboricide extends NEnchantment {
 						}
 					}
 					if (!toBeDestroyed.isEmpty()) {
-						launchDestroyTask(toBeDestroyed);
+						this.launchDestroyTask(toBeDestroyed);
 					}
 				}
 			}
@@ -96,24 +98,24 @@ public class Arboricide extends NEnchantment {
 
 			final Random random = new Random();
 			final World world = toBeDestroyed.get(0).iterator().next().getWorld();
-			int i = 0;
+			int i;
 
 			@Override
 			public void run() {
-				if (i < toBeDestroyed.size()) {
-					final Set<NLocation> locs = toBeDestroyed.get(i);
+				if (this.i < toBeDestroyed.size()) {
+					final Set<NLocation> locs = toBeDestroyed.get(this.i);
 					final Iterator<NLocation> it = locs.iterator();
 					NLocation loc;
 					while (it.hasNext()) {
 						loc = it.next();
-						if (random.nextFloat() > 0.75) {
-							world.playSound(loc.toBukkitLocation(), Sound.DIG_WOOD, 1f, 1f);
-							world.getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()).breakNaturally();
+						if (this.random.nextFloat() > 0.75) {
+							this.world.playSound(loc.toBukkitLocation(), Sound.DIG_WOOD, 1f, 1f);
+							this.world.getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()).breakNaturally();
 							it.remove();
 						}
 					}
 					if (locs.isEmpty()) {
-						i++;
+						this.i++;
 					}
 				} else {
 					this.cancel();

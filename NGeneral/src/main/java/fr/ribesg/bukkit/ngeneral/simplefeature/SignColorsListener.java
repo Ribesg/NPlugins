@@ -8,10 +8,12 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -42,7 +44,7 @@ public class SignColorsListener implements Listener {
 
 	public SignColorsListener(final NGeneral instance) {
 		this.plugin = instance;
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+		Bukkit.getPluginManager().registerEvents(this, this.plugin);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -60,9 +62,8 @@ public class SignColorsListener implements Listener {
 					event.setLine(i, ColorUtil.colorize(event.getLine(i)));
 				}
 			} else {
-				plugin.sendMessage(event.getPlayer(), MessageId.general_signcolors_permissionDenied);
+				this.plugin.sendMessage(event.getPlayer(), MessageId.general_signcolors_permissionDenied);
 			}
 		}
-
 	}
 }

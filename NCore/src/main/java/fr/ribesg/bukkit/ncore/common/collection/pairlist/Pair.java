@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.common.collection.pairlist;
+
 public class Pair<K, V> {
 
 	private K key;
@@ -19,7 +20,7 @@ public class Pair<K, V> {
 	}
 
 	public K getKey() {
-		return key;
+		return this.key;
 	}
 
 	public void setKey(final K key) {
@@ -27,7 +28,7 @@ public class Pair<K, V> {
 	}
 
 	public V getValue() {
-		return value;
+		return this.value;
 	}
 
 	public void setValue(final V value) {
@@ -39,28 +40,27 @@ public class Pair<K, V> {
 		if (this == o) {
 			return true;
 		}
-		if (o == null || getClass() != o.getClass()) {
+		if (o == null || this.getClass() != o.getClass()) {
 			return false;
 		}
 
-		final Pair pair = (Pair) o;
+		final Pair pair = (Pair)o;
 
-		return !(key != null ? !key.equals(pair.key) : pair.key != null) && !(value != null ? !value.equals(pair.value) : pair.value != null);
-
+		return !(this.key != null ? !this.key.equals(pair.key) : pair.key != null) && !(this.value != null ? !this.value.equals(pair.value) : pair.value != null);
 	}
 
 	@Override
 	public int hashCode() {
-		int result = key != null ? key.hashCode() : 0;
-		result = 31 * result + (value != null ? value.hashCode() : 0);
+		int result = this.key != null ? this.key.hashCode() : 0;
+		result = 31 * result + (this.value != null ? this.value.hashCode() : 0);
 		return result;
 	}
 
 	@Override
 	public String toString() {
 		return "Pair{" +
-		       "key=" + key +
-		       ", value=" + value +
+		       "key=" + this.key +
+		       ", value=" + this.value +
 		       '}';
 	}
 }

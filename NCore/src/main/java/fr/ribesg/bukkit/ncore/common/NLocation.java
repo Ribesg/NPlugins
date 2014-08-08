@@ -8,12 +8,13 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.common;
+
+import java.util.logging.Logger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
-
-import java.util.logging.Logger;
 
 /**
  * Represents a Location, without reference to Bukkit's World.
@@ -61,20 +62,20 @@ public class NLocation {
 	}
 
 	public Location toBukkitLocation() {
-		final World world = Bukkit.getWorld(worldName);
+		final World world = Bukkit.getWorld(this.worldName);
 		if (world == null) {
 			return null;
 		} else {
-			return new Location(world, x, y, z, yaw, pitch);
+			return new Location(world, this.x, this.y, this.z, this.yaw, this.pitch);
 		}
 	}
 
 	public Vector toVector() {
-		return new Vector(x, y, z);
+		return new Vector(this.x, this.y, this.z);
 	}
 
 	public float getPitch() {
-		return pitch;
+		return this.pitch;
 	}
 
 	public void setPitch(final float pitch) {
@@ -82,11 +83,11 @@ public class NLocation {
 	}
 
 	public String getWorldName() {
-		return worldName;
+		return this.worldName;
 	}
 
 	public World getWorld() {
-		return Bukkit.getWorld(getWorldName());
+		return Bukkit.getWorld(this.worldName);
 	}
 
 	public void setWorldName(final String worldName) {
@@ -94,11 +95,11 @@ public class NLocation {
 	}
 
 	public double getX() {
-		return x;
+		return this.x;
 	}
 
 	public int getBlockX() {
-		return (int) Math.floor(x);
+		return (int)Math.floor(this.x);
 	}
 
 	public void setX(final double x) {
@@ -106,11 +107,11 @@ public class NLocation {
 	}
 
 	public double getY() {
-		return y;
+		return this.y;
 	}
 
 	public int getBlockY() {
-		return (int) Math.floor(y);
+		return (int)Math.floor(this.y);
 	}
 
 	public void setY(final double y) {
@@ -118,7 +119,7 @@ public class NLocation {
 	}
 
 	public float getYaw() {
-		return yaw;
+		return this.yaw;
 	}
 
 	public void setYaw(final float yaw) {
@@ -126,11 +127,11 @@ public class NLocation {
 	}
 
 	public double getZ() {
-		return z;
+		return this.z;
 	}
 
 	public int getBlockZ() {
-		return (int) Math.floor(z);
+		return (int)Math.floor(this.z);
 	}
 
 	public void setZ(final double z) {
@@ -138,10 +139,10 @@ public class NLocation {
 	}
 
 	public NLocation getBlockLocation() {
-		final int x = getBlockX();
-		final int y = getBlockY();
-		final int z = getBlockZ();
-		return new NLocation(getWorldName(), x, y, z);
+		final int x = this.getBlockX();
+		final int y = this.getBlockY();
+		final int z = this.getBlockZ();
+		return new NLocation(this.worldName, x, y, z);
 	}
 
 	@Override
@@ -149,68 +150,66 @@ public class NLocation {
 		if (this == o) {
 			return true;
 		}
-		if (o == null || getClass() != o.getClass()) {
+		if (o == null || this.getClass() != o.getClass()) {
 			return false;
 		}
 
-		final NLocation nLocation = (NLocation) o;
+		final NLocation nLocation = (NLocation)o;
 
-		return Double.compare(nLocation.x, x) == 0 &&
-		       Double.compare(nLocation.y, y) == 0 &&
-		       Double.compare(nLocation.z, z) == 0 &&
-		       worldName.equals(nLocation.worldName);
-
+		return Double.compare(nLocation.x, this.x) == 0 &&
+		       Double.compare(nLocation.y, this.y) == 0 &&
+		       Double.compare(nLocation.z, this.z) == 0 &&
+		       this.worldName.equals(nLocation.worldName);
 	}
 
 	public boolean equalsPlus(final Object o) {
 		if (this == o) {
 			return true;
 		}
-		if (o == null || getClass() != o.getClass()) {
+		if (o == null || this.getClass() != o.getClass()) {
 			return false;
 		}
 
-		final NLocation nLocation = (NLocation) o;
+		final NLocation nLocation = (NLocation)o;
 
-		return Float.compare(nLocation.pitch, pitch) == 0 &&
-		       Double.compare(nLocation.x, x) == 0 &&
-		       Double.compare(nLocation.y, y) == 0 &&
-		       Float.compare(nLocation.yaw, yaw) == 0 &&
-		       Double.compare(nLocation.z, z) == 0 &&
-		       worldName.equals(nLocation.worldName);
-
+		return Float.compare(nLocation.pitch, this.pitch) == 0 &&
+		       Double.compare(nLocation.x, this.x) == 0 &&
+		       Double.compare(nLocation.y, this.y) == 0 &&
+		       Float.compare(nLocation.yaw, this.yaw) == 0 &&
+		       Double.compare(nLocation.z, this.z) == 0 &&
+		       this.worldName.equals(nLocation.worldName);
 	}
 
 	@Override
 	public int hashCode() {
 		int result;
 		long temp;
-		result = worldName.hashCode();
-		temp = Double.doubleToLongBits(x);
-		result = 31 * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(y);
-		result = 31 * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(z);
-		result = 31 * result + (int) (temp ^ (temp >>> 32));
-		result = 31 * result + (yaw != +0.0f ? Float.floatToIntBits(yaw) : 0);
-		result = 31 * result + (pitch != +0.0f ? Float.floatToIntBits(pitch) : 0);
+		result = this.worldName.hashCode();
+		temp = Double.doubleToLongBits(this.x);
+		result = 31 * result + (int)(temp ^ temp >>> 32);
+		temp = Double.doubleToLongBits(this.y);
+		result = 31 * result + (int)(temp ^ temp >>> 32);
+		temp = Double.doubleToLongBits(this.z);
+		result = 31 * result + (int)(temp ^ temp >>> 32);
+		result = 31 * result + (this.yaw != +0.0f ? Float.floatToIntBits(this.yaw) : 0);
+		result = 31 * result + (this.pitch != +0.0f ? Float.floatToIntBits(this.pitch) : 0);
 		return result;
 	}
 
 	public NLocation clone() {
-		return new NLocation(getWorldName(), getX(), getY(), getZ(), getYaw(), getPitch());
+		return new NLocation(this.worldName, this.x, this.y, this.z, this.yaw, this.pitch);
 	}
 
 	public String toString() {
 		final StringBuilder s = new StringBuilder();
 		s.append('<');
-		s.append(getWorldName());
+		s.append(this.worldName);
 		s.append(SEPARATOR_CHAR);
-		s.append(getX());
+		s.append(this.x);
 		s.append(SEPARATOR_CHAR);
-		s.append(getY());
+		s.append(this.y);
 		s.append(SEPARATOR_CHAR);
-		s.append(getZ());
+		s.append(this.z);
 		s.append('>');
 		return s.toString();
 	}
@@ -240,17 +239,17 @@ public class NLocation {
 	public String toStringPlus() {
 		final StringBuilder s = new StringBuilder();
 		s.append('<');
-		s.append(getWorldName());
+		s.append(this.worldName);
 		s.append(SEPARATOR_CHAR);
-		s.append(getX());
+		s.append(this.x);
 		s.append(SEPARATOR_CHAR);
-		s.append(getY());
+		s.append(this.y);
 		s.append(SEPARATOR_CHAR);
-		s.append(getZ());
+		s.append(this.z);
 		s.append(SEPARATOR_CHAR);
-		s.append(getYaw());
+		s.append(this.yaw);
 		s.append(SEPARATOR_CHAR);
-		s.append(getPitch());
+		s.append(this.pitch);
 		s.append('>');
 		return s.toString();
 	}
@@ -410,26 +409,26 @@ public class NLocation {
 	}
 
 	public double distance(final NLocation o) throws IllegalArgumentException {
-		return Math.sqrt(distanceSquared(o));
+		return Math.sqrt(this.distanceSquared(o));
 	}
 
 	public double distanceSquared(final NLocation o) throws IllegalArgumentException {
-		final double dy = y - o.y;
-		return distance2DSquared(o) + dy * dy;
+		final double dy = this.y - o.y;
+		return this.distance2DSquared(o) + dy * dy;
 	}
 
 	public double distance2D(final NLocation o) throws IllegalArgumentException {
-		return Math.sqrt(distance2DSquared(o));
+		return Math.sqrt(this.distance2DSquared(o));
 	}
 
 	public double distance2DSquared(final NLocation o) throws IllegalArgumentException {
 		if (o == null) {
 			throw new IllegalArgumentException("Cannot measure distance to a null location");
-		} else if (!o.getWorldName().equals(getWorldName())) {
-			throw new IllegalArgumentException("Cannot measure distance between " + getWorldName() + " and " + o.getWorldName());
+		} else if (!o.worldName.equals(this.worldName)) {
+			throw new IllegalArgumentException("Cannot measure distance between " + this.worldName + " and " + o.worldName);
 		}
-		final double dx = x - o.x;
-		final double dz = z - o.z;
+		final double dx = this.x - o.x;
+		final double dz = this.z - o.z;
 		return dx * dx + dz * dz;
 	}
 }

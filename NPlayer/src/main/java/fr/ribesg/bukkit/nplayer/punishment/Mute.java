@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.punishment;
+
 public class Mute extends Punishment {
 
 	public Mute(final String muted, final String reason) {
@@ -21,10 +22,10 @@ public class Mute extends Punishment {
 	@Override
 	public String toString() {
 		return "Mute{" +
-		       "punished='" + punished + '\'' +
-		       ", type=" + type +
-		       ", endDate=" + endDate +
-		       ", reason='" + reason + '\'' +
+		       "punished='" + this.punished + '\'' +
+		       ", type=" + this.type +
+		       ", endDate=" + this.endDate +
+		       ", reason='" + this.reason + '\'' +
 		       '}';
 	}
 }

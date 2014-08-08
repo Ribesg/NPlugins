@@ -29,18 +29,18 @@ public class Format {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public String getPrefix() {
-		return prefix;
+		return this.prefix;
 	}
 
 	public String getSuffix() {
-		return suffix;
+		return this.suffix;
 	}
 
 	public FormatType getType() {
-		return type;
+		return this.type;
 	}
 }

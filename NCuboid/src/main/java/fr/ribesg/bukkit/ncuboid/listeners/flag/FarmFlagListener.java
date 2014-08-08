@@ -17,6 +17,10 @@ import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityInteractEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEntityEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerInteractEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -31,29 +35,27 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class FarmFlagListener extends AbstractListener {
 
 	private static Set<EntityType> animals;
 
 	private static Set<EntityType> getAnimals() {
 		if (animals == null) {
-			animals = new HashSet<>();
-			animals.add(EntityType.BAT);
-			animals.add(EntityType.CHICKEN);
-			animals.add(EntityType.COW);
-			animals.add(EntityType.HORSE);
-			animals.add(EntityType.IRON_GOLEM);
-			animals.add(EntityType.MUSHROOM_COW);
-			animals.add(EntityType.OCELOT);
-			animals.add(EntityType.PIG);
-			animals.add(EntityType.SHEEP);
-			animals.add(EntityType.SNOWMAN);
-			animals.add(EntityType.SQUID);
-			animals.add(EntityType.VILLAGER);
-			animals.add(EntityType.WOLF);
+			animals = EnumSet.of(
+					EntityType.BAT,
+					EntityType.CHICKEN,
+					EntityType.COW,
+					EntityType.HORSE,
+					EntityType.IRON_GOLEM,
+					EntityType.MUSHROOM_COW,
+					EntityType.OCELOT,
+					EntityType.PIG,
+					EntityType.SHEEP,
+					EntityType.SNOWMAN,
+					EntityType.SQUID,
+					EntityType.VILLAGER,
+					EntityType.WOLF
+			);
 		}
 		return animals;
 	}
@@ -65,14 +67,14 @@ public class FarmFlagListener extends AbstractListener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityDamageByEntity(final ExtendedEntityDamageEvent ext) {
 		if (ext.getBaseEvent() instanceof EntityDamageByEntityEvent) {
-			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent) ext.getBaseEvent();
+			final EntityDamageByEntityEvent event = (EntityDamageByEntityEvent)ext.getBaseEvent();
 			final Player p;
 			if (event.getDamager().getType() == EntityType.PLAYER) {
-				p = (Player) event.getDamager();
+				p = (Player)event.getDamager();
 			} else if (event.getDamager() instanceof Projectile) {
-				final ProjectileSource shooter = ((Projectile) event.getDamager()).getShooter();
+				final ProjectileSource shooter = ((Projectile)event.getDamager()).getShooter();
 				if (shooter != null && shooter instanceof Player) {
-					p = (Player) shooter;
+					p = (Player)shooter;
 				} else {
 					return;
 				}
@@ -90,7 +92,7 @@ public class FarmFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEvent(final ExtendedPlayerInteractEvent ext) {
-		final PlayerInteractEvent event = (PlayerInteractEvent) ext.getBaseEvent();
+		final PlayerInteractEvent event = (PlayerInteractEvent)ext.getBaseEvent();
 		if (event.getAction() == Action.PHYSICAL && event.hasBlock() && event.getClickedBlock().getType() == Material.SOIL) {
 			if (ext.getClickedRegion() != null && ext.getClickedRegion().getFlag(Flag.FARM)) {
 				event.setCancelled(true);
@@ -100,7 +102,7 @@ public class FarmFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityInteractEvent(final ExtendedEntityInteractEvent ext) {
-		final EntityInteractEvent event = (EntityInteractEvent) ext.getBaseEvent();
+		final EntityInteractEvent event = (EntityInteractEvent)ext.getBaseEvent();
 		if (event.getBlock().getType() == Material.SOIL) {
 			if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.FARM)) {
 				event.setCancelled(true);
@@ -110,7 +112,7 @@ public class FarmFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteractEntity(final ExtendedPlayerInteractEntityEvent ext) {
-		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent) ext.getBaseEvent();
+		final PlayerInteractEntityEvent event = (PlayerInteractEntityEvent)ext.getBaseEvent();
 		if (getAnimals().contains(event.getRightClicked().getType())) {
 			if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.FARM) && !ext.getRegion().isUser(event.getPlayer())) {
 				event.setCancelled(true);
@@ -120,7 +122,7 @@ public class FarmFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerShearEntity(final PlayerShearEntityEvent event) {
-		final GeneralRegion cuboid = getPlugin().getDb().getPriorByLocation(event.getEntity().getLocation());
+		final GeneralRegion cuboid = this.getPlugin().getDb().getPriorByLocation(event.getEntity().getLocation());
 		if (cuboid != null && cuboid.getFlag(Flag.FARM) && !cuboid.isUser(event.getPlayer())) {
 			event.setCancelled(true);
 		}

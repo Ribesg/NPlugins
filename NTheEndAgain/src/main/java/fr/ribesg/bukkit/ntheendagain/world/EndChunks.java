@@ -11,16 +11,6 @@ package fr.ribesg.bukkit.ntheendagain.world;
 
 import fr.ribesg.bukkit.ncore.common.ChunkCoord;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.BlockFace;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -36,9 +26,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+
 public class EndChunks implements Iterable<EndChunk> {
 
-	private final static Charset CHARSET = StandardCharsets.UTF_8;
+	private static final Charset CHARSET = StandardCharsets.UTF_8;
 
 	private final EndWorldHandler handler;
 
@@ -49,40 +50,40 @@ public class EndChunks implements Iterable<EndChunk> {
 	private int totalSavedDragons;
 
 	public EndChunks(final EndWorldHandler handler, final String worldName) {
-		chunks = new HashMap<>();
-		totalSavedDragons = 0;
+		this.chunks = new HashMap<>();
+		this.totalSavedDragons = 0;
 		this.handler = handler;
 		this.worldName = worldName;
 	}
 
 	public EndChunk addChunk(final Chunk bukkitChunk) {
 		final EndChunk res = new EndChunk(this, bukkitChunk);
-		res.setProtected(handler.getConfig().getDefaultProtected());
-		addChunk(res);
+		res.setProtected(this.handler.getConfig().getDefaultProtected());
+		this.addChunk(res);
 		return res;
 	}
 
 	private void addChunk(final EndChunk endChunk) {
-		checkWorld(endChunk.getWorldName());
-		chunks.put(endChunk.getCoords(), endChunk);
+		this.checkWorld(endChunk.getWorldName());
+		this.chunks.put(endChunk.getCoords(), endChunk);
 	}
 
 	public EndChunk getChunk(final String world, final int x, final int z) {
-		checkWorld(world);
-		return get(new ChunkCoord(x, z, world));
+		this.checkWorld(world);
+		return this.get(new ChunkCoord(x, z, world));
 	}
 
 	public EndChunk getChunk(final Chunk bukkitChunk) {
-		checkWorld(bukkitChunk.getWorld().getName());
-		return get(new ChunkCoord(bukkitChunk));
+		this.checkWorld(bukkitChunk.getWorld().getName());
+		return this.get(new ChunkCoord(bukkitChunk));
 	}
 
 	private EndChunk get(final ChunkCoord coord) {
-		EndChunk res = chunks.get(coord);
+		EndChunk res = this.chunks.get(coord);
 		if (res == null) {
 			res = new EndChunk(this, coord);
-			res.setProtected(handler.getConfig().getDefaultProtected());
-			chunks.put(res.getCoords(), res);
+			res.setProtected(this.handler.getConfig().getDefaultProtected());
+			this.chunks.put(res.getCoords(), res);
 		}
 		return res;
 	}
@@ -90,7 +91,7 @@ public class EndChunks implements Iterable<EndChunk> {
 	private void checkWorld(final String worldName) {
 		if (!worldName.equals(this.worldName)) {
 			throw new IllegalArgumentException("Wrong world, this EndChunks object handles world \"" + this.worldName + "\", " +
-			                                   "not world \"" + worldName + "\"");
+			                                   "not world \"" + worldName + '"');
 		}
 	}
 
@@ -102,7 +103,7 @@ public class EndChunks implements Iterable<EndChunk> {
 
 	public void crystalRegen() {
 		Chunk bukkitChunk;
-		for (final EndChunk c : chunks.values()) {
+		for (final EndChunk c : this.chunks.values()) {
 			if (c.containsCrystal()) {
 				final World w = Bukkit.getWorld(c.getWorldName());
 				bukkitChunk = w.getChunkAt(c.getX(), c.getZ());
@@ -137,7 +138,7 @@ public class EndChunks implements Iterable<EndChunk> {
 				final ConfigurationSection sec = config.getConfigurationSection(chunkCoordString);
 				if (sec != null) {
 					final EndChunk ec = EndChunk.rebuild(this, sec);
-					addChunk(ec);
+					this.addChunk(ec);
 				}
 			}
 		}
@@ -149,7 +150,7 @@ public class EndChunks implements Iterable<EndChunk> {
 		}
 		try (BufferedWriter writer = Files.newBufferedWriter(pathEndChunks, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
 			final YamlConfiguration config = new YamlConfiguration();
-			for (final EndChunk c : chunks.values()) {
+			for (final EndChunk c : this.chunks.values()) {
 				c.store(config);
 			}
 			writer.write(config.saveToString());
@@ -158,31 +159,31 @@ public class EndChunks implements Iterable<EndChunk> {
 
 	@Override
 	public Iterator<EndChunk> iterator() {
-		return chunks.values().iterator();
+		return this.chunks.values().iterator();
 	}
 
 	public int size() {
-		return chunks.size();
+		return this.chunks.size();
 	}
 
 	public List<EndChunk> getSafeChunksList() {
 		final List<EndChunk> result = new ArrayList<>();
-		result.addAll(chunks.values());
+		result.addAll(this.chunks.values());
 		return result;
 	}
 
 	public int getTotalSavedDragons() {
-		return totalSavedDragons;
+		return this.totalSavedDragons;
 	}
 
 	/*package*/ void incrementTotalSavedDragons() {
-		totalSavedDragons++;
+		this.totalSavedDragons++;
 	}
 
 	/*package*/ void decrementTotalSavedDragons(final int quantity) {
-		totalSavedDragons -= quantity;
-		if (totalSavedDragons < 0) {
-			totalSavedDragons = 0;
+		this.totalSavedDragons -= quantity;
+		if (this.totalSavedDragons < 0) {
+			this.totalSavedDragons = 0;
 		}
 	}
 }

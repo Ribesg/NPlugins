@@ -15,11 +15,12 @@ import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
+
+import java.util.regex.Pattern;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.regex.Pattern;
 
 public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 
@@ -28,7 +29,7 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 
 	public FlagSubcmdExecutor(final NCuboid instance) {
 		super(instance);
-		setUsage(ChatColor.RED + "Usage : /ncuboid flag <regionName> <flagName> [value]");
+		this.setUsage(ChatColor.RED + "Usage : /ncuboid flag <regionName> <flagName> [value]");
 	}
 
 	@Override
@@ -37,29 +38,29 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 			return false;
 		} else if (Perms.hasFlag(sender)) {
 			// Get region, check rights on region
-			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
+			final GeneralRegion c = this.getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
-			} else if (!Perms.hasAdmin(sender) && !(sender instanceof Player && c.isAdmin((Player) sender))) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidAdmin, args[0]);
+			} else if (!Perms.hasAdmin(sender) && !(sender instanceof Player && c.isAdmin((Player)sender))) {
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidAdmin, args[0]);
 				return true;
 			}
 
 			// Get flag, check rights on flag
 			final Flag f = Flag.get(args[1]);
 			if (f == null) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagUnknownFlag, args[1]);
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagUnknownFlag, args[1]);
 				return true;
 			} else if (!Perms.hasFlag(sender, f)) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagNoPermission, f.name());
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagNoPermission, f.name());
 				return true;
 			}
 
 			if (args.length == 2) {
 				// Show value
 				final boolean value = c.getFlag(f);
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagValue, f.name(), value ? "ON" : "OFF", c.getRegionName());
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagValue, f.name(), value ? "ON" : "OFF", c.getRegionName());
 				return true;
 			} else {
 				// Get provided value
@@ -70,11 +71,11 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 				} else if (DISABLE_REGEX.matcher(valueString).matches()) {
 					value = false;
 				} else {
-					getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagUnknownValue, args[2]);
+					this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagUnknownValue, args[2]);
 					return true;
 				}
 				if (value == c.getFlag(f)) {
-					getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAlreadySet, f.name(), value ? "ON" : "OFF", c.getRegionName());
+					this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagAlreadySet, f.name(), value ? "ON" : "OFF", c.getRegionName());
 					return true;
 				}
 
@@ -82,14 +83,14 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
 				c.setFlag(f, value);
 
 				if (f == Flag.HIDDEN) {
-					getPlugin().getDynmapBridge().handle(c);
+					this.getPlugin().getDynmapBridge().handle(c);
 				}
 
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagSet, f.name(), Boolean.toString(value), c.getRegionName());
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagSet, f.name(), Boolean.toString(value), c.getRegionName());
 				return true;
 			}
 		} else {
-			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+			this.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
 	}

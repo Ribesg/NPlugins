@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nworld.warp;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -30,7 +31,7 @@ public class Warps implements Iterable<Warp> {
 
 	@Override
 	public Iterator<Warp> iterator() {
-		final List<Warp> list = new ArrayList<>(warps.values());
+		final List<Warp> list = new ArrayList<>(this.warps.values());
 		Collections.sort(list);
 		return list.iterator();
 	}
@@ -56,52 +57,52 @@ public class Warps implements Iterable<Warp> {
 	/////////////////
 
 	public int size() {
-		return warps.size();
+		return this.warps.size();
 	}
 
 	public Collection<Warp> values() {
-		return warps.values();
+		return this.warps.values();
 	}
 
 	public Warp remove(final String key) {
-		return warps.remove(key.toLowerCase());
+		return this.warps.remove(key.toLowerCase());
 	}
 
 	public Warp get(final String key) {
-		return warps.get(key.toLowerCase());
+		return this.warps.get(key.toLowerCase());
 	}
 
 	public Set<String> keySet() {
-		return warps.keySet();
+		return this.warps.keySet();
 	}
 
 	public boolean containsKey(final String key) {
-		return warps.containsKey(key.toLowerCase());
+		return this.warps.containsKey(key.toLowerCase());
 	}
 
 	public void clear() {
-		warps.clear();
+		this.warps.clear();
 	}
 
 	public boolean containsValue(final Warp value) {
-		return warps.containsValue(value);
+		return this.warps.containsValue(value);
 	}
 
 	public boolean isEmpty() {
-		return warps.isEmpty();
+		return this.warps.isEmpty();
 	}
 
 	public Set<Map.Entry<String, Warp>> entrySet() {
-		return warps.entrySet();
+		return this.warps.entrySet();
 	}
 
 	public Warp put(final String key, final Warp value) {
-		return warps.put(key.toLowerCase(), value);
+		return this.warps.put(key.toLowerCase(), value);
 	}
 
 	public void putAll(final Map<String, Warp> map) {
 		for (final Map.Entry<String, Warp> e : map.entrySet()) {
-			put(e.getKey(), e.getValue());
+			this.put(e.getKey(), e.getValue());
 		}
 	}
 }

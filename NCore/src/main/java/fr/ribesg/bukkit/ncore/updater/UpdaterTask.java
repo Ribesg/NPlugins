@@ -8,7 +8,9 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.updater;
+
 import fr.ribesg.bukkit.ncore.Perms;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,6 +20,7 @@ public class UpdaterTask extends BukkitRunnable {
 	private final Updater updater;
 
 	public UpdaterTask(final Updater updater) {
+		super();
 		this.updater = updater;
 	}
 

@@ -13,13 +13,14 @@ import fr.ribesg.bukkit.ncore.common.ChunkCoord;
 import fr.ribesg.bukkit.ncore.common.MinecraftTime;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 
 public class Altars {
 
@@ -31,149 +32,149 @@ public class Altars {
 	public Altars(final NEnchantingEgg plugin) {
 		this.plugin = plugin;
 
-		perWorld = new HashMap<>();
-		perChunk = new HashMap<>();
+		this.perWorld = new HashMap<>();
+		this.perChunk = new HashMap<>();
 	}
 
 	public void onEnable() {
-		plugin.entering(getClass(), "onEnable");
+		this.plugin.entering(this.getClass(), "onEnable");
 
-		for (final Altar altar : getAltars()) {
+		for (final Altar altar : this.getAltars()) {
 			altar.setState(AltarState.INACTIVE);
 		}
 
-		plugin.exiting(getClass(), "onEnable");
+		this.plugin.exiting(this.getClass(), "onEnable");
 	}
 
 	public void onDisable() {
-		plugin.entering(getClass(), "onDisable");
+		this.plugin.entering(this.getClass(), "onDisable");
 
-		for (final Altar altar : getAltars()) {
+		for (final Altar altar : this.getAltars()) {
 			altar.hardResetToInactive(false);
 		}
 
-		plugin.exiting(getClass(), "onDisable");
+		this.plugin.exiting(this.getClass(), "onDisable");
 	}
 
 	public Set<Altar> getAltars() {
-		return new HashSet<>(perChunk.values());
+		return new HashSet<>(this.perChunk.values());
 	}
 
 	public boolean canAdd(final Altar altar, final double minDistance) {
-		plugin.entering(getClass(), "canAdd");
+		this.plugin.entering(this.getClass(), "canAdd");
 
 		boolean result = true;
 		final NLocation l = altar.getCenterLocation();
-		plugin.debug("Trying to add Altar at location " + l.toString());
+		this.plugin.debug("Trying to add Altar at location " + l);
 
-		if (perWorld.containsKey(l.getWorldName())) {
+		if (this.perWorld.containsKey(l.getWorldName())) {
 			final double minDistanceSquared = minDistance * minDistance;
-			if (plugin.isDebugEnabled()) {
-				plugin.debug("There are already altars in this world");
-				plugin.debug("Required minimal distance: " + minDistance + " (squared: " + minDistanceSquared + ")");
+			if (this.plugin.isDebugEnabled()) {
+				this.plugin.debug("There are already altars in this world");
+				this.plugin.debug("Required minimal distance: " + minDistance + " (squared: " + minDistanceSquared + ')');
 			}
-			final Set<Altar> set = perWorld.get(l.getWorldName());
+			final Set<Altar> set = this.perWorld.get(l.getWorldName());
 			for (final Altar other : set) {
 				final double distanceSquared = l.distance2DSquared(other.getCenterLocation());
-				if (plugin.isDebugEnabled()) {
-					plugin.debug("Distance (squared) with " + other.getCenterLocation() + ": " + distanceSquared);
+				if (this.plugin.isDebugEnabled()) {
+					this.plugin.debug("Distance (squared) with " + other.getCenterLocation() + ": " + distanceSquared);
 				}
 				if (distanceSquared < minDistanceSquared) {
-					plugin.debug("Too close, can't add");
+					this.plugin.debug("Too close, can't add");
 					result = false;
 					break;
 				}
 			}
 		}
 
-		plugin.exiting(getClass(), "canAdd");
+		this.plugin.exiting(this.getClass(), "canAdd");
 		return result;
 	}
 
 	public void add(final Altar altar) {
-		plugin.entering(getClass(), "add");
+		this.plugin.entering(this.getClass(), "add");
 
 		final World w = altar.getCenterLocation().getWorld();
 		final Set<Altar> set;
-		if (perWorld.containsKey(w.getName())) {
-			set = perWorld.get(w.getName());
+		if (this.perWorld.containsKey(w.getName())) {
+			set = this.perWorld.get(w.getName());
 		} else {
 			set = new HashSet<>();
 		}
 		set.add(altar);
-		perWorld.put(w.getName(), set);
+		this.perWorld.put(w.getName(), set);
 		for (final ChunkCoord c : altar.getChunks()) {
-			perChunk.put(c, altar);
+			this.perChunk.put(c, altar);
 		}
 
-		plugin.exiting(getClass(), "add");
+		this.plugin.exiting(this.getClass(), "add");
 	}
 
 	public void remove(final Altar altar) {
-		plugin.entering(getClass(), "remove");
+		this.plugin.entering(this.getClass(), "remove");
 
 		final World w = altar.getCenterLocation().getWorld();
-		if (perWorld.containsKey(w.getName())) {
-			final Set<Altar> set = perWorld.get(w.getName());
+		if (this.perWorld.containsKey(w.getName())) {
+			final Set<Altar> set = this.perWorld.get(w.getName());
 			set.remove(altar);
-			if (set.size() == 0) {
-				perWorld.remove(w.getName());
+			if (set.isEmpty()) {
+				this.perWorld.remove(w.getName());
 			}
 		}
 		for (final ChunkCoord c : altar.getChunks()) {
-			perChunk.remove(c);
+			this.perChunk.remove(c);
 		}
 
-		plugin.exiting(getClass(), "remove");
+		this.plugin.exiting(this.getClass(), "remove");
 	}
 
 	public Altar get(final ChunkCoord coord) {
-		return perChunk.get(coord);
+		return this.perChunk.get(coord);
 	}
 
 	public void time(final String worldName, final MinecraftTime currentTime) {
-		plugin.entering(getClass(), "time");
+		this.plugin.entering(this.getClass(), "time");
 
-		if (perWorld.containsKey(worldName)) {
+		if (this.perWorld.containsKey(worldName)) {
 			if (currentTime == MinecraftTime.NIGHT) {
-				for (final Altar a : perWorld.get(worldName)) {
+				for (final Altar a : this.perWorld.get(worldName)) {
 					if (a.getState() == AltarState.INACTIVE) {
-						plugin.debug("Activating altar at location " + a.getCenterLocation());
-						plugin.getInactiveToActiveTransition().doTransition(a);
+						this.plugin.debug("Activating altar at location " + a.getCenterLocation());
+						this.plugin.getInactiveToActiveTransition().doTransition(a);
 					}
 				}
 			} else {
-				for (final Altar a : perWorld.get(worldName)) {
+				for (final Altar a : this.perWorld.get(worldName)) {
 					if (a.getState() == AltarState.ACTIVE) {
-						plugin.debug("Hard-reseting altar at location " + a.getCenterLocation());
+						this.plugin.debug("Hard-reseting altar at location " + a.getCenterLocation());
 						a.hardResetToInactive(false);
 					} else if (a.getState() == AltarState.LOCKED) {
-						plugin.debug("Unlocking altar at location " + a.getCenterLocation());
+						this.plugin.debug("Unlocking altar at location " + a.getCenterLocation());
 						a.setState(AltarState.INACTIVE);
 					}
 				}
 			}
 		}
 
-		plugin.exiting(getClass(), "time");
+		this.plugin.exiting(this.getClass(), "time");
 	}
 
 	public void chunkLoad(final ChunkCoord c) {
-		plugin.entering(getClass(), "chunkLoad");
+		this.plugin.entering(this.getClass(), "chunkLoad");
 
-		if (perChunk.containsKey(c)) {
-			plugin.debug("Chunk contains an Altar");
+		if (this.perChunk.containsKey(c)) {
+			this.plugin.debug("Chunk contains an Altar");
 			final World world = Bukkit.getWorld(c.getWorldName());
-			final Altar altar = perChunk.get(c);
+			final Altar altar = this.perChunk.get(c);
 			if (altar.getState() == AltarState.INACTIVE && MinecraftTime.isNightTime(world.getTime())) {
-				plugin.debug("Activating altar at location " + altar.getCenterLocation());
-				plugin.getInactiveToActiveTransition().doTransition(altar);
+				this.plugin.debug("Activating altar at location " + altar.getCenterLocation());
+				this.plugin.getInactiveToActiveTransition().doTransition(altar);
 			} else if (altar.getState() != AltarState.INACTIVE && MinecraftTime.isNightTime(world.getTime())) {
-				plugin.debug("Hard-reseting altar at location " + altar.getCenterLocation());
+				this.plugin.debug("Hard-reseting altar at location " + altar.getCenterLocation());
 				altar.hardResetToInactive(false);
 			}
 		}
 
-		plugin.exiting(getClass(), "chunkLoad");
+		this.plugin.exiting(this.getClass(), "chunkLoad");
 	}
 }

@@ -8,13 +8,9 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.common.collection.pairlist.PairList;
-import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
-import org.bukkit.Bukkit;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,21 +20,25 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
+import org.bukkit.Bukkit;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+
 public class ItemNetworkHandlerTask extends BukkitRunnable {
 
 	private static final Random RANDOM = new Random();
 
-	private final ItemNetworkFeature feature;
-	private final ItemNetwork        network;
-	private       BukkitTask         task;
+	private final ItemNetwork network;
+	private       BukkitTask  task;
 
 	public ItemNetworkHandlerTask(final ItemNetwork network) {
-		this.feature = network.getFeature();
+		super();
 		this.network = network;
 	}
 
 	public void initialize() {
-		this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(network.getFeature().getPlugin(), this, RANDOM.nextInt(5 * 20), 5L);
+		this.task = Bukkit.getScheduler().runTaskTimerAsynchronously(this.network.getFeature().getPlugin(), this, RANDOM.nextInt(5 * 20), 5L);
 	}
 
 	public void terminate() {

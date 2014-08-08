@@ -8,12 +8,14 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 
 /**
  * NPermissions Listener. Binds PermissionAttachments to
@@ -55,7 +57,7 @@ public class NListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerLoginLast(final PlayerLoginEvent event) {
-		if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) {
+		if (event.getResult() != Result.ALLOWED) {
 			this.plugin.getManager().unRegisterPlayer(event.getPlayer());
 		}
 	}

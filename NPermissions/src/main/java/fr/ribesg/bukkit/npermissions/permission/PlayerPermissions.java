@@ -8,9 +8,19 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.permission;
-import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.UUID;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * Represents the Permissions attached to a Player.
@@ -140,7 +150,7 @@ public class PlayerPermissions extends PermissionsSet {
 	 * @return the Groups for this Player, main Group excluded
 	 */
 	public Set<String> getGroups() {
-		return groups;
+		return this.groups;
 	}
 
 	/**
@@ -168,23 +178,17 @@ public class PlayerPermissions extends PermissionsSet {
 		final ConfigurationSection thisSection = parentSection.createSection(this.playerUuid.toString());
 		thisSection.set("playerName", this.name);
 		thisSection.set("mainGroup", this.mainGroup);
-		if (this.groups.size() > 0) {
+		if (!this.groups.isEmpty()) {
 			thisSection.set("groups", new LinkedList<>(this.groups));
 		}
 		super.saveCommon(thisSection);
 	}
 
-	/**
-	 * @see PermissionsSet#getDefaultPriority()
-	 */
 	@Override
 	public int getDefaultPriority() {
 		return DEFAULT_PLAYER_PRIORITY;
 	}
 
-	/**
-	 * @see PermissionsSet#computePermissions(java.util.Map)
-	 */
 	@Override
 	public Map<String, Boolean> computePermissions(final Map<String, Boolean> resultMap) {
 		// Create a data structure to store all PermissionsSet related to the Player, grouped and sorted by priority

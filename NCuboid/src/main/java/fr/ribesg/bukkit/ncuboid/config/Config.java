@@ -14,15 +14,16 @@ import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ncore.util.inventory.InventoryUtilException;
 import fr.ribesg.bukkit.ncore.util.inventory.MaterialUtil;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 /**
  * The config for the NCuboid node
@@ -44,7 +45,7 @@ public class Config extends AbstractConfig<NCuboid> {
 	 */
 	public Config(final NCuboid instance) {
 		super(instance);
-		setSelectionItemMaterial(Material.STICK);
+		this.setSelectionItemMaterial(Material.STICK);
 		this.groupConfigs = new HashMap<>();
 
 		final GroupConfig adminConfig = new GroupConfig("admin", -1, -1, -1);
@@ -56,9 +57,6 @@ public class Config extends AbstractConfig<NCuboid> {
 		this.defaultGroupConfig = new GroupConfig("", 0, 0, 0);
 	}
 
-	/**
-	 * @see AbstractConfig#handleValues(YamlConfiguration)
-	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 
@@ -69,11 +67,11 @@ public class Config extends AbstractConfig<NCuboid> {
 		} catch (final InventoryUtilException e) {
 			m = null;
 		}
-		setSelectionItemMaterial(m == null ? Material.STICK : m);
+		this.setSelectionItemMaterial(m == null ? Material.STICK : m);
 
 		// groupConfigs.
 		if (config.isConfigurationSection("groupConfigs")) {
-			groupConfigs.clear();
+			this.groupConfigs.clear();
 			final ConfigurationSection groupConfigSection = config.getConfigurationSection("groupConfigs");
 			for (final String groupName : groupConfigSection.getKeys(false)) {
 				try {
@@ -86,7 +84,7 @@ public class Config extends AbstractConfig<NCuboid> {
 						if (maxRegionNb == def || maxRegion1DSize == def || maxRegion3DSize == def) {
 							LOGGER.severe("Missing config value for '" + groupName + "' in config");
 						} else {
-							groupConfigs.put(groupName.toLowerCase(), new GroupConfig(groupName.toLowerCase(), maxRegionNb, maxRegion1DSize, maxRegion3DSize));
+							this.groupConfigs.put(groupName.toLowerCase(), new GroupConfig(groupName.toLowerCase(), maxRegionNb, maxRegion1DSize, maxRegion3DSize));
 						}
 					} else {
 						LOGGER.severe("Invalid config value '" + groupName + "' ignored in config");
@@ -98,9 +96,6 @@ public class Config extends AbstractConfig<NCuboid> {
 		}
 	}
 
-	/**
-	 * @see AbstractConfig#getConfigString()
-	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
@@ -117,7 +112,7 @@ public class Config extends AbstractConfig<NCuboid> {
 
 		// selectionItemMaterial. Default : Stick/280
 		content.append("# The tool used to select points and get informations about blocks protection. Default : 180 (Stick)\n");
-		content.append("selectionItemMaterial: " + getSelectionItemMaterial().name() + "\n\n");
+		content.append("selectionItemMaterial: " + this.selectionItemMaterial.name() + "\n\n");
 
 		// groupConfigs
 		content.append("# Here, you can configure for each group:\n");
@@ -128,18 +123,18 @@ public class Config extends AbstractConfig<NCuboid> {
 		content.append("# Note: For any of those values, '-1' means 'unlimited'.\n");
 		content.append("groupConfigs:\n");
 		for (final GroupConfig gc : this.groupConfigs.values()) {
-			content.append("  # Group '" + gc.getGroupName() + "'. The permission for this group is " + gc.getGroupPerm() + "\n");
+			content.append("  # Group '" + gc.getGroupName() + "'. The permission for this group is " + gc.getGroupPerm() + '\n');
 			content.append("  " + gc.getGroupName() + ":\n");
-			content.append("    maxRegionNb: " + gc.getMaxRegionNb() + "\n");
-			content.append("    maxRegion1DSize: " + gc.getMaxRegion1DSize() + "\n");
-			content.append("    maxRegion3DSize: " + gc.getMaxRegion3DSize() + "\n");
+			content.append("    maxRegionNb: " + gc.getMaxRegionNb() + '\n');
+			content.append("    maxRegion1DSize: " + gc.getMaxRegion1DSize() + '\n');
+			content.append("    maxRegion3DSize: " + gc.getMaxRegion3DSize() + '\n');
 		}
 
 		return content.toString();
 	}
 
 	public Material getSelectionItemMaterial() {
-		return selectionItemMaterial;
+		return this.selectionItemMaterial;
 	}
 
 	private void setSelectionItemMaterial(final Material selectionItemMaterial) {
@@ -147,17 +142,17 @@ public class Config extends AbstractConfig<NCuboid> {
 	}
 
 	public Set<String> getKnownGroups() {
-		return groupConfigs.keySet();
+		return this.groupConfigs.keySet();
 	}
 
 	public GroupConfig getGroupConfig(final String groupName) {
-		return groupConfigs.get(groupName);
+		return this.groupConfigs.get(groupName);
 	}
 
 	public GroupConfig getGroupConfig(final Player player) {
 		final GroupConfig result = new GroupConfig("tmp", 0, 0, 0);
 		boolean found = false;
-		for (final GroupConfig gc : groupConfigs.values()) {
+		for (final GroupConfig gc : this.groupConfigs.values()) {
 			if (player.hasPermission(gc.getGroupPerm())) {
 				found = true;
 				if (result.getMaxRegionNb() != -1) {
@@ -187,7 +182,7 @@ public class Config extends AbstractConfig<NCuboid> {
 			return result;
 		} else {
 			LOGGER.warning("Player '" + player.getName() + "' doesn't have any associated group, he will not be able to make regions!");
-			return defaultGroupConfig;
+			return this.defaultGroupConfig;
 		}
 	}
 }

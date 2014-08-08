@@ -8,8 +8,10 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nworld.world;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nworld.NWorld;
+
 import org.bukkit.World;
 
 /**
@@ -19,7 +21,7 @@ public class StockWorld extends GeneralWorld {
 
 	public StockWorld(final NWorld instance, final String worldName, final WorldType type, final NLocation spawnLocation, final String requiredPermission, final boolean enabled, final boolean hidden) {
 		super(instance, worldName, spawnLocation, requiredPermission, enabled, hidden);
-		setType(type);
+		this.setType(type);
 	}
 
 	@Override

@@ -31,20 +31,20 @@ public class ChunkCoord {
 	}
 
 	public ChunkCoord(final Chunk bukkitChunk) {
-		x = bukkitChunk.getX();
-		z = bukkitChunk.getZ();
-		worldName = bukkitChunk.getWorld().getName();
+		this.x = bukkitChunk.getX();
+		this.z = bukkitChunk.getZ();
+		this.worldName = bukkitChunk.getWorld().getName();
 	}
 
 	public ChunkCoord(final NLocation loc) {
-		x = loc.getBlockX() >> 4;
-		z = loc.getBlockZ() >> 4;
-		worldName = loc.getWorldName();
+		this.x = loc.getBlockX() >> 4;
+		this.z = loc.getBlockZ() >> 4;
+		this.worldName = loc.getWorldName();
 	}
 
 	@Override
 	public String toString() {
-		return worldName + SEPARATOR + x + SEPARATOR + z;
+		return this.worldName + SEPARATOR + this.x + SEPARATOR + this.z;
 	}
 
 	/**
@@ -60,25 +60,25 @@ public class ChunkCoord {
 	}
 
 	public int getX() {
-		return x;
+		return this.x;
 	}
 
 	public int getZ() {
-		return z;
+		return this.z;
 	}
 
 	public String getWorldName() {
-		return worldName;
+		return this.worldName;
 	}
 
 	public World getBukkitWorld() {
-		return Bukkit.getWorld(getWorldName());
+		return Bukkit.getWorld(this.worldName);
 	}
 
 	public Chunk getBukkitChunk() {
-		final World world = getBukkitWorld();
+		final World world = this.getBukkitWorld();
 		if (world != null) {
-			return world.getChunkAt(getX(), getZ());
+			return world.getChunkAt(this.x, this.z);
 		} else {
 			return null;
 		}
@@ -88,9 +88,9 @@ public class ChunkCoord {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (worldName == null ? 0 : worldName.toLowerCase().hashCode());
-		result = prime * result + x;
-		result = prime * result + z;
+		result = prime * result + (this.worldName == null ? 0 : this.worldName.toLowerCase().hashCode());
+		result = prime * result + this.x;
+		result = prime * result + this.z;
 		return result;
 	}
 
@@ -102,21 +102,21 @@ public class ChunkCoord {
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
+		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		final ChunkCoord other = (ChunkCoord) obj;
-		if (x != other.x) {
+		final ChunkCoord other = (ChunkCoord)obj;
+		if (this.x != other.x) {
 			return false;
 		}
-		if (z != other.z) {
+		if (this.z != other.z) {
 			return false;
 		}
-		if (worldName == null) {
+		if (this.worldName == null) {
 			if (other.worldName != null) {
 				return false;
 			}
-		} else if (!worldName.equalsIgnoreCase(other.worldName)) {
+		} else if (!this.worldName.equalsIgnoreCase(other.worldName)) {
 			return false;
 		}
 		return true;

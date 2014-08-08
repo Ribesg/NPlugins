@@ -15,7 +15,7 @@ public class Profile {
 	private String name;
 
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(final String id) {
@@ -23,7 +23,7 @@ public class Profile {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(final String name) {

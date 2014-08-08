@@ -11,10 +11,11 @@ package fr.ribesg.bukkit.ncore.node.cuboid;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.node.Node;
-import org.bukkit.entity.Player;
 
 import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.entity.Player;
 
 /**
  * API for the NCuboid plugin.

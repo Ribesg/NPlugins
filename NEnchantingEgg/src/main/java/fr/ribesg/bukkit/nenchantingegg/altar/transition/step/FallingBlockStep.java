@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.nenchantingegg.altar.transition.step;
 
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
+
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,7 +33,7 @@ public class FallingBlockStep extends Step {
 		super(delay);
 		this.block = block;
 		this.fromHeight = fromHeight < 0 ? 0 : fromHeight;
-		initialVelocity = new Vector(0, initialVerticalVelocity, 0);
+		this.initialVelocity = new Vector(0, initialVerticalVelocity, 0);
 	}
 
 	public FallingBlockStep(final int delay, final RelativeBlock block, final int fromHeight, final Vector initialVelocity) {
@@ -44,19 +45,17 @@ public class FallingBlockStep extends Step {
 
 	@Override
 	public void doStep(final Altar altar) {
-		final Location locBlock = altar.getCenterLocation().toBukkitLocation().add(block.getRelativeLocation());
+		final Location locBlock = altar.getCenterLocation().toBukkitLocation().add(this.block.getRelativeLocation());
 		locBlock.getBlock().setType(Material.AIR);
-		locBlock.getWorld().playEffect(locBlock, Effect.MOBSPAWNER_FLAMES, (byte) 4);
+		locBlock.getWorld().playEffect(locBlock, Effect.MOBSPAWNER_FLAMES, (byte)4);
 		locBlock.getWorld().playSound(locBlock, Sound.IRONGOLEM_THROW, 1.0f, 1.0f);
 
-		final Location locSpawn = locBlock.clone().add(0, fromHeight, 0);
+		final Location locSpawn = locBlock.clone().add(0, this.fromHeight, 0);
 		if (locSpawn.getY() >= locSpawn.getWorld().getMaxHeight()) {
 			locSpawn.setY(locSpawn.getWorld().getMaxHeight() - 1);
 		}
-		final FallingBlock fb = locSpawn.getWorld().spawnFallingBlock(locSpawn, block.getBlockMaterial(), block.getBlockData());
+		final FallingBlock fb = locSpawn.getWorld().spawnFallingBlock(locSpawn, this.block.getBlockMaterial(), this.block.getBlockData());
 		fb.setDropItem(false);
-		fb.setVelocity(initialVelocity);
-
+		fb.setVelocity(this.initialVelocity);
 	}
-
 }

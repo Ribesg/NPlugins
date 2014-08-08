@@ -12,6 +12,7 @@ package fr.ribesg.bukkit.ntheendagain;
 import fr.ribesg.bukkit.ncore.common.logging.DenyFilter;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -22,7 +23,7 @@ public class MovedTooQuicklyDenyFilter implements DenyFilter {
 	private final NTheEndAgain plugin;
 
 	public MovedTooQuicklyDenyFilter(final NTheEndAgain instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	@Override
@@ -32,7 +33,7 @@ public class MovedTooQuicklyDenyFilter implements DenyFilter {
 			final String[] beforeMovedTooQuicklySplit = beforeMovedTooQuickly.split(" ");
 			final String playerName = beforeMovedTooQuicklySplit[beforeMovedTooQuicklySplit.length - 1];
 			final Player player = Bukkit.getPlayerExact(playerName);
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(player.getWorld().getName()));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(player.getWorld().getName()));
 			return handler != null && handler.getConfig().getFilterMovedTooQuicklySpam() == 1;
 		} else {
 			return false;

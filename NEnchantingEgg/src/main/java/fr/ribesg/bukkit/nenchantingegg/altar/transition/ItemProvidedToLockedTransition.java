@@ -19,12 +19,13 @@ import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.BlockStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.ExplosionStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.FallingBlockStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.Step;
-import org.bukkit.Material;
-import org.bukkit.SkullType;
-import org.bukkit.block.BlockFace;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import org.bukkit.Material;
+import org.bukkit.SkullType;
+import org.bukkit.block.BlockFace;
 
 // TODO
 public class ItemProvidedToLockedTransition extends Transition {
@@ -35,8 +36,8 @@ public class ItemProvidedToLockedTransition extends Transition {
 
 	@Override
 	protected void setFromToStates() {
-		fromState = AltarState.ITEM_PROVIDED;
-		toState = AltarState.LOCKED;
+		this.fromState = AltarState.ITEM_PROVIDED;
+		this.toState = AltarState.LOCKED;
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class ItemProvidedToLockedTransition extends Transition {
 
 		// ##########################################
 		// Central falling pillar
-		steps.add(new BlockStep(t - 5, new RelativeBlock(0, 0, 0, Material.AIR, (byte) 0)));
+		steps.add(new BlockStep(t - 5, new RelativeBlock(0, 0, 0, Material.AIR, (byte)0)));
 		steps.add(new FallingBlockStep(t - 5, new RelativeBlock(0, 1, 0, Material.QUARTZ_BLOCK, BlockData.QUARTZ_PILLAR_VERTICAL), 0));
 
 		// ##########################################

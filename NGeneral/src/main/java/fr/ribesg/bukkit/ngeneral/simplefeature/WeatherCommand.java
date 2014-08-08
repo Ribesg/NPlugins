@@ -8,17 +8,19 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Random;
 
 public class WeatherCommand implements CommandExecutor {
 
@@ -28,14 +30,14 @@ public class WeatherCommand implements CommandExecutor {
 
 	public WeatherCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.setCommandExecutor(COMMAND, this);
+		this.plugin.setCommandExecutor(COMMAND, this);
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		if (command.getName().equals(COMMAND)) {
 			if (!Perms.hasWeather(sender)) {
-				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+				this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 				return true;
 			} else {
 				World world;
@@ -44,23 +46,23 @@ public class WeatherCommand implements CommandExecutor {
 				if (args.length == 1) {
 					type = args[0];
 					if (!(sender instanceof Player)) {
-						plugin.sendMessage(sender, MessageId.missingWorldArg);
+						this.plugin.sendMessage(sender, MessageId.missingWorldArg);
 						return true;
 					}
-					world = ((Player) sender).getWorld();
+					world = ((Player)sender).getWorld();
 				} else if (args.length == 2) {
 					type = args[0];
 					try {
 						duration = Integer.parseInt(args[1]);
 						if (!(sender instanceof Player)) {
-							plugin.sendMessage(sender, MessageId.missingWorldArg);
+							this.plugin.sendMessage(sender, MessageId.missingWorldArg);
 							return true;
 						}
-						world = ((Player) sender).getWorld();
-					} catch (NumberFormatException e) {
+						world = ((Player)sender).getWorld();
+					} catch (final NumberFormatException e) {
 						world = Bukkit.getWorld(args[1]);
 						if (world == null) {
-							plugin.sendMessage(sender, MessageId.unknownWorld, args[1]);
+							this.plugin.sendMessage(sender, MessageId.unknownWorld, args[1]);
 							return true;
 						}
 					}
@@ -68,12 +70,12 @@ public class WeatherCommand implements CommandExecutor {
 					type = args[0];
 					try {
 						duration = Integer.parseInt(args[1]);
-					} catch (NumberFormatException e) {
+					} catch (final NumberFormatException e) {
 						return false;
 					}
 					world = Bukkit.getWorld(args[2]);
 					if (world == null) {
-						plugin.sendMessage(sender, MessageId.unknownWorld, args[2]);
+						this.plugin.sendMessage(sender, MessageId.unknownWorld, args[2]);
 						return true;
 					}
 				} else {
@@ -104,12 +106,11 @@ public class WeatherCommand implements CommandExecutor {
 					default:
 						return false;
 				}
-				plugin.broadcastMessage(MessageId.general_weatherSet, type, world.getName(), sender.getName(), Integer.toString(duration));
+				this.plugin.broadcastMessage(MessageId.general_weatherSet, type, world.getName(), sender.getName(), Integer.toString(duration));
 				return true;
 			}
 		} else {
 			return false;
 		}
 	}
-
 }

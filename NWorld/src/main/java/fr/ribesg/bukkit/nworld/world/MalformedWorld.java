@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nworld.world;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nworld.NWorld;
 
@@ -22,7 +23,7 @@ public class MalformedWorld extends GeneralWorld {
 
 	public MalformedWorld(final NWorld instance, final String worldName) {
 		super(instance, worldName, new NLocation(worldName, 0, 0, 0, 0, 0), "random.permission." + new Random().nextLong(), false, true);
-		setType(WorldType.UNKNOWN);
+		this.setType(WorldType.UNKNOWN);
 	}
 
 	@Override

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public class TimeUtil {
 	private static final Map<String, String> translatedUnits = new HashMap<>(14);
 
 	static {
-		for (final String s : new String[] {
+		for (final String s : new String[]{
 				"second",
 				"seconds",
 				"minute",
@@ -123,7 +124,7 @@ public class TimeUtil {
 			if (mapping == null) {
 				mapping = new HashMap<>();
 				for (final TimeUnits t : TimeUnits.values()) {
-					for (final String representation : t.getStringRepresentations()) {
+					for (final String representation : t.stringRepresentations) {
 						mapping.put(representation, t);
 					}
 				}
@@ -180,7 +181,7 @@ public class TimeUtil {
 			if (builder == null) {
 				builder = new StringBuilder(months + " " + translatedUnits.get("month" + (months == 1 ? "" : "s")));
 			} else {
-				builder.append(", ").append(months).append(" ").append(translatedUnits.get("month" + (months == 1 ? "" : "s")));
+				builder.append(", ").append(months).append(' ').append(translatedUnits.get("month" + (months == 1 ? "" : "s")));
 			}
 		}
 		leftOver = leftOver % TimeUnits.MONTH.getMultiplier();
@@ -190,7 +191,7 @@ public class TimeUtil {
 			if (builder == null) {
 				builder = new StringBuilder(weeks + " " + translatedUnits.get("week" + (weeks == 1 ? "" : "s")));
 			} else {
-				builder.append(", ").append(weeks).append(" ").append(translatedUnits.get("week" + (weeks == 1 ? "" : "s")));
+				builder.append(", ").append(weeks).append(' ').append(translatedUnits.get("week" + (weeks == 1 ? "" : "s")));
 			}
 		}
 		leftOver = leftOver % TimeUnits.WEEK.getMultiplier();
@@ -200,7 +201,7 @@ public class TimeUtil {
 			if (builder == null) {
 				builder = new StringBuilder(days + " " + translatedUnits.get("day" + (days == 1 ? "" : "s")));
 			} else {
-				builder.append(", ").append(days).append(" ").append(translatedUnits.get("day" + (days == 1 ? "" : "s")));
+				builder.append(", ").append(days).append(' ').append(translatedUnits.get("day" + (days == 1 ? "" : "s")));
 			}
 		}
 		leftOver = leftOver % TimeUnits.DAY.getMultiplier();
@@ -210,7 +211,7 @@ public class TimeUtil {
 			if (builder == null) {
 				builder = new StringBuilder(hours + " " + translatedUnits.get("hour" + (hours == 1 ? "" : "s")));
 			} else {
-				builder.append(", ").append(hours).append(" ").append(translatedUnits.get("hour" + (hours == 1 ? "" : "s")));
+				builder.append(", ").append(hours).append(' ').append(translatedUnits.get("hour" + (hours == 1 ? "" : "s")));
 			}
 		}
 		leftOver = leftOver % TimeUnits.HOUR.getMultiplier();
@@ -220,7 +221,7 @@ public class TimeUtil {
 			if (builder == null) {
 				builder = new StringBuilder(minutes + " " + translatedUnits.get("minute" + (minutes == 1 ? "" : "s")));
 			} else {
-				builder.append(", ").append(minutes).append(" ").append(translatedUnits.get("minute" + (minutes == 1 ? "" : "s")));
+				builder.append(", ").append(minutes).append(' ').append(translatedUnits.get("minute" + (minutes == 1 ? "" : "s")));
 			}
 		}
 		leftOver = leftOver % TimeUnits.MINUTE.getMultiplier();
@@ -228,7 +229,7 @@ public class TimeUtil {
 		if (builder == null) {
 			builder = new StringBuilder(leftOver + " " + translatedUnits.get("second" + (leftOver == 1 ? "" : "s")));
 		} else if (leftOver != 0) {
-			builder.append(", ").append(leftOver).append(" ").append(translatedUnits.get("second" + (leftOver == 1 ? "" : "s")));
+			builder.append(", ").append(leftOver).append(' ').append(translatedUnits.get("second" + (leftOver == 1 ? "" : "s")));
 		}
 
 		return builder.toString();
@@ -277,52 +278,122 @@ public class TimeUtil {
 	}
 
 	/**
-	 * @see #getInSeconds(String)
+	 * This method parses the provided String and extract the number of
+	 * milliseconds it represents.
+	 * <p>
+	 * Example input: "4d5hours8s" will return the number of milliseconds
+	 * representing 4 days + 5 hours + 8 seconds = 363608000 ms
+	 *
+	 * @param stringRepresentation a string representation of an amount of time
+	 *
+	 * @return the corresponding amount of milliseconds
+	 *
+	 * @throws IllegalArgumentException when the provided String is malformed
 	 */
 	public static long getInMilliseconds(final String stringRepresentation) {
 		return getInSeconds(stringRepresentation) * 1000;
 	}
 
 	/**
-	 * @see #getInSeconds(String)
+	 * This method parses the provided String and extract the number of
+	 * minutes it represents.
+	 * <p>
+	 * Example input: "4d5hours8s" will return the number of minutes
+	 * representing 4 days + 5 hours + 8 seconds = 6060.33 min
+	 *
+	 * @param stringRepresentation a string representation of an amount of time
+	 *
+	 * @return the corresponding amount of minutes
+	 *
+	 * @throws IllegalArgumentException when the provided String is malformed
 	 */
 	public static double getInMinutes(final String stringRepresentation) {
-		return getInSeconds(stringRepresentation) / (double) TimeUnits.MINUTE.getMultiplier();
+		return getInSeconds(stringRepresentation) / (double)TimeUnits.MINUTE.getMultiplier();
 	}
 
 	/**
-	 * @see #getInSeconds(String)
+	 * This method parses the provided String and extract the number of
+	 * hours it represents.
+	 * <p>
+	 * Example input: "4d5hours8s" will return the number of hours
+	 * representing 4 days + 5 hours + 8 seconds = 101 hours
+	 *
+	 * @param stringRepresentation a string representation of an amount of time
+	 *
+	 * @return the corresponding amount of hours
+	 *
+	 * @throws IllegalArgumentException when the provided String is malformed
 	 */
 	public static double getInHours(final String stringRepresentation) {
-		return getInSeconds(stringRepresentation) / (double) TimeUnits.HOUR.getMultiplier();
+		return getInSeconds(stringRepresentation) / (double)TimeUnits.HOUR.getMultiplier();
 	}
 
 	/**
-	 * @see #getInSeconds(String)
+	 * This method parses the provided String and extract the number of
+	 * days it represents.
+	 * <p>
+	 * Example input: "4d5hours8s" will return the number of days
+	 * representing 4 days + 5 hours + 8 seconds = 4.21 days
+	 *
+	 * @param stringRepresentation a string representation of an amount of time
+	 *
+	 * @return the corresponding amount of days
+	 *
+	 * @throws IllegalArgumentException when the provided String is malformed
 	 */
 	public static double getInDays(final String stringRepresentation) {
-		return getInSeconds(stringRepresentation) / (double) TimeUnits.DAY.getMultiplier();
+		return getInSeconds(stringRepresentation) / (double)TimeUnits.DAY.getMultiplier();
 	}
 
 	/**
-	 * @see #getInSeconds(String)
+	 * This method parses the provided String and extract the number of
+	 * weeks it represents.
+	 * <p>
+	 * Example input: "4d5hours8s" will return the number of weeks
+	 * representing 4 days + 5 hours + 8 seconds = 0.60 weeks
+	 *
+	 * @param stringRepresentation a string representation of an amount of time
+	 *
+	 * @return the corresponding amount of weeks
+	 *
+	 * @throws IllegalArgumentException when the provided String is malformed
 	 */
 	public static double getInWeeks(final String stringRepresentation) {
-		return getInSeconds(stringRepresentation) / (double) TimeUnits.WEEK.getMultiplier();
+		return getInSeconds(stringRepresentation) / (double)TimeUnits.WEEK.getMultiplier();
 	}
 
 	/**
-	 * @see #getInSeconds(String)
+	 * This method parses the provided String and extract the number of
+	 * months it represents.
+	 * <p>
+	 * Example input: "4d5hours8s" will return the number of months
+	 * representing 4 days + 5 hours + 8 seconds = 0.14 months
+	 *
+	 * @param stringRepresentation a string representation of an amount of time
+	 *
+	 * @return the corresponding amount of months
+	 *
+	 * @throws IllegalArgumentException when the provided String is malformed
 	 */
 	public static double getInMonths(final String stringRepresentation) {
-		return getInSeconds(stringRepresentation) / (double) TimeUnits.MONTH.getMultiplier();
+		return getInSeconds(stringRepresentation) / (double)TimeUnits.MONTH.getMultiplier();
 	}
 
 	/**
-	 * @see #getInSeconds(String)
+	 * This method parses the provided String and extract the number of
+	 * years it represents.
+	 * <p>
+	 * Example input: "4d5hours8s" will return the number of years
+	 * representing 4 days + 5 hours + 8 seconds = 0.0115 years
+	 *
+	 * @param stringRepresentation a string representation of an amount of time
+	 *
+	 * @return the corresponding amount of years
+	 *
+	 * @throws IllegalArgumentException when the provided String is malformed
 	 */
 	public static double getInYears(final String stringRepresentation) {
-		return getInSeconds(stringRepresentation) / (double) TimeUnits.YEAR.getMultiplier();
+		return getInSeconds(stringRepresentation) / (double)TimeUnits.YEAR.getMultiplier();
 	}
 
 	/**
@@ -339,7 +410,7 @@ public class TimeUtil {
 		final Pattern pattern = Pattern.compile("(\\d+)([A-Za-z]+)");
 		final Matcher matcher = pattern.matcher(stringRepresentation);
 		while (matcher.find()) {
-			final String[] matched = new String[] {
+			final String[] matched = {
 					matcher.group(1),
 					matcher.group(2)
 			};

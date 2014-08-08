@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntalk.filter.bean;
+
 import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
 import java.util.Map;
@@ -27,11 +28,11 @@ public class DivineFilter extends TimedFilter {
 	}
 
 	public int getMinHealth() {
-		return minHealth;
+		return this.minHealth;
 	}
 
 	public int getEntityAmount() {
-		return entityAmount;
+		return this.entityAmount;
 	}
 
 	// ############ //
@@ -41,8 +42,8 @@ public class DivineFilter extends TimedFilter {
 	@Override
 	public Map<String, Object> getConfigMap() {
 		final Map<String, Object> map = super.getConfigMap();
-		map.put("minHealth", minHealth);
-		map.put("entityAmount", entityAmount);
+		map.put("minHealth", this.minHealth);
+		map.put("entityAmount", this.entityAmount);
 		return map;
 	}
 
@@ -52,11 +53,11 @@ public class DivineFilter extends TimedFilter {
 
 	public static DivineFilter loadFromConfig(final String key, final Map<String, Object> values) {
 		try {
-			final String filteredString = (String) values.get("filteredString");
-			final boolean regex = (boolean) values.get("isRegex");
-			final long duration = (int) values.get("duration");
-			final int minHealth = (int) values.get("minHealth");
-			final int entityAmount = (int) values.get("entityAmount");
+			final String filteredString = (String)values.get("filteredString");
+			final boolean regex = (boolean)values.get("isRegex");
+			final long duration = (int)values.get("duration");
+			final int minHealth = (int)values.get("minHealth");
+			final int entityAmount = (int)values.get("entityAmount");
 			return new DivineFilter(key, filteredString, regex, duration, minHealth, entityAmount);
 		} catch (final NullPointerException e) {
 			throw new IllegalArgumentException("Missing value", e);

@@ -12,6 +12,7 @@ package fr.ribesg.bukkit.ngeneral.config;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
+
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -86,53 +87,50 @@ public class Config extends AbstractConfig<NGeneral> {
 	public Config(final NGeneral instance) {
 		super(instance);
 
-		initialMessage = "";
+		this.initialMessage = "";
 
-		autoAfkFeature = true;
-		flyModeFeature = true;
-		godModeFeature = true;
-		itemNetworkFeature = true;
-		protectionSignFeature = true;
-		spyModeFeature = true;
+		this.autoAfkFeature = true;
+		this.flyModeFeature = true;
+		this.godModeFeature = true;
+		this.itemNetworkFeature = true;
+		this.protectionSignFeature = true;
+		this.spyModeFeature = true;
 
-		autoAfkDelay = 120;
-		itemNetworkMaxDistance = 100;
+		this.autoAfkDelay = 120;
+		this.itemNetworkMaxDistance = 100;
 
-		broadCastOnAfk = true;
-		broadCastOnBusy = true;
+		this.broadCastOnAfk = true;
+		this.broadCastOnBusy = true;
 
-		protectionSignNoPermMsgLine1 = DEFAULT_protectionSignNoPermMsgLine1;
-		protectionSignNoPermMsgLine2 = DEFAULT_protectionSignNoPermMsgLine2;
-		protectionSignNoPermMsgLine3 = DEFAULT_protectionSignNoPermMsgLine3;
+		this.protectionSignNoPermMsgLine1 = DEFAULT_protectionSignNoPermMsgLine1;
+		this.protectionSignNoPermMsgLine2 = DEFAULT_protectionSignNoPermMsgLine2;
+		this.protectionSignNoPermMsgLine3 = DEFAULT_protectionSignNoPermMsgLine3;
 
-		protectionSignNothingToProtectMsgLine1 = DEFAULT_protectionSignNothingToProtectMsgLine1;
-		protectionSignNothingToProtectMsgLine2 = DEFAULT_protectionSignNothingToProtectMsgLine2;
-		protectionSignNothingToProtectMsgLine3 = DEFAULT_protectionSignNothingToProtectMsgLine3;
+		this.protectionSignNothingToProtectMsgLine1 = DEFAULT_protectionSignNothingToProtectMsgLine1;
+		this.protectionSignNothingToProtectMsgLine2 = DEFAULT_protectionSignNothingToProtectMsgLine2;
+		this.protectionSignNothingToProtectMsgLine3 = DEFAULT_protectionSignNothingToProtectMsgLine3;
 
-		protectionSignAlreadyProtectedMsgLine1 = DEFAULT_protectionSignAlreadyProtectedMsgLine1;
-		protectionSignAlreadyProtectedMsgLine2 = DEFAULT_protectionSignAlreadyProtectedMsgLine2;
-		protectionSignAlreadyProtectedMsgLine3 = DEFAULT_protectionSignAlreadyProtectedMsgLine3;
+		this.protectionSignAlreadyProtectedMsgLine1 = DEFAULT_protectionSignAlreadyProtectedMsgLine1;
+		this.protectionSignAlreadyProtectedMsgLine2 = DEFAULT_protectionSignAlreadyProtectedMsgLine2;
+		this.protectionSignAlreadyProtectedMsgLine3 = DEFAULT_protectionSignAlreadyProtectedMsgLine3;
 
-		itemNetworkSignUnknownNetworkMsgLine1 = DEFAULT_itemNetworkSignUnknownNetworkMsgLine1;
-		itemNetworkSignUnknownNetworkMsgLine2 = DEFAULT_itemNetworkSignUnknownNetworkMsgLine2;
-		itemNetworkSignUnknownNetworkMsgLine3 = DEFAULT_itemNetworkSignUnknownNetworkMsgLine3;
+		this.itemNetworkSignUnknownNetworkMsgLine1 = DEFAULT_itemNetworkSignUnknownNetworkMsgLine1;
+		this.itemNetworkSignUnknownNetworkMsgLine2 = DEFAULT_itemNetworkSignUnknownNetworkMsgLine2;
+		this.itemNetworkSignUnknownNetworkMsgLine3 = DEFAULT_itemNetworkSignUnknownNetworkMsgLine3;
 
-		itemNetworkSignNotAllowedMsgLine1 = DEFAULT_itemNetworkSignNotAllowedMsgLine1;
-		itemNetworkSignNotAllowedMsgLine2 = DEFAULT_itemNetworkSignNotAllowedMsgLine2;
-		itemNetworkSignNotAllowedMsgLine3 = DEFAULT_itemNetworkSignNotAllowedMsgLine3;
+		this.itemNetworkSignNotAllowedMsgLine1 = DEFAULT_itemNetworkSignNotAllowedMsgLine1;
+		this.itemNetworkSignNotAllowedMsgLine2 = DEFAULT_itemNetworkSignNotAllowedMsgLine2;
+		this.itemNetworkSignNotAllowedMsgLine3 = DEFAULT_itemNetworkSignNotAllowedMsgLine3;
 
-		itemNetworkSignInvalidMaterialsMsgLine1 = DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1;
-		itemNetworkSignInvalidMaterialsMsgLine2 = DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2;
-		itemNetworkSignInvalidMaterialsMsgLine3 = DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3;
+		this.itemNetworkSignInvalidMaterialsMsgLine1 = DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1;
+		this.itemNetworkSignInvalidMaterialsMsgLine2 = DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2;
+		this.itemNetworkSignInvalidMaterialsMsgLine3 = DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3;
 
-		itemNetworkSignTooFarMsgLine1 = DEFAULT_itemNetworkSignTooFarMsgLine1;
-		itemNetworkSignTooFarMsgLine2 = DEFAULT_itemNetworkSignTooFarMsgLine2;
-		itemNetworkSignTooFarMsgLine3 = DEFAULT_itemNetworkSignTooFarMsgLine3;
+		this.itemNetworkSignTooFarMsgLine1 = DEFAULT_itemNetworkSignTooFarMsgLine1;
+		this.itemNetworkSignTooFarMsgLine2 = DEFAULT_itemNetworkSignTooFarMsgLine2;
+		this.itemNetworkSignTooFarMsgLine3 = DEFAULT_itemNetworkSignTooFarMsgLine3;
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration)
-	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
@@ -142,171 +140,171 @@ public class Config extends AbstractConfig<NGeneral> {
 
 		// initialMessage. Default: ""
 		// Possible values: anything, multi-line with ##
-		setInitialMessage(config.getString("initialMessage", ""));
+		this.setInitialMessage(config.getString("initialMessage", ""));
 
 		// autoAfkFeature. Default: true.
 		// Possible values: true, false
-		setAutoAfkFeature(config.getBoolean("autoAfkFeature", true));
+		this.setAutoAfkFeature(config.getBoolean("autoAfkFeature", true));
 
 		// flyModeFeature. Default: true.
 		// Possible values: true, false
-		setFlyModeFeature(config.getBoolean("flyModeFeature", true));
+		this.setFlyModeFeature(config.getBoolean("flyModeFeature", true));
 
 		// godModeFeature. Default: true.
 		// Possible values: true, false
-		setGodModeFeature(config.getBoolean("godModeFeature", true));
+		this.setGodModeFeature(config.getBoolean("godModeFeature", true));
 
 		// itemNetworkFeature. Default: true.
 		// Possible values: true, false
-		setItemNetworkFeature(config.getBoolean("itemNetworkFeature", true));
+		this.setItemNetworkFeature(config.getBoolean("itemNetworkFeature", true));
 
 		// protectionSignFeature. Default: true.
 		// Possible values: true, false
-		setProtectionSignFeature(config.getBoolean("protectionSignFeature", true));
+		this.setProtectionSignFeature(config.getBoolean("protectionSignFeature", true));
 
 		// spyModeFeature. Default: true.
 		// Possible values: true, false
-		setSpyModeFeature(config.getBoolean("spyModeFeature", true));
+		this.setSpyModeFeature(config.getBoolean("spyModeFeature", true));
 
 		// autoAfkDelay. Default: 120
 		// Possible values: any positive int
-		setAutoAfkDelay(config.getInt("autoAfkDelay", 120));
+		this.setAutoAfkDelay(config.getInt("autoAfkDelay", 120));
 
 		// itemNetworkMaxDistance. Default: 100
 		// Possible values: any positive int
-		setItemNetworkMaxDistance(config.getInt("itemNetworkMaxDistance", 100));
+		this.setItemNetworkMaxDistance(config.getInt("itemNetworkMaxDistance", 100));
 
 		// protectionSignNoPermMsgLines.
-		setProtectionSignNoPermMsgLine1(config.getString("protectionSignNoPermMsgLine1", DEFAULT_protectionSignNoPermMsgLine1));
-		if (getProtectionSignNoPermMsgLine1().length() > 15) {
-			wrongValue("config.yml", "protectionSignNoPermMsgLine1", getProtectionSignNoPermMsgLine1(), DEFAULT_protectionSignNoPermMsgLine1);
-			setProtectionSignNoPermMsgLine1(DEFAULT_protectionSignNoPermMsgLine1);
+		this.setProtectionSignNoPermMsgLine1(config.getString("protectionSignNoPermMsgLine1", DEFAULT_protectionSignNoPermMsgLine1));
+		if (this.protectionSignNoPermMsgLine1.length() > 15) {
+			this.wrongValue("config.yml", "protectionSignNoPermMsgLine1", this.protectionSignNoPermMsgLine1, DEFAULT_protectionSignNoPermMsgLine1);
+			this.setProtectionSignNoPermMsgLine1(DEFAULT_protectionSignNoPermMsgLine1);
 		}
 
-		setProtectionSignNoPermMsgLine2(config.getString("protectionSignNoPermMsgLine2", DEFAULT_protectionSignNoPermMsgLine2));
-		if (getProtectionSignNoPermMsgLine2().length() > 15) {
-			wrongValue("config.yml", "protectionSignNoPermMsgLine2", getProtectionSignNoPermMsgLine2(), DEFAULT_protectionSignNoPermMsgLine2);
-			setProtectionSignNoPermMsgLine2(DEFAULT_protectionSignNoPermMsgLine2);
+		this.setProtectionSignNoPermMsgLine2(config.getString("protectionSignNoPermMsgLine2", DEFAULT_protectionSignNoPermMsgLine2));
+		if (this.protectionSignNoPermMsgLine2.length() > 15) {
+			this.wrongValue("config.yml", "protectionSignNoPermMsgLine2", this.protectionSignNoPermMsgLine2, DEFAULT_protectionSignNoPermMsgLine2);
+			this.setProtectionSignNoPermMsgLine2(DEFAULT_protectionSignNoPermMsgLine2);
 		}
 
-		setProtectionSignNoPermMsgLine3(config.getString("protectionSignNoPermMsgLine3", DEFAULT_protectionSignNoPermMsgLine3));
-		if (getProtectionSignNoPermMsgLine3().length() > 15) {
-			wrongValue("config.yml", "protectionSignNoPermMsgLine3", getProtectionSignNoPermMsgLine3(), DEFAULT_protectionSignNoPermMsgLine3);
-			setProtectionSignNoPermMsgLine3(DEFAULT_protectionSignNoPermMsgLine3);
+		this.setProtectionSignNoPermMsgLine3(config.getString("protectionSignNoPermMsgLine3", DEFAULT_protectionSignNoPermMsgLine3));
+		if (this.protectionSignNoPermMsgLine3.length() > 15) {
+			this.wrongValue("config.yml", "protectionSignNoPermMsgLine3", this.protectionSignNoPermMsgLine3, DEFAULT_protectionSignNoPermMsgLine3);
+			this.setProtectionSignNoPermMsgLine3(DEFAULT_protectionSignNoPermMsgLine3);
 		}
 
 		// protectionSignNothingToProtectMsgLines.
-		setProtectionSignNothingToProtectMsgLine1(config.getString("protectionSignNothingToProtectMsgLine1", DEFAULT_protectionSignNothingToProtectMsgLine1));
-		if (getProtectionSignNothingToProtectMsgLine1().length() > 15) {
-			wrongValue("config.yml", "protectionSignNothingToProtectMsgLine1", getProtectionSignNothingToProtectMsgLine1(), DEFAULT_protectionSignNothingToProtectMsgLine1);
-			setProtectionSignNothingToProtectMsgLine1(DEFAULT_protectionSignNothingToProtectMsgLine1);
+		this.setProtectionSignNothingToProtectMsgLine1(config.getString("protectionSignNothingToProtectMsgLine1", DEFAULT_protectionSignNothingToProtectMsgLine1));
+		if (this.protectionSignNothingToProtectMsgLine1.length() > 15) {
+			this.wrongValue("config.yml", "protectionSignNothingToProtectMsgLine1", this.protectionSignNothingToProtectMsgLine1, DEFAULT_protectionSignNothingToProtectMsgLine1);
+			this.setProtectionSignNothingToProtectMsgLine1(DEFAULT_protectionSignNothingToProtectMsgLine1);
 		}
 
-		setProtectionSignNothingToProtectMsgLine2(config.getString("protectionSignNothingToProtectMsgLine2", DEFAULT_protectionSignNothingToProtectMsgLine2));
-		if (getProtectionSignNothingToProtectMsgLine2().length() > 15) {
-			wrongValue("config.yml", "protectionSignNothingToProtectMsgLine2", getProtectionSignNothingToProtectMsgLine2(), DEFAULT_protectionSignNothingToProtectMsgLine2);
-			setProtectionSignNothingToProtectMsgLine2(DEFAULT_protectionSignNothingToProtectMsgLine2);
+		this.setProtectionSignNothingToProtectMsgLine2(config.getString("protectionSignNothingToProtectMsgLine2", DEFAULT_protectionSignNothingToProtectMsgLine2));
+		if (this.protectionSignNothingToProtectMsgLine2.length() > 15) {
+			this.wrongValue("config.yml", "protectionSignNothingToProtectMsgLine2", this.protectionSignNothingToProtectMsgLine2, DEFAULT_protectionSignNothingToProtectMsgLine2);
+			this.setProtectionSignNothingToProtectMsgLine2(DEFAULT_protectionSignNothingToProtectMsgLine2);
 		}
 
-		setProtectionSignNothingToProtectMsgLine3(config.getString("protectionSignNothingToProtectMsgLine3", DEFAULT_protectionSignNothingToProtectMsgLine3));
-		if (getProtectionSignNothingToProtectMsgLine3().length() > 15) {
-			wrongValue("config.yml", "protectionSignNothingToProtectMsgLine3", getProtectionSignNothingToProtectMsgLine3(), DEFAULT_protectionSignNothingToProtectMsgLine3);
-			setProtectionSignNothingToProtectMsgLine3(DEFAULT_protectionSignNothingToProtectMsgLine3);
+		this.setProtectionSignNothingToProtectMsgLine3(config.getString("protectionSignNothingToProtectMsgLine3", DEFAULT_protectionSignNothingToProtectMsgLine3));
+		if (this.protectionSignNothingToProtectMsgLine3.length() > 15) {
+			this.wrongValue("config.yml", "protectionSignNothingToProtectMsgLine3", this.protectionSignNothingToProtectMsgLine3, DEFAULT_protectionSignNothingToProtectMsgLine3);
+			this.setProtectionSignNothingToProtectMsgLine3(DEFAULT_protectionSignNothingToProtectMsgLine3);
 		}
 
 		// protectionSignAlreadyProtectedMsgLines.
-		setProtectionSignAlreadyProtectedMsgLine1(config.getString("protectionSignAlreadyProtectedMsgLine1", DEFAULT_protectionSignAlreadyProtectedMsgLine1));
-		if (getProtectionSignAlreadyProtectedMsgLine1().length() > 15) {
-			wrongValue("config.yml", "protectionSignAlreadyProtectedMsgLine1", getProtectionSignAlreadyProtectedMsgLine1(), DEFAULT_protectionSignAlreadyProtectedMsgLine1);
-			setProtectionSignAlreadyProtectedMsgLine1(DEFAULT_protectionSignAlreadyProtectedMsgLine1);
+		this.setProtectionSignAlreadyProtectedMsgLine1(config.getString("protectionSignAlreadyProtectedMsgLine1", DEFAULT_protectionSignAlreadyProtectedMsgLine1));
+		if (this.protectionSignAlreadyProtectedMsgLine1.length() > 15) {
+			this.wrongValue("config.yml", "protectionSignAlreadyProtectedMsgLine1", this.protectionSignAlreadyProtectedMsgLine1, DEFAULT_protectionSignAlreadyProtectedMsgLine1);
+			this.setProtectionSignAlreadyProtectedMsgLine1(DEFAULT_protectionSignAlreadyProtectedMsgLine1);
 		}
 
-		setProtectionSignAlreadyProtectedMsgLine2(config.getString("protectionSignAlreadyProtectedMsgLine2", DEFAULT_protectionSignAlreadyProtectedMsgLine2));
-		if (getProtectionSignAlreadyProtectedMsgLine2().length() > 15) {
-			wrongValue("config.yml", "protectionSignAlreadyProtectedMsgLine2", getProtectionSignAlreadyProtectedMsgLine2(), DEFAULT_protectionSignAlreadyProtectedMsgLine2);
-			setProtectionSignAlreadyProtectedMsgLine2(DEFAULT_protectionSignAlreadyProtectedMsgLine2);
+		this.setProtectionSignAlreadyProtectedMsgLine2(config.getString("protectionSignAlreadyProtectedMsgLine2", DEFAULT_protectionSignAlreadyProtectedMsgLine2));
+		if (this.protectionSignAlreadyProtectedMsgLine2.length() > 15) {
+			this.wrongValue("config.yml", "protectionSignAlreadyProtectedMsgLine2", this.protectionSignAlreadyProtectedMsgLine2, DEFAULT_protectionSignAlreadyProtectedMsgLine2);
+			this.setProtectionSignAlreadyProtectedMsgLine2(DEFAULT_protectionSignAlreadyProtectedMsgLine2);
 		}
 
-		setProtectionSignAlreadyProtectedMsgLine3(config.getString("protectionSignAlreadyProtectedMsgLine3", DEFAULT_protectionSignAlreadyProtectedMsgLine3));
-		if (getProtectionSignAlreadyProtectedMsgLine3().length() > 15) {
-			wrongValue("config.yml", "protectionSignAlreadyProtectedMsgLine3", getProtectionSignAlreadyProtectedMsgLine3(), DEFAULT_protectionSignAlreadyProtectedMsgLine3);
-			setProtectionSignAlreadyProtectedMsgLine3(DEFAULT_protectionSignAlreadyProtectedMsgLine3);
+		this.setProtectionSignAlreadyProtectedMsgLine3(config.getString("protectionSignAlreadyProtectedMsgLine3", DEFAULT_protectionSignAlreadyProtectedMsgLine3));
+		if (this.protectionSignAlreadyProtectedMsgLine3.length() > 15) {
+			this.wrongValue("config.yml", "protectionSignAlreadyProtectedMsgLine3", this.protectionSignAlreadyProtectedMsgLine3, DEFAULT_protectionSignAlreadyProtectedMsgLine3);
+			this.setProtectionSignAlreadyProtectedMsgLine3(DEFAULT_protectionSignAlreadyProtectedMsgLine3);
 		}
 
 		// itemNetworkSignUnknownNetworkMsgLines.
-		setItemNetworkSignUnknownNetworkMsgLine1(config.getString("itemNetworkSignUnknownNetworkMsgLine1", DEFAULT_itemNetworkSignUnknownNetworkMsgLine1));
-		if (getItemNetworkSignUnknownNetworkMsgLine1().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignUnknownNetworkMsgLine1", getItemNetworkSignUnknownNetworkMsgLine1(), DEFAULT_itemNetworkSignUnknownNetworkMsgLine1);
-			setItemNetworkSignUnknownNetworkMsgLine1(DEFAULT_itemNetworkSignUnknownNetworkMsgLine1);
+		this.setItemNetworkSignUnknownNetworkMsgLine1(config.getString("itemNetworkSignUnknownNetworkMsgLine1", DEFAULT_itemNetworkSignUnknownNetworkMsgLine1));
+		if (this.itemNetworkSignUnknownNetworkMsgLine1.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignUnknownNetworkMsgLine1", this.itemNetworkSignUnknownNetworkMsgLine1, DEFAULT_itemNetworkSignUnknownNetworkMsgLine1);
+			this.setItemNetworkSignUnknownNetworkMsgLine1(DEFAULT_itemNetworkSignUnknownNetworkMsgLine1);
 		}
 
-		setItemNetworkSignUnknownNetworkMsgLine2(config.getString("itemNetworkSignUnknownNetworkMsgLine2", DEFAULT_itemNetworkSignUnknownNetworkMsgLine2));
-		if (getItemNetworkSignUnknownNetworkMsgLine2().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignUnknownNetworkMsgLine2", getItemNetworkSignUnknownNetworkMsgLine2(), DEFAULT_itemNetworkSignUnknownNetworkMsgLine2);
-			setItemNetworkSignUnknownNetworkMsgLine2(DEFAULT_itemNetworkSignUnknownNetworkMsgLine2);
+		this.setItemNetworkSignUnknownNetworkMsgLine2(config.getString("itemNetworkSignUnknownNetworkMsgLine2", DEFAULT_itemNetworkSignUnknownNetworkMsgLine2));
+		if (this.itemNetworkSignUnknownNetworkMsgLine2.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignUnknownNetworkMsgLine2", this.itemNetworkSignUnknownNetworkMsgLine2, DEFAULT_itemNetworkSignUnknownNetworkMsgLine2);
+			this.setItemNetworkSignUnknownNetworkMsgLine2(DEFAULT_itemNetworkSignUnknownNetworkMsgLine2);
 		}
 
-		setItemNetworkSignUnknownNetworkMsgLine3(config.getString("itemNetworkSignUnknownNetworkMsgLine3", DEFAULT_itemNetworkSignUnknownNetworkMsgLine3));
-		if (getItemNetworkSignUnknownNetworkMsgLine3().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignUnknownNetworkMsgLine3", getItemNetworkSignUnknownNetworkMsgLine3(), DEFAULT_itemNetworkSignUnknownNetworkMsgLine3);
-			setItemNetworkSignUnknownNetworkMsgLine3(DEFAULT_itemNetworkSignUnknownNetworkMsgLine3);
+		this.setItemNetworkSignUnknownNetworkMsgLine3(config.getString("itemNetworkSignUnknownNetworkMsgLine3", DEFAULT_itemNetworkSignUnknownNetworkMsgLine3));
+		if (this.itemNetworkSignUnknownNetworkMsgLine3.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignUnknownNetworkMsgLine3", this.itemNetworkSignUnknownNetworkMsgLine3, DEFAULT_itemNetworkSignUnknownNetworkMsgLine3);
+			this.setItemNetworkSignUnknownNetworkMsgLine3(DEFAULT_itemNetworkSignUnknownNetworkMsgLine3);
 		}
 
 		// itemNetworkSignNotAllowedMsgLines.
-		setItemNetworkSignNotAllowedMsgLine1(config.getString("itemNetworkSignNotAllowedMsgLine1", DEFAULT_itemNetworkSignNotAllowedMsgLine1));
-		if (getItemNetworkSignNotAllowedMsgLine1().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignNotAllowedMsgLine1", getItemNetworkSignNotAllowedMsgLine1(), DEFAULT_itemNetworkSignNotAllowedMsgLine1);
-			setItemNetworkSignNotAllowedMsgLine1(DEFAULT_itemNetworkSignNotAllowedMsgLine1);
+		this.setItemNetworkSignNotAllowedMsgLine1(config.getString("itemNetworkSignNotAllowedMsgLine1", DEFAULT_itemNetworkSignNotAllowedMsgLine1));
+		if (this.itemNetworkSignNotAllowedMsgLine1.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignNotAllowedMsgLine1", this.itemNetworkSignNotAllowedMsgLine1, DEFAULT_itemNetworkSignNotAllowedMsgLine1);
+			this.setItemNetworkSignNotAllowedMsgLine1(DEFAULT_itemNetworkSignNotAllowedMsgLine1);
 		}
 
-		setItemNetworkSignNotAllowedMsgLine2(config.getString("itemNetworkSignNotAllowedMsgLine2", DEFAULT_itemNetworkSignNotAllowedMsgLine2));
-		if (getItemNetworkSignNotAllowedMsgLine2().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignNotAllowedMsgLine2", getItemNetworkSignNotAllowedMsgLine2(), DEFAULT_itemNetworkSignNotAllowedMsgLine2);
-			setItemNetworkSignNotAllowedMsgLine2(DEFAULT_itemNetworkSignNotAllowedMsgLine2);
+		this.setItemNetworkSignNotAllowedMsgLine2(config.getString("itemNetworkSignNotAllowedMsgLine2", DEFAULT_itemNetworkSignNotAllowedMsgLine2));
+		if (this.itemNetworkSignNotAllowedMsgLine2.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignNotAllowedMsgLine2", this.itemNetworkSignNotAllowedMsgLine2, DEFAULT_itemNetworkSignNotAllowedMsgLine2);
+			this.setItemNetworkSignNotAllowedMsgLine2(DEFAULT_itemNetworkSignNotAllowedMsgLine2);
 		}
 
-		setItemNetworkSignNotAllowedMsgLine3(config.getString("itemNetworkSignNotAllowedMsgLine3", DEFAULT_itemNetworkSignNotAllowedMsgLine3));
-		if (getItemNetworkSignNotAllowedMsgLine3().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignNotAllowedMsgLine3", getItemNetworkSignNotAllowedMsgLine3(), DEFAULT_itemNetworkSignNotAllowedMsgLine3);
-			setItemNetworkSignNotAllowedMsgLine3(DEFAULT_itemNetworkSignNotAllowedMsgLine3);
+		this.setItemNetworkSignNotAllowedMsgLine3(config.getString("itemNetworkSignNotAllowedMsgLine3", DEFAULT_itemNetworkSignNotAllowedMsgLine3));
+		if (this.itemNetworkSignNotAllowedMsgLine3.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignNotAllowedMsgLine3", this.itemNetworkSignNotAllowedMsgLine3, DEFAULT_itemNetworkSignNotAllowedMsgLine3);
+			this.setItemNetworkSignNotAllowedMsgLine3(DEFAULT_itemNetworkSignNotAllowedMsgLine3);
 		}
 
 		// itemNetworkSignInvalidMaterialsMsgLines.
-		setItemNetworkSignInvalidMaterialsMsgLine1(config.getString("itemNetworkSignInvalidMaterialsMsgLine1", DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1));
-		if (getItemNetworkSignInvalidMaterialsMsgLine1().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignInvalidMaterialsMsgLine1", getItemNetworkSignInvalidMaterialsMsgLine1(), DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1);
-			setItemNetworkSignInvalidMaterialsMsgLine1(DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1);
+		this.setItemNetworkSignInvalidMaterialsMsgLine1(config.getString("itemNetworkSignInvalidMaterialsMsgLine1", DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1));
+		if (this.itemNetworkSignInvalidMaterialsMsgLine1.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignInvalidMaterialsMsgLine1", this.itemNetworkSignInvalidMaterialsMsgLine1, DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1);
+			this.setItemNetworkSignInvalidMaterialsMsgLine1(DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1);
 		}
 
-		setItemNetworkSignInvalidMaterialsMsgLine2(config.getString("itemNetworkSignInvalidMaterialsMsgLine2", DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2));
-		if (getItemNetworkSignInvalidMaterialsMsgLine2().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignInvalidMaterialsMsgLine2", getItemNetworkSignInvalidMaterialsMsgLine2(), DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2);
-			setItemNetworkSignInvalidMaterialsMsgLine2(DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2);
+		this.setItemNetworkSignInvalidMaterialsMsgLine2(config.getString("itemNetworkSignInvalidMaterialsMsgLine2", DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2));
+		if (this.itemNetworkSignInvalidMaterialsMsgLine2.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignInvalidMaterialsMsgLine2", this.itemNetworkSignInvalidMaterialsMsgLine2, DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2);
+			this.setItemNetworkSignInvalidMaterialsMsgLine2(DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2);
 		}
 
-		setItemNetworkSignInvalidMaterialsMsgLine3(config.getString("itemNetworkSignInvalidMaterialsMsgLine3", DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3));
-		if (getItemNetworkSignInvalidMaterialsMsgLine3().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignInvalidMaterialsMsgLine3", getItemNetworkSignInvalidMaterialsMsgLine3(), DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3);
-			setItemNetworkSignInvalidMaterialsMsgLine3(DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3);
+		this.setItemNetworkSignInvalidMaterialsMsgLine3(config.getString("itemNetworkSignInvalidMaterialsMsgLine3", DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3));
+		if (this.itemNetworkSignInvalidMaterialsMsgLine3.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignInvalidMaterialsMsgLine3", this.itemNetworkSignInvalidMaterialsMsgLine3, DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3);
+			this.setItemNetworkSignInvalidMaterialsMsgLine3(DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3);
 		}
 
 		// itemNetworkSignTooFarMsgLines.
-		setItemNetworkSignTooFarMsgLine1(config.getString("itemNetworkSignTooFarMsgLine1", DEFAULT_itemNetworkSignTooFarMsgLine1));
-		if (getItemNetworkSignTooFarMsgLine1().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignTooFarMsgLine1", getItemNetworkSignTooFarMsgLine1(), DEFAULT_itemNetworkSignTooFarMsgLine1);
-			setItemNetworkSignTooFarMsgLine1(DEFAULT_itemNetworkSignTooFarMsgLine1);
+		this.setItemNetworkSignTooFarMsgLine1(config.getString("itemNetworkSignTooFarMsgLine1", DEFAULT_itemNetworkSignTooFarMsgLine1));
+		if (this.itemNetworkSignTooFarMsgLine1.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignTooFarMsgLine1", this.itemNetworkSignTooFarMsgLine1, DEFAULT_itemNetworkSignTooFarMsgLine1);
+			this.setItemNetworkSignTooFarMsgLine1(DEFAULT_itemNetworkSignTooFarMsgLine1);
 		}
 
-		setItemNetworkSignTooFarMsgLine2(config.getString("itemNetworkSignTooFarMsgLine2", DEFAULT_itemNetworkSignTooFarMsgLine2));
-		if (getItemNetworkSignTooFarMsgLine2().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignTooFarMsgLine2", getItemNetworkSignTooFarMsgLine2(), DEFAULT_itemNetworkSignTooFarMsgLine2);
-			setItemNetworkSignTooFarMsgLine2(DEFAULT_itemNetworkSignTooFarMsgLine2);
+		this.setItemNetworkSignTooFarMsgLine2(config.getString("itemNetworkSignTooFarMsgLine2", DEFAULT_itemNetworkSignTooFarMsgLine2));
+		if (this.itemNetworkSignTooFarMsgLine2.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignTooFarMsgLine2", this.itemNetworkSignTooFarMsgLine2, DEFAULT_itemNetworkSignTooFarMsgLine2);
+			this.setItemNetworkSignTooFarMsgLine2(DEFAULT_itemNetworkSignTooFarMsgLine2);
 		}
 
-		setItemNetworkSignTooFarMsgLine3(config.getString("itemNetworkSignTooFarMsgLine3", DEFAULT_itemNetworkSignTooFarMsgLine3));
-		if (getItemNetworkSignTooFarMsgLine3().length() > 15) {
-			wrongValue("config.yml", "itemNetworkSignTooFarMsgLine3", getItemNetworkSignTooFarMsgLine3(), DEFAULT_itemNetworkSignTooFarMsgLine3);
-			setItemNetworkSignTooFarMsgLine3(DEFAULT_itemNetworkSignTooFarMsgLine3);
+		this.setItemNetworkSignTooFarMsgLine3(config.getString("itemNetworkSignTooFarMsgLine3", DEFAULT_itemNetworkSignTooFarMsgLine3));
+		if (this.itemNetworkSignTooFarMsgLine3.length() > 15) {
+			this.wrongValue("config.yml", "itemNetworkSignTooFarMsgLine3", this.itemNetworkSignTooFarMsgLine3, DEFAULT_itemNetworkSignTooFarMsgLine3);
+			this.setItemNetworkSignTooFarMsgLine3(DEFAULT_itemNetworkSignTooFarMsgLine3);
 		}
 
 		// ##################
@@ -315,17 +313,13 @@ public class Config extends AbstractConfig<NGeneral> {
 
 		// broadCastOnAfk. Default: true.
 		// Possible values: true, false
-		setBroadCastOnAfk(config.getBoolean("broadCastOnAfk", true));
+		this.setBroadCastOnAfk(config.getBoolean("broadCastOnAfk", true));
 
 		// broadCastOnBusy. Default: true.
 		// Possible values: true, false
-		setBroadCastOnBusy(config.getBoolean("broadCastOnBusy", true));
-
+		this.setBroadCastOnBusy(config.getBoolean("broadCastOnBusy", true));
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString()
-	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
@@ -358,40 +352,40 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("# followed by a bunch of spaces to hide it.\n");
 		content.append("# You can specify different lines using the ## separator.\n");
 		content.append("# For example, this is the perfect place to use Rei's Minimap codes.\n");
-		content.append("initialMessage: " + getInitialMessage() + "\n\n");
+		content.append("initialMessage: " + this.initialMessage + "\n\n");
 
 		// Auto AFK Feature
 		content.append("# Defines if the AutoAfk feature is enabled or not\n");
-		content.append("autoAfkFeature: " + hasAutoAfkFeature() + "\n\n");
+		content.append("autoAfkFeature: " + this.hasAutoAfkFeature() + "\n\n");
 
 		// Fly Mode Feature
 		content.append("# Defines if the FlyMode feature is enabled or not\n");
-		content.append("flyModeFeature: " + hasFlyModeFeature() + "\n\n");
+		content.append("flyModeFeature: " + this.hasFlyModeFeature() + "\n\n");
 
 		// God Mode Feature
 		content.append("# Defines if the GodMode feature is enabled or not\n");
-		content.append("godModeFeature: " + hasGodModeFeature() + "\n\n");
+		content.append("godModeFeature: " + this.hasGodModeFeature() + "\n\n");
 
 		// Item Network Feature
 		content.append("# Defines if the ItemNetwork feature is enabled or not\n");
-		content.append("itemNetworkFeature: " + hasItemNetworkFeature() + "\n\n");
+		content.append("itemNetworkFeature: " + this.hasItemNetworkFeature() + "\n\n");
 
 		// Protection Sign Feature
 		content.append("# Defines if the ProtectionSign feature is enabled or not\n");
-		content.append("protectionSignFeature: " + hasProtectionSignFeature() + "\n\n");
+		content.append("protectionSignFeature: " + this.hasProtectionSignFeature() + "\n\n");
 
 		// Protection Sign Feature
 		content.append("# Defines if the Spy Mode feature is enabled or not\n");
-		content.append("spyModeFeature: " + hasSpyModeFeature() + "\n\n");
+		content.append("spyModeFeature: " + this.hasSpyModeFeature() + "\n\n");
 
 		// Auto AFK Delay
 		content.append("# Time before a player is set to auto-afk\n");
-		content.append("autoAfkDelay: " + getAutoAfkDelay() + "\n\n");
+		content.append("autoAfkDelay: " + this.autoAfkDelay + "\n\n");
 
 		// Item Network Max Distance
 		content.append("# Maximum allowed distance between an Emitter sign and any\n");
 		content.append("# Receiver sign of the same network\n");
-		content.append("itemNetworkMaxDistance: " + getItemNetworkMaxDistance() + "\n\n");
+		content.append("itemNetworkMaxDistance: " + this.itemNetworkMaxDistance + "\n\n");
 
 		// No Permission for Protection Signs message
 		content.append("# Message written on Error signs when player is not allowed to\n");
@@ -400,9 +394,9 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("#   \"" + DEFAULT_protectionSignNoPermMsgLine1 + "\"\n");
 		content.append("#   \"" + DEFAULT_protectionSignNoPermMsgLine2 + "\"\n");
 		content.append("#   \"" + DEFAULT_protectionSignNoPermMsgLine3 + "\"\n");
-		content.append("protectionSignNoPermMsgLine1: \"" + getProtectionSignNoPermMsgLine1() + "\"\n");
-		content.append("protectionSignNoPermMsgLine2: \"" + getProtectionSignNoPermMsgLine2() + "\"\n");
-		content.append("protectionSignNoPermMsgLine3: \"" + getProtectionSignNoPermMsgLine3() + "\"\n\n");
+		content.append("protectionSignNoPermMsgLine1: \"" + this.protectionSignNoPermMsgLine1 + "\"\n");
+		content.append("protectionSignNoPermMsgLine2: \"" + this.protectionSignNoPermMsgLine2 + "\"\n");
+		content.append("protectionSignNoPermMsgLine3: \"" + this.protectionSignNoPermMsgLine3 + "\"\n\n");
 
 		// Nothing to protect Protection Signs message
 		content.append("# Message written on Error signs when there is not valid 'protectable'\n");
@@ -411,9 +405,9 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("#   \"" + DEFAULT_protectionSignNothingToProtectMsgLine1 + "\"\n");
 		content.append("#   \"" + DEFAULT_protectionSignNothingToProtectMsgLine2 + "\"\n");
 		content.append("#   \"" + DEFAULT_protectionSignNothingToProtectMsgLine3 + "\"\n");
-		content.append("protectionSignNothingToProtectMsgLine1: \"" + getProtectionSignNothingToProtectMsgLine1() + "\"\n");
-		content.append("protectionSignNothingToProtectMsgLine2: \"" + getProtectionSignNothingToProtectMsgLine2() + "\"\n");
-		content.append("protectionSignNothingToProtectMsgLine3: \"" + getProtectionSignNothingToProtectMsgLine3() + "\"\n\n");
+		content.append("protectionSignNothingToProtectMsgLine1: \"" + this.protectionSignNothingToProtectMsgLine1 + "\"\n");
+		content.append("protectionSignNothingToProtectMsgLine2: \"" + this.protectionSignNothingToProtectMsgLine2 + "\"\n");
+		content.append("protectionSignNothingToProtectMsgLine3: \"" + this.protectionSignNothingToProtectMsgLine3 + "\"\n\n");
 
 		// Already protected Protection Signs message
 		content.append("# Message written on Error signs when a block that would be protected by the\n");
@@ -422,9 +416,9 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("#   \"" + DEFAULT_protectionSignAlreadyProtectedMsgLine1 + "\"\n");
 		content.append("#   \"" + DEFAULT_protectionSignAlreadyProtectedMsgLine2 + "\"\n");
 		content.append("#   \"" + DEFAULT_protectionSignAlreadyProtectedMsgLine3 + "\"\n");
-		content.append("protectionSignAlreadyProtectedMsgLine1: \"" + getProtectionSignAlreadyProtectedMsgLine1() + "\"\n");
-		content.append("protectionSignAlreadyProtectedMsgLine2: \"" + getProtectionSignAlreadyProtectedMsgLine2() + "\"\n");
-		content.append("protectionSignAlreadyProtectedMsgLine3: \"" + getProtectionSignAlreadyProtectedMsgLine3() + "\"\n\n");
+		content.append("protectionSignAlreadyProtectedMsgLine1: \"" + this.protectionSignAlreadyProtectedMsgLine1 + "\"\n");
+		content.append("protectionSignAlreadyProtectedMsgLine2: \"" + this.protectionSignAlreadyProtectedMsgLine2 + "\"\n");
+		content.append("protectionSignAlreadyProtectedMsgLine3: \"" + this.protectionSignAlreadyProtectedMsgLine3 + "\"\n\n");
 
 		// Unknown Network Item Network Signs message
 		content.append("# Message written on Error signs when the Network Name provided on the sign does not\n");
@@ -433,9 +427,9 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("#   \"" + DEFAULT_itemNetworkSignUnknownNetworkMsgLine1 + "\"\n");
 		content.append("#   \"" + DEFAULT_itemNetworkSignUnknownNetworkMsgLine2 + "\"\n");
 		content.append("#   \"" + DEFAULT_itemNetworkSignUnknownNetworkMsgLine3 + "\"\n");
-		content.append("itemNetworkSignUnknownNetworkMsgLine1: \"" + getItemNetworkSignUnknownNetworkMsgLine1() + "\"\n");
-		content.append("itemNetworkSignUnknownNetworkMsgLine2: \"" + getItemNetworkSignUnknownNetworkMsgLine2() + "\"\n");
-		content.append("itemNetworkSignUnknownNetworkMsgLine3: \"" + getItemNetworkSignUnknownNetworkMsgLine3() + "\"\n\n");
+		content.append("itemNetworkSignUnknownNetworkMsgLine1: \"" + this.itemNetworkSignUnknownNetworkMsgLine1 + "\"\n");
+		content.append("itemNetworkSignUnknownNetworkMsgLine2: \"" + this.itemNetworkSignUnknownNetworkMsgLine2 + "\"\n");
+		content.append("itemNetworkSignUnknownNetworkMsgLine3: \"" + this.itemNetworkSignUnknownNetworkMsgLine3 + "\"\n\n");
 
 		// Not Allowed Item Network Signs message
 		content.append("# Message written on Error signs when the User is not owner of the provided\n");
@@ -444,9 +438,9 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("#   \"" + DEFAULT_itemNetworkSignNotAllowedMsgLine1 + "\"\n");
 		content.append("#   \"" + DEFAULT_itemNetworkSignNotAllowedMsgLine2 + "\"\n");
 		content.append("#   \"" + DEFAULT_itemNetworkSignNotAllowedMsgLine3 + "\"\n");
-		content.append("itemNetworkSignNotAllowedMsgLine1: \"" + getItemNetworkSignNotAllowedMsgLine1() + "\"\n");
-		content.append("itemNetworkSignNotAllowedMsgLine2: \"" + getItemNetworkSignNotAllowedMsgLine2() + "\"\n");
-		content.append("itemNetworkSignNotAllowedMsgLine3: \"" + getItemNetworkSignNotAllowedMsgLine3() + "\"\n\n");
+		content.append("itemNetworkSignNotAllowedMsgLine1: \"" + this.itemNetworkSignNotAllowedMsgLine1 + "\"\n");
+		content.append("itemNetworkSignNotAllowedMsgLine2: \"" + this.itemNetworkSignNotAllowedMsgLine2 + "\"\n");
+		content.append("itemNetworkSignNotAllowedMsgLine3: \"" + this.itemNetworkSignNotAllowedMsgLine3 + "\"\n\n");
 
 		// Invalid Materials Item Network Signs message
 		content.append("# Message written on Error signs when the 3rd line defining\n");
@@ -455,9 +449,9 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("#   \"" + DEFAULT_itemNetworkSignInvalidMaterialsMsgLine1 + "\"\n");
 		content.append("#   \"" + DEFAULT_itemNetworkSignInvalidMaterialsMsgLine2 + "\"\n");
 		content.append("#   \"" + DEFAULT_itemNetworkSignInvalidMaterialsMsgLine3 + "\"\n");
-		content.append("itemNetworkSignInvalidMaterialsMsgLine1: \"" + getItemNetworkSignInvalidMaterialsMsgLine1() + "\"\n");
-		content.append("itemNetworkSignInvalidMaterialsMsgLine2: \"" + getItemNetworkSignInvalidMaterialsMsgLine2() + "\"\n");
-		content.append("itemNetworkSignInvalidMaterialsMsgLine3: \"" + getItemNetworkSignInvalidMaterialsMsgLine3() + "\"\n\n");
+		content.append("itemNetworkSignInvalidMaterialsMsgLine1: \"" + this.itemNetworkSignInvalidMaterialsMsgLine1 + "\"\n");
+		content.append("itemNetworkSignInvalidMaterialsMsgLine2: \"" + this.itemNetworkSignInvalidMaterialsMsgLine2 + "\"\n");
+		content.append("itemNetworkSignInvalidMaterialsMsgLine3: \"" + this.itemNetworkSignInvalidMaterialsMsgLine3 + "\"\n\n");
 
 		// Too Far Item Network Signs message
 		content.append("# Message written on Error signs when the User tries to create a\n");
@@ -466,9 +460,9 @@ public class Config extends AbstractConfig<NGeneral> {
 		content.append("#   \"" + DEFAULT_itemNetworkSignTooFarMsgLine1 + "\"\n");
 		content.append("#   \"" + DEFAULT_itemNetworkSignTooFarMsgLine2 + "\"\n");
 		content.append("#   \"" + DEFAULT_itemNetworkSignTooFarMsgLine3 + "\"\n");
-		content.append("itemNetworkSignTooFarMsgLine1: \"" + getItemNetworkSignTooFarMsgLine1() + "\"\n");
-		content.append("itemNetworkSignTooFarMsgLine2: \"" + getItemNetworkSignTooFarMsgLine2() + "\"\n");
-		content.append("itemNetworkSignTooFarMsgLine3: \"" + getItemNetworkSignTooFarMsgLine3() + "\"\n\n");
+		content.append("itemNetworkSignTooFarMsgLine1: \"" + this.itemNetworkSignTooFarMsgLine1 + "\"\n");
+		content.append("itemNetworkSignTooFarMsgLine2: \"" + this.itemNetworkSignTooFarMsgLine2 + "\"\n");
+		content.append("itemNetworkSignTooFarMsgLine3: \"" + this.itemNetworkSignTooFarMsgLine3 + "\"\n\n");
 
 		// ##################
 		// ## Misc options ##
@@ -484,11 +478,11 @@ public class Config extends AbstractConfig<NGeneral> {
 
 		// Broadcast on AFK
 		content.append("# Defines if we broadcast a message when a player changes his AFK state\n");
-		content.append("broadCastOnAfk: " + hasBroadCastOnAfk() + "\n\n");
+		content.append("broadCastOnAfk: " + this.hasBroadCastOnAfk() + "\n\n");
 
 		// Broadcast on BUSY
 		content.append("# Defines if we broadcast a message when a player changes his BUSY state\n");
-		content.append("broadCastOnBusy: " + hasBroadCastOnBusy() + "\n\n");
+		content.append("broadCastOnBusy: " + this.hasBroadCastOnBusy() + "\n\n");
 
 		return content.toString();
 	}
@@ -496,7 +490,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	// Getters and Setters for config values
 
 	public boolean hasAutoAfkFeature() {
-		return autoAfkFeature;
+		return this.autoAfkFeature;
 	}
 
 	public void setAutoAfkFeature(final boolean autoAfkFeature) {
@@ -504,7 +498,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public boolean hasFlyModeFeature() {
-		return flyModeFeature;
+		return this.flyModeFeature;
 	}
 
 	public void setFlyModeFeature(final boolean flyModeFeature) {
@@ -512,7 +506,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public boolean hasGodModeFeature() {
-		return godModeFeature;
+		return this.godModeFeature;
 	}
 
 	public void setGodModeFeature(final boolean godModeFeature) {
@@ -520,7 +514,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public boolean hasItemNetworkFeature() {
-		return itemNetworkFeature;
+		return this.itemNetworkFeature;
 	}
 
 	public void setItemNetworkFeature(final boolean itemNetworkFeature) {
@@ -528,7 +522,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public boolean hasProtectionSignFeature() {
-		return protectionSignFeature;
+		return this.protectionSignFeature;
 	}
 
 	public void setProtectionSignFeature(final boolean protectionSignFeature) {
@@ -536,7 +530,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public boolean hasSpyModeFeature() {
-		return spyModeFeature;
+		return this.spyModeFeature;
 	}
 
 	public void setSpyModeFeature(final boolean spyModeFeature) {
@@ -544,7 +538,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public int getAutoAfkDelay() {
-		return autoAfkDelay;
+		return this.autoAfkDelay;
 	}
 
 	public void setAutoAfkDelay(final int autoAfkDelay) {
@@ -552,7 +546,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public int getItemNetworkMaxDistance() {
-		return itemNetworkMaxDistance;
+		return this.itemNetworkMaxDistance;
 	}
 
 	public void setItemNetworkMaxDistance(final int itemNetworkMaxDistance) {
@@ -560,7 +554,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public boolean hasBroadCastOnAfk() {
-		return broadCastOnAfk;
+		return this.broadCastOnAfk;
 	}
 
 	public void setBroadCastOnAfk(final boolean broadCastOnAfk) {
@@ -568,7 +562,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public boolean hasBroadCastOnBusy() {
-		return broadCastOnBusy;
+		return this.broadCastOnBusy;
 	}
 
 	public void setBroadCastOnBusy(final boolean broadCastOnBusy) {
@@ -576,7 +570,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getProtectionSignNoPermMsgLine1() {
-		return protectionSignNoPermMsgLine1;
+		return this.protectionSignNoPermMsgLine1;
 	}
 
 	public void setProtectionSignNoPermMsgLine1(final String protectionSignNoPermMsgLine1) {
@@ -584,7 +578,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getProtectionSignNoPermMsgLine2() {
-		return protectionSignNoPermMsgLine2;
+		return this.protectionSignNoPermMsgLine2;
 	}
 
 	public void setProtectionSignNoPermMsgLine2(final String protectionSignNoPermMsgLine2) {
@@ -592,7 +586,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getProtectionSignNoPermMsgLine3() {
-		return protectionSignNoPermMsgLine3;
+		return this.protectionSignNoPermMsgLine3;
 	}
 
 	public void setProtectionSignNoPermMsgLine3(final String protectionSignNoPermMsgLine3) {
@@ -600,7 +594,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getProtectionSignNothingToProtectMsgLine1() {
-		return protectionSignNothingToProtectMsgLine1;
+		return this.protectionSignNothingToProtectMsgLine1;
 	}
 
 	public void setProtectionSignNothingToProtectMsgLine1(final String protectionSignNothingToProtectMsgLine1) {
@@ -608,7 +602,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getProtectionSignNothingToProtectMsgLine2() {
-		return protectionSignNothingToProtectMsgLine2;
+		return this.protectionSignNothingToProtectMsgLine2;
 	}
 
 	public void setProtectionSignNothingToProtectMsgLine2(final String protectionSignNothingToProtectMsgLine2) {
@@ -616,7 +610,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getProtectionSignNothingToProtectMsgLine3() {
-		return protectionSignNothingToProtectMsgLine3;
+		return this.protectionSignNothingToProtectMsgLine3;
 	}
 
 	public void setProtectionSignNothingToProtectMsgLine3(final String protectionSignNothingToProtectMsgLine3) {
@@ -624,7 +618,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getProtectionSignAlreadyProtectedMsgLine1() {
-		return protectionSignAlreadyProtectedMsgLine1;
+		return this.protectionSignAlreadyProtectedMsgLine1;
 	}
 
 	public void setProtectionSignAlreadyProtectedMsgLine1(final String protectionSignAlreadyProtectedMsgLine1) {
@@ -632,7 +626,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getProtectionSignAlreadyProtectedMsgLine2() {
-		return protectionSignAlreadyProtectedMsgLine2;
+		return this.protectionSignAlreadyProtectedMsgLine2;
 	}
 
 	public void setProtectionSignAlreadyProtectedMsgLine2(final String protectionSignAlreadyProtectedMsgLine2) {
@@ -640,7 +634,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getProtectionSignAlreadyProtectedMsgLine3() {
-		return protectionSignAlreadyProtectedMsgLine3;
+		return this.protectionSignAlreadyProtectedMsgLine3;
 	}
 
 	public void setProtectionSignAlreadyProtectedMsgLine3(final String protectionSignAlreadyProtectedMsgLine3) {
@@ -648,7 +642,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getInitialMessage() {
-		return initialMessage;
+		return this.initialMessage;
 	}
 
 	public void setInitialMessage(final String initialMessage) {
@@ -656,7 +650,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignInvalidMaterialsMsgLine1() {
-		return itemNetworkSignInvalidMaterialsMsgLine1;
+		return this.itemNetworkSignInvalidMaterialsMsgLine1;
 	}
 
 	public void setItemNetworkSignInvalidMaterialsMsgLine1(final String itemNetworkSignInvalidMaterialsMsgLine1) {
@@ -664,7 +658,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignInvalidMaterialsMsgLine2() {
-		return itemNetworkSignInvalidMaterialsMsgLine2;
+		return this.itemNetworkSignInvalidMaterialsMsgLine2;
 	}
 
 	public void setItemNetworkSignInvalidMaterialsMsgLine2(final String itemNetworkSignInvalidMaterialsMsgLine2) {
@@ -672,7 +666,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignInvalidMaterialsMsgLine3() {
-		return itemNetworkSignInvalidMaterialsMsgLine3;
+		return this.itemNetworkSignInvalidMaterialsMsgLine3;
 	}
 
 	public void setItemNetworkSignInvalidMaterialsMsgLine3(final String itemNetworkSignInvalidMaterialsMsgLine3) {
@@ -680,7 +674,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignTooFarMsgLine1() {
-		return itemNetworkSignTooFarMsgLine1;
+		return this.itemNetworkSignTooFarMsgLine1;
 	}
 
 	public void setItemNetworkSignTooFarMsgLine1(final String itemNetworkSignTooFarMsgLine1) {
@@ -688,7 +682,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignTooFarMsgLine2() {
-		return itemNetworkSignTooFarMsgLine2;
+		return this.itemNetworkSignTooFarMsgLine2;
 	}
 
 	public void setItemNetworkSignTooFarMsgLine2(final String itemNetworkSignTooFarMsgLine2) {
@@ -696,7 +690,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignTooFarMsgLine3() {
-		return itemNetworkSignTooFarMsgLine3;
+		return this.itemNetworkSignTooFarMsgLine3;
 	}
 
 	public void setItemNetworkSignTooFarMsgLine3(final String itemNetworkSignTooFarMsgLine3) {
@@ -704,7 +698,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignNotAllowedMsgLine1() {
-		return itemNetworkSignNotAllowedMsgLine1;
+		return this.itemNetworkSignNotAllowedMsgLine1;
 	}
 
 	public void setItemNetworkSignNotAllowedMsgLine1(final String itemNetworkSignNotAllowedMsgLine1) {
@@ -712,7 +706,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignNotAllowedMsgLine2() {
-		return itemNetworkSignNotAllowedMsgLine2;
+		return this.itemNetworkSignNotAllowedMsgLine2;
 	}
 
 	public void setItemNetworkSignNotAllowedMsgLine2(final String itemNetworkSignNotAllowedMsgLine2) {
@@ -720,7 +714,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignNotAllowedMsgLine3() {
-		return itemNetworkSignNotAllowedMsgLine3;
+		return this.itemNetworkSignNotAllowedMsgLine3;
 	}
 
 	public void setItemNetworkSignNotAllowedMsgLine3(final String itemNetworkSignNotAllowedMsgLine3) {
@@ -728,7 +722,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignUnknownNetworkMsgLine1() {
-		return itemNetworkSignUnknownNetworkMsgLine1;
+		return this.itemNetworkSignUnknownNetworkMsgLine1;
 	}
 
 	public void setItemNetworkSignUnknownNetworkMsgLine1(final String itemNetworkSignUnknownNetworkMsgLine1) {
@@ -736,7 +730,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignUnknownNetworkMsgLine2() {
-		return itemNetworkSignUnknownNetworkMsgLine2;
+		return this.itemNetworkSignUnknownNetworkMsgLine2;
 	}
 
 	public void setItemNetworkSignUnknownNetworkMsgLine2(final String itemNetworkSignUnknownNetworkMsgLine2) {
@@ -744,7 +738,7 @@ public class Config extends AbstractConfig<NGeneral> {
 	}
 
 	public String getItemNetworkSignUnknownNetworkMsgLine3() {
-		return itemNetworkSignUnknownNetworkMsgLine3;
+		return this.itemNetworkSignUnknownNetworkMsgLine3;
 	}
 
 	public void setItemNetworkSignUnknownNetworkMsgLine3(final String itemNetworkSignUnknownNetworkMsgLine3) {

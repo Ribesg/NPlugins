@@ -15,68 +15,66 @@ import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ncore.util.inventory.EnchantmentUtil;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altars;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+
 public class Config extends AbstractConfig<NEnchantingEgg> {
 
-	private int                       minimumDistanceBetweenTwoAltars;
-	private double                    repairBoostMultiplier;
-	private double                    enchantmentBoostMultiplier;
-	private Map<Enchantment, Integer> enchantmentsMaxLevels;
+	private       int                       minimumDistanceBetweenTwoAltars;
+	private       double                    repairBoostMultiplier;
+	private       double                    enchantmentBoostMultiplier;
+	private final Map<Enchantment, Integer> enchantmentsMaxLevels;
 
 	private final Altars altars;
 
 	public Config(final NEnchantingEgg instance) {
 		super(instance);
 
-		altars = instance.getAltars();
+		this.altars = instance.getAltars();
 
-		setMinimumDistanceBetweenTwoAltars(500);
-		setRepairBoostMultiplier(1.0);
-		setEnchantmentBoostMultiplier(1.0);
+		this.setMinimumDistanceBetweenTwoAltars(500);
+		this.setRepairBoostMultiplier(1.0);
+		this.setEnchantmentBoostMultiplier(1.0);
 
-		enchantmentsMaxLevels = new HashMap<>();
+		this.enchantmentsMaxLevels = new HashMap<>();
 		for (final Enchantment enchantment : Enchantment.values()) {
-			enchantmentsMaxLevels.put(enchantment, 10);
+			this.enchantmentsMaxLevels.put(enchantment, 10);
 		}
 	}
 
-	/**
-	 * @see AbstractConfig#handleValues(YamlConfiguration)
-	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
-		plugin.entering(getClass(), "handleValues");
+		this.plugin.entering(this.getClass(), "handleValues");
 
 		// minimumDistanceBetweenTwoAltars. Default: 500.
 		// Possible values: Positive integer >= 35
-		setMinimumDistanceBetweenTwoAltars(config.getInt("minimumDistanceBetweenTwoAltars", 500));
-		if (getMinimumDistanceBetweenTwoAltars() < 35) {
-			wrongValue("config.yml", "minimumDistanceBetweenTwoAltars", getMinimumDistanceBetweenTwoAltars(), 500);
-			setMinimumDistanceBetweenTwoAltars(500);
+		this.setMinimumDistanceBetweenTwoAltars(config.getInt("minimumDistanceBetweenTwoAltars", 500));
+		if (this.minimumDistanceBetweenTwoAltars < 35) {
+			this.wrongValue("config.yml", "minimumDistanceBetweenTwoAltars", this.minimumDistanceBetweenTwoAltars, 500);
+			this.setMinimumDistanceBetweenTwoAltars(500);
 		}
 
 		// repairBoostMultiplier. Default: 1.0.
 		// Possible values: Positive double
-		setRepairBoostMultiplier(config.getDouble("repairBoostMultiplier", 1.0));
-		if (getRepairBoostMultiplier() <= 0.0) {
-			wrongValue("config.yml", "repairBoostMultiplier", getRepairBoostMultiplier(), 1.0);
-			setRepairBoostMultiplier(1.0);
+		this.setRepairBoostMultiplier(config.getDouble("repairBoostMultiplier", 1.0));
+		if (this.repairBoostMultiplier <= 0.0) {
+			this.wrongValue("config.yml", "repairBoostMultiplier", this.repairBoostMultiplier, 1.0);
+			this.setRepairBoostMultiplier(1.0);
 		}
 
 		// enchantmentBoostMultiplier. Default: 1.0.
 		// Possible values: Positive double
-		setEnchantmentBoostMultiplier(config.getDouble("enchantmentBoostMultiplier", 1.0));
-		if (getEnchantmentBoostMultiplier() <= 0.0) {
-			wrongValue("config.yml", "enchantmentBoostMultiplier", getEnchantmentBoostMultiplier(), 1.0);
-			setEnchantmentBoostMultiplier(1.0);
+		this.setEnchantmentBoostMultiplier(config.getDouble("enchantmentBoostMultiplier", 1.0));
+		if (this.enchantmentBoostMultiplier <= 0.0) {
+			this.wrongValue("config.yml", "enchantmentBoostMultiplier", this.enchantmentBoostMultiplier, 1.0);
+			this.setEnchantmentBoostMultiplier(1.0);
 		}
 
 		// enchantmentMaxLevels.
@@ -86,11 +84,11 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 				final int level = section.getInt(key, 10);
 				final Enchantment enchantment = EnchantmentUtil.getEnchantment(key);
 				if (enchantment == null) {
-					plugin.error(Level.WARNING, "Ignored unknown enchantment name or id: " + key);
+					this.plugin.error(Level.WARNING, "Ignored unknown enchantment name or id: " + key);
 				} else if (level > 10) {
-					plugin.error(Level.WARNING, "Ignored too high level for enchantment '" + key + "': " + level);
+					this.plugin.error(Level.WARNING, "Ignored too high level for enchantment '" + key + "': " + level);
 				} else {
-					enchantmentsMaxLevels.put(enchantment, level);
+					this.enchantmentsMaxLevels.put(enchantment, level);
 				}
 			}
 		}
@@ -100,32 +98,29 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 			for (final String s : list) {
 				final NLocation loc = NLocation.toNLocation(s);
 				if (loc == null) {
-					plugin.error("Incorrect altar location (Malformed): \"" + s + "\"");
+					this.plugin.error("Incorrect altar location (Malformed): \"" + s + '"');
 					break;
 				}
-				final Altar a = new Altar(plugin, loc);
+				final Altar a = new Altar(this.plugin, loc);
 				if (a.getCenterLocation().getWorld() == null) {
-					plugin.error("Incorrect altar location (Unknown world '" + loc.getWorldName() + "'): \"" + s + "\"");
-					plugin.error("Has this world been disabled?");
+					this.plugin.error("Incorrect altar location (Unknown world '" + loc.getWorldName() + "'): \"" + s + '"');
+					this.plugin.error("Has this world been disabled?");
 					break;
-				} else if (!altars.canAdd(a, getMinimumDistanceBetweenTwoAltars())) {
-					plugin.error("Incorrect altar location (Too close): \"" + s + "\"");
+				} else if (!this.altars.canAdd(a, this.minimumDistanceBetweenTwoAltars)) {
+					this.plugin.error("Incorrect altar location (Too close): \"" + s + '"');
 					break;
 				} else if (a.isInactiveAltarValid()) {
-					altars.add(a);
+					this.altars.add(a);
 				}
 			}
 		}
 
-		plugin.exiting(getClass(), "handleValues");
+		this.plugin.exiting(this.getClass(), "handleValues");
 	}
 
-	/**
-	 * @see AbstractConfig#getConfigString()
-	 */
 	@Override
 	protected String getConfigString() {
-		plugin.entering(getClass(), "getConfigString");
+		this.plugin.entering(this.getClass(), "getConfigString");
 
 		final StringBuilder content = new StringBuilder();
 		final FrameBuilder frame;
@@ -142,19 +137,19 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		// Minimum distance between 2 altars
 		content.append("# The minimum distance between 2 altars. Default: 500\n");
 		content.append("# Note: You can't use a value under 35.\n");
-		content.append("minimumDistanceBetweenTwoAltars: " + getMinimumDistanceBetweenTwoAltars() + "\n\n");
+		content.append("minimumDistanceBetweenTwoAltars: " + this.minimumDistanceBetweenTwoAltars + "\n\n");
 
 		// Repair boost multiplier
 		content.append("# The coefficient applied to durability boost on repair. Default: 1.0\n");
 		content.append("# Note: You can't use a value equals to or under 0.0\n");
-		content.append("repairBoostMultiplier: " + getRepairBoostMultiplier() + "\n\n");
+		content.append("repairBoostMultiplier: " + this.repairBoostMultiplier + "\n\n");
 
 		// Enchantment boost multiplier
 		content.append("# The coefficient applied to probabilities of enchantment boost. Default: 1.0\n");
 		content.append("# Note: You can't use a value equals to or under 0.0, and you may prefer\n");
 		content.append("#       to use values close to 1 to prevent breaking everything.\n");
 		content.append("#       Example: 1.1 is an IMPORTANT increase!\n");
-		content.append("enchantmentBoostMultiplier: " + getEnchantmentBoostMultiplier() + "\n\n");
+		content.append("enchantmentBoostMultiplier: " + this.enchantmentBoostMultiplier + "\n\n");
 
 		// Enchantments max levels
 		content.append("# Maximum allowed levels for each enchantment.\n");
@@ -162,23 +157,23 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 		content.append("# Notes: - Any Enchantment not specified here has a max level of 10.\n");
 		content.append("#        - Any value greater than 10 will be ignored.\n");
 		content.append("enchantmentMaxLevels:\n");
-		for (final Map.Entry<Enchantment, Integer> e : enchantmentsMaxLevels.entrySet()) {
-			content.append("  " + e.getKey().getName() + ": " + e.getValue() + "\n");
+		for (final Map.Entry<Enchantment, Integer> e : this.enchantmentsMaxLevels.entrySet()) {
+			content.append("  " + e.getKey().getName() + ": " + e.getValue() + '\n');
 		}
 
 		// Altars
 		content.append("# This stores created altars\n");
 		content.append("altars:\n");
-		for (final Altar a : altars.getAltars()) {
-			content.append("- " + a.getCenterLocation().toString() + '\n');
+		for (final Altar a : this.altars.getAltars()) {
+			content.append("- " + a.getCenterLocation() + '\n');
 		}
 
-		plugin.exiting(getClass(), "getConfigString");
+		this.plugin.exiting(this.getClass(), "getConfigString");
 		return content.toString();
 	}
 
 	public int getMinimumDistanceBetweenTwoAltars() {
-		return minimumDistanceBetweenTwoAltars;
+		return this.minimumDistanceBetweenTwoAltars;
 	}
 
 	public void setMinimumDistanceBetweenTwoAltars(final int minimumDistanceBetweenTwoAltars) {
@@ -186,7 +181,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 	}
 
 	public double getRepairBoostMultiplier() {
-		return repairBoostMultiplier;
+		return this.repairBoostMultiplier;
 	}
 
 	public void setRepairBoostMultiplier(final double repairBoostMultiplier) {
@@ -194,7 +189,7 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 	}
 
 	public double getEnchantmentBoostMultiplier() {
-		return enchantmentBoostMultiplier;
+		return this.enchantmentBoostMultiplier;
 	}
 
 	public void setEnchantmentBoostMultiplier(final double enchantmentBoostMultiplier) {
@@ -202,6 +197,6 @@ public class Config extends AbstractConfig<NEnchantingEgg> {
 	}
 
 	public int getEnchantmentMaxLevel(final Enchantment enchantment) {
-		return enchantmentsMaxLevels.get(enchantment);
+		return this.enchantmentsMaxLevels.get(enchantment);
 	}
 }

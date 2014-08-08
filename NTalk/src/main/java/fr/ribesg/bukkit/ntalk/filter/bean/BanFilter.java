@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntalk.filter.bean;
+
 import fr.ribesg.bukkit.ntalk.filter.ChatFilterResult;
 
 import java.util.Map;
@@ -27,9 +28,9 @@ public class BanFilter extends TimedFilter {
 
 	public static BanFilter loadFromConfig(final String key, final Map<String, Object> values) {
 		try {
-			final String filteredString = (String) values.get("filteredString");
-			final boolean regex = (boolean) values.get("isRegex");
-			final long duration = (int) values.get("duration");
+			final String filteredString = (String)values.get("filteredString");
+			final boolean regex = (boolean)values.get("isRegex");
+			final long duration = (int)values.get("duration");
 			return new BanFilter(key, filteredString, regex, duration);
 		} catch (final NullPointerException e) {
 			throw new IllegalArgumentException("Missing value", e);

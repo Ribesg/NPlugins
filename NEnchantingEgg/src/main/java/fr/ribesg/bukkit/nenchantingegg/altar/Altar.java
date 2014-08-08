@@ -15,6 +15,11 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeBlock;
 import fr.ribesg.bukkit.nenchantingegg.item.ItemBuilder;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -24,13 +29,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class Altar {
 
-	private final static int MAX_RADIUS = 5;
+	private static final int MAX_RADIUS = 5;
 
 	private final NEnchantingEgg plugin;
 
@@ -46,39 +47,39 @@ public class Altar {
 	public Altar(final NEnchantingEgg plugin, final NLocation loc) {
 		this.plugin = plugin;
 
-		centerLocation = loc.getBlockLocation();
+		this.centerLocation = loc.getBlockLocation();
 
-		playerName = null;
-		builder = null;
+		this.playerName = null;
+		this.builder = null;
 
-		chunks = new HashSet<>();
+		this.chunks = new HashSet<>();
 
 		final int bX = loc.getBlockX();
 		final int bZ = loc.getBlockZ();
 
-		for (int x = (int) Math.floor((bX - MAX_RADIUS) / 16.0); x <= Math.floor((bX + MAX_RADIUS) / 16.0); x++) {
-			for (int z = (int) Math.floor((bZ - MAX_RADIUS) / 16.0); z <= Math.floor((bZ + MAX_RADIUS) / 16.0); z++) {
-				chunks.add(new ChunkCoord(x, z, loc.getWorldName()));
+		for (int x = (int)Math.floor((bX - MAX_RADIUS) / 16.0); x <= Math.floor((bX + MAX_RADIUS) / 16.0); x++) {
+			for (int z = (int)Math.floor((bZ - MAX_RADIUS) / 16.0); z <= Math.floor((bZ + MAX_RADIUS) / 16.0); z++) {
+				this.chunks.add(new ChunkCoord(x, z, loc.getWorldName()));
 			}
 		}
 
-		setState(AltarState.INVALID);
+		this.setState(AltarState.INVALID);
 	}
 
 	public void setState(final AltarState newState) {
-		if (newState == AltarState.LOCKED && MinecraftTime.isDayTime(centerLocation.getWorld().getTime())) {
-			state = AltarState.INACTIVE;
+		if (newState == AltarState.LOCKED && MinecraftTime.isDayTime(this.centerLocation.getWorld().getTime())) {
+			this.state = AltarState.INACTIVE;
 		} else {
 			if (newState == AltarState.EGG_PROVIDED) {
-				builder = new ItemBuilder(this);
+				this.builder = new ItemBuilder(this);
 			}
-			state = newState;
+			this.state = newState;
 		}
 	}
 
 	public void destroy() {
-		setState(AltarState.INVALID);
-		plugin.getAltars().remove(this);
+		this.setState(AltarState.INVALID);
+		this.plugin.getAltars().remove(this);
 	}
 
 	/**
@@ -86,7 +87,7 @@ public class Altar {
 	 */
 	public void hardResetToInactive(final boolean hurt) {
 		this.state = AltarState.INACTIVE;
-		final Location loc = getCenterLocation().toBukkitLocation();
+		final Location loc = this.centerLocation.toBukkitLocation();
 		for (final RelativeBlock r : AltarState.getInactiveStateBlocks()) {
 			final Block b = loc.clone().add(r.getRelativeLocation()).getBlock();
 			b.setType(r.getBlockMaterial());
@@ -96,30 +97,30 @@ public class Altar {
 			}
 		}
 		loc.getWorld().createExplosion(loc.getX(), loc.getY(), loc.getZ(), hurt ? 5f : 0f, false, false);
-		if (builder != null) {
-			builder.popItems();
+		if (this.builder != null) {
+			this.builder.popItems();
 		}
 	}
 
 	public void buildItem(final ItemStack is, final List<ItemStack> items) {
-		plugin.entering(getClass(), "buildItem");
+		this.plugin.entering(this.getClass(), "buildItem");
 
-		if (state != AltarState.ITEM_PROVIDED) {
+		if (this.state != AltarState.ITEM_PROVIDED) {
 			throw new IllegalStateException();
 		} else {
-			final Location itemDropLocation = centerLocation.toBukkitLocation().clone().add(0.5, 3, 0.5);
+			final Location itemDropLocation = this.centerLocation.toBukkitLocation().clone().add(0.5, 3, 0.5);
 			if (is != null) {
 				final Item i = itemDropLocation.getWorld().dropItem(itemDropLocation, is);
 				if (i != null) {
 					i.setPickupDelay(80);
 					i.setVelocity(new Vector(0, -0.25, 0));
-					plugin.getItemListener().getItemMap().put(i, playerName);
-					plugin.debug("Item spawned!");
+					this.plugin.getItemListener().getItemMap().put(i, this.playerName);
+					this.plugin.debug("Item spawned!");
 				} else {
-					plugin.error("Unable to spawn the Item!");
+					this.plugin.error("Unable to spawn the Item!");
 				}
 			}
-			builder = null;
+			this.builder = null;
 
 			for (final ItemStack item : items) {
 				final Item it = itemDropLocation.getWorld().dropItem(itemDropLocation, item);
@@ -129,7 +130,7 @@ public class Altar {
 			}
 		}
 
-		plugin.exiting(getClass(), "buildItem");
+		this.plugin.exiting(this.getClass(), "buildItem");
 	}
 
 	/**
@@ -140,21 +141,21 @@ public class Altar {
 	 * @return If the altar that may have been constructed at this location is valid
 	 */
 	public boolean isInactiveAltarValid() {
-		plugin.entering(getClass(), "isInactiveAltarValid");
+		this.plugin.entering(this.getClass(), "isInactiveAltarValid");
 
 		boolean result = true;
 
 		// First check: if all blocks are here
 		for (final RelativeBlock rb : AltarState.getInactiveStateBlocks()) {
-			final Location rbLoc = rb.getLocation(centerLocation.toBukkitLocation());
+			final Location rbLoc = rb.getLocation(this.centerLocation.toBukkitLocation());
 			final boolean sameMaterial = rbLoc.getBlock().getType() == rb.getBlockMaterial();
 			final boolean sameData = rbLoc.getBlock().getData() == rb.getBlockData();
 			final boolean isSkull = rb.getBlockMaterial() == Material.SKULL;
 			final boolean isAir = rb.getBlockMaterial() == Material.AIR;
 			if ((!sameMaterial || !sameData && !isAir) && !isSkull) {
-				if (plugin.isDebugEnabled()) {
-					plugin.debug("Invalid Altar: should be " + rb.getBlockMaterial() + ":" + rb.getBlockData() + " at location " +
-					             NLocation.toString(rbLoc) + ", is " + rbLoc.getBlock().getType() + ":" + rbLoc.getBlock().getData());
+				if (this.plugin.isDebugEnabled()) {
+					this.plugin.debug("Invalid Altar: should be " + rb.getBlockMaterial() + ':' + rb.getBlockData() + " at location " +
+					                  NLocation.toString(rbLoc) + ", is " + rbLoc.getBlock().getType() + ':' + rbLoc.getBlock().getData());
 				}
 				result = false;
 				break;
@@ -164,21 +165,21 @@ public class Altar {
 		if (result) {
 			// Second check: if all top blocks are altar blocks
 			// TODO: Optimize this?
-			final World world = centerLocation.getWorld();
-			final int cX = centerLocation.getBlockX();
-			final int cY = centerLocation.getBlockY() + 1;
-			final int cZ = centerLocation.getBlockZ();
+			final World world = this.centerLocation.getWorld();
+			final int cX = this.centerLocation.getBlockX();
+			final int cY = this.centerLocation.getBlockY() + 1;
+			final int cZ = this.centerLocation.getBlockZ();
 			loop:
 			for (int x = -MAX_RADIUS; x <= MAX_RADIUS; x++) {
 				for (int z = -MAX_RADIUS; z <= MAX_RADIUS; z++) {
 					final int maxY = world.getHighestBlockYAt(cX + x, cZ + z);
-					if (isAltarXZ(x, z) && maxY != getHighestAltarBlock(x, z, false) + cY) {
+					if (this.isAltarXZ(x, z) && maxY != this.getHighestAltarBlock(x, z, false) + cY) {
 						/** Debug
 						 System.out.println("Found:   " + centerLocation.getWorld().getHighestBlockYAt(cX + x, cZ + z));
 						 System.out.println("Awaited: " + (getHighestAltarBlock(x, z, false) + cY));
 						 System.out.println("At: " + x + ";" + z + " (" + (cX + x) + ";" + (cZ + z) + ")");
 						 */
-						plugin.debug("Invalid altar: obstructing block located at " + new NLocation(world.getName(), x, maxY, z));
+						this.plugin.debug("Invalid altar: obstructing block located at " + new NLocation(world.getName(), x, maxY, z));
 						result = false;
 						break loop;
 					}
@@ -186,7 +187,7 @@ public class Altar {
 			}
 		}
 
-		plugin.exiting(getClass(), "isInactiveAltarValid");
+		this.plugin.exiting(this.getClass(), "isInactiveAltarValid");
 		return result;
 	}
 
@@ -200,9 +201,9 @@ public class Altar {
 	 * @return True if the given loc is the location of where players have to put the DragonEgg
 	 */
 	public boolean isEggPosition(final Location loc) {
-		final int x = loc.getBlockX() - centerLocation.getBlockX();
-		final int y = loc.getBlockY() - centerLocation.getBlockY();
-		final int z = loc.getBlockZ() - centerLocation.getBlockZ();
+		final int x = loc.getBlockX() - this.centerLocation.getBlockX();
+		final int y = loc.getBlockY() - this.centerLocation.getBlockY();
+		final int z = loc.getBlockZ() - this.centerLocation.getBlockZ();
 		return x == 0 && y == 1 && z == 0;
 	}
 
@@ -212,9 +213,9 @@ public class Altar {
 	 * @return True if the given loc is the location of where players have to put the Skull
 	 */
 	public boolean isSkullPosition(final Location loc) {
-		final int x = loc.getBlockX() - centerLocation.getBlockX();
-		final int y = loc.getBlockY() - centerLocation.getBlockY();
-		final int z = loc.getBlockZ() - centerLocation.getBlockZ();
+		final int x = loc.getBlockX() - this.centerLocation.getBlockX();
+		final int y = loc.getBlockY() - this.centerLocation.getBlockY();
+		final int z = loc.getBlockZ() - this.centerLocation.getBlockZ();
 		return x == -2 && y == 2 && z == 0;
 	}
 
@@ -224,10 +225,10 @@ public class Altar {
 	 * @return True if this altar prevents the placement of the block
 	 */
 	public boolean preventsBlockPlacement(final Location loc) {
-		final int x = loc.getBlockX() - centerLocation.getBlockX();
-		final int y = loc.getBlockY() - centerLocation.getBlockY();
-		final int z = loc.getBlockZ() - centerLocation.getBlockZ();
-		return isAltarXZ(x, z) && getHighestAltarBlock(x, z, true) <= y;
+		final int x = loc.getBlockX() - this.centerLocation.getBlockX();
+		final int y = loc.getBlockY() - this.centerLocation.getBlockY();
+		final int z = loc.getBlockZ() - this.centerLocation.getBlockZ();
+		return this.isAltarXZ(x, z) && this.getHighestAltarBlock(x, z, true) <= y;
 	}
 
 	/**
@@ -237,10 +238,10 @@ public class Altar {
 	 */
 	public boolean preventsBlockDestruction(final BlockBreakEvent event) {
 		final Location loc = event.getBlock().getLocation();
-		final int x = loc.getBlockX() - centerLocation.getBlockX();
-		final int y = loc.getBlockY() - centerLocation.getBlockY();
-		final int z = loc.getBlockZ() - centerLocation.getBlockZ();
-		return isAltarXYZ(x, y, z);
+		final int x = loc.getBlockX() - this.centerLocation.getBlockX();
+		final int y = loc.getBlockY() - this.centerLocation.getBlockY();
+		final int z = loc.getBlockZ() - this.centerLocation.getBlockZ();
+		return this.isAltarXYZ(x, y, z);
 	}
 
 	/**
@@ -290,8 +291,8 @@ public class Altar {
 			return 1;
 		} else if (x == -2 && z == 0) {
 			return skullPlaced ? 2 : 1;
-		} else if (state == AltarState.EGG_PROVIDED || state == AltarState.ITEM_PROVIDED ||
-		           state == AltarState.IN_TRANSITION && (previousState == AltarState.EGG_PROVIDED || previousState == AltarState.ITEM_PROVIDED)) {
+		} else if (this.state == AltarState.EGG_PROVIDED || this.state == AltarState.ITEM_PROVIDED ||
+		           this.state == AltarState.IN_TRANSITION && (this.previousState == AltarState.EGG_PROVIDED || this.previousState == AltarState.ITEM_PROVIDED)) {
 			return 1;
 		} else {
 			return 0;
@@ -308,19 +309,19 @@ public class Altar {
 	}
 
 	public ItemBuilder getBuilder() {
-		return builder;
+		return this.builder;
 	}
 
 	public NLocation getCenterLocation() {
-		return centerLocation;
+		return this.centerLocation;
 	}
 
 	public Set<ChunkCoord> getChunks() {
-		return chunks;
+		return this.chunks;
 	}
 
 	public String getPlayerName() {
-		return playerName;
+		return this.playerName;
 	}
 
 	public void setPlayerName(final String playerName) {
@@ -328,11 +329,11 @@ public class Altar {
 	}
 
 	public AltarState getPreviousState() {
-		return previousState;
+		return this.previousState;
 	}
 
 	public AltarState getState() {
-		return state;
+		return this.state;
 	}
 
 	public void setPreviousState(final AltarState previousState) {
@@ -340,6 +341,6 @@ public class Altar {
 	}
 
 	public NEnchantingEgg getPlugin() {
-		return plugin;
+		return this.plugin;
 	}
 }

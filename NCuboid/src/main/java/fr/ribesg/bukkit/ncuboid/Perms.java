@@ -12,11 +12,12 @@ package fr.ribesg.bukkit.ncuboid;
 import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
 import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
+
+import java.util.EnumMap;
+import java.util.Map;
+
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Perms {
 
@@ -40,7 +41,7 @@ public class Perms {
 
 	private static String getFlagPermission(final Flag f) {
 		if (flagPermissions == null) {
-			flagPermissions = new HashMap<>(Flag.values().length);
+			flagPermissions = new EnumMap<>(Flag.class);
 			flagPermissions.put(Flag.BOOSTER, "ncuboid.flag.booster");
 			flagPermissions.put(Flag.BUILD, "ncuboid.flag.build");
 			flagPermissions.put(Flag.CHAT, "ncuboid.flag.chat");
@@ -79,7 +80,7 @@ public class Perms {
 
 	private static String getAttributePermission(final Attribute fa) {
 		if (attributesPermissions == null) {
-			attributesPermissions = new HashMap<>(Attribute.values().length);
+			attributesPermissions = new EnumMap<>(Attribute.class);
 
 			// Strings
 			attributesPermissions.put(Attribute.FAREWELL_MESSAGE, "ncuboid.attribute.farewellmessage");
@@ -113,7 +114,7 @@ public class Perms {
 
 	public static boolean isAdmin(final Player player, final boolean async) {
 		final String playerName = player.getName();
-		return async ? (AsyncPermAccessor.isOp(playerName) || AsyncPermAccessor.has(playerName, ADMIN)) : (player.isOp() || player.hasPermission(ADMIN));
+		return async ? AsyncPermAccessor.isOp(playerName) || AsyncPermAccessor.has(playerName, ADMIN) : player.isOp() || player.hasPermission(ADMIN);
 	}
 
 	public static boolean hasFlag(final Permissible user, final Flag f) {

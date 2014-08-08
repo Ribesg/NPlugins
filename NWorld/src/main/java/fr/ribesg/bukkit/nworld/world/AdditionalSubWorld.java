@@ -8,8 +8,10 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nworld.world;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nworld.NWorld;
+
 import org.bukkit.World.Environment;
 
 /**
@@ -25,27 +27,27 @@ public class AdditionalSubWorld extends GeneralWorld {
 		String worldName = parentWorld.getWorldName();
 		if (type == Environment.NETHER) {
 			worldName += "_nether";
-			setType(WorldType.ADDITIONAL_SUB_NETHER);
+			this.setType(WorldType.ADDITIONAL_SUB_NETHER);
 			parentWorld.setNetherWorld(this);
 		} else if (type == Environment.THE_END) {
 			worldName += "_the_end";
-			setType(WorldType.ADDITIONAL_SUB_END);
+			this.setType(WorldType.ADDITIONAL_SUB_END);
 			parentWorld.setEndWorld(this);
 		} else {
-			throw new IllegalArgumentException("Invalid sub-world type: " + type.toString());
+			throw new IllegalArgumentException("Invalid sub-world type: " + type);
 		}
-		setWorldName(worldName);
-		setSpawnLocation(spawnLocation);
-		setRequiredPermission(requiredPermission);
-		setEnabled(enabled);
-		setHidden(hidden);
-		if (!plugin.getWorlds().containsKey(worldName)) {
-			plugin.getWorlds().put(worldName, this);
+		this.setWorldName(worldName);
+		this.setSpawnLocation(spawnLocation);
+		this.setRequiredPermission(requiredPermission);
+		this.setEnabled(enabled);
+		this.setHidden(hidden);
+		if (!this.plugin.getWorlds().containsKey(worldName)) {
+			this.plugin.getWorlds().put(worldName, this);
 		}
 	}
 
 	public long getSeed() {
-		return parentWorld.getSeed();
+		return this.parentWorld.getSeed();
 	}
 
 	public boolean isMalformed() {
@@ -53,6 +55,6 @@ public class AdditionalSubWorld extends GeneralWorld {
 	}
 
 	public AdditionalWorld getParentWorld() {
-		return parentWorld;
+		return this.parentWorld;
 	}
 }

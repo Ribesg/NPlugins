@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.punishment;
+
 public class Jail extends Punishment {
 
 	private final String jailPointName;
@@ -23,17 +24,17 @@ public class Jail extends Punishment {
 	}
 
 	public String getJailPointName() {
-		return jailPointName;
+		return this.jailPointName;
 	}
 
 	@Override
 	public String toString() {
 		return "Jail{" +
-		       "punished='" + punished + '\'' +
-		       ", type=" + type +
-		       ", endDate=" + endDate +
-		       ", reason='" + reason + '\'' +
-		       ", jailPointName='" + jailPointName + '\'' +
+		       "punished='" + this.punished + '\'' +
+		       ", type=" + this.type +
+		       ", endDate=" + this.endDate +
+		       ", reason='" + this.reason + '\'' +
+		       ", jailPointName='" + this.jailPointName + '\'' +
 		       '}';
 	}
 }

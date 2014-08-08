@@ -10,9 +10,6 @@
 package fr.ribesg.bukkit.ncore.config;
 
 import fr.ribesg.bukkit.ncore.util.DateUtil;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,6 +21,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Represents a config file
@@ -50,7 +51,7 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 	 * @param instance Linked plugin instance
 	 */
 	public AbstractConfig(final T instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	/**
@@ -60,7 +61,7 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 	 * @throws InvalidConfigurationException If the configuration is malformed
 	 */
 	public void loadConfig() throws IOException, InvalidConfigurationException {
-		loadConfig("config.yml");
+		this.loadConfig("config.yml");
 	}
 
 	/**
@@ -74,11 +75,11 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 	 * @throws InvalidConfigurationException If the configuration is malformed
 	 */
 	public void loadConfig(final String fileName) throws IOException, InvalidConfigurationException {
-		final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + fileName);
+		final Path path = Paths.get(this.plugin.getDataFolder().toPath().toAbsolutePath() + File.separator + fileName);
 		if (!Files.exists(path)) {
 			path.toFile().getParentFile().mkdirs();
 			Files.createFile(path);
-			writeConfig(path);
+			this.writeConfig(path);
 		} else {
 			final YamlConfiguration config = new YamlConfiguration();
 			try (BufferedReader reader = Files.newBufferedReader(path, CHARSET)) {
@@ -90,46 +91,46 @@ public abstract class AbstractConfig<T extends JavaPlugin> {
 			}
 
 			try {
-				handleValues(config);
+				this.handleValues(config);
 			} catch (final Throwable t) {
 				// Make a backup copy of the just-read file in case something REALLY wrong happened
-				Files.copy(path, Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString(), fileName + '.' + DateUtil.formatNow() + ".bak"));
+				Files.copy(path, Paths.get(this.plugin.getDataFolder().toPath().toAbsolutePath().toString(), fileName + '.' + DateUtil.formatNow() + ".bak"));
 				throw t;
 			}
 
 			// Rewrite the config to "clean" it
-			writeConfig(path);
+			this.writeConfig(path);
 		}
 	}
 
 	public void writeConfig() throws IOException {
-		writeConfig("config.yml");
+		this.writeConfig("config.yml");
 	}
 
 	public void writeConfig(final String fileName) throws IOException {
-		final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + fileName);
-		writeConfig(path);
+		final Path path = Paths.get(this.plugin.getDataFolder().toPath().toAbsolutePath() + File.separator + fileName);
+		this.writeConfig(path);
 	}
 
 	private void writeConfig(final Path path) throws IOException {
 		try (BufferedWriter writer = Files.newBufferedWriter(path, CHARSET, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
-			writer.write(getConfigString());
+			writer.write(this.getConfigString());
 		}
 	}
 
 	protected void wrongValue(final String fileName, final String key, final Object incorrectValue, final Object valueSet) {
 		final StringBuilder message1 = new StringBuilder();
-		message1.append("Incorrect value '").append(incorrectValue.toString());
+		message1.append("Incorrect value '").append(incorrectValue);
 		message1.append("' found in config file ").append(fileName);
-		message1.append(" for key '").append(key).append("'");
+		message1.append(" for key '").append(key).append('\'');
 
 		final StringBuilder message2 = new StringBuilder();
 		message2.append("The value of config key '").append(key);
-		message2.append("' as been reset to '").append(valueSet.toString());
+		message2.append("' as been reset to '").append(valueSet);
 		message2.append("' in file ").append(fileName);
 
-		plugin.getLogger().warning(message1.toString());
-		plugin.getLogger().info(message2.toString());
+		this.plugin.getLogger().warning(message1.toString());
+		this.plugin.getLogger().info(message2.toString());
 	}
 
 	protected boolean match(final long value, final long min, final long max) {

@@ -8,18 +8,20 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nworld.world;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.WorldUtil;
 import fr.ribesg.bukkit.nworld.NWorld;
+
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.io.IOException;
 
 /**
  * @author Ribesg
@@ -75,8 +77,8 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 		this.enabled = enabled;
 		this.hidden = hidden;
 		this.type = WorldType.UNKNOWN;
-		if (!plugin.getWorlds().containsKey(worldName)) {
-			plugin.getWorlds().put(worldName, this);
+		if (!this.plugin.getWorlds().containsKey(worldName)) {
+			this.plugin.getWorlds().put(worldName, this);
 		}
 	}
 
@@ -91,7 +93,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	}
 
 	public World create() {
-		return create(org.bukkit.WorldType.NORMAL);
+		return this.create(org.bukkit.WorldType.NORMAL);
 	}
 
 	public World create(org.bukkit.WorldType type) {
@@ -99,16 +101,16 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 			type = org.bukkit.WorldType.NORMAL;
 		}
 		try {
-			if (WorldUtil.isLoaded(getWorldName()) != null || WorldUtil.exists(getWorldName()) != null) {
+			if (WorldUtil.isLoaded(this.worldName) != null || WorldUtil.exists(this.worldName) != null) {
 				throw new IllegalStateException("World already exists");
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return null;
 		}
-		final WorldCreator creator = new WorldCreator(getWorldName());
-		creator.seed(getSeed());
+		final WorldCreator creator = new WorldCreator(this.worldName);
+		creator.seed(this.getSeed());
 		creator.type(type);
-		switch (getType()) {
+		switch (this.type) {
 			case ADDITIONAL:
 			case STOCK:
 				creator.environment(World.Environment.NORMAL);
@@ -122,54 +124,54 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 				creator.environment(World.Environment.THE_END);
 				break;
 			default:
-				throw new IllegalStateException("Incorrect world type: " + getType());
+				throw new IllegalStateException("Incorrect world type: " + this.type);
 		}
 		final World result = creator.createWorld();
-		setSpawnLocation(result.getSpawnLocation());
+		this.setSpawnLocation(result.getSpawnLocation());
 		return result;
 	}
 
 	public boolean isLoaded() {
-		return WorldUtil.isLoaded(getWorldName()) != null;
+		return WorldUtil.isLoaded(this.worldName) != null;
 	}
 
 	public World load() {
 		try {
-			if (isLoaded()) {
+			if (this.isLoaded()) {
 				throw new IllegalStateException("World already loaded");
-			} else if (WorldUtil.exists(getWorldName()) == null) {
+			} else if (WorldUtil.exists(this.worldName) == null) {
 				throw new IllegalStateException("World does not exists");
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return null;
 		}
-		final WorldCreator creator = new WorldCreator(getWorldName());
+		final WorldCreator creator = new WorldCreator(this.worldName);
 		final World result = creator.createWorld();
-		if (getSpawnLocation() == null) {
-			setSpawnLocation(result.getSpawnLocation());
+		if (this.spawnLocation == null) {
+			this.setSpawnLocation(result.getSpawnLocation());
 		}
 		this.setEnabled(true);
 		return result;
 	}
 
 	public void unload() {
-		if (!isLoaded()) {
+		if (!this.isLoaded()) {
 			throw new IllegalStateException("World not loaded");
 		}
 
 		// Teleport players to another world
-		final Location spawn = plugin.getWorlds().get(Bukkit.getWorlds().get(0).getName()).getSpawnLocation().toBukkitLocation();
-		for (final Player p : Bukkit.getWorld(getWorldName()).getPlayers()) {
-			plugin.sendMessage(p, MessageId.world_teleportedBecauseOfWorldUnload);
+		final Location spawn = this.plugin.getWorlds().get(Bukkit.getWorlds().get(0).getName()).spawnLocation.toBukkitLocation();
+		for (final Player p : Bukkit.getWorld(this.worldName).getPlayers()) {
+			this.plugin.sendMessage(p, MessageId.world_teleportedBecauseOfWorldUnload);
 			p.teleport(spawn);
 		}
 
 		// Unload the world
-		Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+		Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
 
 			@Override
 			public void run() {
-				Bukkit.unloadWorld(getWorldName(), true);
+				Bukkit.unloadWorld(fr.ribesg.bukkit.nworld.world.GeneralWorld.this.getWorldName(), true);
 			}
 		}, 1L);
 
@@ -178,8 +180,8 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 
 	public boolean exists() {
 		try {
-			return WorldUtil.exists(getWorldName()) != null;
-		} catch (IOException e) {
+			return WorldUtil.exists(this.worldName) != null;
+		} catch (final IOException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -189,13 +191,13 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	 * @return Null if the world doesn't exist / isn't loaded
 	 */
 	public World getBukkitWorld() {
-		return Bukkit.getWorld(getWorldName());
+		return Bukkit.getWorld(this.worldName);
 	}
 
 	public abstract long getSeed();
 
 	public String getWorldName() {
-		return worldName;
+		return this.worldName;
 	}
 
 	public void setWorldName(final String worldName) {
@@ -203,7 +205,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	}
 
 	public NLocation getSpawnLocation() {
-		return spawnLocation;
+		return this.spawnLocation;
 	}
 
 	public void setSpawnLocation(final NLocation spawnLocation) {
@@ -211,11 +213,11 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	}
 
 	public void setSpawnLocation(final Location spawnLocation) {
-		setSpawnLocation(new NLocation(spawnLocation));
+		this.setSpawnLocation(new NLocation(spawnLocation));
 	}
 
 	public String getRequiredPermission() {
-		return requiredPermission;
+		return this.requiredPermission;
 	}
 
 	public void setRequiredPermission(final String requiredPermission) {
@@ -223,7 +225,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	}
 
 	public boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
 	public void setEnabled(final boolean enabled) {
@@ -231,7 +233,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	}
 
 	public boolean isHidden() {
-		return hidden;
+		return this.hidden;
 	}
 
 	public void setHidden(final boolean hidden) {
@@ -239,7 +241,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 	}
 
 	public WorldType getType() {
-		return type;
+		return this.type;
 	}
 
 	public void setType(final WorldType type) {
@@ -248,7 +250,7 @@ public abstract class GeneralWorld implements Comparable<GeneralWorld> {
 
 	@Override
 	public int compareTo(final GeneralWorld o) {
-		return worldName.compareTo(o.worldName);
+		return this.worldName.compareTo(o.worldName);
 	}
 
 	public boolean isMalformed() {

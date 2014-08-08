@@ -13,14 +13,15 @@ import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.AltarState;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.Step;
-import org.bukkit.Bukkit;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class Transition {
 
@@ -34,51 +35,51 @@ public abstract class Transition {
 
 	protected Transition(final NEnchantingEgg plugin) {
 		this.plugin = plugin;
-		final Set<Step> steps = createSteps();
+		final Set<Step> steps = this.createSteps();
 
-		stepsPerDelay = new HashMap<>();
+		this.stepsPerDelay = new HashMap<>();
 
 		for (final Step step : steps) {
-			if (stepsPerDelay.containsKey(step.getDelay())) {
-				stepsPerDelay.get(step.getDelay()).add(step);
+			if (this.stepsPerDelay.containsKey(step.getDelay())) {
+				this.stepsPerDelay.get(step.getDelay()).add(step);
 			} else {
 				final Set<Step> stepsForThisDelay = new HashSet<>();
 				stepsForThisDelay.add(step);
-				stepsPerDelay.put(step.getDelay(), stepsForThisDelay);
+				this.stepsPerDelay.put(step.getDelay(), stepsForThisDelay);
 			}
 		}
 
 		int max = Integer.MIN_VALUE;
-		for (final int i : stepsPerDelay.keySet()) {
+		for (final int i : this.stepsPerDelay.keySet()) {
 			if (max < i) {
 				max = i;
 			}
 		}
-		maxDelay = max;
-		setFromToStates();
+		this.maxDelay = max;
+		this.setFromToStates();
 	}
 
 	public void doTransition(final Altar altar) {
-		doTransition(altar, false);
+		this.doTransition(altar, false);
 	}
 
 	public void doTransition(final Altar altar, final boolean force) {
-		if (plugin != null) {
-			if (!force && altar.getState() != fromState) {
+		if (this.plugin != null) {
+			if (!force && altar.getState() != this.fromState) {
 				// TODO Exception ?
-				plugin.error("Unable to do Transition !");
-				plugin.error("Altar Location: " + altar.getCenterLocation().toString());
-				plugin.error("Altar state: " + altar.getState().toString());
-				plugin.error("Transition to state " +
-				             toState.toString() +
-				             " failed because the Altar was not in state " +
-				             fromState.toString());
-				plugin.error("Try to rebuild the Altar?");
+				this.plugin.error("Unable to do Transition !");
+				this.plugin.error("Altar Location: " + altar.getCenterLocation());
+				this.plugin.error("Altar state: " + altar.getState());
+				this.plugin.error("Transition to state " +
+				                  this.toState +
+				                  " failed because the Altar was not in state " +
+				                  this.fromState);
+				this.plugin.error("Try to rebuild the Altar?");
 			} else {
 				altar.setPreviousState(altar.getState());
 				altar.setState(AltarState.IN_TRANSITION);
-				for (final Entry<Integer, Set<Step>> e : stepsPerDelay.entrySet()) {
-					Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+				for (final Entry<Integer, Set<Step>> e : this.stepsPerDelay.entrySet()) {
+					Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
 
 						@Override
 						public void run() {
@@ -88,14 +89,14 @@ public abstract class Transition {
 						}
 					}, e.getKey());
 				}
-				Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+				Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
 
 					@Override
 					public void run() {
-						altar.setState(toState);
-						afterTransition(altar);
+						altar.setState(fr.ribesg.bukkit.nenchantingegg.altar.transition.Transition.this.toState);
+						fr.ribesg.bukkit.nenchantingegg.altar.transition.Transition.this.afterTransition(altar);
 					}
-				}, maxDelay + 1);
+				}, this.maxDelay + 1);
 			}
 		}
 	}

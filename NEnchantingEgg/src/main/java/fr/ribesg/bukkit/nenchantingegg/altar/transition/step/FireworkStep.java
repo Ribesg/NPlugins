@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.nenchantingegg.altar.transition.step;
 
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeFirework;
+
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -27,14 +28,14 @@ public class FireworkStep extends Step {
 
 	@Override
 	public void doStep(final Altar altar) {
-		final Location loc = altar.getCenterLocation().toBukkitLocation().add(firework.getRelativeLocation());
-		final Firework f = (Firework) loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
+		final Location loc = altar.getCenterLocation().toBukkitLocation().add(this.firework.getRelativeLocation());
+		final Firework f = (Firework)loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
 		if (f != null) {
-			if (firework.hasVelocity()) {
-				f.setVelocity(firework.getVelocity());
+			if (this.firework.hasVelocity()) {
+				f.setVelocity(this.firework.getVelocity());
 			}
 			final FireworkMeta meta = f.getFireworkMeta();
-			meta.addEffects(firework.getEffects());
+			meta.addEffects(this.firework.getEffects());
 			meta.setPower(0);
 			f.setFireworkMeta(meta);
 		}

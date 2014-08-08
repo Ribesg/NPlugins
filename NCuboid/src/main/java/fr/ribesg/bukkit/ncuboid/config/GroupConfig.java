@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncuboid.config;
+
 /**
  * @author Ribesg
  */
@@ -26,15 +27,15 @@ public class GroupConfig {
 	}
 
 	public String getGroupName() {
-		return groupName;
+		return this.groupName;
 	}
 
 	public String getGroupPerm() {
-		return "group." + groupName.toLowerCase();
+		return "group." + this.groupName.toLowerCase();
 	}
 
 	public int getMaxRegionNb() {
-		return maxRegionNb;
+		return this.maxRegionNb;
 	}
 
 	public void setMaxRegionNb(final int maxRegionNb) {
@@ -42,7 +43,7 @@ public class GroupConfig {
 	}
 
 	public int getMaxRegion1DSize() {
-		return maxRegion1DSize;
+		return this.maxRegion1DSize;
 	}
 
 	public void setMaxRegion1DSize(final int maxRegion1DSize) {
@@ -50,7 +51,7 @@ public class GroupConfig {
 	}
 
 	public int getMaxRegion3DSize() {
-		return maxRegion3DSize;
+		return this.maxRegion3DSize;
 	}
 
 	public void setMaxRegion3DSize(final int maxRegion3DSize) {

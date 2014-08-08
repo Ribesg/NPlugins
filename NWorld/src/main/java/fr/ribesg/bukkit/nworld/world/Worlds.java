@@ -8,9 +8,19 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nworld.world;
+
 import fr.ribesg.bukkit.nworld.world.GeneralWorld.WorldType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * @author Ribesg
@@ -25,7 +35,7 @@ public class Worlds implements Iterable<GeneralWorld> {
 
 	@Override
 	public Iterator<GeneralWorld> iterator() {
-		final List<GeneralWorld> list = new ArrayList<>(worlds.values());
+		final List<GeneralWorld> list = new ArrayList<>(this.worlds.values());
 		Collections.sort(list);
 		return list.iterator();
 	}
@@ -34,7 +44,7 @@ public class Worlds implements Iterable<GeneralWorld> {
 		final SortedMap<String, StockWorld> result = new TreeMap<>();
 		for (final GeneralWorld world : this) {
 			if (WorldType.isStock(world)) {
-				result.put(world.getWorldName(), (StockWorld) world);
+				result.put(world.getWorldName(), (StockWorld)world);
 			}
 		}
 		return result;
@@ -44,7 +54,7 @@ public class Worlds implements Iterable<GeneralWorld> {
 		final SortedMap<String, AdditionalWorld> result = new TreeMap<>();
 		for (final GeneralWorld world : this) {
 			if (world.getType() == WorldType.ADDITIONAL) {
-				result.put(world.getWorldName(), (AdditionalWorld) world);
+				result.put(world.getWorldName(), (AdditionalWorld)world);
 			}
 		}
 		return result;
@@ -54,7 +64,7 @@ public class Worlds implements Iterable<GeneralWorld> {
 		final SortedMap<String, AdditionalSubWorld> result = new TreeMap<>();
 		for (final GeneralWorld world : this) {
 			if (world.getType() == WorldType.ADDITIONAL_SUB_NETHER || world.getType() == WorldType.ADDITIONAL_SUB_END) {
-				result.put(world.getWorldName(), (AdditionalSubWorld) world);
+				result.put(world.getWorldName(), (AdditionalSubWorld)world);
 			}
 		}
 		return result;
@@ -65,12 +75,12 @@ public class Worlds implements Iterable<GeneralWorld> {
 	/////////////////
 
 	public int size() {
-		return worlds.size();
+		return this.worlds.size();
 	}
 
 	public int sizeNormal() {
 		int size = 0;
-		for (final GeneralWorld w : worlds.values()) {
+		for (final GeneralWorld w : this.worlds.values()) {
 			if (w.getType() == WorldType.STOCK || w.getType() == WorldType.ADDITIONAL) {
 				size++;
 			}
@@ -80,7 +90,7 @@ public class Worlds implements Iterable<GeneralWorld> {
 
 	public int sizeNether() {
 		int size = 0;
-		for (final GeneralWorld w : worlds.values()) {
+		for (final GeneralWorld w : this.worlds.values()) {
 			if (w.getType() == WorldType.STOCK_NETHER || w.getType() == WorldType.ADDITIONAL_SUB_NETHER) {
 				size++;
 			}
@@ -90,7 +100,7 @@ public class Worlds implements Iterable<GeneralWorld> {
 
 	public int sizeEnd() {
 		int size = 0;
-		for (final GeneralWorld w : worlds.values()) {
+		for (final GeneralWorld w : this.worlds.values()) {
 			if (w.getType() == WorldType.STOCK_END || w.getType() == WorldType.ADDITIONAL_SUB_END) {
 				size++;
 			}
@@ -99,46 +109,46 @@ public class Worlds implements Iterable<GeneralWorld> {
 	}
 
 	public boolean isEmpty() {
-		return worlds.isEmpty();
+		return this.worlds.isEmpty();
 	}
 
 	public boolean containsKey(final String key) {
-		return worlds.containsKey(key);
+		return this.worlds.containsKey(key);
 	}
 
 	public boolean containsValue(final GeneralWorld value) {
-		return worlds.containsValue(value);
+		return this.worlds.containsValue(value);
 	}
 
 	public GeneralWorld get(final String key) {
-		return worlds.get(key);
+		return this.worlds.get(key);
 	}
 
 	public GeneralWorld put(final String key, final GeneralWorld value) {
-		return worlds.put(key, value);
+		return this.worlds.put(key, value);
 	}
 
 	public void putAll(final Map<? extends String, ? extends GeneralWorld> m) {
-		worlds.putAll(m);
+		this.worlds.putAll(m);
 	}
 
 	public GeneralWorld remove(final String key) {
-		return worlds.remove(key);
+		return this.worlds.remove(key);
 	}
 
 	public void clear() {
-		worlds.clear();
+		this.worlds.clear();
 	}
 
 	public Set<String> keySet() {
-		return worlds.keySet();
+		return this.worlds.keySet();
 	}
 
 	public Collection<GeneralWorld> values() {
-		return worlds.values();
+		return this.worlds.values();
 	}
 
 	public Set<Map.Entry<String, GeneralWorld>> entrySet() {
-		return worlds.entrySet();
+		return this.worlds.entrySet();
 	}
 }

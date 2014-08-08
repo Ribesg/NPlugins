@@ -16,345 +16,340 @@ import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncore.util.inventory.InventoryUtilException;
 import fr.ribesg.bukkit.ncore.util.inventory.ItemStackUtil;
+
+import java.util.Arrays;
+import java.util.Random;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
-import java.util.Random;
-
 public class Config extends AbstractConfig<NTheEndAgain> {
 
-	private final static Random RANDOM = new Random();
+	private static final Random RANDOM = new Random();
 
 	private final String worldName;
 
 	// General
-	private final static int DEFAULT_filterMovedTooQuicklySpam = 0;
+	private static final int DEFAULT_filterMovedTooQuicklySpam = 0;
 	private int filterMovedTooQuicklySpam;
 
 	// EnderDragon
-	private final static int DEFAULT_edHealth = 200;
+	private static final int DEFAULT_edHealth = 200;
 	private int edHealth;
 
-	private final static float DEFAULT_edDamageMultiplier = 1.0f;
+	private static final float DEFAULT_edDamageMultiplier = 1.0f;
 	private float edDamageMultiplier;
 
-	private final static int DEFAULT_edPushesPlayers = 1;
+	private static final int DEFAULT_edPushesPlayers = 1;
 	private int edPushesPlayers;
 
-	private final static float DEFAULT_edPushForce = 1.75f;
+	private static final float DEFAULT_edPushForce = 1.75f;
 	private float edPushForce;
 
-	private final static int DEFAULT_edEggHandling = 0;
+	private static final int DEFAULT_edEggHandling = 0;
 	private int edEggHandling;
 
-	private final static int DEFAULT_edExpHandling = 0;
+	private static final int DEFAULT_edExpHandling = 0;
 	private int edExpHandling;
 
-	private final static int DEFAULT_edExpReward = 12_000;
+	private static final int DEFAULT_edExpReward = 12_000;
 	private int edExpReward;
 
-	private final static int DEFAULT_edPortalSpawn = 0;
+	private static final int DEFAULT_edPortalSpawn = 0;
 	private int edPortalSpawn;
 
 	// EnderCrystals
-	private final static float DEFAULT_ecHealthRegainRate = 1.0f;
+	private static final float DEFAULT_ecHealthRegainRate = 1.0f;
 	private float ecHealthRegainRate;
 
 	// Regeneration
-	private final static int DEFAULT_regenType = 0;
+	private static final int DEFAULT_regenType = 0;
 	private int regenType;
 
-	private final static int DEFAULT_regenTimer = 86_400; // 24 hours
+	private static final int DEFAULT_regenTimer = 86_400; // 24 hours
 	private int regenTimer;
 
-	private final static int DEFAULT_regenMethod = 0;
+	private static final int DEFAULT_regenMethod = 0;
 	private int regenMethod;
 
-	private final static int DEFAULT_regenAction = 0;
+	private static final int DEFAULT_regenAction = 0;
 	private int regenAction;
 
-	private final static int DEFAULT_hardRegenOnStop = 0;
+	private static final int DEFAULT_hardRegenOnStop = 0;
 	private int hardRegenOnStop;
 
-	private final static int DEFAULT_slowSoftRegenChunks = 5;
+	private static final int DEFAULT_slowSoftRegenChunks = 5;
 	private int slowSoftRegenChunks;
 
-	private final static int DEFAULT_slowSoftRegenTimer = 5;
+	private static final int DEFAULT_slowSoftRegenTimer = 5;
 	private int slowSoftRegenTimer;
 
 	// Respawn
-	private final static int DEFAULT_respawnNumber = 1;
+	private static final int DEFAULT_respawnNumber = 1;
 	private int respawnNumber;
 
-	private final static int DEFAULT_respawnType = 0;
+	private static final int DEFAULT_respawnType = 0;
 	private int respawnType;
 
-	private final static int DEFAULT_respawnTimerMin = 7_200;
+	private static final int DEFAULT_respawnTimerMin = 7_200;
 	private int respawnTimerMin;
 
-	private final static int DEFAULT_respawnTimerMax = 14_400;
+	private static final int DEFAULT_respawnTimerMax = 14_400;
 	private int respawnTimerMax;
 
 	// Drop Table
-	private final static int DEFAULT_dropTableHandling = 1;
+	private static final int DEFAULT_dropTableHandling = 1;
 	private int dropTableHandling;
 
 	private final PairList<ItemStack, Float> dropTable;
 
 	// Chunk Protection
-	private final static boolean DEFAULT_defaultProtected = false;
+	private static final boolean DEFAULT_defaultProtected = false;
 	private boolean defaultProtected;
 
 	// Data
-	private final static long DEFAULT_nextRegenTaskTime = 0;
+	private static final long DEFAULT_nextRegenTaskTime = 0;
 	private long nextRegenTaskTime;
 
-	private final static long DEFAULT_nextRespawnTaskTime = 0;
+	private static final long DEFAULT_nextRespawnTaskTime = 0;
 	private long nextRespawnTaskTime;
 
 	public Config(final NTheEndAgain instance, final String world) {
 		super(instance);
-		worldName = world;
+		this.worldName = world;
 
 		// General
-		setFilterMovedTooQuicklySpam(DEFAULT_filterMovedTooQuicklySpam);
+		this.setFilterMovedTooQuicklySpam(DEFAULT_filterMovedTooQuicklySpam);
 
 		// EnderDragon
-		setEdHealth(DEFAULT_edHealth);
-		setEdDamageMultiplier(DEFAULT_edDamageMultiplier);
-		setEdPushesPlayers(DEFAULT_edPushesPlayers);
-		setEdPushForce(DEFAULT_edPushForce);
-		setEdEggHandling(DEFAULT_edEggHandling);
-		setEdExpHandling(DEFAULT_edExpHandling);
-		setEdExpReward(DEFAULT_edExpReward);
-		setEdPortalSpawn(DEFAULT_edPortalSpawn);
+		this.setEdHealth(DEFAULT_edHealth);
+		this.setEdDamageMultiplier(DEFAULT_edDamageMultiplier);
+		this.setEdPushesPlayers(DEFAULT_edPushesPlayers);
+		this.setEdPushForce(DEFAULT_edPushForce);
+		this.setEdEggHandling(DEFAULT_edEggHandling);
+		this.setEdExpHandling(DEFAULT_edExpHandling);
+		this.setEdExpReward(DEFAULT_edExpReward);
+		this.setEdPortalSpawn(DEFAULT_edPortalSpawn);
 
 		// EnderCrystals
-		setEcHealthRegainRate(DEFAULT_ecHealthRegainRate);
+		this.setEcHealthRegainRate(DEFAULT_ecHealthRegainRate);
 
 		// Regeneration
-		setRegenType(DEFAULT_regenType);
-		setRegenTimer(DEFAULT_regenTimer);
-		setRegenMethod(DEFAULT_regenMethod);
-		setRegenAction(DEFAULT_regenAction);
-		setHardRegenOnStop(DEFAULT_hardRegenOnStop);
-		setSlowSoftRegenChunks(DEFAULT_slowSoftRegenChunks);
-		setSlowSoftRegenTimer(DEFAULT_slowSoftRegenTimer);
+		this.setRegenType(DEFAULT_regenType);
+		this.setRegenTimer(DEFAULT_regenTimer);
+		this.setRegenMethod(DEFAULT_regenMethod);
+		this.setRegenAction(DEFAULT_regenAction);
+		this.setHardRegenOnStop(DEFAULT_hardRegenOnStop);
+		this.setSlowSoftRegenChunks(DEFAULT_slowSoftRegenChunks);
+		this.setSlowSoftRegenTimer(DEFAULT_slowSoftRegenTimer);
 
 		// Respawn
-		setRespawnNumber(DEFAULT_respawnNumber);
-		setRespawnType(DEFAULT_respawnType);
-		setRespawnTimerMin(DEFAULT_respawnTimerMin);
-		setRespawnTimerMax(DEFAULT_respawnTimerMax);
+		this.setRespawnNumber(DEFAULT_respawnNumber);
+		this.setRespawnType(DEFAULT_respawnType);
+		this.setRespawnTimerMin(DEFAULT_respawnTimerMin);
+		this.setRespawnTimerMax(DEFAULT_respawnTimerMax);
 
 		// Drop Table
-		setDropTableHandling(DEFAULT_dropTableHandling);
+		this.setDropTableHandling(DEFAULT_dropTableHandling);
 		this.dropTable = new PairList<>();
 
 		// Data
-		setNextRegenTaskTime(DEFAULT_nextRegenTaskTime);
-		setNextRespawnTaskTime(DEFAULT_nextRespawnTaskTime);
+		this.setNextRegenTaskTime(DEFAULT_nextRegenTaskTime);
+		this.setNextRespawnTaskTime(DEFAULT_nextRespawnTaskTime);
 	}
 
-	/**
-	 * @see AbstractConfig#handleValues(YamlConfiguration)
-	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 
-		final String fileName = StringUtil.toLowerCamelCase(worldName) + "Config.yml";
+		final String fileName = StringUtil.toLowerCamelCase(this.worldName) + "Config.yml";
 
 		// General
-		setFilterMovedTooQuicklySpam(config.getInt("filterMovedTooQuicklySpam", DEFAULT_filterMovedTooQuicklySpam));
-		if (!match(getFilterMovedTooQuicklySpam(), 0, 1)) {
-			wrongValue(fileName, "filterMovedTooQuicklySpam", getFilterMovedTooQuicklySpam(), DEFAULT_filterMovedTooQuicklySpam);
-			setFilterMovedTooQuicklySpam(DEFAULT_filterMovedTooQuicklySpam);
+		this.setFilterMovedTooQuicklySpam(config.getInt("filterMovedTooQuicklySpam", DEFAULT_filterMovedTooQuicklySpam));
+		if (!this.match(this.filterMovedTooQuicklySpam, 0, 1)) {
+			this.wrongValue(fileName, "filterMovedTooQuicklySpam", this.filterMovedTooQuicklySpam, DEFAULT_filterMovedTooQuicklySpam);
+			this.setFilterMovedTooQuicklySpam(DEFAULT_filterMovedTooQuicklySpam);
 		}
 
 		// EnderDragon
-		setEdHealth(config.getInt("edHealth", DEFAULT_edHealth));
-		if (!match(getEdHealth(), 1, Integer.MAX_VALUE)) {
-			wrongValue(fileName, "edHealth", getEdHealth(), DEFAULT_edHealth);
-			setEdHealth(DEFAULT_edHealth);
+		this.setEdHealth(config.getInt("edHealth", DEFAULT_edHealth));
+		if (!this.match(this.edHealth, 1, Integer.MAX_VALUE)) {
+			this.wrongValue(fileName, "edHealth", this.edHealth, DEFAULT_edHealth);
+			this.setEdHealth(DEFAULT_edHealth);
 		}
 
-		setEdDamageMultiplier((float) config.getDouble("edDamageMultiplier", DEFAULT_edDamageMultiplier));
-		if (!match(getEdDamageMultiplier(), 0f, Float.MAX_VALUE)) {
-			wrongValue(fileName, "edDamageMultiplier", getEdDamageMultiplier(), DEFAULT_edDamageMultiplier);
-			setEdDamageMultiplier(DEFAULT_edDamageMultiplier);
+		this.setEdDamageMultiplier((float)config.getDouble("edDamageMultiplier", DEFAULT_edDamageMultiplier));
+		if (!this.match(this.edDamageMultiplier, 0f, Float.MAX_VALUE)) {
+			this.wrongValue(fileName, "edDamageMultiplier", this.edDamageMultiplier, DEFAULT_edDamageMultiplier);
+			this.setEdDamageMultiplier(DEFAULT_edDamageMultiplier);
 		}
 
-		setEdPushesPlayers(config.getInt("edPushesPlayers", DEFAULT_edPushesPlayers));
-		if (!match(getEdPushesPlayers(), 0, 1)) {
-			wrongValue(fileName, "edPushesPlayers", getEdPushesPlayers(), DEFAULT_edPushesPlayers);
-			setEdPushesPlayers(DEFAULT_edPushesPlayers);
+		this.setEdPushesPlayers(config.getInt("edPushesPlayers", DEFAULT_edPushesPlayers));
+		if (!this.match(this.edPushesPlayers, 0, 1)) {
+			this.wrongValue(fileName, "edPushesPlayers", this.edPushesPlayers, DEFAULT_edPushesPlayers);
+			this.setEdPushesPlayers(DEFAULT_edPushesPlayers);
 		}
 
-		setEdPushForce((float) config.getDouble("edPushForce", DEFAULT_edPushForce));
-		if (!match(getEdPushForce(), 0.01f, 10f)) {
-			wrongValue(fileName, "edPushForce", getEdPushForce(), DEFAULT_edPushForce);
-			setEdPushForce(DEFAULT_edPushForce);
+		this.setEdPushForce((float)config.getDouble("edPushForce", DEFAULT_edPushForce));
+		if (!this.match(this.edPushForce, 0.01f, 10f)) {
+			this.wrongValue(fileName, "edPushForce", this.edPushForce, DEFAULT_edPushForce);
+			this.setEdPushForce(DEFAULT_edPushForce);
 		}
 
-		setEdEggHandling(config.getInt("edEggHandling", DEFAULT_edEggHandling));
-		if (!match(getEdEggHandling(), 0, 1)) {
-			wrongValue(fileName, "edEggHandling", getEdEggHandling(), DEFAULT_edEggHandling);
-			setEdEggHandling(DEFAULT_edEggHandling);
+		this.setEdEggHandling(config.getInt("edEggHandling", DEFAULT_edEggHandling));
+		if (!this.match(this.edEggHandling, 0, 1)) {
+			this.wrongValue(fileName, "edEggHandling", this.edEggHandling, DEFAULT_edEggHandling);
+			this.setEdEggHandling(DEFAULT_edEggHandling);
 		}
 
-		setEdExpHandling(config.getInt("edExpHandling", DEFAULT_edExpHandling));
-		if (!match(getEdExpHandling(), 0, 1)) {
-			wrongValue(fileName, "edExpHandling", getEdExpHandling(), DEFAULT_edExpHandling);
-			setEdExpHandling(DEFAULT_edExpHandling);
+		this.setEdExpHandling(config.getInt("edExpHandling", DEFAULT_edExpHandling));
+		if (!this.match(this.edExpHandling, 0, 1)) {
+			this.wrongValue(fileName, "edExpHandling", this.edExpHandling, DEFAULT_edExpHandling);
+			this.setEdExpHandling(DEFAULT_edExpHandling);
 		}
 
-		setEdExpReward(config.getInt("edExpReward", DEFAULT_edExpReward));
-		if (!match(getEdExpReward(), 0, Integer.MAX_VALUE)) {
-			wrongValue(fileName, "edExpReward", getEdExpReward(), DEFAULT_edExpReward);
-			setEdExpReward(DEFAULT_edExpReward);
+		this.setEdExpReward(config.getInt("edExpReward", DEFAULT_edExpReward));
+		if (!this.match(this.edExpReward, 0, Integer.MAX_VALUE)) {
+			this.wrongValue(fileName, "edExpReward", this.edExpReward, DEFAULT_edExpReward);
+			this.setEdExpReward(DEFAULT_edExpReward);
 		}
 
-		setEdPortalSpawn(config.getInt("edPortalSpawn", DEFAULT_edPortalSpawn));
-		if (!match(getEdPortalSpawn(), 0, 2)) {
-			wrongValue(fileName, "edPortalSpawn", getEdPortalSpawn(), DEFAULT_edPortalSpawn);
-			setEdPortalSpawn(DEFAULT_edPortalSpawn);
+		this.setEdPortalSpawn(config.getInt("edPortalSpawn", DEFAULT_edPortalSpawn));
+		if (!this.match(this.edPortalSpawn, 0, 2)) {
+			this.wrongValue(fileName, "edPortalSpawn", this.edPortalSpawn, DEFAULT_edPortalSpawn);
+			this.setEdPortalSpawn(DEFAULT_edPortalSpawn);
 		}
 
 		// EnderCrystals
-		setEcHealthRegainRate((float) config.getDouble("ecHealthRegainRate", DEFAULT_ecHealthRegainRate));
-		if (!match(getEcHealthRegainRate(), 0f, Float.MAX_VALUE)) {
-			wrongValue(fileName, "ecHealthRegainRate", getEcHealthRegainRate(), DEFAULT_ecHealthRegainRate);
-			setEcHealthRegainRate(DEFAULT_ecHealthRegainRate);
+		this.setEcHealthRegainRate((float)config.getDouble("ecHealthRegainRate", DEFAULT_ecHealthRegainRate));
+		if (!this.match(this.ecHealthRegainRate, 0f, Float.MAX_VALUE)) {
+			this.wrongValue(fileName, "ecHealthRegainRate", this.ecHealthRegainRate, DEFAULT_ecHealthRegainRate);
+			this.setEcHealthRegainRate(DEFAULT_ecHealthRegainRate);
 		}
 
 		// Regeneration
-		setRegenType(config.getInt("regenType", DEFAULT_regenType));
-		if (!match(getRegenType(), 0, 4)) {
-			wrongValue(fileName, "regenType", getRegenType(), DEFAULT_regenType);
-			setRegenType(DEFAULT_regenType);
+		this.setRegenType(config.getInt("regenType", DEFAULT_regenType));
+		if (!this.match(this.regenType, 0, 4)) {
+			this.wrongValue(fileName, "regenType", this.regenType, DEFAULT_regenType);
+			this.setRegenType(DEFAULT_regenType);
 		}
 
-		setRegenTimer(config.getInt("regenTimer", DEFAULT_regenTimer));
-		if (!match(getRegenTimer(), 0, Integer.MAX_VALUE)) {
-			wrongValue(fileName, "regenTimer", getRegenTimer(), DEFAULT_regenTimer);
-			setRegenTimer(DEFAULT_regenTimer);
+		this.setRegenTimer(config.getInt("regenTimer", DEFAULT_regenTimer));
+		if (!this.match(this.regenTimer, 0, Integer.MAX_VALUE)) {
+			this.wrongValue(fileName, "regenTimer", this.regenTimer, DEFAULT_regenTimer);
+			this.setRegenTimer(DEFAULT_regenTimer);
 		}
 
-		if (getRegenTimer() == 0 && match(getRegenType(), 3, 4)) {
-			plugin.getLogger().warning("Can't use regenTimer=0 with regenType=" + getRegenType() + "!");
-			wrongValue(fileName, "regenType", getRegenType(), 0);
-			setRegenType(0);
+		if (this.regenTimer == 0 && this.match(this.regenType, 3, 4)) {
+			this.plugin.getLogger().warning("Can't use regenTimer=0 with regenType=" + this.regenType + '!');
+			this.wrongValue(fileName, "regenType", this.regenType, 0);
+			this.setRegenType(0);
 		}
 
-		setRegenMethod(config.getInt("regenMethod", DEFAULT_regenMethod));
-		if (!match(getRegenMethod(), 0, 2)) {
-			wrongValue(fileName, "regenMethod", getRegenMethod(), DEFAULT_regenMethod);
-			setRegenMethod(DEFAULT_regenMethod);
+		this.setRegenMethod(config.getInt("regenMethod", DEFAULT_regenMethod));
+		if (!this.match(this.regenMethod, 0, 2)) {
+			this.wrongValue(fileName, "regenMethod", this.regenMethod, DEFAULT_regenMethod);
+			this.setRegenMethod(DEFAULT_regenMethod);
 		}
 
-		setRegenAction(config.getInt("regenAction", DEFAULT_regenAction));
-		if (!match(getRegenAction(), 0, 2)) {
-			wrongValue(fileName, "regenAction", getRegenAction(), DEFAULT_regenAction);
-			setRegenAction(DEFAULT_regenAction);
-		} else if (getRegenAction() == 2 && getRegenMethod() != 2) {
-			plugin.getLogger().warning("Cannot use regenAction=2 without regenMethod=2!");
-			wrongValue(fileName, "regenAction", getRegenAction(), DEFAULT_regenAction);
-			setRegenAction(DEFAULT_regenAction);
+		this.setRegenAction(config.getInt("regenAction", DEFAULT_regenAction));
+		if (!this.match(this.regenAction, 0, 2)) {
+			this.wrongValue(fileName, "regenAction", this.regenAction, DEFAULT_regenAction);
+			this.setRegenAction(DEFAULT_regenAction);
+		} else if (this.regenAction == 2 && this.regenMethod != 2) {
+			this.plugin.getLogger().warning("Cannot use regenAction=2 without regenMethod=2!");
+			this.wrongValue(fileName, "regenAction", this.regenAction, DEFAULT_regenAction);
+			this.setRegenAction(DEFAULT_regenAction);
 		}
 
-		setHardRegenOnStop(config.getInt("hardRegenOnStop", DEFAULT_hardRegenOnStop));
-		if (!match(getHardRegenOnStop(), 0, 1)) {
-			wrongValue(fileName, "hardRegenOnStop", getHardRegenOnStop(), DEFAULT_hardRegenOnStop);
-			setHardRegenOnStop(DEFAULT_hardRegenOnStop);
+		this.setHardRegenOnStop(config.getInt("hardRegenOnStop", DEFAULT_hardRegenOnStop));
+		if (!this.match(this.hardRegenOnStop, 0, 1)) {
+			this.wrongValue(fileName, "hardRegenOnStop", this.hardRegenOnStop, DEFAULT_hardRegenOnStop);
+			this.setHardRegenOnStop(DEFAULT_hardRegenOnStop);
 		}
 
-		setSlowSoftRegenChunks(config.getInt("slowSoftRegenChunks", DEFAULT_slowSoftRegenChunks));
-		if (!match(getSlowSoftRegenChunks(), 1, Integer.MAX_VALUE)) {
-			wrongValue(fileName, "slowSoftRegenChunks", getSlowSoftRegenChunks(), DEFAULT_slowSoftRegenChunks);
-			setSlowSoftRegenChunks(DEFAULT_slowSoftRegenChunks);
+		this.setSlowSoftRegenChunks(config.getInt("slowSoftRegenChunks", DEFAULT_slowSoftRegenChunks));
+		if (!this.match(this.slowSoftRegenChunks, 1, Integer.MAX_VALUE)) {
+			this.wrongValue(fileName, "slowSoftRegenChunks", this.slowSoftRegenChunks, DEFAULT_slowSoftRegenChunks);
+			this.setSlowSoftRegenChunks(DEFAULT_slowSoftRegenChunks);
 		}
 
-		setSlowSoftRegenTimer(config.getInt("slowSoftRegenTimer", DEFAULT_slowSoftRegenTimer));
-		if (!match(getSlowSoftRegenTimer(), 1, Integer.MAX_VALUE)) {
-			wrongValue(fileName, "slowSoftRegenTimer", getSlowSoftRegenTimer(), DEFAULT_slowSoftRegenTimer);
-			setSlowSoftRegenTimer(DEFAULT_slowSoftRegenTimer);
+		this.setSlowSoftRegenTimer(config.getInt("slowSoftRegenTimer", DEFAULT_slowSoftRegenTimer));
+		if (!this.match(this.slowSoftRegenTimer, 1, Integer.MAX_VALUE)) {
+			this.wrongValue(fileName, "slowSoftRegenTimer", this.slowSoftRegenTimer, DEFAULT_slowSoftRegenTimer);
+			this.setSlowSoftRegenTimer(DEFAULT_slowSoftRegenTimer);
 		}
 
 		// Respawn
-		setRespawnNumber(config.getInt("respawnNumber", DEFAULT_respawnNumber));
-		if (!match(getRespawnNumber(), 0, Integer.MAX_VALUE)) {
-			wrongValue(fileName, "respawnNumber", getRespawnNumber(), DEFAULT_respawnNumber);
-			setRespawnNumber(DEFAULT_respawnNumber);
+		this.setRespawnNumber(config.getInt("respawnNumber", DEFAULT_respawnNumber));
+		if (!this.match(this.respawnNumber, 0, Integer.MAX_VALUE)) {
+			this.wrongValue(fileName, "respawnNumber", this.respawnNumber, DEFAULT_respawnNumber);
+			this.setRespawnNumber(DEFAULT_respawnNumber);
 		}
 
-		setRespawnType(config.getInt("respawnType", DEFAULT_respawnType));
-		if (!match(getRegenType(), 0, 6)) {
-			wrongValue(fileName, "respawnType", getRespawnType(), DEFAULT_respawnType);
-			setRespawnType(DEFAULT_respawnType);
+		this.setRespawnType(config.getInt("respawnType", DEFAULT_respawnType));
+		if (!this.match(this.regenType, 0, 6)) {
+			this.wrongValue(fileName, "respawnType", this.respawnType, DEFAULT_respawnType);
+			this.setRespawnType(DEFAULT_respawnType);
 		}
 
-		setRespawnTimerMin(config.getInt("respawnTimerMin", DEFAULT_respawnTimerMin));
-		if (!match(getRespawnTimerMin(), 0, Integer.MAX_VALUE)) {
-			wrongValue(fileName, "respawnTimerMin", getRespawnTimerMin(), DEFAULT_respawnTimerMin);
-			setRespawnTimerMin(DEFAULT_respawnTimerMin);
+		this.setRespawnTimerMin(config.getInt("respawnTimerMin", DEFAULT_respawnTimerMin));
+		if (!this.match(this.respawnTimerMin, 0, Integer.MAX_VALUE)) {
+			this.wrongValue(fileName, "respawnTimerMin", this.respawnTimerMin, DEFAULT_respawnTimerMin);
+			this.setRespawnTimerMin(DEFAULT_respawnTimerMin);
 		}
 
-		setRespawnTimerMax(config.getInt("respawnTimerMax", DEFAULT_respawnTimerMax));
-		if (!match(getRespawnTimerMax(), getRespawnTimerMin(), Integer.MAX_VALUE)) {
-			wrongValue(fileName, "respawnTimerMax", getRespawnTimerMax(), getRespawnTimerMin());
-			setRespawnTimerMin(getRespawnTimerMin());
+		this.setRespawnTimerMax(config.getInt("respawnTimerMax", DEFAULT_respawnTimerMax));
+		if (!this.match(this.respawnTimerMax, this.respawnTimerMin, Integer.MAX_VALUE)) {
+			this.wrongValue(fileName, "respawnTimerMax", this.respawnTimerMax, this.respawnTimerMin);
+			this.setRespawnTimerMin(this.respawnTimerMin);
 		}
 
 		// Drop Table
-		setDropTableHandling(config.getInt("dropTableHandling", DEFAULT_dropTableHandling));
-		if (!match(getDropTableHandling(), 0, 1)) {
-			wrongValue(fileName, "dropTableHandling", getDropTableHandling(), DEFAULT_dropTableHandling);
-			setDropTableHandling(DEFAULT_dropTableHandling);
+		this.setDropTableHandling(config.getInt("dropTableHandling", DEFAULT_dropTableHandling));
+		if (!this.match(this.dropTableHandling, 0, 1)) {
+			this.wrongValue(fileName, "dropTableHandling", this.dropTableHandling, DEFAULT_dropTableHandling);
+			this.setDropTableHandling(DEFAULT_dropTableHandling);
 		}
 
 		if (config.isConfigurationSection("dropTable")) {
-			dropTable.clear();
+			this.dropTable.clear();
 			final ConfigurationSection dropTableSection = config.getConfigurationSection("dropTable");
 			for (final String drop : dropTableSection.getKeys(false)) {
 				final ConfigurationSection dropSection = dropTableSection.getConfigurationSection(drop);
-				final float probability = (float) dropSection.getDouble("probability", -1);
+				final float probability = (float)dropSection.getDouble("probability", -1);
 				if (probability > 1 || probability <= 0) {
-					plugin.error("Invalid probability value in configuration for world '" + worldName + "' (drop '" + drop + "')");
+					this.plugin.error("Invalid probability value in configuration for world '" + this.worldName + "' (drop '" + drop + "')");
 				} else {
 					try {
 						final ItemStack is = ItemStackUtil.loadFromConfig(dropSection, "itemStack");
-						dropTable.put(is, probability);
+						this.dropTable.put(is, probability);
 					} catch (final InventoryUtilException e) {
-						plugin.error("Invalid ItemStack in configuration for world '" + worldName + "' (drop '" + drop + "')");
+						this.plugin.error("Invalid ItemStack in configuration for world '" + this.worldName + "' (drop '" + drop + "')");
 					}
 				}
 			}
 		}
 
 		// Chunk Protection
-		setDefaultProtected(config.getBoolean("defaultProtected", false));
+		this.setDefaultProtected(config.getBoolean("defaultProtected", false));
 
 		// Data
-		setNextRegenTaskTime(config.getLong("nextRegenTaskTime", DEFAULT_nextRegenTaskTime));
-		if (!match(getNextRegenTaskTime(), 0, Long.MAX_VALUE)) {
-			wrongValue(fileName, "nextRegenTaskTime", getNextRegenTaskTime(), DEFAULT_nextRegenTaskTime);
-			setNextRegenTaskTime(DEFAULT_nextRegenTaskTime);
+		this.setNextRegenTaskTime(config.getLong("nextRegenTaskTime", DEFAULT_nextRegenTaskTime));
+		if (!this.match(this.nextRegenTaskTime, 0, Long.MAX_VALUE)) {
+			this.wrongValue(fileName, "nextRegenTaskTime", this.nextRegenTaskTime, DEFAULT_nextRegenTaskTime);
+			this.setNextRegenTaskTime(DEFAULT_nextRegenTaskTime);
 		}
 
-		setNextRespawnTaskTime(config.getLong("nextRespawnTaskTime", DEFAULT_nextRespawnTaskTime));
-		if (!match(getNextRespawnTaskTime(), 0, Long.MAX_VALUE)) {
-			wrongValue(fileName, "nextRespawnTaskTime", getNextRespawnTaskTime(), DEFAULT_nextRespawnTaskTime);
-			setNextRespawnTaskTime(DEFAULT_nextRespawnTaskTime);
+		this.setNextRespawnTaskTime(config.getLong("nextRespawnTaskTime", DEFAULT_nextRespawnTaskTime));
+		if (!this.match(this.nextRespawnTaskTime, 0, Long.MAX_VALUE)) {
+			this.wrongValue(fileName, "nextRespawnTaskTime", this.nextRespawnTaskTime, DEFAULT_nextRespawnTaskTime);
+			this.setNextRespawnTaskTime(DEFAULT_nextRespawnTaskTime);
 		}
 	}
 
-	/**
-	 * @see AbstractConfig#getConfigString()
-	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
@@ -372,7 +367,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 			content.append(line + '\n');
 		}
 
-		content.append("\n# This config file is about the world \"" + worldName + "\"\n\n");
+		content.append("\n# This config file is about the world \"" + this.worldName + "\"\n\n");
 
 		// ############# //
 		// ## GENERAL ## //
@@ -387,7 +382,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append('\n');
 
 		// filterMovedTooQuicklySpam
-		content.append("# Do we hide the 'Player Moved Too Quickly!' spam? Default: " + DEFAULT_filterMovedTooQuicklySpam + "\n");
+		content.append("# Do we hide the 'Player Moved Too Quickly!' spam? Default: " + DEFAULT_filterMovedTooQuicklySpam + '\n');
 		content.append("# /!\\ This feature is not compatible with any other plugin using Bukkit's Logger filters\n");
 		content.append("#\n");
 		content.append("#       0: Disabled.\n");
@@ -396,7 +391,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("# Note: to completely disable the filter and allow compatibility with other plugins using it,\n");
 		content.append("#       please be sure to set it to 0 in EVERY End World config file.\n");
 		content.append("#\n");
-		content.append("filterMovedTooQuicklySpam: " + getFilterMovedTooQuicklySpam() + "\n\n");
+		content.append("filterMovedTooQuicklySpam: " + this.filterMovedTooQuicklySpam + "\n\n");
 
 		// ################# //
 		// ## ENDERDRAGON ## //
@@ -411,55 +406,55 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append('\n');
 
 		// edHealth
-		content.append("# The health value EnderDragons will spawn with. Default: " + DEFAULT_edHealth + "\n");
-		content.append("edHealth: " + getEdHealth() + "\n\n");
+		content.append("# The health value EnderDragons will spawn with. Default: " + DEFAULT_edHealth + '\n');
+		content.append("edHealth: " + this.edHealth + "\n\n");
 
 		// edDamageMultiplier
-		content.append("# Scale damages done by EnderDragon. Default: " + DEFAULT_edDamageMultiplier + "\n");
-		content.append("edDamageMultiplier: " + getEdDamageMultiplier() + "\n\n");
+		content.append("# Scale damages done by EnderDragon. Default: " + DEFAULT_edDamageMultiplier + '\n');
+		content.append("edDamageMultiplier: " + this.edDamageMultiplier + "\n\n");
 
 		// edPushesPlayers
-		content.append("# Do we 'simulate' the EnderDragon-Pushes-Player behaviour? Default: " + DEFAULT_edPushesPlayers + "\n");
+		content.append("# Do we 'simulate' the EnderDragon-Pushes-Player behaviour? Default: " + DEFAULT_edPushesPlayers + '\n');
 		content.append("# This feature apply a kind-of random velocity to a Player after it has been damaged by an EnderDragon\n");
 		content.append("#\n");
 		content.append("#       0: Disabled.\n");
 		content.append("#       1: Enabled.\n");
 		content.append("#\n");
-		content.append("edPushesPlayers: " + getEdPushesPlayers() + "\n\n");
+		content.append("edPushesPlayers: " + this.edPushesPlayers + "\n\n");
 
 		// edPushForce
 		content.append("# Simulated EnderDragon Push force. Default: " + DEFAULT_edPushForce + '\n');
 		content.append("# Should be a value between 0.01 and 10.0\n");
-		content.append("edPushForce: " + getEdPushForce() + "\n\n");
+		content.append("edPushForce: " + this.edPushForce + "\n\n");
 
 		// edEggHandling
-		content.append("# The way the DragonEgg will spawn. Default: " + DEFAULT_edEggHandling + "\n");
+		content.append("# The way the DragonEgg will spawn. Default: " + DEFAULT_edEggHandling + '\n');
 		content.append("#\n");
 		content.append("#       0: Disabled. The egg will spawn normally if portalHandling is set to 0 or 1.\n");
 		content.append("#       1: Enabled. The egg will be semi-randomly given to one of the best fighters.\n");
 		content.append("#\n");
-		content.append("edEggHandling: " + getEdEggHandling() + "\n\n");
+		content.append("edEggHandling: " + this.edEggHandling + "\n\n");
 
 		// edExpHandling
-		content.append("# The way the reward XP will be given to player. Default: " + DEFAULT_edExpHandling + "\n");
+		content.append("# The way the reward XP will be given to player. Default: " + DEFAULT_edExpHandling + '\n');
 		content.append("#\n");
 		content.append("#       0: Disabled. XP orbs will spawn normally.\n");
 		content.append("#       1: Enabled. XP will be splitted between fighters, more XP for better fighters.\n");
 		content.append("#\n");
-		content.append("edExpHandling: " + getEdExpHandling() + "\n\n");
+		content.append("edExpHandling: " + this.edExpHandling + "\n\n");
 
 		// edExpReward
-		content.append("# The value of the XP drop. Default: " + DEFAULT_edExpReward + "\n");
-		content.append("edExpReward: " + getEdExpReward() + "\n\n");
+		content.append("# The value of the XP drop. Default: " + DEFAULT_edExpReward + '\n');
+		content.append("edExpReward: " + this.edExpReward + "\n\n");
 
 		// edPortalSpawn
-		content.append("# The way portal spawn will be handled. Default: " + DEFAULT_edPortalSpawn + "\n");
+		content.append("# The way portal spawn will be handled. Default: " + DEFAULT_edPortalSpawn + '\n');
 		content.append("#\n");
 		content.append("#       0: Disabled. Portal will spawn normally.\n");
 		content.append("#       1: Egg. Portal will be removed but not the DragonEgg\n");
 		content.append("#       2: Enabled. Portal will not spawn. No more cut obsidian towers. /!\\ No Egg if dragonEggHandling=0.\n");
 		content.append("#\n");
-		content.append("edPortalSpawn: " + getEdPortalSpawn() + "\n\n");
+		content.append("edPortalSpawn: " + this.edPortalSpawn + "\n\n");
 
 		// ################### //
 		// ## ENDERCRYSTALS ## //
@@ -474,14 +469,14 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append('\n');
 
 		// ecHealthRegainRate
-		content.append("# Change EnderCrystals behaviour relative to the EnderDragon. Default: " + DEFAULT_ecHealthRegainRate + "\n");
+		content.append("# Change EnderCrystals behaviour relative to the EnderDragon. Default: " + DEFAULT_ecHealthRegainRate + '\n');
 		content.append("# One important thing to understand is that Health is integer (for now).\n");
 		content.append("#\n");
 		content.append("#       < 1.0: Acts as a \"chance that the Dragon will regain 1 HP\" each tick\n");
 		content.append("#       = 1.0: Vanilla. EnderDragon gain 1 HP per tick.\n");
 		content.append("#       > 1.0: EnderDragon gain x HP per tick, so please set it to an integer value like 2 or more.\n");
 		content.append("#\n");
-		content.append("ecHealthRegainRate: " + getEcHealthRegainRate() + "\n\n");
+		content.append("ecHealthRegainRate: " + this.ecHealthRegainRate + "\n\n");
 
 		// ################## //
 		// ## REGENERATION ## //
@@ -496,17 +491,17 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append('\n');
 
 		// regenType
-		content.append("# Select the regeneration type. Default: " + DEFAULT_regenType + "\n");
+		content.append("# Select the regeneration type. Default: " + DEFAULT_regenType + '\n');
 		content.append("#\n");
 		content.append("#       0: Disabled. No hot regeneration.\n");
 		content.append("#       1: Before EnderDragon respawn (only if no EnderDragon alive)\n");
 		content.append("#       2: Periodic - From load time. Regen every <regenTimer> seconds after boot/load.\n");
 		content.append("#       3: Periodic - Persistent. Regen every <regenTimer> seconds, persistent through reboots/reloads\n");
 		content.append("#\n");
-		content.append("regenType: " + getRegenType() + "\n\n");
+		content.append("regenType: " + this.regenType + "\n\n");
 
 		// regenMethod
-		content.append("# Select your definition of \"regen\". Default: " + DEFAULT_regenMethod + "\n");
+		content.append("# Select your definition of \"regen\". Default: " + DEFAULT_regenMethod + '\n');
 		content.append("#\n");
 		content.append("#       0: Hard Regen. Regen every chunks at once. Laggy. Not recommended.\n");
 		content.append("#       1: Soft Regen. Regen chunks when they are loaded. A lot less laggy.\n");
@@ -514,12 +509,12 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#\n");
 		content.append("# Note: Regeneration does not regenerate Protected chunks.\n");
 		content.append("#\n");
-		content.append("regenMethod: " + getRegenMethod() + "\n\n");
+		content.append("regenMethod: " + this.regenMethod + "\n\n");
 
 		// regenTimer
 		content.append("# The time between each regen. Ignored if regenType is not Periodic (2 or 3). Default: " +
 		               DEFAULT_regenTimer +
-		               "\n");
+		               '\n');
 		content.append("#\n");
 		content.append("# Here are some example values:\n");
 		content.append("#   Value   --   Description\n");
@@ -539,10 +534,10 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#\n");
 		content.append("# Note: You should NOT use low value. Some hours of delay are recommended.\n");
 		content.append("#\n");
-		content.append("regenTimer: " + getRegenTimer() + "\n\n");
+		content.append("regenTimer: " + this.regenTimer + "\n\n");
 
 		// regenAction
-		content.append("# What do we do to players in the End when we want to regen the world? Default: " + DEFAULT_regenAction + "\n");
+		content.append("# What do we do to players in the End when we want to regen the world? Default: " + DEFAULT_regenAction + '\n');
 		content.append("#\n");
 		content.append("#       0: Kick them. This way they can rejoin immediatly in the End at the same place.\n");
 		content.append("#          WARNING: Mass rejoin after mass kick in the End could cause lag if regenMethod=1\n");
@@ -551,7 +546,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#\n");
 		content.append("#       2: Do nothing. Can only be used with regenMethod=2\n");
 		content.append("#\n");
-		content.append("regenAction: " + getRegenAction() + "\n\n");
+		content.append("regenAction: " + this.regenAction + "\n\n");
 
 		// hardRegenOnStop
 		content.append("# Activate hard regeneration on server stop. This will only slow down server stop.\n");
@@ -560,17 +555,17 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#       0: Disabled.\n");
 		content.append("#       1: Enabled.\n");
 		content.append("#\n");
-		content.append("hardRegenOnStop: " + getHardRegenOnStop() + "\n\n");
+		content.append("hardRegenOnStop: " + this.hardRegenOnStop + "\n\n");
 
 		// slowSoftRegenChunks
 		content.append("# Select the number of chunks to be regen every slowSoftRegenTimer after a Soft Regeneration has started.\n");
-		content.append("# Default value: " + DEFAULT_slowSoftRegenChunks + "\n");
-		content.append("slowSoftRegenChunks: " + getSlowSoftRegenChunks() + "\n\n");
+		content.append("# Default value: " + DEFAULT_slowSoftRegenChunks + '\n');
+		content.append("slowSoftRegenChunks: " + this.slowSoftRegenChunks + "\n\n");
 
 		// slowSoftRegenTimer
 		content.append("# Select the at which rate slowSoftRegenChunks chunks will be regenerated after a\n");
-		content.append("# Soft Regeneration has started. Default value: " + DEFAULT_slowSoftRegenTimer + "\n");
-		content.append("slowSoftRegenTimer: " + getSlowSoftRegenTimer() + "\n\n");
+		content.append("# Soft Regeneration has started. Default value: " + DEFAULT_slowSoftRegenTimer + '\n');
+		content.append("slowSoftRegenTimer: " + this.slowSoftRegenTimer + "\n\n");
 
 		// ############# //
 		// ## RESPAWN ## //
@@ -585,11 +580,11 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append('\n');
 
 		// respawnNumber
-		content.append("# This is the amount of EnderDragons you want to be spawned. Default: " + DEFAULT_respawnNumber + "\n");
-		content.append("respawnNumber: " + getRespawnNumber() + "\n\n");
+		content.append("# This is the amount of EnderDragons you want to be spawned. Default: " + DEFAULT_respawnNumber + '\n');
+		content.append("respawnNumber: " + this.respawnNumber + "\n\n");
 
 		// respawnType
-		content.append("# Select when you want to respawn Dragons automagically. Default: " + DEFAULT_respawnType + "\n");
+		content.append("# Select when you want to respawn Dragons automagically. Default: " + DEFAULT_respawnType + '\n');
 		content.append("#\n");
 		content.append("#       0: Disabled. No automatic respawn.\n");
 		content.append("#       1: X seconds after each Dragon's death. Not really good with regenType=1.\n");
@@ -599,14 +594,14 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#       5: Periodic - Persistent. Respawn every X seconds, persistent through reboots/reloads\n");
 		content.append("#       6: NEW - Respawn every X seconds after the last Dragon alive's death, persistent through reboots/reloads\n");
 		content.append("#\n");
-		content.append("respawnType: " + getRespawnType() + "\n\n");
+		content.append("respawnType: " + this.respawnType + "\n\n");
 
 		// respawnTimer
 		content.append("# The X value in the previous comments. Defaults: " +
 		               DEFAULT_respawnTimerMin +
 		               " < " +
 		               DEFAULT_respawnTimerMax +
-		               "\n");
+		               '\n');
 		content.append("# A value will be randomly chosen for each iteration. The chosen value vill be between min and max\n");
 		content.append("#\n");
 		content.append("# Here are some example values (again!):\n");
@@ -628,8 +623,8 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("# Note: You CAN use low value if regenType is not set to 1.\n");
 		content.append("#       But maybe you should consider using respawnType=1 or respawnType=2 instead of a low periodic.\n");
 		content.append("#\n");
-		content.append("respawnTimerMin: " + getRespawnTimerMin() + "\n");
-		content.append("respawnTimerMax: " + getRespawnTimerMax() + "\n\n");
+		content.append("respawnTimerMin: " + this.respawnTimerMin + '\n');
+		content.append("respawnTimerMax: " + this.respawnTimerMax + "\n\n");
 
 		// ################ //
 		// ## DROP TABLE ## //
@@ -644,12 +639,12 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append('\n');
 
 		// dropTableHandling
-		content.append("# The way the Drops will spawn. Default: " + DEFAULT_dropTableHandling + "\n");
+		content.append("# The way the Drops will spawn. Default: " + DEFAULT_dropTableHandling + '\n');
 		content.append("#\n");
 		content.append("#       0: Stock. Drops will just fall from the EnderDragon death Location\n");
 		content.append("#       1: Distribution. Drops will be distributed exactly like the DragonEgg\n");
 		content.append("#\n");
-		content.append("dropTableHandling: " + getDropTableHandling() + "\n\n");
+		content.append("dropTableHandling: " + this.dropTableHandling + "\n\n");
 
 		content.append("# Drop table for the EnderDragons. Complete informations: http://ribe.sg/is-config\n");
 		content.append("# Example drop table:\n");
@@ -667,23 +662,23 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 			ItemStackUtil.saveToConfigSection(exampleDropSection, "itemStack", is);
 			content.append(StringUtil.prependLines(dummyConfig.saveToString(), "# "));
 		} catch (final InventoryUtilException e) {
-			plugin.error("Failed to save example ItemStack!", e);
+			this.plugin.error("Failed to save example ItemStack!", e);
 		}
-		content.append("\n");
+		content.append('\n');
 		try {
 			final YamlConfiguration dummyConfig = new YamlConfiguration();
 			final ConfigurationSection dummySection = dummyConfig.createSection("dropTable");
 			int i = 0;
-			for (final Pair<ItemStack, Float> p : dropTable) {
+			for (final Pair<ItemStack, Float> p : this.dropTable) {
 				final ConfigurationSection exampleDropSection = dummySection.createSection("drop" + ++i);
 				exampleDropSection.set("probability", p.getValue());
 				ItemStackUtil.saveToConfigSection(exampleDropSection, "itemStack", p.getKey());
 			}
 			content.append(dummyConfig.saveToString());
 		} catch (final InventoryUtilException e) {
-			plugin.error("Failed to save DropTable!", e);
+			this.plugin.error("Failed to save DropTable!", e);
 		}
-		content.append("\n");
+		content.append('\n');
 
 		// ###################### //
 		// ## CHUNK PROTECTION ## //
@@ -698,12 +693,12 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append('\n');
 
 		// defaultProtected
-		content.append("# Default state of newly first-generated chunks. Default: " + DEFAULT_defaultProtected + "\n");
+		content.append("# Default state of newly first-generated chunks. Default: " + DEFAULT_defaultProtected + '\n');
 		content.append("#\n");
 		content.append("#       true:  Protected from regeneration\n");
 		content.append("#       false: Unprotected from regeneration\n");
 		content.append("#\n");
-		content.append("defaultProtected: " + getDefaultProtected() + "\n\n");
+		content.append("defaultProtected: " + this.defaultProtected + "\n\n");
 
 		// ########## //
 		// ## DATA ## //
@@ -719,11 +714,11 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 
 		// nextRegenTaskTime
 		content.append("# Used to allow Regen task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");
-		content.append("nextRegenTaskTime: " + (getRegenTimer() == 0 ? "0" : getNextRegenTaskTime()) + "\n\n");
+		content.append("nextRegenTaskTime: " + (this.regenTimer == 0 ? "0" : this.nextRegenTaskTime) + "\n\n");
 
 		// nextRespawnTaskTime
 		content.append("# Used to allow Respawn task timer persistence. /!\\ PLEASE DO NOT TOUCH THIS !\n");
-		content.append("nextRespawnTaskTime: " + (getRespawnTimerMax() == 0 ? "0" : getNextRespawnTaskTime()) + "\n\n");
+		content.append("nextRespawnTaskTime: " + (this.respawnTimerMax == 0 ? "0" : this.nextRespawnTaskTime) + "\n\n");
 
 		return content.toString();
 	}
@@ -731,7 +726,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	// General
 
 	public int getFilterMovedTooQuicklySpam() {
-		return filterMovedTooQuicklySpam;
+		return this.filterMovedTooQuicklySpam;
 	}
 
 	private void setFilterMovedTooQuicklySpam(final int filterMovedTooQuicklySpam) {
@@ -741,7 +736,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	// EnderDragons
 
 	public float getEdDamageMultiplier() {
-		return edDamageMultiplier;
+		return this.edDamageMultiplier;
 	}
 
 	private void setEdDamageMultiplier(final float edDamageMultiplier) {
@@ -749,7 +744,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getEdEggHandling() {
-		return edEggHandling;
+		return this.edEggHandling;
 	}
 
 	private void setEdEggHandling(final int edEggHandling) {
@@ -757,7 +752,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getEdExpHandling() {
-		return edExpHandling;
+		return this.edExpHandling;
 	}
 
 	private void setEdExpHandling(final int edExpHandling) {
@@ -765,7 +760,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getEdExpReward() {
-		return edExpReward;
+		return this.edExpReward;
 	}
 
 	private void setEdExpReward(final int edExpReward) {
@@ -773,7 +768,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getEdHealth() {
-		return edHealth;
+		return this.edHealth;
 	}
 
 	private void setEdHealth(final int edHealth) {
@@ -781,7 +776,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getEdPortalSpawn() {
-		return edPortalSpawn;
+		return this.edPortalSpawn;
 	}
 
 	private void setEdPortalSpawn(final int edPortalSpawn) {
@@ -789,7 +784,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getEdPushesPlayers() {
-		return edPushesPlayers;
+		return this.edPushesPlayers;
 	}
 
 	private void setEdPushesPlayers(final int edPushesPlayers) {
@@ -797,7 +792,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public float getEdPushForce() {
-		return edPushForce;
+		return this.edPushForce;
 	}
 
 	public void setEdPushForce(final float edPushForce) {
@@ -807,7 +802,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	// EnderCrystals
 
 	public float getEcHealthRegainRate() {
-		return ecHealthRegainRate;
+		return this.ecHealthRegainRate;
 	}
 
 	public void setEcHealthRegainRate(final float ecHealthRegainRate) {
@@ -817,7 +812,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	// Regeneration
 
 	public int getHardRegenOnStop() {
-		return hardRegenOnStop;
+		return this.hardRegenOnStop;
 	}
 
 	private void setHardRegenOnStop(final int hardRegenOnStop) {
@@ -825,7 +820,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getRegenAction() {
-		return regenAction;
+		return this.regenAction;
 	}
 
 	private void setRegenAction(final int regenAction) {
@@ -833,7 +828,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getRegenMethod() {
-		return regenMethod;
+		return this.regenMethod;
 	}
 
 	private void setRegenMethod(final int regenMethod) {
@@ -841,7 +836,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getRegenTimer() {
-		return regenTimer;
+		return this.regenTimer;
 	}
 
 	private void setRegenTimer(final int regenTimer) {
@@ -849,7 +844,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getRegenType() {
-		return regenType;
+		return this.regenType;
 	}
 
 	private void setRegenType(final int regenType) {
@@ -857,7 +852,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getSlowSoftRegenChunks() {
-		return slowSoftRegenChunks;
+		return this.slowSoftRegenChunks;
 	}
 
 	public void setSlowSoftRegenChunks(final int slowSoftRegenChunks) {
@@ -865,7 +860,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getSlowSoftRegenTimer() {
-		return slowSoftRegenTimer;
+		return this.slowSoftRegenTimer;
 	}
 
 	public void setSlowSoftRegenTimer(final int slowSoftRegenTimer) {
@@ -875,7 +870,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	// Respawn
 
 	public int getRespawnNumber() {
-		return respawnNumber;
+		return this.respawnNumber;
 	}
 
 	private void setRespawnNumber(final int respawnNumber) {
@@ -883,7 +878,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getRespawnTimerMax() {
-		return respawnTimerMax;
+		return this.respawnTimerMax;
 	}
 
 	private void setRespawnTimerMax(final int respawnTimerMax) {
@@ -891,7 +886,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getRespawnTimerMin() {
-		return respawnTimerMin;
+		return this.respawnTimerMin;
 	}
 
 	private void setRespawnTimerMin(final int respawnTimerMin) {
@@ -899,12 +894,12 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public int getRandomRespawnTimer() {
-		final int respawnTimerDiff = getRespawnTimerMax() - getRespawnTimerMin();
-		return respawnTimerDiff == 0 ? 0 : RANDOM.nextInt(respawnTimerDiff) + getRespawnTimerMin();
+		final int respawnTimerDiff = this.respawnTimerMax - this.respawnTimerMin;
+		return respawnTimerDiff == 0 ? 0 : RANDOM.nextInt(respawnTimerDiff) + this.respawnTimerMin;
 	}
 
 	public int getRespawnType() {
-		return respawnType;
+		return this.respawnType;
 	}
 
 	private void setRespawnType(final int respawnType) {
@@ -914,7 +909,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	// Drop Table
 
 	public int getDropTableHandling() {
-		return dropTableHandling;
+		return this.dropTableHandling;
 	}
 
 	private void setDropTableHandling(final int dropTableHandling) {
@@ -928,7 +923,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	// Chunk Protection
 
 	public boolean getDefaultProtected() {
-		return defaultProtected;
+		return this.defaultProtected;
 	}
 
 	public void setDefaultProtected(final boolean defaultProtected) {
@@ -938,7 +933,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	// Data
 
 	public long getNextRegenTaskTime() {
-		return nextRegenTaskTime;
+		return this.nextRegenTaskTime;
 	}
 
 	public void setNextRegenTaskTime(final long nextRegenTaskTime) {
@@ -946,7 +941,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	}
 
 	public long getNextRespawnTaskTime() {
-		return nextRespawnTaskTime;
+		return this.nextRespawnTaskTime;
 	}
 
 	public void setNextRespawnTaskTime(final long nextRespawnTaskTime) {
@@ -956,6 +951,6 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	// Others
 
 	public String getWorldName() {
-		return worldName;
+		return this.worldName;
 	}
 }

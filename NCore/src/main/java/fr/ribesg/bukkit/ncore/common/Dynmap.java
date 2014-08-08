@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ncore.common;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
 import org.dynmap.DynmapCommonAPI;
 
 /**
@@ -97,7 +98,7 @@ public class Dynmap {
 	 * Builds a Dynmap bridge.
 	 */
 	public Dynmap() {
-		this.api = (DynmapCommonAPI) Bukkit.getPluginManager().getPlugin(DYNMAP_PLUGIN_NAME);
+		this.api = (DynmapCommonAPI)Bukkit.getPluginManager().getPlugin(DYNMAP_PLUGIN_NAME);
 	}
 
 	/**

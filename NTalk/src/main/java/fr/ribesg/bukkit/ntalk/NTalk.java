@@ -15,10 +15,11 @@ import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
 import fr.ribesg.bukkit.ntalk.filter.ChatFilter;
 import fr.ribesg.bukkit.ntalk.format.Formater;
 import fr.ribesg.bukkit.ntalk.lang.Messages;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
+
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.plugin.PluginManager;
 
 public class NTalk extends NPlugin implements TalkNode {
 
@@ -42,9 +43,9 @@ public class NTalk extends NPlugin implements TalkNode {
 
 	@Override
 	protected void loadMessages() throws IOException {
-		debug("Loading plugin Messages...");
-		if (!getDataFolder().isDirectory()) {
-			getDataFolder().mkdir();
+		this.debug("Loading plugin Messages...");
+		if (!this.getDataFolder().isDirectory()) {
+			this.getDataFolder().mkdir();
 		}
 
 		final Messages messages = new Messages();
@@ -57,53 +58,50 @@ public class NTalk extends NPlugin implements TalkNode {
 	public boolean onNodeEnable() {
 		// Config
 		try {
-			debug("Loading configuration...");
-			pluginConfig = new Config(this);
-			pluginConfig.loadConfig();
+			this.debug("Loading configuration...");
+			this.pluginConfig = new Config(this);
+			this.pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			error("An error occured when NTalk tried to load config.yml", e);
+			this.error("An error occured when NTalk tried to load config.yml", e);
 			return false;
 		}
 
 		// Chat filter
-		if (pluginConfig.isChatFiltersEnabled()) {
+		if (this.pluginConfig.isChatFiltersEnabled()) {
 			try {
-				debug("Loading Chat Filters...");
-				chatFilter = new ChatFilter(this);
-				chatFilter.loadConfig("filters.yml");
+				this.debug("Loading Chat Filters...");
+				this.chatFilter = new ChatFilter(this);
+				this.chatFilter.loadConfig("filters.yml");
 			} catch (final IOException | InvalidConfigurationException e) {
-				error("An error occured when NTalk tried to load filters.yml", e);
+				this.error("An error occured when NTalk tried to load filters.yml", e);
 				return false;
 			}
 		}
 
-		debug("Building formater...");
-		formater = new Formater(this);
+		this.debug("Building formater...");
+		this.formater = new Formater(this);
 
 		// Listeners
-		debug("Registering Listeners...");
-		final PluginManager pm = getServer().getPluginManager();
+		this.debug("Registering Listeners...");
+		final PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new TalkListener(this), this);
 
 		// Command
-		debug("Registering Commands...");
+		this.debug("Registering Commands...");
 		final TalkCommandExecutor executor = new TalkCommandExecutor(this);
-		setCommandExecutor("ntalk", executor);
-		setCommandExecutor("pm", executor);
-		setCommandExecutor("pr", executor);
-		setCommandExecutor("nick", executor);
+		this.setCommandExecutor("ntalk", executor);
+		this.setCommandExecutor("pm", executor);
+		this.setCommandExecutor("pr", executor);
+		this.setCommandExecutor("nick", executor);
 
 		// We need to access permissions in the AsyncPlayerChatEvent handler
 		// For this purpose, we need to use the AsyncPermAccessor
-		debug("Initializing Asynchronous Permissions Accessor...");
+		this.debug("Initializing Asynchronous Permissions Accessor...");
 		AsyncPermAccessor.init(this);
 
 		return true;
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
-	 */
 	@Override
 	protected void handleOtherNodes() {
 		// Nothing to do here for now
@@ -112,27 +110,27 @@ public class NTalk extends NPlugin implements TalkNode {
 	@Override
 	public void onNodeDisable() {
 		try {
-			getPluginConfig().writeConfig();
+			this.pluginConfig.writeConfig();
 		} catch (final IOException e) {
-			error("An error occured when NTalk tried to save config.yml", e);
+			this.error("An error occured when NTalk tried to save config.yml", e);
 		}
 	}
 
 	public Formater getFormater() {
-		return formater;
+		return this.formater;
 	}
 
 	public ChatFilter getChatFilter() {
-		return chatFilter;
+		return this.chatFilter;
 	}
 
 	@Override
 	public Messages getMessages() {
-		return messages;
+		return this.messages;
 	}
 
 	public Config getPluginConfig() {
-		return pluginConfig;
+		return this.pluginConfig;
 	}
 
 	// API for other nodes

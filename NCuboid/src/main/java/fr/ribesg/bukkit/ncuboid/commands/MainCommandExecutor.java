@@ -13,17 +13,18 @@ import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AdminUserGroupJailSubcmdExecutor;
+import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AttributeSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.CreateSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.DeleteSubcmdExecutor;
-import fr.ribesg.bukkit.ncuboid.commands.subexecutors.AttributeSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.FlagSubcmdExecutor;
 import fr.ribesg.bukkit.ncuboid.commands.subexecutors.ReloadSubcmdExecutor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 
 public class MainCommandExecutor implements CommandExecutor {
 
@@ -65,15 +66,15 @@ public class MainCommandExecutor implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String cmdLabel, final String[] args) {
-		if (cmd.getName().equals("ncuboid")) {
+		if ("ncuboid".equals(cmd.getName())) {
 			if (!Perms.hasGeneral(sender)) {
-				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+				this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 				return true;
 			} else {
 				if (args.length == 0) {
-					return cmdDefault(sender);
+					return this.cmdDefault(sender);
 				} else {
-					final AbstractSubcmdExecutor executor = getExecutor(args[0].toLowerCase());
+					final AbstractSubcmdExecutor executor = this.getExecutor(args[0].toLowerCase());
 					return executor != null && executor.execute(sender, args);
 				}
 			}
@@ -88,7 +89,7 @@ public class MainCommandExecutor implements CommandExecutor {
 	}
 
 	private AbstractSubcmdExecutor getExecutor(final String providedName) {
-		return this.executorsMap.get(getFromAlias(providedName));
+		return this.executorsMap.get(this.getFromAlias(providedName));
 	}
 
 	private String getFromAlias(final String providedName) {

@@ -8,16 +8,18 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.config;
+
 import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ncore.util.TimeUtil;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * @author Ribesg
@@ -79,41 +81,41 @@ public class Config extends AbstractConfig<NCore> {
 
 		// updateCheck. Default: true
 		// Possible values: boolean
-		setUpdateCheck(config.getBoolean("updateCheck", true));
+		this.setUpdateCheck(config.getBoolean("updateCheck", true));
 
 		// updateCheckInterval. Default: 43200
 		// Possible values: Positive or null intergers, in seconds
-		setUpdateCheckInterval(config.getLong("updateCheckInterval", 43200));
+		this.setUpdateCheckInterval(config.getLong("updateCheckInterval", 43200));
 
 		// checkFor. Default: NCore, NCuboid, NEnchantingEgg, NGeneral, NPlayer, NTalk, NTheEndAgain, NWorld
 		// Possible values: any subset of the default value
-		setCheckFor(config.getStringList("checkFor"));
+		this.setCheckFor(config.getStringList("checkFor"));
 
 		// apiKey. Default: empty
-		setApiKey(config.getString("apiKey", ""));
+		this.setApiKey(config.getString("apiKey", ""));
 
 		// proxyAddress
 		final String proxyHost = config.getString("proxyHost", null);
 		final int proxyPort = config.getInt("proxyPort", -1);
 		if (proxyHost != null && !proxyHost.isEmpty() && proxyPort != -1) {
-			setProxyAddress(new InetSocketAddress(proxyHost, proxyPort));
+			this.setProxyAddress(new InetSocketAddress(proxyHost, proxyPort));
 		}
 
 		// translatableUnits
-		setSecondTimeUnit(config.getString("second", "second"));
-		setSecondsTimeUnit(config.getString("seconds", "seconds"));
-		setMinuteTimeUnit(config.getString("minute", "minute"));
-		setMinutesTimeUnit(config.getString("minutes", "minutes"));
-		setHourTimeUnit(config.getString("hour", "hour"));
-		setHoursTimeUnit(config.getString("hours", "hours"));
-		setDayTimeUnit(config.getString("day", "day"));
-		setDaysTimeUnit(config.getString("days", "days"));
-		setWeekTimeUnit(config.getString("week", "week"));
-		setWeeksTimeUnit(config.getString("weeks", "weeks"));
-		setMonthTimeUnit(config.getString("month", "month"));
-		setMonthsTimeUnit(config.getString("months", "months"));
-		setYearTimeUnit(config.getString("year", "year"));
-		setYearsTimeUnit(config.getString("years", "years"));
+		this.setSecondTimeUnit(config.getString("second", "second"));
+		this.setSecondsTimeUnit(config.getString("seconds", "seconds"));
+		this.setMinuteTimeUnit(config.getString("minute", "minute"));
+		this.setMinutesTimeUnit(config.getString("minutes", "minutes"));
+		this.setHourTimeUnit(config.getString("hour", "hour"));
+		this.setHoursTimeUnit(config.getString("hours", "hours"));
+		this.setDayTimeUnit(config.getString("day", "day"));
+		this.setDaysTimeUnit(config.getString("days", "days"));
+		this.setWeekTimeUnit(config.getString("week", "week"));
+		this.setWeeksTimeUnit(config.getString("weeks", "weeks"));
+		this.setMonthTimeUnit(config.getString("month", "month"));
+		this.setMonthsTimeUnit(config.getString("months", "months"));
+		this.setYearTimeUnit(config.getString("year", "year"));
+		this.setYearsTimeUnit(config.getString("years", "years"));
 
 		TimeUtil.setTranslatedUnit("second", this.second);
 		TimeUtil.setTranslatedUnit("seconds", this.seconds);
@@ -131,7 +133,7 @@ public class Config extends AbstractConfig<NCore> {
 		TimeUtil.setTranslatedUnit("years", this.years);
 
 		// debugEnabled. Default: empty
-		setDebugEnabled(config.getStringList("debugEnabled"));
+		this.setDebugEnabled(config.getStringList("debugEnabled"));
 	}
 
 	@Override
@@ -154,7 +156,7 @@ public class Config extends AbstractConfig<NCore> {
 		content.append("# - Automatic check for updates\n");
 		content.append("# - The whole /updater command\n");
 		content.append("# - File download\n");
-		content.append("updateCheck: " + isUpdateCheck() + "\n\n");
+		content.append("updateCheck: " + this.updateCheck + "\n\n");
 
 		// updateCheckInterval: Default: 43200
 		content.append("# Interval between Update check, in seconds. Default : 43200\n");
@@ -176,14 +178,14 @@ public class Config extends AbstractConfig<NCore> {
 		content.append("# Note: This is not persistent through restarts.\n");
 		content.append("# Note: Values below 15 minutes are useless because of an internal cache.\n");
 		content.append("#\n");
-		content.append("updateCheckInterval: " + getUpdateCheckInterval() + "\n\n");
+		content.append("updateCheckInterval: " + this.updateCheckInterval + "\n\n");
 
 		// checkFor. Default: NCore, NCuboid, NEnchantingEgg, NGeneral, NPlayer, NTalk, NTheEndAgain, NWorld
 		content.append("# Enable update check for each specific node. Default: all nodes\n");
 		content.append("# Note: Will not consider unknown plugins nor unused nodes.\n");
 		content.append("checkFor:\n");
 		for (final String pluginName : this.checkFor) {
-			content.append("- " + pluginName + "\n");
+			content.append("- " + pluginName + '\n');
 		}
 		content.append('\n');
 
@@ -206,41 +208,41 @@ public class Config extends AbstractConfig<NCore> {
 			content.append("proxyPort: \"\"\n");
 		} else {
 			content.append("proxyHost: \"" + this.proxyAddress.getHostName() + "\"\n");
-			content.append("proxyPort: " + this.proxyAddress.getPort() + "\n");
+			content.append("proxyPort: " + this.proxyAddress.getPort() + '\n');
 		}
 		content.append('\n');
 
 		// translatableUnits
 		content.append("# Here you can translate what's written in every plugin when\n");
 		content.append("# a duration is printed.\n");
-		content.append("second: " + getSecondTimeUnit() + '\n');
-		content.append("seconds: " + getSecondsTimeUnit() + '\n');
-		content.append("minute: " + getMinuteTimeUnit() + '\n');
-		content.append("minutes: " + getMinutesTimeUnit() + '\n');
-		content.append("hour: " + getHourTimeUnit() + '\n');
-		content.append("hours: " + getHoursTimeUnit() + '\n');
-		content.append("day: " + getDayTimeUnit() + '\n');
-		content.append("days: " + getDaysTimeUnit() + '\n');
-		content.append("week: " + getWeekTimeUnit() + '\n');
-		content.append("weeks: " + getWeeksTimeUnit() + '\n');
-		content.append("month: " + getMonthTimeUnit() + '\n');
-		content.append("months: " + getMonthsTimeUnit() + '\n');
-		content.append("year: " + getYearTimeUnit() + '\n');
-		content.append("years: " + getYearsTimeUnit() + '\n');
+		content.append("second: " + this.second + '\n');
+		content.append("seconds: " + this.seconds + '\n');
+		content.append("minute: " + this.minute + '\n');
+		content.append("minutes: " + this.minutes + '\n');
+		content.append("hour: " + this.hour + '\n');
+		content.append("hours: " + this.hours + '\n');
+		content.append("day: " + this.day + '\n');
+		content.append("days: " + this.days + '\n');
+		content.append("week: " + this.week + '\n');
+		content.append("weeks: " + this.weeks + '\n');
+		content.append("month: " + this.month + '\n');
+		content.append("months: " + this.months + '\n');
+		content.append("year: " + this.year + '\n');
+		content.append("years: " + this.years + '\n');
 		content.append('\n');
 
 		// debugEnabled. Default: empty
 		content.append("# Enables debug mode for each specific node. Default: empty\n");
 		content.append("debugEnabled:\n");
 		for (final String debugged : this.debugEnabled) {
-			content.append("- " + debugged + "\n");
+			content.append("- " + debugged + '\n');
 		}
 
 		return content.toString();
 	}
 
 	public boolean isUpdateCheck() {
-		return updateCheck;
+		return this.updateCheck;
 	}
 
 	public void setUpdateCheck(final boolean updateCheck) {
@@ -248,7 +250,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public long getUpdateCheckInterval() {
-		return updateCheckInterval;
+		return this.updateCheckInterval;
 	}
 
 	public void setUpdateCheckInterval(final long updateCheckInterval) {
@@ -256,7 +258,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public List<String> getCheckFor() {
-		return checkFor;
+		return this.checkFor;
 	}
 
 	public void setCheckFor(final List<String> checkFor) {
@@ -264,7 +266,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getApiKey() {
-		return apiKey;
+		return this.apiKey;
 	}
 
 	public void setApiKey(final String apiKey) {
@@ -272,7 +274,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public InetSocketAddress getProxyAddress() {
-		return proxyAddress;
+		return this.proxyAddress;
 	}
 
 	public void setProxyAddress(final InetSocketAddress proxyAddress) {
@@ -288,7 +290,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getSecondTimeUnit() {
-		return second;
+		return this.second;
 	}
 
 	public void setSecondTimeUnit(final String second) {
@@ -296,7 +298,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getSecondsTimeUnit() {
-		return seconds;
+		return this.seconds;
 	}
 
 	public void setSecondsTimeUnit(final String seconds) {
@@ -304,7 +306,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getMinuteTimeUnit() {
-		return minute;
+		return this.minute;
 	}
 
 	public void setMinuteTimeUnit(final String minute) {
@@ -312,7 +314,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getMinutesTimeUnit() {
-		return minutes;
+		return this.minutes;
 	}
 
 	public void setMinutesTimeUnit(final String minutes) {
@@ -320,7 +322,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getHourTimeUnit() {
-		return hour;
+		return this.hour;
 	}
 
 	public void setHourTimeUnit(final String hour) {
@@ -328,7 +330,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getHoursTimeUnit() {
-		return hours;
+		return this.hours;
 	}
 
 	public void setHoursTimeUnit(final String hours) {
@@ -336,7 +338,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getDayTimeUnit() {
-		return day;
+		return this.day;
 	}
 
 	public void setDayTimeUnit(final String day) {
@@ -344,7 +346,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getDaysTimeUnit() {
-		return days;
+		return this.days;
 	}
 
 	public void setDaysTimeUnit(final String days) {
@@ -352,7 +354,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getWeekTimeUnit() {
-		return week;
+		return this.week;
 	}
 
 	public void setWeekTimeUnit(final String week) {
@@ -360,7 +362,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getWeeksTimeUnit() {
-		return weeks;
+		return this.weeks;
 	}
 
 	public void setWeeksTimeUnit(final String weeks) {
@@ -368,7 +370,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getMonthTimeUnit() {
-		return month;
+		return this.month;
 	}
 
 	public void setMonthTimeUnit(final String month) {
@@ -376,7 +378,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getMonthsTimeUnit() {
-		return months;
+		return this.months;
 	}
 
 	public void setMonthsTimeUnit(final String months) {
@@ -384,7 +386,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getYearTimeUnit() {
-		return year;
+		return this.year;
 	}
 
 	public void setYearTimeUnit(final String year) {
@@ -392,7 +394,7 @@ public class Config extends AbstractConfig<NCore> {
 	}
 
 	public String getYearsTimeUnit() {
-		return years;
+		return this.years;
 	}
 
 	public void setYearsTimeUnit(final String years) {

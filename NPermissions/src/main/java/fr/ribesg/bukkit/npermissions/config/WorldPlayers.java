@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.config;
+
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
@@ -18,13 +19,14 @@ import fr.ribesg.bukkit.npermissions.permission.PermissionsManager;
 import fr.ribesg.bukkit.npermissions.permission.PlayerPermissions;
 import fr.ribesg.bukkit.npermissions.permission.WorldLegacyPlayerPermissions;
 import fr.ribesg.bukkit.npermissions.permission.WorldPlayerPermissions;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * @author Ribesg
@@ -59,27 +61,27 @@ public class WorldPlayers extends AbstractConfig<NPermissions> {
 
 		for (final String key : config.getKeys(false)) {
 			if (!config.isConfigurationSection(key)) {
-				plugin.error(Level.WARNING, "Unknown key '" + key + "' found in " + this.worldName + "/players.yml, ignored");
+				this.plugin.error(Level.WARNING, "Unknown key '" + key + "' found in " + this.worldName + "/players.yml, ignored");
 			} else if ("_legacy".equals(key)) {
 				final ConfigurationSection legacyPlayersSection = config.getConfigurationSection(key);
 				for (final String legacyKey : legacyPlayersSection.getKeys(false)) {
 					if (!legacyPlayersSection.isConfigurationSection(legacyKey)) {
-						plugin.error(Level.WARNING, "Unknown key '" + legacyKey + "' found in " + this.worldName + "/players.yml under _legacy, ignored");
+						this.plugin.error(Level.WARNING, "Unknown key '" + legacyKey + "' found in " + this.worldName + "/players.yml under _legacy, ignored");
 					} else {
 						final ConfigurationSection legacyPlayerSection = legacyPlayersSection.getConfigurationSection(legacyKey);
-						final String mainGroup = legacyPlayerSection.getString("mainGroup", plugin.getPluginConfig().getDefaultGroup()).toLowerCase();
+						final String mainGroup = legacyPlayerSection.getString("mainGroup", this.plugin.getPluginConfig().getDefaultGroup()).toLowerCase();
 						final int priority = legacyPlayerSection.getInt("priority", 1);
 						final List<String> groups = legacyPlayerSection.getStringList("groups");
 						final List<String> allow = legacyPlayerSection.getStringList("allow");
 						final List<String> deny = legacyPlayerSection.getStringList("deny");
 
-						if (!manager.getGroups().containsKey(mainGroup)) {
-							plugin.error("Unknown group '" + mainGroup + "' found in " + this.worldName + "/players.yml as main group of legacy player '" + legacyKey + "', ignored player");
+						if (!this.manager.getGroups().containsKey(mainGroup)) {
+							this.plugin.error("Unknown group '" + mainGroup + "' found in " + this.worldName + "/players.yml as main group of legacy player '" + legacyKey + "', ignored player");
 							continue;
 						}
 						final LegacyPlayerPermissions legacyPlayerPermissions = this.manager.getLegacyPlayers().get(legacyKey.toLowerCase());
 						if (legacyPlayerPermissions == null) {
-							plugin.error("Unknown legacy player '" + legacyKey + "' found in " + this.worldName + "/players.yml, ignored player. It has to be defined in the general Legacy Players list first.");
+							this.plugin.error("Unknown legacy player '" + legacyKey + "' found in " + this.worldName + "/players.yml, ignored player. It has to be defined in the general Legacy Players list first.");
 							continue;
 						}
 						final WorldLegacyPlayerPermissions worldLegacyPlayer = new WorldLegacyPlayerPermissions(this.worldName, legacyPlayerPermissions, priority);
@@ -88,7 +90,7 @@ public class WorldPlayers extends AbstractConfig<NPermissions> {
 							try {
 								worldLegacyPlayer.add(allowedPermission, true);
 							} catch (final PermissionException e) {
-								plugin.error("Error while loading player '" + legacyKey + "': " + e.getMessage(), e);
+								this.plugin.error("Error while loading player '" + legacyKey + "': " + e.getMessage(), e);
 							}
 						}
 
@@ -96,13 +98,13 @@ public class WorldPlayers extends AbstractConfig<NPermissions> {
 							try {
 								worldLegacyPlayer.add(deniedPermission, false);
 							} catch (final PermissionException e) {
-								plugin.error("Error while loading player '" + legacyKey + "': " + e.getMessage(), e);
+								this.plugin.error("Error while loading player '" + legacyKey + "': " + e.getMessage(), e);
 							}
 						}
 
 						for (final String group : groups) {
-							if (!manager.getGroups().containsKey(group.toLowerCase())) {
-								plugin.error("Unknown group '" + group + "' found in " + this.worldName + "/players.yml as secondary group of player '" + legacyKey + "', ignored group");
+							if (!this.manager.getGroups().containsKey(group.toLowerCase())) {
+								this.plugin.error("Unknown group '" + group + "' found in " + this.worldName + "/players.yml as secondary group of player '" + legacyKey + "', ignored group");
 							} else {
 								worldLegacyPlayer.addGroup(group);
 							}
@@ -118,7 +120,7 @@ public class WorldPlayers extends AbstractConfig<NPermissions> {
 				try {
 					uuid = UUID.fromString(key);
 				} catch (final IllegalArgumentException e) {
-					plugin.error("Malformed UUID '" + key + "' in " + this.worldName + "/players.yml (for player '" + playerName + "')");
+					this.plugin.error("Malformed UUID '" + key + "' in " + this.worldName + "/players.yml (for player '" + playerName + "')");
 					continue;
 				}
 				final String mainGroup = playerSection.getString("mainGroup");
@@ -127,8 +129,8 @@ public class WorldPlayers extends AbstractConfig<NPermissions> {
 				final List<String> allow = playerSection.getStringList("allow");
 				final List<String> deny = playerSection.getStringList("deny");
 
-				if (!manager.getGroups().containsKey(mainGroup)) {
-					plugin.error("Unknown group '" + mainGroup + "' found in " + this.worldName + "/players.yml as main group of player '" + playerName + "' with UUID '" + key + "', ignored player");
+				if (!this.manager.getGroups().containsKey(mainGroup)) {
+					this.plugin.error("Unknown group '" + mainGroup + "' found in " + this.worldName + "/players.yml as main group of player '" + playerName + "' with UUID '" + key + "', ignored player");
 					continue;
 				}
 				final PlayerPermissions playerPermissions = this.manager.getPlayers().get(uuid);
@@ -138,7 +140,7 @@ public class WorldPlayers extends AbstractConfig<NPermissions> {
 					try {
 						worldPlayer.add(allowedPermission, true);
 					} catch (final PermissionException e) {
-						plugin.error("Error while loading player '" + playerName + "' (" + key + "): " + e.getMessage(), e);
+						this.plugin.error("Error while loading player '" + playerName + "' (" + key + "): " + e.getMessage(), e);
 					}
 				}
 
@@ -146,13 +148,13 @@ public class WorldPlayers extends AbstractConfig<NPermissions> {
 					try {
 						worldPlayer.add(deniedPermission, false);
 					} catch (final PermissionException e) {
-						plugin.error("Error while loading player '" + playerName + "' (" + key + "): " + e.getMessage(), e);
+						this.plugin.error("Error while loading player '" + playerName + "' (" + key + "): " + e.getMessage(), e);
 					}
 				}
 
 				for (final String group : groups) {
-					if (!manager.getGroups().containsKey(group.toLowerCase())) {
-						plugin.error("Unknown group '" + group + "' found in " + this.worldName + "/players.yml as secondary group of player '" + playerName + "' with UUID '" + key + "', ignored group");
+					if (!this.manager.getGroups().containsKey(group.toLowerCase())) {
+						this.plugin.error("Unknown group '" + group + "' found in " + this.worldName + "/players.yml as secondary group of player '" + playerName + "' with UUID '" + key + "', ignored group");
 					} else {
 						worldPlayer.addGroup(group);
 					}
@@ -188,7 +190,7 @@ public class WorldPlayers extends AbstractConfig<NPermissions> {
 			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			worldPlayer.save(dummySection);
-			content.append(dummySection.saveToString()).append("\n");
+			content.append(dummySection.saveToString()).append('\n');
 		}
 
 		content.append("_legacy:\n");
@@ -199,7 +201,7 @@ public class WorldPlayers extends AbstractConfig<NPermissions> {
 			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			worldLegacyPlayer.save(dummySection);
-			content.append(StringUtil.prependLines(dummySection.saveToString(), "  ")).append("\n");
+			content.append(StringUtil.prependLines(dummySection.saveToString(), "  ")).append('\n');
 		}
 
 		return content.toString();

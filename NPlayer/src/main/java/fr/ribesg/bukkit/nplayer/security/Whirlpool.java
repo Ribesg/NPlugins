@@ -137,7 +137,7 @@ public class Whirlpool {
 			}
 		}
 		/*
-        for (int t = 0; t < 8; t++) {
+	    for (int t = 0; t < 8; t++) {
             System.out.println("static const u64 C" + t + "[256] = {");
             for (int i = 0; i < 64; i++) {
                 System.out.print("   ");
@@ -221,7 +221,7 @@ public class Whirlpool {
          * map the buffer to a block:
          */
 		for (int i = 0, j = 0; i < 8; i++, j += 8) {
-			this.block[i] = (long) this.buffer[j] << 56 ^ (this.buffer[j + 1] & 0xffL) << 48 ^ (this.buffer[j + 2] & 0xffL) << 40 ^
+			this.block[i] = (long)this.buffer[j] << 56 ^ (this.buffer[j + 1] & 0xffL) << 48 ^ (this.buffer[j + 2] & 0xffL) << 40 ^
 			                (this.buffer[j + 3] & 0xffL) << 32 ^ (this.buffer[j + 4] & 0xffL) << 24 ^ (this.buffer[j + 5] & 0xffL) << 16 ^
 			                (this.buffer[j + 6] & 0xffL) << 8 ^ this.buffer[j + 7] & 0xffL;
 		}
@@ -241,7 +241,7 @@ public class Whirlpool {
 			for (int i = 0; i < 8; i++) {
 				this.L[i] = 0L;
 				for (int t = 0, s = 56; t < 8; t++, s -= 8) {
-					this.L[i] ^= Whirlpool.C[t][(int) (this.K[i - t & 7] >>> s) & 0xff];
+					this.L[i] ^= Whirlpool.C[t][(int)(this.K[i - t & 7] >>> s) & 0xff];
 				}
 			}
 			System.arraycopy(this.L, 0, this.K, 0, 8);
@@ -252,7 +252,7 @@ public class Whirlpool {
 			for (int i = 0; i < 8; i++) {
 				this.L[i] = this.K[i];
 				for (int t = 0, s = 56; t < 8; t++, s -= 8) {
-					this.L[i] ^= Whirlpool.C[t][(int) (this.state[i - t & 7] >>> s) & 0xff];
+					this.L[i] ^= Whirlpool.C[t][(int)(this.state[i - t & 7] >>> s) & 0xff];
 				}
 			}
 			System.arraycopy(this.L, 0, this.state, 0, 8);
@@ -269,7 +269,7 @@ public class Whirlpool {
 	 * Initialize the hashing state.
 	 */
 	public void NESSIEinit() {
-		Arrays.fill(this.bitLength, (byte) 0);
+		Arrays.fill(this.bitLength, (byte)0);
 		this.bufferBits = this.bufferPos = 0;
 		this.buffer[0] = 0; // it's only necessary to cleanup buffer[bufferPos].
 		Arrays.fill(this.hash, 0L); // initial value
@@ -297,14 +297,14 @@ public class Whirlpool {
                         bufferPos
          */
 		int sourcePos = 0; // index of leftmost source byte containing data (1 to 8 bits).
-		final int sourceGap = 8 - ((int) sourceBits & 7) & 7; // space on source[sourcePos].
+		final int sourceGap = 8 - ((int)sourceBits & 7) & 7; // space on source[sourcePos].
 		final int bufferRem = this.bufferBits & 7; // occupied bits on buffer[bufferPos].
 		int b;
 		// tally the length of the added data:
 		long value = sourceBits;
 		for (int i = 31, carry = 0; i >= 0; i--) {
-			carry += (this.bitLength[i] & 0xff) + ((int) value & 0xff);
-			this.bitLength[i] = (byte) carry;
+			carry += (this.bitLength[i] & 0xff) + ((int)value & 0xff);
+			this.bitLength[i] = (byte)carry;
 			carry >>>= 8;
 			value >>>= 8;
 		}
@@ -324,7 +324,7 @@ public class Whirlpool {
 				// reset buffer:
 				this.bufferBits = this.bufferPos = 0;
 			}
-			this.buffer[this.bufferPos] = (byte) (b << 8 - bufferRem & 0xff);
+			this.buffer[this.bufferPos] = (byte)(b << 8 - bufferRem & 0xff);
 			this.bufferBits += bufferRem;
 			// proceed to remaining data:
 			sourceBits -= 8;
@@ -354,8 +354,8 @@ public class Whirlpool {
 				// reset buffer:
 				this.bufferBits = this.bufferPos = 0;
 			}
-			this.buffer[this.bufferPos] = (byte) (b << 8 - bufferRem & 0xff);
-			this.bufferBits += (int) sourceBits;
+			this.buffer[this.bufferPos] = (byte)(b << 8 - bufferRem & 0xff);
+			this.bufferBits += (int)sourceBits;
 		}
 	}
 
@@ -388,14 +388,14 @@ public class Whirlpool {
 		// return the completed message digest:
 		for (int i = 0, j = 0; i < 8; i++, j += 8) {
 			final long h = this.hash[i];
-			digest[j] = (byte) (h >>> 56);
-			digest[j + 1] = (byte) (h >>> 48);
-			digest[j + 2] = (byte) (h >>> 40);
-			digest[j + 3] = (byte) (h >>> 32);
-			digest[j + 4] = (byte) (h >>> 24);
-			digest[j + 5] = (byte) (h >>> 16);
-			digest[j + 6] = (byte) (h >>> 8);
-			digest[j + 7] = (byte) h;
+			digest[j] = (byte)(h >>> 56);
+			digest[j + 1] = (byte)(h >>> 48);
+			digest[j + 2] = (byte)(h >>> 40);
+			digest[j + 3] = (byte)(h >>> 32);
+			digest[j + 4] = (byte)(h >>> 24);
+			digest[j + 5] = (byte)(h >>> 16);
+			digest[j + 6] = (byte)(h >>> 8);
+			digest[j + 7] = (byte)h;
 		}
 	}
 
@@ -410,7 +410,7 @@ public class Whirlpool {
 		if (source.length() > 0) {
 			final byte[] data = new byte[source.length()];
 			for (int i = 0; i < source.length(); i++) {
-				data[i] = (byte) source.charAt(i);
+				data[i] = (byte)source.charAt(i);
 			}
 			this.NESSIEadd(data, 8 * data.length);
 		}

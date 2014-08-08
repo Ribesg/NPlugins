@@ -8,12 +8,13 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import org.bukkit.Bukkit;
+import org.bukkit.World;
 
 /**
  * Utility class handling worlds.
@@ -48,7 +49,7 @@ public class WorldUtil {
 	 *
 	 * @return The correct name of the world if it exists, null otherwise
 	 *
-	 * @throws java.io.IOException If it was unable to iterate over the Worlds folder
+	 * @throws IOException If it was unable to iterate over the Worlds folder
 	 */
 	public static String exists(final String worldName) throws IOException {
 		try {

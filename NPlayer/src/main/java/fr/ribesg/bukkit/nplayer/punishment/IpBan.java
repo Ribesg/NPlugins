@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.punishment;
+
 public class IpBan extends Punishment {
 
 	public IpBan(final String banned, final String reason) {
@@ -21,10 +22,10 @@ public class IpBan extends Punishment {
 	@Override
 	public String toString() {
 		return "IpBan{" +
-		       "punished='" + punished + '\'' +
-		       ", type=" + type +
-		       ", endDate=" + endDate +
-		       ", reason='" + reason + '\'' +
+		       "punished='" + this.punished + '\'' +
+		       ", type=" + this.type +
+		       ", endDate=" + this.endDate +
+		       ", reason='" + this.reason + '\'' +
 		       '}';
 	}
 }

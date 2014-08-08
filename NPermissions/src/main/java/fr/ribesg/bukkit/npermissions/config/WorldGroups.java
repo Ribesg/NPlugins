@@ -16,15 +16,17 @@ import fr.ribesg.bukkit.npermissions.permission.GroupPermissions;
 import fr.ribesg.bukkit.npermissions.permission.PermissionException;
 import fr.ribesg.bukkit.npermissions.permission.PermissionsManager;
 import fr.ribesg.bukkit.npermissions.permission.WorldGroupPermissions;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.SortedSet;
 import java.util.logging.Level;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * @author Ribesg
@@ -54,13 +56,13 @@ public class WorldGroups extends AbstractConfig<NPermissions> {
 
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
-		this.manager.getWorldGroups().get(worldName).clear();
+		this.manager.getWorldGroups().get(this.worldName).clear();
 
 		final Map<WorldGroupPermissions, List<String>> inheritanceMap = new LinkedHashMap<>();
 
 		for (final String key : config.getKeys(false)) {
 			if (!config.isConfigurationSection(key)) {
-				plugin.error(Level.WARNING, "Unknown key '" + key + "' found in groups.yml, ignored");
+				this.plugin.error(Level.WARNING, "Unknown key '" + key + "' found in groups.yml, ignored");
 			} else {
 				final ConfigurationSection groupSection = config.getConfigurationSection(key);
 				final String groupName = key.toLowerCase();
@@ -75,7 +77,7 @@ public class WorldGroups extends AbstractConfig<NPermissions> {
 					try {
 						worldGroup.add(allowedPermission, true);
 					} catch (final PermissionException e) {
-						plugin.error("Error while loading group '" + groupName + "' for world '" + this.worldName + "': " + e.getMessage(), e);
+						this.plugin.error("Error while loading group '" + groupName + "' for world '" + this.worldName + "': " + e.getMessage(), e);
 					}
 				}
 
@@ -83,23 +85,23 @@ public class WorldGroups extends AbstractConfig<NPermissions> {
 					try {
 						worldGroup.add(deniedPermission, false);
 					} catch (final PermissionException e) {
-						plugin.error("Error while loading group '" + groupName + "' for world '" + this.worldName + "': " + e.getMessage(), e);
+						this.plugin.error("Error while loading group '" + groupName + "' for world '" + this.worldName + "': " + e.getMessage(), e);
 					}
 				}
 
 				inheritanceMap.put(worldGroup, extendsList);
-				this.manager.getWorldGroups().get(worldName).put(groupName, worldGroup);
+				this.manager.getWorldGroups().get(this.worldName).put(groupName, worldGroup);
 			}
 		}
 
-		for (final WorldGroupPermissions worldGroup : inheritanceMap.keySet()) {
-			final List<String> extendsList = inheritanceMap.get(worldGroup);
+		for (final Entry<WorldGroupPermissions, List<String>> worldGroupPermissionsListEntry : inheritanceMap.entrySet()) {
+			final List<String> extendsList = worldGroupPermissionsListEntry.getValue();
 			for (final String superGroupName : extendsList) {
 				final WorldGroupPermissions superWorldGroup = this.manager.getWorldGroups().get(this.worldName).get(superGroupName.toLowerCase());
 				if (superWorldGroup == null) {
-					plugin.error("World Group '" + worldGroup.getGroupName() + "' references unknown super World Group '" + superGroupName.toLowerCase() + "'");
+					this.plugin.error("World Group '" + worldGroupPermissionsListEntry.getKey().getGroupName() + "' references unknown super World Group '" + superGroupName.toLowerCase() + '\'');
 				} else {
-					worldGroup.addSuperGroup(superGroupName.toLowerCase());
+					worldGroupPermissionsListEntry.getKey().addSuperGroup(superGroupName.toLowerCase());
 				}
 			}
 		}
@@ -120,7 +122,7 @@ public class WorldGroups extends AbstractConfig<NPermissions> {
 		}
 		content.append('\n');
 
-		content.append("# This file contains permissions for world '" + worldName + "'\n\n");
+		content.append("# This file contains permissions for world '" + this.worldName + "'\n\n");
 
 		// TODO print some (commented) example before
 
@@ -128,17 +130,17 @@ public class WorldGroups extends AbstractConfig<NPermissions> {
 			final String groupPermission = "group." + worldGroup.getGroupName().toLowerCase();
 			content.append("# The group '" + worldGroup.getGroupName() + "', also has all permissions defined at the plugin folder's root\n");
 			final SortedSet<String> groupPerms = worldGroup.getAllGroupPerms();
-			if (groupPerms.size() > 0) {
+			if (!groupPerms.isEmpty()) {
 				content.append("# Members of this group also have the following permissions:\n");
 				for (final String groupPerm : groupPerms) {
 					if (!groupPermission.equals(groupPerm) && !this.manager.getGroups().get(worldGroup.getGroupName()).getAllGroupPerms().contains(groupPerm)) {
-						content.append("# - " + groupPerm + "\n");
+						content.append("# - " + groupPerm + '\n');
 					}
 				}
 			}
 			final YamlConfiguration dummySection = new YamlConfiguration();
 			worldGroup.save(dummySection);
-			content.append(dummySection.saveToString()).append("\n");
+			content.append(dummySection.saveToString()).append('\n');
 		}
 
 		return content.toString();

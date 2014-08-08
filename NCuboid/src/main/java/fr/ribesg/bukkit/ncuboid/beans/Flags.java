@@ -16,15 +16,15 @@ public class Flags {
 	private final EnumMap<Flag, Boolean> flags;
 
 	public Flags() {
-		flags = Flags.getDefaultFlagMap();
+		this.flags = Flags.getDefaultFlagMap();
 	}
 
 	public boolean getFlag(final Flag f) {
-		return flags.get(f);
+		return this.flags.get(f);
 	}
 
 	public void setFlag(final Flag f, final boolean b) {
-		flags.put(f, b);
+		this.flags.put(f, b);
 	}
 
 	private static EnumMap<Flag, Boolean> getDefaultFlagMap() {

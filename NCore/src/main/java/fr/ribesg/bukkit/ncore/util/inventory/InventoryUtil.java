@@ -8,11 +8,8 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util.inventory;
+
 import fr.ribesg.bukkit.ncore.util.StringUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +17,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Utility class to handle Inventories.
@@ -140,12 +142,14 @@ public class InventoryUtil {
 	 * @param itemStacks the ItemStack array to serialize
 	 *
 	 * @return a single String representing this ItemStack array
+	 *
+	 * @throws InventoryUtilException if something goes wrong
 	 */
 	public static String toString(final ItemStack[] itemStacks) throws InventoryUtilException {
 		final List<String> strings = new ArrayList<>(itemStacks.length);
 		for (final ItemStack is : itemStacks) {
 			if (is == null) {
-				strings.add((""));
+				strings.add("");
 			} else {
 				try {
 					strings.add(ItemStackUtil.toString(is));
@@ -170,7 +174,8 @@ public class InventoryUtil {
 	 *
 	 * @return an array of ItemStacks
 	 *
-	 * @see #toString(org.bukkit.inventory.ItemStack[])
+	 * @throws InventoryUtilException if something goes wrong
+	 * @see #toString(ItemStack[])
 	 */
 	public static ItemStack[] fromString(final String string) throws InventoryUtilException {
 		final String separator = string.substring(0, 4);
@@ -270,6 +275,8 @@ public class InventoryUtil {
 	 * @param inventory the inventory to serialize
 	 *
 	 * @return a String representing the provided inventory
+	 *
+	 * @throws InventoryUtilException if something goes wrong
 	 */
 	public static String toString(final Inventory inventory) throws InventoryUtilException {
 		return toString(inventory.getContents());
@@ -288,7 +295,7 @@ public class InventoryUtil {
 	public static void setFromString(final Inventory inventoryToSet, final String string) throws InventoryUtilException {
 		final ItemStack[] fromString = fromString(string);
 		if (inventoryToSet.getSize() != fromString.length) {
-			throw new InventoryUtilException("String size (" + fromString.length + ") does not match inventory size (" + inventoryToSet.getSize() + ")");
+			throw new InventoryUtilException("String size (" + fromString.length + ") does not match inventory size (" + inventoryToSet.getSize() + ')');
 		}
 		inventoryToSet.setContents(fromString);
 	}
@@ -310,9 +317,10 @@ public class InventoryUtil {
 	/**
 	 * Loads an Inventory from a Configuration File
 	 *
-	 * @param parent the parent section under which another section for
-	 *               the Inventory exists
-	 * @param key    the key of the Inventory section
+	 * @param parent    the parent section under which another section for
+	 *                  the Inventory exists
+	 * @param key       the key of the Inventory section
+	 * @param inventory the Inventory to set
 	 *
 	 * @throws InventoryUtilException if something goes wrong
 	 */

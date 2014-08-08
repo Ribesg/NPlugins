@@ -12,6 +12,7 @@ package fr.ribesg.bukkit.ncuboid.events.extensions;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
+
 import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class ExtendedPlayerDropItemEvent extends AbstractExtendedEvent {
@@ -20,10 +21,10 @@ public class ExtendedPlayerDropItemEvent extends AbstractExtendedEvent {
 
 	public ExtendedPlayerDropItemEvent(final RegionDb db, final PlayerDropItemEvent event) {
 		super(db.getPlugin(), event);
-		region = db.getPriorByLocation(event.getPlayer().getLocation());
+		this.region = db.getPriorByLocation(event.getPlayer().getLocation());
 	}
 
 	public GeneralRegion getRegion() {
-		return region;
+		return this.region;
 	}
 }

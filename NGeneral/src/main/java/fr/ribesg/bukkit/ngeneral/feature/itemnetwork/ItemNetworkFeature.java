@@ -8,20 +8,22 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.feature.Feature;
 import fr.ribesg.bukkit.ngeneral.feature.FeatureType;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ItemNetwork;
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.Material;
-import org.bukkit.World;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Material;
+import org.bukkit.World;
 
 public class ItemNetworkFeature extends Feature {
 
@@ -39,12 +41,12 @@ public class ItemNetworkFeature extends Feature {
 		final ItemNetworkListener listener = new ItemNetworkListener(this);
 		final ItemNetworkCommandExecutor executor = new ItemNetworkCommandExecutor(this);
 
-		for (final ItemNetwork in : networks.values()) {
+		for (final ItemNetwork in : this.networks.values()) {
 			in.initialize();
 		}
 
-		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
-		plugin.setCommandExecutor("itemnetwork", executor);
+		Bukkit.getPluginManager().registerEvents(listener, this.getPlugin());
+		this.plugin.setCommandExecutor("itemnetwork", executor);
 	}
 
 	public void lock(final NLocation loc) {
@@ -112,7 +114,6 @@ public class ItemNetworkFeature extends Feature {
 				this.lockedChestLocations.remove(new NLocation(w.getName(), x, y, z + 1));
 				w.playEffect(w.getBlockAt(x, y, z + 1).getLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
 			}
-
 		}
 	}
 
@@ -121,6 +122,6 @@ public class ItemNetworkFeature extends Feature {
 	}
 
 	public Map<String, ItemNetwork> getNetworks() {
-		return networks;
+		return this.networks;
 	}
 }

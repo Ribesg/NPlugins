@@ -8,8 +8,10 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nworld.world;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nworld.NWorld;
+
 import org.bukkit.World;
 
 /**
@@ -27,25 +29,25 @@ public class AdditionalWorld extends GeneralWorld {
 		super(instance, worldName, spawnLocation, requiredPermission, enabled, hidden);
 		this.seed = seed;
 		this.hasNether = hasNether;
-		netherWorld = null;
+		this.netherWorld = null;
 		this.hasEnd = hasEnd;
-		endWorld = null;
-		setType(WorldType.ADDITIONAL);
+		this.endWorld = null;
+		this.setType(WorldType.ADDITIONAL);
 	}
 
 	public long getSeed() {
-		return seed;
+		return this.seed;
 	}
 
 	public boolean hasNether() {
-		return hasNether;
+		return this.hasNether;
 	}
 
 	public void setNether(final boolean hasNether) {
 		if (hasNether) {
-			AdditionalSubWorld nether = getNetherWorld();
+			AdditionalSubWorld nether = this.netherWorld;
 			if (nether == null) {
-				nether = new AdditionalSubWorld(plugin, this, null /* Will be affected by load() */, plugin.getPluginConfig().getDefaultRequiredPermission(), true, plugin.getPluginConfig().isDefaultHidden(), World.Environment.NETHER);
+				nether = new AdditionalSubWorld(this.plugin, this, null /* Will be affected by load() */, this.plugin.getPluginConfig().getDefaultRequiredPermission(), true, this.plugin.getPluginConfig().isDefaultHidden(), World.Environment.NETHER);
 			}
 			if (nether.exists()) {
 				nether.load();
@@ -54,20 +56,20 @@ public class AdditionalWorld extends GeneralWorld {
 			}
 			this.hasNether = true;
 		} else {
-			getNetherWorld().unload();
+			this.netherWorld.unload();
 			this.hasNether = false;
 		}
 	}
 
 	public boolean hasEnd() {
-		return hasEnd;
+		return this.hasEnd;
 	}
 
 	public void setEnd(final boolean hasEnd) {
 		if (hasEnd) {
-			AdditionalSubWorld end = getEndWorld();
+			AdditionalSubWorld end = this.endWorld;
 			if (end == null) {
-				end = new AdditionalSubWorld(plugin, this, null /* Will be affected by load() */, plugin.getPluginConfig().getDefaultRequiredPermission(), true, plugin.getPluginConfig().isDefaultHidden(), World.Environment.THE_END);
+				end = new AdditionalSubWorld(this.plugin, this, null /* Will be affected by load() */, this.plugin.getPluginConfig().getDefaultRequiredPermission(), true, this.plugin.getPluginConfig().isDefaultHidden(), World.Environment.THE_END);
 			}
 			if (end.exists()) {
 				end.load();
@@ -76,13 +78,13 @@ public class AdditionalWorld extends GeneralWorld {
 			}
 			this.hasEnd = true;
 		} else {
-			getEndWorld().unload();
+			this.endWorld.unload();
 			this.hasEnd = false;
 		}
 	}
 
 	public AdditionalSubWorld getEndWorld() {
-		return endWorld;
+		return this.endWorld;
 	}
 
 	public void setEndWorld(final AdditionalSubWorld endWorld) {
@@ -90,7 +92,7 @@ public class AdditionalWorld extends GeneralWorld {
 	}
 
 	public AdditionalSubWorld getNetherWorld() {
-		return netherWorld;
+		return this.netherWorld;
 	}
 
 	public void setNetherWorld(final AdditionalSubWorld netherWorld) {

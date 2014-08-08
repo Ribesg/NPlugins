@@ -15,6 +15,7 @@ import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,7 +28,7 @@ public class MessageListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
-		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
+		final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
 			final Player player = event.getPlayer();
 			if (ext.getFromRegion() != null && !ext.getToRegions().contains(ext.getFromRegion())) {

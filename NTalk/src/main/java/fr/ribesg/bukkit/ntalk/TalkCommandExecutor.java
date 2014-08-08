@@ -13,17 +13,18 @@ import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * @author ribes
@@ -36,8 +37,8 @@ public class TalkCommandExecutor implements CommandExecutor {
 	private final HashMap<String, String> lastReceivedPmMap;
 
 	public TalkCommandExecutor(final NTalk instance) {
-		plugin = instance;
-		lastReceivedPmMap = new HashMap<>();
+		this.plugin = instance;
+		this.lastReceivedPmMap = new HashMap<>();
 	}
 
 	@Override
@@ -51,9 +52,9 @@ public class TalkCommandExecutor implements CommandExecutor {
 					case "reload":
 					case "rld":
 						if (Perms.hasReload(sender)) {
-							return cmdReload(sender, args);
+							return this.cmdReload(sender, args);
 						} else {
-							plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+							this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 							return true;
 						}
 					default:
@@ -61,23 +62,23 @@ public class TalkCommandExecutor implements CommandExecutor {
 				}
 			case "pm":
 				if (Perms.hasPrivateMessage(sender)) {
-					return cmdPrivateMessage(sender, args);
+					return this.cmdPrivateMessage(sender, args);
 				} else {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
 			case "pr":
 				if (Perms.hasPrivateResponse(sender)) {
-					return cmdPrivateResponse(sender, args);
+					return this.cmdPrivateResponse(sender, args);
 				} else {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
 			case "nick":
 				if (Perms.hasNick(sender)) {
-					return cmdNick(sender, args);
+					return this.cmdNick(sender, args);
 				} else {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
 			default:
@@ -94,11 +95,11 @@ public class TalkCommandExecutor implements CommandExecutor {
 			case "mess":
 			case "mes":
 				try {
-					plugin.loadMessages();
-					plugin.sendMessage(sender, MessageId.cmdReloadMessages);
+					this.plugin.loadMessages();
+					this.plugin.sendMessage(sender, MessageId.cmdReloadMessages);
 				} catch (final IOException e) {
-					plugin.error("An error occured when NTalk tried to load messages.yml", e);
-					plugin.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+					this.plugin.error("An error occured when NTalk tried to load messages.yml", e);
+					this.plugin.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
 				}
 				return true;
 			default:
@@ -114,22 +115,22 @@ public class TalkCommandExecutor implements CommandExecutor {
 			final HashSet<CommandSender> targets = new HashSet<>();
 			final HashSet<CommandSender> spies = new HashSet<>();
 			for (final String target : targetsName) {
-				final Player p = plugin.getServer().getPlayer(target);
+				final Player p = this.plugin.getServer().getPlayer(target);
 				if (p != null) {
 					targets.add(p);
-				} else if (target.equalsIgnoreCase("CONSOLE") || target.equalsIgnoreCase("SERVER")) {
-					targets.add(plugin.getServer().getConsoleSender());
+				} else if ("CONSOLE".equalsIgnoreCase(target) || "SERVER".equalsIgnoreCase(target)) {
+					targets.add(this.plugin.getServer().getConsoleSender());
 				} else {
-					plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, target);
+					this.plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, target);
 				}
 			}
-			for (final Player p : plugin.getServer().getOnlinePlayers()) {
+			for (final Player p : this.plugin.getServer().getOnlinePlayers()) {
 				if (Perms.hasSpy(p)) {
 					spies.add(p);
 				}
 			}
-			spies.add(plugin.getServer().getConsoleSender());
-			if (targets.size() == 0) {
+			spies.add(this.plugin.getServer().getConsoleSender());
+			if (targets.isEmpty()) {
 				return true;
 			}
 
@@ -138,7 +139,7 @@ public class TalkCommandExecutor implements CommandExecutor {
 				messageBuilder.append(' ').append(args[i]);
 			}
 
-			sendMessages(sender, targets, spies, messageBuilder.toString());
+			this.sendMessages(sender, targets, spies, messageBuilder.toString());
 			return true;
 		}
 	}
@@ -146,35 +147,35 @@ public class TalkCommandExecutor implements CommandExecutor {
 	private boolean cmdPrivateResponse(final CommandSender sender, final String[] args) {
 		if (args.length < 1) {
 			return false;
-		} else if (lastReceivedPmMap.containsKey(sender.getName())) {
-			final String targetName = lastReceivedPmMap.get(sender.getName());
+		} else if (this.lastReceivedPmMap.containsKey(sender.getName())) {
+			final String targetName = this.lastReceivedPmMap.get(sender.getName());
 			final CommandSender target;
 			if (CONSOLE_NAME.equals(targetName)) {
-				target = plugin.getServer().getConsoleSender();
+				target = this.plugin.getServer().getConsoleSender();
 			} else {
-				target = plugin.getServer().getPlayerExact(targetName);
+				target = this.plugin.getServer().getPlayerExact(targetName);
 			}
 			if (target != null) {
 				final StringBuilder messageBuilder = new StringBuilder(args[0]);
 				for (int i = 1; i < args.length; i++) {
 					messageBuilder.append(' ').append(args[i]);
 				}
-				final String[] formattedMessage = sendMessage(sender, target, messageBuilder.toString());
-				for (final Player p : plugin.getServer().getOnlinePlayers()) {
+				final String[] formattedMessage = this.sendMessage(sender, target, messageBuilder.toString());
+				for (final Player p : this.plugin.getServer().getOnlinePlayers()) {
 					if (Perms.hasSpy(p) && p != target && p != sender) {
 						p.sendMessage(formattedMessage[Perms.hasSeeNicks(p, false) ? 0 : 1]);
 					}
 				}
-				if (target != plugin.getServer().getConsoleSender()) {
-					plugin.getServer().getConsoleSender().sendMessage(formattedMessage[0]);
+				if (target != this.plugin.getServer().getConsoleSender()) {
+					this.plugin.getServer().getConsoleSender().sendMessage(formattedMessage[0]);
 				}
 				return true;
 			} else {
-				plugin.sendMessage(sender, MessageId.talk_nobodyToRespond);
+				this.plugin.sendMessage(sender, MessageId.talk_nobodyToRespond);
 				return true;
 			}
 		} else {
-			plugin.sendMessage(sender, MessageId.talk_nobodyToRespond);
+			this.plugin.sendMessage(sender, MessageId.talk_nobodyToRespond);
 			return true;
 		}
 	}
@@ -185,33 +186,33 @@ public class TalkCommandExecutor implements CommandExecutor {
 		} else if (args.length == 1) {
 			final String realName = args[0];
 			if (!PlayerIdsUtil.isValidMinecraftUserName(realName)) {
-				plugin.sendMessage(sender, MessageId.talk_invalidUsername, realName);
+				this.plugin.sendMessage(sender, MessageId.talk_invalidUsername, realName);
 				return true;
 			}
 			final UUID id = UuidDb.getId(Node.TALK, realName);
-			plugin.getPluginConfig().getPlayerNicknames().remove(id);
-			plugin.sendMessage(sender, MessageId.talk_youDeNickNamed, realName);
-			final Player p = plugin.getServer().getPlayerExact(realName);
+			this.plugin.getPluginConfig().getPlayerNicknames().remove(id);
+			this.plugin.sendMessage(sender, MessageId.talk_youDeNickNamed, realName);
+			final Player p = this.plugin.getServer().getPlayerExact(realName);
 			if (p != null && p != sender) {
-				plugin.sendMessage(plugin.getServer().getPlayerExact(realName), MessageId.talk_youWereDeNickNamed, sender.getName());
+				this.plugin.sendMessage(this.plugin.getServer().getPlayerExact(realName), MessageId.talk_youWereDeNickNamed, sender.getName());
 			}
 			return true;
 		} else {
 			final String realName = args[0];
 			final String nick = args[1];
 			if (!PlayerIdsUtil.isValidMinecraftUserName(realName)) {
-				plugin.sendMessage(sender, MessageId.talk_invalidUsername, realName);
+				this.plugin.sendMessage(sender, MessageId.talk_invalidUsername, realName);
 				return true;
 			} else if (!PlayerIdsUtil.isValidNickName(nick)) {
-				plugin.sendMessage(sender, MessageId.talk_invalidNickname, nick);
+				this.plugin.sendMessage(sender, MessageId.talk_invalidNickname, nick);
 				return true;
 			}
 			final UUID id = UuidDb.getId(Node.TALK, realName);
-			plugin.getPluginConfig().getPlayerNicknames().put(id, nick);
-			plugin.sendMessage(sender, MessageId.talk_youNickNamed, realName, nick);
-			final Player p = plugin.getServer().getPlayerExact(realName);
+			this.plugin.getPluginConfig().getPlayerNicknames().put(id, nick);
+			this.plugin.sendMessage(sender, MessageId.talk_youNickNamed, realName, nick);
+			final Player p = this.plugin.getServer().getPlayerExact(realName);
 			if (p != null && p != sender) {
-				plugin.sendMessage(plugin.getServer().getPlayerExact(realName), MessageId.talk_youWereNickNamed, nick, sender.getName());
+				this.plugin.sendMessage(this.plugin.getServer().getPlayerExact(realName), MessageId.talk_youWereNickNamed, nick, sender.getName());
 			}
 			return true;
 		}
@@ -219,7 +220,7 @@ public class TalkCommandExecutor implements CommandExecutor {
 
 	private void sendMessages(final CommandSender from, final Set<CommandSender> toSet, final Set<CommandSender> spySet, final String message) {
 		for (final CommandSender to : toSet) {
-			final String formattedMessage[] = sendMessage(from, to, message);
+			final String[] formattedMessage = this.sendMessage(from, to, message);
 			for (final CommandSender spy : spySet) {
 				if (spy != from && spy != to) {
 					spy.sendMessage(formattedMessage[Perms.hasSeeNicks(spy, false) ? 0 : 1]);
@@ -229,10 +230,10 @@ public class TalkCommandExecutor implements CommandExecutor {
 	}
 
 	private String[] sendMessage(final CommandSender from, final CommandSender to, final String message) {
-		final String[] formattedMessage = plugin.getFormater().parsePM(from, to, message);
+		final String[] formattedMessage = this.plugin.getFormater().parsePM(from, to, message);
 		from.sendMessage(formattedMessage[Perms.hasSeeNicks(from, false) ? 0 : 1]);
 		to.sendMessage(formattedMessage[Perms.hasSeeNicks(to, false) ? 0 : 1]);
-		lastReceivedPmMap.put(to.getName(), from.getName());
+		this.lastReceivedPmMap.put(to.getName(), from.getName());
 		return formattedMessage;
 	}
 }

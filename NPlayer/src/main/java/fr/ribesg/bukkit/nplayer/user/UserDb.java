@@ -8,16 +8,13 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.user;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.nplayer.NPlayer;
-import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,12 +24,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Level;
 
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 public class UserDb {
 
-	private final static long TWO_WEEKS = TimeUtil.getInMilliseconds("2weeks");
+	private static final long TWO_WEEKS = TimeUtil.getInMilliseconds("2weeks");
 
 	private final NPlayer                 plugin;
 	private final Map<UUID, User>         usersPerId;
@@ -45,53 +48,53 @@ public class UserDb {
 	}
 
 	public boolean isUserKnown(final UUID userId) {
-		return usersPerId.containsKey(userId);
+		return this.usersPerId.containsKey(userId);
 	}
 
 	public boolean isIpKnown(final String ip) {
-		return usersPerIp.containsKey(ip);
+		return this.usersPerIp.containsKey(ip);
 	}
 
 	public User get(final UUID userId) {
-		return usersPerId.get(userId);
+		return this.usersPerId.get(userId);
 	}
 
 	public List<User> getByIp(final String ip) {
-		final List<User> res = usersPerIp.get(ip);
+		final List<User> res = this.usersPerIp.get(ip);
 		return res == null ? new ArrayList<User>() : res;
 	}
 
 	public User newUser(final UUID userId, final String passwordHash, final String currentIp) {
-		final User user = new User(plugin.getLoggedOutUserHandler(), userId, passwordHash, currentIp);
-		usersPerId.put(userId, user);
-		addPerIp(currentIp, user);
+		final User user = new User(this.plugin.getLoggedOutUserHandler(), userId, passwordHash, currentIp);
+		this.usersPerId.put(userId, user);
+		this.addPerIp(currentIp, user);
 		return user;
 	}
 
 	private void addPerIp(final String ip, final User user) {
-		List<User> usersWithSameIp = usersPerIp.get(ip);
+		List<User> usersWithSameIp = this.usersPerIp.get(ip);
 		if (usersWithSameIp == null) {
 			usersWithSameIp = new ArrayList<>();
 			usersWithSameIp.add(user);
-			usersPerIp.put(ip, usersWithSameIp);
+			this.usersPerIp.put(ip, usersWithSameIp);
 		} else {
 			usersWithSameIp.add(user);
 		}
 	}
 
 	public void updateIp(final User user, final String ip) {
-		final List<User> users = getByIp(ip);
+		final List<User> users = this.getByIp(ip);
 		users.add(user);
-		usersPerIp.put(ip, users);
+		this.usersPerIp.put(ip, users);
 	}
 
 	public int size() {
-		return usersPerId.size();
+		return this.usersPerId.size();
 	}
 
 	public int recurrentSize() {
 		int size = 0;
-		for (final User u : usersPerId.values()) {
+		for (final User u : this.usersPerId.values()) {
 			if (System.currentTimeMillis() - UuidDb.getLastSeen(u.getUserId()) < TWO_WEEKS) {
 				size++;
 			}
@@ -100,7 +103,7 @@ public class UserDb {
 	}
 
 	public void saveConfig() throws IOException {
-		saveConfig(Paths.get(plugin.getDataFolder().getPath(), "userDB.yml"));
+		this.saveConfig(Paths.get(this.plugin.getDataFolder().getPath(), "userDB.yml"));
 	}
 
 	private void saveConfig(final Path filePath) throws IOException {
@@ -111,8 +114,8 @@ public class UserDb {
 			Files.createFile(filePath);
 		}
 		final YamlConfiguration config = new YamlConfiguration();
-		for (final UUID userId : usersPerId.keySet()) {
-			final User user = usersPerId.get(userId);
+		for (final Entry<UUID, User> uuidUserEntry : this.usersPerId.entrySet()) {
+			final User user = this.usersPerId.get(uuidUserEntry.getKey());
 			final ConfigurationSection userSection = config.createSection(user.getUserId().toString());
 			userSection.set("passwordHash", user.getPasswordHash());
 			userSection.set("lastIp", user.getLastIp());
@@ -124,7 +127,7 @@ public class UserDb {
 	}
 
 	public void loadConfig() throws IOException, InvalidConfigurationException {
-		loadConfig(Paths.get(plugin.getDataFolder().getPath(), "userDB.yml"));
+		this.loadConfig(Paths.get(this.plugin.getDataFolder().getPath(), "userDB.yml"));
 	}
 
 	private void loadConfig(final Path filePath) throws IOException, InvalidConfigurationException {
@@ -142,7 +145,7 @@ public class UserDb {
 				id = UuidDb.getId(Node.PLAYER, userIdString, true);
 			}
 			if (id == null) {
-				plugin.error(Level.WARNING, "Invalid userId '" + userIdString + "' found in userDb.yml, ignored");
+				this.plugin.error(Level.WARNING, "Invalid userId '" + userIdString + "' found in userDb.yml, ignored");
 				continue;
 			}
 			final String passwordHash = userSection.getString("passwordHash");
@@ -150,10 +153,10 @@ public class UserDb {
 			final List<String> knownIps = userSection.getStringList("knownIps");
 			final boolean autoLogout = userSection.getBoolean("autoLogout");
 			final Location home = NLocation.toLocation(userSection.getString("home"));
-			final User user = new User(plugin.getLoggedOutUserHandler(), lastIp, knownIps, passwordHash, id, autoLogout, home);
-			usersPerId.put(id, user);
+			final User user = new User(this.plugin.getLoggedOutUserHandler(), lastIp, knownIps, passwordHash, id, autoLogout, home);
+			this.usersPerId.put(id, user);
 			for (final String ip : user.getKnownIps()) {
-				addPerIp(ip, user);
+				this.addPerIp(ip, user);
 			}
 		}
 	}

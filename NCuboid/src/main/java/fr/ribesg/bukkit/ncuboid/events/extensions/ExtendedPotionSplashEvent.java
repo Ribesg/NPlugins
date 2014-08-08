@@ -11,13 +11,14 @@ package fr.ribesg.bukkit.ncuboid.events.extensions;
 
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
 
@@ -39,21 +40,21 @@ public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
 		return negativeEffects;
 	}
 
-	private boolean hasNegativeEffect = false;
+	private boolean hasNegativeEffect;
 
 	public ExtendedPotionSplashEvent(final RegionDb db, final PotionSplashEvent event) {
 		super(db.getPlugin(), event);
 		final ThrownPotion potion = event.getPotion();
 		for (final PotionEffect e : potion.getEffects()) {
 			if (getNegativeEffects().contains(e.getType())) {
-				hasNegativeEffect = true;
+				this.hasNegativeEffect = true;
 				break;
 			}
 		}
-		getPlugin().info("" + hasNegativeEffect);
+		this.getPlugin().info(String.valueOf(this.hasNegativeEffect));
 	}
 
 	public boolean hasNegativeEffect() {
-		return hasNegativeEffect;
+		return this.hasNegativeEffect;
 	}
 }

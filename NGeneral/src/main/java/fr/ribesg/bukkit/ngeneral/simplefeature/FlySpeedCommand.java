@@ -8,9 +8,11 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,8 +32,8 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
 
 	public FlySpeedCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.setCommandExecutor(COMMAND, this);
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+		this.plugin.setCommandExecutor(COMMAND, this);
+		Bukkit.getPluginManager().registerEvents(this, this.plugin);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -43,27 +45,27 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		if (command.getName().equals(COMMAND)) {
 			if (!Perms.hasFlySpeed(sender)) {
-				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+				this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			} else if (args.length == 1) {
 				if (!(sender instanceof Player)) {
-					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+					this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 				} else {
-					final Player player = (Player) sender;
+					final Player player = (Player)sender;
 					try {
 						final float value = Float.parseFloat(args[0]);
 						if (value < -1 || value > 1) {
 							return false;
 						}
 						player.setFlySpeed(value);
-						plugin.sendMessage(player, MessageId.general_flySpeed_set, Float.toString(value));
-					} catch (NumberFormatException e) {
+						this.plugin.sendMessage(player, MessageId.general_flySpeed_set, Float.toString(value));
+					} catch (final NumberFormatException e) {
 						player.setFlySpeed(DEFAULT_BUKKIT_FLYSPEED);
-						plugin.sendMessage(player, MessageId.general_flySpeed_reset);
+						this.plugin.sendMessage(player, MessageId.general_flySpeed_reset);
 					}
 				}
 			} else if (args.length == 2) {
 				if (!Perms.hasFlySpeedOthers(sender)) {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 				} else {
 					final String arg0 = args[0].toLowerCase();
 					float value = DEFAULT_BUKKIT_FLYSPEED;
@@ -72,11 +74,11 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
 						if (value < -1 || value > 1) {
 							return false;
 						}
-					} catch (NumberFormatException ignored) {
+					} catch (final NumberFormatException ignored) {
 					}
 					final String arg1 = args[1].toLowerCase();
 					final String[] names = arg1.split(",");
-					setAll(sender, names, value);
+					this.setAll(sender, names, value);
 				}
 				return true;
 			} else {
@@ -98,11 +100,11 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
 		for (final String name : playerNames) {
 			final Player p = Bukkit.getPlayer(name);
 			if (p == null) {
-				plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
+				this.plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 			} else {
 				p.setFlySpeed(value);
-				plugin.sendMessage(sender, MessageId.general_flySpeed_setFor, Float.toString(value), p.getName());
-				plugin.sendMessage(p, MessageId.general_flySpeed_setBy, Float.toString(value), sender.getName());
+				this.plugin.sendMessage(sender, MessageId.general_flySpeed_setFor, Float.toString(value), p.getName());
+				this.plugin.sendMessage(p, MessageId.general_flySpeed_setBy, Float.toString(value), sender.getName());
 			}
 		}
 	}

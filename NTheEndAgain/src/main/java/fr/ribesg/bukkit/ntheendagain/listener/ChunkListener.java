@@ -8,15 +8,19 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntheendagain.listener;
+
 import fr.ribesg.bukkit.ncore.event.theendagain.ChunkRegenEvent;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
+
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -26,8 +30,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.HashMap;
 
 /**
  * Handles Chunk Load and Unload events
@@ -39,7 +41,7 @@ public class ChunkListener implements Listener {
 	private final NTheEndAgain plugin;
 
 	public ChunkListener(final NTheEndAgain instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	/**
@@ -50,9 +52,9 @@ public class ChunkListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onEndChunkLoad(final ChunkLoadEvent event) {
-		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
+		if (event.getWorld().getEnvironment() == Environment.THE_END) {
 			final String worldName = event.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 			if (handler != null) {
 				final EndChunks chunks = handler.getChunks();
 				final Chunk chunk = event.getChunk();
@@ -70,7 +72,7 @@ public class ChunkListener implements Listener {
 					if (!regenEvent.isCancelled()) {
 						for (final Entity e : chunk.getEntities()) {
 							if (e.getType() == EntityType.ENDER_DRAGON) {
-								final EnderDragon ed = (EnderDragon) e;
+								final EnderDragon ed = (EnderDragon)e;
 								if (handler.getDragons().containsKey(ed.getUniqueId())) {
 									handler.getDragons().remove(ed.getUniqueId());
 									handler.getLoadedDragons().remove(ed.getUniqueId());
@@ -81,7 +83,7 @@ public class ChunkListener implements Listener {
 						endChunk.cleanCrystalLocations();
 						final int x = endChunk.getX(), z = endChunk.getZ();
 						event.getWorld().regenerateChunk(x, z);
-						Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+						Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
 
 							@Override
 							public void run() {
@@ -104,7 +106,7 @@ public class ChunkListener implements Listener {
 					}
 					for (final Entity e : chunk.getEntities()) {
 						if (e.getType() == EntityType.ENDER_DRAGON) {
-							final EnderDragon ed = (EnderDragon) e;
+							final EnderDragon ed = (EnderDragon)e;
 							if (!handler.getDragons().containsKey(ed.getUniqueId())) {
 								ed.setMaxHealth(handler.getConfig().getEdHealth());
 								ed.setHealth(ed.getMaxHealth());
@@ -128,9 +130,9 @@ public class ChunkListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onEndChunkUnload(final ChunkUnloadEvent event) {
-		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
+		if (event.getWorld().getEnvironment() == Environment.THE_END) {
 			final String worldName = event.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 			if (handler != null) {
 				EndChunk chunk = handler.getChunks().getChunk(event.getChunk());
 				if (chunk == null) {
@@ -138,7 +140,7 @@ public class ChunkListener implements Listener {
 				}
 				for (final Entity e : event.getChunk().getEntities()) {
 					if (e.getType() == EntityType.ENDER_DRAGON) {
-						final EnderDragon ed = (EnderDragon) e;
+						final EnderDragon ed = (EnderDragon)e;
 						handler.getLoadedDragons().remove(ed.getUniqueId());
 						chunk.incrementSavedDragons();
 					}

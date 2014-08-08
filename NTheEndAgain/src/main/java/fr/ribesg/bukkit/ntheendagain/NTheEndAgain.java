@@ -17,16 +17,18 @@ import fr.ribesg.bukkit.ntheendagain.listener.ChunkListener;
 import fr.ribesg.bukkit.ntheendagain.listener.DamageListener;
 import fr.ribesg.bukkit.ntheendagain.listener.EnderDragonListener;
 import fr.ribesg.bukkit.ntheendagain.listener.WorldListener;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.World.Environment;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.mcstats.Metrics;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.World.Environment;
+import org.bukkit.configuration.InvalidConfigurationException;
+
+import org.mcstats.Metrics;
 
 public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
@@ -46,9 +48,9 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
 	@Override
 	protected void loadMessages() throws IOException {
-		debug("Loading plugin Messages...");
-		if (!getDataFolder().isDirectory()) {
-			getDataFolder().mkdir();
+		this.debug("Loading plugin Messages...");
+		if (!this.getDataFolder().isDirectory()) {
+			this.getDataFolder().mkdir();
 		}
 
 		final Messages messages = new Messages();
@@ -59,56 +61,56 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
 	@Override
 	public boolean onNodeEnable() {
-		entering(getClass(), "onNodeEnable");
+		this.entering(this.getClass(), "onNodeEnable");
 
-		debug("Loading End world config and Chunk data...");
-		worldHandlers = new HashMap<>();
+		this.debug("Loading End world config and Chunk data...");
+		this.worldHandlers = new HashMap<>();
 		boolean res = true;
 
-		debug("Analysing all worlds...");
+		this.debug("Analysing all worlds...");
 		for (final World w : Bukkit.getWorlds()) {
-			debug("World " + w.getName() + " is of type " + w.getEnvironment());
+			this.debug("World " + w.getName() + " is of type " + w.getEnvironment());
 			if (w.getEnvironment() == Environment.THE_END) {
 				try {
-					debug("Trying to load world " + w.getName());
-					res = loadWorld(w);
+					this.debug("Trying to load world " + w.getName());
+					res = this.loadWorld(w);
 					if (!res) {
-						debug("Load of world " + w.getName() + " failed!");
+						this.debug("Load of world " + w.getName() + " failed!");
 						break;
 					}
 				} catch (final InvalidConfigurationException e) {
-					error("An error occured when NTheEndAgain tried to load \"" + w.getName() + "\"'s config file.", e);
+					this.error("An error occured when NTheEndAgain tried to load \"" + w.getName() + "\"'s config file.", e);
 					break;
 				}
 			}
 		}
 		if (!res) {
-			error("Failed to load a configuration, please triple-check them. Disabling plugin...");
-			for (final EndWorldHandler handler : worldHandlers.values()) {
+			this.error("Failed to load a configuration, please triple-check them. Disabling plugin...");
+			for (final EndWorldHandler handler : this.worldHandlers.values()) {
 				handler.cancelTasks();
 			}
 			return false;
 		}
 
-		debug("Activating filter if needed...");
-		activateFilter();
+		this.debug("Activating filter if needed...");
+		this.activateFilter();
 
-		debug("Registering event handlers...");
-		getServer().getPluginManager().registerEvents(new WorldListener(this), this);
-		getServer().getPluginManager().registerEvents(new ChunkListener(this), this);
-		getServer().getPluginManager().registerEvents(new EnderDragonListener(this), this);
-		getServer().getPluginManager().registerEvents(new DamageListener(this), this);
+		this.debug("Registering event handlers...");
+		this.getServer().getPluginManager().registerEvents(new WorldListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new ChunkListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new EnderDragonListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new DamageListener(this), this);
 
-		debug("Registering command...");
-		setCommandExecutor("nend", new TheEndAgainCommandExecutor(this));
+		this.debug("Registering command...");
+		this.setCommandExecutor("nend", new TheEndAgainCommandExecutor(this));
 
-		debug("Handling Metrics...");
-		final Metrics.Graph g1 = getMetrics().createGraph("Amount of End Worlds handled");
+		this.debug("Handling Metrics...");
+		final Metrics.Graph g1 = this.getMetrics().createGraph("Amount of End Worlds handled");
 		g1.addPlotter(new Metrics.Plotter() {
 
 			@Override
 			public int getValue() {
-				return getWorldHandlers().size();
+				return fr.ribesg.bukkit.ntheendagain.NTheEndAgain.this.getWorldHandlers().size();
 			}
 		});
 
@@ -117,7 +119,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 		int hard = 0;
 		int soft = 0;
 		int crystal = 0;
-		for (final EndWorldHandler h : getWorldHandlers().values()) {
+		for (final EndWorldHandler h : this.worldHandlers.values()) {
 			if (h.getConfig().getRegenType() == 0) {
 				disabled++;
 			} else {
@@ -140,7 +142,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 		final int finalHard = hard;
 		final int finalSoft = soft;
 		final int finalCrystal = crystal;
-		final Metrics.Graph g2 = getMetrics().createGraph("Regeneration Method");
+		final Metrics.Graph g2 = this.getMetrics().createGraph("Regeneration Method");
 		g2.addPlotter(new Metrics.Plotter("Disabled") {
 
 			@Override
@@ -172,13 +174,13 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
 		// Metrics - Regeneration on Stop
 		int regenOnStop = 0;
-		for (final EndWorldHandler h : getWorldHandlers().values()) {
+		for (final EndWorldHandler h : this.worldHandlers.values()) {
 			if (h.getConfig().getHardRegenOnStop() == 1) {
 				regenOnStop++;
 			}
 		}
 		final int finalRegenOnStop = regenOnStop;
-		final Metrics.Graph g3 = getMetrics().createGraph("Hard Regeneration on Stop");
+		final Metrics.Graph g3 = this.getMetrics().createGraph("Hard Regeneration on Stop");
 		g3.addPlotter(new Metrics.Plotter("Enabled") {
 
 			@Override
@@ -190,17 +192,14 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
 			@Override
 			public int getValue() {
-				return getWorldHandlers().size() - finalRegenOnStop;
+				return fr.ribesg.bukkit.ntheendagain.NTheEndAgain.this.getWorldHandlers().size() - finalRegenOnStop;
 			}
 		});
 
-		exiting(getClass(), "onNodeEnable");
+		this.exiting(this.getClass(), "onNodeEnable");
 		return true;
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
-	 */
 	@Override
 	protected void handleOtherNodes() {
 		// Nothing to do here for now
@@ -208,22 +207,22 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 
 	@Override
 	public void onNodeDisable() {
-		entering(getClass(), "onNodeDisable");
+		this.entering(this.getClass(), "onNodeDisable");
 
-		for (final EndWorldHandler handler : worldHandlers.values()) {
+		for (final EndWorldHandler handler : this.worldHandlers.values()) {
 			try {
 				handler.unload(true);
 			} catch (final InvalidConfigurationException e) {
-				error("Unable to disable \"" + handler.getEndWorld().getName() + "\"'s world handler. Server should be " +
-				      "stopped now (Were you reloading?)", e);
+				this.error("Unable to disable \"" + handler.getEndWorld().getName() + "\"'s world handler. Server should be " +
+				           "stopped now (Were you reloading?)", e);
 			}
 		}
 
-		exiting(getClass(), "onNodeDisable");
+		this.exiting(this.getClass(), "onNodeDisable");
 	}
 
 	public Path getConfigFilePath(final String fileName) {
-		return Paths.get(getDataFolder().getPath(), fileName + ".yml");
+		return Paths.get(this.getDataFolder().getPath(), fileName + ".yml");
 	}
 
 	public boolean loadWorld(final World endWorld) throws InvalidConfigurationException {
@@ -231,11 +230,11 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 		try {
 			handler.loadConfig();
 			handler.loadChunks();
-			worldHandlers.put(handler.getCamelCaseWorldName(), handler);
+			this.worldHandlers.put(handler.getCamelCaseWorldName(), handler);
 			handler.initLater();
 			return true;
 		} catch (final IOException e) {
-			error("This error occured when NTheEndAgain tried to load " + e.getMessage() + ".yml", e);
+			this.error("This error occured when NTheEndAgain tried to load " + e.getMessage() + ".yml", e);
 			return false;
 		}
 	}
@@ -246,7 +245,7 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 	 * @return Value
 	 */
 	public EndWorldHandler getHandler(final String lowerCamelCaseWorldName) {
-		return worldHandlers.get(lowerCamelCaseWorldName);
+		return this.worldHandlers.get(lowerCamelCaseWorldName);
 	}
 
 	/**
@@ -255,28 +254,28 @@ public class NTheEndAgain extends NPlugin implements TheEndAgainNode {
 	 */
 	public void activateFilter() {
 		boolean filterActivated = false;
-		for (final EndWorldHandler handler : worldHandlers.values()) {
+		for (final EndWorldHandler handler : this.worldHandlers.values()) {
 			if (handler.getConfig().getFilterMovedTooQuicklySpam() == 1) {
-				debug("Filter needs to be actiavted for world " + handler.getEndWorld().getName());
+				this.debug("Filter needs to be actiavted for world " + handler.getEndWorld().getName());
 				filterActivated = true;
 				break;
 			}
 		}
 		if (filterActivated) {
-			debug("Filter activated!");
-			getCore().getFilterManager().addDenyFilter(new MovedTooQuicklyDenyFilter(this));
+			this.debug("Filter activated!");
+			this.getCore().getFilterManager().addDenyFilter(new MovedTooQuicklyDenyFilter(this));
 		} else {
-			debug("Filter was not activated");
+			this.debug("Filter was not activated");
 		}
 	}
 
 	@Override
 	public Messages getMessages() {
-		return messages;
+		return this.messages;
 	}
 
 	public HashMap<String, EndWorldHandler> getWorldHandlers() {
-		return worldHandlers;
+		return this.worldHandlers;
 	}
 
 	// API for other nodes

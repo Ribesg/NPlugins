@@ -8,13 +8,13 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.user;
-import fr.ribesg.bukkit.ncore.config.UuidDb;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 
 public class User {
 
@@ -55,7 +55,7 @@ public class User {
 	}
 
 	public String getLastIp() {
-		return lastIp;
+		return this.lastIp;
 	}
 
 	public void newIp(final String currentIp) {
@@ -66,24 +66,24 @@ public class User {
 	}
 
 	public List<String> getKnownIps() {
-		return knownIps;
+		return this.knownIps;
 	}
 
 	public boolean isLoggedIn() {
-		return loggedIn;
+		return this.loggedIn;
 	}
 
 	public void setLoggedIn(final boolean loggedIn) {
 		this.loggedIn = loggedIn;
 		if (loggedIn) {
-			handler.notifyLogin(Bukkit.getPlayer(getUserId()));
+			this.handler.notifyLogin(Bukkit.getPlayer(this.userId));
 		} else {
-			handler.notifyLogout(Bukkit.getPlayer(getUserId()));
+			this.handler.notifyLogout(Bukkit.getPlayer(this.userId));
 		}
 	}
 
 	public String getPasswordHash() {
-		return passwordHash;
+		return this.passwordHash;
 	}
 
 	public void setPasswordHash(final String passwordHash) {
@@ -91,11 +91,11 @@ public class User {
 	}
 
 	public UUID getUserId() {
-		return userId;
+		return this.userId;
 	}
 
 	public boolean hasAutoLogout() {
-		return autoLogout;
+		return this.autoLogout;
 	}
 
 	public void setAutoLogout(final boolean autoLogout) {
@@ -103,7 +103,7 @@ public class User {
 	}
 
 	public Location getHome() {
-		return home;
+		return this.home;
 	}
 
 	public void setHome(final Location home) {

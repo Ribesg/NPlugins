@@ -10,6 +10,7 @@
 package fr.ribesg.com.mojang.api.profiles;
 
 import com.google.gson.Gson;
+
 import fr.ribesg.com.mojang.api.http.BasicHttpClient;
 import fr.ribesg.com.mojang.api.http.HttpBody;
 import fr.ribesg.com.mojang.api.http.HttpClient;
@@ -29,7 +30,7 @@ public class HttpProfileRepository implements ProfileRepository {
 
 	private static final Gson GSON = new Gson();
 	private final String     agent;
-	private       HttpClient client;
+	private final HttpClient client;
 
 	public HttpProfileRepository(final String agent) {
 		this(agent, BasicHttpClient.getInstance());
@@ -58,7 +59,7 @@ public class HttpProfileRepository implements ProfileRepository {
 				}
 				final String[] namesBatch = Arrays.copyOfRange(names, start, end);
 				final HttpBody body = getHttpBody(namesBatch);
-				final Profile[] result = post(getProfilesUrl(), body, headers);
+				final Profile[] result = this.post(this.getProfilesUrl(), body, headers);
 				profiles.addAll(Arrays.asList(result));
 
 				start = end;
@@ -73,11 +74,11 @@ public class HttpProfileRepository implements ProfileRepository {
 
 	private URL getProfilesUrl() throws MalformedURLException {
 		// To lookup Minecraft profiles, agent should be "minecraft"
-		return new URL("https://api.mojang.com/profiles/" + agent);
+		return new URL("https://api.mojang.com/profiles/" + this.agent);
 	}
 
 	private Profile[] post(final URL url, final HttpBody body, final List<HttpHeader> headers) throws IOException {
-		final String response = client.post(url, body, headers);
+		final String response = this.client.post(url, body, headers);
 		return GSON.fromJson(response, Profile[].class);
 	}
 

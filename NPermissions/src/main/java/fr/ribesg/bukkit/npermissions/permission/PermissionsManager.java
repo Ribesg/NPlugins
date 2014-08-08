@@ -8,16 +8,19 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.permission;
+
 import fr.ribesg.bukkit.npermissions.NPermissions;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.logging.Level;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
 
 /**
  * This class manages Permissions.
@@ -71,7 +74,7 @@ public class PermissionsManager {
 	/**
 	 * Map that enables easy per-String PlayerPermissions get
 	 */
-	private Map<String, UUID> playerNameToUuidMap = new HashMap<>();
+	private final Map<String, UUID> playerNameToUuidMap = new HashMap<>();
 
 	/**
 	 * Permissions Manager constructor.
@@ -95,7 +98,7 @@ public class PermissionsManager {
 	 * @return the NPermissions plugin instance
 	 */
 	public NPermissions getPlugin() {
-		return plugin;
+		return this.plugin;
 	}
 
 	/**
@@ -191,7 +194,7 @@ public class PermissionsManager {
 		if (playerPermissionsSet == null) {
 			final LegacyPlayerPermissions legacyPlayerPermissionsSet = this.legacyPlayers.remove(playerName.toLowerCase());
 			if (legacyPlayerPermissionsSet == null) {
-				playerPermissionsSet = new PlayerPermissions(this, playerUuid, playerName, 1, plugin.getPluginConfig().getDefaultGroup());
+				playerPermissionsSet = new PlayerPermissions(this, playerUuid, playerName, 1, this.plugin.getPluginConfig().getDefaultGroup());
 			} else {
 				playerPermissionsSet = new PlayerPermissions(playerUuid, legacyPlayerPermissionsSet);
 				playerPermissionsSet.setPlayerName(playerName);
@@ -201,16 +204,16 @@ public class PermissionsManager {
 		}
 
 		// Get/Generate/Update World specific permissions
-		if (plugin.getPluginConfig().hasPerWorldPermissions()) {
-			for (final String worldName : this.worldPlayers.keySet()) {
-				WorldPlayerPermissions worldPlayerPerms = this.worldPlayers.get(worldName).get(playerUuid);
-				if (this.worldLegacyPlayers.containsKey(worldName) && this.worldLegacyPlayers.get(worldName).containsKey(playerName.toLowerCase())) {
-					final WorldLegacyPlayerPermissions worldLegacyPlayerPerms = this.worldLegacyPlayers.get(worldName).remove(playerName.toLowerCase());
+		if (this.plugin.getPluginConfig().hasPerWorldPermissions()) {
+			for (final Entry<String, Map<UUID, WorldPlayerPermissions>> stringMapEntry : this.worldPlayers.entrySet()) {
+				WorldPlayerPermissions worldPlayerPerms = this.worldPlayers.get(stringMapEntry.getKey()).get(playerUuid);
+				if (this.worldLegacyPlayers.containsKey(stringMapEntry.getKey()) && this.worldLegacyPlayers.get(stringMapEntry.getKey()).containsKey(playerName.toLowerCase())) {
+					final WorldLegacyPlayerPermissions worldLegacyPlayerPerms = this.worldLegacyPlayers.get(stringMapEntry.getKey()).remove(playerName.toLowerCase());
 					if (worldPlayerPerms != null) {
-						plugin.error(Level.WARNING, "Legacy Player record already has normal Player record for world '" + worldName + "': " + playerName);
+						this.plugin.error(Level.WARNING, "Legacy Player record already has normal Player record for world '" + stringMapEntry.getKey() + "': " + playerName);
 					} else {
 						worldPlayerPerms = new WorldPlayerPermissions(playerUuid, playerPermissionsSet, worldLegacyPlayerPerms);
-						this.worldPlayers.get(worldName).put(playerUuid, worldPlayerPerms);
+						this.worldPlayers.get(stringMapEntry.getKey()).put(playerUuid, worldPlayerPerms);
 						saveNeeded = true;
 					}
 				}
@@ -219,12 +222,12 @@ public class PermissionsManager {
 
 		// Apply general permissions for now, world specific permissions will be handled later, if needed
 		final Map<String, Boolean> permissions = playerPermissionsSet.getComputedPermissions();
-		final PermissionAttachment playerPermissions = player.addAttachment(plugin);
+		final PermissionAttachment playerPermissions = player.addAttachment(this.plugin);
 		for (final Map.Entry<String, Boolean> e : permissions.entrySet()) {
 			playerPermissions.setPermission(e.getKey(), e.getValue());
 		}
 		this.attachmentMap.put(playerUuid, playerPermissions);
-		addPlayerByName(playerName, playerUuid);
+		this.addPlayerByName(playerName, playerUuid);
 		if (saveNeeded) {
 			this.plugin.savePlayers();
 			this.plugin.saveWorldPlayers();
@@ -239,7 +242,7 @@ public class PermissionsManager {
 	 * @param player the Player
 	 */
 	public void registerPlayerForWorld(final Player player) {
-		applyWorldPermissions(player);
+		this.applyWorldPermissions(player);
 	}
 
 	/**
@@ -249,9 +252,9 @@ public class PermissionsManager {
 	 */
 	public void reRegisterPlayer(final UUID uuid) {
 		final Player player = Bukkit.getPlayer(uuid);
-		unRegisterPlayer(player);
-		registerPlayer(player);
-		applyWorldPermissions(player);
+		this.unRegisterPlayer(player);
+		this.registerPlayer(player);
+		this.applyWorldPermissions(player);
 	}
 
 	/**
@@ -277,7 +280,7 @@ public class PermissionsManager {
 	 * @param player the Player
 	 */
 	public void applyWorldPermissions(final Player player) {
-		if (plugin.getPluginConfig().hasPerWorldPermissions()) {
+		if (this.plugin.getPluginConfig().hasPerWorldPermissions()) {
 			final String worldName = player.getWorld().getName();
 			final UUID playerUuid = player.getUniqueId();
 			PermissionAttachment playerAttachment = this.attachmentMap.remove(playerUuid);
@@ -288,7 +291,7 @@ public class PermissionsManager {
 			if (playerAttachment != null) {
 				playerAttachment.remove();
 			}
-			playerAttachment = player.addAttachment(plugin);
+			playerAttachment = player.addAttachment(this.plugin);
 			for (final Map.Entry<String, Boolean> e : playerPermissions.getComputedPermissions().entrySet()) {
 				playerAttachment.setPermission(e.getKey(), e.getValue());
 			}

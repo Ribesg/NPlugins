@@ -21,13 +21,14 @@ import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.ItemNetworkFeature;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ItemNetwork;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ReceiverSign;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class DbConfig extends AbstractConfig<NGeneral> {
 
@@ -35,9 +36,6 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		super(instance);
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration)
-	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
@@ -61,7 +59,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 					flyModePlayers.add(id);
 				}
 			}
-			plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers().addAll(flyModePlayers);
+			this.plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers().addAll(flyModePlayers);
 		}
 
 		// #############
@@ -84,7 +82,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 					godModePlayers.add(id);
 				}
 			}
-			plugin.getFeatures().get(GodModeFeature.class).getGodPlayers().addAll(godModePlayers);
+			this.plugin.getFeatures().get(GodModeFeature.class).getGodPlayers().addAll(godModePlayers);
 		}
 
 		// #################
@@ -92,7 +90,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		// #################
 
 		if (config.isConfigurationSection("itemnetworks")) {
-			final ItemNetworkFeature feature = plugin.getFeatures().get(ItemNetworkFeature.class);
+			final ItemNetworkFeature feature = this.plugin.getFeatures().get(ItemNetworkFeature.class);
 			final ConfigurationSection inetSection = config.getConfigurationSection("itemnetworks");
 			for (final String networkName : inetSection.getKeys(false)) {
 				final ConfigurationSection networkSection = inetSection.getConfigurationSection(networkName);
@@ -104,7 +102,7 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 						final ConfigurationSection receiverSection = receiversSection.getConfigurationSection(key);
 						final NLocation location = NLocation.toNLocation(receiverSection.getString("location"));
 						final String acceptsString = receiverSection.getString("accepts");
-						final ReceiverSign receiverSign = new ReceiverSign(plugin, location, acceptsString);
+						final ReceiverSign receiverSign = new ReceiverSign(this.plugin, location, acceptsString);
 						network.getReceivers().add(receiverSign);
 					}
 				}
@@ -113,9 +111,6 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		}
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString()
-	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
@@ -137,10 +132,10 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		// ## FlyMode ##
 		// #############
 
-		if (plugin.getPluginConfig().hasFlyModeFeature()) {
+		if (this.plugin.getPluginConfig().hasFlyModeFeature()) {
 			content.append("flyModePlayers:\n");
-			for (final UUID playerId : plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers()) {
-				content.append("- " + playerId + " # " + UuidDb.getName(playerId) + "\n");
+			for (final UUID playerId : this.plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers()) {
+				content.append("- " + playerId + " # " + UuidDb.getName(playerId) + '\n');
 			}
 			content.append('\n');
 		}
@@ -149,10 +144,10 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		// ## GodMode ##
 		// #############
 
-		if (plugin.getPluginConfig().hasGodModeFeature()) {
+		if (this.plugin.getPluginConfig().hasGodModeFeature()) {
 			content.append("godModePlayers:\n");
-			for (final UUID playerId : plugin.getFeatures().get(GodModeFeature.class).getGodPlayers()) {
-				content.append("- " + playerId + " # " + UuidDb.getName(playerId) + "\n");
+			for (final UUID playerId : this.plugin.getFeatures().get(GodModeFeature.class).getGodPlayers()) {
+				content.append("- " + playerId + " # " + UuidDb.getName(playerId) + '\n');
 			}
 			content.append('\n');
 		}
@@ -161,16 +156,16 @@ public class DbConfig extends AbstractConfig<NGeneral> {
 		// ## ItemNetwork ##
 		// #################
 
-		if (plugin.getPluginConfig().hasItemNetworkFeature()) {
+		if (this.plugin.getPluginConfig().hasItemNetworkFeature()) {
 			content.append("itemnetworks:\n");
-			for (final ItemNetwork network : plugin.getFeatures().get(ItemNetworkFeature.class).getNetworks().values()) {
+			for (final ItemNetwork network : this.plugin.getFeatures().get(ItemNetworkFeature.class).getNetworks().values()) {
 				content.append("  " + network.getName() + ":\n");
-				content.append("    creator: " + network.getCreator() + "\n");
+				content.append("    creator: " + network.getCreator() + '\n');
 				content.append("    receivers:\n");
 				int i = 1;
 				for (final ReceiverSign receiver : network.getReceivers()) {
 					content.append("      receiver" + i++ + ":\n");
-					content.append("        location: " + receiver.getLocation().toString() + "\n");
+					content.append("        location: " + receiver.getLocation() + '\n');
 					content.append("        accepts: \"" + receiver.getAcceptsString() + "\"\n");
 				}
 			}

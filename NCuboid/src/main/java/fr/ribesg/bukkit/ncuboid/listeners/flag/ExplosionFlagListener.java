@@ -16,6 +16,7 @@ import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityChangeBlockEvent
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityDamageEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedEntityExplodeEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -33,7 +34,7 @@ public class ExplosionFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityExplode(final ExtendedEntityExplodeEvent ext) {
-		final EntityExplodeEvent event = (EntityExplodeEvent) ext.getBaseEvent();
+		final EntityExplodeEvent event = (EntityExplodeEvent)ext.getBaseEvent();
 		for (final Block b : ext.getBlockRegionsMap().keySet()) {
 			if (ext.getBlockRegionsMap().get(b).getFlag(Flag.EXPLOSION_BLOCK)) {
 				event.blockList().remove(b);
@@ -49,7 +50,7 @@ public class ExplosionFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityDamage(final ExtendedEntityDamageEvent ext) {
-		final EntityDamageEvent event = (EntityDamageEvent) ext.getBaseEvent();
+		final EntityDamageEvent event = (EntityDamageEvent)ext.getBaseEvent();
 		if (event.getCause() == DamageCause.ENTITY_EXPLOSION) {
 			if (event.getEntityType() == EntityType.DROPPED_ITEM) {
 				if (ext.getEntityRegion() != null && ext.getEntityRegion().getFlag(Flag.EXPLOSION_ITEM) || ext.getDamagerRegion() != null && ext.getDamagerRegion().getFlag(Flag.EXPLOSION_ITEM)) {
@@ -65,7 +66,7 @@ public class ExplosionFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEntityChangeBlock(final ExtendedEntityChangeBlockEvent ext) {
-		final EntityChangeBlockEvent event = (EntityChangeBlockEvent) ext.getBaseEvent();
+		final EntityChangeBlockEvent event = (EntityChangeBlockEvent)ext.getBaseEvent();
 		if (event.getEntityType() == EntityType.ENDER_DRAGON || event.getEntityType() == EntityType.WITHER) {
 			if (ext.getBlockRegion() != null && ext.getBlockRegion().getFlag(Flag.EXPLOSION_BLOCK)) {
 				event.setCancelled(true);

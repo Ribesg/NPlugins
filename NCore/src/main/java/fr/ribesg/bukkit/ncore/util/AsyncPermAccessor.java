@@ -8,17 +8,6 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,9 +20,21 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+
 /**
  * This tool allow Asynchronous access to a Player's permission.
- * The {@link #init(org.bukkit.plugin.Plugin)} method should be
+ * The {@link #init(Plugin)} method should be
  * called by at least one Plugin synchronously before any sync or async
  * access.
  * <p>
@@ -188,7 +189,7 @@ public final class AsyncPermAccessor implements Listener {
 	/**
 	 * The updating task
 	 */
-	private BukkitTask task;
+	private final BukkitTask task;
 
 	/**
 	 * Construct the AsyncPermAccessor.
@@ -212,10 +213,18 @@ public final class AsyncPermAccessor implements Listener {
 		this.playerCount = this.players.size();
 
 		Bukkit.getPluginManager().registerEvents(this, this.plugin);
-		this.task = launchUpdateTask();
+		this.task = this.launchUpdateTask();
 	}
 
 	/**
+	 * Checks if a Player had a Permission on the last update.
+	 *
+	 * @param playerName     the player's name
+	 * @param permissionNode the permission to check
+	 *
+	 * @return true if the provided Player had the provided Permission on
+	 * the last update, false otherwise
+	 *
 	 * @see #has(String, String)
 	 */
 	private boolean _has(final String playerName, final String permissionNode) {
@@ -224,6 +233,13 @@ public final class AsyncPermAccessor implements Listener {
 	}
 
 	/**
+	 * Checks if a Player was Op on the last update.
+	 *
+	 * @param playerName the player's name
+	 *
+	 * @return true if the provided Player was Op on the last update,
+	 * false otherwise
+	 *
 	 * @see #isOp(String)
 	 */
 	private boolean _isOp(final String playerName) {
@@ -259,12 +275,14 @@ public final class AsyncPermAccessor implements Listener {
 	 */
 	private void update() {
 		for (final Player player : Bukkit.getOnlinePlayers()) {
-			updatePlayer(player);
+			this.updatePlayer(player);
 		}
 	}
 
 	/**
 	 * Update all permissions and op state of the provided player.
+	 *
+	 * @param player the player
 	 */
 	private void updatePlayer(final Player player) {
 		if (player.isOnline()) {
@@ -287,7 +305,7 @@ public final class AsyncPermAccessor implements Listener {
 			}
 			this.permissions.put(playerName, playerPerms);
 		} else {
-			forgetPlayer(player);
+			this.forgetPlayer(player);
 		}
 	}
 
@@ -305,6 +323,8 @@ public final class AsyncPermAccessor implements Listener {
 
 	/**
 	 * Launch the update task.
+	 *
+	 * @return the task
 	 */
 	private BukkitTask launchUpdateTask() {
 		final int delay = 2;
@@ -317,7 +337,7 @@ public final class AsyncPermAccessor implements Listener {
 			public void run() {
 				UPDATE_LOCK.writeLock().lock();
 				try {
-					if (firstRun) {
+					if (this.firstRun) {
 						this.firstRun = false;
 						AsyncPermAccessor.this.update();
 						synchronized (UPDATE_LOCK) {
@@ -325,11 +345,11 @@ public final class AsyncPermAccessor implements Listener {
 						}
 					} else {
 						int i = 0;
-						while (i++ < (AsyncPermAccessor.this.playerCount == 0 ? 0 : (1 + AsyncPermAccessor.this.playerCount / (5 * 20L / delay)))) {
+						while (i++ < (AsyncPermAccessor.this.playerCount == 0 ? 0 : 1 + fr.ribesg.bukkit.ncore.util.AsyncPermAccessor.this.playerCount / (5 * 20L / delay))) {
 							if (!this.it.hasNext()) {
 								this.it = AsyncPermAccessor.this.players.iterator();
 							}
-							AsyncPermAccessor.this.updatePlayer(it.next());
+							AsyncPermAccessor.this.updatePlayer(this.it.next());
 						}
 					}
 				} finally {

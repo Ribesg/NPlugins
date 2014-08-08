@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntalk.filter;
+
 import fr.ribesg.bukkit.ncore.common.collection.trie.Trie;
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
@@ -18,15 +19,16 @@ import fr.ribesg.bukkit.ntalk.filter.bean.Filter;
 import fr.ribesg.bukkit.ntalk.filter.bean.JailFilter;
 import fr.ribesg.bukkit.ntalk.filter.bean.MuteFilter;
 import fr.ribesg.bukkit.ntalk.filter.bean.ReplaceFilter;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * @author Ribesg
@@ -72,8 +74,8 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 
 	@Override
 	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
-		regexes.clear();
-		strings.clear();
+		this.regexes.clear();
+		this.strings.clear();
 
 		if (config.isConfigurationSection("filters")) {
 			final ConfigurationSection filtersSection = config.getConfigurationSection("filters");
@@ -86,11 +88,11 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 				}
 			}
 		} else {
-			plugin.getPluginConfig().setChatFiltersEnabled(false);
+			this.plugin.getPluginConfig().setChatFiltersEnabled(false);
 			try {
-				plugin.getPluginConfig().writeConfig();
+				this.plugin.getPluginConfig().writeConfig();
 			} catch (final IOException e) {
-				plugin.getLogger().warning("The following error occured, but it's not really a problem.");
+				this.plugin.getLogger().warning("The following error occured, but it's not really a problem.");
 				e.printStackTrace();
 			}
 		}
@@ -172,7 +174,7 @@ public class ChatFilter extends AbstractConfig<NTalk> {
 				if (e.getValue() instanceof String) {
 					content.append("    " + e.getKey() + ": \"" + e.getValue().toString().replaceAll("\\\\", "\\\\\\\\") + "\"\n");
 				} else {
-					content.append("    " + e.getKey() + ": " + e.getValue().toString() + "\n");
+					content.append("    " + e.getKey() + ": " + e.getValue() + '\n');
 				}
 			}
 		}

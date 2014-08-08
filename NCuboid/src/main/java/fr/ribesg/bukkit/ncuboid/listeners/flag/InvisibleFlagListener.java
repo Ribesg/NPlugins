@@ -16,6 +16,10 @@ import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerGridMoveEvent;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerJoinEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,53 +27,50 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class InvisibleFlagListener extends AbstractListener {
 
 	private final Set<String> invisiblePlayers;
 
 	public InvisibleFlagListener(final NCuboid instance) {
 		super(instance);
-		invisiblePlayers = new HashSet<>();
+		this.invisiblePlayers = new HashSet<>();
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
-		final PlayerGridMoveEvent event = (PlayerGridMoveEvent) ext.getBaseEvent();
+		final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
 		if (!ext.isCustomCancelled()) {
-			if (invisiblePlayers.contains(event.getPlayer().getName())) {
+			if (this.invisiblePlayers.contains(event.getPlayer().getName())) {
 				if (ext.getToRegion() == null || !ext.getToRegion().getFlag(Flag.INVISIBLE)) {
-					showToAll(event.getPlayer());
-					invisiblePlayers.remove(event.getPlayer().getName());
+					this.showToAll(event.getPlayer());
+					this.invisiblePlayers.remove(event.getPlayer().getName());
 				}
 			} else if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.INVISIBLE)) {
-				hideToAll(event.getPlayer());
-				invisiblePlayers.add(event.getPlayer().getName());
+				this.hideToAll(event.getPlayer());
+				this.invisiblePlayers.add(event.getPlayer().getName());
 			}
 		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerJoin(final ExtendedPlayerJoinEvent ext) {
-		final PlayerJoinEvent event = (PlayerJoinEvent) ext.getBaseEvent();
+		final PlayerJoinEvent event = (PlayerJoinEvent)ext.getBaseEvent();
 		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.INVISIBLE)) {
-			invisiblePlayers.add(event.getPlayer().getName());
-			hideToAll(event.getPlayer());
+			this.invisiblePlayers.add(event.getPlayer().getName());
+			this.hideToAll(event.getPlayer());
 		}
-		for (final String p : invisiblePlayers) {
+		for (final String p : this.invisiblePlayers) {
 			event.getPlayer().hidePlayer(Bukkit.getPlayerExact(p));
 		}
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerQuit(final PlayerQuitEvent event) {
-		invisiblePlayers.remove(event.getPlayer().getName());
+		this.invisiblePlayers.remove(event.getPlayer().getName());
 	}
 
 	private void showToAll(final Player p) {
-		if (getPlugin().shouldShow(p)) {
+		if (this.getPlugin().shouldShow(p)) {
 			for (final Player other : Bukkit.getOnlinePlayers()) {
 				if (!other.equals(p)) {
 					other.showPlayer(p);

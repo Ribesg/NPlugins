@@ -27,15 +27,15 @@ public class ExtendedPlayerGridMoveEvent extends AbstractExtendedEvent {
 
 	public ExtendedPlayerGridMoveEvent(final RegionDb db, final PlayerGridMoveEvent event) {
 		super(db.getPlugin(), event);
-		fromRegions = db.getAllByLocation(event.getFrom());
-		fromRegion = db.getPrior(fromRegions);
-		toRegions = db.getAllByLocation(event.getTo());
-		toRegion = db.getPrior(toRegions);
-		customCancelled = false;
+		this.fromRegions = db.getAllByLocation(event.getFrom());
+		this.fromRegion = db.getPrior(this.fromRegions);
+		this.toRegions = db.getAllByLocation(event.getTo());
+		this.toRegion = db.getPrior(this.toRegions);
+		this.customCancelled = false;
 	}
 
 	public boolean isCustomCancelled() {
-		return customCancelled;
+		return this.customCancelled;
 	}
 
 	public void setCustomCancelled(final boolean customCancelled) {
@@ -43,18 +43,18 @@ public class ExtendedPlayerGridMoveEvent extends AbstractExtendedEvent {
 	}
 
 	public GeneralRegion getFromRegion() {
-		return fromRegion;
+		return this.fromRegion;
 	}
 
 	public Set<GeneralRegion> getFromRegions() {
-		return fromRegions;
+		return this.fromRegions;
 	}
 
 	public GeneralRegion getToRegion() {
-		return toRegion;
+		return this.toRegion;
 	}
 
 	public Set<GeneralRegion> getToRegions() {
-		return toRegions;
+		return this.toRegions;
 	}
 }

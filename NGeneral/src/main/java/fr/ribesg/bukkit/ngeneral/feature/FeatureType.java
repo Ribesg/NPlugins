@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature;
+
 import fr.ribesg.bukkit.ngeneral.feature.autoafk.AutoAfkFeature;
 import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
 import fr.ribesg.bukkit.ngeneral.feature.godmode.GodModeFeature;
@@ -28,8 +29,7 @@ public enum FeatureType {
 	GOD_MODE(GodModeFeature.class),
 	ITEM_NETWORK(ItemNetworkFeature.class),
 	PROTECTION_SIGNS(ProtectionSignFeature.class),
-	SPY_MODE(SpyModeFeature.class),
-	;
+	SPY_MODE(SpyModeFeature.class),;
 
 	/**
 	 * Maps Feature classes to appropriate FeatureType enum value

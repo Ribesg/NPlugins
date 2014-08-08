@@ -8,15 +8,17 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.godmode;
+
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.feature.Feature;
 import fr.ribesg.bukkit.ngeneral.feature.FeatureType;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class GodModeFeature extends Feature {
 
@@ -24,7 +26,7 @@ public class GodModeFeature extends Feature {
 
 	public GodModeFeature(final NGeneral instance) {
 		super(instance, FeatureType.GOD_MODE, instance.getPluginConfig().hasGodModeFeature());
-		godPlayers = new HashSet<>();
+		this.godPlayers = new HashSet<>();
 	}
 
 	@Override
@@ -32,26 +34,26 @@ public class GodModeFeature extends Feature {
 		final GodModeListener listener = new GodModeListener(this);
 		final GodModeCommandExecutor executor = new GodModeCommandExecutor(this);
 
-		Bukkit.getPluginManager().registerEvents(listener, plugin);
-		plugin.setCommandExecutor("god", executor);
+		Bukkit.getPluginManager().registerEvents(listener, this.plugin);
+		this.plugin.setCommandExecutor("god", executor);
 	}
 
 	public Set<UUID> getGodPlayers() {
-		return godPlayers;
+		return this.godPlayers;
 	}
 
 	public boolean hasGodMode(final Player player) {
-		return godPlayers.contains(player.getUniqueId());
+		return this.godPlayers.contains(player.getUniqueId());
 	}
 
 	public void setGodMode(final Player player, final boolean value) {
 		if (value) {
-			godPlayers.add(player.getUniqueId());
+			this.godPlayers.add(player.getUniqueId());
 			player.setHealth(player.getMaxHealth());
 			player.setFoodLevel(20);
 			player.setSaturation(20.0f);
 		} else {
-			godPlayers.remove(player.getUniqueId());
+			this.godPlayers.remove(player.getUniqueId());
 		}
 	}
 }

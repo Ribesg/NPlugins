@@ -8,15 +8,17 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncuboid.beans;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 public class Jails {
 
@@ -38,7 +40,7 @@ public class Jails {
 
 	public void saveJails(final ConfigurationSection parent) {
 		final ConfigurationSection jailsSection = parent.createSection("jails");
-		for (final Jail jail : byName.values()) {
+		for (final Jail jail : this.byName.values()) {
 			final ConfigurationSection jailSection = jailsSection.createSection(jail.getName());
 			jailSection.set("location", jail.getLocation().toStringPlus());
 			jailSection.set("region", jail.getRegion().getRegionName());
@@ -50,18 +52,18 @@ public class Jails {
 			final ConfigurationSection jailsSection = parent.getConfigurationSection("jails");
 			for (final String jailName : jailsSection.getKeys(false)) {
 				if (!jailsSection.isConfigurationSection(jailName)) {
-					plugin.error("Malformed configuration value for jail '" + jailName + "' in regionDB.yml, ignoring jail");
+					this.plugin.error("Malformed configuration value for jail '" + jailName + "' in regionDB.yml, ignoring jail");
 				} else {
 					final ConfigurationSection jailSection = jailsSection.getConfigurationSection(jailName);
 					final NLocation location = NLocation.toNLocation(jailSection.getString("location"));
 					final String regionName = jailSection.getString("region");
 					final GeneralRegion region = db.getByName(regionName);
 					if (location == null) {
-						plugin.error("Malformed location for jail '" + jailName + "' in regionDB.yml, ignoring jail");
+						this.plugin.error("Malformed location for jail '" + jailName + "' in regionDB.yml, ignoring jail");
 					} else if (region == null) {
-						plugin.error("Unknown region '" + regionName + "' for jail '" + jailName + "' in regionDB.yml, ignoring jail");
+						this.plugin.error("Unknown region '" + regionName + "' for jail '" + jailName + "' in regionDB.yml, ignoring jail");
 					} else {
-						add(new Jail(jailName, location, region));
+						this.add(new Jail(jailName, location, region));
 					}
 				}
 			}
@@ -71,10 +73,10 @@ public class Jails {
 	// Jails handling
 
 	public boolean add(final Jail jail) {
-		plugin.entering(getClass(), "add", "jail=" + jail);
+		this.plugin.entering(this.getClass(), "add", "jail=" + jail);
 
-		if (containsName(jail.getName())) {
-			plugin.exiting(getClass(), "add", "Failed: jail already exists with same name");
+		if (this.containsName(jail.getName())) {
+			this.plugin.exiting(this.getClass(), "add", "Failed: jail already exists with same name");
 			return false;
 		} else {
 			this.byName.put(jail.getName(), jail);
@@ -85,17 +87,17 @@ public class Jails {
 			}
 			regionJails.add(jail);
 
-			plugin.exiting(getClass(), "add");
+			this.plugin.exiting(this.getClass(), "add");
 			return true;
 		}
 	}
 
 	public boolean remove(final String jailName) {
-		plugin.entering(getClass(), "remove", "jailName=" + jailName);
+		this.plugin.entering(this.getClass(), "remove", "jailName=" + jailName);
 
-		final Jail jail = getByName(jailName);
+		final Jail jail = this.getByName(jailName);
 		if (jail != null) {
-			final Set<Jail> jails = getByRegion(jail.getRegion());
+			final Set<Jail> jails = this.getByRegion(jail.getRegion());
 			if (jails.size() == 1) {
 				this.byRegion.remove(jail.getRegion());
 			} else {
@@ -103,10 +105,10 @@ public class Jails {
 			}
 			this.byName.remove(jailName.toLowerCase());
 
-			plugin.exiting(getClass(), "remove");
+			this.plugin.exiting(this.getClass(), "remove");
 			return true;
 		} else {
-			plugin.exiting(getClass(), "remove", "Failed: unknown jail");
+			this.plugin.exiting(this.getClass(), "remove", "Failed: unknown jail");
 			return false;
 		}
 	}
@@ -116,7 +118,7 @@ public class Jails {
 	}
 
 	public boolean containsName(final String jailName) {
-		return getByName(jailName) != null;
+		return this.getByName(jailName) != null;
 	}
 
 	public Set<Jail> getByRegion(final GeneralRegion region) {
@@ -124,7 +126,7 @@ public class Jails {
 	}
 
 	public boolean containsRegion(final GeneralRegion region) {
-		return getByRegion(region) != null;
+		return this.getByRegion(region) != null;
 	}
 
 	public Set<String> getJailNames() {
@@ -134,17 +136,17 @@ public class Jails {
 	// Jailed player handling
 
 	public boolean jail(final UUID id, final String jailName) {
-		if (plugin.isDebugEnabled()) {
-			plugin.entering(getClass(), "jail", "id=" + id + ";jailName=" + jailName);
+		if (this.plugin.isDebugEnabled()) {
+			this.plugin.entering(this.getClass(), "jail", "id=" + id + ";jailName=" + jailName);
 		}
-		if (!isJailed(id) && containsName(jailName)) {
-			this.jailed.put(id, getByName(jailName));
+		if (!this.isJailed(id) && this.containsName(jailName)) {
+			this.jailed.put(id, this.getByName(jailName));
 
-			plugin.exiting(getClass(), "jail");
+			this.plugin.exiting(this.getClass(), "jail");
 			return true;
 		} else {
-			if (plugin.isDebugEnabled()) {
-				plugin.exiting(getClass(), "jail", "Failed: " + (isJailed(id) ? "player already jailed" : "unknown jail"));
+			if (this.plugin.isDebugEnabled()) {
+				this.plugin.exiting(this.getClass(), "jail", "Failed: " + (this.isJailed(id) ? "player already jailed" : "unknown jail"));
 			}
 			return false;
 		}

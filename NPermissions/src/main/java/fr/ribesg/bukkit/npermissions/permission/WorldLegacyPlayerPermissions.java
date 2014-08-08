@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.permission;
+
 public class WorldLegacyPlayerPermissions extends LegacyPlayerPermissions {
 
 	private final String                  worldName;
@@ -27,10 +28,10 @@ public class WorldLegacyPlayerPermissions extends LegacyPlayerPermissions {
 	}
 
 	public String getWorldName() {
-		return worldName;
+		return this.worldName;
 	}
 
 	public LegacyPlayerPermissions getParentPlayer() {
-		return parentPlayer;
+		return this.parentPlayer;
 	}
 }

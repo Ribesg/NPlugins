@@ -33,10 +33,9 @@ public class RelativeSkullBlock extends RelativeBlock {
 
 	@Override
 	public void setAdditionalData(final Block block) {
-		final Skull skullState = (Skull) block.getState();
-		skullState.setSkullType(type);
-		skullState.setRotation(rotation);
+		final Skull skullState = (Skull)block.getState();
+		skullState.setSkullType(this.type);
+		skullState.setRotation(this.rotation);
 		skullState.update();
 	}
-
 }

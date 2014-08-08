@@ -8,11 +8,12 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.event.theendagain;
+
+import java.util.Map;
+
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
-import java.util.Map;
 
 /**
  * This event is called by the NTheEndAgain node just before giving xp
@@ -34,6 +35,7 @@ public class XPDistributionEvent extends Event implements Cancellable {
 	private       boolean              cancelled;
 
 	public XPDistributionEvent(final Map<String, Integer> xpMap, final int totalXPAmount) {
+		super();
 		this.xpMap = xpMap;
 		this.totalXPAmount = totalXPAmount;
 		this.cancelled = false;
@@ -51,7 +53,7 @@ public class XPDistributionEvent extends Event implements Cancellable {
 	 * @return the map
 	 */
 	public Map<String, Integer> getXpMap() {
-		return xpMap;
+		return this.xpMap;
 	}
 
 	/**
@@ -60,12 +62,12 @@ public class XPDistributionEvent extends Event implements Cancellable {
 	 * @return the total amount of XP given for this Dragon's death, for reference
 	 */
 	public int getTotalXPAmount() {
-		return totalXPAmount;
+		return this.totalXPAmount;
 	}
 
 	@Override
 	public boolean isCancelled() {
-		return cancelled;
+		return this.cancelled;
 	}
 
 	@Override

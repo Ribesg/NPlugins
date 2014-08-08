@@ -17,13 +17,24 @@ import fr.ribesg.bukkit.ngeneral.config.DbConfig;
 import fr.ribesg.bukkit.ngeneral.feature.Features;
 import fr.ribesg.bukkit.ngeneral.feature.spymode.SpyModeFeature;
 import fr.ribesg.bukkit.ngeneral.lang.Messages;
-import fr.ribesg.bukkit.ngeneral.simplefeature.*;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.InvalidConfigurationException;
+import fr.ribesg.bukkit.ngeneral.simplefeature.BusyCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.FlySpeedCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.HealFoodCommands;
+import fr.ribesg.bukkit.ngeneral.simplefeature.NightVisionCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.RepairCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.SignColorsListener;
+import fr.ribesg.bukkit.ngeneral.simplefeature.TeleportCommands;
+import fr.ribesg.bukkit.ngeneral.simplefeature.TimeCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.WalkSpeedCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.WeatherCommand;
+import fr.ribesg.bukkit.ngeneral.simplefeature.WelcomeListener;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 public class NGeneral extends NPlugin implements GeneralNode {
 
@@ -42,9 +53,9 @@ public class NGeneral extends NPlugin implements GeneralNode {
 
 	@Override
 	protected void loadMessages() throws IOException {
-		debug("Loading plugin Messages...");
-		if (!getDataFolder().isDirectory()) {
-			getDataFolder().mkdir();
+		this.debug("Loading plugin Messages...");
+		if (!this.getDataFolder().isDirectory()) {
+			this.getDataFolder().mkdir();
 		}
 
 		final Messages messages = new Messages();
@@ -57,12 +68,12 @@ public class NGeneral extends NPlugin implements GeneralNode {
 	protected boolean onNodeEnable() {
 		// Config
 		try {
-			pluginConfig = new Config(this);
-			pluginConfig.loadConfig();
+			this.pluginConfig = new Config(this);
+			this.pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
+			this.getLogger().severe("An error occured, stacktrace follows:");
 			e.printStackTrace();
-			getLogger().severe("This error occured when NGeneral tried to load config.yml");
+			this.getLogger().severe("This error occured when NGeneral tried to load config.yml");
 			return false;
 		}
 
@@ -71,12 +82,12 @@ public class NGeneral extends NPlugin implements GeneralNode {
 
 		// Db
 		try {
-			dbConfig = new DbConfig(this);
-			dbConfig.loadConfig("db.yml");
+			this.dbConfig = new DbConfig(this);
+			this.dbConfig.loadConfig("db.yml");
 		} catch (final IOException | InvalidConfigurationException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
+			this.getLogger().severe("An error occured, stacktrace follows:");
 			e.printStackTrace();
-			getLogger().severe("This error occured when NGeneral tried to load db.yml");
+			this.getLogger().severe("This error occured when NGeneral tried to load db.yml");
 			return false;
 		}
 
@@ -101,7 +112,7 @@ public class NGeneral extends NPlugin implements GeneralNode {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
-		if (cmd.getName().equals("ngeneral")) {
+		if ("ngeneral".equals(cmd.getName())) {
 			if (args.length < 1) {
 				return false;
 			}
@@ -117,18 +128,18 @@ public class NGeneral extends NPlugin implements GeneralNode {
 							case "mess":
 							case "mes":
 								try {
-									loadMessages();
-									sendMessage(sender, MessageId.cmdReloadMessages);
+									this.loadMessages();
+									this.sendMessage(sender, MessageId.cmdReloadMessages);
 								} catch (final IOException e) {
-									error("An error occured when NPlayer tried to load messages.yml", e);
-									sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+									this.error("An error occured when NPlayer tried to load messages.yml", e);
+									this.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
 								}
 								return true;
 							default:
 								return false;
 						}
 					} else {
-						sendMessage(sender, MessageId.noPermissionForCommand);
+						this.sendMessage(sender, MessageId.noPermissionForCommand);
 						return true;
 					}
 				default:
@@ -139,9 +150,6 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		}
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
-	 */
 	@Override
 	protected void handleOtherNodes() {
 		// NOP
@@ -152,12 +160,12 @@ public class NGeneral extends NPlugin implements GeneralNode {
 		this.features.terminate();
 
 		try {
-			getPluginConfig().writeConfig();
+			this.pluginConfig.writeConfig();
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		try {
-			getDbConfig().writeConfig("db.yml");
+			this.dbConfig.writeConfig("db.yml");
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -165,19 +173,19 @@ public class NGeneral extends NPlugin implements GeneralNode {
 
 	@Override
 	public Messages getMessages() {
-		return messages;
+		return this.messages;
 	}
 
 	public Config getPluginConfig() {
-		return pluginConfig;
+		return this.pluginConfig;
 	}
 
 	public DbConfig getDbConfig() {
-		return dbConfig;
+		return this.dbConfig;
 	}
 
 	public Features getFeatures() {
-		return features;
+		return this.features;
 	}
 
 	// API for other nodes

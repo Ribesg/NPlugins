@@ -8,14 +8,16 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.updater;
+
 import fr.ribesg.bukkit.ncore.util.VersionUtil;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import java.util.Comparator;
 import java.util.SortedMap;
 import java.util.TreeMap;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 /**
  * @author Ribesg
@@ -36,14 +38,14 @@ public class FileDescription {
 				return -a.compareTo(b);
 			}
 		});
-		final JSONArray array = (JSONArray) JSONValue.parse(jsonString);
+		final JSONArray array = (JSONArray)JSONValue.parse(jsonString);
 		for (final Object o : array.toArray()) {
-			final JSONObject object = (JSONObject) o;
-			final String fileName = (String) object.get(FILENAME_KEY);
-			final String version = VersionUtil.getVersion((String) object.get(VERSION_KEY));
-			final String bukkitVersion = (String) object.get(BUKKIT_VERSION_KEY);
-			final String type = (String) object.get(TYPE_KEY);
-			final String link = (String) object.get(DOWNLOAD_URL_KEY);
+			final JSONObject object = (JSONObject)o;
+			final String fileName = (String)object.get(FILENAME_KEY);
+			final String version = VersionUtil.getVersion((String)object.get(VERSION_KEY));
+			final String bukkitVersion = (String)object.get(BUKKIT_VERSION_KEY);
+			final String type = (String)object.get(TYPE_KEY);
+			final String link = (String)object.get(DOWNLOAD_URL_KEY);
 			final FileDescription fileDescription = new FileDescription(fileName, version, link, type, bukkitVersion);
 			if (VersionUtil.isRelease(version)) {
 				result.put(version, fileDescription);
@@ -67,33 +69,33 @@ public class FileDescription {
 	}
 
 	public String getFileName() {
-		return fileName;
+		return this.fileName;
 	}
 
 	public String getVersion() {
-		return version;
+		return this.version;
 	}
 
 	public String getDownloadUrl() {
-		return downloadUrl;
+		return this.downloadUrl;
 	}
 
 	public String getType() {
-		return type;
+		return this.type;
 	}
 
 	public String getBukkitVersion() {
-		return bukkitVersion;
+		return this.bukkitVersion;
 	}
 
 	@Override
 	public String toString() {
 		return "FileDescription{" +
-		       "fileName='" + fileName + '\'' +
-		       ", version='" + version + '\'' +
-		       ", downloadUrl='" + downloadUrl + '\'' +
-		       ", type='" + type + '\'' +
-		       ", bukkitVersion='" + bukkitVersion + '\'' +
+		       "fileName='" + this.fileName + '\'' +
+		       ", version='" + this.version + '\'' +
+		       ", downloadUrl='" + this.downloadUrl + '\'' +
+		       ", type='" + this.type + '\'' +
+		       ", bukkitVersion='" + this.bukkitVersion + '\'' +
 		       '}';
 	}
 }

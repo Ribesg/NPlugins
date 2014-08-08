@@ -8,13 +8,16 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 
 public class NicknameFilter implements Listener {
 
@@ -26,11 +29,11 @@ public class NicknameFilter implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerLogin(final PlayerLoginEvent event) {
-		if (event.getResult() == PlayerLoginEvent.Result.ALLOWED) {
+		if (event.getResult() == Result.ALLOWED) {
 			final String playerName = event.getPlayer().getName();
 			if (!PlayerIdsUtil.isValidMinecraftUserName(playerName)) {
 				event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-				event.setKickMessage(plugin.getMessages().get(MessageId.general_nicknameFilter_invalid, playerName)[0]);
+				event.setKickMessage(this.plugin.getMessages().get(MessageId.general_nicknameFilter_invalid, playerName)[0]);
 			}
 		}
 	}

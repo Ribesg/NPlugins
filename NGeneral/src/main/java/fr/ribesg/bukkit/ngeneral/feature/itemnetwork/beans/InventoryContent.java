@@ -8,10 +8,12 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+
+import org.bukkit.inventory.ItemStack;
 
 public class InventoryContent {
 
@@ -24,10 +26,10 @@ public class InventoryContent {
 	}
 
 	public NLocation getOrigin() {
-		return origin;
+		return this.origin;
 	}
 
 	public List<ItemStack> getItems() {
-		return items;
+		return this.items;
 	}
 }

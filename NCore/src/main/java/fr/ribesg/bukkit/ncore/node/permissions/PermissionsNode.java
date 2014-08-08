@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.node.permissions;
+
 import fr.ribesg.bukkit.ncore.node.Node;
 
 /**

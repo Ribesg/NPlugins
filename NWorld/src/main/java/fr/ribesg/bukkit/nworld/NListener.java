@@ -13,10 +13,13 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.nworld.world.AdditionalSubWorld;
 import fr.ribesg.bukkit.nworld.world.AdditionalWorld;
 import fr.ribesg.bukkit.nworld.world.GeneralWorld;
+import fr.ribesg.bukkit.nworld.world.GeneralWorld.WorldType;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.TravelAgent;
 import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
@@ -26,6 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 /**
  * @author Ribesg
@@ -59,22 +63,22 @@ public class NListener implements Listener {
 	private final NWorld plugin;
 
 	public NListener(final NWorld instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onEntityUsePortal(final EntityPortalEvent event) {
-		plugin.entering(getClass(), "onEntityUsePortal", "entity=" + event.getEntityType() + ";from=" + NLocation.toString(event.getFrom()) + ";to=" + NLocation.toString(event.getTo()));
+		this.plugin.entering(this.getClass(), "onEntityUsePortal", "entity=" + event.getEntityType() + ";from=" + NLocation.toString(event.getFrom()) + ";to=" + NLocation.toString(event.getTo()));
 
 		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-			plugin.exiting(getClass(), "onEntityUsePortal", "EnderDragon should really stay in the End!");
+			this.plugin.exiting(this.getClass(), "onEntityUsePortal", "EnderDragon should really stay in the End!");
 			event.setCancelled(true);
 			return;
 		}
 
-		final GeneralWorld world = plugin.getWorlds().get(event.getFrom().getWorld().getName());
+		final GeneralWorld world = this.plugin.getWorlds().get(event.getFrom().getWorld().getName());
 		if (GeneralWorld.WorldType.isStock(world)) {
-			plugin.exiting(getClass(), "onEntityUsePortal", "Stock world!");
+			this.plugin.exiting(this.getClass(), "onEntityUsePortal", "Stock world!");
 			return;
 		}
 
@@ -89,15 +93,15 @@ public class NListener implements Listener {
 				cause = PlayerTeleportEvent.TeleportCause.END_PORTAL;
 				break;
 			default:
-				plugin.debug("Strange block found: " + block.getType() + ", trying to find a portal block near the Location");
+				this.plugin.debug("Strange block found: " + block.getType() + ", trying to find a portal block near the Location");
 				for (final BlockFace face : blockFaces) {
 					if (block.getRelative(face).getType() == Material.PORTAL) {
 						cause = PlayerTeleportEvent.TeleportCause.NETHER_PORTAL;
-						plugin.debug("Found a Nether Portal block at " + NLocation.toString(block.getRelative(face).getLocation()));
+						this.plugin.debug("Found a Nether Portal block at " + NLocation.toString(block.getRelative(face).getLocation()));
 						break;
 					} else if (block.getRelative(face).getType() == Material.ENDER_PORTAL) {
 						cause = PlayerTeleportEvent.TeleportCause.END_PORTAL;
-						plugin.debug("Found an End Portal block at " + NLocation.toString(block.getRelative(face).getLocation()));
+						this.plugin.debug("Found an End Portal block at " + NLocation.toString(block.getRelative(face).getLocation()));
 						break;
 					}
 				}
@@ -107,22 +111,22 @@ public class NListener implements Listener {
 				break;
 		}
 
-		if (world.getType() == GeneralWorld.WorldType.ADDITIONAL) {
-			final AdditionalWorld additionalWorld = (AdditionalWorld) world;
-			if (cause == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL && !additionalWorld.hasNether()) {
+		if (world.getType() == WorldType.ADDITIONAL) {
+			final AdditionalWorld additionalWorld = (AdditionalWorld)world;
+			if (cause == TeleportCause.NETHER_PORTAL && !additionalWorld.hasNether()) {
 				event.setCancelled(true);
-				plugin.exiting(getClass(), "onEntityUsePortal", "doesn't have required subworld (nether)");
+				this.plugin.exiting(this.getClass(), "onEntityUsePortal", "doesn't have required subworld (nether)");
 				return;
-			} else if (cause == PlayerTeleportEvent.TeleportCause.END_PORTAL && !additionalWorld.hasEnd()) {
+			} else if (cause == TeleportCause.END_PORTAL && !additionalWorld.hasEnd()) {
 				event.setCancelled(true);
-				plugin.exiting(getClass(), "onEntityUsePortal", "doesn't have required subworld (end)");
+				this.plugin.exiting(this.getClass(), "onEntityUsePortal", "doesn't have required subworld (end)");
 				return;
 			}
 		}
 
-		final PortalEventResult result = handlePortalEvent(event.getFrom(), cause, event.getPortalTravelAgent());
+		final PortalEventResult result = this.handlePortalEvent(event.getFrom(), cause, event.getPortalTravelAgent());
 		if (result == null) {
-			plugin.exiting(getClass(), "onEntityUsePortal", "result is null");
+			this.plugin.exiting(this.getClass(), "onEntityUsePortal", "result is null");
 			return;
 		}
 		if (result.destination != null) {
@@ -135,32 +139,32 @@ public class NListener implements Listener {
 			event.setCancelled(true);
 		}
 
-		plugin.exiting(getClass(), "onEntityUsePortal");
+		this.plugin.exiting(this.getClass(), "onEntityUsePortal");
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
 	public void onPlayerUsePortal(final PlayerPortalEvent event) {
-		plugin.entering(getClass(), "onPlayerUsePortal", "player=" + event.getPlayer().getName() + ";from=" + NLocation.toString(event.getFrom()) + ";to=" + NLocation.toString(event.getTo()));
+		this.plugin.entering(this.getClass(), "onPlayerUsePortal", "player=" + event.getPlayer().getName() + ";from=" + NLocation.toString(event.getFrom()) + ";to=" + NLocation.toString(event.getTo()));
 
-		final GeneralWorld world = plugin.getWorlds().get(event.getFrom().getWorld().getName());
+		final GeneralWorld world = this.plugin.getWorlds().get(event.getFrom().getWorld().getName());
 		if (GeneralWorld.WorldType.isStock(world)) {
 			return;
 		}
 
-		if (world.getType() == GeneralWorld.WorldType.ADDITIONAL) {
-			final AdditionalWorld additionalWorld = (AdditionalWorld) world;
-			if (event.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL && !additionalWorld.hasNether()) {
+		if (world.getType() == WorldType.ADDITIONAL) {
+			final AdditionalWorld additionalWorld = (AdditionalWorld)world;
+			if (event.getCause() == TeleportCause.NETHER_PORTAL && !additionalWorld.hasNether()) {
 				event.setCancelled(true);
-				plugin.exiting(getClass(), "onPlayerUsePortal", "doesn't have required subworld (nether)");
+				this.plugin.exiting(this.getClass(), "onPlayerUsePortal", "doesn't have required subworld (nether)");
 				return;
-			} else if (event.getCause() == PlayerTeleportEvent.TeleportCause.END_PORTAL && !additionalWorld.hasEnd()) {
+			} else if (event.getCause() == TeleportCause.END_PORTAL && !additionalWorld.hasEnd()) {
 				event.setCancelled(true);
-				plugin.exiting(getClass(), "onPlayerUsePortal", "doesn't have required subworld (end)");
+				this.plugin.exiting(this.getClass(), "onPlayerUsePortal", "doesn't have required subworld (end)");
 				return;
 			}
 		}
 
-		final PortalEventResult result = handlePortalEvent(event.getFrom(), event.getCause(), event.getPortalTravelAgent());
+		final PortalEventResult result = this.handlePortalEvent(event.getFrom(), event.getCause(), event.getPortalTravelAgent());
 		if (result == null) {
 			return;
 		}
@@ -174,7 +178,7 @@ public class NListener implements Listener {
 			event.setCancelled(true);
 		}
 
-		plugin.exiting(getClass(), "onPlayerUsePortal");
+		this.plugin.exiting(this.getClass(), "onPlayerUsePortal");
 	}
 
 	/**
@@ -194,7 +198,7 @@ public class NListener implements Listener {
 	}
 
 	private PortalEventResult handlePortalEvent(final Location fromLocation, final PlayerTeleportEvent.TeleportCause teleportCause, final TravelAgent portalTravelAgent) {
-		plugin.entering(getClass(), "handlePortalEvent", "fromLocation=" + NLocation.toString(fromLocation) + ";teleportCause=" + teleportCause);
+		this.plugin.entering(this.getClass(), "handlePortalEvent", "fromLocation=" + NLocation.toString(fromLocation) + ";teleportCause=" + teleportCause);
 
 		// In case of error or other good reasons
 		final PortalEventResult cancel = new PortalEventResult(null, false, true);
@@ -202,76 +206,76 @@ public class NListener implements Listener {
 		final World fromWorld = fromLocation.getWorld();
 		final String worldName = fromWorld.getName();
 		final World.Environment sourceWorldEnvironment = fromWorld.getEnvironment();
-		final GeneralWorld world = plugin.getWorlds().get(worldName);
+		final GeneralWorld world = this.plugin.getWorlds().get(worldName);
 
 		if (GeneralWorld.WorldType.isStock(world)) {
 			// Do not override any Bukkit behaviour
-			plugin.exiting(getClass(), "handlePortalEvent", "Source is stock world");
+			this.plugin.exiting(this.getClass(), "handlePortalEvent", "Source is stock world");
 			return null;
 		}
 
-		if (teleportCause == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) {
-			if (sourceWorldEnvironment == World.Environment.NORMAL) {
+		if (teleportCause == TeleportCause.NETHER_PORTAL) {
+			if (sourceWorldEnvironment == Environment.NORMAL) {
 				// NORMAL => NETHER
-				final AdditionalWorld normalWorld = (AdditionalWorld) world;
+				final AdditionalWorld normalWorld = (AdditionalWorld)world;
 				final AdditionalSubWorld netherWorld = normalWorld.getNetherWorld();
 				if (netherWorld == null) {
-					plugin.exiting(getClass(), "handlePortalEvent", "NORMAL => NETHER - cancel");
+					this.plugin.exiting(this.getClass(), "handlePortalEvent", "NORMAL => NETHER - cancel");
 					return cancel;
 				}
-				final Location averageDestination = normalToNetherLocation(netherWorld.getBukkitWorld(), fromLocation);
+				final Location averageDestination = this.normalToNetherLocation(netherWorld.getBukkitWorld(), fromLocation);
 				final Location actualDestination = portalTravelAgent.findOrCreate(averageDestination);
 				return new PortalEventResult(actualDestination, true, false);
-			} else if (sourceWorldEnvironment == World.Environment.NETHER) {
+			} else if (sourceWorldEnvironment == Environment.NETHER) {
 				// NETHER => NORMAL
-				final AdditionalSubWorld netherWorld = (AdditionalSubWorld) world;
+				final AdditionalSubWorld netherWorld = (AdditionalSubWorld)world;
 				final AdditionalWorld normalWorld = netherWorld.getParentWorld();
 				if (normalWorld == null) {
-					plugin.exiting(getClass(), "handlePortalEvent", "NETHER => NORMAL - cancel");
+					this.plugin.exiting(this.getClass(), "handlePortalEvent", "NETHER => NORMAL - cancel");
 					return cancel;
 				}
-				final Location averageDestination = netherToNormalLocation(normalWorld.getBukkitWorld(), fromLocation);
+				final Location averageDestination = this.netherToNormalLocation(normalWorld.getBukkitWorld(), fromLocation);
 				final Location actualDestination = portalTravelAgent.findOrCreate(averageDestination);
 				return new PortalEventResult(actualDestination, true, false);
-			} else if (sourceWorldEnvironment == World.Environment.THE_END) {
+			} else if (sourceWorldEnvironment == Environment.THE_END) {
 				// END => NETHER
 				// Buggy in Vanilla, do not handle and prevent bugs.
-				plugin.exiting(getClass(), "handlePortalEvent", "END => NETHER - cancel");
+				this.plugin.exiting(this.getClass(), "handlePortalEvent", "END => NETHER - cancel");
 				return cancel;
 			}
-		} else if (teleportCause == PlayerTeleportEvent.TeleportCause.END_PORTAL) {
-			if (sourceWorldEnvironment == World.Environment.NORMAL) {
+		} else if (teleportCause == TeleportCause.END_PORTAL) {
+			if (sourceWorldEnvironment == Environment.NORMAL) {
 				// NORMAL => END
-				final AdditionalWorld normalWorld = (AdditionalWorld) world;
+				final AdditionalWorld normalWorld = (AdditionalWorld)world;
 				final AdditionalSubWorld endWorld = normalWorld.getEndWorld();
 				if (endWorld == null) {
-					plugin.exiting(getClass(), "handlePortalEvent", "NORMAL => END - cancel");
+					this.plugin.exiting(this.getClass(), "handlePortalEvent", "NORMAL => END - cancel");
 					return cancel;
 				}
-				final Location actualDestination = getEndLocation(endWorld.getBukkitWorld());
+				final Location actualDestination = this.getEndLocation(endWorld.getBukkitWorld());
 				portalTravelAgent.createPortal(actualDestination);
 				return new PortalEventResult(actualDestination, true, false);
-			} else if (sourceWorldEnvironment == World.Environment.NETHER) {
+			} else if (sourceWorldEnvironment == Environment.NETHER) {
 				// NETHER => END (WTF)
 				// Not possible in Vanilla, do not handle and prevent eventual bugs.
-				plugin.exiting(getClass(), "handlePortalEvent", "NETHER => END - cancel");
+				this.plugin.exiting(this.getClass(), "handlePortalEvent", "NETHER => END - cancel");
 				return cancel;
-			} else if (sourceWorldEnvironment == World.Environment.THE_END) {
+			} else if (sourceWorldEnvironment == Environment.THE_END) {
 				// END => NORMAL
 				// Just teleport to spawn
-				final AdditionalSubWorld endWorld = (AdditionalSubWorld) world;
+				final AdditionalSubWorld endWorld = (AdditionalSubWorld)world;
 				final AdditionalWorld normalWorld = endWorld.getParentWorld();
 				if (normalWorld == null) {
-					plugin.exiting(getClass(), "handlePortalEvent", "END => NORMAL - cancel");
+					this.plugin.exiting(this.getClass(), "handlePortalEvent", "END => NORMAL - cancel");
 					return cancel;
 				}
 				final Location actualDestination = normalWorld.getSpawnLocation().toBukkitLocation();
-				plugin.exiting(getClass(), "handlePortalEvent");
+				this.plugin.exiting(this.getClass(), "handlePortalEvent");
 				return new PortalEventResult(actualDestination, false, false);
 			}
 		}
 
-		plugin.exiting(getClass(), "handlePortalEvent", "Not handled");
+		this.plugin.exiting(this.getClass(), "handlePortalEvent", "Not handled");
 		return null;
 	}
 
@@ -328,7 +332,7 @@ public class NListener implements Listener {
 		z *= 8;
 
 		// Try to be on the ground !
-		y = Math.min(y, normalWorld.getHighestBlockYAt((int) x, (int) z));
+		y = Math.min(y, normalWorld.getHighestBlockYAt((int)x, (int)z));
 
 		// Create the Location and return it
 		return new Location(normalWorld, x, y, z);

@@ -8,7 +8,6 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.permission;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,6 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * Represents a Set of Permissions, with a name and a priority.
@@ -100,7 +101,7 @@ public abstract class PermissionsSet {
 	public void add(final String permission, final boolean value) throws PermissionException {
 		final String lowerCasedPerm = permission.toLowerCase();
 		if (DENIED_PERMISSIONS_REGEX.matcher(lowerCasedPerm).matches()) {
-			throw new PermissionException("Attempt to register internal permission '" + lowerCasedPerm + "'");
+			throw new PermissionException("Attempt to register internal permission '" + lowerCasedPerm + '\'');
 		} else {
 			final Boolean currentValue = this.permissions.get(lowerCasedPerm);
 			if (currentValue == null) {
@@ -115,7 +116,6 @@ public abstract class PermissionsSet {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -142,10 +142,10 @@ public abstract class PermissionsSet {
 			}
 		}
 
-		if (allowList.size() > 0) {
+		if (!allowList.isEmpty()) {
 			thisSection.set("allow", new LinkedList<>(allowList));
 		}
-		if (denyList.size() > 0) {
+		if (!denyList.isEmpty()) {
 			thisSection.set("deny", new LinkedList<>(denyList));
 		}
 	}
@@ -172,7 +172,7 @@ public abstract class PermissionsSet {
 	 * browse through dependency of this PermissionsSet.
 	 */
 	public void computePermissions() {
-		this.computedPermissions = computePermissions(new HashMap<String, Boolean>());
+		this.computedPermissions = this.computePermissions(new HashMap<String, Boolean>());
 	}
 
 	/**

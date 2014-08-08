@@ -11,6 +11,14 @@ package fr.ribesg.bukkit.ncore.util.inventory;
 
 import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.configuration.ConfigurationSection;
@@ -27,13 +35,6 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class ItemMetaUtil {
 
@@ -82,29 +83,32 @@ public class ItemMetaUtil {
 	/**
 	 * Gets a String representing all special meta of this ItemStack, if any.
 	 *
-	 * @param is the ItemStack
+	 * @param is         the ItemStack
+	 * @param separators the separators
 	 *
 	 * @return a String representing this ItemStack's special meta or an empty String
+	 *
+	 * @throws InventoryUtilException if something goes wrong
 	 */
 	public static String getSpecialMetaString(final ItemStack is, final String[] separators) throws InventoryUtilException {
 		final ItemMeta meta = is.getItemMeta();
 
 		if (meta instanceof BookMeta) {
-			return getBookMetaString((BookMeta) meta);
+			return getBookMetaString((BookMeta)meta);
 		} else if (meta instanceof EnchantmentStorageMeta) {
-			return getEnchantmentStorageMetaString((EnchantmentStorageMeta) meta, separators);
+			return getEnchantmentStorageMetaString((EnchantmentStorageMeta)meta, separators);
 		} else if (meta instanceof FireworkEffectMeta) {
-			return getFireworkEffectMetaString((FireworkEffectMeta) meta);
+			return getFireworkEffectMetaString((FireworkEffectMeta)meta);
 		} else if (meta instanceof FireworkMeta) {
-			return getFireworkMetaString((FireworkMeta) meta, separators);
+			return getFireworkMetaString((FireworkMeta)meta, separators);
 		} else if (meta instanceof LeatherArmorMeta) {
-			return getLeatherArmorMetaString((LeatherArmorMeta) meta);
+			return getLeatherArmorMetaString((LeatherArmorMeta)meta);
 		} else if (meta instanceof MapMeta) {
-			return getMapMetaString((MapMeta) meta);
+			return getMapMetaString((MapMeta)meta);
 		} else if (meta instanceof PotionMeta) {
-			return getPotionMetaString((PotionMeta) meta, separators);
+			return getPotionMetaString((PotionMeta)meta, separators);
 		} else if (meta instanceof SkullMeta) {
-			return getSkullMetaString((SkullMeta) meta);
+			return getSkullMetaString((SkullMeta)meta);
 		} else {
 			throw new InventoryUtilException("Unknown Meta type '" + meta.getClass().getName() + "', please report this to the author (Ribesg)!");
 		}
@@ -122,21 +126,21 @@ public class ItemMetaUtil {
 	 */
 	public static ItemMeta fromString(final ItemMeta meta, final String nameString, final String loreString, final String specialMetaString, final String[] separators) throws InventoryUtilException {
 		if (meta instanceof BookMeta) {
-			parseBookMetaString(specialMetaString, (BookMeta) meta);
+			parseBookMetaString(specialMetaString, (BookMeta)meta);
 		} else if (meta instanceof EnchantmentStorageMeta) {
-			parseEnchantmentStorageMetaString(specialMetaString, (EnchantmentStorageMeta) meta, separators);
+			parseEnchantmentStorageMetaString(specialMetaString, (EnchantmentStorageMeta)meta, separators);
 		} else if (meta instanceof FireworkEffectMeta) {
-			parseFireworkEffectMetaString(specialMetaString, (FireworkEffectMeta) meta);
+			parseFireworkEffectMetaString(specialMetaString, (FireworkEffectMeta)meta);
 		} else if (meta instanceof FireworkMeta) {
-			parseFireworkMetaString(specialMetaString, (FireworkMeta) meta, separators);
+			parseFireworkMetaString(specialMetaString, (FireworkMeta)meta, separators);
 		} else if (meta instanceof LeatherArmorMeta) {
-			parseLeatherArmorMetaString(specialMetaString, (LeatherArmorMeta) meta);
+			parseLeatherArmorMetaString(specialMetaString, (LeatherArmorMeta)meta);
 		} else if (meta instanceof MapMeta) {
-			parseMapMetaString(specialMetaString, (MapMeta) meta);
+			parseMapMetaString(specialMetaString, (MapMeta)meta);
 		} else if (meta instanceof PotionMeta) {
-			parsePotionMetaString(specialMetaString, (PotionMeta) meta, separators);
+			parsePotionMetaString(specialMetaString, (PotionMeta)meta, separators);
 		} else if (meta instanceof SkullMeta) {
-			parseSkullMetaString(specialMetaString, (SkullMeta) meta);
+			parseSkullMetaString(specialMetaString, (SkullMeta)meta);
 		}
 
 		if (!nameString.isEmpty()) {
@@ -163,21 +167,21 @@ public class ItemMetaUtil {
 		final ItemMeta meta = is.getItemMeta();
 
 		if (meta instanceof BookMeta) {
-			saveBookMetaToConfigSection(itemSection, (BookMeta) meta);
+			saveBookMetaToConfigSection(itemSection, (BookMeta)meta);
 		} else if (meta instanceof EnchantmentStorageMeta) {
-			saveEnchantmentStorageMetaToConfigSection(itemSection, (EnchantmentStorageMeta) meta);
+			saveEnchantmentStorageMetaToConfigSection(itemSection, (EnchantmentStorageMeta)meta);
 		} else if (meta instanceof FireworkEffectMeta) {
-			saveFireworkEffectMetaToConfigSection(itemSection, (FireworkEffectMeta) meta);
+			saveFireworkEffectMetaToConfigSection(itemSection, (FireworkEffectMeta)meta);
 		} else if (meta instanceof FireworkMeta) {
-			saveFireworkMetaToConfigSection(itemSection, (FireworkMeta) meta);
+			saveFireworkMetaToConfigSection(itemSection, (FireworkMeta)meta);
 		} else if (meta instanceof LeatherArmorMeta) {
-			saveLeatherArmorMetaToConfigSection(itemSection, (LeatherArmorMeta) meta);
+			saveLeatherArmorMetaToConfigSection(itemSection, (LeatherArmorMeta)meta);
 		} else if (meta instanceof MapMeta) {
-			saveMapMetaToConfigSection(itemSection, (MapMeta) meta);
+			saveMapMetaToConfigSection(itemSection, (MapMeta)meta);
 		} else if (meta instanceof PotionMeta) {
-			savePotionMetaToConfigSection(itemSection, (PotionMeta) meta);
+			savePotionMetaToConfigSection(itemSection, (PotionMeta)meta);
 		} else if (meta instanceof SkullMeta) {
-			saveSkullMetaToConfigSection(itemSection, (SkullMeta) meta);
+			saveSkullMetaToConfigSection(itemSection, (SkullMeta)meta);
 		}
 
 		if (meta.hasDisplayName()) {
@@ -209,6 +213,8 @@ public class ItemMetaUtil {
 	 *
 	 * @param itemSection the parent section of the meta section
 	 * @param is          the ItemStack to complete
+	 *
+	 * @throws InventoryUtilException if something goes wrong
 	 */
 	public static void loadFromConfigSection(final ConfigurationSection itemSection, final ItemStack is) throws InventoryUtilException {
 		if (itemSection.isConfigurationSection("meta")) {
@@ -216,21 +222,21 @@ public class ItemMetaUtil {
 			final ConfigurationSection metaSection = itemSection.getConfigurationSection("meta");
 
 			if (meta instanceof BookMeta) {
-				loadBookMetaFromConfigSection(metaSection, (BookMeta) meta);
+				loadBookMetaFromConfigSection(metaSection, (BookMeta)meta);
 			} else if (meta instanceof EnchantmentStorageMeta) {
-				loadEnchantmentStorageMetaFromConfigSection(metaSection, (EnchantmentStorageMeta) meta);
+				loadEnchantmentStorageMetaFromConfigSection(metaSection, (EnchantmentStorageMeta)meta);
 			} else if (meta instanceof FireworkEffectMeta) {
-				loadFireworkEffectMetaFromConfigSection(metaSection, (FireworkEffectMeta) meta);
+				loadFireworkEffectMetaFromConfigSection(metaSection, (FireworkEffectMeta)meta);
 			} else if (meta instanceof FireworkMeta) {
-				loadFireworkMetaFromConfigSection(metaSection, (FireworkMeta) meta);
+				loadFireworkMetaFromConfigSection(metaSection, (FireworkMeta)meta);
 			} else if (meta instanceof LeatherArmorMeta) {
-				loadLeatherArmorMetaFromConfigSection(metaSection, (LeatherArmorMeta) meta);
+				loadLeatherArmorMetaFromConfigSection(metaSection, (LeatherArmorMeta)meta);
 			} else if (meta instanceof MapMeta) {
-				loadMapMetaFromConfigSection(metaSection, (MapMeta) meta);
+				loadMapMetaFromConfigSection(metaSection, (MapMeta)meta);
 			} else if (meta instanceof PotionMeta) {
-				loadPotionMetaFromConfigSection(metaSection, (PotionMeta) meta);
+				loadPotionMetaFromConfigSection(metaSection, (PotionMeta)meta);
 			} else if (meta instanceof SkullMeta) {
-				loadSkullMetaFromConfigSection(metaSection, (SkullMeta) meta);
+				loadSkullMetaFromConfigSection(metaSection, (SkullMeta)meta);
 			}
 
 			final String displayName = metaSection.getString("name", "");
@@ -324,7 +330,7 @@ public class ItemMetaUtil {
 			for (final String enchantmentPair : enchantmentsPairs) {
 				final String[] enchantmentPairSplit = StringUtil.splitKeepEmpty(enchantmentPair, separators[2]);
 				if (enchantmentPairSplit.length != 2) {
-					throw new InventoryUtilException("Malformed Enchantments field '" + string + "'");
+					throw new InventoryUtilException("Malformed Enchantments field '" + string + '\'');
 				} else {
 					final String enchantmentName = enchantmentPairSplit[0];
 					final String enchantmentLevel = enchantmentPairSplit[1];
@@ -360,7 +366,7 @@ public class ItemMetaUtil {
 				final Enchantment enchantment = EnchantmentUtil.getEnchantment(enchantmentName);
 				final int level = enchantmentsSection.getInt(enchantmentName, -1);
 				if (level < 1) {
-					throw new InventoryUtilException("Invalid enchantment level '" + level + "' for enchantment '" + enchantment.getName() + "'");
+					throw new InventoryUtilException("Invalid enchantment level '" + level + "' for enchantment '" + enchantment.getName() + '\'');
 				} else {
 					meta.addStoredEnchant(enchantment, level, true);
 				}
@@ -405,14 +411,14 @@ public class ItemMetaUtil {
 		final StringBuilder builder = new StringBuilder();
 		builder.append(separator1);
 		builder.append(effectType).append(separator1);
-		if (effectColors.size() > 0) {
+		if (!effectColors.isEmpty()) {
 			builder.append(separator2).append(effectColors.get(0));
 			for (int i = 1; i < effectColors.size(); i++) {
 				builder.append(separator2).append(effectColors.get(i));
 			}
 		}
 		builder.append(separator1);
-		if (effectFadeColors.size() > 0) {
+		if (!effectFadeColors.isEmpty()) {
 			builder.append(separator2).append(effectFadeColors.get(0));
 			for (int i = 1; i < effectFadeColors.size(); i++) {
 				builder.append(separator2).append(effectFadeColors.get(i));

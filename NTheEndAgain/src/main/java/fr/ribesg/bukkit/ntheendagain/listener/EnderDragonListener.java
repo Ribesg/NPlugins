@@ -16,6 +16,18 @@ import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ntheendagain.Config;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
+
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -32,19 +44,9 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityCreatePortalEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
-import java.util.TreeMap;
 
 /**
  * Handles EnderDragons spawn, health regain and death
@@ -64,7 +66,7 @@ public class EnderDragonListener implements Listener {
 	private final NTheEndAgain plugin;
 
 	public EnderDragonListener(final NTheEndAgain instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	/**
@@ -76,7 +78,7 @@ public class EnderDragonListener implements Listener {
 	public void onEnderDragonDeath(final EntityDeathEvent event) {
 		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
 			final World endWorld = event.getEntity().getWorld();
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
 			if (handler != null) {
 				final Config config = handler.getConfig();
 
@@ -92,8 +94,8 @@ public class EnderDragonListener implements Listener {
 				// We ignore offline players
 				final Iterator<Entry<String, Double>> it = dmgMap.entrySet().iterator();
 				while (it.hasNext()) {
-					Entry<String, Double> e = it.next();
-					if (plugin.getServer().getPlayerExact(e.getKey()) == null) {
+					final Entry<String, Double> e = it.next();
+					if (this.plugin.getServer().getPlayerExact(e.getKey()) == null) {
 						it.remove();
 					}
 				}
@@ -107,7 +109,7 @@ public class EnderDragonListener implements Listener {
 				// Create map of damages percentages
 				final Map<String, Float> dmgPercentageMap = new HashMap<>();
 				for (final Entry<String, Double> entry : dmgMap.entrySet()) {
-					dmgPercentageMap.put(entry.getKey(), (float) (entry.getValue() / totalDamages));
+					dmgPercentageMap.put(entry.getKey(), (float)(entry.getValue() / totalDamages));
 				}
 
 				/* XP Handling */
@@ -122,7 +124,7 @@ public class EnderDragonListener implements Listener {
 						// Create map of XP to give
 						final Map<String, Integer> xpMap = new HashMap<>(dmgMap.size());
 						for (final Entry<String, Float> entry : dmgPercentageMap.entrySet()) {
-							final int reward = (int) (config.getEdExpReward() * dmgPercentageMap.get(entry.getKey()));
+							final int reward = (int)(config.getEdExpReward() * dmgPercentageMap.get(entry.getKey()));
 							xpMap.put(entry.getKey(), Math.min(reward, config.getEdExpReward()));
 						}
 
@@ -133,9 +135,9 @@ public class EnderDragonListener implements Listener {
 						if (!xpDistributionEvent.isCancelled()) {
 							// Give exp to players
 							for (final Entry<String, Integer> entry : xpDistributionEvent.getXpMap().entrySet()) {
-								final Player p = plugin.getServer().getPlayerExact(entry.getKey());
+								final Player p = this.plugin.getServer().getPlayerExact(entry.getKey());
 								p.giveExp(entry.getValue());
-								plugin.sendMessage(p, MessageId.theEndAgain_receivedXP, Integer.toString(entry.getValue()));
+								this.plugin.sendMessage(p, MessageId.theEndAgain_receivedXP, Integer.toString(entry.getValue()));
 							}
 						}
 						break;
@@ -166,9 +168,9 @@ public class EnderDragonListener implements Listener {
 					playersKilledLine = MessageId.theEndAgain_playersKilledADragon_line;
 				}
 				if (dmgPercentageMap.size() == 1) {
-					plugin.broadcastMessage(playerKilled, dmgPercentageMap.entrySet().iterator().next().getKey());
+					this.plugin.broadcastMessage(playerKilled, dmgPercentageMap.entrySet().iterator().next().getKey());
 				} else {
-					plugin.broadcastMessage(playersKilled);
+					this.plugin.broadcastMessage(playersKilled);
 					final Set<String> players = dmgPercentageMap.keySet();
 					final String[] sortedPlayers = players.toArray(new String[players.size()]);
 					Arrays.sort(sortedPlayers, new Comparator<String>() {
@@ -183,7 +185,7 @@ public class EnderDragonListener implements Listener {
 						if (percentage < THRESHOLD) {
 							break;
 						} else {
-							plugin.broadcastMessage(playersKilledLine, playerName, FORMAT.format(percentage * 100f));
+							this.plugin.broadcastMessage(playersKilledLine, playerName, FORMAT.format(percentage * 100f));
 						}
 					}
 				}
@@ -203,7 +205,7 @@ public class EnderDragonListener implements Listener {
 	public void onEnderDragonCreatePortal(final EntityCreatePortalEvent event) {
 		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
 			final World endWorld = event.getEntity().getWorld();
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
 			if (handler != null) {
 				final Config config = handler.getConfig();
 				final int pH = config.getEdPortalSpawn();
@@ -288,7 +290,7 @@ public class EnderDragonListener implements Listener {
 						totalDamages += e.getValue();
 					}
 					for (final Entry<String, Double> e : handler.getDragons().get(event.getEntity().getUniqueId()).entrySet()) {
-						ratioMap.put((float) (e.getValue() / (double) totalDamages), e.getKey());
+						ratioMap.put((float)(e.getValue() / (double)totalDamages), e.getKey());
 					}
 
 					// Step 2: Remove entries for Players whom done less damages than threshold
@@ -340,12 +342,12 @@ public class EnderDragonListener implements Listener {
 							} else {
 								// Try to give the Egg
 								final HashMap<Integer, ItemStack> notGiven = p.getInventory().addItem(new ItemStack(Material.DRAGON_EGG));
-								if (notGiven.size() > 0) {
+								if (!notGiven.isEmpty()) {
 									// Inventory full, drop the egg at Player's foot
 									p.getWorld().dropItem(p.getLocation(), new ItemStack(Material.DRAGON_EGG));
-									plugin.sendMessage(p, MessageId.theEndAgain_droppedDragonEgg);
+									this.plugin.sendMessage(p, MessageId.theEndAgain_droppedDragonEgg);
 								} else {
-									plugin.sendMessage(p, MessageId.theEndAgain_receivedDragonEgg);
+									this.plugin.sendMessage(p, MessageId.theEndAgain_receivedDragonEgg);
 								}
 							}
 						}
@@ -381,12 +383,12 @@ public class EnderDragonListener implements Listener {
 										} else {
 											// Try to give the Drop
 											final HashMap<Integer, ItemStack> notGiven = p.getInventory().addItem(is);
-											if (notGiven.size() > 0) {
+											if (!notGiven.isEmpty()) {
 												// Inventory full, drop the drop at Player's foot
 												p.getWorld().dropItem(p.getLocation(), is);
-												plugin.sendMessage(p, MessageId.theEndAgain_droppedDrop);
+												this.plugin.sendMessage(p, MessageId.theEndAgain_droppedDrop);
 											} else {
-												plugin.sendMessage(p, MessageId.theEndAgain_receivedDrop);
+												this.plugin.sendMessage(p, MessageId.theEndAgain_receivedDrop);
 											} // Here starts the bracket waterfall!
 										}
 									} // Yay!
@@ -413,7 +415,7 @@ public class EnderDragonListener implements Listener {
 						handler.getRespawnHandler().respawnLater();
 					} else if (config.getRespawnType() == 6) {
 						config.setNextRespawnTaskTime(System.currentTimeMillis() + config.getRandomRespawnTimer() * 1000);
-						handler.getTasks().add(Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+						handler.getTasks().add(Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
 
 							@Override
 							public void run() {
@@ -436,7 +438,7 @@ public class EnderDragonListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEnderDragonSpawn(final CreatureSpawnEvent event) {
 		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(event.getLocation().getWorld().getName()));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(event.getLocation().getWorld().getName()));
 			if (handler != null) {
 				if (handler.getNumberOfAliveEnderDragons() >= handler.getConfig().getRespawnNumber()) {
 					event.setCancelled(true);
@@ -463,8 +465,8 @@ public class EnderDragonListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onEnderDragonRegainHealth(final EntityRegainHealthEvent event) {
-		if (event.getEntityType() == EntityType.ENDER_DRAGON && event.getRegainReason() == EntityRegainHealthEvent.RegainReason.ENDER_CRYSTAL) {
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(event.getEntity().getLocation().getWorld().getName()));
+		if (event.getEntityType() == EntityType.ENDER_DRAGON && event.getRegainReason() == RegainReason.ENDER_CRYSTAL) {
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(event.getEntity().getLocation().getWorld().getName()));
 			if (handler != null) {
 				final float rate = handler.getConfig().getEcHealthRegainRate();
 				if (rate < 1.0) {
@@ -472,7 +474,7 @@ public class EnderDragonListener implements Listener {
 						event.setCancelled(true);
 					}
 				} else if (rate > 1.0) {
-					event.setAmount((int) (rate * event.getAmount()));
+					event.setAmount((int)(rate * event.getAmount()));
 				}
 			}
 		}

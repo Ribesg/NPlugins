@@ -13,12 +13,6 @@ import fr.ribesg.bukkit.ncore.NCore;
 import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.ncore.util.VersionUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
 import java.io.BufferedInputStream;
@@ -41,6 +35,13 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * This class checks for updates for every used nodes.
@@ -104,11 +105,11 @@ public class Updater {
 		this.cacheDuration = TimeUtil.getInMilliseconds(cacheDuration);
 		this.updateAvailable = new TreeMap<>();
 
-		this.plugins.put(plugin.getName(), plugin);
+		this.plugins.put(this.plugin.getName(), this.plugin);
 		for (final String nodeName : CURSE_IDS.keySet()) {
-			if (plugin.getPluginConfig().getCheckFor().contains(nodeName)) {
-				if (plugin.get(nodeName) != null) {
-					this.plugins.put(nodeName, (JavaPlugin) plugin.get(nodeName));
+			if (this.plugin.getPluginConfig().getCheckFor().contains(nodeName)) {
+				if (this.plugin.get(nodeName) != null) {
+					this.plugins.put(nodeName, (JavaPlugin)this.plugin.get(nodeName));
 				}
 			}
 		}
@@ -127,57 +128,57 @@ public class Updater {
 	}
 
 	public void startTask() {
-		new UpdaterTask(this).runTaskTimer(plugin, 20L, plugin.getPluginConfig().getUpdateCheckInterval() * 20L);
+		new UpdaterTask(this).runTaskTimer(this.plugin, 20L, this.plugin.getPluginConfig().getUpdateCheckInterval() * 20L);
 	}
 
 	/* package */ void notice(final CommandSender sender) {
-		if (updateAvailable.isEmpty()) {
+		if (this.updateAvailable.isEmpty()) {
 			return;
 		}
 
 		final StringBuilder updatesString = new StringBuilder();
 
 		int count = 0;
-		for (final Map.Entry<String, String> update : updateAvailable.entrySet()) {
-			if (++count != updateAvailable.size()) {
-				updatesString.append(ChatColor.GOLD).append(plugin.getUpdater().getPlugins().get(update.getKey()).getName());
+		for (final Map.Entry<String, String> update : this.updateAvailable.entrySet()) {
+			if (++count != this.updateAvailable.size()) {
+				updatesString.append(ChatColor.GOLD).append(this.plugin.getUpdater().plugins.get(update.getKey()).getName());
 				updatesString.append(ChatColor.DARK_GREEN).append(" (").append(update.getValue()).append("), ");
 			} else {
-				updatesString.append(ChatColor.GOLD).append(plugin.getUpdater().getPlugins().get(update.getKey()).getName());
+				updatesString.append(ChatColor.GOLD).append(this.plugin.getUpdater().plugins.get(update.getKey()).getName());
 				updatesString.append(ChatColor.DARK_GREEN).append(" (").append(update.getValue()).append(").");
 			}
 		}
 
-		if (updateAvailable.size() == 1) {
-			sender.sendMessage(plugin.getUpdater().getMessagePrefix() + ChatColor.GREEN + "An update for the following node is available:");
+		if (this.updateAvailable.size() == 1) {
+			sender.sendMessage(PREFIX + ChatColor.GREEN + "An update for the following node is available:");
 		} else {
-			sender.sendMessage(plugin.getUpdater().getMessagePrefix() + ChatColor.GREEN + "Updates for the following nodes are available:");
+			sender.sendMessage(PREFIX + ChatColor.GREEN + "Updates for the following nodes are available:");
 		}
 
-		sender.sendMessage(plugin.getUpdater().getMessagePrefix() + updatesString.toString());
+		sender.sendMessage(PREFIX + updatesString);
 	}
 
 	public void checkForUpdates() {
-		checkForUpdates(null);
+		this.checkForUpdates(null);
 	}
 
 	public void checkForUpdates(@Nullable final CommandSender sender) {
-		checkForUpdates(sender, null);
+		this.checkForUpdates(sender, null);
 	}
 
 	public void checkForUpdates(@Nullable final CommandSender sender, @Nullable final String nodeName) {
-		Bukkit.getScheduler().runTaskAsynchronously(plugin, new BukkitRunnable() {
+		Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new BukkitRunnable() {
 
 			@Override
 			public void run() {
-				for (final JavaPlugin plugin : plugins.values()) {
+				for (final JavaPlugin plugin : fr.ribesg.bukkit.ncore.updater.Updater.this.plugins.values()) {
 					if (plugin != null && (nodeName == null || plugin.getName().equalsIgnoreCase(nodeName)) && VersionUtil.isRelease('v' + plugin.getDescription().getVersion())) {
 						final String version = VersionUtil.getVersion('v' + plugin.getDescription().getVersion());
 						Boolean result = null;
 						FileDescription latestFile = null;
 						try {
-							if (!isUpToDate(plugin.getName(), version)) {
-								latestFile = getLatestVersion(plugin.getName());
+							if (!fr.ribesg.bukkit.ncore.updater.Updater.this.isUpToDate(plugin.getName(), version)) {
+								latestFile = fr.ribesg.bukkit.ncore.updater.Updater.this.getLatestVersion(plugin.getName());
 								result = false;
 							} else {
 								result = true;
@@ -192,7 +193,7 @@ public class Updater {
 
 							@Override
 							public Object call() throws Exception {
-								checkedForUpdates(sender == null ? Bukkit.getConsoleSender() : sender, plugin, finalResult, finalLatestFile);
+								fr.ribesg.bukkit.ncore.updater.Updater.this.checkedForUpdates(sender == null ? Bukkit.getConsoleSender() : sender, plugin, finalResult, finalLatestFile);
 								return null;
 							}
 						});
@@ -207,21 +208,21 @@ public class Updater {
 
 		final String[] message;
 		if (result == null) {
-			message = new String[] {
+			message = new String[]{
 					PREFIX + ChatColor.RED + "Failed to check for updates for plugin " + plugin.getName()
 			};
 		} else if (!result) {
-			newUpdateAvailable(plugin.getName(), fileDescription.getVersion());
-			message = new String[] {
+			this.newUpdateAvailable(plugin.getName(), fileDescription.getVersion());
+			message = new String[]{
 					PREFIX + ChatColor.GREEN + "A new version of " + ChatColor.GOLD + plugin.getName() + ChatColor.GREEN + " is available!",
-					PREFIX + ChatColor.GREEN + "Current version:   " + ChatColor.GOLD + "v" + plugin.getDescription().getVersion(),
+					PREFIX + ChatColor.GREEN + "Current version:   " + ChatColor.GOLD + 'v' + plugin.getDescription().getVersion(),
 					PREFIX + ChatColor.GREEN + "Available version: " + ChatColor.GOLD + fileDescription.getVersion(),
 					PREFIX + ChatColor.GREEN + "Download the update from BukkitDev or with",
 					PREFIX + ChatColor.GOLD + "/updater download " + plugin.getName()
 			};
 		} else {
-			message = new String[] {
-					PREFIX + ChatColor.GOLD + plugin.getName() + ChatColor.GREEN + " is up to date (latest: " + ChatColor.GOLD + "v" + plugin.getDescription().getVersion() + ChatColor.GREEN + ")"
+			message = new String[]{
+					PREFIX + ChatColor.GOLD + plugin.getName() + ChatColor.GREEN + " is up to date (latest: " + ChatColor.GOLD + 'v' + plugin.getDescription().getVersion() + ChatColor.GREEN + ')'
 			};
 		}
 
@@ -236,40 +237,40 @@ public class Updater {
 	}
 
 	public void downloadUpdate(final CommandSender sender, final String nodeName) {
-		if (updateAvailable.containsKey(nodeName)) {
+		if (this.updateAvailable.containsKey(nodeName)) {
 			try {
 				if (nodeName != null) {
-					final FileDescription desc = getLatestVersion(nodeName);
+					final FileDescription desc = this.getLatestVersion(nodeName);
 					if (desc != null) {
 						new BukkitRunnable() {
 
 							@Override
 							public void run() {
 								try {
-									downloadFile(sender, desc.getFileName(), desc.getDownloadUrl());
+									fr.ribesg.bukkit.ncore.updater.Updater.this.downloadFile(sender, desc.getFileName(), desc.getDownloadUrl());
 								} catch (final DownloadFailedException e) {
 									sender.sendMessage(PREFIX + ChatColor.RED + "Failed to download file");
 								}
 							}
-						}.runTaskAsynchronously(plugin);
+						}.runTaskAsynchronously(this.plugin);
 					} else {
 						sender.sendMessage(PREFIX + ChatColor.RED + "Failed to get latest file informations");
 					}
 				} else {
-					for (final String name : updateAvailable.keySet()) {
-						final FileDescription desc = getLatestVersion(name);
+					for (final String name : this.updateAvailable.keySet()) {
+						final FileDescription desc = this.getLatestVersion(name);
 						if (desc != null) {
 							new BukkitRunnable() {
 
 								@Override
 								public void run() {
 									try {
-										downloadFile(sender, desc.getFileName(), desc.getDownloadUrl());
+										fr.ribesg.bukkit.ncore.updater.Updater.this.downloadFile(sender, desc.getFileName(), desc.getDownloadUrl());
 									} catch (final DownloadFailedException e) {
 										sender.sendMessage(PREFIX + ChatColor.RED + "Failed to download file");
 									}
 								}
-							}.runTaskAsynchronously(plugin);
+							}.runTaskAsynchronously(this.plugin);
 						} else {
 							sender.sendMessage(PREFIX + ChatColor.RED + "Failed to get latest file informations");
 						}
@@ -338,14 +339,14 @@ public class Updater {
 	 */
 	private FileDescription getLatestVersion(final String pluginName) throws IOException {
 		if (CURSE_IDS.containsKey(pluginName)) {
-			return getNPluginLatestVersion(pluginName);
+			return this.getNPluginLatestVersion(pluginName);
 		} else {
 			throw new UnsupportedOperationException("Non-NPlugin not yet supported (while trying to update '" + pluginName + "')");
 		}
 	}
 
 	private FileDescription getNPluginLatestVersion(final String pluginName) throws IOException {
-		final Collection<FileDescription> files = getFiles(pluginName);
+		final Collection<FileDescription> files = this.getFiles(pluginName);
 		if (files.isEmpty()) {
 			return null;
 		} else {
@@ -364,7 +365,7 @@ public class Updater {
 	 * @throws IOException if an error occur while trying to contact Curse API
 	 */
 	private boolean isUpToDate(final String pluginName, final String currentVersion) throws IOException {
-		final FileDescription latestFile = getLatestVersion(pluginName);
+		final FileDescription latestFile = this.getLatestVersion(pluginName);
 		return latestFile == null || VersionUtil.compare(currentVersion, latestFile.getVersion()) >= 0;
 	}
 
@@ -383,9 +384,9 @@ public class Updater {
 		try {
 			final Integer projectId = CURSE_IDS.get(pluginName);
 			if (projectId == null) {
-				throw new IllegalArgumentException("Unknown plugin '" + pluginName + "'");
+				throw new IllegalArgumentException("Unknown plugin '" + pluginName + '\'');
 			}
-			return getFiles(projectId);
+			return this.getFiles(projectId);
 		} catch (final IOException e) {
 			throw new IOException("Unable to get files associated to plugin '" + pluginName + "': " + e.getMessage(), e);
 		}
@@ -403,7 +404,7 @@ public class Updater {
 	 */
 	private Collection<FileDescription> getFiles(final int... projectId) throws IOException {
 		try {
-			final String projectIds = getProjectIdsString(projectId);
+			final String projectIds = this.getProjectIdsString(projectId);
 			final Long timeout = this.cacheTimeout.get(projectIds);
 			if (timeout != null) {
 				if (System.currentTimeMillis() < timeout) {
@@ -413,9 +414,9 @@ public class Updater {
 					this.cacheTimeout.remove(projectIds);
 				}
 			}
-			final URL url = buildUrl(projectIds);
-			final URLConnection connection = openConnection(url, proxy);
-			final String jsonString = getJson(connection);
+			final URL url = this.buildUrl(projectIds);
+			final URLConnection connection = this.openConnection(url, this.proxy);
+			final String jsonString = this.getJson(connection);
 			final Collection<FileDescription> files = FileDescription.parse(jsonString).values();
 			this.cache.put(projectIds, files);
 			this.cacheTimeout.put(projectIds, System.currentTimeMillis() + this.cacheDuration);
@@ -444,7 +445,7 @@ public class Updater {
 			}
 			connection.setConnectTimeout(1337); // "Low enough" timeout in case somebody has the "good" idea to call this sync...
 			if (this.apiKey != null) {
-				connection.addRequestProperty("X-API-Key", apiKey);
+				connection.addRequestProperty("X-API-Key", this.apiKey);
 			}
 			connection.addRequestProperty("User-Agent", "NPlugins v" + this.pluginVersion + " Updater by Ribesg");
 			connection.setDoOutput(true);

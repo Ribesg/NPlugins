@@ -8,19 +8,21 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntheendagain.handler;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
+
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.Random;
 
 /**
  * @author Ribesg
@@ -38,79 +40,79 @@ public class RespawnHandler {
 	}
 
 	public boolean respawn() {
-		plugin.entering(getClass(), "respawn");
+		this.plugin.entering(this.getClass(), "respawn");
 		final boolean result;
 
-		if (worldHandler.getConfig().getRegenType() == 1) {
-			plugin.debug("Regen before respan");
-			worldHandler.getRegenHandler().regenThenRespawn();
+		if (this.worldHandler.getConfig().getRegenType() == 1) {
+			this.plugin.debug("Regen before respan");
+			this.worldHandler.getRegenHandler().regenThenRespawn();
 			result = true;
 		} else {
-			plugin.debug("Respawn now!");
-			result = respawnDragons();
+			this.plugin.debug("Respawn now!");
+			result = this.respawnDragons();
 		}
 
-		plugin.exiting(getClass(), "respawn", Boolean.toString(result));
+		this.plugin.exiting(this.getClass(), "respawn", Boolean.toString(result));
 		return result;
 	}
 
 	public void respawnLater() {
-		plugin.entering(getClass(), "respawnLater");
+		this.plugin.entering(this.getClass(), "respawnLater");
 
-		Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), new BukkitRunnable() {
+		Bukkit.getScheduler().runTaskLater(this.worldHandler.getPlugin(), new BukkitRunnable() {
 
 			@Override
 			public void run() {
-				respawn();
+				fr.ribesg.bukkit.ntheendagain.handler.RespawnHandler.this.respawn();
 			}
-		}, worldHandler.getConfig().getRandomRespawnTimer() * 20L);
+		}, this.worldHandler.getConfig().getRandomRespawnTimer() * 20L);
 
-		plugin.entering(getClass(), "respawnLater");
+		this.plugin.entering(this.getClass(), "respawnLater");
 	}
 
 	/*package*/ void respawnNoRegen() {
-		plugin.entering(getClass(), "respawnNoRegen");
+		this.plugin.entering(this.getClass(), "respawnNoRegen");
 
-		respawnDragons();
+		this.respawnDragons();
 
-		plugin.exiting(getClass(), "respawnNoRegen");
+		this.plugin.exiting(this.getClass(), "respawnNoRegen");
 	}
 
 	private boolean respawnDragons() {
-		plugin.entering(getClass(), "respawnDragons");
+		this.plugin.entering(this.getClass(), "respawnDragons");
 
-		final int nbAlive = worldHandler.getNumberOfAliveEnderDragons();
-		final int respawnNumber = worldHandler.getConfig().getRespawnNumber();
+		final int nbAlive = this.worldHandler.getNumberOfAliveEnderDragons();
+		final int respawnNumber = this.worldHandler.getConfig().getRespawnNumber();
 		int respawning = 0;
 		boolean result = true;
 		for (int i = nbAlive; i < respawnNumber; i++) {
-			result &= respawnDragon();
+			result &= this.respawnDragon();
 			respawning++;
 		}
-		plugin.debug("Called respawnDragon " + respawning + " times");
+		this.plugin.debug("Called respawnDragon " + respawning + " times");
 		if (respawning > 1) {
-			worldHandler.getPlugin().broadcastMessage(MessageId.theEndAgain_respawnedX, Integer.toString(respawning), worldHandler.getEndWorld().getName());
+			this.worldHandler.getPlugin().broadcastMessage(MessageId.theEndAgain_respawnedX, Integer.toString(respawning), this.worldHandler.getEndWorld().getName());
 		} else if (respawning == 1) {
-			worldHandler.getPlugin().broadcastMessage(MessageId.theEndAgain_respawned1, worldHandler.getEndWorld().getName());
+			this.worldHandler.getPlugin().broadcastMessage(MessageId.theEndAgain_respawned1, this.worldHandler.getEndWorld().getName());
 		}
 
-		plugin.exiting(getClass(), "respawnDragons", Boolean.toString(result));
+		this.plugin.exiting(this.getClass(), "respawnDragons", Boolean.toString(result));
 		return result;
 	}
 
 	private boolean respawnDragon() {
-		plugin.entering(getClass(), "respawnDragon");
+		this.plugin.entering(this.getClass(), "respawnDragon");
 		boolean result = false;
 
-		final World world = worldHandler.getEndWorld();
-		final EndChunks chunks = worldHandler.getChunks();
+		final World world = this.worldHandler.getEndWorld();
+		final EndChunks chunks = this.worldHandler.getChunks();
 		// Create a random location near the center
 		final int x = RANDOM.nextInt(81) - 40; // [-40;40]
 		final int y = 100 + RANDOM.nextInt(21); // [100;120]
 		final int z = RANDOM.nextInt(81) - 40; // [-40;40]
 		final Location loc = new Location(world, x, y, z);
 
-		plugin.debug("Will spawn at " + NLocation.toString(loc));
+		this.plugin.debug("Will spawn at " + NLocation.toString(loc));
 
 		boolean regenerated = false;
 
@@ -119,7 +121,7 @@ public class RespawnHandler {
 				final Chunk chunk = world.getChunkAt(a, b);
 				final EndChunk endChunk = chunks.getChunk(world.getName(), chunk.getX(), chunk.getZ());
 				if (endChunk != null && endChunk.hasToBeRegen()) {
-					plugin.debug("Chunk at coords " + a + ";" + b + " needs to be regen first");
+					this.plugin.debug("Chunk at coords " + a + ';' + b + " needs to be regen first");
 					world.regenerateChunk(chunk.getX(), chunk.getZ());
 					endChunk.setToBeRegen(false);
 					regenerated = true;
@@ -127,26 +129,26 @@ public class RespawnHandler {
 			}
 		}
 		if (regenerated) {
-			plugin.debug("At least one chunk has been regen, respawn later");
-			Bukkit.getScheduler().runTaskLater(worldHandler.getPlugin(), new BukkitRunnable() {
+			this.plugin.debug("At least one chunk has been regen, respawn later");
+			Bukkit.getScheduler().runTaskLater(this.worldHandler.getPlugin(), new BukkitRunnable() {
 
 				@Override
 				public void run() {
 					if (world.spawnEntity(loc, EntityType.ENDER_DRAGON) == null) {
-						retryRespawn(loc);
+						fr.ribesg.bukkit.ntheendagain.handler.RespawnHandler.this.retryRespawn(loc);
 					}
-					worldHandler.getConfig().setNextRespawnTaskTime(System.nanoTime() + worldHandler.getConfig().getRandomRespawnTimer() * 1_000_000_000);
+					fr.ribesg.bukkit.ntheendagain.handler.RespawnHandler.this.worldHandler.getConfig().setNextRespawnTaskTime(System.nanoTime() + fr.ribesg.bukkit.ntheendagain.handler.RespawnHandler.this.worldHandler.getConfig().getRandomRespawnTimer() * 1_000_000_000);
 				}
 			}, EndWorldHandler.REGEN_TO_RESPAWN_DELAY);
 		} else {
-			plugin.debug("No chunk has been regen, respawn now");
+			this.plugin.debug("No chunk has been regen, respawn now");
 			if (world.spawnEntity(loc, EntityType.ENDER_DRAGON) == null) {
-				retryRespawn(loc);
+				this.retryRespawn(loc);
 			}
 			result = true;
 		}
 
-		plugin.exiting(getClass(), "respawnDragon");
+		this.plugin.exiting(this.getClass(), "respawnDragon");
 		return result;
 	}
 
@@ -155,12 +157,11 @@ public class RespawnHandler {
 
 			@Override
 			public void run() {
-				plugin.info("Failed to spawn an EnderDragon at Location " + NLocation.toString(loc) + ", trying again in 1 second");
+				fr.ribesg.bukkit.ntheendagain.handler.RespawnHandler.this.plugin.info("Failed to spawn an EnderDragon at Location " + NLocation.toString(loc) + ", trying again in 1 second");
 				if (loc.getWorld().spawnEntity(loc, EntityType.ENDER_DRAGON) != null) {
 					this.cancel();
 				}
 			}
-		}.runTaskTimer(plugin, 0L, 20L);
+		}.runTaskTimer(this.plugin, 0L, 20L);
 	}
-
 }

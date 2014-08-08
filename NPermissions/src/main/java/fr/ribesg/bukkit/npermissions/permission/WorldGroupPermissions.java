@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.permission;
+
 import java.util.Map;
 
 public class WorldGroupPermissions extends GroupPermissions {
@@ -31,13 +32,13 @@ public class WorldGroupPermissions extends GroupPermissions {
 	/**
 	 * Priorities does not count vertically.
 	 *
-	 * @see PermissionsSet#computePermissions(java.util.Map)
+	 * @see PermissionsSet#computePermissions(Map)
 	 */
 	@Override
 	public Map<String, Boolean> computePermissions(Map<String, Boolean> resultMap) {
 		resultMap = this.parentGroup.getComputedPermissions();
 		for (final String groupName : this.superGroups) {
-			final WorldGroupPermissions worldGroup = manager.getWorldGroups().get(this.worldName).get(groupName);
+			final WorldGroupPermissions worldGroup = this.manager.getWorldGroups().get(this.worldName).get(groupName);
 			resultMap = worldGroup.computePermissions(resultMap);
 		}
 		resultMap.putAll(this.permissions);

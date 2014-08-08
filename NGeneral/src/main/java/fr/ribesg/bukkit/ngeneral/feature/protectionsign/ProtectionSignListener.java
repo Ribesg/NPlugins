@@ -8,12 +8,16 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.protectionsign;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ncore.util.SignUtil;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
+import java.util.Iterator;
+
 import org.bukkit.Location;
 import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
@@ -35,8 +39,6 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.InventoryHolder;
-
-import java.util.Iterator;
 
 public class ProtectionSignListener implements Listener {
 
@@ -66,27 +68,27 @@ public class ProtectionSignListener implements Listener {
 			final Location loc = event.getBlock().getLocation();
 			if (!Perms.hasProtectionSign(event.getPlayer())) {
 				lines[0] = ProtectionSignFeature.ERROR;
-				lines[1] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine1());
-				lines[2] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine2());
-				lines[3] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine3());
-			} else if (feature.protectsSomething(loc)) {
-				if (feature.canPlaceSign(event.getPlayer().getName(), loc)) {
+				lines[1] = ColorUtil.colorize(this.feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine1());
+				lines[2] = ColorUtil.colorize(this.feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine2());
+				lines[3] = ColorUtil.colorize(this.feature.getPlugin().getPluginConfig().getProtectionSignNoPermMsgLine3());
+			} else if (this.feature.protectsSomething(loc)) {
+				if (this.feature.canPlaceSign(event.getPlayer().getName(), loc)) {
 					lines[0] = ProtectionSignFeature.PROTECTION;
 					lines[1] = ProtectionSignFeature.SECONDARY_PREFIX + PlayerIdsUtil.getId(ColorUtil.stripColorCodes(lines[1]));
 					lines[2] = ProtectionSignFeature.SECONDARY_PREFIX + PlayerIdsUtil.getId(ColorUtil.stripColorCodes(lines[2]));
 					lines[3] = ProtectionSignFeature.PRIMARY_PREFIX + PlayerIdsUtil.getId(event.getPlayer().getName());
-					feature.clearCache(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getWorld().getName());
+					this.feature.clearCache(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc.getWorld().getName());
 				} else {
 					lines[0] = ProtectionSignFeature.ERROR;
-					lines[1] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine1());
-					lines[2] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine2());
-					lines[3] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine3());
+					lines[1] = ColorUtil.colorize(this.feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine1());
+					lines[2] = ColorUtil.colorize(this.feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine2());
+					lines[3] = ColorUtil.colorize(this.feature.getPlugin().getPluginConfig().getProtectionSignAlreadyProtectedMsgLine3());
 				}
 			} else {
 				lines[0] = ProtectionSignFeature.ERROR;
-				lines[1] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine1());
-				lines[2] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine2());
-				lines[3] = ColorUtil.colorize(feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine3());
+				lines[1] = ColorUtil.colorize(this.feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine1());
+				lines[2] = ColorUtil.colorize(this.feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine2());
+				lines[3] = ColorUtil.colorize(this.feature.getPlugin().getPluginConfig().getProtectionSignNothingToProtectMsgLine3());
 			}
 			for (int i = 0; i < 4; i++) {
 				event.setLine(i, lines[i]);
@@ -98,11 +100,11 @@ public class ProtectionSignListener implements Listener {
 	public void onPlayerBreakBlock(final BlockBreakEvent event) {
 		final Block b = event.getBlock();
 		if (SignUtil.isSign(b)) {
-			if (!feature.canBreak(b, event.getPlayer())) {
-				feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_breakDenied);
+			if (!this.feature.canBreak(b, event.getPlayer())) {
+				this.feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_breakDenied);
 				event.setCancelled(true);
 			} else {
-				feature.clearCache(b.getX(), b.getY(), b.getZ(), b.getWorld().getName());
+				this.feature.clearCache(b.getX(), b.getY(), b.getZ(), b.getWorld().getName());
 			}
 		}
 	}
@@ -110,8 +112,8 @@ public class ProtectionSignListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			if (!feature.canUse(event.getPlayer(), event.getClickedBlock())) {
-				feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_accessDenied);
+			if (!this.feature.canUse(event.getPlayer(), event.getClickedBlock())) {
+				this.feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_protectionsign_accessDenied);
 				event.setCancelled(true);
 			}
 		}
@@ -121,7 +123,7 @@ public class ProtectionSignListener implements Listener {
 	public void onEntityExplode(final EntityExplodeEvent event) {
 		final Iterator<Block> it = event.blockList().iterator();
 		while (it.hasNext()) {
-			if (!feature.canBreak(it.next(), null)) {
+			if (!this.feature.canBreak(it.next(), null)) {
 				it.remove();
 			}
 		}
@@ -135,41 +137,41 @@ public class ProtectionSignListener implements Listener {
 		switch (type) {
 			case HOPPER:
 				if (holder instanceof Hopper) {
-					b = ((Hopper) holder).getBlock();
+					b = ((Hopper)holder).getBlock();
 				} // else Minecart Hopper
 				break;
 			case CHEST:
 				if (holder instanceof Chest) {
-					b = ((Chest) holder).getBlock();
+					b = ((Chest)holder).getBlock();
 				} else if (holder instanceof DoubleChest) {
-					b = ((DoubleChest) holder).getLocation().getBlock();
+					b = ((DoubleChest)holder).getLocation().getBlock();
 				} // else Minecart Chest
 				break;
 			case BEACON:
-				b = ((Beacon) holder).getBlock();
+				b = ((Beacon)holder).getBlock();
 				break;
 			case BREWING:
-				b = ((BrewingStand) holder).getBlock();
+				b = ((BrewingStand)holder).getBlock();
 				break;
 			case FURNACE:
-				b = ((Furnace) holder).getBlock();
+				b = ((Furnace)holder).getBlock();
 				break;
 			case DISPENSER:
 				if (holder instanceof Dispenser) {
-					b = ((Dispenser) holder).getBlock();
+					b = ((Dispenser)holder).getBlock();
 				} // else Minecart Dispenser
 				break;
 			case DROPPER:
-				b = ((Dropper) holder).getBlock();
+				b = ((Dropper)holder).getBlock();
 				break;
 			default:
 				return;
 		}
 		if (b != null) {
-			if (feature.getPlugin().isDebugEnabled()) {
-				feature.getPlugin().debug("InventoryMoveEvent with source at " + NLocation.toString(b.getLocation()));
+			if (this.feature.getPlugin().isDebugEnabled()) {
+				this.feature.getPlugin().debug("InventoryMoveEvent with source at " + NLocation.toString(b.getLocation()));
 			}
-			event.setCancelled(feature.isProtected(b) != null);
+			event.setCancelled(this.feature.isProtected(b) != null);
 		}
 
 		if (!event.isCancelled()) {
@@ -179,41 +181,41 @@ public class ProtectionSignListener implements Listener {
 			switch (type) {
 				case HOPPER:
 					if (holder instanceof Hopper) {
-						b = ((Hopper) holder).getBlock();
+						b = ((Hopper)holder).getBlock();
 					} // else Minecart Hopper
 					break;
 				case CHEST:
 					if (holder instanceof Chest) {
-						b = ((Chest) holder).getBlock();
+						b = ((Chest)holder).getBlock();
 					} else if (holder instanceof DoubleChest) {
-						b = ((DoubleChest) holder).getLocation().getBlock();
+						b = ((DoubleChest)holder).getLocation().getBlock();
 					} // else Minecart Chest
 					break;
 				case BEACON:
-					b = ((Beacon) holder).getBlock();
+					b = ((Beacon)holder).getBlock();
 					break;
 				case BREWING:
-					b = ((BrewingStand) holder).getBlock();
+					b = ((BrewingStand)holder).getBlock();
 					break;
 				case FURNACE:
-					b = ((Furnace) holder).getBlock();
+					b = ((Furnace)holder).getBlock();
 					break;
 				case DISPENSER:
 					if (holder instanceof Dispenser) {
-						b = ((Dispenser) holder).getBlock();
+						b = ((Dispenser)holder).getBlock();
 					} // else Minecart Dispenser
 					break;
 				case DROPPER:
-					b = ((Dropper) holder).getBlock();
+					b = ((Dropper)holder).getBlock();
 					break;
 				default:
 					return;
 			}
 			if (b != null) {
-				if (feature.getPlugin().isDebugEnabled()) {
-					feature.getPlugin().debug("InventoryMoveEvent with destination at " + NLocation.toString(b.getLocation()));
+				if (this.feature.getPlugin().isDebugEnabled()) {
+					this.feature.getPlugin().debug("InventoryMoveEvent with destination at " + NLocation.toString(b.getLocation()));
 				}
-				event.setCancelled(feature.isProtected(b) != null);
+				event.setCancelled(this.feature.isProtected(b) != null);
 			}
 		}
 	}

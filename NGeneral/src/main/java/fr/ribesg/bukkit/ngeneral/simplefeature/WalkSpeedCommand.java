@@ -8,9 +8,11 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -30,8 +32,8 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 
 	public WalkSpeedCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.setCommandExecutor(COMMAND, this);
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+		this.plugin.setCommandExecutor(COMMAND, this);
+		Bukkit.getPluginManager().registerEvents(this, this.plugin);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
@@ -43,27 +45,27 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		if (command.getName().equals(COMMAND)) {
 			if (!Perms.hasWalkSpeed(sender)) {
-				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+				this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			} else if (args.length == 1) {
 				if (!(sender instanceof Player)) {
-					plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+					this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 				} else {
-					final Player player = (Player) sender;
+					final Player player = (Player)sender;
 					try {
 						final float value = Float.parseFloat(args[0]);
 						if (value < -1 || value > 1) {
 							return false;
 						}
 						player.setWalkSpeed(value);
-						plugin.sendMessage(player, MessageId.general_walkSpeed_set, Float.toString(value));
-					} catch (NumberFormatException e) {
+						this.plugin.sendMessage(player, MessageId.general_walkSpeed_set, Float.toString(value));
+					} catch (final NumberFormatException e) {
 						player.setWalkSpeed(DEFAULT_BUKKIT_WALKSPEED);
-						plugin.sendMessage(player, MessageId.general_walkSpeed_reset);
+						this.plugin.sendMessage(player, MessageId.general_walkSpeed_reset);
 					}
 				}
 			} else if (args.length == 2) {
 				if (!Perms.hasWalkSpeedOthers(sender)) {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 				} else {
 					final String arg0 = args[0].toLowerCase();
 					float value = DEFAULT_BUKKIT_WALKSPEED;
@@ -72,11 +74,11 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 						if (value < -1 || value > 1) {
 							return false;
 						}
-					} catch (NumberFormatException ignored) {
+					} catch (final NumberFormatException ignored) {
 					}
 					final String arg1 = args[1].toLowerCase();
 					final String[] names = arg1.split(",");
-					setAll(sender, names, value);
+					this.setAll(sender, names, value);
 				}
 				return true;
 			} else {
@@ -98,11 +100,11 @@ public class WalkSpeedCommand implements CommandExecutor, Listener {
 		for (final String name : playerNames) {
 			final Player p = Bukkit.getPlayer(name);
 			if (p == null) {
-				plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
+				this.plugin.sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 			} else {
 				p.setWalkSpeed(value);
-				plugin.sendMessage(sender, MessageId.general_walkSpeed_setFor, p.getName(), Float.toString(value));
-				plugin.sendMessage(p, MessageId.general_walkSpeed_setBy, sender.getName(), Float.toString(value));
+				this.plugin.sendMessage(sender, MessageId.general_walkSpeed_setFor, p.getName(), Float.toString(value));
+				this.plugin.sendMessage(p, MessageId.general_walkSpeed_setBy, sender.getName(), Float.toString(value));
 			}
 		}
 	}

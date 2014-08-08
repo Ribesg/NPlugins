@@ -8,20 +8,22 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncuboid.listeners.attribute;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Attribute;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.SortedSet;
+
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedSet;
 
 public class RespawnListener extends AbstractListener {
 
@@ -41,7 +43,7 @@ public class RespawnListener extends AbstractListener {
 	public void onPlayerRespawn(final PlayerRespawnEvent event) {
 		final NLocation loc = this.deathLocations.remove(event.getPlayer().getName());
 		if (loc != null) {
-			final SortedSet<GeneralRegion> regions = getPlugin().getDb().getAllByLocation(loc);
+			final SortedSet<GeneralRegion> regions = this.getPlugin().getDb().getAllByLocation(loc);
 			for (final GeneralRegion region : regions) {
 				final Location respawnPoint = region.getLocationAttribute(Attribute.RESPAWN_POINT);
 				if (respawnPoint != null) {

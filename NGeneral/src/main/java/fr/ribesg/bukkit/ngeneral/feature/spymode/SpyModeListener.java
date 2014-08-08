@@ -8,15 +8,17 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.spymode;
+
 import fr.ribesg.bukkit.ncore.event.PlayerJoinedEvent;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import java.util.UUID;
 
 public class SpyModeListener implements Listener {
 
@@ -30,13 +32,13 @@ public class SpyModeListener implements Listener {
 	public void onPlayerJoined(final PlayerJoinedEvent event) {
 		final Player player = event.getPlayer();
 		if (Perms.hasSpy(player)) {
-			if (feature.hasSpyMode(player.getUniqueId())) {
+			if (this.feature.hasSpyMode(player.getUniqueId())) {
 				for (final Player other : Bukkit.getOnlinePlayers()) {
 					other.hidePlayer(player);
 				}
 			}
 		} else {
-			for (final UUID id : feature.getSpyPlayers().keySet()) {
+			for (final UUID id : this.feature.getSpyPlayers().keySet()) {
 				final Player hidden = Bukkit.getPlayer(id);
 				if (hidden != null) {
 					player.hidePlayer(hidden);

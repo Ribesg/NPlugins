@@ -11,30 +11,31 @@ package fr.ribesg.bukkit.nenchantingegg.item;
 
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+
 /**
  * Based on a main item and some ingredients, builds a new boosted item.
  */
 public class ItemBuilder {
 
-	private static final Random        RANDOM            = new Random();
-	private static       Set<Material> possibleMainItems = null;
+	private static final Random RANDOM = new Random();
+	private static Set<Material> possibleMainItems;
 
-	private static final double[][] BOOST_VALUES = new double[][] {
+	private static final double[][] BOOST_VALUES = {
 			{
 					1.3d,
 					-0.05d
@@ -67,53 +68,54 @@ public class ItemBuilder {
 	 */
 	private static Set<Material> getPossibleMainItems() {
 		if (possibleMainItems == null) {
-			possibleMainItems = new HashSet<>();
-			possibleMainItems.add(Material.IRON_SPADE);
-			possibleMainItems.add(Material.IRON_PICKAXE);
-			possibleMainItems.add(Material.IRON_AXE);
-			possibleMainItems.add(Material.BOW);
-			possibleMainItems.add(Material.IRON_SWORD);
-			possibleMainItems.add(Material.WOOD_SWORD);
-			possibleMainItems.add(Material.WOOD_SPADE);
-			possibleMainItems.add(Material.WOOD_PICKAXE);
-			possibleMainItems.add(Material.WOOD_AXE);
-			possibleMainItems.add(Material.STONE_SWORD);
-			possibleMainItems.add(Material.STONE_SPADE);
-			possibleMainItems.add(Material.STONE_PICKAXE);
-			possibleMainItems.add(Material.STONE_AXE);
-			possibleMainItems.add(Material.DIAMOND_SWORD);
-			possibleMainItems.add(Material.DIAMOND_SPADE);
-			possibleMainItems.add(Material.DIAMOND_PICKAXE);
-			possibleMainItems.add(Material.DIAMOND_AXE);
-			possibleMainItems.add(Material.GOLD_SWORD);
-			possibleMainItems.add(Material.GOLD_SPADE);
-			possibleMainItems.add(Material.GOLD_PICKAXE);
-			possibleMainItems.add(Material.GOLD_AXE);
-			possibleMainItems.add(Material.WOOD_HOE);
-			possibleMainItems.add(Material.STONE_HOE);
-			possibleMainItems.add(Material.IRON_HOE);
-			possibleMainItems.add(Material.DIAMOND_HOE);
-			possibleMainItems.add(Material.GOLD_HOE);
-			possibleMainItems.add(Material.LEATHER_HELMET);
-			possibleMainItems.add(Material.LEATHER_CHESTPLATE);
-			possibleMainItems.add(Material.LEATHER_LEGGINGS);
-			possibleMainItems.add(Material.LEATHER_BOOTS);
-			possibleMainItems.add(Material.CHAINMAIL_HELMET);
-			possibleMainItems.add(Material.CHAINMAIL_CHESTPLATE);
-			possibleMainItems.add(Material.CHAINMAIL_LEGGINGS);
-			possibleMainItems.add(Material.CHAINMAIL_BOOTS);
-			possibleMainItems.add(Material.IRON_HELMET);
-			possibleMainItems.add(Material.IRON_CHESTPLATE);
-			possibleMainItems.add(Material.IRON_LEGGINGS);
-			possibleMainItems.add(Material.IRON_BOOTS);
-			possibleMainItems.add(Material.DIAMOND_HELMET);
-			possibleMainItems.add(Material.DIAMOND_CHESTPLATE);
-			possibleMainItems.add(Material.DIAMOND_LEGGINGS);
-			possibleMainItems.add(Material.DIAMOND_BOOTS);
-			possibleMainItems.add(Material.GOLD_HELMET);
-			possibleMainItems.add(Material.GOLD_CHESTPLATE);
-			possibleMainItems.add(Material.GOLD_LEGGINGS);
-			possibleMainItems.add(Material.GOLD_BOOTS);
+			possibleMainItems = EnumSet.of(
+					Material.IRON_SPADE,
+					Material.IRON_PICKAXE,
+					Material.IRON_AXE,
+					Material.BOW,
+					Material.IRON_SWORD,
+					Material.WOOD_SWORD,
+					Material.WOOD_SPADE,
+					Material.WOOD_PICKAXE,
+					Material.WOOD_AXE,
+					Material.STONE_SWORD,
+					Material.STONE_SPADE,
+					Material.STONE_PICKAXE,
+					Material.STONE_AXE,
+					Material.DIAMOND_SWORD,
+					Material.DIAMOND_SPADE,
+					Material.DIAMOND_PICKAXE,
+					Material.DIAMOND_AXE,
+					Material.GOLD_SWORD,
+					Material.GOLD_SPADE,
+					Material.GOLD_PICKAXE,
+					Material.GOLD_AXE,
+					Material.WOOD_HOE,
+					Material.STONE_HOE,
+					Material.IRON_HOE,
+					Material.DIAMOND_HOE,
+					Material.GOLD_HOE,
+					Material.LEATHER_HELMET,
+					Material.LEATHER_CHESTPLATE,
+					Material.LEATHER_LEGGINGS,
+					Material.LEATHER_BOOTS,
+					Material.CHAINMAIL_HELMET,
+					Material.CHAINMAIL_CHESTPLATE,
+					Material.CHAINMAIL_LEGGINGS,
+					Material.CHAINMAIL_BOOTS,
+					Material.IRON_HELMET,
+					Material.IRON_CHESTPLATE,
+					Material.IRON_LEGGINGS,
+					Material.IRON_BOOTS,
+					Material.DIAMOND_HELMET,
+					Material.DIAMOND_CHESTPLATE,
+					Material.DIAMOND_LEGGINGS,
+					Material.DIAMOND_BOOTS,
+					Material.GOLD_HELMET,
+					Material.GOLD_CHESTPLATE,
+					Material.GOLD_LEGGINGS,
+					Material.GOLD_BOOTS
+			);
 		}
 		return possibleMainItems;
 	}
@@ -183,151 +185,151 @@ public class ItemBuilder {
 	public ItemBuilder(final Altar altar) {
 		this.altar = altar;
 		this.plugin = altar.getPlugin();
-		items = new ArrayList<>();
+		this.items = new ArrayList<>();
 	}
 
 	/**
 	 * Handles the reception of an item
 	 */
 	public void addItem(final ItemStack is) {
-		plugin.entering(getClass(), "addItem");
+		this.plugin.entering(this.getClass(), "addItem");
 
-		if (getPossibleMainItems().contains(is.getType()) && is.getEnchantments().size() != 0) {
-			plugin.debug("Main item detected");
-			mainItem = is;
-			if (altar.getEggLocation().getBlock().getType() != Material.DRAGON_EGG) {
-				plugin.debug("The Dragon Egg is no longer here, cancel everything");
-				items.clear();
-				altar.hardResetToInactive(true);
+		if (getPossibleMainItems().contains(is.getType()) && !is.getEnchantments().isEmpty()) {
+			this.plugin.debug("Main item detected");
+			this.mainItem = is;
+			if (this.altar.getEggLocation().getBlock().getType() != Material.DRAGON_EGG) {
+				this.plugin.debug("The Dragon Egg is no longer here, cancel everything");
+				this.items.clear();
+				this.altar.hardResetToInactive(true);
 			} else {
-				plugin.debug("The Dragon Egg is still here, proceed to next step");
-				plugin.getEggProvidedToItemProvidedTransition().doTransition(altar);
+				this.plugin.debug("The Dragon Egg is still here, proceed to next step");
+				this.plugin.getEggProvidedToItemProvidedTransition().doTransition(this.altar);
 			}
 		} else {
-			plugin.debug("Secondary item detected");
-			items.add(is);
+			this.plugin.debug("Secondary item detected");
+			this.items.add(is);
 		}
 
-		plugin.exiting(getClass(), "addItem");
+		this.plugin.exiting(this.getClass(), "addItem");
 	}
 
 	/**
 	 * Spawn back stored items.
 	 */
 	public void popItems() {
-		final Location loc = altar.getCenterLocation().toBukkitLocation().clone().add(0.5, 3, 0.5);
-		for (final ItemStack is : items) {
+		final Location loc = this.altar.getCenterLocation().toBukkitLocation().clone().add(0.5, 3, 0.5);
+		for (final ItemStack is : this.items) {
 			loc.getWorld().dropItem(loc, is);
 		}
-		items.clear();
+		this.items.clear();
 	}
 
 	public void computeItem() {
-		plugin.entering(getClass(), "computeItem");
+		this.plugin.entering(this.getClass(), "computeItem");
 
-		if (!items.isEmpty() && mainItem != null) {
-			plugin.debug("Starting item computation process");
+		if (!this.items.isEmpty() && this.mainItem != null) {
+			this.plugin.debug("Starting item computation process");
 
 			// Step 1: repair
-			repair();
+			this.repair();
 
 			// Step 2: boost
-			boost();
+			this.boost();
 
 			// Step 3: enchant
-			enchant();
+			this.enchant();
 
 			// TODO: Other steps
 
 			// Output the item
-			altar.buildItem(mainItem, items);
+			this.altar.buildItem(this.mainItem, this.items);
 		} else {
-			plugin.debug("Something is missing, just give back all items");
-			altar.buildItem(mainItem, items);
-			plugin.getItemProvidedToLockedTransition().doTransition(altar);
+			this.plugin.debug("Something is missing, just give back all items");
+			this.altar.buildItem(this.mainItem, this.items);
+			this.plugin.getItemProvidedToLockedTransition().doTransition(this.altar);
 		}
 
-		plugin.exiting(getClass(), "computeItem");
+		this.plugin.exiting(this.getClass(), "computeItem");
 	}
 
 	private void repair() {
-		plugin.entering(getClass(), "repair");
+		this.plugin.entering(this.getClass(), "repair");
 
-		final Material mat = mainItem.getType();
+		final Material mat = this.mainItem.getType();
 		final short maxDurability = mat.getMaxDurability();
 
-		if (plugin.isDebugEnabled()) {
-			plugin.debug("Repairing item " + mat.name() + " with max durability " + maxDurability);
+		if (this.plugin.isDebugEnabled()) {
+			this.plugin.debug("Repairing item " + mat.name() + " with max durability " + maxDurability);
 		}
 
 		// Get the total durability points sacrificed, in %
 		double repairCount = 0;
-		final Iterator<ItemStack> it = items.iterator();
+		final Iterator<ItemStack> it = this.items.iterator();
 		ItemStack is;
 		while (it.hasNext()) {
 			is = it.next();
 			if (is.getType() == mat) {
-				repairCount += is.getAmount() * ((maxDurability - is.getDurability()) / (double) maxDurability);
+				repairCount += is.getAmount() * ((maxDurability - is.getDurability()) / (double)maxDurability);
 				it.remove();
 			}
 		}
 
-		final int baseRessourceAmount = getBaseRessourceAmount(mat);
+		final int baseRessourceAmount = this.getBaseRessourceAmount(mat);
 
-		plugin.debug("repairCount=" + repairCount);
-		plugin.debug("baseRessourceAmount=" + baseRessourceAmount);
+		this.plugin.debug("repairCount=" + repairCount);
+		this.plugin.debug("baseRessourceAmount=" + baseRessourceAmount);
 
 		repairCount *= baseRessourceAmount;
 
-		plugin.debug("repairCount*baseRessourceAmount=" + repairCount);
+		this.plugin.debug("repairCount*baseRessourceAmount=" + repairCount);
 
 		// Get the number of enchantment levels
 		int totalEnchantmentLevel = 0;
-		for (final Integer i : mainItem.getEnchantments().values()) {
+		for (final Integer i : this.mainItem.getEnchantments().values()) {
 			totalEnchantmentLevel += i;
 		}
 
-		plugin.debug("totalEnchantmentLevel=" + totalEnchantmentLevel);
+		this.plugin.debug("totalEnchantmentLevel=" + totalEnchantmentLevel);
 
 		// Compute base durability boost
-		final double configurableCoef = plugin.getPluginConfig().getRepairBoostMultiplier();
+		final double configurableCoef = this.plugin.getPluginConfig().getRepairBoostMultiplier();
 		double boost = configurableCoef * repairCount / totalEnchantmentLevel;
 
-		plugin.debug("configurableCoef=" + configurableCoef);
-		plugin.debug("boost=" + boost);
+		this.plugin.debug("configurableCoef=" + configurableCoef);
+		this.plugin.debug("boost=" + boost);
 
 		// Add some randomness: boost = 80%*boost + [0-40%]*boost; => boost = [80-120%]*boost;
 		boost = boost - 0.2 * boost + RANDOM.nextFloat() * 0.4 * boost;
 
-		plugin.debug("randomizedBoost=" + boost);
+		this.plugin.debug("randomizedBoost=" + boost);
 
 		// Apply durability
-		double finalDurability = mainItem.getDurability() - boost * maxDurability;
+		double finalDurability = this.mainItem.getDurability() - boost * maxDurability;
 		if (finalDurability < 0) {
 			finalDurability = 0;
 		}
 
-		plugin.debug("finalDurability=" + finalDurability);
+		this.plugin.debug("finalDurability=" + finalDurability);
 
-		mainItem.setDurability((short) finalDurability);
+		this.mainItem.setDurability((short)finalDurability);
 
-		plugin.exiting(getClass(), "repair");
+		this.plugin.exiting(this.getClass(), "repair");
 	}
 
 	private void boost() {
-		plugin.entering(getClass(), "boost");
+		this.plugin.entering(this.getClass(), "boost");
 
-		if (plugin.isDebugEnabled()) {
-			plugin.debug("Original list of Enchantments:");
-			for (final Map.Entry<Enchantment, Integer> e : mainItem.getEnchantments().entrySet()) {
-				plugin.debug("\t" + e.getKey().getName() + ", level " + e.getValue());
+		if (this.plugin.isDebugEnabled()) {
+			this.plugin.debug("Original list of Enchantments:");
+			for (final Map.Entry<Enchantment, Integer> e : this.mainItem.getEnchantments().entrySet()) {
+				this.plugin.debug('\t' + e.getKey().getName() + ", level " + e.getValue());
 			}
 		}
 
 		// Count the amount of Magma Cream and Eye of Ender sacrificed
 		int magmaCream = 0;
 		int eyeOfEnder = 0;
-		final Iterator<ItemStack> it = items.iterator();
+		final Iterator<ItemStack> it = this.items.iterator();
 		ItemStack is;
 		while (it.hasNext()) {
 			is = it.next();
@@ -342,44 +344,44 @@ public class ItemBuilder {
 				break;
 			}
 		}
-		plugin.debug("Found " + magmaCream + " Magma Cream(s)");
-		plugin.debug("Found " + eyeOfEnder + " Eye(s) of Ender");
+		this.plugin.debug("Found " + magmaCream + " Magma Cream(s)");
+		this.plugin.debug("Found " + eyeOfEnder + " Eye(s) of Ender");
 
 		// We do nothing if there's none
 		if (magmaCream != 0 || eyeOfEnder != 0) {
 			// Get the amount of enchantment levels
 			double enchantments = -1f;
-			for (final Integer i : mainItem.getEnchantments().values()) {
+			for (final Integer i : this.mainItem.getEnchantments().values()) {
 				enchantments += 0.75f + 0.25f * i;
 			}
 
-			plugin.debug("enchantments=" + enchantments);
+			this.plugin.debug("enchantments=" + enchantments);
 
 			// Get the total amount of ingredients
 			final int total = magmaCream + eyeOfEnder;
 
-			plugin.debug("total=" + total);
+			this.plugin.debug("total=" + total);
 
 			// Get a ratio between 0 and 1 of the total of ingredients
-			double ratio = magmaCream == 0 ? 0 : eyeOfEnder / magmaCream;
+			double ratio = magmaCream == 0 ? 0 : eyeOfEnder / (float)magmaCream;
 			if (ratio > 1) {
 				ratio = 1 / ratio;
 			}
 
-			plugin.debug("ratio=" + ratio);
+			this.plugin.debug("ratio=" + ratio);
 
 			// Weight the total with the ratio
-			final double weightedTotal = total / 2 + ratio * (total / 2);
+			final double weightedTotal = total / 2f + ratio * (total / 2f);
 
-			plugin.debug("weightedTotal=" + weightedTotal);
+			this.plugin.debug("weightedTotal=" + weightedTotal);
 
 			// Get a coef between 0 and 1 from the weightedTotal (Math.exp(something between -1 and 0))
-			final double coef = Math.exp(-(1f - (weightedTotal / 128f)));
+			final double coef = Math.exp(-(1f - weightedTotal / 128f));
 
-			plugin.debug("coef=" + coef);
+			this.plugin.debug("coef=" + coef);
 
 			// Compute probabilities
-			final double[] probabilities = new double[] {
+			final double[] probabilities = {
 					coef * BOOST_VALUES[0][0] + BOOST_VALUES[0][1] - ENCH_REDUCE * enchantments,
 					coef * BOOST_VALUES[1][0] + BOOST_VALUES[1][1] - ENCH_REDUCE * enchantments,
 					coef * BOOST_VALUES[2][0] + BOOST_VALUES[2][1] - ENCH_REDUCE * enchantments,
@@ -388,10 +390,10 @@ public class ItemBuilder {
 					coef * BOOST_VALUES[5][0] + BOOST_VALUES[5][1] - ENCH_REDUCE * enchantments
 			};
 
-			plugin.debug("probabilities=" + Arrays.toString(probabilities));
+			this.plugin.debug("probabilities=" + Arrays.toString(probabilities));
 
 			// Apply configurable coef and fix out-of-scope values
-			final double configurableCoef = plugin.getPluginConfig().getEnchantmentBoostMultiplier();
+			final double configurableCoef = this.plugin.getPluginConfig().getEnchantmentBoostMultiplier();
 			for (int i = 0; i < probabilities.length; i++) {
 				probabilities[i] *= configurableCoef;
 				if (probabilities[i] > 1) {
@@ -401,12 +403,12 @@ public class ItemBuilder {
 				}
 			}
 
-			plugin.debug("configurableCoef=" + configurableCoef);
-			plugin.debug("fixedProbabilities=" + Arrays.toString(probabilities));
+			this.plugin.debug("configurableCoef=" + configurableCoef);
+			this.plugin.debug("fixedProbabilities=" + Arrays.toString(probabilities));
 
 			// Roll dice
 			final Map<Enchantment, Integer> newEnchantmentsMap = new HashMap<>();
-			for (final Map.Entry<Enchantment, Integer> e : mainItem.getEnchantments().entrySet()) {
+			for (final Map.Entry<Enchantment, Integer> e : this.mainItem.getEnchantments().entrySet()) {
 				int result = 0;
 				for (int i = 6; i > 0; i--) {
 					if (RANDOM.nextFloat() <= probabilities[i - 1]) {
@@ -414,41 +416,41 @@ public class ItemBuilder {
 						break;
 					}
 				}
-				newEnchantmentsMap.put(e.getKey(), Math.min(plugin.getPluginConfig().getEnchantmentMaxLevel(e.getKey()), e.getValue() + result));
+				newEnchantmentsMap.put(e.getKey(), Math.min(this.plugin.getPluginConfig().getEnchantmentMaxLevel(e.getKey()), e.getValue() + result));
 			}
 
-			if (plugin.isDebugEnabled()) {
-				plugin.debug("Final list of Enchantments:");
+			if (this.plugin.isDebugEnabled()) {
+				this.plugin.debug("Final list of Enchantments:");
 				for (final Map.Entry<Enchantment, Integer> e : newEnchantmentsMap.entrySet()) {
-					plugin.debug("\t" + e.getKey().getName() + ", level " + e.getValue());
+					this.plugin.debug('\t' + e.getKey().getName() + ", level " + e.getValue());
 				}
 			}
 
 			// Clear enchantments
 			for (final Enchantment e : Enchantment.values()) {
-				mainItem.removeEnchantment(e);
+				this.mainItem.removeEnchantment(e);
 			}
 
 			// Apply enchantments
-			mainItem.addUnsafeEnchantments(newEnchantmentsMap);
+			this.mainItem.addUnsafeEnchantments(newEnchantmentsMap);
 		}
 
-		plugin.exiting(getClass(), "boost");
+		this.plugin.exiting(this.getClass(), "boost");
 	}
 
 	private void enchant() {
-		plugin.entering(getClass(), "enchant");
+		this.plugin.entering(this.getClass(), "enchant");
 
-		if (plugin.isDebugEnabled()) {
-			plugin.debug("Original list of Enchantments:");
-			for (final Map.Entry<Enchantment, Integer> e : mainItem.getEnchantments().entrySet()) {
-				plugin.debug("\t" + e.getKey().getName() + ", level " + e.getValue());
+		if (this.plugin.isDebugEnabled()) {
+			this.plugin.debug("Original list of Enchantments:");
+			for (final Map.Entry<Enchantment, Integer> e : this.mainItem.getEnchantments().entrySet()) {
+				this.plugin.debug('\t' + e.getKey().getName() + ", level " + e.getValue());
 			}
 		}
 
 		// Count the amount of Ghast Tears sacrificed
 		int ghastTear = 0;
-		final Iterator<ItemStack> it = items.iterator();
+		final Iterator<ItemStack> it = this.items.iterator();
 		ItemStack is;
 		while (it.hasNext()) {
 			is = it.next();
@@ -460,22 +462,22 @@ public class ItemBuilder {
 				}
 			}
 		}
-		plugin.debug("Found " + ghastTear + " Ghast Tear(s)");
+		this.plugin.debug("Found " + ghastTear + " Ghast Tear(s)");
 
 		if (ghastTear != 0) {
 
 			// Arboricide
-			if (plugin.getArboricide().canEnchant(this.mainItem)) {
-				plugin.debug("Try to apply Arboricide");
-				if (RANDOM.nextFloat() < (ghastTear / 16f) * (2f / 3f) * plugin.getPluginConfig().getEnchantmentBoostMultiplier()){
-					this.mainItem = plugin.getArboricide().enchant(this.mainItem);
-					plugin.debug("Applied Arboricide!");
+			if (this.plugin.getArboricide().canEnchant(this.mainItem)) {
+				this.plugin.debug("Try to apply Arboricide");
+				if (RANDOM.nextFloat() < (ghastTear / 16f) * (2f / 3f) * this.plugin.getPluginConfig().getEnchantmentBoostMultiplier()) {
+					this.mainItem = this.plugin.getArboricide().enchant(this.mainItem);
+					this.plugin.debug("Applied Arboricide!");
 				}
 			}
 
 			// TODO Other enchantments here
 		}
 
-		plugin.exiting(getClass(), "enchant");
+		this.plugin.exiting(this.getClass(), "enchant");
 	}
 }

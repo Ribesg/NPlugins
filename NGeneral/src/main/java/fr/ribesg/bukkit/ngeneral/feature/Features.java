@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature;
+
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.feature.autoafk.AutoAfkFeature;
 import fr.ribesg.bukkit.ngeneral.feature.flymode.FlyModeFeature;
@@ -56,6 +57,6 @@ public class Features {
 
 	@SuppressWarnings("unchecked")
 	public <T extends Feature> T get(final Class<T> clazz) {
-		return (T) this.features.get(FeatureType.fromClass(clazz));
+		return (T)this.features.get(FeatureType.fromClass(clazz));
 	}
 }

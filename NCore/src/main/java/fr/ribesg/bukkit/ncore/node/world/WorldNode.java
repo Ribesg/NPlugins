@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ncore.node.world;
 
 import fr.ribesg.bukkit.ncore.node.Node;
+
 import org.bukkit.Location;
 
 /**

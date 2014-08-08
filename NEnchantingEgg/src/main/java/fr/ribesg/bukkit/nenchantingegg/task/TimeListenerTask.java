@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.nenchantingegg.task;
 
 import fr.ribesg.bukkit.ncore.common.MinecraftTime;
 import fr.ribesg.bukkit.nenchantingegg.NEnchantingEgg;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,17 +25,18 @@ public class TimeListenerTask extends BukkitRunnable {
 	private final NEnchantingEgg plugin;
 
 	public TimeListenerTask(final NEnchantingEgg instance) {
-		plugin = instance;
+		super();
+		this.plugin = instance;
 	}
 
 	@Override
 	public void run() {
-		plugin.entering(getClass(), "run");
+		this.plugin.entering(this.getClass(), "run");
 		for (final World w : Bukkit.getWorlds()) {
 			final long actualTime = w.getTime();
 			final MinecraftTime time = MinecraftTime.get(actualTime);
-			plugin.getAltars().time(w.getName(), time);
+			this.plugin.getAltars().time(w.getName(), time);
 		}
-		plugin.exiting(getClass(), "run");
+		this.plugin.exiting(this.getClass(), "run");
 	}
 }

@@ -16,59 +16,60 @@ import fr.ribesg.bukkit.ncore.util.WorldUtil;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 public class TheEndAgainCommandExecutor implements CommandExecutor {
 
 	private final NTheEndAgain plugin;
 
 	public TheEndAgainCommandExecutor(final NTheEndAgain instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if (command.getName().equalsIgnoreCase("nend")) {
-			if (args.length == 0 || args.length == 1 && (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("h"))) {
+		if ("nend".equalsIgnoreCase(command.getName())) {
+			if (args.length == 0 || args.length == 1 && ("help".equalsIgnoreCase(args[0]) || "h".equalsIgnoreCase(args[0]))) {
 				if (Perms.hasHelp(sender)) {
-					return cmdHelp(sender);
+					return this.cmdHelp(sender);
 				} else {
-					plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+					this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 					return true;
 				}
 			} else {
 				switch (args[0].toLowerCase()) {
 					case "regen":
 						if (Perms.hasRegen(sender)) {
-							return cmdRegen(sender, Arrays.copyOfRange(args, 1, args.length));
+							return this.cmdRegen(sender, Arrays.copyOfRange(args, 1, args.length));
 						} else {
-							plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+							this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 							return true;
 						}
 					case "respawnenderdragon":
 					case "respawned":
 					case "respawn":
 						if (Perms.hasRespawn(sender)) {
-							return cmdRespawn(sender, Arrays.copyOfRange(args, 1, args.length));
+							return this.cmdRespawn(sender, Arrays.copyOfRange(args, 1, args.length));
 						} else {
-							plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+							this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 							return true;
 						}
 					case "nbenderdragon":
 					case "nbed":
 					case "nb":
 						if (Perms.hasNb(sender)) {
-							return cmdNb(sender, Arrays.copyOfRange(args, 1, args.length));
+							return this.cmdNb(sender, Arrays.copyOfRange(args, 1, args.length));
 						} else {
-							plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+							this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 							return true;
 						}
 					case "chunk":
@@ -79,43 +80,42 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 								case "info":
 								case "i":
 									if (Perms.hasChunkInfo(sender)) {
-										return cmdChunkInfo(sender, Arrays.copyOfRange(args, 2, args.length));
+										return this.cmdChunkInfo(sender, Arrays.copyOfRange(args, 2, args.length));
 									} else {
-										plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+										this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 										return true;
 									}
 								case "protect":
 								case "p":
 									if (Perms.hasChunkProtect(sender)) {
-										return cmdChunkProtect(sender, Arrays.copyOfRange(args, 2, args.length));
+										return this.cmdChunkProtect(sender, Arrays.copyOfRange(args, 2, args.length));
 									} else {
-										plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+										this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 										return true;
 									}
 								case "unprotect":
 								case "up":
 									if (Perms.hasChunkUnprotect(sender)) {
-										return cmdChunkUnprotect(sender, Arrays.copyOfRange(args, 2, args.length));
+										return this.cmdChunkUnprotect(sender, Arrays.copyOfRange(args, 2, args.length));
 									} else {
-										plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+										this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 										return true;
 									}
 								default:
-									plugin.sendMessage(sender, MessageId.theEndAgain_unkownSubCmd, args[1]);
+									this.plugin.sendMessage(sender, MessageId.theEndAgain_unkownSubCmd, args[1]);
 									return true;
-
 							}
 						}
 					case "reload":
 					case "rld":
 						if (Perms.hasReload(sender)) {
-							return cmdReload(sender, Arrays.copyOfRange(args, 1, args.length));
+							return this.cmdReload(sender, Arrays.copyOfRange(args, 1, args.length));
 						} else {
-							plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+							this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 							return true;
 						}
 					default:
-						plugin.sendMessage(sender, MessageId.theEndAgain_unkownSubCmd, args[0]);
+						this.plugin.sendMessage(sender, MessageId.theEndAgain_unkownSubCmd, args[0]);
 						return true;
 				}
 			}
@@ -132,58 +132,58 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 	}
 
 	private boolean cmdRegen(final CommandSender sender, final String[] args) {
-		final String[] parsedArgs = checkWorldArgument(sender, args);
+		final String[] parsedArgs = this.checkWorldArgument(sender, args);
 		if (parsedArgs == null) {
 			// The sender already received a message
 			return true;
 		} else {
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(parsedArgs[0]));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(parsedArgs[0]));
 			if (handler != null) {
-				plugin.sendMessage(sender, MessageId.theEndAgain_regenerating, handler.getEndWorld().getName());
-				if (parsedArgs.length > 1 && parsedArgs[1].equalsIgnoreCase("hard")) {
+				this.plugin.sendMessage(sender, MessageId.theEndAgain_regenerating, handler.getEndWorld().getName());
+				if (parsedArgs.length > 1 && "hard".equalsIgnoreCase(parsedArgs[1])) {
 					handler.getRegenHandler().regen(0);
 				} else {
 					handler.getRegenHandler().regen();
 				}
 			} else {
-				plugin.sendMessage(sender, MessageId.unknownWorld, parsedArgs[0]);
+				this.plugin.sendMessage(sender, MessageId.unknownWorld, parsedArgs[0]);
 			}
 		}
 		return true;
 	}
 
 	private boolean cmdRespawn(final CommandSender sender, final String[] args) {
-		final String[] parsedArgs = checkWorldArgument(sender, args);
+		final String[] parsedArgs = this.checkWorldArgument(sender, args);
 		if (parsedArgs == null) {
 			// The sender already received a message
 			return true;
 		} else {
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(parsedArgs[0]));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(parsedArgs[0]));
 			if (handler != null) {
 				handler.getRespawnHandler().respawn();
 			} else {
-				plugin.sendMessage(sender, MessageId.unknownWorld, parsedArgs[0]);
+				this.plugin.sendMessage(sender, MessageId.unknownWorld, parsedArgs[0]);
 			}
 		}
 		return true;
 	}
 
 	private boolean cmdNb(final CommandSender sender, final String[] args) {
-		final String[] parsedArgs = checkWorldArgument(sender, args);
+		final String[] parsedArgs = this.checkWorldArgument(sender, args);
 		if (parsedArgs == null) {
 			// The sender already received a message
 			return true;
 		} else {
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(parsedArgs[0]));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(parsedArgs[0]));
 			if (handler != null) {
 				final Integer nb = handler.getNumberOfAliveEnderDragons();
 				if (nb == 0 || nb == 1) {
-					plugin.sendMessage(sender, nb == 0 ? MessageId.theEndAgain_nbAlive0 : MessageId.theEndAgain_nbAlive1, handler.getEndWorld().getName());
+					this.plugin.sendMessage(sender, nb == 0 ? MessageId.theEndAgain_nbAlive0 : MessageId.theEndAgain_nbAlive1, handler.getEndWorld().getName());
 				} else {
-					plugin.sendMessage(sender, MessageId.theEndAgain_nbAliveX, nb.toString(), handler.getEndWorld().getName());
+					this.plugin.sendMessage(sender, MessageId.theEndAgain_nbAliveX, nb.toString(), handler.getEndWorld().getName());
 				}
 			} else {
-				plugin.sendMessage(sender, MessageId.unknownWorld, parsedArgs[0]);
+				this.plugin.sendMessage(sender, MessageId.unknownWorld, parsedArgs[0]);
 			}
 		}
 		return true;
@@ -191,16 +191,16 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 
 	private boolean cmdChunkInfo(final CommandSender sender, final String[] args) {
 		if (args.length > 0) {
-			final List<ChunkCoord> coords = getChunks(sender, args);
+			final List<ChunkCoord> coords = this.getChunks(sender, args);
 			if (coords == null) {
 				return true;
 			} else if (coords.isEmpty()) {
 				return false;
 			} else {
 				final String worldName = coords.get(0).getWorldName();
-				final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+				final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 				if (handler == null) {
-					plugin.sendMessage(sender, MessageId.theEndAgain_notInAnEndWorld);
+					this.plugin.sendMessage(sender, MessageId.theEndAgain_notInAnEndWorld);
 					return true;
 				} else {
 					final EndChunks chunks = handler.getChunks();
@@ -209,20 +209,20 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 						final Integer x = chunk.getX();
 						final Integer z = chunk.getZ();
 						final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkInfo : MessageId.theEndAgain_unprotectedChunkInfo;
-						plugin.sendMessage(sender, id, x.toString(), z.toString(), worldName);
+						this.plugin.sendMessage(sender, id, x.toString(), z.toString(), worldName);
 					}
 					return true;
 				}
 			}
 		} else if (!(sender instanceof Player)) {
-			plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+			this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			return true;
 		} else {
-			final Player player = (Player) sender;
+			final Player player = (Player)sender;
 			final String worldName = player.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 			if (handler == null) {
-				plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
+				this.plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
 				return true;
 			} else {
 				final EndChunks chunks = handler.getChunks();
@@ -230,7 +230,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 				final Integer x = chunk.getX();
 				final Integer z = chunk.getZ();
 				final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkInfo : MessageId.theEndAgain_unprotectedChunkInfo;
-				plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
+				this.plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
 				return true;
 			}
 		}
@@ -238,16 +238,16 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 
 	private boolean cmdChunkProtect(final CommandSender sender, final String[] args) {
 		if (args.length > 0) {
-			final List<ChunkCoord> coords = getChunks(sender, args);
+			final List<ChunkCoord> coords = this.getChunks(sender, args);
 			if (coords == null) {
 				return true;
 			} else if (coords.isEmpty()) {
 				return false;
 			} else {
 				final String worldName = coords.get(0).getWorldName();
-				final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+				final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 				if (handler == null) {
-					plugin.sendMessage(sender, MessageId.theEndAgain_notInAnEndWorld);
+					this.plugin.sendMessage(sender, MessageId.theEndAgain_notInAnEndWorld);
 					return true;
 				} else {
 					final EndChunks chunks = handler.getChunks();
@@ -256,21 +256,21 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 						final Integer x = chunk.getX();
 						final Integer z = chunk.getZ();
 						final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkProtect : MessageId.theEndAgain_unprotectedChunkProtect;
-						plugin.sendMessage(sender, id, x.toString(), z.toString(), worldName);
+						this.plugin.sendMessage(sender, id, x.toString(), z.toString(), worldName);
 						chunk.setProtected(true);
 					}
 					return true;
 				}
 			}
 		} else if (!(sender instanceof Player)) {
-			plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+			this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			return true;
 		} else {
-			final Player player = (Player) sender;
+			final Player player = (Player)sender;
 			final String worldName = player.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 			if (handler == null) {
-				plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
+				this.plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
 				return true;
 			} else {
 				final EndChunks chunks = handler.getChunks();
@@ -278,7 +278,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 				final Integer x = chunk.getX();
 				final Integer z = chunk.getZ();
 				final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkProtect : MessageId.theEndAgain_unprotectedChunkProtect;
-				plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
+				this.plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
 				chunk.setProtected(true);
 				return true;
 			}
@@ -287,16 +287,16 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 
 	private boolean cmdChunkUnprotect(final CommandSender sender, final String[] args) {
 		if (args.length > 0) {
-			final List<ChunkCoord> coords = getChunks(sender, args);
+			final List<ChunkCoord> coords = this.getChunks(sender, args);
 			if (coords == null) {
 				return true;
 			} else if (coords.isEmpty()) {
 				return false;
 			} else {
 				final String worldName = coords.get(0).getWorldName();
-				final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+				final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 				if (handler == null) {
-					plugin.sendMessage(sender, MessageId.theEndAgain_notInAnEndWorld);
+					this.plugin.sendMessage(sender, MessageId.theEndAgain_notInAnEndWorld);
 					return true;
 				} else {
 					final EndChunks chunks = handler.getChunks();
@@ -305,21 +305,21 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 						final Integer x = chunk.getX();
 						final Integer z = chunk.getZ();
 						final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkUnprotect : MessageId.theEndAgain_unprotectedChunkUnprotect;
-						plugin.sendMessage(sender, id, x.toString(), z.toString(), worldName);
+						this.plugin.sendMessage(sender, id, x.toString(), z.toString(), worldName);
 						chunk.setProtected(false);
 					}
 					return true;
 				}
 			}
 		} else if (!(sender instanceof Player)) {
-			plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+			this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			return true;
 		} else {
-			final Player player = (Player) sender;
+			final Player player = (Player)sender;
 			final String worldName = player.getWorld().getName();
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(worldName));
 			if (handler == null) {
-				plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
+				this.plugin.sendMessage(player, MessageId.theEndAgain_notInAnEndWorld);
 				return true;
 			} else {
 				final EndChunks chunks = handler.getChunks();
@@ -327,7 +327,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 				final Integer x = chunk.getX();
 				final Integer z = chunk.getZ();
 				final MessageId id = chunk.isProtected() ? MessageId.theEndAgain_protectedChunkUnprotect : MessageId.theEndAgain_unprotectedChunkUnprotect;
-				plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
+				this.plugin.sendMessage(player, id, x.toString(), z.toString(), worldName);
 				chunk.setProtected(false);
 				return true;
 			}
@@ -343,11 +343,11 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 				case "mess":
 				case "mes":
 					try {
-						plugin.loadMessages();
-						plugin.sendMessage(sender, MessageId.cmdReloadMessages);
+						this.plugin.loadMessages();
+						this.plugin.sendMessage(sender, MessageId.cmdReloadMessages);
 					} catch (final IOException e) {
-						plugin.error("An error occured when NTheEndAgain tried to load messages.yml", e);
-						plugin.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+						this.plugin.error("An error occured when NTheEndAgain tried to load messages.yml", e);
+						this.plugin.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
 					}
 					return true;
 				default:
@@ -373,11 +373,11 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		final boolean senderIsAPlayer = sender instanceof Player;
 		if (args.length == 0) {
 			if (!senderIsAPlayer) {
-				plugin.sendMessage(sender, MessageId.missingWorldArg);
+				this.plugin.sendMessage(sender, MessageId.missingWorldArg);
 				return null;
 			} else {
 				result = new String[args.length + 1];
-				result[0] = ((Player) sender).getWorld().getName();
+				result[0] = ((Player)sender).getWorld().getName();
 				System.arraycopy(args, 0, result, 1, args.length);
 			}
 		} else {
@@ -386,10 +386,10 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 			if (realWorldName == null) { // No world argument provided, use Player's world
 				if (senderIsAPlayer) {
 					result = new String[args.length + 1];
-					result[0] = ((Player) sender).getWorld().getName();
+					result[0] = ((Player)sender).getWorld().getName();
 					System.arraycopy(args, 0, result, 1, args.length);
 				} else {
-					plugin.sendMessage(sender, MessageId.missingWorldArg);
+					this.plugin.sendMessage(sender, MessageId.missingWorldArg);
 					return null;
 				}
 			} else {
@@ -405,7 +405,7 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		if (args.length == 0) {
 			return coords;
 		}
-		final String[] parsedArgs = checkWorldArgument(sender, args); // worldName x z x z
+		final String[] parsedArgs = this.checkWorldArgument(sender, args); // worldName x z x z
 		if (parsedArgs == null) {
 			return null;
 		} else if (parsedArgs.length == 3) {
@@ -441,5 +441,4 @@ public class TheEndAgainCommandExecutor implements CommandExecutor {
 		}
 		return coords;
 	}
-
 }

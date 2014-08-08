@@ -8,9 +8,10 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,12 +45,12 @@ public class FrameBuilder {
 		}
 
 		public String parse(final int toSize) {
-			if (options.contains(Option.CENTER)) {
-				return center(line, toSize);
-			} else if (options.contains(Option.RIGHT)) {
-				return right(line, toSize);
+			if (this.options.contains(Option.CENTER)) {
+				return fr.ribesg.bukkit.ncore.util.FrameBuilder.this.center(this.line, toSize);
+			} else if (this.options.contains(Option.RIGHT)) {
+				return fr.ribesg.bukkit.ncore.util.FrameBuilder.this.right(this.line, toSize);
 			} else {
-				return left(line, toSize);
+				return fr.ribesg.bukkit.ncore.util.FrameBuilder.this.left(this.line, toSize);
 			}
 		}
 	}
@@ -67,7 +68,7 @@ public class FrameBuilder {
 		this.lines = new ArrayList<>();
 		this.maxLength = -1;
 		this.frameChar = frameChar;
-		this.doubleFrameChar = "" + frameChar + frameChar;
+		this.doubleFrameChar = String.valueOf(frameChar) + frameChar;
 	}
 
 	/**
@@ -77,10 +78,10 @@ public class FrameBuilder {
 	 * @param options options about this line
 	 */
 	public void addLine(final String content, final Option... options) {
-		final Set<Option> optionSet = new HashSet<>(Arrays.asList(options));
+		final Set<Option> optionSet = EnumSet.copyOf(Arrays.asList(options));
 		final Line line = new Line(content, optionSet);
 		this.lines.add(line);
-		this.maxLength = content.length() > maxLength ? content.length() : maxLength;
+		this.maxLength = content.length() > this.maxLength ? content.length() : this.maxLength;
 	}
 
 	/**
@@ -89,10 +90,10 @@ public class FrameBuilder {
 	 * @return framed lines
 	 */
 	public String[] build() {
-		final String[] result = new String[lines.size() + 2];
-		result[0] = multipleChars(maxLength + 6, frameChar);
-		for (int i = 0; i < lines.size(); i++) {
-			result[i + 1] = doubleFrameChar + ' ' + lines.get(i).parse(maxLength) + ' ' + doubleFrameChar;
+		final String[] result = new String[this.lines.size() + 2];
+		result[0] = this.multipleChars(this.maxLength + 6, this.frameChar);
+		for (int i = 0; i < this.lines.size(); i++) {
+			result[i + 1] = this.doubleFrameChar + ' ' + this.lines.get(i).parse(this.maxLength) + ' ' + this.doubleFrameChar;
 		}
 		result[result.length - 1] = result[0];
 		return result;
@@ -110,7 +111,7 @@ public class FrameBuilder {
 		final int stringLength = aString.length();
 		final int left = (toSize - stringLength) / 2;
 		final int right = toSize - stringLength - left;
-		return spaces(left) + aString + spaces(right);
+		return this.spaces(left) + aString + this.spaces(right);
 	}
 
 	/**
@@ -123,7 +124,7 @@ public class FrameBuilder {
 	 */
 	private String right(final String aString, final int toSize) {
 		final int stringLength = aString.length();
-		return spaces(toSize - stringLength) + aString;
+		return this.spaces(toSize - stringLength) + aString;
 	}
 
 	/**
@@ -136,7 +137,7 @@ public class FrameBuilder {
 	 */
 	private String left(final String aString, final int toSize) {
 		final int stringLength = aString.length();
-		return aString + spaces(toSize - stringLength);
+		return aString + this.spaces(toSize - stringLength);
 	}
 
 	/**
@@ -147,7 +148,7 @@ public class FrameBuilder {
 	 * @return a String of size nb containing spaces
 	 */
 	private String spaces(final int nb) {
-		return multipleChars(nb, ' ');
+		return this.multipleChars(nb, ' ');
 	}
 
 	/**
@@ -180,9 +181,9 @@ public class FrameBuilder {
 			maxLength = Math.max(maxLength, s.length());
 		}
 		final int length = maxLength + 6;
-		result[0] = multipleChars(length, frameChar);
+		result[0] = this.multipleChars(length, this.frameChar);
 		for (int i = 0; i < messages.length; i++) {
-			result[i + 1] = doubleFrameChar + ' ' + messages[i] + spaces(maxLength - messages[i].length()) + ' ' + doubleFrameChar;
+			result[i + 1] = this.doubleFrameChar + ' ' + messages[i] + this.spaces(maxLength - messages[i].length()) + ' ' + this.doubleFrameChar;
 		}
 		result[result.length - 1] = result[0];
 		return result;

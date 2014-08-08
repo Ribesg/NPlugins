@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
+
 import java.util.regex.Pattern;
 
 /**

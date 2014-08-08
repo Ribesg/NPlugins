@@ -8,7 +8,6 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.npermissions.permission;
-import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -16,6 +15,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * Represents the Permissions attached to a Group.
@@ -93,15 +94,12 @@ public class GroupPermissions extends PermissionsSet {
 	 */
 	public void save(final ConfigurationSection parentSection) {
 		final ConfigurationSection thisSection = parentSection.createSection(this.name);
-		if (this.superGroups.size() > 0) {
+		if (!this.superGroups.isEmpty()) {
 			thisSection.set("extends", new LinkedList<>(this.superGroups));
 		}
 		super.saveCommon(thisSection);
 	}
 
-	/**
-	 * @see PermissionsSet#getDefaultPriority()
-	 */
 	@Override
 	public int getDefaultPriority() {
 		return DEFAULT_GROUP_PRIORITY;
@@ -109,8 +107,6 @@ public class GroupPermissions extends PermissionsSet {
 
 	/**
 	 * Priorities does not count vertically.
-	 *
-	 * @see PermissionsSet#computePermissions(java.util.Map)
 	 */
 	@Override
 	public Map<String, Boolean> computePermissions(Map<String, Boolean> resultMap) {

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -59,5 +60,4 @@ public class VersionUtilTest {
 			// Awaited result
 		}
 	}
-
 }

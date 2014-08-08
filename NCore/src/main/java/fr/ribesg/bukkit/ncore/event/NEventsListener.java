@@ -8,7 +8,9 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.event;
+
 import fr.ribesg.bukkit.ncore.NCore;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -24,7 +26,7 @@ public class NEventsListener implements Listener {
 	private final NCore plugin;
 
 	public NEventsListener(final NCore instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	/**

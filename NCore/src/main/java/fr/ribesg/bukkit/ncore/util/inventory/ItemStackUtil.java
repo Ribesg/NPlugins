@@ -8,14 +8,16 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util.inventory;
+
 import fr.ribesg.bukkit.ncore.util.StringUtil;
+
+import java.util.Map;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.Map;
 
 /**
  * This lib is used to get some Bukkit Enum / standard values from Strings.
@@ -73,6 +75,7 @@ public class ItemStackUtil {
 	 *
 	 * @return a String matching the provided ItemStack
 	 *
+	 * @throws InventoryUtilException if something goes wrong
 	 * @see #fromString(String) to get an ItemStack from the provided String
 	 */
 	public static String toString(final ItemStack is) throws InventoryUtilException {
@@ -104,6 +107,7 @@ public class ItemStackUtil {
 	 *
 	 * @return an ItemStack matching the provided itemString, or null
 	 *
+	 * @throws InventoryUtilException if something goes wrong
 	 * @see #toString(ItemStack) for format
 	 */
 	public static ItemStack fromString(final String itemString) throws InventoryUtilException {
@@ -175,6 +179,7 @@ public class ItemStackUtil {
 	 *                      description
 	 * @param is            the ItemStack to save
 	 *
+	 * @throws InventoryUtilException if something goes wrong
 	 * @see #loadFromConfig(ConfigurationSection, String)
 	 */
 	public static void saveToConfigSection(final ConfigurationSection parentSection, final String key, final ItemStack is) throws InventoryUtilException {
@@ -219,7 +224,7 @@ public class ItemStackUtil {
 			throw new InventoryUtilException("Id is mandatory" + parsed);
 		}
 
-		final short data = (short) itemSection.getInt("data", 0);
+		final short data = (short)itemSection.getInt("data", 0);
 		final int amount = Math.min(Math.max(itemSection.getInt("amount", 1), 1), 64);
 
 		final Map<Enchantment, Integer> enchantmentsMap = EnchantmentUtil.loadFromConfigSection(itemSection);

@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.nplayer;
 
 import fr.ribesg.bukkit.ncore.config.AbstractConfig;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NPlayer> {
@@ -21,45 +22,39 @@ public class Config extends AbstractConfig<NPlayer> {
 
 	public Config(final NPlayer instance) {
 		super(instance);
-		setMaximumLoginAttempts(3);
-		setTooManyAttemptsPunishment(1);
-		setTooManyAttemptsPunishmentDuration(300);
+		this.setMaximumLoginAttempts(3);
+		this.setTooManyAttemptsPunishment(1);
+		this.setTooManyAttemptsPunishmentDuration(300);
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#handleValues(org.bukkit.configuration.file.YamlConfiguration)
-	 */
 	@Override
 	protected void handleValues(final YamlConfiguration config) {
 
 		// maximumLoginAttempts. Default: 3.
 		// Possible values: positive integers
-		setMaximumLoginAttempts(config.getInt("maximumLoginAttempts", 3));
-		if (getMaximumLoginAttempts() < 1) {
-			wrongValue("config.yml", "maximumLoginAttempts", getMaximumLoginAttempts(), 3);
-			setMaximumLoginAttempts(3);
+		this.setMaximumLoginAttempts(config.getInt("maximumLoginAttempts", 3));
+		if (this.maximumLoginAttempts < 1) {
+			this.wrongValue("config.yml", "maximumLoginAttempts", this.maximumLoginAttempts, 3);
+			this.setMaximumLoginAttempts(3);
 		}
 
 		// tooManyAttemptsPunishment. Default: 1.
 		// Possible values: 0, 1, 2
-		setTooManyAttemptsPunishment(config.getInt("tooManyAttemptsPunishment", 1));
-		if (getTooManyAttemptsPunishment() < 0 || getTooManyAttemptsPunishment() > 2) {
-			wrongValue("config.yml", "tooManyAttemptsPunishment", getTooManyAttemptsPunishment(), 1);
-			setTooManyAttemptsPunishment(1);
+		this.setTooManyAttemptsPunishment(config.getInt("tooManyAttemptsPunishment", 1));
+		if (this.tooManyAttemptsPunishment < 0 || this.tooManyAttemptsPunishment > 2) {
+			this.wrongValue("config.yml", "tooManyAttemptsPunishment", this.tooManyAttemptsPunishment, 1);
+			this.setTooManyAttemptsPunishment(1);
 		}
 
 		// tooManyAttemptsPunishmentDuration. Default: 300.
 		// Possible values: positive integers
-		setTooManyAttemptsPunishmentDuration(config.getInt("tooManyAttemptsPunishmentDuration", 300));
-		if (getTooManyAttemptsPunishmentDuration() < 1) {
-			wrongValue("config.yml", "tooManyAttemptsPunishmentDuration", getTooManyAttemptsPunishmentDuration(), 300);
-			setTooManyAttemptsPunishmentDuration(300);
+		this.setTooManyAttemptsPunishmentDuration(config.getInt("tooManyAttemptsPunishmentDuration", 300));
+		if (this.tooManyAttemptsPunishmentDuration < 1) {
+			this.wrongValue("config.yml", "tooManyAttemptsPunishmentDuration", this.tooManyAttemptsPunishmentDuration, 300);
+			this.setTooManyAttemptsPunishmentDuration(300);
 		}
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.config.AbstractConfig#getConfigString()
-	 */
 	@Override
 	protected String getConfigString() {
 		final StringBuilder content = new StringBuilder();
@@ -77,7 +72,7 @@ public class Config extends AbstractConfig<NPlayer> {
 		// Maximum Login attempts
 		content.append("# Maximum login attempts before punishment. Possible values: Positive integers\n");
 		content.append("# Default : 3\n");
-		content.append("maximumLoginAttempts: " + getMaximumLoginAttempts() + "\n\n");
+		content.append("maximumLoginAttempts: " + this.maximumLoginAttempts + "\n\n");
 
 		// Too Many Attempts Punishment
 		content.append("# How do we punish people after too many attempts? Possible values: 0, 1, 2\n");
@@ -88,7 +83,7 @@ public class Config extends AbstractConfig<NPlayer> {
 		content.append("#       1 : Tempban\n");
 		content.append("#       2 : Ban\n");
 		content.append("#\n");
-		content.append("tooManyAttemptsPunishment: " + getTooManyAttemptsPunishment() + "\n\n");
+		content.append("tooManyAttemptsPunishment: " + this.tooManyAttemptsPunishment + "\n\n");
 
 		// Too Many Attempts Punishment Duration
 		content.append("# The duration of the punishment, if applicable. Possible values: Positive integers\n");
@@ -117,13 +112,13 @@ public class Config extends AbstractConfig<NPlayer> {
 		content.append("# You can use *any* strictly positive value you want, just be sure to convert it to seconds.\n");
 		content.append("# Note: only applies to TempBan punishment for now.\n");
 		content.append("#\n");
-		content.append("tooManyAttemptsPunishmentDuration: " + getTooManyAttemptsPunishmentDuration() + "\n\n");
+		content.append("tooManyAttemptsPunishmentDuration: " + this.tooManyAttemptsPunishmentDuration + "\n\n");
 
 		return content.toString();
 	}
 
 	public int getMaximumLoginAttempts() {
-		return maximumLoginAttempts;
+		return this.maximumLoginAttempts;
 	}
 
 	public void setMaximumLoginAttempts(final int maximumLoginAttempts) {
@@ -131,7 +126,7 @@ public class Config extends AbstractConfig<NPlayer> {
 	}
 
 	public int getTooManyAttemptsPunishment() {
-		return tooManyAttemptsPunishment;
+		return this.tooManyAttemptsPunishment;
 	}
 
 	public void setTooManyAttemptsPunishment(final int tooManyAttemptsPunishment) {
@@ -139,7 +134,7 @@ public class Config extends AbstractConfig<NPlayer> {
 	}
 
 	public int getTooManyAttemptsPunishmentDuration() {
-		return tooManyAttemptsPunishmentDuration;
+		return this.tooManyAttemptsPunishmentDuration;
 	}
 
 	public void setTooManyAttemptsPunishmentDuration(final int tooManyAttemptsPunishmentDuration) {

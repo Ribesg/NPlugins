@@ -15,11 +15,6 @@ import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.util.PlayerIdsUtil;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
-import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.util.Vector;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -36,6 +31,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
+
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.util.Vector;
 
 public class RegionDbPersistenceHandler {
 
@@ -229,7 +230,7 @@ public class RegionDbPersistenceHandler {
 		return attributes;
 	}
 
-	private static Rights readRights(final ConfigurationSection sec) throws InvalidConfigurationException {
+	private static Rights readRights(final ConfigurationSection sec) {
 		final Rights rights = new Rights();
 		if (sec.isConfigurationSection(RIGHTS)) {
 			final ConfigurationSection rightsSection = sec.getConfigurationSection(RIGHTS);
@@ -335,7 +336,7 @@ public class RegionDbPersistenceHandler {
 		sec.set(TYPE, region.getType().toString());
 		switch (region.getType()) {
 			case CUBOID:
-				final CuboidRegion cuboid = (CuboidRegion) region;
+				final CuboidRegion cuboid = (CuboidRegion)region;
 				sec.set(MIN_CORNER, cuboid.getMinCorner().toString());
 				sec.set(MAX_CORNER, cuboid.getMaxCorner().toString());
 				break;
@@ -356,7 +357,7 @@ public class RegionDbPersistenceHandler {
 				flags.add(f.toString());
 			}
 		}
-		if (flags.size() > 0) {
+		if (!flags.isEmpty()) {
 			parent.set(FLAGS, flags);
 		}
 	}

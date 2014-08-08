@@ -8,18 +8,20 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntheendagain.listener;
+
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ntheendagain.NTheEndAgain;
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
-import org.bukkit.World;
+
+import java.io.IOException;
+
+import org.bukkit.World.Environment;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
-
-import java.io.IOException;
 
 /**
  * Handles World Load and Unload events
@@ -31,7 +33,7 @@ public class WorldListener implements Listener {
 	private final NTheEndAgain plugin;
 
 	public WorldListener(final NTheEndAgain instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	/**
@@ -41,16 +43,16 @@ public class WorldListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onWorldLoad(final WorldLoadEvent event) {
-		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
-			plugin.getLogger().info("Additional End world detected: handling " + event.getWorld().getName());
-			final EndWorldHandler handler = new EndWorldHandler(plugin, event.getWorld());
+		if (event.getWorld().getEnvironment() == Environment.THE_END) {
+			this.plugin.getLogger().info("Additional End world detected: handling " + event.getWorld().getName());
+			final EndWorldHandler handler = new EndWorldHandler(this.plugin, event.getWorld());
 			try {
 				handler.loadConfig();
 				handler.loadChunks();
-				plugin.getWorldHandlers().put(handler.getCamelCaseWorldName(), handler);
+				this.plugin.getWorldHandlers().put(handler.getCamelCaseWorldName(), handler);
 				handler.init();
 			} catch (final IOException | InvalidConfigurationException e) {
-				plugin.getLogger().severe("An error occured, stacktrace follows:");
+				this.plugin.getLogger().severe("An error occured, stacktrace follows:");
 				e.printStackTrace();
 			}
 		}
@@ -63,14 +65,14 @@ public class WorldListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onWorldUnload(final WorldUnloadEvent event) {
-		if (event.getWorld().getEnvironment() == World.Environment.THE_END) {
-			plugin.getLogger().info("Handling " + event.getWorld().getName() + " unload");
-			final EndWorldHandler handler = plugin.getHandler(StringUtil.toLowerCamelCase(event.getWorld().getName()));
+		if (event.getWorld().getEnvironment() == Environment.THE_END) {
+			this.plugin.getLogger().info("Handling " + event.getWorld().getName() + " unload");
+			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(event.getWorld().getName()));
 			if (handler != null) {
 				try {
 					handler.unload(false);
 				} catch (final InvalidConfigurationException e) {
-					plugin.getLogger().severe("An error occured, stacktrace follows:");
+					this.plugin.getLogger().severe("An error occured, stacktrace follows:");
 					e.printStackTrace();
 				}
 			}

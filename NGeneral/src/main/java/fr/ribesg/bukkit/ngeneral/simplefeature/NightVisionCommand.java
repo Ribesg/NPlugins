@@ -8,10 +8,12 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.simplefeature;
+
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.ngeneral.NGeneral;
 import fr.ribesg.bukkit.ngeneral.Perms;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,24 +29,24 @@ public class NightVisionCommand implements CommandExecutor {
 
 	public NightVisionCommand(final NGeneral instance) {
 		this.plugin = instance;
-		plugin.setCommandExecutor(COMMAND, this);
+		this.plugin.setCommandExecutor(COMMAND, this);
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
 		if (command.getName().equals(COMMAND)) {
 			if (!Perms.hasNightVision(sender)) {
-				plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+				this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
 			} else if (!(sender instanceof Player)) {
-				plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+				this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 			} else {
-				final Player player = (Player) sender;
+				final Player player = (Player)sender;
 				if (player.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
 					player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-					plugin.sendMessage(player, MessageId.general_nightvision_disabled);
+					this.plugin.sendMessage(player, MessageId.general_nightvision_disabled);
 				} else {
-					player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, (int) TimeUtil.getInSeconds("1month"), 9, true), true);
-					plugin.sendMessage(player, MessageId.general_nightvision_enabled);
+					player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, (int)TimeUtil.getInSeconds("1month"), 9, true), true);
+					this.plugin.sendMessage(player, MessageId.general_nightvision_enabled);
 				}
 			}
 			return true;
@@ -52,5 +54,4 @@ public class NightVisionCommand implements CommandExecutor {
 			return false;
 		}
 	}
-
 }

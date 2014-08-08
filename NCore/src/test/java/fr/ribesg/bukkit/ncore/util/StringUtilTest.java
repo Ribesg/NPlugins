@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,5 +31,4 @@ public class StringUtilTest {
 		Assert.assertEquals(4, StringUtil.count(";;test;test;", ";"));
 		Assert.assertEquals(4, StringUtil.count(";;;;;;;;;", ";;"));
 	}
-
 }

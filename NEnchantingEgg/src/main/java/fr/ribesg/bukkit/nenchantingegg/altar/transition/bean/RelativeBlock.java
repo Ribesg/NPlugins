@@ -18,7 +18,7 @@ public class RelativeBlock extends RelativeLocation {
 	private final byte     blockData;
 
 	public RelativeBlock(final double x, final double y, final double z, final Material blockMaterial) {
-		this(x, y, z, blockMaterial, (byte) 0);
+		this(x, y, z, blockMaterial, (byte)0);
 	}
 
 	public RelativeBlock(final double x, final double y, final double z, final Material blockMaterial, final byte blockData) {
@@ -36,10 +36,10 @@ public class RelativeBlock extends RelativeLocation {
 	}
 
 	public byte getBlockData() {
-		return blockData;
+		return this.blockData;
 	}
 
 	public Material getBlockMaterial() {
-		return blockMaterial;
+		return this.blockMaterial;
 	}
 }

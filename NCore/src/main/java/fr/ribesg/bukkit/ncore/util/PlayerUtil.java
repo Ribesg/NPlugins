@@ -8,15 +8,18 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.util.BlockIterator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.util.BlockIterator;
 
 /**
  * Utility class containing various methods related to players.
@@ -34,12 +37,14 @@ public class PlayerUtil {
 	 * to target inclusive.
 	 * <p>
 	 * This is a direct translation of the following deprecated method:
-	 * {@link org.bukkit.entity.LivingEntity#getLineOfSight(java.util.HashSet, int)}
+	 * {@link LivingEntity#getLineOfSight(HashSet, int)}
 	 *
+	 * @param player      the player
 	 * @param transparent HashSet containing all transparent block IDs
 	 *                    (set to null for only air)
 	 * @param maxDistance this is the maximum distance to scan (may be
 	 *                    limited by server by at least 100 blocks, no less)
+	 * @param maxLength   maximum size of returned list
 	 *
 	 * @return list containing all blocks along the living entity's line
 	 * of sight
@@ -76,6 +81,7 @@ public class PlayerUtil {
 	 * This list contains all blocks from the living entity's eye position
 	 * to the block at distance distance inclusive.
 	 *
+	 * @param player   the player
 	 * @param distance this is the distance to scan (may be
 	 *                 limited by server by at least 100 blocks, no less)
 	 *
@@ -99,8 +105,9 @@ public class PlayerUtil {
 	 * Gets the block that the living entity has targeted.
 	 * <p>
 	 * This is a direct translation of the following deprecated method:
-	 * {@link org.bukkit.entity.LivingEntity#getTargetBlock(java.util.HashSet, int)}
+	 * {@link LivingEntity#getTargetBlock(HashSet, int)}
 	 *
+	 * @param player      the player
 	 * @param transparent HashSet containing all transparent block IDs
 	 *                    (set to null for only air)
 	 * @param maxDistance this is the maximum distance to scan (may be

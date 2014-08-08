@@ -3,44 +3,44 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>fr.ribesg.bukkit.nplugins</groupId>
-		<artifactId>NPlugins</artifactId>
-		<version>0.6.10-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>fr.ribesg.bukkit.nplugins</groupId>
+        <artifactId>NPlugins</artifactId>
+        <version>0.6.10-SNAPSHOT</version>
+    </parent>
 
-	<groupId>fr.ribesg.bukkit.nworld</groupId>
-	<artifactId>NWorld</artifactId>
-	<name>NWorld</name>
-	<version>0.6.10-SNAPSHOT</version>
+    <groupId>fr.ribesg.bukkit.nworld</groupId>
+    <artifactId>NWorld</artifactId>
+    <name>NWorld</name>
+    <version>0.6.10-SNAPSHOT</version>
 
-	<url>https://github.com/Ribesg/NPlugins/tree/master/NWorld</url>
+    <url>https://github.com/Ribesg/NPlugins/tree/master/NWorld</url>
 
-	<description>Multi-world plugin of the NPlugins suite</description>
+    <description>Multi-world plugin of the NPlugins suite</description>
 
-	<dependencies>
-		<dependency>
-			<groupId>fr.ribesg.bukkit.ncore</groupId>
-			<artifactId>NCore</artifactId>
-			<version>0.6.10-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>fr.ribesg.bukkit.ncore</groupId>
+            <artifactId>NCore</artifactId>
+            <version>0.6.10-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>replacer</artifactId>
-				<version>1.5.1</version>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>truezip-maven-plugin</artifactId>
-				<version>1.2</version>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>truezip-maven-plugin</artifactId>
+                <version>1.2</version>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

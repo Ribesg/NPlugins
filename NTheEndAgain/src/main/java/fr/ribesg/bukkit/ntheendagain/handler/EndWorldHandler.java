@@ -18,6 +18,14 @@ import fr.ribesg.bukkit.ntheendagain.task.SlowSoftRegeneratorTaskHandler;
 import fr.ribesg.bukkit.ntheendagain.task.UnexpectedDragonDeathHandlerTask;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunks;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -27,13 +35,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 public class EndWorldHandler {
 
@@ -64,43 +65,43 @@ public class EndWorldHandler {
 	 * @param world    the related World
 	 */
 	public EndWorldHandler(final NTheEndAgain instance, final World world) {
-		plugin = instance;
-		endWorld = world;
-		camelCaseWorldName = StringUtil.toLowerCamelCase(endWorld.getName());
-		chunks = new EndChunks(this, world.getName());
-		config = new Config(plugin, endWorld.getName());
-		dragons = new HashMap<>();
-		loadedDragons = new HashSet<>();
-		tasks = new HashSet<>();
-		respawnHandler = new RespawnHandler(this);
-		regenHandler = new RegenHandler(this);
-		slowSoftRegeneratorTaskHandler = null;
+		this.plugin = instance;
+		this.endWorld = world;
+		this.camelCaseWorldName = StringUtil.toLowerCamelCase(this.endWorld.getName());
+		this.chunks = new EndChunks(this, world.getName());
+		this.config = new Config(this.plugin, this.endWorld.getName());
+		this.dragons = new HashMap<>();
+		this.loadedDragons = new HashSet<>();
+		this.tasks = new HashSet<>();
+		this.respawnHandler = new RespawnHandler(this);
+		this.regenHandler = new RegenHandler(this);
+		this.slowSoftRegeneratorTaskHandler = null;
 
 		// Config is not yet loaded here
 	}
 
 	public void loadConfig() throws IOException, InvalidConfigurationException {
-		config.loadConfig(camelCaseWorldName + "Config.yml");
+		this.config.loadConfig(this.camelCaseWorldName + "Config.yml");
 	}
 
 	public void loadChunks() {
-		chunks.load(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
+		this.chunks.load(this.plugin.getConfigFilePath(this.camelCaseWorldName + "Chunks"));
 	}
 
 	public void saveConfig() throws IOException {
-		config.writeConfig(camelCaseWorldName + "Config.yml");
+		this.config.writeConfig(this.camelCaseWorldName + "Config.yml");
 	}
 
 	public void saveChunks() throws IOException {
-		chunks.write(plugin.getConfigFilePath(camelCaseWorldName + "Chunks"));
+		this.chunks.write(this.plugin.getConfigFilePath(this.camelCaseWorldName + "Chunks"));
 	}
 
 	public void initLater() {
-		Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+		Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
 
 			@Override
 			public void run() {
-				init();
+				fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler.this.init();
 			}
 		}, 1L);
 	}
@@ -114,34 +115,33 @@ public class EndWorldHandler {
 	public void init() {
 		// Config is now loaded
 
-		countEntities();
+		this.countEntities();
 
-		if (config.getRespawnType() == 3) {
-			respawnHandler.respawnNoRegen();
-		} else if (config.getRespawnType() == 6) {
-			if (config.getNextRespawnTaskTime() > System.currentTimeMillis()) {
-				tasks.add(Bukkit.getScheduler().runTaskLater(plugin, new BukkitRunnable() {
+		if (this.config.getRespawnType() == 3) {
+			this.respawnHandler.respawnNoRegen();
+		} else if (this.config.getRespawnType() == 6) {
+			if (this.config.getNextRespawnTaskTime() > System.currentTimeMillis()) {
+				this.tasks.add(Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
 
 					@Override
 					public void run() {
-						respawnHandler.respawn();
+						fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler.this.respawnHandler.respawn();
 					}
-				}, config.getNextRespawnTaskTime() / 1000 * 20));
+				}, this.config.getNextRespawnTaskTime() / 1000 * 20));
 			} else {
-				respawnHandler.respawn();
+				this.respawnHandler.respawn();
 			}
 		}
 
-		tasks.add(new UnexpectedDragonDeathHandlerTask(this).schedule(getPlugin()));
+		this.tasks.add(new UnexpectedDragonDeathHandlerTask(this).schedule(this.plugin));
 
-		if (config.getRespawnTimerMax() != 0 && (config.getRespawnType() == 4 || config.getRespawnType() == 5)) {
-			tasks.add(new RespawnTask(this).schedule(getPlugin()));
+		if (this.config.getRespawnTimerMax() != 0 && (this.config.getRespawnType() == 4 || this.config.getRespawnType() == 5)) {
+			this.tasks.add(new RespawnTask(this).schedule(this.plugin));
 		}
 
-		if (config.getRegenTimer() != 0 && (config.getRegenType() == 2 || config.getRegenType() == 3)) {
-			tasks.add(new RegenTask(this).schedule(getPlugin()));
+		if (this.config.getRegenTimer() != 0 && (this.config.getRegenType() == 2 || this.config.getRegenType() == 3)) {
+			this.tasks.add(new RegenTask(this).schedule(this.plugin));
 		}
-
 	}
 
 	/**
@@ -153,38 +153,38 @@ public class EndWorldHandler {
 	 * - Save configs
 	 */
 	public void unload(final boolean pluginDisabled) throws InvalidConfigurationException {
-		cancelTasks();
-		if (pluginDisabled && config.getHardRegenOnStop() == 1) {
-			getRegenHandler().hardRegenOnStop();
+		this.cancelTasks();
+		if (pluginDisabled && this.config.getHardRegenOnStop() == 1) {
+			this.regenHandler.hardRegenOnStop();
 		}
 		try {
 			// Reload-friendly lastExecTime storing in config file
-			final long nextRegenExecTime = getConfig().getNextRegenTaskTime();
-			final long nextRespawnExecTime = getConfig().getNextRespawnTaskTime();
-			loadConfig();
-			getConfig().setNextRegenTaskTime(getConfig().getRegenTimer() == 0 ? 0 : nextRegenExecTime);
-			getConfig().setNextRespawnTaskTime(getConfig().getRespawnTimerMax() == 0 ? 0 : nextRespawnExecTime);
-			saveConfig();
+			final long nextRegenExecTime = this.config.getNextRegenTaskTime();
+			final long nextRespawnExecTime = this.config.getNextRespawnTaskTime();
+			this.loadConfig();
+			this.config.setNextRegenTaskTime(this.config.getRegenTimer() == 0 ? 0 : nextRegenExecTime);
+			this.config.setNextRespawnTaskTime(this.config.getRespawnTimerMax() == 0 ? 0 : nextRespawnExecTime);
+			this.saveConfig();
 		} catch (final IOException e) {
-			plugin.getLogger().severe("An error occured, stacktrace follows:");
+			this.plugin.getLogger().severe("An error occured, stacktrace follows:");
 			e.printStackTrace();
-			plugin.getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
+			this.plugin.getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
 		}
 		try {
-			saveChunks();
+			this.saveChunks();
 		} catch (final IOException e) {
-			plugin.getLogger().severe("An error occured, stacktrace follows:");
+			this.plugin.getLogger().severe("An error occured, stacktrace follows:");
 			e.printStackTrace();
-			plugin.getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
-			plugin.getLogger().severe("/!\\ THIS MEANS THAT PROTECTED CHUNKS COULD BE REGENERATED ON NEXT REGEN IN THIS WORLD /!\\");
+			this.plugin.getLogger().severe("This error occured when NTheEndAgain tried to save " + e.getMessage() + ".yml");
+			this.plugin.getLogger().severe("/!\\ THIS MEANS THAT PROTECTED CHUNKS COULD BE REGENERATED ON NEXT REGEN IN THIS WORLD /!\\");
 		}
 	}
 
 	public void cancelTasks() {
-		for (final BukkitTask t : tasks) {
+		for (final BukkitTask t : this.tasks) {
 			t.cancel();
 		}
-		tasks.clear();
+		this.tasks.clear();
 	}
 
 	/**
@@ -193,30 +193,30 @@ public class EndWorldHandler {
 	 * - EnderCrystals
 	 */
 	private void countEntities() {
-		plugin.getLogger().info("Counting existing EDs in " + endWorld.getName() + "...");
-		for (final EndChunk c : getChunks().getSafeChunksList()) {
-			if (endWorld.isChunkLoaded(c.getX(), c.getZ())) {
-				final Chunk chunk = endWorld.getChunkAt(c.getX(), c.getZ());
+		this.plugin.getLogger().info("Counting existing EDs in " + this.endWorld.getName() + "...");
+		for (final EndChunk c : this.chunks.getSafeChunksList()) {
+			if (this.endWorld.isChunkLoaded(c.getX(), c.getZ())) {
+				final Chunk chunk = this.endWorld.getChunkAt(c.getX(), c.getZ());
 				for (final Entity e : chunk.getEntities()) {
 					if (e.getType() == EntityType.ENDER_DRAGON) {
-						final EnderDragon ed = (EnderDragon) e;
-						if (!getDragons().containsKey(ed.getUniqueId())) {
-							ed.setMaxHealth(getConfig().getEdHealth());
+						final EnderDragon ed = (EnderDragon)e;
+						if (!this.dragons.containsKey(ed.getUniqueId())) {
+							ed.setMaxHealth(this.config.getEdHealth());
 							ed.setHealth(ed.getMaxHealth());
-							getDragons().put(ed.getUniqueId(), new HashMap<String, Double>());
-							getLoadedDragons().add(ed.getUniqueId());
+							this.dragons.put(ed.getUniqueId(), new HashMap<String, Double>());
+							this.loadedDragons.add(ed.getUniqueId());
 						}
 					} else if (e.getType() == EntityType.ENDER_CRYSTAL) {
 						c.addCrystalLocation(e);
 					}
 				}
 			} else {
-				endWorld.loadChunk(c.getX(), c.getZ());
+				this.endWorld.loadChunk(c.getX(), c.getZ());
 				c.resetSavedDragons();
-				endWorld.unloadChunkRequest(c.getX(), c.getZ());
+				this.endWorld.unloadChunkRequest(c.getX(), c.getZ());
 			}
 		}
-		plugin.getLogger().info("Done, " + getNumberOfAliveEnderDragons() + " EnderDragon(s) found.");
+		this.plugin.getLogger().info("Done, " + this.getNumberOfAliveEnderDragons() + " EnderDragon(s) found.");
 	}
 
 	/**
@@ -228,11 +228,11 @@ public class EndWorldHandler {
 	 */
 	public void playerHitED(final UUID enderDragonID, final String playerName, final double dmg) {
 		final Map<String, Double> dragonMap;
-		if (!dragons.containsKey(enderDragonID)) {
+		if (!this.dragons.containsKey(enderDragonID)) {
 			dragonMap = new HashMap<>();
-			dragons.put(enderDragonID, dragonMap);
+			this.dragons.put(enderDragonID, dragonMap);
 		} else {
-			dragonMap = dragons.get(enderDragonID);
+			dragonMap = this.dragons.get(enderDragonID);
 		}
 		if (dragonMap.containsKey(playerName)) {
 			dragonMap.put(playerName, dragonMap.get(playerName) + dmg);
@@ -242,51 +242,51 @@ public class EndWorldHandler {
 	}
 
 	public EndChunks getChunks() {
-		return chunks;
+		return this.chunks;
 	}
 
 	public Config getConfig() {
-		return config;
+		return this.config;
 	}
 
 	public Map<UUID, Map<String, Double>> getDragons() {
-		return dragons;
+		return this.dragons;
 	}
 
 	public World getEndWorld() {
-		return endWorld;
+		return this.endWorld;
 	}
 
 	public Set<UUID> getLoadedDragons() {
-		return loadedDragons;
+		return this.loadedDragons;
 	}
 
 	public int getNumberOfAliveEnderDragons() {
-		return getLoadedDragons().size() + getChunks().getTotalSavedDragons();
+		return this.loadedDragons.size() + this.chunks.getTotalSavedDragons();
 	}
 
 	public NTheEndAgain getPlugin() {
-		return plugin;
+		return this.plugin;
 	}
 
 	public Set<BukkitTask> getTasks() {
-		return tasks;
+		return this.tasks;
 	}
 
 	public RespawnHandler getRespawnHandler() {
-		return respawnHandler;
+		return this.respawnHandler;
 	}
 
 	public RegenHandler getRegenHandler() {
-		return regenHandler;
+		return this.regenHandler;
 	}
 
 	public String getCamelCaseWorldName() {
-		return camelCaseWorldName;
+		return this.camelCaseWorldName;
 	}
 
 	public SlowSoftRegeneratorTaskHandler getSlowSoftRegeneratorTaskHandler() {
-		return slowSoftRegeneratorTaskHandler;
+		return this.slowSoftRegeneratorTaskHandler;
 	}
 
 	public void setSlowSoftRegeneratorTaskHandler(final SlowSoftRegeneratorTaskHandler slowSoftRegeneratorTaskHandler) {

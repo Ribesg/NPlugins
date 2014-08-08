@@ -8,9 +8,10 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util.inventory;
-import org.bukkit.Material;
 
 import java.lang.reflect.Field;
+
+import org.bukkit.Material;
 
 public class MaterialUtil {
 
@@ -18,11 +19,13 @@ public class MaterialUtil {
 	 * Gets a Material from a String, if able to recognize anything in the
 	 * String. For now, only checks for ID and Material enum value.
 	 * Note: For now, there is no real gain of this over using
-	 * {@link org.bukkit.Material#matchMaterial(String)}.
+	 * {@link Material#matchMaterial(String)}.
 	 *
 	 * @param idString the String representing a Material
 	 *
 	 * @return the associated Material or null if not found
+	 *
+	 * @throws InventoryUtilException if something goes wrong
 	 */
 	public static Material getMaterial(final String idString) throws InventoryUtilException {
 		try {
@@ -45,6 +48,8 @@ public class MaterialUtil {
 	 * @param material the Material to check
 	 *
 	 * @return true if deprecated, false otherwise
+	 *
+	 * @throws InventoryUtilException if something goes wrong
 	 */
 	public static boolean isMaterialDeprecated(final Material material) throws InventoryUtilException {
 		try {
@@ -54,5 +59,4 @@ public class MaterialUtil {
 			throw new InventoryUtilException("Material not found: " + material.name(), e);
 		}
 	}
-
 }

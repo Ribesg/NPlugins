@@ -20,15 +20,17 @@ import fr.ribesg.bukkit.nworld.world.GeneralWorld;
 import fr.ribesg.bukkit.nworld.world.GeneralWorld.WorldType;
 import fr.ribesg.bukkit.nworld.world.StockWorld;
 import fr.ribesg.bukkit.nworld.world.Worlds;
+
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
-import org.mcstats.Metrics;
 
-import java.io.IOException;
+import org.mcstats.Metrics;
 
 /**
  * The main plugin class.
@@ -55,9 +57,9 @@ public class NWorld extends NPlugin implements WorldNode {
 
 	@Override
 	public void loadMessages() throws IOException {
-		debug("Loading plugin Messages...");
-		if (!getDataFolder().isDirectory()) {
-			getDataFolder().mkdir();
+		this.debug("Loading plugin Messages...");
+		if (!this.getDataFolder().isDirectory()) {
+			this.getDataFolder().mkdir();
 		}
 
 		final Messages messages = new Messages();
@@ -68,29 +70,29 @@ public class NWorld extends NPlugin implements WorldNode {
 
 	@Override
 	public boolean onNodeEnable() {
-		worlds = new Worlds();
-		warps = new Warps();
+		this.worlds = new Worlds();
+		this.warps = new Warps();
 
 		// Config
 		try {
-			pluginConfig = new Config(this);
-			pluginConfig.loadConfig();
+			this.pluginConfig = new Config(this);
+			this.pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			getLogger().severe("An error occured, stacktrace follows:");
+			this.getLogger().severe("An error occured, stacktrace follows:");
 			e.printStackTrace();
-			getLogger().severe("This error occured when NWorld tried to load config.yml");
+			this.getLogger().severe("This error occured when NWorld tried to load config.yml");
 			return false;
 		}
 
-		worlds = pluginConfig.getWorlds();
-		warps = pluginConfig.getWarps();
+		this.worlds = this.pluginConfig.getWorlds();
+		this.warps = this.pluginConfig.getWarps();
 
 		// This loop will detect newly created worlds
 		// - Default main World, at first plugin start
 		// - Nether & End when activated
 		for (final World w : Bukkit.getWorlds()) {
-			warps.worldEnabled(w.getName());
-			if (!worlds.containsKey(w.getName())) {
+			this.warps.worldEnabled(w.getName());
+			if (!this.worlds.containsKey(w.getName())) {
 				WorldType type = null;
 				switch (w.getEnvironment()) {
 					case NORMAL:
@@ -103,13 +105,13 @@ public class NWorld extends NPlugin implements WorldNode {
 						type = WorldType.STOCK_END;
 						break;
 				}
-				final StockWorld world = new StockWorld(this, w.getName(), type, new NLocation(w.getSpawnLocation()), pluginConfig.getDefaultRequiredPermission(), true, false);
-				worlds.put(w.getName(), world);
+				final StockWorld world = new StockWorld(this, w.getName(), type, new NLocation(w.getSpawnLocation()), this.pluginConfig.getDefaultRequiredPermission(), true, false);
+				this.worlds.put(w.getName(), world);
 			}
 		}
 
 		// This loop will create/load additional worlds
-		for (final AdditionalWorld w : worlds.getAdditional().values()) {
+		for (final AdditionalWorld w : this.worlds.getAdditional().values()) {
 			if (w.isEnabled()) {
 				// Create (Load) the world
 				final WorldCreator creator = new WorldCreator(w.getWorldName());
@@ -122,7 +124,7 @@ public class NWorld extends NPlugin implements WorldNode {
 				world.setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 
 				// Check if some warps should be enabled
-				warps.worldEnabled(w.getWorldName());
+				this.warps.worldEnabled(w.getWorldName());
 
 				// Load Nether if needed
 				if (w.hasNether()) {
@@ -135,7 +137,7 @@ public class NWorld extends NPlugin implements WorldNode {
 					Bukkit.createWorld(netherCreator);
 
 					// Check if some warps should be enabled
-					warps.worldEnabled(netherName);
+					this.warps.worldEnabled(netherName);
 				}
 				// Load End if needed
 				if (w.hasEnd()) {
@@ -148,64 +150,61 @@ public class NWorld extends NPlugin implements WorldNode {
 					Bukkit.createWorld(endCreator);
 
 					// Check if some warps should be enabled
-					warps.worldEnabled(endName);
+					this.warps.worldEnabled(endName);
 				}
 			}
 		}
 
 		// Listener
-		final PluginManager pm = getServer().getPluginManager();
+		final PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new NListener(this), this);
 
 		// Commands
 		final WorldCommandExecutor executor = new WorldCommandExecutor(this);
-		setCommandExecutor("nworld", executor);
-		setCommandExecutor("spawn", executor);
-		setCommandExecutor("setspawn", executor);
-		setCommandExecutor("warp", executor);
-		setCommandExecutor("setwarp", executor);
-		setCommandExecutor("delwarp", executor);
+		this.setCommandExecutor("nworld", executor);
+		this.setCommandExecutor("spawn", executor);
+		this.setCommandExecutor("setspawn", executor);
+		this.setCommandExecutor("warp", executor);
+		this.setCommandExecutor("setwarp", executor);
+		this.setCommandExecutor("delwarp", executor);
 
 		// Metrics - Worlds
-		final Metrics.Graph g1 = getMetrics().createGraph("Amount of Worlds");
+		final Metrics.Graph g1 = this.getMetrics().createGraph("Amount of Worlds");
 		g1.addPlotter(new Metrics.Plotter("Normal") {
 
 			@Override
 			public int getValue() {
-				return getWorlds().sizeNormal();
+				return fr.ribesg.bukkit.nworld.NWorld.this.getWorlds().sizeNormal();
 			}
 		});
 		g1.addPlotter(new Metrics.Plotter("Nether") {
 
 			@Override
 			public int getValue() {
-				return getWorlds().sizeNether();
+				return fr.ribesg.bukkit.nworld.NWorld.this.getWorlds().sizeNether();
 			}
 		});
 		g1.addPlotter(new Metrics.Plotter("End") {
 
 			@Override
 			public int getValue() {
-				return getWorlds().sizeEnd();
+				return fr.ribesg.bukkit.nworld.NWorld.this.getWorlds().sizeEnd();
 			}
 		});
 
 		// Metrics - Warps
-		final Metrics.Graph g2 = getMetrics().createGraph("Amount of Warps");
+		final Metrics.Graph g2 = this.getMetrics().createGraph("Amount of Warps");
 		g2.addPlotter(new Metrics.Plotter() {
 
 			@Override
 			public int getValue() {
-				return getWarps().size();
+				return fr.ribesg.bukkit.nworld.NWorld.this.getWarps().size();
 			}
 		});
 
 		return true;
 	}
 
-	/**
-	 * @see fr.ribesg.bukkit.ncore.node.NPlugin#handleOtherNodes()
-	 */
 	@Override
 	protected void handleOtherNodes() {
 		// Nothing to do here for now
@@ -214,7 +213,7 @@ public class NWorld extends NPlugin implements WorldNode {
 	@Override
 	public void onNodeDisable() {
 		try {
-			getPluginConfig().writeConfig();
+			this.pluginConfig.writeConfig();
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
@@ -222,15 +221,15 @@ public class NWorld extends NPlugin implements WorldNode {
 
 	@Override
 	public Messages getMessages() {
-		return messages;
+		return this.messages;
 	}
 
 	public Config getPluginConfig() {
-		return pluginConfig;
+		return this.pluginConfig;
 	}
 
 	private boolean isMainWorld(final World world) {
-		return world != null && isMainWorld(world.getName());
+		return world != null && this.isMainWorld(world.getName());
 	}
 
 	private boolean isMainWorld(final String worldName) {
@@ -238,11 +237,11 @@ public class NWorld extends NPlugin implements WorldNode {
 	}
 
 	public Warps getWarps() {
-		return warps;
+		return this.warps;
 	}
 
 	public Worlds getWorlds() {
-		return worlds;
+		return this.worlds;
 	}
 
 	// API for other nodes
@@ -254,7 +253,7 @@ public class NWorld extends NPlugin implements WorldNode {
 
 	@Override
 	public Location getWorldSpawnLocation(final String worldName) {
-		final GeneralWorld world = worlds.get(worldName);
+		final GeneralWorld world = this.worlds.get(worldName);
 		return world == null ? null : world.getSpawnLocation().toBukkitLocation();
 	}
 }

@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ngeneral.feature.itemnetwork;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.ColorUtil;
@@ -18,6 +19,13 @@ import fr.ribesg.bukkit.ngeneral.config.Config;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.InventoryContent;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ItemNetwork;
 import fr.ribesg.bukkit.ngeneral.feature.itemnetwork.beans.ReceiverSign;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -38,22 +46,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 public class ItemNetworkListener implements Listener {
 
 	/**
 	 * First line of a INet Emitter sign
 	 */
-	private static final String ITEMNETWORK_EMITTER  = "[" + ChatColor.GREEN + "INet-Em" + ChatColor.BLACK + "]";
+	private static final String ITEMNETWORK_EMITTER  = "[" + ChatColor.GREEN + "INet-Em" + ChatColor.BLACK + ']';
 	/**
 	 * First line of a INet Receiver sign
 	 */
-	private static final String ITEMNETWORK_RECEIVER = "[" + ChatColor.GREEN + "INet-Re" + ChatColor.BLACK + "]";
+	private static final String ITEMNETWORK_RECEIVER = "[" + ChatColor.GREEN + "INet-Re" + ChatColor.BLACK + ']';
 	/**
 	 * Prefix of the INet sign owner name
 	 */
@@ -66,7 +68,7 @@ public class ItemNetworkListener implements Listener {
 	/**
 	 * First line of an Error sign
 	 */
-	private static final String ERROR = "[" + ChatColor.DARK_RED + "Error" + ChatColor.RESET + "]";
+	private static final String ERROR = "[" + ChatColor.DARK_RED + "Error" + ChatColor.RESET + ']';
 
 	/**
 	 * Set of String that players could write as first lines to say that it's a INet Emitter sign
@@ -114,7 +116,7 @@ public class ItemNetworkListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event) {
-		if (isChest(event.getClickedBlock()) && feature.isLocked(new NLocation(event.getClickedBlock().getLocation()))) {
+		if (this.isChest(event.getClickedBlock()) && this.feature.isLocked(new NLocation(event.getClickedBlock().getLocation()))) {
 			event.setCancelled(true);
 		}
 	}
@@ -124,13 +126,13 @@ public class ItemNetworkListener implements Listener {
 		final Inventory inventory = event.getInventory();
 		final InventoryHolder holder = inventory.getHolder();
 		if (holder instanceof Chest || holder instanceof DoubleChest) {
-			final BlockState chest = (BlockState) (holder instanceof Chest ? holder : ((DoubleChest) holder).getLeftSide());
+			final BlockState chest = (BlockState)(holder instanceof Chest ? holder : ((DoubleChest)holder).getLeftSide());
 			final Block block = chest.getBlock();
 			final NLocation loc = new NLocation(block.getLocation());
 			final List<Sign> signs = SignUtil.getSignsForChest(block);
 			for (final Sign sign : signs) {
 				if (sign.getLine(0).equals(ITEMNETWORK_EMITTER)) {
-					feature.lock(loc);
+					this.feature.lock(loc);
 				}
 			}
 		}
@@ -142,14 +144,14 @@ public class ItemNetworkListener implements Listener {
 			final Inventory inventory = event.getInventory();
 			final InventoryHolder holder = inventory.getHolder();
 			if (holder instanceof Chest || holder instanceof DoubleChest) {
-				final BlockState chest = (BlockState) (holder instanceof Chest ? holder : ((DoubleChest) holder).getLeftSide());
+				final BlockState chest = (BlockState)(holder instanceof Chest ? holder : ((DoubleChest)holder).getLeftSide());
 				final Block block = chest.getBlock();
 				final NLocation loc = new NLocation(block.getLocation());
 				final List<Sign> signs = SignUtil.getSignsForChest(block);
 				for (final Sign sign : signs) {
 					if (sign.getLine(0).equals(ITEMNETWORK_EMITTER)) {
 						final String networkName = ColorUtil.stripColorCodes(sign.getLine(1));
-						final ItemNetwork network = feature.getNetworks().get(networkName.toLowerCase());
+						final ItemNetwork network = this.feature.getNetworks().get(networkName.toLowerCase());
 						if (network != null) {
 							final List<ItemStack> items = new ArrayList<>();
 							for (final ItemStack is : inventory.getContents()) {
@@ -160,7 +162,7 @@ public class ItemNetworkListener implements Listener {
 							if (!items.isEmpty()) {
 								network.queue(new InventoryContent(loc, items));
 								inventory.clear();
-								feature.lock(loc);
+								this.feature.lock(loc);
 								return;
 							}
 							break;
@@ -169,7 +171,7 @@ public class ItemNetworkListener implements Listener {
 						}
 					}
 				}
-				feature.unlock(loc);
+				this.feature.unlock(loc);
 			}
 		}
 	}
@@ -181,22 +183,22 @@ public class ItemNetworkListener implements Listener {
 		final String cleanedFirstLine = ColorUtil.stripColorCodes(lines[0].toLowerCase());
 		if (getItemNetworkEmitterStrings().contains(cleanedFirstLine)) {
 			final String networkName = ColorUtil.stripColorCodes(lines[1].toLowerCase());
-			final ItemNetwork network = feature.getNetworks().get(networkName);
+			final ItemNetwork network = this.feature.getNetworks().get(networkName);
 			if (network == null) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtil.colorize(config.getItemNetworkSignUnknownNetworkMsgLine1()));
-				event.setLine(2, ColorUtil.colorize(config.getItemNetworkSignUnknownNetworkMsgLine2()));
-				event.setLine(3, ColorUtil.colorize(config.getItemNetworkSignUnknownNetworkMsgLine3()));
+				event.setLine(1, ColorUtil.colorize(this.config.getItemNetworkSignUnknownNetworkMsgLine1()));
+				event.setLine(2, ColorUtil.colorize(this.config.getItemNetworkSignUnknownNetworkMsgLine2()));
+				event.setLine(3, ColorUtil.colorize(this.config.getItemNetworkSignUnknownNetworkMsgLine3()));
 			} else if (!Perms.hasItemNetworkAll(player) && !player.getName().equalsIgnoreCase(network.getCreator())) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtil.colorize(config.getItemNetworkSignNotAllowedMsgLine1()));
-				event.setLine(2, ColorUtil.colorize(config.getItemNetworkSignNotAllowedMsgLine2()));
-				event.setLine(3, ColorUtil.colorize(config.getItemNetworkSignNotAllowedMsgLine3()));
+				event.setLine(1, ColorUtil.colorize(this.config.getItemNetworkSignNotAllowedMsgLine1()));
+				event.setLine(2, ColorUtil.colorize(this.config.getItemNetworkSignNotAllowedMsgLine2()));
+				event.setLine(3, ColorUtil.colorize(this.config.getItemNetworkSignNotAllowedMsgLine3()));
 			} else if (network.isTooFar(event.getBlock().getLocation())) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtil.colorize(config.getItemNetworkSignTooFarMsgLine1()));
-				event.setLine(2, ColorUtil.colorize(config.getItemNetworkSignTooFarMsgLine2()));
-				event.setLine(3, ColorUtil.colorize(config.getItemNetworkSignTooFarMsgLine3()));
+				event.setLine(1, ColorUtil.colorize(this.config.getItemNetworkSignTooFarMsgLine1()));
+				event.setLine(2, ColorUtil.colorize(this.config.getItemNetworkSignTooFarMsgLine2()));
+				event.setLine(3, ColorUtil.colorize(this.config.getItemNetworkSignTooFarMsgLine3()));
 			} else {
 				event.setLine(0, ITEMNETWORK_EMITTER);
 				event.setLine(1, SECONDARY_PREFIX + network.getName());
@@ -205,31 +207,31 @@ public class ItemNetworkListener implements Listener {
 			}
 		} else if (getItemNetworkReceiverStrings().contains(cleanedFirstLine)) {
 			final String networkName = ColorUtil.stripColorCodes(lines[1].toLowerCase());
-			final ItemNetwork network = feature.getNetworks().get(networkName);
+			final ItemNetwork network = this.feature.getNetworks().get(networkName);
 			if (network == null) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtil.colorize(config.getItemNetworkSignUnknownNetworkMsgLine1()));
-				event.setLine(2, ColorUtil.colorize(config.getItemNetworkSignUnknownNetworkMsgLine2()));
-				event.setLine(3, ColorUtil.colorize(config.getItemNetworkSignUnknownNetworkMsgLine3()));
+				event.setLine(1, ColorUtil.colorize(this.config.getItemNetworkSignUnknownNetworkMsgLine1()));
+				event.setLine(2, ColorUtil.colorize(this.config.getItemNetworkSignUnknownNetworkMsgLine2()));
+				event.setLine(3, ColorUtil.colorize(this.config.getItemNetworkSignUnknownNetworkMsgLine3()));
 			} else if (!Perms.hasItemNetworkAll(player) && !player.getName().equalsIgnoreCase(network.getCreator())) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtil.colorize(config.getItemNetworkSignNotAllowedMsgLine1()));
-				event.setLine(2, ColorUtil.colorize(config.getItemNetworkSignNotAllowedMsgLine2()));
-				event.setLine(3, ColorUtil.colorize(config.getItemNetworkSignNotAllowedMsgLine3()));
+				event.setLine(1, ColorUtil.colorize(this.config.getItemNetworkSignNotAllowedMsgLine1()));
+				event.setLine(2, ColorUtil.colorize(this.config.getItemNetworkSignNotAllowedMsgLine2()));
+				event.setLine(3, ColorUtil.colorize(this.config.getItemNetworkSignNotAllowedMsgLine3()));
 			} else if (network.isTooFar(event.getBlock().getLocation())) {
 				event.setLine(0, ERROR);
-				event.setLine(1, ColorUtil.colorize(config.getItemNetworkSignTooFarMsgLine1()));
-				event.setLine(2, ColorUtil.colorize(config.getItemNetworkSignTooFarMsgLine2()));
-				event.setLine(3, ColorUtil.colorize(config.getItemNetworkSignTooFarMsgLine3()));
+				event.setLine(1, ColorUtil.colorize(this.config.getItemNetworkSignTooFarMsgLine1()));
+				event.setLine(2, ColorUtil.colorize(this.config.getItemNetworkSignTooFarMsgLine2()));
+				event.setLine(3, ColorUtil.colorize(this.config.getItemNetworkSignTooFarMsgLine3()));
 			} else {
 				final String acceptedString = event.getLine(2);
 				try {
-					network.getReceivers().add(new ReceiverSign(feature.getPlugin(), new NLocation(event.getBlock().getLocation()), acceptedString));
-				} catch (IllegalArgumentException e) {
+					network.getReceivers().add(new ReceiverSign(this.feature.getPlugin(), new NLocation(event.getBlock().getLocation()), acceptedString));
+				} catch (final IllegalArgumentException e) {
 					event.setLine(0, ERROR);
-					event.setLine(1, ColorUtil.colorize(config.getItemNetworkSignInvalidMaterialsMsgLine1()));
-					event.setLine(2, ColorUtil.colorize(config.getItemNetworkSignInvalidMaterialsMsgLine2()));
-					event.setLine(3, ColorUtil.colorize(config.getItemNetworkSignInvalidMaterialsMsgLine3()));
+					event.setLine(1, ColorUtil.colorize(this.config.getItemNetworkSignInvalidMaterialsMsgLine1()));
+					event.setLine(2, ColorUtil.colorize(this.config.getItemNetworkSignInvalidMaterialsMsgLine2()));
+					event.setLine(3, ColorUtil.colorize(this.config.getItemNetworkSignInvalidMaterialsMsgLine3()));
 					return;
 				}
 				event.setLine(0, ITEMNETWORK_RECEIVER);
@@ -243,12 +245,12 @@ public class ItemNetworkListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockBreakCheck(final BlockBreakEvent event) {
 		if (SignUtil.isSign(event.getBlock())) {
-			final Sign sign = (Sign) event.getBlock().getState();
+			final Sign sign = (Sign)event.getBlock().getState();
 			final String line1 = sign.getLine(0);
 			if (line1.equals(ITEMNETWORK_EMITTER) || line1.equals(ITEMNETWORK_RECEIVER)) {
 				final String playerId = ColorUtil.stripColorCodes(sign.getLine(3));
 				if (!Perms.isAdmin(event.getPlayer()) && !PlayerIdsUtil.getId(event.getPlayer().getName()).equals(playerId)) {
-					feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_itemnetwork_youNeedToBeCreator);
+					this.feature.getPlugin().sendMessage(event.getPlayer(), MessageId.general_itemnetwork_youNeedToBeCreator);
 					event.setCancelled(true);
 				}
 			}
@@ -258,12 +260,12 @@ public class ItemNetworkListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onBlockBreakRecord(final BlockBreakEvent event) {
 		if (SignUtil.isSign(event.getBlock())) {
-			final Sign sign = (Sign) event.getBlock().getState();
+			final Sign sign = (Sign)event.getBlock().getState();
 			final String line1 = sign.getLine(0);
 			if (line1.equals(ITEMNETWORK_RECEIVER)) {
 				final String networkName = ColorUtil.stripColorCodes(sign.getLine(1));
 				final NLocation location = new NLocation(event.getBlock().getLocation());
-				final ItemNetwork network = feature.getNetworks().get(networkName);
+				final ItemNetwork network = this.feature.getNetworks().get(networkName);
 				if (network != null) {
 					final Iterator<ReceiverSign> it = network.getReceivers().iterator();
 					while (it.hasNext()) {

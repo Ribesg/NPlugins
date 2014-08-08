@@ -8,7 +8,9 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.common.logging;
+
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
@@ -29,7 +31,7 @@ public class FilterManager {
 	 * @param regex a regex String
 	 */
 	public void addRegexFilter(final String regex) {
-		addFilter(RegexFilter.createFilter(regex, "FALSE", "DENY", "NEUTRAL"));
+		this.addFilter(RegexFilter.createFilter(regex, "FALSE", "DENY", "NEUTRAL"));
 	}
 
 	/**
@@ -38,7 +40,7 @@ public class FilterManager {
 	 * @param denyFilter the filter
 	 */
 	public void addDenyFilter(final DenyFilter denyFilter) {
-		addFilter(new Log4jDenyFilter(denyFilter));
+		this.addFilter(new Log4jDenyFilter(denyFilter));
 	}
 
 	/**
@@ -46,8 +48,8 @@ public class FilterManager {
 	 *
 	 * @param log4jFilter a log4j filter
 	 */
-	private void addFilter(final org.apache.logging.log4j.core.Filter log4jFilter) {
-		final LoggerContext context = (LoggerContext) LogManager.getContext(false);
+	private void addFilter(final Filter log4jFilter) {
+		final LoggerContext context = (LoggerContext)LogManager.getContext(false);
 		final Configuration config = context.getConfiguration();
 		for (final LoggerConfig loggerConfig : config.getLoggers().values()) {
 			loggerConfig.addFilter(log4jFilter);
@@ -70,12 +72,13 @@ public class FilterManager {
 		 * @param denyFilter a DenyFilter
 		 */
 		private Log4jDenyFilter(final DenyFilter denyFilter) {
+			super();
 			this.denyFilter = denyFilter;
 		}
 
 		@Override
 		public Result filter(final LogEvent event) {
-			return denyFilter.denies(event.getMessage().getFormattedMessage()) ? Result.DENY : Result.NEUTRAL;
+			return this.denyFilter.denies(event.getMessage().getFormattedMessage()) ? Result.DENY : Result.NEUTRAL;
 		}
 	}
 }

@@ -12,9 +12,8 @@ package fr.ribesg.bukkit.ncuboid.beans;
 import fr.ribesg.bukkit.ncore.common.ChunkCoord;
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
+import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion.RegionState;
 import fr.ribesg.bukkit.ncuboid.config.GroupConfig;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,6 +24,9 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
+
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class RegionDb implements Iterable<GeneralRegion> {
 
@@ -37,16 +39,16 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	private final Map<String, WorldRegion>           byWorld;   // WorldName ; Region
 
 	public RegionDb(final NCuboid instance) {
-		byName = new HashMap<>();
-		byOwner = new HashMap<>();
-		tmpRegions = new HashMap<>();
-		byChunks = new HashMap<>();
-		byWorld = new HashMap<>();
-		plugin = instance;
+		this.byName = new HashMap<>();
+		this.byOwner = new HashMap<>();
+		this.tmpRegions = new HashMap<>();
+		this.byChunks = new HashMap<>();
+		this.byWorld = new HashMap<>();
+		this.plugin = instance;
 	}
 
 	public NCuboid getPlugin() {
-		return plugin;
+		return this.plugin;
 	}
 
 	// #################### //
@@ -54,46 +56,46 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	// #################### //
 
 	public void add(final PlayerRegion region) {
-		addByName(region);
-		addByOwner(region);
-		addByChunks(region);
+		this.addByName(region);
+		this.addByOwner(region);
+		this.addByChunks(region);
 		if (this.plugin.getDynmapBridge().isInitialized()) {
 			this.plugin.getDynmapBridge().handle(region);
 		}
 	}
 
 	public void addByName(final PlayerRegion region) {
-		byName.put(region.getRegionName(), region);
+		this.byName.put(region.getRegionName(), region);
 	}
 
 	public void addByOwner(final PlayerRegion region) {
 		final UUID id = region.getOwnerId();
-		if (byOwner.containsKey(id)) {
-			byOwner.get(id).add(region);
+		if (this.byOwner.containsKey(id)) {
+			this.byOwner.get(id).add(region);
 		} else {
 			final Set<PlayerRegion> newSet = new HashSet<>();
 			newSet.add(region);
-			byOwner.put(id, newSet);
+			this.byOwner.put(id, newSet);
 		}
 	}
 
 	public void addSelection(final PlayerRegion region) {
-		tmpRegions.put(region.getOwnerId(), region);
+		this.tmpRegions.put(region.getOwnerId(), region);
 	}
 
 	public void addByChunks(final PlayerRegion region) {
 		for (final ChunkCoord k : region.getChunks()) {
-			Set<PlayerRegion> set = byChunks.get(k);
+			Set<PlayerRegion> set = this.byChunks.get(k);
 			if (set == null) {
 				set = new HashSet<>(1);
-				byChunks.put(k, set);
+				this.byChunks.put(k, set);
 			}
 			set.add(region);
 		}
 	}
 
 	public void addByWorld(final WorldRegion region) {
-		byWorld.put("world_" + region.getWorldName(), region);
+		this.byWorld.put("world_" + region.getWorldName(), region);
 	}
 
 	// ###################### //
@@ -101,53 +103,53 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	// ###################### //
 
 	public void remove(final PlayerRegion region) {
-		removeByName(region);
-		removeByOwner(region);
-		removeByChunks(region);
+		this.removeByName(region);
+		this.removeByOwner(region);
+		this.removeByChunks(region);
 		if (this.plugin.getDynmapBridge().isInitialized()) {
 			this.plugin.getDynmapBridge().hide(region);
 		}
 	}
 
 	public void removeByName(final PlayerRegion region) {
-		if (byName.containsKey(region.getRegionName())) {
-			byName.remove(region.getRegionName());
+		if (this.byName.containsKey(region.getRegionName())) {
+			this.byName.remove(region.getRegionName());
 		}
 	}
 
 	public void removeByOwner(final PlayerRegion region) {
 		final UUID id = region.getOwnerId();
-		if (byOwner.containsKey(id)) {
-			final Set<PlayerRegion> set = byOwner.get(id);
+		if (this.byOwner.containsKey(id)) {
+			final Set<PlayerRegion> set = this.byOwner.get(id);
 			if (set.contains(region)) {
 				set.remove(region);
 			}
 			if (set.isEmpty()) {
-				byOwner.remove(id);
+				this.byOwner.remove(id);
 			}
 		}
 	}
 
 	public PlayerRegion removeSelection(final UUID id) {
-		return tmpRegions.remove(id);
+		return this.tmpRegions.remove(id);
 	}
 
 	public void removeByChunks(final PlayerRegion region) {
 		for (final ChunkCoord k : region.getChunks()) {
-			if (byChunks.containsKey(k)) {
-				final Set<PlayerRegion> set = byChunks.get(k);
+			if (this.byChunks.containsKey(k)) {
+				final Set<PlayerRegion> set = this.byChunks.get(k);
 				if (set.contains(region)) {
 					set.remove(region);
 				}
 				if (set.isEmpty()) {
-					byChunks.remove(k);
+					this.byChunks.remove(k);
 				}
 			}
 		}
 	}
 
 	public void removeByWorld(final String worldName) {
-		byWorld.remove("world_" + worldName);
+		this.byWorld.remove("world_" + worldName);
 	}
 
 	// ##################### //
@@ -155,7 +157,7 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	// ##################### //
 
 	public GeneralRegion getPriorByLocation(final Location loc) {
-		return getPrior(getAllByLocation(loc));
+		return this.getPrior(this.getAllByLocation(loc));
 	}
 
 	public GeneralRegion getPrior(final SortedSet<GeneralRegion> regions) {
@@ -167,19 +169,19 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	}
 
 	public SortedSet<GeneralRegion> getAllByLocation(final Location loc) {
-		return getAllByLocation(new NLocation(loc));
+		return this.getAllByLocation(new NLocation(loc));
 	}
 
 	public SortedSet<GeneralRegion> getAllByLocation(final NLocation loc) {
 		final ChunkCoord chunkKey = new ChunkCoord(loc);
 		final SortedSet<GeneralRegion> regions = new TreeSet<>();
-		if (byWorld.containsKey("world_" + loc.getWorldName())) {
-			regions.add(byWorld.get("world_" + loc.getWorldName()));
+		if (this.byWorld.containsKey("world_" + loc.getWorldName())) {
+			regions.add(this.byWorld.get("world_" + loc.getWorldName()));
 		}
-		if (!byChunks.containsKey(chunkKey)) {
+		if (!this.byChunks.containsKey(chunkKey)) {
 			return regions.isEmpty() ? null : regions;
 		} else {
-			regions.addAll(byChunks.get(chunkKey));
+			regions.addAll(this.byChunks.get(chunkKey));
 			final Iterator<GeneralRegion> it = regions.iterator();
 			while (it.hasNext()) {
 				if (!it.next().contains(loc)) {
@@ -191,28 +193,28 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	}
 
 	public GeneralRegion getByName(final String regionName) {
-		final GeneralRegion r = byName.get(regionName);
+		final GeneralRegion r = this.byName.get(regionName);
 		if (r == null && regionName.startsWith("world_")) {
-			return getByWorld(regionName.substring(6));
+			return this.getByWorld(regionName.substring(6));
 		} else {
 			return r;
 		}
 	}
 
 	public Set<PlayerRegion> getByOwner(final UUID id) {
-		return byOwner.get(id);
+		return this.byOwner.get(id);
 	}
 
 	public PlayerRegion getSelection(final UUID id) {
-		return tmpRegions.get(id);
+		return this.tmpRegions.get(id);
 	}
 
 	public WorldRegion getByWorld(final String worldName) {
-		return byWorld.get("world_" + worldName);
+		return this.byWorld.get("world_" + worldName);
 	}
 
 	public int size() {
-		return byName.size() + byWorld.size();
+		return this.byName.size() + this.byWorld.size();
 	}
 
 	// ##################################### //
@@ -257,37 +259,37 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		}
 
 		public CreationResultEnum getResult() {
-			return result;
+			return this.result;
 		}
 
 		/**
 		 * Only available if OVERLAP result
 		 */
 		public GeneralRegion getRegion() {
-			return region;
+			return this.region;
 		}
 
 		public int getMaxValue() {
-			return maxValue;
+			return this.maxValue;
 		}
 
 		public long getValue() {
-			return value;
+			return this.value;
 		}
 	}
 
 	public CreationResult canCreate(final Player player) {
 		final UUID id = player.getUniqueId();
-		final GroupConfig config = plugin.getPluginConfig().getGroupConfig(player);
-		final PlayerRegion r = getSelection(id);
+		final GroupConfig config = this.plugin.getPluginConfig().getGroupConfig(player);
+		final PlayerRegion r = this.getSelection(id);
 
-		if (r == null || r.getState() != PlayerRegion.RegionState.TMPSTATE2) {
+		if (r == null || r.getState() != RegionState.TMPSTATE2) {
 			return new CreationResult(CreationResultEnum.DENIED_NO_SELECTION);
 		}
 
 		// Amount of regions
 		if (config.getMaxRegionNb() != -1) {
-			final int nbRegion = getByOwner(id) == null ? 0 : getByOwner(id).size();
+			final int nbRegion = this.getByOwner(id) == null ? 0 : this.getByOwner(id).size();
 			if (nbRegion >= config.getMaxRegionNb()) {
 				return new CreationResult(CreationResultEnum.DENIED_TOO_MUCH, config.getMaxRegionNb(), nbRegion);
 			}
@@ -308,14 +310,14 @@ public class RegionDb implements Iterable<GeneralRegion> {
 		}
 
 		// Overlaping with other cuboids
-		final WorldRegion worldRegion = getByWorld(r.getWorldName());
+		final WorldRegion worldRegion = this.getByWorld(r.getWorldName());
 		if (worldRegion != null && !worldRegion.isUser(player)) {
 			return new CreationResult(CreationResultEnum.DENIED_OVERLAP, worldRegion);
 		}
 		final Set<PlayerRegion> potentiallyOverlappingRegions = new HashSet<>();
 		for (final ChunkCoord c : r.getChunks()) {
-			if (byChunks.containsKey(c)) {
-				for (final PlayerRegion pr : byChunks.get(c)) {
+			if (this.byChunks.containsKey(c)) {
+				for (final PlayerRegion pr : this.byChunks.get(c)) {
 					potentiallyOverlappingRegions.add(pr);
 				}
 			}
@@ -334,11 +336,11 @@ public class RegionDb implements Iterable<GeneralRegion> {
 	// ############################ //
 
 	public Iterator<PlayerRegion> playerRegionsIterator() {
-		return byName.values().iterator();
+		return this.byName.values().iterator();
 	}
 
 	public Iterator<WorldRegion> worldRegionsIterator() {
-		return byWorld.values().iterator();
+		return this.byWorld.values().iterator();
 	}
 
 	@Override
@@ -350,15 +352,15 @@ public class RegionDb implements Iterable<GeneralRegion> {
 
 			@Override
 			public boolean hasNext() {
-				return playerRegionsIterator.hasNext() || worldRegionsIterator.hasNext();
+				return this.playerRegionsIterator.hasNext() || this.worldRegionsIterator.hasNext();
 			}
 
 			@Override
 			public GeneralRegion next() {
-				if (playerRegionsIterator.hasNext()) {
-					return playerRegionsIterator.next();
-				} else if (worldRegionsIterator.hasNext()) {
-					return worldRegionsIterator.next();
+				if (this.playerRegionsIterator.hasNext()) {
+					return this.playerRegionsIterator.next();
+				} else if (this.worldRegionsIterator.hasNext()) {
+					return this.worldRegionsIterator.next();
 				} else {
 					throw new NoSuchElementException();
 				}

@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.nenchantingegg.altar.transition.step;
 
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeSound;
+
 import org.bukkit.Location;
 
 public class SoundStep extends Step {
@@ -19,12 +20,12 @@ public class SoundStep extends Step {
 
 	public SoundStep(final int delay, final RelativeSound effect) {
 		super(delay);
-		sound = effect;
+		this.sound = effect;
 	}
 
 	@Override
 	public void doStep(final Altar altar) {
-		final Location loc = altar.getCenterLocation().toBukkitLocation().add(sound.getRelativeLocation());
-		loc.getWorld().playSound(loc, sound.getSound(), sound.getVolume(), sound.getPitch());
+		final Location loc = altar.getCenterLocation().toBukkitLocation().add(this.sound.getRelativeLocation());
+		loc.getWorld().playSound(loc, this.sound.getSound(), this.sound.getVolume(), this.sound.getPitch());
 	}
 }

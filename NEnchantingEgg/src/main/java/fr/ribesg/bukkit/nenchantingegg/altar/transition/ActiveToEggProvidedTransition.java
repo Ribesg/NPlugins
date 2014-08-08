@@ -18,12 +18,13 @@ import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeSkullBlock;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.BlockStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.LightningStep;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.step.Step;
-import org.bukkit.Material;
-import org.bukkit.SkullType;
-import org.bukkit.block.BlockFace;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import org.bukkit.Material;
+import org.bukkit.SkullType;
+import org.bukkit.block.BlockFace;
 
 // TODO
 public class ActiveToEggProvidedTransition extends Transition {
@@ -34,8 +35,8 @@ public class ActiveToEggProvidedTransition extends Transition {
 
 	@Override
 	protected void setFromToStates() {
-		fromState = AltarState.ACTIVE;
-		toState = AltarState.EGG_PROVIDED;
+		this.fromState = AltarState.ACTIVE;
+		this.toState = AltarState.EGG_PROVIDED;
 	}
 
 	@Override

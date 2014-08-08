@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.nenchantingegg.altar.transition.step;
 
 import fr.ribesg.bukkit.nenchantingegg.altar.Altar;
 import fr.ribesg.bukkit.nenchantingegg.altar.transition.bean.RelativeLocation;
+
 import org.bukkit.Location;
 
 public class ExplosionStep extends Step {
@@ -25,10 +26,9 @@ public class ExplosionStep extends Step {
 	@Override
 	public void doStep(final Altar altar) {
 		final Location centerLocation = altar.getCenterLocation().toBukkitLocation();
-		final double x = centerLocation.getX() + loc.getRelativeLocation().getX();
-		final double y = centerLocation.getY() + loc.getRelativeLocation().getY();
-		final double z = centerLocation.getZ() + loc.getRelativeLocation().getZ();
+		final double x = centerLocation.getX() + this.loc.getRelativeLocation().getX();
+		final double y = centerLocation.getY() + this.loc.getRelativeLocation().getY();
+		final double z = centerLocation.getZ() + this.loc.getRelativeLocation().getZ();
 		altar.getCenterLocation().getWorld().createExplosion(x, y, z, 5f, false, false);
 	}
-
 }

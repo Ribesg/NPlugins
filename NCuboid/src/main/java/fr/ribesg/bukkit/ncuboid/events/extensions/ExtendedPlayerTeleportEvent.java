@@ -12,10 +12,11 @@ package fr.ribesg.bukkit.ncuboid.events.extensions;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.events.AbstractExtendedEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Set;
 import java.util.SortedSet;
+
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class ExtendedPlayerTeleportEvent extends AbstractExtendedEvent {
 
@@ -26,25 +27,25 @@ public class ExtendedPlayerTeleportEvent extends AbstractExtendedEvent {
 
 	public ExtendedPlayerTeleportEvent(final RegionDb db, final PlayerTeleportEvent event) {
 		super(db.getPlugin(), event);
-		fromRegions = db.getAllByLocation(event.getFrom());
-		fromRegion = db.getPrior(fromRegions);
-		toRegions = db.getAllByLocation(event.getTo());
-		toRegion = db.getPrior(toRegions);
+		this.fromRegions = db.getAllByLocation(event.getFrom());
+		this.fromRegion = db.getPrior(this.fromRegions);
+		this.toRegions = db.getAllByLocation(event.getTo());
+		this.toRegion = db.getPrior(this.toRegions);
 	}
 
 	public GeneralRegion getFromRegion() {
-		return fromRegion;
+		return this.fromRegion;
 	}
 
 	public Set<GeneralRegion> getFromRegions() {
-		return fromRegions;
+		return this.fromRegions;
 	}
 
 	public GeneralRegion getToRegion() {
-		return toRegion;
+		return this.toRegion;
 	}
 
 	public Set<GeneralRegion> getToRegions() {
-		return toRegions;
+		return this.toRegions;
 	}
 }

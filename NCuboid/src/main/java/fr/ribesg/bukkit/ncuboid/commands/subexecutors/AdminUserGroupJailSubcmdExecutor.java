@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
@@ -16,15 +17,17 @@ import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion;
+import fr.ribesg.bukkit.ncuboid.beans.GeneralRegion.RegionType;
 import fr.ribesg.bukkit.ncuboid.beans.Jail;
 import fr.ribesg.bukkit.ncuboid.beans.PlayerRegion;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
+
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 
@@ -42,16 +45,16 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 		this.mode = mode;
 		switch (mode) {
 			case ADMIN:
-				setUsage(ChatColor.RED + "Usage : /ncuboid admin <regionName> add|del <playerName>[,playerName]");
+				this.setUsage(ChatColor.RED + "Usage : /ncuboid admin <regionName> add|del <playerName>[,playerName]");
 				break;
 			case USER:
-				setUsage(ChatColor.RED + "Usage : /ncuboid user <regionName> add|del <playerName>[,playerName]");
+				this.setUsage(ChatColor.RED + "Usage : /ncuboid user <regionName> add|del <playerName>[,playerName]");
 				break;
 			case GROUP:
-				setUsage(ChatColor.RED + "Usage : /ncuboid group <regionName> add|del <groupName>[,groupName]");
+				this.setUsage(ChatColor.RED + "Usage : /ncuboid group <regionName> add|del <groupName>[,groupName]");
 				break;
 			case JAIL:
-				setUsage(ChatColor.RED + "Usage : /ncuboid jail <regionName> add|del <jailName>");
+				this.setUsage(ChatColor.RED + "Usage : /ncuboid jail <regionName> add|del <jailName>");
 				break;
 		}
 	}
@@ -61,15 +64,15 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 		if (args.length != 3) {
 			return false;
 		} else {
-			switch (mode) {
+			switch (this.mode) {
 				case ADMIN:
-					return execAdmin(sender, args);
+					return this.execAdmin(sender, args);
 				case USER:
-					return execUser(sender, args);
+					return this.execUser(sender, args);
 				case GROUP:
-					return execGroup(sender, args);
+					return this.execGroup(sender, args);
 				case JAIL:
-					return execJail(sender, args);
+					return this.execJail(sender, args);
 				default:
 					return false; // Dead code
 			}
@@ -79,18 +82,18 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 	private boolean execAdmin(final CommandSender sender, final String[] args) {
 		if (Perms.hasAdmin(sender)) {
 			// Get region, check rights on region
-			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
+			final GeneralRegion c = this.getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
 			}
-			if (!Perms.isAdmin(sender) && (c.getType() == GeneralRegion.RegionType.WORLD || !(sender instanceof Player && ((PlayerRegion) c).isOwner((Player) sender)))) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidOwner, c.getRegionName());
+			if (!Perms.isAdmin(sender) && (c.getType() == RegionType.WORLD || !(sender instanceof Player && ((PlayerRegion)c).isOwner((Player)sender)))) {
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidOwner, c.getRegionName());
 				return true;
 			}
 
 			// Get required action
-			final Boolean add = getAction(args[1]);
+			final Boolean add = this.getAction(args[1]);
 			if (add == null) {
 				return false;
 			}
@@ -100,27 +103,27 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 				final Player player = Bukkit.getPlayer(name);
 				final UUID id = player == null ? UuidDb.getId(Node.CUBOID, name) : player.getUniqueId();
 				if (id == null) {
-					getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
+					this.getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 				} else if (add) {
 					if (c.isAdminId(id)) {
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdAdminAlreadyAdmin, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdAdminAlreadyAdmin, name, c.getRegionName());
 					} else {
 						c.addAdmin(id);
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdAdminAdded, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdAdminAdded, name, c.getRegionName());
 					}
 				} else {
 					if (!c.isAdminId(id)) {
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdAdminNotAdmin, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdAdminNotAdmin, name, c.getRegionName());
 						return true;
 					} else {
 						c.removeAdmin(id);
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdAdminRemoved, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdAdminRemoved, name, c.getRegionName());
 					}
 				}
 			}
 			return true;
 		} else {
-			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+			this.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
 	}
@@ -128,18 +131,18 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 	private boolean execUser(final CommandSender sender, final String[] args) {
 		if (Perms.hasUser(sender)) {
 			// Get region, check rights on region
-			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
+			final GeneralRegion c = this.getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
 			}
-			if (!Perms.isAdmin(sender) && !(sender instanceof Player && c.isAdmin((Player) sender))) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidOwner, c.getRegionName());
+			if (!Perms.isAdmin(sender) && !(sender instanceof Player && c.isAdmin((Player)sender))) {
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidOwner, c.getRegionName());
 				return true;
 			}
 
 			// Get required action
-			final Boolean add = getAction(args[1]);
+			final Boolean add = this.getAction(args[1]);
 			if (add == null) {
 				return false;
 			}
@@ -149,27 +152,27 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 				final Player player = Bukkit.getPlayer(name);
 				final UUID id = player == null ? UuidDb.getId(Node.CUBOID, name) : player.getUniqueId();
 				if (id == null) {
-					getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
+					this.getPlugin().sendMessage(sender, MessageId.noPlayerFoundForGivenName, name);
 				} else if (add) {
 					if (c.isUserId(id)) {
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdUserAlreadyUser, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdUserAlreadyUser, name, c.getRegionName());
 					} else {
 						c.addUser(id);
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdUserAdded, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdUserAdded, name, c.getRegionName());
 					}
 				} else {
 					if (!c.isUserId(id)) {
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdUserNotUser, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdUserNotUser, name, c.getRegionName());
 						return true;
 					} else {
 						c.removeUser(id);
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdUserRemoved, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdUserRemoved, name, c.getRegionName());
 					}
 				}
 			}
 			return true;
 		} else {
-			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+			this.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
 	}
@@ -177,18 +180,18 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 	private boolean execGroup(final CommandSender sender, final String[] args) {
 		if (Perms.hasGroup(sender)) {
 			// Get region, check rights on region
-			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
+			final GeneralRegion c = this.getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
 			}
-			if (!Perms.isAdmin(sender) && !(sender instanceof Player && c.isAdmin((Player) sender))) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidOwner, c.getRegionName());
+			if (!Perms.isAdmin(sender) && !(sender instanceof Player && c.isAdmin((Player)sender))) {
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidOwner, c.getRegionName());
 				return true;
 			}
 
 			// Get required action
-			final Boolean add = getAction(args[1]);
+			final Boolean add = this.getAction(args[1]);
 			if (add == null) {
 				return false;
 			}
@@ -197,24 +200,24 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 			for (final String name : args[2].toLowerCase().split(",")) {
 				if (add) {
 					if (c.isAllowedGroup(name)) {
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupAlreadyGroup, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupAlreadyGroup, name, c.getRegionName());
 					} else {
 						c.allowGroup(name);
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupAdded, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupAdded, name, c.getRegionName());
 					}
 				} else {
 					if (!c.isAllowedGroup(name)) {
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupNotGroup, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupNotGroup, name, c.getRegionName());
 						return true;
 					} else {
 						c.denyGroup(name);
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupRemoved, name, c.getRegionName());
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdGroupRemoved, name, c.getRegionName());
 					}
 				}
 			}
 			return true;
 		} else {
-			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+			this.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
 	}
@@ -222,22 +225,22 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 	private boolean execJail(final CommandSender sender, final String[] args) {
 		if (Perms.hasJail(sender)) {
 			// Get region, check rights on region
-			final GeneralRegion c = getPlugin().getDb().getByName(args[0]);
+			final GeneralRegion c = this.getPlugin().getDb().getByName(args[0]);
 			if (c == null) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_doesNotExist, args[0]);
 				return true;
 			}
-			if (!Perms.isAdmin(sender) && !(sender instanceof Player && c.isAdmin((Player) sender))) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidAdmin, c.getRegionName());
+			if (!Perms.isAdmin(sender) && !(sender instanceof Player && c.isAdmin((Player)sender))) {
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_notCuboidAdmin, c.getRegionName());
 				return true;
 			}
 			if (!c.getFlag(Flag.JAIL)) {
-				getPlugin().sendMessage(sender, MessageId.cuboid_cmdJailNotJailCuboid, c.getRegionName());
+				this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdJailNotJailCuboid, c.getRegionName());
 				return true;
 			}
 
 			// Get required action
-			final Boolean add = getAction(args[1]);
+			final Boolean add = this.getAction(args[1]);
 			if (add == null) {
 				return false;
 			}
@@ -245,32 +248,32 @@ public class AdminUserGroupJailSubcmdExecutor extends AbstractSubcmdExecutor {
 			// Do the stuff
 			if (add) {
 				if (!(sender instanceof Player)) {
-					getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+					this.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
 				} else {
-					final Player player = (Player) sender;
+					final Player player = (Player)sender;
 					final String jailName = args[2];
 					final NLocation location = new NLocation(player.getLocation());
 					if (!c.contains(location)) {
-						getPlugin().sendMessage(player, MessageId.cuboid_cmdJailNotInRegion, location.toString(), c.getRegionName());
+						this.getPlugin().sendMessage(player, MessageId.cuboid_cmdJailNotInRegion, location.toString(), c.getRegionName());
 					} else {
-						if (getPlugin().getJails().add(new Jail(jailName, location, c))) {
-							getPlugin().sendMessage(player, MessageId.cuboid_cmdJailCreated, jailName, c.getRegionName(), location.toString());
+						if (this.getPlugin().getJails().add(new Jail(jailName, location, c))) {
+							this.getPlugin().sendMessage(player, MessageId.cuboid_cmdJailCreated, jailName, c.getRegionName(), location.toString());
 						} else {
-							getPlugin().sendMessage(player, MessageId.cuboid_cmdJailAlreadyExists, jailName);
+							this.getPlugin().sendMessage(player, MessageId.cuboid_cmdJailAlreadyExists, jailName);
 						}
 					}
 				}
 			} else {
 				final String jailName = args[2];
-				if (getPlugin().getJails().remove(jailName)) {
-					getPlugin().sendMessage(sender, MessageId.cuboid_cmdJailRemoved, jailName);
+				if (this.getPlugin().getJails().remove(jailName)) {
+					this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdJailRemoved, jailName);
 				} else {
-					getPlugin().sendMessage(sender, MessageId.cuboid_cmdJailUnknown, jailName);
+					this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdJailUnknown, jailName);
 				}
 			}
 			return true;
 		} else {
-			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+			this.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
 	}

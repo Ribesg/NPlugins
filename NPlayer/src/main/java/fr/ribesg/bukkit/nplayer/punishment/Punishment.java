@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.nplayer.punishment;
+
 public abstract class Punishment {
 
 	protected final String         punished;
@@ -27,39 +28,39 @@ public abstract class Punishment {
 	}
 
 	public boolean isPermanent() {
-		return endDate < 0;
+		return this.endDate < 0;
 	}
 
 	public long getEndDate() {
-		return endDate;
+		return this.endDate;
 	}
 
 	public boolean isStillActive() {
-		if (isPermanent()) {
+		if (this.isPermanent()) {
 			throw new UnsupportedOperationException();
 		}
-		return getEndDate() > System.currentTimeMillis();
+		return this.endDate > System.currentTimeMillis();
 	}
 
 	public PunishmentType getType() {
-		return type;
+		return this.type;
 	}
 
 	public String getPunished() {
-		return punished;
+		return this.punished;
 	}
 
 	public String getReason() {
-		return reason;
+		return this.reason;
 	}
 
 	@Override
 	public String toString() {
 		return "Punishment{" +
-		       "punished='" + punished + '\'' +
-		       ", type=" + type +
-		       ", endDate=" + endDate +
-		       ", reason='" + reason + '\'' +
+		       "punished='" + this.punished + '\'' +
+		       ", type=" + this.type +
+		       ", endDate=" + this.endDate +
+		       ", reason='" + this.reason + '\'' +
 		       '}';
 	}
 }

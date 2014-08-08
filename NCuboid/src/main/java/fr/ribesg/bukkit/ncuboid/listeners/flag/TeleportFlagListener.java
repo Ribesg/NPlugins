@@ -13,6 +13,7 @@ import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import fr.ribesg.bukkit.ncuboid.events.extensions.ExtendedPlayerTeleportEvent;
 import fr.ribesg.bukkit.ncuboid.listeners.AbstractListener;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -25,7 +26,7 @@ public class TeleportFlagListener extends AbstractListener {
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerTeleport(final ExtendedPlayerTeleportEvent ext) {
-		final PlayerTeleportEvent event = (PlayerTeleportEvent) ext.getBaseEvent();
+		final PlayerTeleportEvent event = (PlayerTeleportEvent)ext.getBaseEvent();
 		if (ext.getFromRegion() != null && ext.getFromRegion().getFlag(Flag.TELEPORT)) {
 			event.setCancelled(true);
 		} else if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.TELEPORT)) {

@@ -8,9 +8,12 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.util;
+
 import java.util.Date;
 
-/** @author Ribesg */
+/**
+ * @author Ribesg
+ */
 public class DateUtil {
 
 	public static Date now() {

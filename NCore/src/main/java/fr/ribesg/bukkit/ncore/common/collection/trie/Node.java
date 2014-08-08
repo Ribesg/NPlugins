@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.common.collection.trie;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;

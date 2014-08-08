@@ -27,6 +27,14 @@ import fr.ribesg.bukkit.ncore.updater.Updater;
 import fr.ribesg.bukkit.ncore.updater.UpdaterListener;
 import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -35,14 +43,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.mcstats.Metrics;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.mcstats.Metrics;
 
 /**
  * The Core of the N Plugin Suite
@@ -59,7 +61,7 @@ public class NCore extends JavaPlugin {
 	private Config            pluginConfig;
 	private UuidDb            uuidDb;
 	private Updater           updater;
-	private boolean debugEnabled = false;
+	private boolean           debugEnabled;
 
 	@Override
 	public void onEnable() {
@@ -67,29 +69,29 @@ public class NCore extends JavaPlugin {
 		this.filterManager = new FilterManager();
 
 		try {
-			metrics = new Metrics(this);
+			this.metrics = new Metrics(this);
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 
 		// Config
 		try {
-			pluginConfig = new Config(this);
-			pluginConfig.loadConfig();
+			this.pluginConfig = new Config(this);
+			this.pluginConfig.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			logger.log(Level.SEVERE, "An error occured when NCore tried to load config.yml", e);
+			this.logger.log(Level.SEVERE, "An error occured when NCore tried to load config.yml", e);
 		}
 
-		if (pluginConfig.getDebugEnabled().contains(getName())) {
+		if (this.pluginConfig.getDebugEnabled().contains(this.getName())) {
 			this.debugEnabled = true;
-			info("DEBUG MODE ENABLED!");
+			this.info("DEBUG MODE ENABLED!");
 		}
 
 		try {
-			uuidDb = new UuidDb(this);
-			uuidDb.loadConfig();
+			this.uuidDb = new UuidDb(this);
+			this.uuidDb.loadConfig();
 		} catch (final IOException | InvalidConfigurationException e) {
-			logger.log(Level.SEVERE, "An error occured when NCore tried to load uuidDb.yml", e);
+			this.logger.log(Level.SEVERE, "An error occured when NCore tried to load uuidDb.yml", e);
 		}
 
 		this.nodes = new HashMap<>();
@@ -98,7 +100,7 @@ public class NCore extends JavaPlugin {
 
 			@Override
 			public void run() {
-				afterNodesLoad();
+				fr.ribesg.bukkit.ncore.NCore.this.afterNodesLoad();
 			}
 		}, 5 * 20L /* ~5 seconds */);
 
@@ -109,15 +111,15 @@ public class NCore extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		try {
-			uuidDb.writeConfig();
+			this.uuidDb.writeConfig();
 		} catch (final IOException e) {
-			logger.log(Level.SEVERE, "An error occured when NCore tried to save uuidDb.yml", e);
+			this.logger.log(Level.SEVERE, "An error occured when NCore tried to save uuidDb.yml", e);
 		}
 	}
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
-		if (cmd.getName().equals("debug")) {
+		if ("debug".equals(cmd.getName())) {
 			if (!Perms.hasDebug(sender)) {
 				sender.sendMessage(ColorUtil.colorize("&cYou do not have the permission to use that command"));
 				return true;
@@ -125,22 +127,22 @@ public class NCore extends JavaPlugin {
 			if (args.length < 1 || args.length > 2) {
 				return false;
 			} else {
-				final String header = "" + ChatColor.DARK_GRAY + ChatColor.BOLD + "DEBUG " + ChatColor.RESET;
+				final String header = String.valueOf(ChatColor.DARK_GRAY) + ChatColor.BOLD + "DEBUG " + ChatColor.RESET;
 				final String nodeName = args[args.length - 1];
 				final Plugin plugin = Bukkit.getPluginManager().getPlugin(nodeName);
-				if (plugin == null || (!(plugin instanceof NPlugin) && plugin != this)) {
-					sender.sendMessage(header + ChatColor.RED + "'" + nodeName + "' is unknown or unloaded!");
+				if (plugin == null || !(plugin instanceof NPlugin) && plugin != this) {
+					sender.sendMessage(header + ChatColor.RED + '\'' + nodeName + "' is unknown or unloaded!");
 				} else {
 					final boolean value;
 					if (plugin == this) {
 						if (args.length == 1) {
-							value = !isDebugEnabled();
+							value = !this.debugEnabled;
 						} else {
 							value = Boolean.parseBoolean(args[0]);
 						}
-						setDebugEnabled(value);
+						this.setDebugEnabled(value);
 					} else {
-						final NPlugin nPlugin = (NPlugin) plugin;
+						final NPlugin nPlugin = (NPlugin)plugin;
 						if (args.length == 1) {
 							value = !nPlugin.isDebugEnabled();
 						} else {
@@ -148,51 +150,51 @@ public class NCore extends JavaPlugin {
 						}
 						nPlugin.setDebugEnabled(value);
 					}
-					sender.sendMessage(header + ChatColor.GREEN + "'" + nodeName + "' now has debug mode " + ChatColor.GOLD +
-					                   (value ? "enabled" : "disabled") + ChatColor.GREEN + "!");
+					sender.sendMessage(header + ChatColor.GREEN + '\'' + nodeName + "' now has debug mode " + ChatColor.GOLD +
+					                   (value ? "enabled" : "disabled") + ChatColor.GREEN + '!');
 					try {
-						final List<String> debugEnabledList = pluginConfig.getDebugEnabled();
+						final List<String> debugEnabledList = this.pluginConfig.getDebugEnabled();
 						if (value) {
 							debugEnabledList.add(plugin.getName());
 						} else {
 							debugEnabledList.remove(plugin.getName());
 						}
-						pluginConfig.loadConfig();
-						pluginConfig.setDebugEnabled(debugEnabledList);
-						pluginConfig.writeConfig();
+						this.pluginConfig.loadConfig();
+						this.pluginConfig.setDebugEnabled(debugEnabledList);
+						this.pluginConfig.writeConfig();
 					} catch (final InvalidConfigurationException | IOException ignored) {
 						// Not a real problem
 					}
 				}
 				return true;
 			}
-		} else if (cmd.getName().equals("updater")) {
+		} else if ("updater".equals(cmd.getName())) {
 			if (!Perms.hasUpdater(sender)) {
 				sender.sendMessage(ColorUtil.colorize("&cYou do not have the permission to use that command"));
 				return true;
 			}
-			if (updater == null) {
+			if (this.updater == null) {
 				sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Updater is disabled in config");
 			} else if (args.length != 2) {
 				return false;
 			} else {
 				final String action = args[0].toLowerCase();
 				final String nodeName = args[1];
-				final boolean all = args[1].equalsIgnoreCase("all");
-				if (!all && updater.getPlugins().get(nodeName.toLowerCase()) == null) {
+				final boolean all = "all".equalsIgnoreCase(args[1]);
+				if (!all && this.updater.getPlugins().get(nodeName.toLowerCase()) == null) {
 					sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Unknown Node: " + nodeName);
 				} else {
 					switch (action) {
 						case "check":
 						case "status":
-							updater.checkForUpdates(sender, all ? null : nodeName);
+							this.updater.checkForUpdates(sender, all ? null : nodeName);
 							break;
 						case "download":
 						case "dl":
 							if (all) {
 								sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Please select a specific Node to download");
 							} else {
-								updater.downloadUpdate(sender, nodeName);
+								this.updater.downloadUpdate(sender, nodeName);
 							}
 							break;
 					}
@@ -206,9 +208,9 @@ public class NCore extends JavaPlugin {
 
 	private void afterNodesLoad() {
 		boolean noNodeFound = true;
-		final Metrics.Graph nodesUsedGraph = metrics.createGraph("Nodes used");
+		final Metrics.Graph nodesUsedGraph = this.metrics.createGraph("Nodes used");
 
-		if (get(Node.CUBOID) != null) {
+		if (this.get(Node.CUBOID) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.CUBOID.substring(1)) {
 
 				@Override
@@ -219,7 +221,7 @@ public class NCore extends JavaPlugin {
 			noNodeFound = false;
 		}
 
-		if (get(Node.ENCHANTING_EGG) != null) {
+		if (this.get(Node.ENCHANTING_EGG) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.ENCHANTING_EGG.substring(1)) {
 
 				@Override
@@ -230,7 +232,7 @@ public class NCore extends JavaPlugin {
 			noNodeFound = false;
 		}
 
-		if (get(Node.GENERAL) != null) {
+		if (this.get(Node.GENERAL) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.GENERAL.substring(1)) {
 
 				@Override
@@ -241,7 +243,7 @@ public class NCore extends JavaPlugin {
 			noNodeFound = false;
 		}
 
-		if (get(Node.PLAYER) != null) {
+		if (this.get(Node.PLAYER) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PLAYER.substring(1)) {
 
 				@Override
@@ -252,7 +254,7 @@ public class NCore extends JavaPlugin {
 			noNodeFound = false;
 		}
 
-		if (get(Node.PERMISSIONS) != null) {
+		if (this.get(Node.PERMISSIONS) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PERMISSIONS.substring(1)) {
 
 				@Override
@@ -263,7 +265,7 @@ public class NCore extends JavaPlugin {
 			noNodeFound = false;
 		}
 
-		if (get(Node.TALK) != null) {
+		if (this.get(Node.TALK) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.TALK.substring(1)) {
 
 				@Override
@@ -274,7 +276,7 @@ public class NCore extends JavaPlugin {
 			noNodeFound = false;
 		}
 
-		if (get(Node.THE_END_AGAIN) != null) {
+		if (this.get(Node.THE_END_AGAIN) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.THE_END_AGAIN.substring(1)) {
 
 				@Override
@@ -285,7 +287,7 @@ public class NCore extends JavaPlugin {
 			noNodeFound = false;
 		}
 
-		if (get(Node.WORLD) != null) {
+		if (this.get(Node.WORLD) != null) {
 			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.WORLD.substring(1)) {
 
 				@Override
@@ -296,7 +298,7 @@ public class NCore extends JavaPlugin {
 			noNodeFound = false;
 		}
 
-		metrics.start();
+		this.metrics.start();
 
 		if (noNodeFound) {
 			final FrameBuilder frame = new FrameBuilder();
@@ -307,13 +309,13 @@ public class NCore extends JavaPlugin {
 			frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
 
 			for (final String s : frame.build()) {
-				logger.severe(s);
+				this.logger.severe(s);
 			}
 
-			getPluginLoader().disablePlugin(this);
-		} else if (pluginConfig.isUpdateCheck()) {
-			this.updater = new Updater(this, 'v' + getDescription().getVersion(), pluginConfig.getProxy(), pluginConfig.getApiKey());
-			if (pluginConfig.getUpdateCheckInterval() > 0) {
+			this.getPluginLoader().disablePlugin(this);
+		} else if (this.pluginConfig.isUpdateCheck()) {
+			this.updater = new Updater(this, 'v' + this.getDescription().getVersion(), this.pluginConfig.getProxy(), this.pluginConfig.getApiKey());
+			if (this.pluginConfig.getUpdateCheckInterval() > 0) {
 				this.updater.startTask();
 			}
 		}
@@ -324,35 +326,35 @@ public class NCore extends JavaPlugin {
 	}
 
 	public CuboidNode getCuboidNode() {
-		return (CuboidNode) get(Node.CUBOID);
+		return (CuboidNode)this.get(Node.CUBOID);
 	}
 
 	public EnchantingEggNode getEnchantingEggNode() {
-		return (EnchantingEggNode) get(Node.ENCHANTING_EGG);
+		return (EnchantingEggNode)this.get(Node.ENCHANTING_EGG);
 	}
 
 	public GeneralNode getGeneralNode() {
-		return (GeneralNode) get(Node.GENERAL);
+		return (GeneralNode)this.get(Node.GENERAL);
 	}
 
 	public PlayerNode getPlayerNode() {
-		return (PlayerNode) get(Node.PLAYER);
+		return (PlayerNode)this.get(Node.PLAYER);
 	}
 
 	public PermissionsNode getPermissionsNode() {
-		return (PermissionsNode) get(Node.PERMISSIONS);
+		return (PermissionsNode)this.get(Node.PERMISSIONS);
 	}
 
 	public TalkNode getTalkNode() {
-		return (TalkNode) get(Node.TALK);
+		return (TalkNode)this.get(Node.TALK);
 	}
 
 	public TheEndAgainNode getTheEndAgainNode() {
-		return (TheEndAgainNode) get(Node.THE_END_AGAIN);
+		return (TheEndAgainNode)this.get(Node.THE_END_AGAIN);
 	}
 
 	public WorldNode getWorldNode() {
-		return (WorldNode) get(Node.WORLD);
+		return (WorldNode)this.get(Node.WORLD);
 	}
 
 	public void set(final String nodeName, final Node node) {
@@ -364,15 +366,15 @@ public class NCore extends JavaPlugin {
 	}
 
 	public Config getPluginConfig() {
-		return pluginConfig;
+		return this.pluginConfig;
 	}
 
 	public Updater getUpdater() {
-		return updater;
+		return this.updater;
 	}
 
 	public FilterManager getFilterManager() {
-		return filterManager;
+		return this.filterManager;
 	}
 
 	// ##################### //
@@ -388,34 +390,34 @@ public class NCore extends JavaPlugin {
 	}
 
 	public void log(final Level level, final String message) {
-		logger.log(level, message);
+		this.logger.log(level, message);
 	}
 
 	public void info(final String message) {
-		log(Level.INFO, message);
+		this.log(Level.INFO, message);
 	}
 
 	public void entering(final Class clazz, final String methodName) {
 		if (this.debugEnabled) {
-			log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
+			this.log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()));
 		}
 	}
 
 	public void entering(final Class clazz, final String methodName, final String comment) {
 		if (this.debugEnabled) {
-			log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
+			this.log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
 		}
 	}
 
 	public void exiting(final Class clazz, final String methodName) {
 		if (this.debugEnabled) {
-			log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()));
+			this.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()));
 		}
 	}
 
 	public void exiting(final Class clazz, final String methodName, final String comment) {
 		if (this.debugEnabled) {
-			log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
+			this.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
 		}
 	}
 
@@ -425,29 +427,29 @@ public class NCore extends JavaPlugin {
 
 	public void debug(final String message) {
 		if (this.debugEnabled) {
-			log(Level.INFO, "DEBUG         " + message);
+			this.log(Level.INFO, "DEBUG         " + message);
 		}
 	}
 
 	public void debug(final String message, final Throwable e) {
 		if (this.debugEnabled) {
-			logger.log(Level.SEVERE, "DEBUG         " + message, e);
+			this.logger.log(Level.SEVERE, "DEBUG         " + message, e);
 		}
 	}
 
 	public void error(final String message) {
-		error(Level.SEVERE, message);
+		this.error(Level.SEVERE, message);
 	}
 
 	public void error(final Level level, final String message) {
-		log(level, message);
+		this.log(level, message);
 	}
 
 	public void error(final String message, final Throwable e) {
-		error(Level.SEVERE, message, e);
+		this.error(Level.SEVERE, message, e);
 	}
 
 	public void error(final Level level, final String message, final Throwable e) {
-		logger.log(level, message, e);
+		this.logger.log(level, message, e);
 	}
 }

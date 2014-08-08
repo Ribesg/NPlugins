@@ -15,17 +15,18 @@ import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDb;
 import fr.ribesg.bukkit.ncuboid.beans.RegionDbPersistenceHandler;
 import fr.ribesg.bukkit.ncuboid.commands.AbstractSubcmdExecutor;
+
+import java.io.IOException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
-
-import java.io.IOException;
 
 public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 
 	public ReloadSubcmdExecutor(final NCuboid instance) {
 		super(instance);
-		setUsage(ChatColor.RED + "Usage : /ncuboid reload <regions|config|messages>");
+		this.setUsage(ChatColor.RED + "Usage : /ncuboid reload <regions|config|messages>");
 	}
 
 	@Override
@@ -36,44 +37,43 @@ public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 			switch (args[0].toLowerCase()) {
 				case "regions":
 				case "region":
-					final RegionDb db = RegionDbPersistenceHandler.reloadDb(getPlugin());
-					if (db == getPlugin().getDb()) {
-						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "regionDB.yml");
+					final RegionDb db = RegionDbPersistenceHandler.reloadDb(this.getPlugin());
+					if (db == this.getPlugin().getDb()) {
+						this.getPlugin().sendMessage(sender, MessageId.cmdReloadError, "regionDB.yml");
 					} else {
-						getPlugin().setDb(db);
-						getPlugin().getDynmapBridge().reinitialize(db);
-						getPlugin().sendMessage(sender, MessageId.cuboid_cmdReloadRegions);
+						this.getPlugin().setDb(db);
+						this.getPlugin().getDynmapBridge().reinitialize(db);
+						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdReloadRegions);
 					}
 					return true;
 				case "config":
 				case "conf":
 					try {
-						getPlugin().getPluginConfig().loadConfig();
-						getPlugin().sendMessage(sender, MessageId.cmdReloadConfig);
+						this.getPlugin().getPluginConfig().loadConfig();
+						this.getPlugin().sendMessage(sender, MessageId.cmdReloadConfig);
 						return true;
 					} catch (final IOException | InvalidConfigurationException e) {
-						getPlugin().error("An error occured when NCuboid tried to reload config.yml", e);
-						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "config.yml");
+						this.getPlugin().error("An error occured when NCuboid tried to reload config.yml", e);
+						this.getPlugin().sendMessage(sender, MessageId.cmdReloadError, "config.yml");
 						return true;
 					}
 				case "messages":
 				case "mess":
 				case "mes":
 					try {
-						getPlugin().loadMessages();
-						getPlugin().sendMessage(sender, MessageId.cmdReloadMessages);
+						this.getPlugin().loadMessages();
+						this.getPlugin().sendMessage(sender, MessageId.cmdReloadMessages);
 					} catch (final IOException e) {
-						getPlugin().error("An error occured when NCuboid tried to reload messages.yml", e);
-						getPlugin().sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+						this.getPlugin().error("An error occured when NCuboid tried to reload messages.yml", e);
+						this.getPlugin().sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
 					}
 					return true;
 				default:
 					return false;
 			}
 		} else {
-			getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+			this.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
 			return true;
 		}
 	}
-
 }

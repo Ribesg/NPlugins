@@ -25,6 +25,8 @@ public class VersionUtil {
 	/**
 	 * Check if a version represents a Snapshot version or not.
 	 *
+	 * @param versionString a version String
+	 *
 	 * @return true if the provided String represents a Snapshot version,
 	 * false otherwise
 	 */
@@ -34,6 +36,8 @@ public class VersionUtil {
 
 	/**
 	 * Check if a version represents a Release version or not.
+	 *
+	 * @param versionString a version String
 	 *
 	 * @return true if the provided String represents a Release version,
 	 * false otherwise
@@ -101,5 +105,4 @@ public class VersionUtil {
 			}
 		}
 	}
-
 }

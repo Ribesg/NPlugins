@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncore.common.logging;
+
 /**
  * Represents a simple Log filter.
  *

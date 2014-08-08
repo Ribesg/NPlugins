@@ -8,6 +8,7 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ncuboid.beans;
+
 import fr.ribesg.bukkit.ncore.common.NLocation;
 
 public class Jail {
@@ -23,23 +24,23 @@ public class Jail {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public NLocation getLocation() {
-		return location;
+		return this.location;
 	}
 
 	public GeneralRegion getRegion() {
-		return region;
+		return this.region;
 	}
 
 	@Override
 	public String toString() {
 		return "Jail{" +
-		       "name='" + name + '\'' +
-		       ", location=" + location +
-		       ", region=" + region +
+		       "name='" + this.name + '\'' +
+		       ", location=" + this.location +
+		       ", region=" + this.region +
 		       '}';
 	}
 }

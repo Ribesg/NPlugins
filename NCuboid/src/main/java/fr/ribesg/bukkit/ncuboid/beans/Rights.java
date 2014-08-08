@@ -11,11 +11,12 @@ package fr.ribesg.bukkit.ncuboid.beans;
 
 import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
 import fr.ribesg.bukkit.ncuboid.Perms;
-import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
+import org.bukkit.entity.Player;
 
 public class Rights {
 
@@ -39,11 +40,11 @@ public class Rights {
 	}
 
 	public boolean isUser(final Player player, final boolean async) {
-		if (Perms.isAdmin(player, async) || isUserId(player.getUniqueId())) {
+		if (Perms.isAdmin(player, async) || this.isUserId(player.getUniqueId())) {
 			return true;
-		} else if (allowedGroups != null) {
+		} else if (this.allowedGroups != null) {
 			final String playerName = player.getName();
-			for (final String groupName : allowedGroups) {
+			for (final String groupName : this.allowedGroups) {
 				final String permission = "group." + groupName;
 				if (async ? AsyncPermAccessor.has(playerName, permission) : player.hasPermission(permission)) {
 					return true;
@@ -54,92 +55,92 @@ public class Rights {
 	}
 
 	public boolean isUserId(final UUID id) {
-		return users != null && users.contains(id);
+		return this.users != null && this.users.contains(id);
 	}
 
 	public boolean isAdmin(final Player player) {
-		return Perms.isAdmin(player, false) || isAdminId(player.getUniqueId());
+		return Perms.isAdmin(player, false) || this.isAdminId(player.getUniqueId());
 	}
 
 	public boolean isAdminId(final UUID id) {
-		return admins != null && admins.contains(id);
+		return this.admins != null && this.admins.contains(id);
 	}
 
 	public boolean isAllowedGroup(final String groupName) {
-		return allowedGroups != null && allowedGroups.contains(groupName.toLowerCase());
+		return this.allowedGroups != null && this.allowedGroups.contains(groupName.toLowerCase());
 	}
 
 	public boolean isAllowedCommand(final String command) {
-		return disallowedCommands == null || !disallowedCommands.contains(command.toLowerCase());
+		return this.disallowedCommands == null || !this.disallowedCommands.contains(command.toLowerCase());
 	}
 
 	public void addUser(final UUID id) {
-		if (users == null) {
-			users = new HashSet<>();
+		if (this.users == null) {
+			this.users = new HashSet<>();
 		}
-		users.add(id);
+		this.users.add(id);
 	}
 
 	public void removeUser(final UUID id) {
-		removeAdmin(id);
-		if (users != null) {
-			users.remove(id);
+		this.removeAdmin(id);
+		if (this.users != null) {
+			this.users.remove(id);
 		}
 	}
 
 	public void addAdmin(final UUID id) {
-		addUser(id);
-		if (admins == null) {
-			admins = new HashSet<>();
+		this.addUser(id);
+		if (this.admins == null) {
+			this.admins = new HashSet<>();
 		}
-		admins.add(id);
+		this.admins.add(id);
 	}
 
 	public void removeAdmin(final UUID id) {
-		if (admins != null) {
-			admins.remove(id);
+		if (this.admins != null) {
+			this.admins.remove(id);
 		}
 	}
 
 	public void allowGroup(final String groupName) {
-		if (allowedGroups == null) {
-			allowedGroups = new HashSet<>();
+		if (this.allowedGroups == null) {
+			this.allowedGroups = new HashSet<>();
 		}
-		allowedGroups.add(groupName.toLowerCase());
+		this.allowedGroups.add(groupName.toLowerCase());
 	}
 
 	public void denyGroup(final String groupName) {
-		if (allowedGroups != null) {
-			allowedGroups.remove(groupName.toLowerCase());
+		if (this.allowedGroups != null) {
+			this.allowedGroups.remove(groupName.toLowerCase());
 		}
 	}
 
 	public void allowCommand(final String command) {
-		if (disallowedCommands != null) {
-			disallowedCommands.remove(command.toLowerCase());
+		if (this.disallowedCommands != null) {
+			this.disallowedCommands.remove(command.toLowerCase());
 		}
 	}
 
 	public void denyCommand(final String command) {
-		if (disallowedCommands == null) {
-			disallowedCommands = new HashSet<>();
+		if (this.disallowedCommands == null) {
+			this.disallowedCommands = new HashSet<>();
 		}
-		disallowedCommands.add(command.toLowerCase());
+		this.disallowedCommands.add(command.toLowerCase());
 	}
 
 	public Set<String> getAllowedGroups() {
-		return allowedGroups;
+		return this.allowedGroups;
 	}
 
 	public Set<UUID> getUsers() {
-		return users;
+		return this.users;
 	}
 
 	public Set<UUID> getAdmins() {
-		return admins;
+		return this.admins;
 	}
 
 	public Set<String> getDisallowedCommands() {
-		return disallowedCommands;
+		return this.disallowedCommands;
 	}
 }

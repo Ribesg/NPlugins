@@ -22,6 +22,6 @@ public abstract class Step {
 	public abstract void doStep(final Altar altar);
 
 	public int getDelay() {
-		return delay;
+		return this.delay;
 	}
 }

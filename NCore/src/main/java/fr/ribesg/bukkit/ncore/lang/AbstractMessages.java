@@ -11,10 +11,6 @@ package fr.ribesg.bukkit.ncore.lang;
 
 import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,6 +24,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.EnumMap;
 import java.util.Set;
+
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Represents all the messages sent to players
@@ -75,10 +76,10 @@ public abstract class AbstractMessages {
 	 * @throws IOException If there is an error reading / writing file
 	 */
 	public void loadMessages(final JavaPlugin plugin) throws IOException {
-		final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath().toString() + File.separator + "messages.yml");
-		messagesMap = getDefaultConfig();
+		final Path path = Paths.get(plugin.getDataFolder().toPath().toAbsolutePath() + File.separator + "messages.yml");
+		this.messagesMap = this.getDefaultConfig();
 		if (!Files.exists(path)) {
-			newMessages(path);
+			this.newMessages(path);
 		} else {
 			final YamlConfiguration messagesConfig = new YamlConfiguration();
 			try (BufferedReader reader = Files.newBufferedReader(path, CHARSET)) {
@@ -93,7 +94,7 @@ public abstract class AbstractMessages {
 			for (final String idString : messagesConfig.getKeys(false)) {
 				try {
 					final MessageId id = MessageId.valueOf(idString);
-					final Message def = messagesMap.get(id);
+					final Message def = this.messagesMap.get(id);
 					final ConfigurationSection section = messagesConfig.getConfigurationSection(idString);
 					if (section == null) {
 						plugin.getLogger().warning(idString + "was not found in messages.yml, maybe it's new? Adding default value!");
@@ -102,13 +103,13 @@ public abstract class AbstractMessages {
 					} else {
 						final String value = section.getString("value", def.getDefaultMessage());
 						final boolean useHeader = section.getBoolean("useHeader", true);
-						messagesMap.put(id, new Message(id, def.getDefaultMessage(), value, def.defaultUseHeader(), useHeader, def.getAwaitedArgs()));
+						this.messagesMap.put(id, new Message(id, def.getDefaultMessage(), value, def.defaultUseHeader(), useHeader, def.getAwaitedArgs()));
 					}
 				} catch (final IllegalArgumentException e) {
 					plugin.getLogger().warning(idString + " is not / no longer used, removing it from messages config file.");
 				}
 			}
-			overwriteConfig(path);
+			this.overwriteConfig(path);
 		}
 	}
 
@@ -117,7 +118,7 @@ public abstract class AbstractMessages {
 	 */
 	EnumMap<MessageId, Message> getDefaultConfig() {
 		final EnumMap<MessageId, Message> map = new EnumMap<>(MessageId.class);
-		for (final Message m : createMessage()) {
+		for (final Message m : this.createMessage()) {
 			map.put(m.getId(), m);
 		}
 		return map;
@@ -131,16 +132,16 @@ public abstract class AbstractMessages {
 	protected abstract Set<Message> createMessage();
 
 	private void newMessages(final Path pathMessages) throws IOException {
-		writeMessages(pathMessages, false);
+		this.writeMessages(pathMessages, false);
 	}
 
 	private void overwriteConfig(final Path pathMessages) throws IOException {
-		writeMessages(pathMessages, true);
+		this.writeMessages(pathMessages, true);
 	}
 
 	private void writeMessages(final Path path, final boolean overwrite) throws IOException {
 		try (BufferedWriter writer = Files.newBufferedWriter(path, CHARSET, overwrite ? StandardOpenOption.TRUNCATE_EXISTING : StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
-			writer.write(getConfigString());
+			writer.write(this.getConfigString());
 		}
 	}
 
@@ -151,7 +152,7 @@ public abstract class AbstractMessages {
 		final StringBuilder content = new StringBuilder();
 
 		final FrameBuilder frame = new FrameBuilder();
-		frame.addLine("List of N" + nodeName + " messages. You're free to change text/colors/language here.");
+		frame.addLine("List of N" + this.nodeName + " messages. You're free to change text/colors/language here.");
 		frame.addLine("Supports both '§' and '&' characters for colors.");
 		frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
 		for (final String line : frame.build()) {
@@ -159,7 +160,7 @@ public abstract class AbstractMessages {
 		}
 		content.append('\n');
 
-		for (final Message m : getMessagesMap().values()) {
+		for (final Message m : this.messagesMap.values()) {
 			content.append("# Default value    : " + m.getDefaultMessage() + '\n');
 			content.append("# Default useHeader: " + m.defaultUseHeader() + '\n');
 			content.append("# Awaited arguments: " + m.getAwaitedArgsString() + '\n');
@@ -178,13 +179,13 @@ public abstract class AbstractMessages {
 	 */
 	public String[] get(final MessageId id, final String... args) {
 		try {
-			final Message m = getMessagesMap().get(id);
+			final Message m = this.messagesMap.get(id);
 			if (args != null && args.length != m.getAwaitedArgsNb() || args == null && m.getAwaitedArgsNb() > 0) {
 				throw new IllegalArgumentException("Call to Messages.get(id,args...) with wrong number of args : " +
 				                                   (args == null ? 0 : args.length) +
 				                                   " (awaited : " +
 				                                   m.getAwaitedArgsNb() +
-				                                   ")");
+				                                   ')');
 			}
 			String res = m.getConfigMessage() == null ? m.getDefaultMessage() : m.getConfigMessage();
 
@@ -200,14 +201,14 @@ public abstract class AbstractMessages {
 				}
 			}
 			// Adding Header, colors
-			final String[] resSplit = res.concat(LINE_SEPARATOR).split(LINE_SEPARATOR);
+			final String[] resSplit = (res + LINE_SEPARATOR).split(LINE_SEPARATOR);
 			for (int i = 0; i < resSplit.length; i++) {
-				resSplit[i] = (m.useHeader() ? messageHeader : "") + ColorUtil.colorize(resSplit[i]);
+				resSplit[i] = (m.useHeader() ? this.messageHeader : "") + ColorUtil.colorize(resSplit[i]);
 			}
 			return resSplit;
 		} catch (final IllegalArgumentException e) {
 			e.printStackTrace();
-			return new String[] {messageHeader + ChatColor.RED + "Something gone wrong, see console"};
+			return new String[]{this.messageHeader + ChatColor.RED + "Something gone wrong, see console"};
 		}
 	}
 
@@ -230,10 +231,10 @@ public abstract class AbstractMessages {
 	}
 
 	public String getMessageHeader() {
-		return messageHeader;
+		return this.messageHeader;
 	}
 
 	public EnumMap<MessageId, Message> getMessagesMap() {
-		return messagesMap;
+		return this.messagesMap;
 	}
 }

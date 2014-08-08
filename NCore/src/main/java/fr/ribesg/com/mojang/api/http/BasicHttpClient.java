@@ -34,7 +34,7 @@ public class BasicHttpClient implements HttpClient {
 
 	@Override
 	public String post(final URL url, final HttpBody body, final List<HttpHeader> headers) throws IOException {
-		return post(url, null, body, headers);
+		return this.post(url, null, body, headers);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class BasicHttpClient implements HttpClient {
 		if (proxy == null) {
 			proxy = Proxy.NO_PROXY;
 		}
-		final HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
+		final HttpURLConnection connection = (HttpURLConnection)url.openConnection(proxy);
 		connection.setRequestMethod("POST");
 
 		for (final HttpHeader header : headers) {

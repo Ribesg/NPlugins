@@ -8,12 +8,14 @@
  ***************************************************************************/
 
 package fr.ribesg.bukkit.ntheendagain.task;
+
 import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
 import fr.ribesg.bukkit.ntheendagain.world.EndChunk;
-import org.bukkit.World;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Iterator;
+
+import org.bukkit.World;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class SlowSoftRegeneratorTaskHandler {
 
@@ -23,6 +25,7 @@ public class SlowSoftRegeneratorTaskHandler {
 		private final int                nbChunks;
 
 		public SlowSoftRegeneratorTask(final Iterator<EndChunk> iterator, final int nbChunks) {
+			super();
 			this.iterator = iterator;
 			this.nbChunks = nbChunks;
 		}
@@ -30,7 +33,7 @@ public class SlowSoftRegeneratorTaskHandler {
 		@Override
 		public void run() {
 			int regen = 0;
-			while (regen < this.nbChunks && iterator.hasNext()) {
+			while (regen < this.nbChunks && this.iterator.hasNext()) {
 				final EndChunk c = this.iterator.next();
 				if (c.hasToBeRegen()) {
 					final World world = c.getCoords().getBukkitWorld();
@@ -43,7 +46,7 @@ public class SlowSoftRegeneratorTaskHandler {
 					}
 				}
 			}
-			if (!iterator.hasNext()) {
+			if (!this.iterator.hasNext()) {
 				this.cancel();
 			}
 		}
@@ -68,7 +71,7 @@ public class SlowSoftRegeneratorTaskHandler {
 	}
 
 	public void run() {
-		this.task = new SlowSoftRegeneratorTask(handler.getChunks().getSafeChunksList().iterator(), this.slowSoftRegenChunks);
+		this.task = new SlowSoftRegeneratorTask(this.handler.getChunks().getSafeChunksList().iterator(), this.slowSoftRegenChunks);
 		this.task.runTaskTimer(this.handler.getPlugin(), this.slowSoftRegenTimer, this.slowSoftRegenTimer);
 	}
 
@@ -76,7 +79,7 @@ public class SlowSoftRegeneratorTaskHandler {
 		if (this.task != null) {
 			try {
 				this.task.cancel();
-			} catch (IllegalStateException ignored) {
+			} catch (final IllegalStateException ignored) {
 				// Ignored
 			}
 		}
