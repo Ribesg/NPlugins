@@ -238,6 +238,7 @@ public enum MessageId {
     player_userHomeSet,
     player_yourHomeSet,
 
+    player_authenticationDisabled,
     player_pleaseRegister,
     player_autoLogged,
     player_pleaseLogin,

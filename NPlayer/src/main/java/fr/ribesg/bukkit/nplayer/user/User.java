@@ -75,10 +75,12 @@ public class User {
 
     public void setLoggedIn(final boolean loggedIn) {
         this.loggedIn = loggedIn;
-        if (loggedIn) {
-            this.handler.notifyLogin(Bukkit.getPlayer(this.userId));
-        } else {
-            this.handler.notifyLogout(Bukkit.getPlayer(this.userId));
+        if (this.handler != null) {
+            if (loggedIn) {
+                this.handler.notifyLogin(Bukkit.getPlayer(this.userId));
+            } else {
+                this.handler.notifyLogout(Bukkit.getPlayer(this.userId));
+            }
         }
     }
 

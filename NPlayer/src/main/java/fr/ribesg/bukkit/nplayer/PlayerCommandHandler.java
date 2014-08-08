@@ -207,24 +207,29 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
     private boolean loginCommand(final Player player, final String[] args) {
         this.plugin.entering(this.getClass(), "loginCommand");
 
-        final User user = this.plugin.getUserDb().get(player.getUniqueId());
-        if (user == null) {
-            this.plugin.debug("Unregistered user");
-            this.plugin.sendMessage(player, MessageId.player_registerFirst);
+        if (this.plugin.getPluginConfig().getAuthenticationMode() == 0) {
+            this.plugin.debug("Authentication disabled");
+            this.plugin.sendMessage(player, MessageId.player_authenticationDisabled);
         } else {
-            this.plugin.debug("Registered user");
-            final String password = StringUtil.joinStrings(args);
-            final boolean isCorrect = Security.isUserPassword(password, user);
-            if (isCorrect) {
-                this.plugin.debug("Correct password provided");
-                this.plugin.sendMessage(player, MessageId.player_welcomeBack);
-                user.setLoggedIn(true);
-                user.newIp(player.getAddress().getAddress().getHostAddress());
-                this.plugin.getUserDb().updateIp(user, player.getAddress().getAddress().getHostAddress());
+            final User user = this.plugin.getUserDb().get(player.getUniqueId());
+            if (user == null || user.getPasswordHash() == null) {
+                this.plugin.debug("Unregistered user");
+                this.plugin.sendMessage(player, MessageId.player_registerFirst);
             } else {
-                this.plugin.debug("Incorrect password provided");
-                this.plugin.sendMessage(player, MessageId.player_wrongPassword);
-                this.loginAttempt(player.getName());
+                this.plugin.debug("Registered user");
+                final String password = StringUtil.joinStrings(args);
+                final boolean isCorrect = Security.isUserPassword(password, user);
+                if (isCorrect) {
+                    this.plugin.debug("Correct password provided");
+                    this.plugin.sendMessage(player, MessageId.player_welcomeBack);
+                    user.setLoggedIn(true);
+                    user.newIp(player.getAddress().getAddress().getHostAddress());
+                    this.plugin.getUserDb().updateIp(user, player.getAddress().getAddress().getHostAddress());
+                } else {
+                    this.plugin.debug("Incorrect password provided");
+                    this.plugin.sendMessage(player, MessageId.player_wrongPassword);
+                    this.loginAttempt(player.getName());
+                }
             }
         }
 
@@ -235,20 +240,25 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
     private boolean registerCommand(final Player player, final String[] args) {
         this.plugin.entering(this.getClass(), "registerCommand");
 
-        User user = this.plugin.getUserDb().get(player.getUniqueId());
-        final String password = StringUtil.joinStrings(args);
-        if (user == null) {
-            this.plugin.debug("Unregistered user");
-            user = this.plugin.getUserDb().newUser(player.getUniqueId(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
-            user.setLoggedIn(true);
-            this.plugin.sendMessage(player, MessageId.player_welcomeToTheServer);
-        } else if (user.isLoggedIn()) {
-            this.plugin.debug("Registered and logged-in user, change password");
-            user.setPasswordHash(Security.hash(password));
-            this.plugin.sendMessage(player, MessageId.player_passwordChanged);
+        if (this.plugin.getPluginConfig().getAuthenticationMode() == 0) {
+            this.plugin.debug("Authentication disabled");
+            this.plugin.sendMessage(player, MessageId.player_authenticationDisabled);
         } else {
-            this.plugin.debug("Registered non-logged-in user");
-            this.plugin.sendMessage(player, MessageId.player_alreadyRegistered);
+            User user = this.plugin.getUserDb().get(player.getUniqueId());
+            final String password = StringUtil.joinStrings(args);
+            if (user == null) {
+                this.plugin.debug("Unregistered user");
+                user = this.plugin.getUserDb().newUser(player.getUniqueId(), Security.hash(password), player.getAddress().getAddress().getHostAddress());
+                user.setLoggedIn(true);
+                this.plugin.sendMessage(player, MessageId.player_welcomeToTheServer);
+            } else if (user.isLoggedIn()) {
+                this.plugin.debug("Registered and logged-in user, change password");
+                user.setPasswordHash(Security.hash(password));
+                this.plugin.sendMessage(player, MessageId.player_passwordChanged);
+            } else {
+                this.plugin.debug("Registered non-logged-in user");
+                this.plugin.sendMessage(player, MessageId.player_alreadyRegistered);
+            }
         }
 
         this.plugin.exiting(this.getClass(), "registerCommand");
@@ -258,61 +268,66 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
     private boolean logoutCommand(final Player player, final String[] args) {
         this.plugin.entering(this.getClass(), "logoutCommand");
 
-        final User user = this.plugin.getUserDb().get(player.getUniqueId());
-        if (user == null) {
-            this.plugin.debug("Unregistered user");
-            this.plugin.sendMessage(player, MessageId.player_registerFirst);
-        } else if (!user.isLoggedIn()) {
-            this.plugin.debug("Registered non-logged-in user");
-            this.plugin.sendMessage(player, MessageId.player_loginFirst);
+        if (this.plugin.getPluginConfig().getAuthenticationMode() == 0) {
+            this.plugin.debug("Authentication disabled");
+            this.plugin.sendMessage(player, MessageId.player_authenticationDisabled);
         } else {
-            this.plugin.debug("Registered logged-in user");
-            boolean autoLogout = false;
-            boolean toggle = false;
-            boolean enable = false;
-            boolean disable = false;
-            if (args != null && args.length > 0) {
-                this.plugin.debug("Additional arguments");
-                for (int i = 0; i < args.length; i++) {
-                    args[i] = args[i].toLowerCase();
-                }
-                if (args.length == 1) {
-                    if ("autologout".equals(args[0]) || "auto".equals(args[0])) {
-                        this.plugin.debug("Toggle auto-logout");
-                        autoLogout = true;
-                        toggle = true;
+            final User user = this.plugin.getUserDb().get(player.getUniqueId());
+            if (user == null || user.getPasswordHash() == null) {
+                this.plugin.debug("Unregistered user");
+                this.plugin.sendMessage(player, MessageId.player_registerFirst);
+            } else if (!user.isLoggedIn()) {
+                this.plugin.debug("Registered non-logged-in user");
+                this.plugin.sendMessage(player, MessageId.player_loginFirst);
+            } else {
+                this.plugin.debug("Registered logged-in user");
+                boolean autoLogout = false;
+                boolean toggle = false;
+                boolean enable = false;
+                boolean disable = false;
+                if (args != null && args.length > 0) {
+                    this.plugin.debug("Additional arguments");
+                    for (int i = 0; i < args.length; i++) {
+                        args[i] = args[i].toLowerCase();
                     }
-                } else if (args.length == 2) {
-                    if ("autologout".equals(args[0]) || "auto".equals(args[0])) {
-                        autoLogout = true;
-                        if ("enable".equals(args[1])) {
-                            this.plugin.debug("Enable auto-logout");
-                            enable = true;
-                        } else if ("disable".equals(args[1])) {
-                            this.plugin.debug("Disable auto-logout");
-                            disable = true;
+                    if (args.length == 1) {
+                        if ("autologout".equals(args[0]) || "auto".equals(args[0])) {
+                            this.plugin.debug("Toggle auto-logout");
+                            autoLogout = true;
+                            toggle = true;
+                        }
+                    } else if (args.length == 2) {
+                        if ("autologout".equals(args[0]) || "auto".equals(args[0])) {
+                            autoLogout = true;
+                            if ("enable".equals(args[1])) {
+                                this.plugin.debug("Enable auto-logout");
+                                enable = true;
+                            } else if ("disable".equals(args[1])) {
+                                this.plugin.debug("Disable auto-logout");
+                                disable = true;
+                            }
                         }
                     }
                 }
-            }
-            if (autoLogout) {
-                this.plugin.debug("Modifying auto-logout state");
-                if (toggle) {
-                    user.setAutoLogout(!user.hasAutoLogout());
-                } else if (enable) {
-                    user.setAutoLogout(true);
-                } else if (disable) {
-                    user.setAutoLogout(false);
-                }
-                if (user.hasAutoLogout()) {
-                    this.plugin.sendMessage(player, MessageId.player_autoLogoutEnabled);
+                if (autoLogout) {
+                    this.plugin.debug("Modifying auto-logout state");
+                    if (toggle) {
+                        user.setAutoLogout(!user.hasAutoLogout());
+                    } else if (enable) {
+                        user.setAutoLogout(true);
+                    } else if (disable) {
+                        user.setAutoLogout(false);
+                    }
+                    if (user.hasAutoLogout()) {
+                        this.plugin.sendMessage(player, MessageId.player_autoLogoutEnabled);
+                    } else {
+                        this.plugin.sendMessage(player, MessageId.player_autoLogoutDisabled);
+                    }
                 } else {
-                    this.plugin.sendMessage(player, MessageId.player_autoLogoutDisabled);
+                    this.plugin.debug("Logging out");
+                    user.setLoggedIn(false);
+                    this.plugin.sendMessage(player, MessageId.player_loggedOut);
                 }
-            } else {
-                this.plugin.debug("Logging out");
-                user.setLoggedIn(false);
-                this.plugin.sendMessage(player, MessageId.player_loggedOut);
             }
         }
 
@@ -420,24 +435,31 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
     private boolean forceLoginCommand(final CommandSender sender, final String[] args) {
         this.plugin.entering(this.getClass(), "forceLoginCommand");
         boolean result = false;
-
-        if (args.length == 1) {
-            final Player player = Bukkit.getPlayer(args[0]);
-            if (player == null) {
-                this.plugin.sendMessage(sender, MessageId.player_unknownUser, args[0]);
-            } else {
-                final User user = this.plugin.getUserDb().get(player.getUniqueId());
-                if (user == null) {
-                    this.plugin.sendMessage(sender, MessageId.player_unknownUser, player.getName());
-                } else {
-                    user.setLoggedIn(true);
-                    this.plugin.getLoggedOutUserHandler().notifyLogin(player);
-                    this.plugin.sendMessage(sender, MessageId.player_youForcedLogin, player.getName());
-                    this.plugin.sendMessage(player, MessageId.player_somebodyForcedLoginYou, sender.getName());
-                }
-            }
-
+        if (this.plugin.getPluginConfig().getAuthenticationMode() == 0) {
+            this.plugin.debug("Authentication disabled");
+            this.plugin.sendMessage(sender, MessageId.player_authenticationDisabled);
             result = true;
+        } else {
+            if (args.length == 1) {
+                final Player player = Bukkit.getPlayer(args[0]);
+                if (player == null) {
+                    this.plugin.sendMessage(sender, MessageId.player_unknownUser, args[0]);
+                } else {
+                    final User user = this.plugin.getUserDb().get(player.getUniqueId());
+                    if (user == null) {
+                        this.plugin.sendMessage(sender, MessageId.player_unknownUser, player.getName());
+                    } else {
+                        user.setLoggedIn(true);
+                        if (this.plugin.getPluginConfig().getAuthenticationMode() == 1) {
+                            this.plugin.getLoggedOutUserHandler().notifyLogin(player);
+                        }
+                        this.plugin.sendMessage(sender, MessageId.player_youForcedLogin, player.getName());
+                        this.plugin.sendMessage(player, MessageId.player_somebodyForcedLoginYou, sender.getName());
+                    }
+                }
+
+                result = true;
+            }
         }
 
         this.plugin.exiting(this.getClass(), "forceLoginCommand");

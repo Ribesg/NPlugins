@@ -16,12 +16,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NPlayer> {
 
+    private int authenticationMode;
     private int maximumLoginAttempts;
     private int tooManyAttemptsPunishment;
     private int tooManyAttemptsPunishmentDuration;
 
     public Config(final NPlayer instance) {
         super(instance);
+        this.setAuthenticationMode(1);
         this.setMaximumLoginAttempts(3);
         this.setTooManyAttemptsPunishment(1);
         this.setTooManyAttemptsPunishmentDuration(300);
@@ -30,10 +32,18 @@ public class Config extends AbstractConfig<NPlayer> {
     @Override
     protected void handleValues(final YamlConfiguration config) {
 
+        // authenticationMode. Default: 1.
+        // Possible values: 0, 1, 2
+        this.setAuthenticationMode(config.getInt("authenticationMode", 1));
+        if (!this.match(this.authenticationMode, 0, 2)) {
+            this.wrongValue("config.yml", "authenticationMode", this.authenticationMode, 1);
+            this.setAuthenticationMode(1);
+        }
+
         // maximumLoginAttempts. Default: 3.
         // Possible values: positive integers
         this.setMaximumLoginAttempts(config.getInt("maximumLoginAttempts", 3));
-        if (this.maximumLoginAttempts < 1) {
+        if (!this.match(this.maximumLoginAttempts, 1, Integer.MAX_VALUE)) {
             this.wrongValue("config.yml", "maximumLoginAttempts", this.maximumLoginAttempts, 3);
             this.setMaximumLoginAttempts(3);
         }
@@ -41,7 +51,7 @@ public class Config extends AbstractConfig<NPlayer> {
         // tooManyAttemptsPunishment. Default: 1.
         // Possible values: 0, 1, 2
         this.setTooManyAttemptsPunishment(config.getInt("tooManyAttemptsPunishment", 1));
-        if (this.tooManyAttemptsPunishment < 0 || this.tooManyAttemptsPunishment > 2) {
+        if (!this.match(this.tooManyAttemptsPunishment, 0, 6)) {
             this.wrongValue("config.yml", "tooManyAttemptsPunishment", this.tooManyAttemptsPunishment, 1);
             this.setTooManyAttemptsPunishment(1);
         }
@@ -49,7 +59,7 @@ public class Config extends AbstractConfig<NPlayer> {
         // tooManyAttemptsPunishmentDuration. Default: 300.
         // Possible values: positive integers
         this.setTooManyAttemptsPunishmentDuration(config.getInt("tooManyAttemptsPunishmentDuration", 300));
-        if (this.tooManyAttemptsPunishmentDuration < 1) {
+        if (!this.match(this.tooManyAttemptsPunishmentDuration, 1, Integer.MAX_VALUE)) {
             this.wrongValue("config.yml", "tooManyAttemptsPunishmentDuration", this.tooManyAttemptsPunishmentDuration, 300);
             this.setTooManyAttemptsPunishmentDuration(300);
         }
@@ -68,6 +78,17 @@ public class Config extends AbstractConfig<NPlayer> {
         for (final String line : frame.build()) {
             content.append(line + '\n');
         }
+
+        // Enable authentication
+        content.append("# Defines if authentication is enabled. Possibles values: 0 or 1.\n");
+        content.append("# Default: 1\n");
+        content.append("#\n");
+        content.append("#   Value | Action\n");
+        content.append("#       0 : Enabled\n");
+        content.append("#       1 : Disabled\n");
+        content.append("#       2 : Optional\n");
+        content.append("#\n");
+        content.append("authenticationMode: " + this.authenticationMode + "\n\n");
 
         // Maximum Login attempts
         content.append("# Maximum login attempts before punishment. Possible values: Positive integers\n");
@@ -115,6 +136,14 @@ public class Config extends AbstractConfig<NPlayer> {
         content.append("tooManyAttemptsPunishmentDuration: " + this.tooManyAttemptsPunishmentDuration + "\n\n");
 
         return content.toString();
+    }
+
+    public int getAuthenticationMode() {
+        return this.authenticationMode;
+    }
+
+    public void setAuthenticationMode(final int authenticationMode) {
+        this.authenticationMode = authenticationMode;
     }
 
     public int getMaximumLoginAttempts() {

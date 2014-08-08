@@ -22,6 +22,7 @@ import fr.ribesg.bukkit.nplayer.punishment.PunishmentListener;
 import fr.ribesg.bukkit.nplayer.punishment.PunishmentType;
 import fr.ribesg.bukkit.nplayer.punishment.TemporaryPunishmentCleanerTask;
 import fr.ribesg.bukkit.nplayer.user.LoggedOutUserHandler;
+import fr.ribesg.bukkit.nplayer.user.PlayerListener;
 import fr.ribesg.bukkit.nplayer.user.UserDb;
 
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class NPlayer extends NPlugin implements PlayerNode {
 
     @Override
     protected String getMinCoreVersion() {
-        return "0.6.9";
+        return "0.6.10";
     }
 
     @Override
@@ -67,8 +68,6 @@ public class NPlayer extends NPlugin implements PlayerNode {
     public boolean onNodeEnable() {
         this.entering(this.getClass(), "onNodeEnable");
 
-        this.getCore().getFilterManager().addDenyFilter(new LoginRegisterFilter());
-
         this.debug("Loading plugin config...");
         try {
             this.pluginConfig = new Config(this);
@@ -78,8 +77,13 @@ public class NPlayer extends NPlugin implements PlayerNode {
             return false;
         }
 
-        this.debug("Initializing LoggedOutUserHandler...");
-        this.loggedOutUserHandler = new LoggedOutUserHandler(this);
+        if (this.pluginConfig.getAuthenticationMode() == 0) {
+            this.debug("Registering LoginRegisterFilter...");
+            this.getCore().getFilterManager().addDenyFilter(new LoginRegisterFilter());
+
+            this.debug("Initializing LoggedOutUserHandler...");
+            this.loggedOutUserHandler = new LoggedOutUserHandler(this);
+        }
 
         this.debug("Creating UserDb...");
         this.userDb = new UserDb(this);
@@ -108,7 +112,10 @@ public class NPlayer extends NPlugin implements PlayerNode {
 
         this.debug("Creating and Registering Listeners...");
         final PluginManager pm = this.getServer().getPluginManager();
-        pm.registerEvents(this.loggedOutUserHandler, this);
+        if (this.loggedOutUserHandler != null) {
+            pm.registerEvents(this.loggedOutUserHandler, this);
+        }
+        pm.registerEvents(new PlayerListener(this, this.loggedOutUserHandler), this);
         pm.registerEvents(new PunishmentListener(this), this);
 
         this.debug("Creating PlayerCommandHandler and registering commands...");

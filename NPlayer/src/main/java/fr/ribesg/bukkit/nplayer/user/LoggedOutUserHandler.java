@@ -101,36 +101,6 @@ public class LoggedOutUserHandler implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerJoined(final PlayerJoinedEvent event) {
-        final Player player = event.getPlayer();
-        this.notifyConnect(player);
-        final User user = this.plugin.getUserDb().get(player.getUniqueId());
-        if (user == null) {
-            // Unknown, should /register
-            this.plugin.sendMessage(player, MessageId.player_pleaseRegister);
-        } else if (user.getLastIp().equals(player.getAddress().getAddress().getHostAddress()) && !user.hasAutoLogout()) {
-            // Auto-login
-            user.setLoggedIn(true);
-            this.notifyLogin(player);
-            this.plugin.sendMessage(player, MessageId.player_autoLogged);
-        } else {
-            // Should /login
-            this.plugin.sendMessage(player, MessageId.player_pleaseLogin);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerQuit(final PlayerQuitEvent event) {
-        final Player player = event.getPlayer();
-        final User user = this.plugin.getUserDb().get(player.getUniqueId());
-        if (user != null && user.hasAutoLogout()) {
-            user.setLoggedIn(false);
-            this.notifyLogout(player);
-        }
-        this.notifyDisconnect(player);
-    }
-
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerGridMove(final PlayerGridMoveEvent event) {
         final Player player = event.getPlayer();

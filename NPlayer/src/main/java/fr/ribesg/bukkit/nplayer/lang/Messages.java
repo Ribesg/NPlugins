@@ -45,6 +45,7 @@ public class Messages extends AbstractMessages {
         newMessages.add(new Message(MessageId.cmdReloadError, "&An error occured while loading %file%!", true, "%file%"));
 
         // Command - PLAYER
+        newMessages.add(new Message(MessageId.player_authenticationDisabled, "&cAuthentication is disabled on this server", true));
         newMessages.add(new Message(MessageId.player_registerFirst, "&cYou need to register before login!##&cUse the '/register' command", true));
         newMessages.add(new Message(MessageId.player_loginFirst, "&cYou need to login first!##&cUse the '/login' command", true));
         newMessages.add(new Message(MessageId.player_welcomeBack, "&aYou're now logged in! Have fun!", true));
