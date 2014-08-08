@@ -17,14 +17,14 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 public class ExtendedPlayerDropItemEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion region;
+    private final GeneralRegion region;
 
-	public ExtendedPlayerDropItemEvent(final RegionDb db, final PlayerDropItemEvent event) {
-		super(db.getPlugin(), event);
-		this.region = db.getPriorByLocation(event.getPlayer().getLocation());
-	}
+    public ExtendedPlayerDropItemEvent(final RegionDb db, final PlayerDropItemEvent event) {
+        super(db.getPlugin(), event);
+        this.region = db.getPriorByLocation(event.getPlayer().getLocation());
+    }
 
-	public GeneralRegion getRegion() {
-		return this.region;
-	}
+    public GeneralRegion getRegion() {
+        return this.region;
+    }
 }

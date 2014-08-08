@@ -16,11 +16,11 @@ import org.junit.Test;
 
 public class PlayerIdsUtilTest {
 
-	@Test
-	public void testShortToUuid() {
-		final UUID id = UUID.randomUUID();
-		final String shortUuid = PlayerIdsUtil.uuidToShortUuid(id);
-		final UUID id2 = PlayerIdsUtil.shortUuidToUuid(shortUuid);
-		Assert.assertEquals(id, id2);
-	}
+    @Test
+    public void testShortToUuid() {
+        final UUID id = UUID.randomUUID();
+        final String shortUuid = PlayerIdsUtil.uuidToShortUuid(id);
+        final UUID id2 = PlayerIdsUtil.shortUuidToUuid(shortUuid);
+        Assert.assertEquals(id, id2);
+    }
 }

@@ -21,19 +21,19 @@ import org.bukkit.event.EventPriority;
 
 public class WarpgateFlagListener extends AbstractListener {
 
-	public WarpgateFlagListener(final NCuboid instance) {
-		super(instance);
-	}
+    public WarpgateFlagListener(final NCuboid instance) {
+        super(instance);
+    }
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
-		final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
-		if (!ext.isCustomCancelled()) {
-			if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.WARPGATE)) {
-				event.getPlayer().teleport(ext.getToRegion().getLocationAttribute(Attribute.EXTERNAL_POINT));
-				ext.setCustomCancelled(true);
-				event.setCancelled(true);
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
+        final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
+        if (!ext.isCustomCancelled()) {
+            if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.WARPGATE)) {
+                event.getPlayer().teleport(ext.getToRegion().getLocationAttribute(Attribute.EXTERNAL_POINT));
+                ext.setCustomCancelled(true);
+                event.setCancelled(true);
+            }
+        }
+    }
 }

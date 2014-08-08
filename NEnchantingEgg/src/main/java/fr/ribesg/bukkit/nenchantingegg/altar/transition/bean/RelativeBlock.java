@@ -14,32 +14,32 @@ import org.bukkit.block.Block;
 
 public class RelativeBlock extends RelativeLocation {
 
-	private final Material blockMaterial;
-	private final byte     blockData;
+    private final Material blockMaterial;
+    private final byte     blockData;
 
-	public RelativeBlock(final double x, final double y, final double z, final Material blockMaterial) {
-		this(x, y, z, blockMaterial, (byte)0);
-	}
+    public RelativeBlock(final double x, final double y, final double z, final Material blockMaterial) {
+        this(x, y, z, blockMaterial, (byte)0);
+    }
 
-	public RelativeBlock(final double x, final double y, final double z, final Material blockMaterial, final byte blockData) {
-		super(x, y, z);
-		this.blockMaterial = blockMaterial;
-		this.blockData = blockData;
-	}
+    public RelativeBlock(final double x, final double y, final double z, final Material blockMaterial, final byte blockData) {
+        super(x, y, z);
+        this.blockMaterial = blockMaterial;
+        this.blockData = blockData;
+    }
 
-	public boolean needAdditionalData() {
-		return false;
-	}
+    public boolean needAdditionalData() {
+        return false;
+    }
 
-	public void setAdditionalData(final Block theBlock) {
-		throw new UnsupportedOperationException();
-	}
+    public void setAdditionalData(final Block theBlock) {
+        throw new UnsupportedOperationException();
+    }
 
-	public byte getBlockData() {
-		return this.blockData;
-	}
+    public byte getBlockData() {
+        return this.blockData;
+    }
 
-	public Material getBlockMaterial() {
-		return this.blockMaterial;
-	}
+    public Material getBlockMaterial() {
+        return this.blockMaterial;
+    }
 }

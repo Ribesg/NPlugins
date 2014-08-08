@@ -18,22 +18,22 @@ import java.util.Map;
  */
 public class MuteFilter extends TimedFilter {
 
-	public MuteFilter(final String outputString, final String filteredString, final boolean regex, final long duration) {
-		super(outputString, filteredString, regex, ChatFilterResult.TEMPORARY_MUTE, duration);
-	}
+    public MuteFilter(final String outputString, final String filteredString, final boolean regex, final long duration) {
+        super(outputString, filteredString, regex, ChatFilterResult.TEMPORARY_MUTE, duration);
+    }
 
-	// ############# //
-	// ## Loading ## //
-	// ############# //
+    // ############# //
+    // ## Loading ## //
+    // ############# //
 
-	public static MuteFilter loadFromConfig(final String key, final Map<String, Object> values) {
-		try {
-			final String filteredString = (String)values.get("filteredString");
-			final boolean regex = (boolean)values.get("isRegex");
-			final long duration = (int)values.get("duration");
-			return new MuteFilter(key, filteredString, regex, duration);
-		} catch (final NullPointerException e) {
-			throw new IllegalArgumentException("Missing value", e);
-		}
-	}
+    public static MuteFilter loadFromConfig(final String key, final Map<String, Object> values) {
+        try {
+            final String filteredString = (String)values.get("filteredString");
+            final boolean regex = (boolean)values.get("isRegex");
+            final long duration = (int)values.get("duration");
+            return new MuteFilter(key, filteredString, regex, duration);
+        } catch (final NullPointerException e) {
+            throw new IllegalArgumentException("Missing value", e);
+        }
+    }
 }

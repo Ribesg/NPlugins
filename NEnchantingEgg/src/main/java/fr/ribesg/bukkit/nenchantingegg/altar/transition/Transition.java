@@ -25,86 +25,86 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public abstract class Transition {
 
-	protected final NEnchantingEgg plugin;
+    protected final NEnchantingEgg plugin;
 
-	protected AltarState fromState;
-	protected AltarState toState;
+    protected AltarState fromState;
+    protected AltarState toState;
 
-	private final Map<Integer, Set<Step>> stepsPerDelay;
-	private final int                     maxDelay;
+    private final Map<Integer, Set<Step>> stepsPerDelay;
+    private final int                     maxDelay;
 
-	protected Transition(final NEnchantingEgg plugin) {
-		this.plugin = plugin;
-		final Set<Step> steps = this.createSteps();
+    protected Transition(final NEnchantingEgg plugin) {
+        this.plugin = plugin;
+        final Set<Step> steps = this.createSteps();
 
-		this.stepsPerDelay = new HashMap<>();
+        this.stepsPerDelay = new HashMap<>();
 
-		for (final Step step : steps) {
-			if (this.stepsPerDelay.containsKey(step.getDelay())) {
-				this.stepsPerDelay.get(step.getDelay()).add(step);
-			} else {
-				final Set<Step> stepsForThisDelay = new HashSet<>();
-				stepsForThisDelay.add(step);
-				this.stepsPerDelay.put(step.getDelay(), stepsForThisDelay);
-			}
-		}
+        for (final Step step : steps) {
+            if (this.stepsPerDelay.containsKey(step.getDelay())) {
+                this.stepsPerDelay.get(step.getDelay()).add(step);
+            } else {
+                final Set<Step> stepsForThisDelay = new HashSet<>();
+                stepsForThisDelay.add(step);
+                this.stepsPerDelay.put(step.getDelay(), stepsForThisDelay);
+            }
+        }
 
-		int max = Integer.MIN_VALUE;
-		for (final int i : this.stepsPerDelay.keySet()) {
-			if (max < i) {
-				max = i;
-			}
-		}
-		this.maxDelay = max;
-		this.setFromToStates();
-	}
+        int max = Integer.MIN_VALUE;
+        for (final int i : this.stepsPerDelay.keySet()) {
+            if (max < i) {
+                max = i;
+            }
+        }
+        this.maxDelay = max;
+        this.setFromToStates();
+    }
 
-	public void doTransition(final Altar altar) {
-		this.doTransition(altar, false);
-	}
+    public void doTransition(final Altar altar) {
+        this.doTransition(altar, false);
+    }
 
-	public void doTransition(final Altar altar, final boolean force) {
-		if (this.plugin != null) {
-			if (!force && altar.getState() != this.fromState) {
-				// TODO Exception ?
-				this.plugin.error("Unable to do Transition !");
-				this.plugin.error("Altar Location: " + altar.getCenterLocation());
-				this.plugin.error("Altar state: " + altar.getState());
-				this.plugin.error("Transition to state " +
-				                  this.toState +
-				                  " failed because the Altar was not in state " +
-				                  this.fromState);
-				this.plugin.error("Try to rebuild the Altar?");
-			} else {
-				altar.setPreviousState(altar.getState());
-				altar.setState(AltarState.IN_TRANSITION);
-				for (final Entry<Integer, Set<Step>> e : this.stepsPerDelay.entrySet()) {
-					Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
+    public void doTransition(final Altar altar, final boolean force) {
+        if (this.plugin != null) {
+            if (!force && altar.getState() != this.fromState) {
+                // TODO Exception ?
+                this.plugin.error("Unable to do Transition !");
+                this.plugin.error("Altar Location: " + altar.getCenterLocation());
+                this.plugin.error("Altar state: " + altar.getState());
+                this.plugin.error("Transition to state " +
+                                  this.toState +
+                                  " failed because the Altar was not in state " +
+                                  this.fromState);
+                this.plugin.error("Try to rebuild the Altar?");
+            } else {
+                altar.setPreviousState(altar.getState());
+                altar.setState(AltarState.IN_TRANSITION);
+                for (final Entry<Integer, Set<Step>> e : this.stepsPerDelay.entrySet()) {
+                    Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
 
-						@Override
-						public void run() {
-							for (final Step step : e.getValue()) {
-								step.doStep(altar);
-							}
-						}
-					}, e.getKey());
-				}
-				Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            for (final Step step : e.getValue()) {
+                                step.doStep(altar);
+                            }
+                        }
+                    }, e.getKey());
+                }
+                Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
 
-					@Override
-					public void run() {
-						altar.setState(fr.ribesg.bukkit.nenchantingegg.altar.transition.Transition.this.toState);
-						fr.ribesg.bukkit.nenchantingegg.altar.transition.Transition.this.afterTransition(altar);
-					}
-				}, this.maxDelay + 1);
-			}
-		}
-	}
+                    @Override
+                    public void run() {
+                        altar.setState(fr.ribesg.bukkit.nenchantingegg.altar.transition.Transition.this.toState);
+                        fr.ribesg.bukkit.nenchantingegg.altar.transition.Transition.this.afterTransition(altar);
+                    }
+                }, this.maxDelay + 1);
+            }
+        }
+    }
 
-	protected abstract Set<Step> createSteps();
+    protected abstract Set<Step> createSteps();
 
-	protected abstract void setFromToStates();
+    protected abstract void setFromToStates();
 
-	protected void afterTransition(final Altar altar) {
-	}
+    protected void afterTransition(final Altar altar) {
+    }
 }

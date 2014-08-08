@@ -21,19 +21,19 @@ import org.bukkit.event.player.PlayerMoveEvent;
  */
 public class PlayerChunkMoveEvent extends PlayerMoveEvent {
 
-	// Handlers
-	private static final HandlerList HANDLERS = new HandlerList();
+    // Handlers
+    private static final HandlerList HANDLERS = new HandlerList();
 
-	public static HandlerList getHandlerList() {
-		return HANDLERS;
-	}
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
-	public PlayerChunkMoveEvent(final Player player, final Location from, final Location to) {
-		super(player, from, to);
-	}
+    public PlayerChunkMoveEvent(final Player player, final Location from, final Location to) {
+        super(player, from, to);
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return HANDLERS;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
 }

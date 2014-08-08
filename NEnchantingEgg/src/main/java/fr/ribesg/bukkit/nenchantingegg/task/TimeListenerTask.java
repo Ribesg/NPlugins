@@ -22,21 +22,21 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class TimeListenerTask extends BukkitRunnable {
 
-	private final NEnchantingEgg plugin;
+    private final NEnchantingEgg plugin;
 
-	public TimeListenerTask(final NEnchantingEgg instance) {
-		super();
-		this.plugin = instance;
-	}
+    public TimeListenerTask(final NEnchantingEgg instance) {
+        super();
+        this.plugin = instance;
+    }
 
-	@Override
-	public void run() {
-		this.plugin.entering(this.getClass(), "run");
-		for (final World w : Bukkit.getWorlds()) {
-			final long actualTime = w.getTime();
-			final MinecraftTime time = MinecraftTime.get(actualTime);
-			this.plugin.getAltars().time(w.getName(), time);
-		}
-		this.plugin.exiting(this.getClass(), "run");
-	}
+    @Override
+    public void run() {
+        this.plugin.entering(this.getClass(), "run");
+        for (final World w : Bukkit.getWorlds()) {
+            final long actualTime = w.getTime();
+            final MinecraftTime time = MinecraftTime.get(actualTime);
+            this.plugin.getAltars().time(w.getName(), time);
+        }
+        this.plugin.exiting(this.getClass(), "run");
+    }
 }

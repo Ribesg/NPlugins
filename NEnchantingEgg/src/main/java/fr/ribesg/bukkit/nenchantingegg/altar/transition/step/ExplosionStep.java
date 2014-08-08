@@ -16,19 +16,19 @@ import org.bukkit.Location;
 
 public class ExplosionStep extends Step {
 
-	private final RelativeLocation loc;
+    private final RelativeLocation loc;
 
-	public ExplosionStep(final int delay, final RelativeLocation loc) {
-		super(delay);
-		this.loc = loc;
-	}
+    public ExplosionStep(final int delay, final RelativeLocation loc) {
+        super(delay);
+        this.loc = loc;
+    }
 
-	@Override
-	public void doStep(final Altar altar) {
-		final Location centerLocation = altar.getCenterLocation().toBukkitLocation();
-		final double x = centerLocation.getX() + this.loc.getRelativeLocation().getX();
-		final double y = centerLocation.getY() + this.loc.getRelativeLocation().getY();
-		final double z = centerLocation.getZ() + this.loc.getRelativeLocation().getZ();
-		altar.getCenterLocation().getWorld().createExplosion(x, y, z, 5f, false, false);
-	}
+    @Override
+    public void doStep(final Altar altar) {
+        final Location centerLocation = altar.getCenterLocation().toBukkitLocation();
+        final double x = centerLocation.getX() + this.loc.getRelativeLocation().getX();
+        final double y = centerLocation.getY() + this.loc.getRelativeLocation().getY();
+        final double z = centerLocation.getZ() + this.loc.getRelativeLocation().getZ();
+        altar.getCenterLocation().getWorld().createExplosion(x, y, z, 5f, false, false);
+    }
 }

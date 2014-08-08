@@ -16,19 +16,19 @@ import java.util.Date;
  */
 public class DateUtil {
 
-	public static Date now() {
-		return new Date();
-	}
+    public static Date now() {
+        return new Date();
+    }
 
-	public static String formatDate(final Date date) {
-		return String.format("%tFT%<tRZ", date).replace(':', 'h');
-	}
+    public static String formatDate(final Date date) {
+        return String.format("%tFT%<tRZ", date).replace(':', 'h');
+    }
 
-	public static String formatDate(final long date) {
-		return formatDate(new Date(date));
-	}
+    public static String formatDate(final long date) {
+        return formatDate(new Date(date));
+    }
 
-	public static String formatNow() {
-		return formatDate(now());
-	}
+    public static String formatNow() {
+        return formatDate(now());
+    }
 }

@@ -16,20 +16,20 @@ import org.bukkit.block.Block;
 
 public class BlockStep extends Step {
 
-	private final RelativeBlock block;
+    private final RelativeBlock block;
 
-	public BlockStep(final int delay, final RelativeBlock block) {
-		super(delay);
-		this.block = block;
-	}
+    public BlockStep(final int delay, final RelativeBlock block) {
+        super(delay);
+        this.block = block;
+    }
 
-	@Override
-	public void doStep(final Altar altar) {
-		final Block b = altar.getCenterLocation().toBukkitLocation().add(this.block.getRelativeLocation()).getBlock();
-		b.setType(this.block.getBlockMaterial());
-		b.setData(this.block.getBlockData());
-		if (this.block.needAdditionalData()) {
-			this.block.setAdditionalData(b);
-		}
-	}
+    @Override
+    public void doStep(final Altar altar) {
+        final Block b = altar.getCenterLocation().toBukkitLocation().add(this.block.getRelativeLocation()).getBlock();
+        b.setType(this.block.getBlockMaterial());
+        b.setData(this.block.getBlockData());
+        if (this.block.needAdditionalData()) {
+            this.block.setAdditionalData(b);
+        }
+    }
 }

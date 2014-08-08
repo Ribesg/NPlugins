@@ -21,17 +21,17 @@ import org.bukkit.event.EventPriority;
 
 public class BoosterFlagListener extends AbstractListener {
 
-	public BoosterFlagListener(final NCuboid instance) {
-		super(instance);
-	}
+    public BoosterFlagListener(final NCuboid instance) {
+        super(instance);
+    }
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
-		final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
-		if (!ext.isCustomCancelled()) {
-			if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.BOOSTER)) {
-				event.getPlayer().setVelocity(ext.getToRegion().getVectorAttribute(Attribute.BOOSTER_VECTOR));
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
+        final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
+        if (!ext.isCustomCancelled()) {
+            if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.BOOSTER)) {
+                event.getPlayer().setVelocity(ext.getToRegion().getVectorAttribute(Attribute.BOOSTER_VECTOR));
+            }
+        }
+    }
 }

@@ -35,72 +35,72 @@ import org.bukkit.util.Vector;
  */
 public class DamageListener implements Listener {
 
-	private static final Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();
 
-	private final NTheEndAgain plugin;
+    private final NTheEndAgain plugin;
 
-	public DamageListener(final NTheEndAgain instance) {
-		this.plugin = instance;
-	}
+    public DamageListener(final NTheEndAgain instance) {
+        this.plugin = instance;
+    }
 
-	/**
-	 * Player => EnderDragon:
-	 * - Counts damages done to EnderDragons by players or by projectiles thrown by players
-	 * <p/>
-	 * EnderDragon => Player:
-	 * - Handles Damage Multiplier
-	 * - Simulates EnderDragon pushing Player behaviour
-	 *
-	 * @param event an EntityDamageByEntityEvent
-	 */
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onEntityDamageByEntity(final EntityDamageByEntityEvent event) {
-		// EnderDragon damaged by Player
-		if (event.getEntityType() == EntityType.ENDER_DRAGON) {
-			final Player player;
-			if (event.getDamager().getType() == EntityType.PLAYER) {
-				player = (Player)event.getDamager();
-			} else if (event.getDamager() instanceof Projectile && ((Projectile)event.getDamager()).getShooter() instanceof Player) {
-				player = (Player)((Projectile)event.getDamager()).getShooter();
-			} else {
-				// Not caused by a Player
-				return;
-			}
-			final EnderDragon dragon = (EnderDragon)event.getEntity();
-			final World endWorld = dragon.getWorld();
-			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
-			if (handler != null) {
-				handler.playerHitED(dragon.getUniqueId(), player.getName(), event.getDamage());
-			}
-		}
+    /**
+     * Player => EnderDragon:
+     * - Counts damages done to EnderDragons by players or by projectiles thrown by players
+     * <p/>
+     * EnderDragon => Player:
+     * - Handles Damage Multiplier
+     * - Simulates EnderDragon pushing Player behaviour
+     *
+     * @param event an EntityDamageByEntityEvent
+     */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onEntityDamageByEntity(final EntityDamageByEntityEvent event) {
+        // EnderDragon damaged by Player
+        if (event.getEntityType() == EntityType.ENDER_DRAGON) {
+            final Player player;
+            if (event.getDamager().getType() == EntityType.PLAYER) {
+                player = (Player)event.getDamager();
+            } else if (event.getDamager() instanceof Projectile && ((Projectile)event.getDamager()).getShooter() instanceof Player) {
+                player = (Player)((Projectile)event.getDamager()).getShooter();
+            } else {
+                // Not caused by a Player
+                return;
+            }
+            final EnderDragon dragon = (EnderDragon)event.getEntity();
+            final World endWorld = dragon.getWorld();
+            final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
+            if (handler != null) {
+                handler.playerHitED(dragon.getUniqueId(), player.getName(), event.getDamage());
+            }
+        }
 
-		// Player damaged by EnderDragon
-		else if (event.getEntityType() == EntityType.PLAYER && event.getDamager().getType() == EntityType.ENDER_DRAGON) {
-			final World endWorld = event.getEntity().getWorld();
-			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
-			if (handler != null) {
-				event.setDamage(Math.round(event.getDamage() * handler.getConfig().getEdDamageMultiplier()));
-				if (handler.getConfig().getEdPushesPlayers() == 1) {
-					// Simulate ED pushing player
-					final Vector velocity = event.getDamager().getLocation().toVector();
-					velocity.subtract(event.getEntity().getLocation().toVector());
-					velocity.normalize().multiply(-1);
-					if (velocity.getY() < 0.05f) {
-						velocity.setY(0.05f);
-					}
-					if (RANDOM.nextFloat() < 0.025f) {
-						velocity.setY(10);
-					}
-					velocity.normalize().multiply(handler.getConfig().getEdPushForce());
-					Bukkit.getScheduler().runTask(this.plugin, new BukkitRunnable() {
+        // Player damaged by EnderDragon
+        else if (event.getEntityType() == EntityType.PLAYER && event.getDamager().getType() == EntityType.ENDER_DRAGON) {
+            final World endWorld = event.getEntity().getWorld();
+            final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(endWorld.getName()));
+            if (handler != null) {
+                event.setDamage(Math.round(event.getDamage() * handler.getConfig().getEdDamageMultiplier()));
+                if (handler.getConfig().getEdPushesPlayers() == 1) {
+                    // Simulate ED pushing player
+                    final Vector velocity = event.getDamager().getLocation().toVector();
+                    velocity.subtract(event.getEntity().getLocation().toVector());
+                    velocity.normalize().multiply(-1);
+                    if (velocity.getY() < 0.05f) {
+                        velocity.setY(0.05f);
+                    }
+                    if (RANDOM.nextFloat() < 0.025f) {
+                        velocity.setY(10);
+                    }
+                    velocity.normalize().multiply(handler.getConfig().getEdPushForce());
+                    Bukkit.getScheduler().runTask(this.plugin, new BukkitRunnable() {
 
-						@Override
-						public void run() {
-							event.getEntity().setVelocity(velocity);
-						}
-					});
-				}
-			}
-		}
-	}
+                        @Override
+                        public void run() {
+                            event.getEntity().setVelocity(velocity);
+                        }
+                    });
+                }
+            }
+        }
+    }
 }

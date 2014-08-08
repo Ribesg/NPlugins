@@ -16,13 +16,13 @@ package fr.ribesg.bukkit.ncore.common.logging;
  */
 public interface DenyFilter {
 
-	/**
-	 * Check if this DenyFilter denies a message or not.
-	 *
-	 * @param message the message to check
-	 *
-	 * @return true if this DenyFilter prevents this message from being logged,
-	 * false otherwise
-	 */
-	public boolean denies(final String message);
+    /**
+     * Check if this DenyFilter denies a message or not.
+     *
+     * @param message the message to check
+     *
+     * @return true if this DenyFilter prevents this message from being logged,
+     * false otherwise
+     */
+    public boolean denies(final String message);
 }

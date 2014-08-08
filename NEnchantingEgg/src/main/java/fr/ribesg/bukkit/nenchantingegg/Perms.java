@@ -13,19 +13,19 @@ import org.bukkit.permissions.Permissible;
 
 public class Perms {
 
-	private static final String ADMIN      = "nenchantingegg.admin";
-	private static final String USER       = "nenchantingegg.user";
-	private static final String CMD_RELOAD = "nenchantingegg.cmd.reload";
+    private static final String ADMIN      = "nenchantingegg.admin";
+    private static final String USER       = "nenchantingegg.user";
+    private static final String CMD_RELOAD = "nenchantingegg.cmd.reload";
 
-	public static boolean isAdmin(final Permissible user) {
-		return user.isOp() || user.hasPermission(ADMIN);
-	}
+    public static boolean isAdmin(final Permissible user) {
+        return user.isOp() || user.hasPermission(ADMIN);
+    }
 
-	public static boolean isUser(final Permissible user) {
-		return user.hasPermission(USER);
-	}
+    public static boolean isUser(final Permissible user) {
+        return user.hasPermission(USER);
+    }
 
-	public static boolean hasReload(final Permissible user) {
-		return isAdmin(user) || user.hasPermission(CMD_RELOAD);
-	}
+    public static boolean hasReload(final Permissible user) {
+        return isAdmin(user) || user.hasPermission(CMD_RELOAD);
+    }
 }

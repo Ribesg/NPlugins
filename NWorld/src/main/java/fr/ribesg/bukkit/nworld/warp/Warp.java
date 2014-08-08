@@ -18,66 +18,66 @@ import org.bukkit.Location;
  */
 public class Warp implements Comparable<Warp> {
 
-	private String    name;
-	private NLocation location;
-	private boolean   enabled;
-	private String    requiredPermission;
-	private boolean   hidden;
+    private String    name;
+    private NLocation location;
+    private boolean   enabled;
+    private String    requiredPermission;
+    private boolean   hidden;
 
-	public Warp(final String name, final NLocation location, final boolean enabled, final String requiredPermission, final boolean hidden) {
-		this.name = name;
-		this.location = location;
-		this.enabled = enabled;
-		this.requiredPermission = requiredPermission;
-		this.hidden = hidden;
-	}
+    public Warp(final String name, final NLocation location, final boolean enabled, final String requiredPermission, final boolean hidden) {
+        this.name = name;
+        this.location = location;
+        this.enabled = enabled;
+        this.requiredPermission = requiredPermission;
+        this.hidden = hidden;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public void setName(final String name) {
-		this.name = name;
-	}
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-	public NLocation getLocation() {
-		return this.location;
-	}
+    public NLocation getLocation() {
+        return this.location;
+    }
 
-	public void setLocation(final NLocation location) {
-		this.location = location;
-	}
+    public void setLocation(final NLocation location) {
+        this.location = location;
+    }
 
-	public void setLocation(final Location location) {
-		this.setLocation(new NLocation(location));
-	}
+    public void setLocation(final Location location) {
+        this.setLocation(new NLocation(location));
+    }
 
-	public boolean isEnabled() {
-		return this.enabled;
-	}
+    public boolean isEnabled() {
+        return this.enabled;
+    }
 
-	public void setEnabled(final boolean enabled) {
-		this.enabled = enabled;
-	}
+    public void setEnabled(final boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	public String getRequiredPermission() {
-		return this.requiredPermission;
-	}
+    public String getRequiredPermission() {
+        return this.requiredPermission;
+    }
 
-	public void setRequiredPermission(final String requiredPermission) {
-		this.requiredPermission = requiredPermission;
-	}
+    public void setRequiredPermission(final String requiredPermission) {
+        this.requiredPermission = requiredPermission;
+    }
 
-	public boolean isHidden() {
-		return this.hidden;
-	}
+    public boolean isHidden() {
+        return this.hidden;
+    }
 
-	public void setHidden(final boolean hidden) {
-		this.hidden = hidden;
-	}
+    public void setHidden(final boolean hidden) {
+        this.hidden = hidden;
+    }
 
-	@Override
-	public int compareTo(final Warp o) {
-		return this.name.compareTo(o.name);
-	}
+    @Override
+    public int compareTo(final Warp o) {
+        return this.name.compareTo(o.name);
+    }
 }

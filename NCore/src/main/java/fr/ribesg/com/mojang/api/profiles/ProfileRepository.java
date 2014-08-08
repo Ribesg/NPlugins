@@ -11,5 +11,5 @@ package fr.ribesg.com.mojang.api.profiles;
 
 public interface ProfileRepository {
 
-	public Profile[] findProfilesByNames(String... names);
+    public Profile[] findProfilesByNames(String... names);
 }

@@ -23,23 +23,23 @@ import org.bukkit.event.EventPriority;
 
 public class PassFlagListener extends AbstractListener {
 
-	public PassFlagListener(final NCuboid instance) {
-		super(instance);
-	}
+    public PassFlagListener(final NCuboid instance) {
+        super(instance);
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
-		final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
-		if (!ext.isCustomCancelled()) {
-			final GeneralRegion to = ext.getToRegion();
-			if (to != null && to.getFlag(Flag.PASS) && !ext.getFromRegions().contains(to)) {
-				Location loc = to.getLocationAttribute(Attribute.EXTERNAL_POINT);
-				if (loc == null) {
-					loc = event.getFrom();
-				}
-				event.setTo(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getBlockY() + 0.1, loc.getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
-				ext.setCustomCancelled(true);
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
+        final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
+        if (!ext.isCustomCancelled()) {
+            final GeneralRegion to = ext.getToRegion();
+            if (to != null && to.getFlag(Flag.PASS) && !ext.getFromRegions().contains(to)) {
+                Location loc = to.getLocationAttribute(Attribute.EXTERNAL_POINT);
+                if (loc == null) {
+                    loc = event.getFrom();
+                }
+                event.setTo(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getBlockY() + 0.1, loc.getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
+                ext.setCustomCancelled(true);
+            }
+        }
+    }
 }

@@ -21,12 +21,12 @@ import java.util.UUID;
  */
 public interface GeneralNode extends Node {
 
-	/**
-	 * Checks if a Player is in Spy Mode.
-	 *
-	 * @param playerId the player's UUID
-	 *
-	 * @return true if the Player is in Spy Mode, false otherwise
-	 */
-	public boolean isSpy(final UUID playerId);
+    /**
+     * Checks if a Player is in Spy Mode.
+     *
+     * @param playerId the player's UUID
+     *
+     * @return true if the Player is in Spy Mode, false otherwise
+     */
+    public boolean isSpy(final UUID playerId);
 }

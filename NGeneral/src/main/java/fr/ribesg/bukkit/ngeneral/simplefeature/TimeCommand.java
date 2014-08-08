@@ -23,71 +23,71 @@ import org.bukkit.entity.Player;
 
 public class TimeCommand implements CommandExecutor {
 
-	private static final String COMMAND = "time";
+    private static final String COMMAND = "time";
 
-	private final NGeneral plugin;
+    private final NGeneral plugin;
 
-	public TimeCommand(final NGeneral instance) {
-		this.plugin = instance;
-		this.plugin.setCommandExecutor(COMMAND, this);
-	}
+    public TimeCommand(final NGeneral instance) {
+        this.plugin = instance;
+        this.plugin.setCommandExecutor(COMMAND, this);
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if (command.getName().equals(COMMAND)) {
-			if (!Perms.hasTime(sender)) {
-				this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-				return true;
-			} else if (args.length == 1) {
-				if (!(sender instanceof Player)) {
-					this.plugin.sendMessage(sender, MessageId.missingWorldArg);
-					return true;
-				}
-				final Player player = (Player)sender;
-				final World world = player.getWorld();
-				final long value = this.parseValue(args[0]);
-				if (value == -1) {
-					return false;
-				}
-				world.setTime(value);
-				this.plugin.broadcastMessage(MessageId.general_timeSet, args[0], world.getName(), player.getName());
-				return true;
-			} else if (args.length == 2) {
-				final World world = Bukkit.getWorld(args[1]);
-				if (world == null) {
-					this.plugin.sendMessage(sender, MessageId.unknownWorld, args[1]);
-					return true;
-				}
-				final long value = this.parseValue(args[0]);
-				if (value == -1) {
-					return false;
-				}
-				world.setTime(value);
-				this.plugin.broadcastMessage(MessageId.general_timeSet, args[0], world.getName(), sender.getName());
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+        if (command.getName().equals(COMMAND)) {
+            if (!Perms.hasTime(sender)) {
+                this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+                return true;
+            } else if (args.length == 1) {
+                if (!(sender instanceof Player)) {
+                    this.plugin.sendMessage(sender, MessageId.missingWorldArg);
+                    return true;
+                }
+                final Player player = (Player)sender;
+                final World world = player.getWorld();
+                final long value = this.parseValue(args[0]);
+                if (value == -1) {
+                    return false;
+                }
+                world.setTime(value);
+                this.plugin.broadcastMessage(MessageId.general_timeSet, args[0], world.getName(), player.getName());
+                return true;
+            } else if (args.length == 2) {
+                final World world = Bukkit.getWorld(args[1]);
+                if (world == null) {
+                    this.plugin.sendMessage(sender, MessageId.unknownWorld, args[1]);
+                    return true;
+                }
+                final long value = this.parseValue(args[0]);
+                if (value == -1) {
+                    return false;
+                }
+                world.setTime(value);
+                this.plugin.broadcastMessage(MessageId.general_timeSet, args[0], world.getName(), sender.getName());
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
-	private long parseValue(final String value) {
-		switch (value.toLowerCase()) {
-			case "d":
-			case "day":
-				return MinecraftTime.DAY.start();
-			case "n":
-			case "night":
-				return MinecraftTime.NIGHT.start();
-			default:
-				try {
-					final long l = Long.parseLong(value);
-					return l % MinecraftTime.DAY_LENGTH;
-				} catch (final NumberFormatException e) {
-					return -1;
-				}
-		}
-	}
+    private long parseValue(final String value) {
+        switch (value.toLowerCase()) {
+            case "d":
+            case "day":
+                return MinecraftTime.DAY.start();
+            case "n":
+            case "night":
+                return MinecraftTime.NIGHT.start();
+            default:
+                try {
+                    final long l = Long.parseLong(value);
+                    return l % MinecraftTime.DAY_LENGTH;
+                } catch (final NumberFormatException e) {
+                    return -1;
+                }
+        }
+    }
 }

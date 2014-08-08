@@ -21,59 +21,59 @@ import org.bukkit.entity.Player;
 
 public class BusyCommand implements CommandExecutor {
 
-	private static final String BUSY_PREFIX = String.valueOf(ChatColor.DARK_RED) + ChatColor.ITALIC;
-	private static final String COMMAND     = "busy";
+    private static final String BUSY_PREFIX = String.valueOf(ChatColor.DARK_RED) + ChatColor.ITALIC;
+    private static final String COMMAND     = "busy";
 
-	private final NGeneral plugin;
+    private final NGeneral plugin;
 
-	public BusyCommand(final NGeneral instance) {
-		this.plugin = instance;
-		this.plugin.setCommandExecutor(COMMAND, this);
-	}
+    public BusyCommand(final NGeneral instance) {
+        this.plugin = instance;
+        this.plugin.setCommandExecutor(COMMAND, this);
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if (command.getName().equals(COMMAND)) {
-			if (!Perms.hasBusy(sender)) {
-				this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-			} else if (!(sender instanceof Player)) {
-				this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-			} else {
-				final Player player = (Player)sender;
-				String reason = "";
-				for (final String arg : args) {
-					reason += arg + ' ';
-				}
-				if (!reason.isEmpty()) {
-					reason = reason.substring(0, reason.length() - 1);
-				}
-				if (player.getPlayerListName().startsWith(BUSY_PREFIX)) {
-					player.setPlayerListName(player.getName());
-					if (this.plugin.getPluginConfig().hasBroadCastOnBusy()) {
-						if (!reason.isEmpty()) {
-							this.plugin.broadcastMessage(MessageId.general_busy_noLongerBusyBroadcastReason, player.getName(), reason);
-						} else {
-							this.plugin.broadcastMessage(MessageId.general_busy_noLongerBusyBroadcast, player.getName());
-						}
-					}
-				} else {
-					String newPlayerListName = BUSY_PREFIX + player.getName();
-					if (newPlayerListName.length() > 16) {
-						newPlayerListName = newPlayerListName.substring(0, 16);
-					}
-					player.setPlayerListName(newPlayerListName);
-					if (this.plugin.getPluginConfig().hasBroadCastOnBusy()) {
-						if (!reason.isEmpty()) {
-							this.plugin.broadcastMessage(MessageId.general_busy_nowBusyBroadcastReason, player.getName(), reason);
-						} else {
-							this.plugin.broadcastMessage(MessageId.general_busy_nowBusyBroadcast, player.getName());
-						}
-					}
-				}
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+        if (command.getName().equals(COMMAND)) {
+            if (!Perms.hasBusy(sender)) {
+                this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+            } else if (!(sender instanceof Player)) {
+                this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+            } else {
+                final Player player = (Player)sender;
+                String reason = "";
+                for (final String arg : args) {
+                    reason += arg + ' ';
+                }
+                if (!reason.isEmpty()) {
+                    reason = reason.substring(0, reason.length() - 1);
+                }
+                if (player.getPlayerListName().startsWith(BUSY_PREFIX)) {
+                    player.setPlayerListName(player.getName());
+                    if (this.plugin.getPluginConfig().hasBroadCastOnBusy()) {
+                        if (!reason.isEmpty()) {
+                            this.plugin.broadcastMessage(MessageId.general_busy_noLongerBusyBroadcastReason, player.getName(), reason);
+                        } else {
+                            this.plugin.broadcastMessage(MessageId.general_busy_noLongerBusyBroadcast, player.getName());
+                        }
+                    }
+                } else {
+                    String newPlayerListName = BUSY_PREFIX + player.getName();
+                    if (newPlayerListName.length() > 16) {
+                        newPlayerListName = newPlayerListName.substring(0, 16);
+                    }
+                    player.setPlayerListName(newPlayerListName);
+                    if (this.plugin.getPluginConfig().hasBroadCastOnBusy()) {
+                        if (!reason.isEmpty()) {
+                            this.plugin.broadcastMessage(MessageId.general_busy_nowBusyBroadcastReason, player.getName(), reason);
+                        } else {
+                            this.plugin.broadcastMessage(MessageId.general_busy_nowBusyBroadcast, player.getName());
+                        }
+                    }
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -23,47 +23,47 @@ import org.bukkit.event.block.SignChangeEvent;
 
 public class SignColorsListener implements Listener {
 
-	private static String colorsRegex;
+    private static String colorsRegex;
 
-	private static String getColorsRegex() {
-		if (colorsRegex == null) {
-			final StringBuilder s = new StringBuilder(3 + ChatColor.values().length);
-			s.append("^.*");
-			s.append(ColorUtil.ALTERNATE_COLOR_CHAR_STRING);
-			s.append('[');
-			for (final ChatColor c : ChatColor.values()) {
-				s.append(c.getChar());
-			}
-			s.append("].*$");
-			colorsRegex = s.toString();
-		}
-		return colorsRegex;
-	}
+    private static String getColorsRegex() {
+        if (colorsRegex == null) {
+            final StringBuilder s = new StringBuilder(3 + ChatColor.values().length);
+            s.append("^.*");
+            s.append(ColorUtil.ALTERNATE_COLOR_CHAR_STRING);
+            s.append('[');
+            for (final ChatColor c : ChatColor.values()) {
+                s.append(c.getChar());
+            }
+            s.append("].*$");
+            colorsRegex = s.toString();
+        }
+        return colorsRegex;
+    }
 
-	private final NGeneral plugin;
+    private final NGeneral plugin;
 
-	public SignColorsListener(final NGeneral instance) {
-		this.plugin = instance;
-		Bukkit.getPluginManager().registerEvents(this, this.plugin);
-	}
+    public SignColorsListener(final NGeneral instance) {
+        this.plugin = instance;
+        Bukkit.getPluginManager().registerEvents(this, this.plugin);
+    }
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onSignChange(final SignChangeEvent event) {
-		boolean containsColors = false;
-		for (final String line : event.getLines()) {
-			if (line.matches(getColorsRegex())) {
-				containsColors = true;
-				break;
-			}
-		}
-		if (containsColors) {
-			if (Perms.hasSignColors(event.getPlayer())) {
-				for (int i = 0; i < 4; i++) {
-					event.setLine(i, ColorUtil.colorize(event.getLine(i)));
-				}
-			} else {
-				this.plugin.sendMessage(event.getPlayer(), MessageId.general_signcolors_permissionDenied);
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onSignChange(final SignChangeEvent event) {
+        boolean containsColors = false;
+        for (final String line : event.getLines()) {
+            if (line.matches(getColorsRegex())) {
+                containsColors = true;
+                break;
+            }
+        }
+        if (containsColors) {
+            if (Perms.hasSignColors(event.getPlayer())) {
+                for (int i = 0; i < 4; i++) {
+                    event.setLine(i, ColorUtil.colorize(event.getLine(i)));
+                }
+            } else {
+                this.plugin.sendMessage(event.getPlayer(), MessageId.general_signcolors_permissionDenied);
+            }
+        }
+    }
 }

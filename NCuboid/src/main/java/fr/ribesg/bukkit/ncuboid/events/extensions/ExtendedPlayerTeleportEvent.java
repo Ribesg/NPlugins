@@ -20,32 +20,32 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class ExtendedPlayerTeleportEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion            fromRegion;
-	private final SortedSet<GeneralRegion> fromRegions;
-	private final GeneralRegion            toRegion;
-	private final SortedSet<GeneralRegion> toRegions;
+    private final GeneralRegion            fromRegion;
+    private final SortedSet<GeneralRegion> fromRegions;
+    private final GeneralRegion            toRegion;
+    private final SortedSet<GeneralRegion> toRegions;
 
-	public ExtendedPlayerTeleportEvent(final RegionDb db, final PlayerTeleportEvent event) {
-		super(db.getPlugin(), event);
-		this.fromRegions = db.getAllByLocation(event.getFrom());
-		this.fromRegion = db.getPrior(this.fromRegions);
-		this.toRegions = db.getAllByLocation(event.getTo());
-		this.toRegion = db.getPrior(this.toRegions);
-	}
+    public ExtendedPlayerTeleportEvent(final RegionDb db, final PlayerTeleportEvent event) {
+        super(db.getPlugin(), event);
+        this.fromRegions = db.getAllByLocation(event.getFrom());
+        this.fromRegion = db.getPrior(this.fromRegions);
+        this.toRegions = db.getAllByLocation(event.getTo());
+        this.toRegion = db.getPrior(this.toRegions);
+    }
 
-	public GeneralRegion getFromRegion() {
-		return this.fromRegion;
-	}
+    public GeneralRegion getFromRegion() {
+        return this.fromRegion;
+    }
 
-	public Set<GeneralRegion> getFromRegions() {
-		return this.fromRegions;
-	}
+    public Set<GeneralRegion> getFromRegions() {
+        return this.fromRegions;
+    }
 
-	public GeneralRegion getToRegion() {
-		return this.toRegion;
-	}
+    public GeneralRegion getToRegion() {
+        return this.toRegion;
+    }
 
-	public Set<GeneralRegion> getToRegions() {
-		return this.toRegions;
-	}
+    public Set<GeneralRegion> getToRegions() {
+        return this.toRegions;
+    }
 }

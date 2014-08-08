@@ -25,36 +25,36 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class JailFlagListener extends AbstractListener {
 
-	public JailFlagListener(final NCuboid instance) {
-		super(instance);
-	}
+    public JailFlagListener(final NCuboid instance) {
+        super(instance);
+    }
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
-		final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
-		if (!ext.isCustomCancelled()) {
-			final Player player = event.getPlayer();
-			if (this.getPlugin().isJailed(player.getUniqueId())) {
-				final Jail jail = this.getPlugin().getJails().getJailForPlayer(player.getUniqueId());
-				final GeneralRegion region = jail.getRegion();
-				if (ext.getToRegions() == null || !ext.getToRegions().contains(region)) {
-					player.teleport(NLocation.fixDirection(jail.getLocation().toBukkitLocation(), player.getLocation()));
-					ext.setCustomCancelled(true);
-				}
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
+        final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
+        if (!ext.isCustomCancelled()) {
+            final Player player = event.getPlayer();
+            if (this.getPlugin().isJailed(player.getUniqueId())) {
+                final Jail jail = this.getPlugin().getJails().getJailForPlayer(player.getUniqueId());
+                final GeneralRegion region = jail.getRegion();
+                if (ext.getToRegions() == null || !ext.getToRegions().contains(region)) {
+                    player.teleport(NLocation.fixDirection(jail.getLocation().toBukkitLocation(), player.getLocation()));
+                    ext.setCustomCancelled(true);
+                }
+            }
+        }
+    }
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPlayerTeleport(final ExtendedPlayerTeleportEvent ext) {
-		final PlayerTeleportEvent event = (PlayerTeleportEvent)ext.getBaseEvent();
-		final Player player = event.getPlayer();
-		if (this.getPlugin().isJailed(player.getUniqueId())) {
-			final Jail jail = this.getPlugin().getJails().getJailForPlayer(player.getUniqueId());
-			final GeneralRegion region = jail.getRegion();
-			if (ext.getToRegions() == null || !ext.getToRegions().contains(region)) {
-				event.setCancelled(true);
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPlayerTeleport(final ExtendedPlayerTeleportEvent ext) {
+        final PlayerTeleportEvent event = (PlayerTeleportEvent)ext.getBaseEvent();
+        final Player player = event.getPlayer();
+        if (this.getPlugin().isJailed(player.getUniqueId())) {
+            final Jail jail = this.getPlugin().getJails().getJailForPlayer(player.getUniqueId());
+            final GeneralRegion region = jail.getRegion();
+            if (ext.getToRegions() == null || !ext.getToRegions().contains(region)) {
+                event.setCancelled(true);
+            }
+        }
+    }
 }

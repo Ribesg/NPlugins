@@ -19,28 +19,28 @@ import org.bukkit.World;
  */
 public class StockWorld extends GeneralWorld {
 
-	public StockWorld(final NWorld instance, final String worldName, final WorldType type, final NLocation spawnLocation, final String requiredPermission, final boolean enabled, final boolean hidden) {
-		super(instance, worldName, spawnLocation, requiredPermission, enabled, hidden);
-		this.setType(type);
-	}
+    public StockWorld(final NWorld instance, final String worldName, final WorldType type, final NLocation spawnLocation, final String requiredPermission, final boolean enabled, final boolean hidden) {
+        super(instance, worldName, spawnLocation, requiredPermission, enabled, hidden);
+        this.setType(type);
+    }
 
-	@Override
-	public World create() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public World create() {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public World load() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public World load() {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public void unload() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public void unload() {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public long getSeed() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public long getSeed() {
+        throw new UnsupportedOperationException();
+    }
 }

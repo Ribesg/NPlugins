@@ -22,25 +22,25 @@ import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 
 public class FireFlagListener extends AbstractListener {
 
-	public FireFlagListener(final NCuboid instance) {
-		super(instance);
-	}
+    public FireFlagListener(final NCuboid instance) {
+        super(instance);
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onBlockBurn(final BlockBurnEvent event) {
-		final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
-		if (region != null && region.getFlag(Flag.FIRE)) {
-			event.setCancelled(true);
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onBlockBurn(final BlockBurnEvent event) {
+        final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
+        if (region != null && region.getFlag(Flag.FIRE)) {
+            event.setCancelled(true);
+        }
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onBlockIgnite(final BlockIgniteEvent event) {
-		if (event.getCause() != IgniteCause.FLINT_AND_STEEL) {
-			final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
-			if (region != null && region.getFlag(Flag.FIRE)) {
-				event.setCancelled(true);
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onBlockIgnite(final BlockIgniteEvent event) {
+        if (event.getCause() != IgniteCause.FLINT_AND_STEEL) {
+            final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getBlock().getLocation());
+            if (region != null && region.getFlag(Flag.FIRE)) {
+                event.setCancelled(true);
+            }
+        }
+    }
 }

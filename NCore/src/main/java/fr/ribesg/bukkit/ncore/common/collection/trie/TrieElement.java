@@ -11,5 +11,5 @@ package fr.ribesg.bukkit.ncore.common.collection.trie;
 
 public interface TrieElement {
 
-	public char[] getCharSequence();
+    public char[] getCharSequence();
 }

@@ -29,38 +29,38 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class MaterialUtilTest {
 
-	private final Material awaitedMaterial;
-	private final String   idString;
+    private final Material awaitedMaterial;
+    private final String   idString;
 
-	public MaterialUtilTest(final Material awaitedMaterial, final String idString) {
-		this.awaitedMaterial = awaitedMaterial;
-		this.idString = idString;
-	}
+    public MaterialUtilTest(final Material awaitedMaterial, final String idString) {
+        this.awaitedMaterial = awaitedMaterial;
+        this.idString = idString;
+    }
 
-	@Test
-	public void testGetMaterial() throws InventoryUtilException {
-		final String awaitedMaterialName = this.awaitedMaterial.name();
+    @Test
+    public void testGetMaterial() throws InventoryUtilException {
+        final String awaitedMaterialName = this.awaitedMaterial.name();
 
-		final Material foundMaterial = MaterialUtil.getMaterial(this.idString);
-		final String foundMaterialName = foundMaterial == null ? "null" : foundMaterial.name();
-		Assert.assertEquals("Expected Material '" + awaitedMaterialName + "' but found '" + foundMaterialName + '\'', awaitedMaterialName, foundMaterialName);
-	}
+        final Material foundMaterial = MaterialUtil.getMaterial(this.idString);
+        final String foundMaterialName = foundMaterial == null ? "null" : foundMaterial.name();
+        Assert.assertEquals("Expected Material '" + awaitedMaterialName + "' but found '" + foundMaterialName + '\'', awaitedMaterialName, foundMaterialName);
+    }
 
-	@Parameters
-	public static Collection<Object[]> data() throws InventoryUtilException {
-		final Collection<Object[]> data = new ArrayList<>();
-		for (final Material m : Material.values()) {
-			if (!MaterialUtil.isMaterialDeprecated(m)) {
-				data.add(new Object[]{
-						m,
-						m.name()
-				});
-				data.add(new Object[]{
-						m,
-						Integer.toString(m.getId())
-				});
-			}
-		}
-		return data;
-	}
+    @Parameters
+    public static Collection<Object[]> data() throws InventoryUtilException {
+        final Collection<Object[]> data = new ArrayList<>();
+        for (final Material m : Material.values()) {
+            if (!MaterialUtil.isMaterialDeprecated(m)) {
+                data.add(new Object[]{
+                        m,
+                        m.name()
+                });
+                data.add(new Object[]{
+                        m,
+                        Integer.toString(m.getId())
+                });
+            }
+        }
+        return data;
+    }
 }

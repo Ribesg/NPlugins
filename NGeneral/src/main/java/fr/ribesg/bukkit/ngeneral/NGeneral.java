@@ -38,166 +38,166 @@ import org.bukkit.configuration.InvalidConfigurationException;
 
 public class NGeneral extends NPlugin implements GeneralNode {
 
-	// Configs
-	private Messages messages;
-	private Config   pluginConfig;
-	private DbConfig dbConfig;
+    // Configs
+    private Messages messages;
+    private Config   pluginConfig;
+    private DbConfig dbConfig;
 
-	// Features
-	private Features features;
+    // Features
+    private Features features;
 
-	@Override
-	protected String getMinCoreVersion() {
-		return "0.6.10";
-	}
+    @Override
+    protected String getMinCoreVersion() {
+        return "0.6.10";
+    }
 
-	@Override
-	protected void loadMessages() throws IOException {
-		this.debug("Loading plugin Messages...");
-		if (!this.getDataFolder().isDirectory()) {
-			this.getDataFolder().mkdir();
-		}
+    @Override
+    protected void loadMessages() throws IOException {
+        this.debug("Loading plugin Messages...");
+        if (!this.getDataFolder().isDirectory()) {
+            this.getDataFolder().mkdir();
+        }
 
-		final Messages messages = new Messages();
-		messages.loadMessages(this);
+        final Messages messages = new Messages();
+        messages.loadMessages(this);
 
-		this.messages = messages;
-	}
+        this.messages = messages;
+    }
 
-	@Override
-	protected boolean onNodeEnable() {
-		// Config
-		try {
-			this.pluginConfig = new Config(this);
-			this.pluginConfig.loadConfig();
-		} catch (final IOException | InvalidConfigurationException e) {
-			this.getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			this.getLogger().severe("This error occured when NGeneral tried to load config.yml");
-			return false;
-		}
+    @Override
+    protected boolean onNodeEnable() {
+        // Config
+        try {
+            this.pluginConfig = new Config(this);
+            this.pluginConfig.loadConfig();
+        } catch (final IOException | InvalidConfigurationException e) {
+            this.getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            this.getLogger().severe("This error occured when NGeneral tried to load config.yml");
+            return false;
+        }
 
-		// Features
-		this.features = new Features(this);
+        // Features
+        this.features = new Features(this);
 
-		// Db
-		try {
-			this.dbConfig = new DbConfig(this);
-			this.dbConfig.loadConfig("db.yml");
-		} catch (final IOException | InvalidConfigurationException e) {
-			this.getLogger().severe("An error occured, stacktrace follows:");
-			e.printStackTrace();
-			this.getLogger().severe("This error occured when NGeneral tried to load db.yml");
-			return false;
-		}
+        // Db
+        try {
+            this.dbConfig = new DbConfig(this);
+            this.dbConfig.loadConfig("db.yml");
+        } catch (final IOException | InvalidConfigurationException e) {
+            this.getLogger().severe("An error occured, stacktrace follows:");
+            e.printStackTrace();
+            this.getLogger().severe("This error occured when NGeneral tried to load db.yml");
+            return false;
+        }
 
-		// Feature init
-		this.features.initialize();
+        // Feature init
+        this.features.initialize();
 
-		// Simple features - Self-registered
-		new FlySpeedCommand(this);
-		new WalkSpeedCommand(this);
-		new BusyCommand(this);
-		new TimeCommand(this);
-		new WeatherCommand(this);
-		new RepairCommand(this);
-		new NightVisionCommand(this);
-		new SignColorsListener(this);
-		new TeleportCommands(this);
-		new WelcomeListener(this);
-		new HealFoodCommands(this);
+        // Simple features - Self-registered
+        new FlySpeedCommand(this);
+        new WalkSpeedCommand(this);
+        new BusyCommand(this);
+        new TimeCommand(this);
+        new WeatherCommand(this);
+        new RepairCommand(this);
+        new NightVisionCommand(this);
+        new SignColorsListener(this);
+        new TeleportCommands(this);
+        new WelcomeListener(this);
+        new HealFoodCommands(this);
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
-		if ("ngeneral".equals(cmd.getName())) {
-			if (args.length < 1) {
-				return false;
-			}
-			switch (args[0].toLowerCase()) {
-				case "reload":
-				case "rld":
-					if (Perms.hasReload(sender)) {
-						if (args.length != 2) {
-							return false;
-						}
-						switch (args[1].toLowerCase()) {
-							case "messages":
-							case "mess":
-							case "mes":
-								try {
-									this.loadMessages();
-									this.sendMessage(sender, MessageId.cmdReloadMessages);
-								} catch (final IOException e) {
-									this.error("An error occured when NPlayer tried to load messages.yml", e);
-									this.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
-								}
-								return true;
-							default:
-								return false;
-						}
-					} else {
-						this.sendMessage(sender, MessageId.noPermissionForCommand);
-						return true;
-					}
-				default:
-					return false;
-			}
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+        if ("ngeneral".equals(cmd.getName())) {
+            if (args.length < 1) {
+                return false;
+            }
+            switch (args[0].toLowerCase()) {
+                case "reload":
+                case "rld":
+                    if (Perms.hasReload(sender)) {
+                        if (args.length != 2) {
+                            return false;
+                        }
+                        switch (args[1].toLowerCase()) {
+                            case "messages":
+                            case "mess":
+                            case "mes":
+                                try {
+                                    this.loadMessages();
+                                    this.sendMessage(sender, MessageId.cmdReloadMessages);
+                                } catch (final IOException e) {
+                                    this.error("An error occured when NPlayer tried to load messages.yml", e);
+                                    this.sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+                                }
+                                return true;
+                            default:
+                                return false;
+                        }
+                    } else {
+                        this.sendMessage(sender, MessageId.noPermissionForCommand);
+                        return true;
+                    }
+                default:
+                    return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
-	@Override
-	protected void handleOtherNodes() {
-		// NOP
-	}
+    @Override
+    protected void handleOtherNodes() {
+        // NOP
+    }
 
-	@Override
-	protected void onNodeDisable() {
-		this.features.terminate();
+    @Override
+    protected void onNodeDisable() {
+        this.features.terminate();
 
-		try {
-			this.pluginConfig.writeConfig();
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			this.dbConfig.writeConfig("db.yml");
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
-	}
+        try {
+            this.pluginConfig.writeConfig();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            this.dbConfig.writeConfig("db.yml");
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public Messages getMessages() {
-		return this.messages;
-	}
+    @Override
+    public Messages getMessages() {
+        return this.messages;
+    }
 
-	public Config getPluginConfig() {
-		return this.pluginConfig;
-	}
+    public Config getPluginConfig() {
+        return this.pluginConfig;
+    }
 
-	public DbConfig getDbConfig() {
-		return this.dbConfig;
-	}
+    public DbConfig getDbConfig() {
+        return this.dbConfig;
+    }
 
-	public Features getFeatures() {
-		return this.features;
-	}
+    public Features getFeatures() {
+        return this.features;
+    }
 
-	// API for other nodes
+    // API for other nodes
 
-	@Override
-	public String getNodeName() {
-		return GENERAL;
-	}
+    @Override
+    public String getNodeName() {
+        return GENERAL;
+    }
 
-	@Override
-	public boolean isSpy(final UUID playerId) {
-		final SpyModeFeature spyMode = this.features.get(SpyModeFeature.class);
-		return spyMode != null && spyMode.hasSpyMode(playerId);
-	}
+    @Override
+    public boolean isSpy(final UUID playerId) {
+        final SpyModeFeature spyMode = this.features.get(SpyModeFeature.class);
+        return spyMode != null && spyMode.hasSpyMode(playerId);
+    }
 }

@@ -25,60 +25,60 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
  */
 public class NListener implements Listener {
 
-	/**
-	 * The NPermissions plugin instance
-	 */
-	private final NPermissions plugin;
+    /**
+     * The NPermissions plugin instance
+     */
+    private final NPermissions plugin;
 
-	/**
-	 * NPermissions Listener constructor.
-	 *
-	 * @param instance the NPermissions plugin instance
-	 */
-	public NListener(final NPermissions instance) {
-		this.plugin = instance;
-	}
+    /**
+     * NPermissions Listener constructor.
+     *
+     * @param instance the NPermissions plugin instance
+     */
+    public NListener(final NPermissions instance) {
+        this.plugin = instance;
+    }
 
-	/**
-	 * Registers the player as soon as he logins to be able to do some
-	 * Permissions checks in the PlayerLoginEvent.
-	 *
-	 * @param event the PlayerLoginEvent
-	 */
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerLoginFirst(final PlayerLoginEvent event) {
-		this.plugin.getManager().registerPlayer(event.getPlayer());
-	}
+    /**
+     * Registers the player as soon as he logins to be able to do some
+     * Permissions checks in the PlayerLoginEvent.
+     *
+     * @param event the PlayerLoginEvent
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerLoginFirst(final PlayerLoginEvent event) {
+        this.plugin.getManager().registerPlayer(event.getPlayer());
+    }
 
-	/**
-	 * Unregisters the player if the login failed.
-	 *
-	 * @param event the PlayerLoginEvent
-	 */
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerLoginLast(final PlayerLoginEvent event) {
-		if (event.getResult() != Result.ALLOWED) {
-			this.plugin.getManager().unRegisterPlayer(event.getPlayer());
-		}
-	}
+    /**
+     * Unregisters the player if the login failed.
+     *
+     * @param event the PlayerLoginEvent
+     */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerLoginLast(final PlayerLoginEvent event) {
+        if (event.getResult() != Result.ALLOWED) {
+            this.plugin.getManager().unRegisterPlayer(event.getPlayer());
+        }
+    }
 
-	/**
-	 * Update permissions for Player now that we now in which world he is.
-	 *
-	 * @param event the PlayerJoinEvent
-	 */
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerJoin(final PlayerJoinEvent event) {
-		this.plugin.getManager().registerPlayerForWorld(event.getPlayer());
-	}
+    /**
+     * Update permissions for Player now that we now in which world he is.
+     *
+     * @param event the PlayerJoinEvent
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerJoin(final PlayerJoinEvent event) {
+        this.plugin.getManager().registerPlayerForWorld(event.getPlayer());
+    }
 
-	/**
-	 * Change permissions for Player when he changes world.
-	 *
-	 * @param event the PlayerChangedWorldEvent
-	 */
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onPlayerChangeWorld(final PlayerChangedWorldEvent event) {
-		this.plugin.getManager().applyWorldPermissions(event.getPlayer());
-	}
+    /**
+     * Change permissions for Player when he changes world.
+     *
+     * @param event the PlayerChangedWorldEvent
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerChangeWorld(final PlayerChangedWorldEvent event) {
+        this.plugin.getManager().applyWorldPermissions(event.getPlayer());
+    }
 }

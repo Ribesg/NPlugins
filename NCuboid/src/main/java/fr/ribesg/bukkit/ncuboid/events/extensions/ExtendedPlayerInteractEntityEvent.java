@@ -20,20 +20,20 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class ExtendedPlayerInteractEntityEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion            region;
-	private final SortedSet<GeneralRegion> regions;
+    private final GeneralRegion            region;
+    private final SortedSet<GeneralRegion> regions;
 
-	public ExtendedPlayerInteractEntityEvent(final RegionDb db, final PlayerInteractEntityEvent event) {
-		super(db.getPlugin(), event);
-		this.regions = db.getAllByLocation(event.getRightClicked().getLocation());
-		this.region = db.getPrior(this.regions);
-	}
+    public ExtendedPlayerInteractEntityEvent(final RegionDb db, final PlayerInteractEntityEvent event) {
+        super(db.getPlugin(), event);
+        this.regions = db.getAllByLocation(event.getRightClicked().getLocation());
+        this.region = db.getPrior(this.regions);
+    }
 
-	public GeneralRegion getRegion() {
-		return this.region;
-	}
+    public GeneralRegion getRegion() {
+        return this.region;
+    }
 
-	public Set<GeneralRegion> getRegions() {
-		return this.regions;
-	}
+    public Set<GeneralRegion> getRegions() {
+        return this.regions;
+    }
 }

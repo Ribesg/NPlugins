@@ -16,116 +16,116 @@ package fr.ribesg.bukkit.ncore.lang;
  */
 public class Message {
 
-	private final MessageId id;
-	private final String    defaultMessage;
-	private final String    configMessage;
-	private final String[]  awaitedArgs;
-	private final boolean   defaultUseHeader;
-	private final boolean   useHeader;
+    private final MessageId id;
+    private final String    defaultMessage;
+    private final String    configMessage;
+    private final String[]  awaitedArgs;
+    private final boolean   defaultUseHeader;
+    private final boolean   useHeader;
 
-	/**
-	 * @param id               The Message Id
-	 * @param defaultMessage   The default Message (in English)
-	 * @param defaultUseHeader The default value for useHeader
-	 * @param awaitedArgs      The awaited arguments used while parsing the message
-	 */
-	public Message(final MessageId id, final String defaultMessage, final boolean defaultUseHeader, final String... awaitedArgs) {
-		this.id = id;
-		this.defaultMessage = defaultMessage;
-		this.awaitedArgs = awaitedArgs;
-		this.configMessage = null;
-		this.defaultUseHeader = defaultUseHeader;
-		this.useHeader = defaultUseHeader;
-	}
+    /**
+     * @param id               The Message Id
+     * @param defaultMessage   The default Message (in English)
+     * @param defaultUseHeader The default value for useHeader
+     * @param awaitedArgs      The awaited arguments used while parsing the message
+     */
+    public Message(final MessageId id, final String defaultMessage, final boolean defaultUseHeader, final String... awaitedArgs) {
+        this.id = id;
+        this.defaultMessage = defaultMessage;
+        this.awaitedArgs = awaitedArgs;
+        this.configMessage = null;
+        this.defaultUseHeader = defaultUseHeader;
+        this.useHeader = defaultUseHeader;
+    }
 
-	/**
-	 * @param id               The Message Id
-	 * @param defaultMessage   The default Message (in English)
-	 * @param configMessage    The Message found in the configuration file
-	 * @param defaultUseHeader The default value for useHeader
-	 * @param useHeader        Defines if we should prepend the header or not
-	 * @param awaitedArgs      The awaited arguments used while parsing the message
-	 */
-	public Message(final MessageId id, final String defaultMessage, final String configMessage, final boolean defaultUseHeader, final boolean useHeader, final String... awaitedArgs) {
-		this.id = id;
-		this.defaultMessage = defaultMessage;
-		this.awaitedArgs = awaitedArgs;
-		this.configMessage = configMessage;
-		this.defaultUseHeader = defaultUseHeader;
-		this.useHeader = useHeader;
-	}
+    /**
+     * @param id               The Message Id
+     * @param defaultMessage   The default Message (in English)
+     * @param configMessage    The Message found in the configuration file
+     * @param defaultUseHeader The default value for useHeader
+     * @param useHeader        Defines if we should prepend the header or not
+     * @param awaitedArgs      The awaited arguments used while parsing the message
+     */
+    public Message(final MessageId id, final String defaultMessage, final String configMessage, final boolean defaultUseHeader, final boolean useHeader, final String... awaitedArgs) {
+        this.id = id;
+        this.defaultMessage = defaultMessage;
+        this.awaitedArgs = awaitedArgs;
+        this.configMessage = configMessage;
+        this.defaultUseHeader = defaultUseHeader;
+        this.useHeader = useHeader;
+    }
 
-	/**
-	 * @return a String representation of what arguments were awaited
-	 */
-	public String getAwaitedArgsString() {
-		if (this.awaitedArgs == null || this.awaitedArgs.length == 0) {
-			return "none";
-		} else {
-			final StringBuilder s = new StringBuilder();
-			for (final String arg : this.awaitedArgs) {
-				s.append(arg);
-				s.append(" ; ");
-			}
-			return s.toString().substring(0, s.length() - 3);
-		}
-	}
+    /**
+     * @return a String representation of what arguments were awaited
+     */
+    public String getAwaitedArgsString() {
+        if (this.awaitedArgs == null || this.awaitedArgs.length == 0) {
+            return "none";
+        } else {
+            final StringBuilder s = new StringBuilder();
+            for (final String arg : this.awaitedArgs) {
+                s.append(arg);
+                s.append(" ; ");
+            }
+            return s.toString().substring(0, s.length() - 3);
+        }
+    }
 
-	/**
-	 * @return the number of arguments awaited
-	 */
-	public int getAwaitedArgsNb() {
-		if (this.awaitedArgs == null || this.awaitedArgs.length == 0) {
-			return 0;
-		} else {
-			return this.awaitedArgs.length;
-		}
-	}
+    /**
+     * @return the number of arguments awaited
+     */
+    public int getAwaitedArgsNb() {
+        if (this.awaitedArgs == null || this.awaitedArgs.length == 0) {
+            return 0;
+        } else {
+            return this.awaitedArgs.length;
+        }
+    }
 
-	public MessageId getId() {
-		return this.id;
-	}
+    public MessageId getId() {
+        return this.id;
+    }
 
-	public String getDefaultMessage() {
-		return this.defaultMessage;
-	}
+    public String getDefaultMessage() {
+        return this.defaultMessage;
+    }
 
-	public String getConfigMessage() {
-		return this.configMessage;
-	}
+    public String getConfigMessage() {
+        return this.configMessage;
+    }
 
-	public String[] getAwaitedArgs() {
-		return this.awaitedArgs;
-	}
+    public String[] getAwaitedArgs() {
+        return this.awaitedArgs;
+    }
 
-	public boolean defaultUseHeader() {
-		return this.defaultUseHeader;
-	}
+    public boolean defaultUseHeader() {
+        return this.defaultUseHeader;
+    }
 
-	public boolean useHeader() {
-		return this.useHeader;
-	}
+    public boolean useHeader() {
+        return this.useHeader;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (this.id == null ? 0 : this.id.hashCode());
-		return result;
-	}
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (this.id == null ? 0 : this.id.hashCode());
+        return result;
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (this.getClass() != obj.getClass()) {
-			return false;
-		}
-		final Message other = (Message)obj;
-		return this.id == other.id;
-	}
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (this.getClass() != obj.getClass()) {
+            return false;
+        }
+        final Message other = (Message)obj;
+        return this.id == other.id;
+    }
 }

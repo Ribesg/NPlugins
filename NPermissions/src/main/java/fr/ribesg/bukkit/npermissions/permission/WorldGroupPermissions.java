@@ -13,35 +13,35 @@ import java.util.Map;
 
 public class WorldGroupPermissions extends GroupPermissions {
 
-	private final String           worldName;
-	private final GroupPermissions parentGroup;
+    private final String           worldName;
+    private final GroupPermissions parentGroup;
 
-	/**
-	 * World Group Permissions constructor.
-	 *
-	 * @param worldName   the world name
-	 * @param parentGroup the group
-	 * @param priority    the priority of this Permissions Set
-	 */
-	public WorldGroupPermissions(final String worldName, final GroupPermissions parentGroup, final int priority) {
-		super(parentGroup.manager, parentGroup.name, priority);
-		this.worldName = worldName;
-		this.parentGroup = parentGroup;
-	}
+    /**
+     * World Group Permissions constructor.
+     *
+     * @param worldName   the world name
+     * @param parentGroup the group
+     * @param priority    the priority of this Permissions Set
+     */
+    public WorldGroupPermissions(final String worldName, final GroupPermissions parentGroup, final int priority) {
+        super(parentGroup.manager, parentGroup.name, priority);
+        this.worldName = worldName;
+        this.parentGroup = parentGroup;
+    }
 
-	/**
-	 * Priorities does not count vertically.
-	 *
-	 * @see PermissionsSet#computePermissions(Map)
-	 */
-	@Override
-	public Map<String, Boolean> computePermissions(Map<String, Boolean> resultMap) {
-		resultMap = this.parentGroup.getComputedPermissions();
-		for (final String groupName : this.superGroups) {
-			final WorldGroupPermissions worldGroup = this.manager.getWorldGroups().get(this.worldName).get(groupName);
-			resultMap = worldGroup.computePermissions(resultMap);
-		}
-		resultMap.putAll(this.permissions);
-		return resultMap;
-	}
+    /**
+     * Priorities does not count vertically.
+     *
+     * @see PermissionsSet#computePermissions(Map)
+     */
+    @Override
+    public Map<String, Boolean> computePermissions(Map<String, Boolean> resultMap) {
+        resultMap = this.parentGroup.getComputedPermissions();
+        for (final String groupName : this.superGroups) {
+            final WorldGroupPermissions worldGroup = this.manager.getWorldGroups().get(this.worldName).get(groupName);
+            resultMap = worldGroup.computePermissions(resultMap);
+        }
+        resultMap.putAll(this.permissions);
+        return resultMap;
+    }
 }

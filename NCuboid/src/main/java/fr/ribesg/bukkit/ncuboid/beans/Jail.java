@@ -13,34 +13,34 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 
 public class Jail {
 
-	private final String        name;
-	private final NLocation     location;
-	private final GeneralRegion region;
+    private final String        name;
+    private final NLocation     location;
+    private final GeneralRegion region;
 
-	public Jail(final String name, final NLocation location, final GeneralRegion region) {
-		this.name = name;
-		this.location = location;
-		this.region = region;
-	}
+    public Jail(final String name, final NLocation location, final GeneralRegion region) {
+        this.name = name;
+        this.location = location;
+        this.region = region;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public NLocation getLocation() {
-		return this.location;
-	}
+    public NLocation getLocation() {
+        return this.location;
+    }
 
-	public GeneralRegion getRegion() {
-		return this.region;
-	}
+    public GeneralRegion getRegion() {
+        return this.region;
+    }
 
-	@Override
-	public String toString() {
-		return "Jail{" +
-		       "name='" + this.name + '\'' +
-		       ", location=" + this.location +
-		       ", region=" + this.region +
-		       '}';
-	}
+    @Override
+    public String toString() {
+        return "Jail{" +
+               "name='" + this.name + '\'' +
+               ", location=" + this.location +
+               ", region=" + this.region +
+               '}';
+    }
 }

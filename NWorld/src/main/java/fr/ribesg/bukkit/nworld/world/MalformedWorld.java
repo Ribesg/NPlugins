@@ -21,18 +21,18 @@ import java.util.Random;
  */
 public class MalformedWorld extends GeneralWorld {
 
-	public MalformedWorld(final NWorld instance, final String worldName) {
-		super(instance, worldName, new NLocation(worldName, 0, 0, 0, 0, 0), "random.permission." + new Random().nextLong(), false, true);
-		this.setType(WorldType.UNKNOWN);
-	}
+    public MalformedWorld(final NWorld instance, final String worldName) {
+        super(instance, worldName, new NLocation(worldName, 0, 0, 0, 0, 0), "random.permission." + new Random().nextLong(), false, true);
+        this.setType(WorldType.UNKNOWN);
+    }
 
-	@Override
-	public long getSeed() {
-		throw new UnsupportedOperationException();
-	}
+    @Override
+    public long getSeed() {
+        throw new UnsupportedOperationException();
+    }
 
-	@Override
-	public boolean isMalformed() {
-		return true;
-	}
+    @Override
+    public boolean isMalformed() {
+        return true;
+    }
 }

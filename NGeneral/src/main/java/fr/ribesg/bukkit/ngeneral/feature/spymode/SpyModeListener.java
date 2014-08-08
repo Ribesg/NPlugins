@@ -22,28 +22,28 @@ import org.bukkit.event.Listener;
 
 public class SpyModeListener implements Listener {
 
-	private final SpyModeFeature feature;
+    private final SpyModeFeature feature;
 
-	public SpyModeListener(final SpyModeFeature feature) {
-		this.feature = feature;
-	}
+    public SpyModeListener(final SpyModeFeature feature) {
+        this.feature = feature;
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerJoined(final PlayerJoinedEvent event) {
-		final Player player = event.getPlayer();
-		if (Perms.hasSpy(player)) {
-			if (this.feature.hasSpyMode(player.getUniqueId())) {
-				for (final Player other : Bukkit.getOnlinePlayers()) {
-					other.hidePlayer(player);
-				}
-			}
-		} else {
-			for (final UUID id : this.feature.getSpyPlayers().keySet()) {
-				final Player hidden = Bukkit.getPlayer(id);
-				if (hidden != null) {
-					player.hidePlayer(hidden);
-				}
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerJoined(final PlayerJoinedEvent event) {
+        final Player player = event.getPlayer();
+        if (Perms.hasSpy(player)) {
+            if (this.feature.hasSpyMode(player.getUniqueId())) {
+                for (final Player other : Bukkit.getOnlinePlayers()) {
+                    other.hidePlayer(player);
+                }
+            }
+        } else {
+            for (final UUID id : this.feature.getSpyPlayers().keySet()) {
+                final Player hidden = Bukkit.getPlayer(id);
+                if (hidden != null) {
+                    player.hidePlayer(hidden);
+                }
+            }
+        }
+    }
 }

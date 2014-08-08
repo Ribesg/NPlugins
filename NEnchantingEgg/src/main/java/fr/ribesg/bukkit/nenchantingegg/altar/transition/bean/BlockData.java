@@ -11,10 +11,10 @@ package fr.ribesg.bukkit.nenchantingegg.altar.transition.bean;
 
 public interface BlockData {
 
-	public static final byte QUARTZ_NORMAL          = 0;
-	public static final byte QUARTZ_CHISELED        = 1;
-	public static final byte QUARTZ_PILLAR_VERTICAL = 2;
-	public static final byte QUARTZ_PILLAR_Z_AXIS   = 3;
-	public static final byte QUARTZ_PILLAR_X_AXIS   = 4;
-	public static final byte SKULL_FLOOR            = 1;
+    public static final byte QUARTZ_NORMAL          = 0;
+    public static final byte QUARTZ_CHISELED        = 1;
+    public static final byte QUARTZ_PILLAR_VERTICAL = 2;
+    public static final byte QUARTZ_PILLAR_Z_AXIS   = 3;
+    public static final byte QUARTZ_PILLAR_X_AXIS   = 4;
+    public static final byte SKULL_FLOOR            = 1;
 }

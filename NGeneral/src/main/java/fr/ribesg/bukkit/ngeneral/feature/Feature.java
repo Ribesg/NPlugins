@@ -16,40 +16,40 @@ import fr.ribesg.bukkit.ngeneral.NGeneral;
  */
 public abstract class Feature {
 
-	protected final NGeneral    plugin;
-	protected final FeatureType type;
-	protected final boolean     enabled;
+    protected final NGeneral    plugin;
+    protected final FeatureType type;
+    protected final boolean     enabled;
 
-	/**
-	 * Must not interact with Bukkit in any way
-	 */
-	protected Feature(final NGeneral instance, final FeatureType type, final boolean enabled) {
-		this.plugin = instance;
-		this.type = type;
-		this.enabled = enabled;
-	}
+    /**
+     * Must not interact with Bukkit in any way
+     */
+    protected Feature(final NGeneral instance, final FeatureType type, final boolean enabled) {
+        this.plugin = instance;
+        this.type = type;
+        this.enabled = enabled;
+    }
 
-	public NGeneral getPlugin() {
-		return this.plugin;
-	}
+    public NGeneral getPlugin() {
+        return this.plugin;
+    }
 
-	public FeatureType getType() {
-		return this.type;
-	}
+    public FeatureType getType() {
+        return this.type;
+    }
 
-	public Boolean isEnabled() {
-		return this.enabled;
-	}
+    public Boolean isEnabled() {
+        return this.enabled;
+    }
 
-	/**
-	 * Must be overridden by Features to start interacting with Bukkit.
-	 */
-	public abstract void initialize();
+    /**
+     * Must be overridden by Features to start interacting with Bukkit.
+     */
+    public abstract void initialize();
 
-	/**
-	 * Should be overridden by Features that have to do something
-	 * onDisable.
-	 */
-	public void terminate() {
-	}
+    /**
+     * Should be overridden by Features that have to do something
+     * onDisable.
+     */
+    public void terminate() {
+    }
 }

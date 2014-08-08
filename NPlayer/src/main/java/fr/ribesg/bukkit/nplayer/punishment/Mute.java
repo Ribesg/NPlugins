@@ -11,21 +11,21 @@ package fr.ribesg.bukkit.nplayer.punishment;
 
 public class Mute extends Punishment {
 
-	public Mute(final String muted, final String reason) {
-		super(muted, PunishmentType.MUTE, reason);
-	}
+    public Mute(final String muted, final String reason) {
+        super(muted, PunishmentType.MUTE, reason);
+    }
 
-	public Mute(final String muted, final String reason, final long endDate) {
-		super(muted, PunishmentType.MUTE, reason, endDate);
-	}
+    public Mute(final String muted, final String reason, final long endDate) {
+        super(muted, PunishmentType.MUTE, reason, endDate);
+    }
 
-	@Override
-	public String toString() {
-		return "Mute{" +
-		       "punished='" + this.punished + '\'' +
-		       ", type=" + this.type +
-		       ", endDate=" + this.endDate +
-		       ", reason='" + this.reason + '\'' +
-		       '}';
-	}
+    @Override
+    public String toString() {
+        return "Mute{" +
+               "punished='" + this.punished + '\'' +
+               ", type=" + this.type +
+               ", endDate=" + this.endDate +
+               ", reason='" + this.reason + '\'' +
+               '}';
+    }
 }

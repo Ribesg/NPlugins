@@ -11,27 +11,27 @@ package fr.ribesg.bukkit.npermissions.permission;
 
 public class WorldLegacyPlayerPermissions extends LegacyPlayerPermissions {
 
-	private final String                  worldName;
-	private final LegacyPlayerPermissions parentPlayer;
+    private final String                  worldName;
+    private final LegacyPlayerPermissions parentPlayer;
 
-	/**
-	 * World Legacy Player Permissions constructor.
-	 *
-	 * @param worldName    the world name
-	 * @param parentPlayer the player
-	 * @param priority     the priority of this Permissions Set
-	 */
-	public WorldLegacyPlayerPermissions(final String worldName, final LegacyPlayerPermissions parentPlayer, final int priority) {
-		super(parentPlayer.manager, parentPlayer.name, priority, parentPlayer.mainGroup);
-		this.worldName = worldName;
-		this.parentPlayer = parentPlayer;
-	}
+    /**
+     * World Legacy Player Permissions constructor.
+     *
+     * @param worldName    the world name
+     * @param parentPlayer the player
+     * @param priority     the priority of this Permissions Set
+     */
+    public WorldLegacyPlayerPermissions(final String worldName, final LegacyPlayerPermissions parentPlayer, final int priority) {
+        super(parentPlayer.manager, parentPlayer.name, priority, parentPlayer.mainGroup);
+        this.worldName = worldName;
+        this.parentPlayer = parentPlayer;
+    }
 
-	public String getWorldName() {
-		return this.worldName;
-	}
+    public String getWorldName() {
+        return this.worldName;
+    }
 
-	public LegacyPlayerPermissions getParentPlayer() {
-		return this.parentPlayer;
-	}
+    public LegacyPlayerPermissions getParentPlayer() {
+        return this.parentPlayer;
+    }
 }

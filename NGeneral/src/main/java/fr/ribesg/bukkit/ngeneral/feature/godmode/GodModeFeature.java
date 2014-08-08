@@ -22,38 +22,38 @@ import org.bukkit.entity.Player;
 
 public class GodModeFeature extends Feature {
 
-	private final Set<UUID> godPlayers;
+    private final Set<UUID> godPlayers;
 
-	public GodModeFeature(final NGeneral instance) {
-		super(instance, FeatureType.GOD_MODE, instance.getPluginConfig().hasGodModeFeature());
-		this.godPlayers = new HashSet<>();
-	}
+    public GodModeFeature(final NGeneral instance) {
+        super(instance, FeatureType.GOD_MODE, instance.getPluginConfig().hasGodModeFeature());
+        this.godPlayers = new HashSet<>();
+    }
 
-	@Override
-	public void initialize() {
-		final GodModeListener listener = new GodModeListener(this);
-		final GodModeCommandExecutor executor = new GodModeCommandExecutor(this);
+    @Override
+    public void initialize() {
+        final GodModeListener listener = new GodModeListener(this);
+        final GodModeCommandExecutor executor = new GodModeCommandExecutor(this);
 
-		Bukkit.getPluginManager().registerEvents(listener, this.plugin);
-		this.plugin.setCommandExecutor("god", executor);
-	}
+        Bukkit.getPluginManager().registerEvents(listener, this.plugin);
+        this.plugin.setCommandExecutor("god", executor);
+    }
 
-	public Set<UUID> getGodPlayers() {
-		return this.godPlayers;
-	}
+    public Set<UUID> getGodPlayers() {
+        return this.godPlayers;
+    }
 
-	public boolean hasGodMode(final Player player) {
-		return this.godPlayers.contains(player.getUniqueId());
-	}
+    public boolean hasGodMode(final Player player) {
+        return this.godPlayers.contains(player.getUniqueId());
+    }
 
-	public void setGodMode(final Player player, final boolean value) {
-		if (value) {
-			this.godPlayers.add(player.getUniqueId());
-			player.setHealth(player.getMaxHealth());
-			player.setFoodLevel(20);
-			player.setSaturation(20.0f);
-		} else {
-			this.godPlayers.remove(player.getUniqueId());
-		}
-	}
+    public void setGodMode(final Player player, final boolean value) {
+        if (value) {
+            this.godPlayers.add(player.getUniqueId());
+            player.setHealth(player.getMaxHealth());
+            player.setFoodLevel(20);
+            player.setSaturation(20.0f);
+        } else {
+            this.godPlayers.remove(player.getUniqueId());
+        }
+    }
 }

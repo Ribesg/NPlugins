@@ -23,48 +23,48 @@ import org.bukkit.entity.Player;
 
 public class FlyModeFeature extends Feature {
 
-	private final Set<UUID> flyPlayers;
+    private final Set<UUID> flyPlayers;
 
-	public FlyModeFeature(final NGeneral instance) {
-		super(instance, FeatureType.FLY_MODE, instance.getPluginConfig().hasFlyModeFeature());
-		this.flyPlayers = new HashSet<>();
-	}
+    public FlyModeFeature(final NGeneral instance) {
+        super(instance, FeatureType.FLY_MODE, instance.getPluginConfig().hasFlyModeFeature());
+        this.flyPlayers = new HashSet<>();
+    }
 
-	@Override
-	public void initialize() {
-		final FlyModeListener listener = new FlyModeListener(this);
-		final FlyModeCommandExecutor executor = new FlyModeCommandExecutor(this);
+    @Override
+    public void initialize() {
+        final FlyModeListener listener = new FlyModeListener(this);
+        final FlyModeCommandExecutor executor = new FlyModeCommandExecutor(this);
 
-		Bukkit.getPluginManager().registerEvents(listener, this.plugin);
-		this.plugin.setCommandExecutor("fly", executor);
-	}
+        Bukkit.getPluginManager().registerEvents(listener, this.plugin);
+        this.plugin.setCommandExecutor("fly", executor);
+    }
 
-	@Override
-	public void terminate() {
-		for (final Player player : Bukkit.getOnlinePlayers()) {
-			if (!Perms.hasFly(player) && this.hasFlyMode(player)) {
-				player.setAllowFlight(false);
-				this.setFlyMode(player, false);
-				player.setFallDistance(-100f);
-			}
-		}
-	}
+    @Override
+    public void terminate() {
+        for (final Player player : Bukkit.getOnlinePlayers()) {
+            if (!Perms.hasFly(player) && this.hasFlyMode(player)) {
+                player.setAllowFlight(false);
+                this.setFlyMode(player, false);
+                player.setFallDistance(-100f);
+            }
+        }
+    }
 
-	public Set<UUID> getFlyPlayers() {
-		return this.flyPlayers;
-	}
+    public Set<UUID> getFlyPlayers() {
+        return this.flyPlayers;
+    }
 
-	public boolean hasFlyMode(final Player player) {
-		return this.flyPlayers.contains(player.getUniqueId());
-	}
+    public boolean hasFlyMode(final Player player) {
+        return this.flyPlayers.contains(player.getUniqueId());
+    }
 
-	public void setFlyMode(final Player player, final boolean value) {
-		if (value) {
-			this.flyPlayers.add(player.getUniqueId());
-			player.setAllowFlight(true);
-		} else {
-			this.flyPlayers.remove(player.getUniqueId());
-			player.setAllowFlight(false);
-		}
-	}
+    public void setFlyMode(final Player player, final boolean value) {
+        if (value) {
+            this.flyPlayers.add(player.getUniqueId());
+            player.setAllowFlight(true);
+        } else {
+            this.flyPlayers.remove(player.getUniqueId());
+            player.setAllowFlight(false);
+        }
+    }
 }

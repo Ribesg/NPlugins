@@ -14,32 +14,32 @@ import fr.ribesg.bukkit.ncore.common.NLocation;
 // This is a really different Region type.
 public class WorldRegion extends GeneralRegion {
 
-	public WorldRegion(final String worldName) {
-		super(worldName, RegionType.WORLD, 0);
+    public WorldRegion(final String worldName) {
+        super(worldName, RegionType.WORLD, 0);
 
-		// Default flags are a little different for worlds
-		// TODO Make this configurable
-		this.setFlag(Flag.BUILD, false);
-		this.setFlag(Flag.CHEST, false);
-		this.setFlag(Flag.USE, false);
-	}
+        // Default flags are a little different for worlds
+        // TODO Make this configurable
+        this.setFlag(Flag.BUILD, false);
+        this.setFlag(Flag.CHEST, false);
+        this.setFlag(Flag.USE, false);
+    }
 
-	public WorldRegion(final String worldName, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts) {
-		super(worldName, RegionType.WORLD, rights, priority, flags, flagAtts);
-	}
+    public WorldRegion(final String worldName, final Rights rights, final int priority, final Flags flags, final Attributes flagAtts) {
+        super(worldName, RegionType.WORLD, rights, priority, flags, flagAtts);
+    }
 
-	@Override
-	public boolean contains(final NLocation loc) {
-		return this.getWorldName().equals(loc.getWorldName());
-	}
+    @Override
+    public boolean contains(final NLocation loc) {
+        return this.getWorldName().equals(loc.getWorldName());
+    }
 
-	@Override
-	public String getRegionName() {
-		return "world_" + this.getWorldName();
-	}
+    @Override
+    public String getRegionName() {
+        return "world_" + this.getWorldName();
+    }
 
-	@Override
-	public long getTotalSize() {
-		return Long.MAX_VALUE;
-	}
+    @Override
+    public long getTotalSize() {
+        return Long.MAX_VALUE;
+    }
 }

@@ -20,42 +20,42 @@ import org.bukkit.entity.Player;
 
 public class SpyModeCommandExecutor implements CommandExecutor {
 
-	private final SpyModeFeature feature;
+    private final SpyModeFeature feature;
 
-	public SpyModeCommandExecutor(final SpyModeFeature feature) {
-		this.feature = feature;
-	}
+    public SpyModeCommandExecutor(final SpyModeFeature feature) {
+        this.feature = feature;
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if ("spy".equals(command.getName())) {
-			if (!Perms.hasSpy(sender)) {
-				this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
-				return true;
-			} else if (!(sender instanceof Player)) {
-				this.feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-				return true;
-			} else {
-				final Player player = (Player)sender;
-				if (this.feature.hasSpyMode(player.getUniqueId())) {
-					this.feature.unSetSpyMode(player);
-					this.feature.getPlugin().sendMessage(player, MessageId.general_spy_disabled);
-				} else if (args.length == 0) {
-					this.feature.setSpyMode(player, null);
-					this.feature.getPlugin().sendMessage(player, MessageId.general_spy_enabled);
-				} else {
-					final Player spied = Bukkit.getPlayer(args[0]);
-					if (spied == null) {
-						this.feature.getPlugin().sendMessage(player, MessageId.noPlayerFoundForGivenName, args[0]);
-					} else {
-						this.feature.setSpyMode(player, spied);
-						this.feature.getPlugin().sendMessage(player, MessageId.general_spy_enabledPlayer, spied.getName());
-					}
-				}
-				return true;
-			}
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+        if ("spy".equals(command.getName())) {
+            if (!Perms.hasSpy(sender)) {
+                this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+                return true;
+            } else if (!(sender instanceof Player)) {
+                this.feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+                return true;
+            } else {
+                final Player player = (Player)sender;
+                if (this.feature.hasSpyMode(player.getUniqueId())) {
+                    this.feature.unSetSpyMode(player);
+                    this.feature.getPlugin().sendMessage(player, MessageId.general_spy_disabled);
+                } else if (args.length == 0) {
+                    this.feature.setSpyMode(player, null);
+                    this.feature.getPlugin().sendMessage(player, MessageId.general_spy_enabled);
+                } else {
+                    final Player spied = Bukkit.getPlayer(args[0]);
+                    if (spied == null) {
+                        this.feature.getPlugin().sendMessage(player, MessageId.noPlayerFoundForGivenName, args[0]);
+                    } else {
+                        this.feature.setSpyMode(player, spied);
+                        this.feature.getPlugin().sendMessage(player, MessageId.general_spy_enabledPlayer, spied.getName());
+                    }
+                }
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
 }

@@ -22,31 +22,31 @@ import org.junit.Test;
 
 public class FlagsAttributesTest extends AbstractReflectionTest {
 
-	@Test
-	@SuppressWarnings("unchecked")
-	public void checkPermForEachFlag() {
-		// Initialize maps by first call
-		this.executeStaticMethod(Perms.class, "getFlagPermission", new Class[]{Flag.class}, new Object[]{null});
-		this.executeStaticMethod(Perms.class, "getAttributePermission", new Class[]{Attribute.class}, new Object[]{null});
+    @Test
+    @SuppressWarnings("unchecked")
+    public void checkPermForEachFlag() {
+        // Initialize maps by first call
+        this.executeStaticMethod(Perms.class, "getFlagPermission", new Class[]{Flag.class}, new Object[]{null});
+        this.executeStaticMethod(Perms.class, "getAttributePermission", new Class[]{Attribute.class}, new Object[]{null});
 
-		// Get maps
-		final Map<Flag, String> flagPermissions = (Map<Flag, String>)this.getStaticFieldValue(Perms.class, "flagPermissions");
-		final Map<Attribute, String> flagAttributesPermissions = (Map<Attribute, String>)this.getStaticFieldValue(Perms.class, "attributesPermissions");
+        // Get maps
+        final Map<Flag, String> flagPermissions = (Map<Flag, String>)this.getStaticFieldValue(Perms.class, "flagPermissions");
+        final Map<Attribute, String> flagAttributesPermissions = (Map<Attribute, String>)this.getStaticFieldValue(Perms.class, "attributesPermissions");
 
-		// Check content. We only need to check the size as those are Maps, so there's no duplicated key. If
-		// the size is ok then everything is here.
-		Assert.assertEquals("Missing Flag somewhere!", Flag.values().length, flagPermissions.size());
-		Assert.assertEquals("Missing Attribute somewhere!", Attribute.values().length, flagAttributesPermissions.size());
-	}
+        // Check content. We only need to check the size as those are Maps, so there's no duplicated key. If
+        // the size is ok then everything is here.
+        Assert.assertEquals("Missing Flag somewhere!", Flag.values().length, flagPermissions.size());
+        Assert.assertEquals("Missing Attribute somewhere!", Attribute.values().length, flagAttributesPermissions.size());
+    }
 
-	@Test
-	@SuppressWarnings("unchecked")
-	public void checkDefaultFlagsMap() {
-		// Get the map
-		final EnumMap<Flag, String> defaultFlagMap = (EnumMap<Flag, String>)this.executeStaticMethod(Flags.class, "getDefaultFlagMap", null);
+    @Test
+    @SuppressWarnings("unchecked")
+    public void checkDefaultFlagsMap() {
+        // Get the map
+        final EnumMap<Flag, String> defaultFlagMap = (EnumMap<Flag, String>)this.executeStaticMethod(Flags.class, "getDefaultFlagMap", null);
 
-		// Check content. We only need to check the size as it's an EnumMap, so there's no duplicated key. If
-		// the size is ok then everything is here.
-		Assert.assertEquals("Missing Flag somewhere!", Flag.values().length, defaultFlagMap.size());
-	}
+        // Check content. We only need to check the size as it's an EnumMap, so there's no duplicated key. If
+        // the size is ok then everything is here.
+        Assert.assertEquals("Missing Flag somewhere!", Flag.values().length, defaultFlagMap.size());
+    }
 }

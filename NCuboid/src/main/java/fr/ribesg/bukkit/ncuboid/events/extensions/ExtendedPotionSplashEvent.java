@@ -22,39 +22,39 @@ import org.bukkit.potion.PotionEffectType;
 
 public class ExtendedPotionSplashEvent extends AbstractExtendedEvent {
 
-	private static Set<PotionEffectType> negativeEffects;
+    private static Set<PotionEffectType> negativeEffects;
 
-	private static Set<PotionEffectType> getNegativeEffects() {
-		if (negativeEffects == null) {
-			negativeEffects = new HashSet<>();
-			negativeEffects.add(PotionEffectType.BLINDNESS);
-			negativeEffects.add(PotionEffectType.CONFUSION);
-			negativeEffects.add(PotionEffectType.HARM);
-			negativeEffects.add(PotionEffectType.HUNGER);
-			negativeEffects.add(PotionEffectType.POISON);
-			negativeEffects.add(PotionEffectType.SLOW);
-			negativeEffects.add(PotionEffectType.SLOW_DIGGING);
-			negativeEffects.add(PotionEffectType.WEAKNESS);
-			negativeEffects.add(PotionEffectType.WITHER);
-		}
-		return negativeEffects;
-	}
+    private static Set<PotionEffectType> getNegativeEffects() {
+        if (negativeEffects == null) {
+            negativeEffects = new HashSet<>();
+            negativeEffects.add(PotionEffectType.BLINDNESS);
+            negativeEffects.add(PotionEffectType.CONFUSION);
+            negativeEffects.add(PotionEffectType.HARM);
+            negativeEffects.add(PotionEffectType.HUNGER);
+            negativeEffects.add(PotionEffectType.POISON);
+            negativeEffects.add(PotionEffectType.SLOW);
+            negativeEffects.add(PotionEffectType.SLOW_DIGGING);
+            negativeEffects.add(PotionEffectType.WEAKNESS);
+            negativeEffects.add(PotionEffectType.WITHER);
+        }
+        return negativeEffects;
+    }
 
-	private boolean hasNegativeEffect;
+    private boolean hasNegativeEffect;
 
-	public ExtendedPotionSplashEvent(final RegionDb db, final PotionSplashEvent event) {
-		super(db.getPlugin(), event);
-		final ThrownPotion potion = event.getPotion();
-		for (final PotionEffect e : potion.getEffects()) {
-			if (getNegativeEffects().contains(e.getType())) {
-				this.hasNegativeEffect = true;
-				break;
-			}
-		}
-		this.getPlugin().info(String.valueOf(this.hasNegativeEffect));
-	}
+    public ExtendedPotionSplashEvent(final RegionDb db, final PotionSplashEvent event) {
+        super(db.getPlugin(), event);
+        final ThrownPotion potion = event.getPotion();
+        for (final PotionEffect e : potion.getEffects()) {
+            if (getNegativeEffects().contains(e.getType())) {
+                this.hasNegativeEffect = true;
+                break;
+            }
+        }
+        this.getPlugin().info(String.valueOf(this.hasNegativeEffect));
+    }
 
-	public boolean hasNegativeEffect() {
-		return this.hasNegativeEffect;
-	}
+    public boolean hasNegativeEffect() {
+        return this.hasNegativeEffect;
+    }
 }

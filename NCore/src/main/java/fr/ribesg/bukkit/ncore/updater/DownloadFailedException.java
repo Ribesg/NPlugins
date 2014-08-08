@@ -11,19 +11,19 @@ package fr.ribesg.bukkit.ncore.updater;
 
 public class DownloadFailedException extends Exception {
 
-	public DownloadFailedException() {
-		super();
-	}
+    public DownloadFailedException() {
+        super();
+    }
 
-	public DownloadFailedException(final String message) {
-		super(message);
-	}
+    public DownloadFailedException(final String message) {
+        super(message);
+    }
 
-	public DownloadFailedException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
+    public DownloadFailedException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
-	public DownloadFailedException(final Throwable cause) {
-		super(cause);
-	}
+    public DownloadFailedException(final Throwable cause) {
+        super(cause);
+    }
 }

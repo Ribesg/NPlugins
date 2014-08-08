@@ -24,56 +24,56 @@ import org.bukkit.configuration.InvalidConfigurationException;
 
 public class ReloadSubcmdExecutor extends AbstractSubcmdExecutor {
 
-	public ReloadSubcmdExecutor(final NCuboid instance) {
-		super(instance);
-		this.setUsage(ChatColor.RED + "Usage : /ncuboid reload <regions|config|messages>");
-	}
+    public ReloadSubcmdExecutor(final NCuboid instance) {
+        super(instance);
+        this.setUsage(ChatColor.RED + "Usage : /ncuboid reload <regions|config|messages>");
+    }
 
-	@Override
-	public boolean exec(final CommandSender sender, final String[] args) {
-		if (args.length != 1) {
-			return false;
-		} else if (Perms.hasReload(sender)) {
-			switch (args[0].toLowerCase()) {
-				case "regions":
-				case "region":
-					final RegionDb db = RegionDbPersistenceHandler.reloadDb(this.getPlugin());
-					if (db == this.getPlugin().getDb()) {
-						this.getPlugin().sendMessage(sender, MessageId.cmdReloadError, "regionDB.yml");
-					} else {
-						this.getPlugin().setDb(db);
-						this.getPlugin().getDynmapBridge().reinitialize(db);
-						this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdReloadRegions);
-					}
-					return true;
-				case "config":
-				case "conf":
-					try {
-						this.getPlugin().getPluginConfig().loadConfig();
-						this.getPlugin().sendMessage(sender, MessageId.cmdReloadConfig);
-						return true;
-					} catch (final IOException | InvalidConfigurationException e) {
-						this.getPlugin().error("An error occured when NCuboid tried to reload config.yml", e);
-						this.getPlugin().sendMessage(sender, MessageId.cmdReloadError, "config.yml");
-						return true;
-					}
-				case "messages":
-				case "mess":
-				case "mes":
-					try {
-						this.getPlugin().loadMessages();
-						this.getPlugin().sendMessage(sender, MessageId.cmdReloadMessages);
-					} catch (final IOException e) {
-						this.getPlugin().error("An error occured when NCuboid tried to reload messages.yml", e);
-						this.getPlugin().sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
-					}
-					return true;
-				default:
-					return false;
-			}
-		} else {
-			this.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
-			return true;
-		}
-	}
+    @Override
+    public boolean exec(final CommandSender sender, final String[] args) {
+        if (args.length != 1) {
+            return false;
+        } else if (Perms.hasReload(sender)) {
+            switch (args[0].toLowerCase()) {
+                case "regions":
+                case "region":
+                    final RegionDb db = RegionDbPersistenceHandler.reloadDb(this.getPlugin());
+                    if (db == this.getPlugin().getDb()) {
+                        this.getPlugin().sendMessage(sender, MessageId.cmdReloadError, "regionDB.yml");
+                    } else {
+                        this.getPlugin().setDb(db);
+                        this.getPlugin().getDynmapBridge().reinitialize(db);
+                        this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdReloadRegions);
+                    }
+                    return true;
+                case "config":
+                case "conf":
+                    try {
+                        this.getPlugin().getPluginConfig().loadConfig();
+                        this.getPlugin().sendMessage(sender, MessageId.cmdReloadConfig);
+                        return true;
+                    } catch (final IOException | InvalidConfigurationException e) {
+                        this.getPlugin().error("An error occured when NCuboid tried to reload config.yml", e);
+                        this.getPlugin().sendMessage(sender, MessageId.cmdReloadError, "config.yml");
+                        return true;
+                    }
+                case "messages":
+                case "mess":
+                case "mes":
+                    try {
+                        this.getPlugin().loadMessages();
+                        this.getPlugin().sendMessage(sender, MessageId.cmdReloadMessages);
+                    } catch (final IOException e) {
+                        this.getPlugin().error("An error occured when NCuboid tried to reload messages.yml", e);
+                        this.getPlugin().sendMessage(sender, MessageId.cmdReloadError, "messages.yml");
+                    }
+                    return true;
+                default:
+                    return false;
+            }
+        } else {
+            this.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+            return true;
+        }
+    }
 }

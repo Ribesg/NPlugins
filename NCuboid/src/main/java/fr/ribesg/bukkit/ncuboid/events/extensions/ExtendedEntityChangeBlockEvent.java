@@ -17,14 +17,14 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 
 public class ExtendedEntityChangeBlockEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion blockRegion;
+    private final GeneralRegion blockRegion;
 
-	public ExtendedEntityChangeBlockEvent(final RegionDb db, final EntityChangeBlockEvent event) {
-		super(db.getPlugin(), event);
-		this.blockRegion = db.getPriorByLocation(event.getBlock().getLocation());
-	}
+    public ExtendedEntityChangeBlockEvent(final RegionDb db, final EntityChangeBlockEvent event) {
+        super(db.getPlugin(), event);
+        this.blockRegion = db.getPriorByLocation(event.getBlock().getLocation());
+    }
 
-	public GeneralRegion getBlockRegion() {
-		return this.blockRegion;
-	}
+    public GeneralRegion getBlockRegion() {
+        return this.blockRegion;
+    }
 }

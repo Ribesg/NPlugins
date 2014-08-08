@@ -23,43 +23,43 @@ import org.bukkit.event.HandlerList;
  */
 public class ChunkRegenEvent extends Event implements Cancellable {
 
-	// Handlers
-	private static final HandlerList HANDLERS = new HandlerList();
+    // Handlers
+    private static final HandlerList HANDLERS = new HandlerList();
 
-	public static HandlerList getHandlerList() {
-		return HANDLERS;
-	}
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
-	private final Chunk   chunk;
-	private       boolean cancelled;
+    private final Chunk   chunk;
+    private       boolean cancelled;
 
-	public ChunkRegenEvent(final Chunk chunk) {
-		super();
-		this.chunk = chunk;
-		this.cancelled = false;
-	}
+    public ChunkRegenEvent(final Chunk chunk) {
+        super();
+        this.chunk = chunk;
+        this.cancelled = false;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return HANDLERS;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
 
-	/**
-	 * The chunk that is about to be regen (or not).
-	 *
-	 * @return the chunk that is about to be regen (or not)
-	 */
-	public Chunk getChunk() {
-		return this.chunk;
-	}
+    /**
+     * The chunk that is about to be regen (or not).
+     *
+     * @return the chunk that is about to be regen (or not)
+     */
+    public Chunk getChunk() {
+        return this.chunk;
+    }
 
-	@Override
-	public boolean isCancelled() {
-		return this.cancelled;
-	}
+    @Override
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
 
-	@Override
-	public void setCancelled(final boolean cancelled) {
-		this.cancelled = cancelled;
-	}
+    @Override
+    public void setCancelled(final boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 }

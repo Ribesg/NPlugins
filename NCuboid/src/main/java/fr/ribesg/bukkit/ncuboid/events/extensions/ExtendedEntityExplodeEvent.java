@@ -21,26 +21,26 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class ExtendedEntityExplodeEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion             entityRegion;
-	private final Map<Block, GeneralRegion> blockRegionsMap;
+    private final GeneralRegion             entityRegion;
+    private final Map<Block, GeneralRegion> blockRegionsMap;
 
-	public ExtendedEntityExplodeEvent(final RegionDb db, final EntityExplodeEvent event) {
-		super(db.getPlugin(), event);
-		this.blockRegionsMap = new HashMap<>();
-		for (final Block b : event.blockList()) {
-			final GeneralRegion cuboid = db.getPriorByLocation(b.getLocation());
-			if (cuboid != null) {
-				this.blockRegionsMap.put(b, cuboid);
-			}
-		}
-		this.entityRegion = this.blockRegionsMap.get(event.getLocation().getBlock());
-	}
+    public ExtendedEntityExplodeEvent(final RegionDb db, final EntityExplodeEvent event) {
+        super(db.getPlugin(), event);
+        this.blockRegionsMap = new HashMap<>();
+        for (final Block b : event.blockList()) {
+            final GeneralRegion cuboid = db.getPriorByLocation(b.getLocation());
+            if (cuboid != null) {
+                this.blockRegionsMap.put(b, cuboid);
+            }
+        }
+        this.entityRegion = this.blockRegionsMap.get(event.getLocation().getBlock());
+    }
 
-	public Map<Block, GeneralRegion> getBlockRegionsMap() {
-		return this.blockRegionsMap;
-	}
+    public Map<Block, GeneralRegion> getBlockRegionsMap() {
+        return this.blockRegionsMap;
+    }
 
-	public GeneralRegion getEntityRegion() {
-		return this.entityRegion;
-	}
+    public GeneralRegion getEntityRegion() {
+        return this.entityRegion;
+    }
 }

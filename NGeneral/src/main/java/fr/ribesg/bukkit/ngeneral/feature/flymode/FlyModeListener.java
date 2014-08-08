@@ -24,45 +24,45 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class FlyModeListener implements Listener {
 
-	private final FlyModeFeature feature;
+    private final FlyModeFeature feature;
 
-	public FlyModeListener(final FlyModeFeature feature) {
-		this.feature = feature;
-	}
+    public FlyModeListener(final FlyModeFeature feature) {
+        this.feature = feature;
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerJoin(final PlayerJoinEvent event) {
-		if (this.feature.hasFlyMode(event.getPlayer())) {
-			event.getPlayer().setAllowFlight(true);
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerJoin(final PlayerJoinEvent event) {
+        if (this.feature.hasFlyMode(event.getPlayer())) {
+            event.getPlayer().setAllowFlight(true);
+        }
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerQuit(final PlayerQuitEvent event) {
-		if (!Perms.hasFly(event.getPlayer()) && this.feature.hasFlyMode(event.getPlayer())) {
-			event.getPlayer().setAllowFlight(false);
-			this.feature.setFlyMode(event.getPlayer(), false);
-			event.getPlayer().setFallDistance(-100f);
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerQuit(final PlayerQuitEvent event) {
+        if (!Perms.hasFly(event.getPlayer()) && this.feature.hasFlyMode(event.getPlayer())) {
+            event.getPlayer().setAllowFlight(false);
+            this.feature.setFlyMode(event.getPlayer(), false);
+            event.getPlayer().setFallDistance(-100f);
+        }
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerQuitCreative(final PlayerGameModeChangeEvent event) {
-		if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
-			final boolean wasFlying = event.getPlayer().isFlying();
-			final Player player = event.getPlayer();
-			if (Perms.hasFly(event.getPlayer()) && this.feature.hasFlyMode(event.getPlayer())) {
-				Bukkit.getScheduler().runTaskLater(this.feature.getPlugin(), new BukkitRunnable() {
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerQuitCreative(final PlayerGameModeChangeEvent event) {
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+            final boolean wasFlying = event.getPlayer().isFlying();
+            final Player player = event.getPlayer();
+            if (Perms.hasFly(event.getPlayer()) && this.feature.hasFlyMode(event.getPlayer())) {
+                Bukkit.getScheduler().runTaskLater(this.feature.getPlugin(), new BukkitRunnable() {
 
-					@Override
-					public void run() {
-						if (player.isOnline()) {
-							player.setAllowFlight(true);
-							player.setFlying(wasFlying);
-						}
-					}
-				}, 1L);
-			}
-		}
-	}
+                    @Override
+                    public void run() {
+                        if (player.isOnline()) {
+                            player.setAllowFlight(true);
+                            player.setFlying(wasFlying);
+                        }
+                    }
+                }, 1L);
+            }
+        }
+    }
 }

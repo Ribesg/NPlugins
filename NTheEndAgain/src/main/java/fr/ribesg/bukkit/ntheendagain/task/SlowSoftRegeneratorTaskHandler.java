@@ -19,69 +19,69 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class SlowSoftRegeneratorTaskHandler {
 
-	private class SlowSoftRegeneratorTask extends BukkitRunnable {
+    private class SlowSoftRegeneratorTask extends BukkitRunnable {
 
-		private final Iterator<EndChunk> iterator;
-		private final int                nbChunks;
+        private final Iterator<EndChunk> iterator;
+        private final int                nbChunks;
 
-		public SlowSoftRegeneratorTask(final Iterator<EndChunk> iterator, final int nbChunks) {
-			super();
-			this.iterator = iterator;
-			this.nbChunks = nbChunks;
-		}
+        public SlowSoftRegeneratorTask(final Iterator<EndChunk> iterator, final int nbChunks) {
+            super();
+            this.iterator = iterator;
+            this.nbChunks = nbChunks;
+        }
 
-		@Override
-		public void run() {
-			int regen = 0;
-			while (regen < this.nbChunks && this.iterator.hasNext()) {
-				final EndChunk c = this.iterator.next();
-				if (c.hasToBeRegen()) {
-					final World world = c.getCoords().getBukkitWorld();
-					if (world != null) {
-						world.loadChunk(c.getX(), c.getZ());
-						regen++;
-					} else {
-						// Something bad happen, stop there
-						this.cancel();
-					}
-				}
-			}
-			if (!this.iterator.hasNext()) {
-				this.cancel();
-			}
-		}
-	}
+        @Override
+        public void run() {
+            int regen = 0;
+            while (regen < this.nbChunks && this.iterator.hasNext()) {
+                final EndChunk c = this.iterator.next();
+                if (c.hasToBeRegen()) {
+                    final World world = c.getCoords().getBukkitWorld();
+                    if (world != null) {
+                        world.loadChunk(c.getX(), c.getZ());
+                        regen++;
+                    } else {
+                        // Something bad happen, stop there
+                        this.cancel();
+                    }
+                }
+            }
+            if (!this.iterator.hasNext()) {
+                this.cancel();
+            }
+        }
+    }
 
-	private final EndWorldHandler handler;
+    private final EndWorldHandler handler;
 
-	private final int slowSoftRegenChunks;
-	private final int slowSoftRegenTimer;
+    private final int slowSoftRegenChunks;
+    private final int slowSoftRegenTimer;
 
-	private SlowSoftRegeneratorTask task;
+    private SlowSoftRegeneratorTask task;
 
-	public SlowSoftRegeneratorTaskHandler(final EndWorldHandler handler) {
-		this.handler = handler;
-		if (handler.getSlowSoftRegeneratorTaskHandler() != null) {
-			handler.getSlowSoftRegeneratorTaskHandler().cancel();
-		}
-		handler.setSlowSoftRegeneratorTaskHandler(this);
+    public SlowSoftRegeneratorTaskHandler(final EndWorldHandler handler) {
+        this.handler = handler;
+        if (handler.getSlowSoftRegeneratorTaskHandler() != null) {
+            handler.getSlowSoftRegeneratorTaskHandler().cancel();
+        }
+        handler.setSlowSoftRegeneratorTaskHandler(this);
 
-		this.slowSoftRegenChunks = handler.getConfig().getSlowSoftRegenChunks();
-		this.slowSoftRegenTimer = handler.getConfig().getSlowSoftRegenTimer();
-	}
+        this.slowSoftRegenChunks = handler.getConfig().getSlowSoftRegenChunks();
+        this.slowSoftRegenTimer = handler.getConfig().getSlowSoftRegenTimer();
+    }
 
-	public void run() {
-		this.task = new SlowSoftRegeneratorTask(this.handler.getChunks().getSafeChunksList().iterator(), this.slowSoftRegenChunks);
-		this.task.runTaskTimer(this.handler.getPlugin(), this.slowSoftRegenTimer, this.slowSoftRegenTimer);
-	}
+    public void run() {
+        this.task = new SlowSoftRegeneratorTask(this.handler.getChunks().getSafeChunksList().iterator(), this.slowSoftRegenChunks);
+        this.task.runTaskTimer(this.handler.getPlugin(), this.slowSoftRegenTimer, this.slowSoftRegenTimer);
+    }
 
-	public void cancel() {
-		if (this.task != null) {
-			try {
-				this.task.cancel();
-			} catch (final IllegalStateException ignored) {
-				// Ignored
-			}
-		}
-	}
+    public void cancel() {
+        if (this.task != null) {
+            try {
+                this.task.cancel();
+            } catch (final IllegalStateException ignored) {
+                // Ignored
+            }
+        }
+    }
 }

@@ -21,20 +21,20 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 
 public class NicknameFilter implements Listener {
 
-	private final NGeneral plugin;
+    private final NGeneral plugin;
 
-	public NicknameFilter(final NGeneral plugin) {
-		this.plugin = plugin;
-	}
+    public NicknameFilter(final NGeneral plugin) {
+        this.plugin = plugin;
+    }
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerLogin(final PlayerLoginEvent event) {
-		if (event.getResult() == Result.ALLOWED) {
-			final String playerName = event.getPlayer().getName();
-			if (!PlayerIdsUtil.isValidMinecraftUserName(playerName)) {
-				event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-				event.setKickMessage(this.plugin.getMessages().get(MessageId.general_nicknameFilter_invalid, playerName)[0]);
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerLogin(final PlayerLoginEvent event) {
+        if (event.getResult() == Result.ALLOWED) {
+            final String playerName = event.getPlayer().getName();
+            if (!PlayerIdsUtil.isValidMinecraftUserName(playerName)) {
+                event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
+                event.setKickMessage(this.plugin.getMessages().get(MessageId.general_nicknameFilter_invalid, playerName)[0]);
+            }
+        }
+    }
 }

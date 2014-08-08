@@ -53,403 +53,403 @@ import org.mcstats.Metrics;
  */
 public class NCore extends JavaPlugin {
 
-	private Logger        logger;
-	private FilterManager filterManager;
+    private Logger        logger;
+    private FilterManager filterManager;
 
-	private Map<String, Node> nodes;
-	private Metrics           metrics;
-	private Config            pluginConfig;
-	private UuidDb            uuidDb;
-	private Updater           updater;
-	private boolean           debugEnabled;
+    private Map<String, Node> nodes;
+    private Metrics           metrics;
+    private Config            pluginConfig;
+    private UuidDb            uuidDb;
+    private Updater           updater;
+    private boolean           debugEnabled;
 
-	@Override
-	public void onEnable() {
-		this.logger = this.getLogger();
-		this.filterManager = new FilterManager();
+    @Override
+    public void onEnable() {
+        this.logger = this.getLogger();
+        this.filterManager = new FilterManager();
 
-		try {
-			this.metrics = new Metrics(this);
-		} catch (final IOException e) {
-			e.printStackTrace();
-		}
+        try {
+            this.metrics = new Metrics(this);
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
 
-		// Config
-		try {
-			this.pluginConfig = new Config(this);
-			this.pluginConfig.loadConfig();
-		} catch (final IOException | InvalidConfigurationException e) {
-			this.logger.log(Level.SEVERE, "An error occured when NCore tried to load config.yml", e);
-		}
+        // Config
+        try {
+            this.pluginConfig = new Config(this);
+            this.pluginConfig.loadConfig();
+        } catch (final IOException | InvalidConfigurationException e) {
+            this.logger.log(Level.SEVERE, "An error occured when NCore tried to load config.yml", e);
+        }
 
-		if (this.pluginConfig.getDebugEnabled().contains(this.getName())) {
-			this.debugEnabled = true;
-			this.info("DEBUG MODE ENABLED!");
-		}
+        if (this.pluginConfig.getDebugEnabled().contains(this.getName())) {
+            this.debugEnabled = true;
+            this.info("DEBUG MODE ENABLED!");
+        }
 
-		try {
-			this.uuidDb = new UuidDb(this);
-			this.uuidDb.loadConfig();
-		} catch (final IOException | InvalidConfigurationException e) {
-			this.logger.log(Level.SEVERE, "An error occured when NCore tried to load uuidDb.yml", e);
-		}
+        try {
+            this.uuidDb = new UuidDb(this);
+            this.uuidDb.loadConfig();
+        } catch (final IOException | InvalidConfigurationException e) {
+            this.logger.log(Level.SEVERE, "An error occured when NCore tried to load uuidDb.yml", e);
+        }
 
-		this.nodes = new HashMap<>();
+        this.nodes = new HashMap<>();
 
-		Bukkit.getScheduler().runTaskLaterAsynchronously(this, new BukkitRunnable() {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(this, new BukkitRunnable() {
 
-			@Override
-			public void run() {
-				fr.ribesg.bukkit.ncore.NCore.this.afterNodesLoad();
-			}
-		}, 5 * 20L /* ~5 seconds */);
+            @Override
+            public void run() {
+                fr.ribesg.bukkit.ncore.NCore.this.afterNodesLoad();
+            }
+        }, 5 * 20L /* ~5 seconds */);
 
-		Bukkit.getPluginManager().registerEvents(new NEventsListener(this), this);
-		Bukkit.getPluginManager().registerEvents(new UpdaterListener(this), this);
-	}
+        Bukkit.getPluginManager().registerEvents(new NEventsListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new UpdaterListener(this), this);
+    }
 
-	@Override
-	public void onDisable() {
-		try {
-			this.uuidDb.writeConfig();
-		} catch (final IOException e) {
-			this.logger.log(Level.SEVERE, "An error occured when NCore tried to save uuidDb.yml", e);
-		}
-	}
+    @Override
+    public void onDisable() {
+        try {
+            this.uuidDb.writeConfig();
+        } catch (final IOException e) {
+            this.logger.log(Level.SEVERE, "An error occured when NCore tried to save uuidDb.yml", e);
+        }
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
-		if ("debug".equals(cmd.getName())) {
-			if (!Perms.hasDebug(sender)) {
-				sender.sendMessage(ColorUtil.colorize("&cYou do not have the permission to use that command"));
-				return true;
-			}
-			if (args.length < 1 || args.length > 2) {
-				return false;
-			} else {
-				final String header = String.valueOf(ChatColor.DARK_GRAY) + ChatColor.BOLD + "DEBUG " + ChatColor.RESET;
-				final String nodeName = args[args.length - 1];
-				final Plugin plugin = Bukkit.getPluginManager().getPlugin(nodeName);
-				if (plugin == null || !(plugin instanceof NPlugin) && plugin != this) {
-					sender.sendMessage(header + ChatColor.RED + '\'' + nodeName + "' is unknown or unloaded!");
-				} else {
-					final boolean value;
-					if (plugin == this) {
-						if (args.length == 1) {
-							value = !this.debugEnabled;
-						} else {
-							value = Boolean.parseBoolean(args[0]);
-						}
-						this.setDebugEnabled(value);
-					} else {
-						final NPlugin nPlugin = (NPlugin)plugin;
-						if (args.length == 1) {
-							value = !nPlugin.isDebugEnabled();
-						} else {
-							value = Boolean.parseBoolean(args[0]);
-						}
-						nPlugin.setDebugEnabled(value);
-					}
-					sender.sendMessage(header + ChatColor.GREEN + '\'' + nodeName + "' now has debug mode " + ChatColor.GOLD +
-					                   (value ? "enabled" : "disabled") + ChatColor.GREEN + '!');
-					try {
-						final List<String> debugEnabledList = this.pluginConfig.getDebugEnabled();
-						if (value) {
-							debugEnabledList.add(plugin.getName());
-						} else {
-							debugEnabledList.remove(plugin.getName());
-						}
-						this.pluginConfig.loadConfig();
-						this.pluginConfig.setDebugEnabled(debugEnabledList);
-						this.pluginConfig.writeConfig();
-					} catch (final InvalidConfigurationException | IOException ignored) {
-						// Not a real problem
-					}
-				}
-				return true;
-			}
-		} else if ("updater".equals(cmd.getName())) {
-			if (!Perms.hasUpdater(sender)) {
-				sender.sendMessage(ColorUtil.colorize("&cYou do not have the permission to use that command"));
-				return true;
-			}
-			if (this.updater == null) {
-				sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Updater is disabled in config");
-			} else if (args.length != 2) {
-				return false;
-			} else {
-				final String action = args[0].toLowerCase();
-				final String nodeName = args[1];
-				final boolean all = "all".equalsIgnoreCase(args[1]);
-				if (!all && this.updater.getPlugins().get(nodeName.toLowerCase()) == null) {
-					sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Unknown Node: " + nodeName);
-				} else {
-					switch (action) {
-						case "check":
-						case "status":
-							this.updater.checkForUpdates(sender, all ? null : nodeName);
-							break;
-						case "download":
-						case "dl":
-							if (all) {
-								sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Please select a specific Node to download");
-							} else {
-								this.updater.downloadUpdate(sender, nodeName);
-							}
-							break;
-					}
-				}
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
+        if ("debug".equals(cmd.getName())) {
+            if (!Perms.hasDebug(sender)) {
+                sender.sendMessage(ColorUtil.colorize("&cYou do not have the permission to use that command"));
+                return true;
+            }
+            if (args.length < 1 || args.length > 2) {
+                return false;
+            } else {
+                final String header = String.valueOf(ChatColor.DARK_GRAY) + ChatColor.BOLD + "DEBUG " + ChatColor.RESET;
+                final String nodeName = args[args.length - 1];
+                final Plugin plugin = Bukkit.getPluginManager().getPlugin(nodeName);
+                if (plugin == null || !(plugin instanceof NPlugin) && plugin != this) {
+                    sender.sendMessage(header + ChatColor.RED + '\'' + nodeName + "' is unknown or unloaded!");
+                } else {
+                    final boolean value;
+                    if (plugin == this) {
+                        if (args.length == 1) {
+                            value = !this.debugEnabled;
+                        } else {
+                            value = Boolean.parseBoolean(args[0]);
+                        }
+                        this.setDebugEnabled(value);
+                    } else {
+                        final NPlugin nPlugin = (NPlugin)plugin;
+                        if (args.length == 1) {
+                            value = !nPlugin.isDebugEnabled();
+                        } else {
+                            value = Boolean.parseBoolean(args[0]);
+                        }
+                        nPlugin.setDebugEnabled(value);
+                    }
+                    sender.sendMessage(header + ChatColor.GREEN + '\'' + nodeName + "' now has debug mode " + ChatColor.GOLD +
+                                       (value ? "enabled" : "disabled") + ChatColor.GREEN + '!');
+                    try {
+                        final List<String> debugEnabledList = this.pluginConfig.getDebugEnabled();
+                        if (value) {
+                            debugEnabledList.add(plugin.getName());
+                        } else {
+                            debugEnabledList.remove(plugin.getName());
+                        }
+                        this.pluginConfig.loadConfig();
+                        this.pluginConfig.setDebugEnabled(debugEnabledList);
+                        this.pluginConfig.writeConfig();
+                    } catch (final InvalidConfigurationException | IOException ignored) {
+                        // Not a real problem
+                    }
+                }
+                return true;
+            }
+        } else if ("updater".equals(cmd.getName())) {
+            if (!Perms.hasUpdater(sender)) {
+                sender.sendMessage(ColorUtil.colorize("&cYou do not have the permission to use that command"));
+                return true;
+            }
+            if (this.updater == null) {
+                sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Updater is disabled in config");
+            } else if (args.length != 2) {
+                return false;
+            } else {
+                final String action = args[0].toLowerCase();
+                final String nodeName = args[1];
+                final boolean all = "all".equalsIgnoreCase(args[1]);
+                if (!all && this.updater.getPlugins().get(nodeName.toLowerCase()) == null) {
+                    sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Unknown Node: " + nodeName);
+                } else {
+                    switch (action) {
+                        case "check":
+                        case "status":
+                            this.updater.checkForUpdates(sender, all ? null : nodeName);
+                            break;
+                        case "download":
+                        case "dl":
+                            if (all) {
+                                sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Please select a specific Node to download");
+                            } else {
+                                this.updater.downloadUpdate(sender, nodeName);
+                            }
+                            break;
+                    }
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	private void afterNodesLoad() {
-		boolean noNodeFound = true;
-		final Metrics.Graph nodesUsedGraph = this.metrics.createGraph("Nodes used");
+    private void afterNodesLoad() {
+        boolean noNodeFound = true;
+        final Metrics.Graph nodesUsedGraph = this.metrics.createGraph("Nodes used");
 
-		if (this.get(Node.CUBOID) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.CUBOID.substring(1)) {
+        if (this.get(Node.CUBOID) != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.CUBOID.substring(1)) {
 
-				@Override
-				public int getValue() {
-					return 1;
-				}
-			});
-			noNodeFound = false;
-		}
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
-		if (this.get(Node.ENCHANTING_EGG) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.ENCHANTING_EGG.substring(1)) {
+        if (this.get(Node.ENCHANTING_EGG) != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.ENCHANTING_EGG.substring(1)) {
 
-				@Override
-				public int getValue() {
-					return 1;
-				}
-			});
-			noNodeFound = false;
-		}
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
-		if (this.get(Node.GENERAL) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.GENERAL.substring(1)) {
+        if (this.get(Node.GENERAL) != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.GENERAL.substring(1)) {
 
-				@Override
-				public int getValue() {
-					return 1;
-				}
-			});
-			noNodeFound = false;
-		}
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
-		if (this.get(Node.PLAYER) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PLAYER.substring(1)) {
+        if (this.get(Node.PLAYER) != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PLAYER.substring(1)) {
 
-				@Override
-				public int getValue() {
-					return 1;
-				}
-			});
-			noNodeFound = false;
-		}
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
-		if (this.get(Node.PERMISSIONS) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PERMISSIONS.substring(1)) {
+        if (this.get(Node.PERMISSIONS) != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.PERMISSIONS.substring(1)) {
 
-				@Override
-				public int getValue() {
-					return 1;
-				}
-			});
-			noNodeFound = false;
-		}
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
-		if (this.get(Node.TALK) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.TALK.substring(1)) {
+        if (this.get(Node.TALK) != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.TALK.substring(1)) {
 
-				@Override
-				public int getValue() {
-					return 1;
-				}
-			});
-			noNodeFound = false;
-		}
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
-		if (this.get(Node.THE_END_AGAIN) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.THE_END_AGAIN.substring(1)) {
+        if (this.get(Node.THE_END_AGAIN) != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.THE_END_AGAIN.substring(1)) {
 
-				@Override
-				public int getValue() {
-					return 1;
-				}
-			});
-			noNodeFound = false;
-		}
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
-		if (this.get(Node.WORLD) != null) {
-			nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.WORLD.substring(1)) {
+        if (this.get(Node.WORLD) != null) {
+            nodesUsedGraph.addPlotter(new Metrics.Plotter(Node.WORLD.substring(1)) {
 
-				@Override
-				public int getValue() {
-					return 1;
-				}
-			});
-			noNodeFound = false;
-		}
+                @Override
+                public int getValue() {
+                    return 1;
+                }
+            });
+            noNodeFound = false;
+        }
 
-		this.metrics.start();
+        this.metrics.start();
 
-		if (noNodeFound) {
-			final FrameBuilder frame = new FrameBuilder();
-			frame.addLine("This plugin can be safely removed", FrameBuilder.Option.CENTER);
-			frame.addLine("It seems that you are using this plugin, NCore, while note using any");
-			frame.addLine("node of the NPlugins suite. Maybe you forgot to add the Node(s) you");
-			frame.addLine("wanted to use, or you forgot to remove NCore after removing all nodes.");
-			frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
+        if (noNodeFound) {
+            final FrameBuilder frame = new FrameBuilder();
+            frame.addLine("This plugin can be safely removed", FrameBuilder.Option.CENTER);
+            frame.addLine("It seems that you are using this plugin, NCore, while note using any");
+            frame.addLine("node of the NPlugins suite. Maybe you forgot to add the Node(s) you");
+            frame.addLine("wanted to use, or you forgot to remove NCore after removing all nodes.");
+            frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
 
-			for (final String s : frame.build()) {
-				this.logger.severe(s);
-			}
+            for (final String s : frame.build()) {
+                this.logger.severe(s);
+            }
 
-			this.getPluginLoader().disablePlugin(this);
-		} else if (this.pluginConfig.isUpdateCheck()) {
-			this.updater = new Updater(this, 'v' + this.getDescription().getVersion(), this.pluginConfig.getProxy(), this.pluginConfig.getApiKey());
-			if (this.pluginConfig.getUpdateCheckInterval() > 0) {
-				this.updater.startTask();
-			}
-		}
-	}
+            this.getPluginLoader().disablePlugin(this);
+        } else if (this.pluginConfig.isUpdateCheck()) {
+            this.updater = new Updater(this, 'v' + this.getDescription().getVersion(), this.pluginConfig.getProxy(), this.pluginConfig.getApiKey());
+            if (this.pluginConfig.getUpdateCheckInterval() > 0) {
+                this.updater.startTask();
+            }
+        }
+    }
 
-	public Node get(final String nodeName) {
-		return this.nodes.get(nodeName.toLowerCase());
-	}
+    public Node get(final String nodeName) {
+        return this.nodes.get(nodeName.toLowerCase());
+    }
 
-	public CuboidNode getCuboidNode() {
-		return (CuboidNode)this.get(Node.CUBOID);
-	}
+    public CuboidNode getCuboidNode() {
+        return (CuboidNode)this.get(Node.CUBOID);
+    }
 
-	public EnchantingEggNode getEnchantingEggNode() {
-		return (EnchantingEggNode)this.get(Node.ENCHANTING_EGG);
-	}
+    public EnchantingEggNode getEnchantingEggNode() {
+        return (EnchantingEggNode)this.get(Node.ENCHANTING_EGG);
+    }
 
-	public GeneralNode getGeneralNode() {
-		return (GeneralNode)this.get(Node.GENERAL);
-	}
+    public GeneralNode getGeneralNode() {
+        return (GeneralNode)this.get(Node.GENERAL);
+    }
 
-	public PlayerNode getPlayerNode() {
-		return (PlayerNode)this.get(Node.PLAYER);
-	}
+    public PlayerNode getPlayerNode() {
+        return (PlayerNode)this.get(Node.PLAYER);
+    }
 
-	public PermissionsNode getPermissionsNode() {
-		return (PermissionsNode)this.get(Node.PERMISSIONS);
-	}
+    public PermissionsNode getPermissionsNode() {
+        return (PermissionsNode)this.get(Node.PERMISSIONS);
+    }
 
-	public TalkNode getTalkNode() {
-		return (TalkNode)this.get(Node.TALK);
-	}
+    public TalkNode getTalkNode() {
+        return (TalkNode)this.get(Node.TALK);
+    }
 
-	public TheEndAgainNode getTheEndAgainNode() {
-		return (TheEndAgainNode)this.get(Node.THE_END_AGAIN);
-	}
+    public TheEndAgainNode getTheEndAgainNode() {
+        return (TheEndAgainNode)this.get(Node.THE_END_AGAIN);
+    }
 
-	public WorldNode getWorldNode() {
-		return (WorldNode)this.get(Node.WORLD);
-	}
+    public WorldNode getWorldNode() {
+        return (WorldNode)this.get(Node.WORLD);
+    }
 
-	public void set(final String nodeName, final Node node) {
-		if (this.nodes.containsKey(nodeName.toLowerCase())) {
-			throw new IllegalStateException("Registering the same node twice!");
-		} else {
-			this.nodes.put(nodeName.toLowerCase(), node);
-		}
-	}
+    public void set(final String nodeName, final Node node) {
+        if (this.nodes.containsKey(nodeName.toLowerCase())) {
+            throw new IllegalStateException("Registering the same node twice!");
+        } else {
+            this.nodes.put(nodeName.toLowerCase(), node);
+        }
+    }
 
-	public Config getPluginConfig() {
-		return this.pluginConfig;
-	}
+    public Config getPluginConfig() {
+        return this.pluginConfig;
+    }
 
-	public Updater getUpdater() {
-		return this.updater;
-	}
+    public Updater getUpdater() {
+        return this.updater;
+    }
 
-	public FilterManager getFilterManager() {
-		return this.filterManager;
-	}
+    public FilterManager getFilterManager() {
+        return this.filterManager;
+    }
 
-	// ##################### //
-	// ## Debugging stuff ## //
-	// ##################### //
+    // ##################### //
+    // ## Debugging stuff ## //
+    // ##################### //
 
-	public void setDebugEnabled(final boolean value) {
-		this.debugEnabled = value;
-	}
+    public void setDebugEnabled(final boolean value) {
+        this.debugEnabled = value;
+    }
 
-	public boolean isDebugEnabled() {
-		return this.debugEnabled;
-	}
+    public boolean isDebugEnabled() {
+        return this.debugEnabled;
+    }
 
-	public void log(final Level level, final String message) {
-		this.logger.log(level, message);
-	}
+    public void log(final Level level, final String message) {
+        this.logger.log(level, message);
+    }
 
-	public void info(final String message) {
-		this.log(Level.INFO, message);
-	}
+    public void info(final String message) {
+        this.log(Level.INFO, message);
+    }
 
-	public void entering(final Class clazz, final String methodName) {
-		if (this.debugEnabled) {
-			this.log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()));
-		}
-	}
+    public void entering(final Class clazz, final String methodName) {
+        if (this.debugEnabled) {
+            this.log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()));
+        }
+    }
 
-	public void entering(final Class clazz, final String methodName, final String comment) {
-		if (this.debugEnabled) {
-			this.log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
-		}
-	}
+    public void entering(final Class clazz, final String methodName, final String comment) {
+        if (this.debugEnabled) {
+            this.log(Level.INFO, "DEBUG >>> '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
+        }
+    }
 
-	public void exiting(final Class clazz, final String methodName) {
-		if (this.debugEnabled) {
-			this.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()));
-		}
-	}
+    public void exiting(final Class clazz, final String methodName) {
+        if (this.debugEnabled) {
+            this.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()));
+        }
+    }
 
-	public void exiting(final Class clazz, final String methodName, final String comment) {
-		if (this.debugEnabled) {
-			this.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
-		}
-	}
+    public void exiting(final Class clazz, final String methodName, final String comment) {
+        if (this.debugEnabled) {
+            this.log(Level.INFO, "DEBUG <<< '" + methodName + "' in " + this.shortNPluginPackageName(clazz.getName()) + " (" + comment + ')');
+        }
+    }
 
-	private String shortNPluginPackageName(final String packageName) {
-		return packageName.substring(17);
-	}
+    private String shortNPluginPackageName(final String packageName) {
+        return packageName.substring(17);
+    }
 
-	public void debug(final String message) {
-		if (this.debugEnabled) {
-			this.log(Level.INFO, "DEBUG         " + message);
-		}
-	}
+    public void debug(final String message) {
+        if (this.debugEnabled) {
+            this.log(Level.INFO, "DEBUG         " + message);
+        }
+    }
 
-	public void debug(final String message, final Throwable e) {
-		if (this.debugEnabled) {
-			this.logger.log(Level.SEVERE, "DEBUG         " + message, e);
-		}
-	}
+    public void debug(final String message, final Throwable e) {
+        if (this.debugEnabled) {
+            this.logger.log(Level.SEVERE, "DEBUG         " + message, e);
+        }
+    }
 
-	public void error(final String message) {
-		this.error(Level.SEVERE, message);
-	}
+    public void error(final String message) {
+        this.error(Level.SEVERE, message);
+    }
 
-	public void error(final Level level, final String message) {
-		this.log(level, message);
-	}
+    public void error(final Level level, final String message) {
+        this.log(level, message);
+    }
 
-	public void error(final String message, final Throwable e) {
-		this.error(Level.SEVERE, message, e);
-	}
+    public void error(final String message, final Throwable e) {
+        this.error(Level.SEVERE, message, e);
+    }
 
-	public void error(final Level level, final String message, final Throwable e) {
-		this.logger.log(level, message, e);
-	}
+    public void error(final Level level, final String message, final Throwable e) {
+        this.logger.log(level, message, e);
+    }
 }

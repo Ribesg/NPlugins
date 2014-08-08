@@ -17,33 +17,33 @@ import org.bukkit.command.CommandSender;
 
 public abstract class AbstractSubcmdExecutor {
 
-	private final NCuboid  plugin;
-	private       String[] usage;
+    private final NCuboid  plugin;
+    private       String[] usage;
 
-	public AbstractSubcmdExecutor(final NCuboid instance) {
-		this.plugin = instance;
-	}
+    public AbstractSubcmdExecutor(final NCuboid instance) {
+        this.plugin = instance;
+    }
 
-	public NCuboid getPlugin() {
-		return this.plugin;
-	}
+    public NCuboid getPlugin() {
+        return this.plugin;
+    }
 
-	/**
-	 * Should be called in sub-classes' constructors
-	 */
-	protected void setUsage(final String... usage) {
-		this.usage = usage;
-	}
+    /**
+     * Should be called in sub-classes' constructors
+     */
+    protected void setUsage(final String... usage) {
+        this.usage = usage;
+    }
 
-	public boolean execute(final CommandSender sender, final String[] superCommandArgs) {
-		final boolean result = this.exec(sender, Arrays.copyOfRange(superCommandArgs, 1, superCommandArgs.length));
-		if (!result) {
-			for (final String line : this.usage) {
-				sender.sendMessage(this.plugin.getMessages().getMessageHeader() + line);
-			}
-		}
-		return true;
-	}
+    public boolean execute(final CommandSender sender, final String[] superCommandArgs) {
+        final boolean result = this.exec(sender, Arrays.copyOfRange(superCommandArgs, 1, superCommandArgs.length));
+        if (!result) {
+            for (final String line : this.usage) {
+                sender.sendMessage(this.plugin.getMessages().getMessageHeader() + line);
+            }
+        }
+        return true;
+    }
 
-	protected abstract boolean exec(final CommandSender sender, final String[] commandArgs);
+    protected abstract boolean exec(final CommandSender sender, final String[] commandArgs);
 }

@@ -20,40 +20,40 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class ExtendedPlayerInteractEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion            clickedRegion;
-	private final SortedSet<GeneralRegion> clickedRegions;
-	private final GeneralRegion            relativeClickedRegion;
-	private final SortedSet<GeneralRegion> relativeClickedRegions;
+    private final GeneralRegion            clickedRegion;
+    private final SortedSet<GeneralRegion> clickedRegions;
+    private final GeneralRegion            relativeClickedRegion;
+    private final SortedSet<GeneralRegion> relativeClickedRegions;
 
-	// Called only if event.hasBlock()
-	public ExtendedPlayerInteractEvent(final RegionDb db, final PlayerInteractEvent event) {
-		super(db.getPlugin(), event);
-		if (event.hasBlock()) {
-			this.clickedRegions = db.getAllByLocation(event.getClickedBlock().getLocation());
-			this.clickedRegion = db.getPrior(this.clickedRegions);
-			this.relativeClickedRegions = db.getAllByLocation(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
-			this.relativeClickedRegion = db.getPrior(this.relativeClickedRegions);
-		} else {
-			this.clickedRegions = null;
-			this.clickedRegion = null;
-			this.relativeClickedRegion = null;
-			this.relativeClickedRegions = null;
-		}
-	}
+    // Called only if event.hasBlock()
+    public ExtendedPlayerInteractEvent(final RegionDb db, final PlayerInteractEvent event) {
+        super(db.getPlugin(), event);
+        if (event.hasBlock()) {
+            this.clickedRegions = db.getAllByLocation(event.getClickedBlock().getLocation());
+            this.clickedRegion = db.getPrior(this.clickedRegions);
+            this.relativeClickedRegions = db.getAllByLocation(event.getClickedBlock().getRelative(event.getBlockFace()).getLocation());
+            this.relativeClickedRegion = db.getPrior(this.relativeClickedRegions);
+        } else {
+            this.clickedRegions = null;
+            this.clickedRegion = null;
+            this.relativeClickedRegion = null;
+            this.relativeClickedRegions = null;
+        }
+    }
 
-	public GeneralRegion getClickedRegion() {
-		return this.clickedRegion;
-	}
+    public GeneralRegion getClickedRegion() {
+        return this.clickedRegion;
+    }
 
-	public Set<GeneralRegion> getClickedRegions() {
-		return this.clickedRegions;
-	}
+    public Set<GeneralRegion> getClickedRegions() {
+        return this.clickedRegions;
+    }
 
-	public GeneralRegion getRelativeClickedRegion() {
-		return this.relativeClickedRegion;
-	}
+    public GeneralRegion getRelativeClickedRegion() {
+        return this.relativeClickedRegion;
+    }
 
-	public Set<GeneralRegion> getRelativeClickedRegions() {
-		return this.relativeClickedRegions;
-	}
+    public Set<GeneralRegion> getRelativeClickedRegions() {
+        return this.relativeClickedRegions;
+    }
 }

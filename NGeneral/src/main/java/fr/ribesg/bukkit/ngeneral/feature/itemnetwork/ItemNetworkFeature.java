@@ -27,101 +27,101 @@ import org.bukkit.World;
 
 public class ItemNetworkFeature extends Feature {
 
-	private final Map<String, ItemNetwork> networks;
-	private final Set<NLocation>           lockedChestLocations;
+    private final Map<String, ItemNetwork> networks;
+    private final Set<NLocation>           lockedChestLocations;
 
-	public ItemNetworkFeature(final NGeneral instance) {
-		super(instance, FeatureType.ITEM_NETWORK, instance.getPluginConfig().hasItemNetworkFeature());
-		this.networks = new HashMap<>();
-		this.lockedChestLocations = new HashSet<>();
-	}
+    public ItemNetworkFeature(final NGeneral instance) {
+        super(instance, FeatureType.ITEM_NETWORK, instance.getPluginConfig().hasItemNetworkFeature());
+        this.networks = new HashMap<>();
+        this.lockedChestLocations = new HashSet<>();
+    }
 
-	@Override
-	public void initialize() {
-		final ItemNetworkListener listener = new ItemNetworkListener(this);
-		final ItemNetworkCommandExecutor executor = new ItemNetworkCommandExecutor(this);
+    @Override
+    public void initialize() {
+        final ItemNetworkListener listener = new ItemNetworkListener(this);
+        final ItemNetworkCommandExecutor executor = new ItemNetworkCommandExecutor(this);
 
-		for (final ItemNetwork in : this.networks.values()) {
-			in.initialize();
-		}
+        for (final ItemNetwork in : this.networks.values()) {
+            in.initialize();
+        }
 
-		Bukkit.getPluginManager().registerEvents(listener, this.getPlugin());
-		this.plugin.setCommandExecutor("itemnetwork", executor);
-	}
+        Bukkit.getPluginManager().registerEvents(listener, this.getPlugin());
+        this.plugin.setCommandExecutor("itemnetwork", executor);
+    }
 
-	public void lock(final NLocation loc) {
-		this.lockedChestLocations.add(loc);
-		final World w = loc.getWorld();
+    public void lock(final NLocation loc) {
+        this.lockedChestLocations.add(loc);
+        final World w = loc.getWorld();
 
-		final Material chest = w.getBlockAt(loc.toBukkitLocation()).getType();
+        final Material chest = w.getBlockAt(loc.toBukkitLocation()).getType();
 
-		final int x = loc.getBlockX();
-		final int y = loc.getBlockY();
-		final int z = loc.getBlockZ();
+        final int x = loc.getBlockX();
+        final int y = loc.getBlockY();
+        final int z = loc.getBlockZ();
 
-		if (w.getBlockAt(x - 1, y, z).getType() == chest) {
-			this.lockedChestLocations.add(new NLocation(w.getName(), x - 1, y, z));
-			return;
-		}
+        if (w.getBlockAt(x - 1, y, z).getType() == chest) {
+            this.lockedChestLocations.add(new NLocation(w.getName(), x - 1, y, z));
+            return;
+        }
 
-		if (w.getBlockAt(x + 1, y, z).getType() == chest) {
-			this.lockedChestLocations.add(new NLocation(w.getName(), x + 1, y, z));
-			return;
-		}
+        if (w.getBlockAt(x + 1, y, z).getType() == chest) {
+            this.lockedChestLocations.add(new NLocation(w.getName(), x + 1, y, z));
+            return;
+        }
 
-		if (w.getBlockAt(x, y, z - 1).getType() == chest) {
-			this.lockedChestLocations.add(new NLocation(w.getName(), x, y, z - 1));
-			return;
-		}
+        if (w.getBlockAt(x, y, z - 1).getType() == chest) {
+            this.lockedChestLocations.add(new NLocation(w.getName(), x, y, z - 1));
+            return;
+        }
 
-		if (w.getBlockAt(x, y, z + 1).getType() == chest) {
-			this.lockedChestLocations.add(new NLocation(w.getName(), x, y, z + 1));
-		}
-	}
+        if (w.getBlockAt(x, y, z + 1).getType() == chest) {
+            this.lockedChestLocations.add(new NLocation(w.getName(), x, y, z + 1));
+        }
+    }
 
-	public void unlock(final NLocation loc) {
-		if (this.lockedChestLocations.remove(loc)) {
+    public void unlock(final NLocation loc) {
+        if (this.lockedChestLocations.remove(loc)) {
 
-			final World w = loc.getWorld();
+            final World w = loc.getWorld();
 
-			w.playEffect(loc.toBukkitLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
+            w.playEffect(loc.toBukkitLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
 
-			final Material chest = w.getBlockAt(loc.toBukkitLocation()).getType();
+            final Material chest = w.getBlockAt(loc.toBukkitLocation()).getType();
 
-			final int x = loc.getBlockX();
-			final int y = loc.getBlockY();
-			final int z = loc.getBlockZ();
+            final int x = loc.getBlockX();
+            final int y = loc.getBlockY();
+            final int z = loc.getBlockZ();
 
-			if (w.getBlockAt(x - 1, y, z).getType() == chest) {
-				this.lockedChestLocations.remove(new NLocation(w.getName(), x - 1, y, z));
-				w.playEffect(w.getBlockAt(x - 1, y, z).getLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
-				return;
-			}
+            if (w.getBlockAt(x - 1, y, z).getType() == chest) {
+                this.lockedChestLocations.remove(new NLocation(w.getName(), x - 1, y, z));
+                w.playEffect(w.getBlockAt(x - 1, y, z).getLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
+                return;
+            }
 
-			if (w.getBlockAt(x + 1, y, z).getType() == chest) {
-				this.lockedChestLocations.remove(new NLocation(w.getName(), x + 1, y, z));
-				w.playEffect(w.getBlockAt(x + 1, y, z).getLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
-				return;
-			}
+            if (w.getBlockAt(x + 1, y, z).getType() == chest) {
+                this.lockedChestLocations.remove(new NLocation(w.getName(), x + 1, y, z));
+                w.playEffect(w.getBlockAt(x + 1, y, z).getLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
+                return;
+            }
 
-			if (w.getBlockAt(x, y, z - 1).getType() == chest) {
-				this.lockedChestLocations.remove(new NLocation(w.getName(), x, y, z - 1));
-				w.playEffect(w.getBlockAt(x, y, z - 1).getLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
-				return;
-			}
+            if (w.getBlockAt(x, y, z - 1).getType() == chest) {
+                this.lockedChestLocations.remove(new NLocation(w.getName(), x, y, z - 1));
+                w.playEffect(w.getBlockAt(x, y, z - 1).getLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
+                return;
+            }
 
-			if (w.getBlockAt(x, y, z + 1).getType() == chest) {
-				this.lockedChestLocations.remove(new NLocation(w.getName(), x, y, z + 1));
-				w.playEffect(w.getBlockAt(x, y, z + 1).getLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
-			}
-		}
-	}
+            if (w.getBlockAt(x, y, z + 1).getType() == chest) {
+                this.lockedChestLocations.remove(new NLocation(w.getName(), x, y, z + 1));
+                w.playEffect(w.getBlockAt(x, y, z + 1).getLocation().add(0.5, 0.5, 0.5), Effect.ENDER_SIGNAL, 0);
+            }
+        }
+    }
 
-	public boolean isLocked(final NLocation loc) {
-		return this.lockedChestLocations.contains(loc);
-	}
+    public boolean isLocked(final NLocation loc) {
+        return this.lockedChestLocations.contains(loc);
+    }
 
-	public Map<String, ItemNetwork> getNetworks() {
-		return this.networks;
-	}
+    public Map<String, ItemNetwork> getNetworks() {
+        return this.networks;
+    }
 }

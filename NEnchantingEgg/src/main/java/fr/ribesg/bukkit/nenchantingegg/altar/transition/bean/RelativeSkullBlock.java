@@ -17,25 +17,25 @@ import org.bukkit.block.Skull;
 
 public class RelativeSkullBlock extends RelativeBlock {
 
-	private final SkullType type;
-	private final BlockFace rotation;
+    private final SkullType type;
+    private final BlockFace rotation;
 
-	public RelativeSkullBlock(final double x, final double y, final double z, final SkullType type, final BlockFace rotation) {
-		super(x, y, z, Material.SKULL, BlockData.SKULL_FLOOR);
-		this.type = type;
-		this.rotation = rotation;
-	}
+    public RelativeSkullBlock(final double x, final double y, final double z, final SkullType type, final BlockFace rotation) {
+        super(x, y, z, Material.SKULL, BlockData.SKULL_FLOOR);
+        this.type = type;
+        this.rotation = rotation;
+    }
 
-	@Override
-	public boolean needAdditionalData() {
-		return true;
-	}
+    @Override
+    public boolean needAdditionalData() {
+        return true;
+    }
 
-	@Override
-	public void setAdditionalData(final Block block) {
-		final Skull skullState = (Skull)block.getState();
-		skullState.setSkullType(this.type);
-		skullState.setRotation(this.rotation);
-		skullState.update();
-	}
+    @Override
+    public void setAdditionalData(final Block block) {
+        final Skull skullState = (Skull)block.getState();
+        skullState.setSkullType(this.type);
+        skullState.setRotation(this.rotation);
+        skullState.update();
+    }
 }

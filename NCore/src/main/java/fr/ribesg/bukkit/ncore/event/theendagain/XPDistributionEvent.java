@@ -23,55 +23,55 @@ import org.bukkit.event.HandlerList;
  */
 public class XPDistributionEvent extends Event implements Cancellable {
 
-	// Handlers
-	private static final HandlerList HANDLERS = new HandlerList();
+    // Handlers
+    private static final HandlerList HANDLERS = new HandlerList();
 
-	public static HandlerList getHandlerList() {
-		return HANDLERS;
-	}
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
-	private final Map<String, Integer> xpMap;
-	private final int                  totalXPAmount;
-	private       boolean              cancelled;
+    private final Map<String, Integer> xpMap;
+    private final int                  totalXPAmount;
+    private       boolean              cancelled;
 
-	public XPDistributionEvent(final Map<String, Integer> xpMap, final int totalXPAmount) {
-		super();
-		this.xpMap = xpMap;
-		this.totalXPAmount = totalXPAmount;
-		this.cancelled = false;
-	}
+    public XPDistributionEvent(final Map<String, Integer> xpMap, final int totalXPAmount) {
+        super();
+        this.xpMap = xpMap;
+        this.totalXPAmount = totalXPAmount;
+        this.cancelled = false;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return HANDLERS;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
 
-	/**
-	 * A map linking Player names to the XP they will receive.
-	 * The amount of XP can be modified, and you are free to add or remove people from this map.
-	 *
-	 * @return the map
-	 */
-	public Map<String, Integer> getXpMap() {
-		return this.xpMap;
-	}
+    /**
+     * A map linking Player names to the XP they will receive.
+     * The amount of XP can be modified, and you are free to add or remove people from this map.
+     *
+     * @return the map
+     */
+    public Map<String, Integer> getXpMap() {
+        return this.xpMap;
+    }
 
-	/**
-	 * The total amount of XP given for this Dragon's death, for reference.
-	 *
-	 * @return the total amount of XP given for this Dragon's death, for reference
-	 */
-	public int getTotalXPAmount() {
-		return this.totalXPAmount;
-	}
+    /**
+     * The total amount of XP given for this Dragon's death, for reference.
+     *
+     * @return the total amount of XP given for this Dragon's death, for reference
+     */
+    public int getTotalXPAmount() {
+        return this.totalXPAmount;
+    }
 
-	@Override
-	public boolean isCancelled() {
-		return this.cancelled;
-	}
+    @Override
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
 
-	@Override
-	public void setCancelled(final boolean cancelled) {
-		this.cancelled = cancelled;
-	}
+    @Override
+    public void setCancelled(final boolean cancelled) {
+        this.cancelled = cancelled;
+    }
 }

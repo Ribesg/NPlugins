@@ -19,47 +19,47 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class AutoAfkListener implements Listener {
 
-	private final AutoAfkFeature feature;
+    private final AutoAfkFeature feature;
 
-	public AutoAfkListener(final AutoAfkFeature feature) {
-		this.feature = feature;
-	}
+    public AutoAfkListener(final AutoAfkFeature feature) {
+        this.feature = feature;
+    }
 
-	@EventHandler
-	public void onPlayerMove(final PlayerMoveEvent event) {
-		final Player player = event.getPlayer();
-		this.feature.update(player.getName());
-		if (this.feature.isAfk(player)) {
-			this.feature.setAfk(player.getName(), false, null);
-		}
-	}
+    @EventHandler
+    public void onPlayerMove(final PlayerMoveEvent event) {
+        final Player player = event.getPlayer();
+        this.feature.update(player.getName());
+        if (this.feature.isAfk(player)) {
+            this.feature.setAfk(player.getName(), false, null);
+        }
+    }
 
-	@EventHandler
-	public void onPlayerInteract(final PlayerInteractEvent event) {
-		final Player player = event.getPlayer();
-		this.feature.update(player.getName());
-		if (this.feature.isAfk(player)) {
-			this.feature.setAfk(player.getName(), false, null);
-		}
-	}
+    @EventHandler
+    public void onPlayerInteract(final PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
+        this.feature.update(player.getName());
+        if (this.feature.isAfk(player)) {
+            this.feature.setAfk(player.getName(), false, null);
+        }
+    }
 
-	@EventHandler
-	public void onPlayerChat(final AsyncPlayerChatEvent event) {
-		final Player player = event.getPlayer();
-		this.feature.update(player.getName());
-		if (this.feature.isAfk(player)) {
-			this.feature.setAfk(player.getName(), false, null);
-		}
-	}
+    @EventHandler
+    public void onPlayerChat(final AsyncPlayerChatEvent event) {
+        final Player player = event.getPlayer();
+        this.feature.update(player.getName());
+        if (this.feature.isAfk(player)) {
+            this.feature.setAfk(player.getName(), false, null);
+        }
+    }
 
-	@EventHandler
-	public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
-		final Player player = event.getPlayer();
-		this.feature.update(player.getName());
-		if (!event.getMessage().startsWith("/afk")) {
-			if (this.feature.isAfk(player)) {
-				this.feature.setAfk(player.getName(), false, null);
-			}
-		}
-	}
+    @EventHandler
+    public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
+        final Player player = event.getPlayer();
+        this.feature.update(player.getName());
+        if (!event.getMessage().startsWith("/afk")) {
+            if (this.feature.isAfk(player)) {
+                this.feature.setAfk(player.getName(), false, null);
+            }
+        }
+    }
 }

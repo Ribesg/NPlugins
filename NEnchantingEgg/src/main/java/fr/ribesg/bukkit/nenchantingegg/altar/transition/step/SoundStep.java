@@ -16,16 +16,16 @@ import org.bukkit.Location;
 
 public class SoundStep extends Step {
 
-	private final RelativeSound sound;
+    private final RelativeSound sound;
 
-	public SoundStep(final int delay, final RelativeSound effect) {
-		super(delay);
-		this.sound = effect;
-	}
+    public SoundStep(final int delay, final RelativeSound effect) {
+        super(delay);
+        this.sound = effect;
+    }
 
-	@Override
-	public void doStep(final Altar altar) {
-		final Location loc = altar.getCenterLocation().toBukkitLocation().add(this.sound.getRelativeLocation());
-		loc.getWorld().playSound(loc, this.sound.getSound(), this.sound.getVolume(), this.sound.getPitch());
-	}
+    @Override
+    public void doStep(final Altar altar) {
+        final Location loc = altar.getCenterLocation().toBukkitLocation().add(this.sound.getRelativeLocation());
+        loc.getWorld().playSound(loc, this.sound.getSound(), this.sound.getVolume(), this.sound.getPitch());
+    }
 }

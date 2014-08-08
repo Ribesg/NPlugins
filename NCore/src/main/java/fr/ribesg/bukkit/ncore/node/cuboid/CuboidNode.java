@@ -25,58 +25,58 @@ import org.bukkit.entity.Player;
  */
 public interface CuboidNode extends Node {
 
-	/**
-	 * Checks if a Player is jailed. Not case sensitive.
-	 *
-	 * @param id the Player's UUID
-	 *
-	 * @return true if the Player is jailed, false otherwise
-	 */
-	public boolean isJailed(final UUID id);
+    /**
+     * Checks if a Player is jailed. Not case sensitive.
+     *
+     * @param id the Player's UUID
+     *
+     * @return true if the Player is jailed, false otherwise
+     */
+    public boolean isJailed(final UUID id);
 
-	/**
-	 * Jails the Player if he's not jailed and if the provided jail name
-	 * exists.
-	 *
-	 * @param id       the Player's UUID
-	 * @param jailName the Jail name
-	 *
-	 * @return true if the Player can be, and is now considered, jailed
-	 */
-	public boolean jail(final UUID id, final String jailName);
+    /**
+     * Jails the Player if he's not jailed and if the provided jail name
+     * exists.
+     *
+     * @param id       the Player's UUID
+     * @param jailName the Jail name
+     *
+     * @return true if the Player can be, and is now considered, jailed
+     */
+    public boolean jail(final UUID id, final String jailName);
 
-	/**
-	 * Unjails a Player
-	 *
-	 * @param id the Player's UUID
-	 *
-	 * @return true if the Player was jailed
-	 */
-	public boolean unJail(final UUID id);
+    /**
+     * Unjails a Player
+     *
+     * @param id the Player's UUID
+     *
+     * @return true if the Player was jailed
+     */
+    public boolean unJail(final UUID id);
 
-	/**
-	 * Gets a set of all existing jails.
-	 *
-	 * @return a set of all existing jails
-	 */
-	public Set<String> getJailsSet();
+    /**
+     * Gets a set of all existing jails.
+     *
+     * @return a set of all existing jails
+     */
+    public Set<String> getJailsSet();
 
-	/**
-	 * Gets the Location of a Jail.
-	 *
-	 * @param jailName the Jail name
-	 *
-	 * @return the Location of the jail, or null if it does not exist
-	 */
-	public NLocation getJailLocation(final String jailName);
+    /**
+     * Gets the Location of a Jail.
+     *
+     * @param jailName the Jail name
+     *
+     * @return the Location of the jail, or null if it does not exist
+     */
+    public NLocation getJailLocation(final String jailName);
 
-	/**
-	 * Checks if a Player is in a Region with INVISIBLE Flag.
-	 *
-	 * @param player the player
-	 *
-	 * @return true if the Player is in a Region with INVISIBLE Flag,
-	 * false otherwise
-	 */
-	public boolean isInInvisibleRegion(final Player player);
+    /**
+     * Checks if a Player is in a Region with INVISIBLE Flag.
+     *
+     * @param player the player
+     *
+     * @return true if the Player is in a Region with INVISIBLE Flag,
+     * false otherwise
+     */
+    public boolean isInInvisibleRegion(final Player player);
 }

@@ -20,20 +20,20 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 
 public class ExtendedHangingBreakEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion            region;
-	private final SortedSet<GeneralRegion> regions;
+    private final GeneralRegion            region;
+    private final SortedSet<GeneralRegion> regions;
 
-	public ExtendedHangingBreakEvent(final RegionDb db, final HangingBreakEvent event) {
-		super(db.getPlugin(), event);
-		this.regions = db.getAllByLocation(event.getEntity().getLocation());
-		this.region = db.getPrior(this.regions);
-	}
+    public ExtendedHangingBreakEvent(final RegionDb db, final HangingBreakEvent event) {
+        super(db.getPlugin(), event);
+        this.regions = db.getAllByLocation(event.getEntity().getLocation());
+        this.region = db.getPrior(this.regions);
+    }
 
-	public GeneralRegion getRegion() {
-		return this.region;
-	}
+    public GeneralRegion getRegion() {
+        return this.region;
+    }
 
-	public Set<GeneralRegion> getRegions() {
-		return this.regions;
-	}
+    public Set<GeneralRegion> getRegions() {
+        return this.regions;
+    }
 }

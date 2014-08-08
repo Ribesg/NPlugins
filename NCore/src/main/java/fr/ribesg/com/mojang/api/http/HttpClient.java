@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface HttpClient {
 
-	public String post(final URL url, final HttpBody body, final List<HttpHeader> headers) throws IOException;
+    public String post(final URL url, final HttpBody body, final List<HttpHeader> headers) throws IOException;
 
-	public String post(final URL url, final Proxy proxy, final HttpBody body, final List<HttpHeader> headers) throws IOException;
+    public String post(final URL url, final Proxy proxy, final HttpBody body, final List<HttpHeader> headers) throws IOException;
 }

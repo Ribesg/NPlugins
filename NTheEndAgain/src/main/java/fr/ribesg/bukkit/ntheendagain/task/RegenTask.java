@@ -16,36 +16,36 @@ import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
  */
 public class RegenTask extends RandomRepeatingTask {
 
-	public RegenTask(final EndWorldHandler handler) {
-		super(handler);
-	}
+    public RegenTask(final EndWorldHandler handler) {
+        super(handler);
+    }
 
-	@Override
-	public boolean exec() {
-		this.worldHandler.getPlugin().entering(this.getClass(), "exec");
+    @Override
+    public boolean exec() {
+        this.worldHandler.getPlugin().entering(this.getClass(), "exec");
 
-		this.worldHandler.getRegenHandler().regen();
+        this.worldHandler.getRegenHandler().regen();
 
-		this.worldHandler.getPlugin().exiting(this.getClass(), "exec");
-		return true;
-	}
+        this.worldHandler.getPlugin().exiting(this.getClass(), "exec");
+        return true;
+    }
 
-	@Override
-	protected long getInitialDelay() {
-		long nextRegenTaskTime = this.worldHandler.getConfig().getNextRegenTaskTime();
-		if (this.worldHandler.getConfig().getRegenType() == 2) {
-			nextRegenTaskTime = 0;
-		}
-		return this.buildInitialDelay(nextRegenTaskTime);
-	}
+    @Override
+    protected long getInitialDelay() {
+        long nextRegenTaskTime = this.worldHandler.getConfig().getNextRegenTaskTime();
+        if (this.worldHandler.getConfig().getRegenType() == 2) {
+            nextRegenTaskTime = 0;
+        }
+        return this.buildInitialDelay(nextRegenTaskTime);
+    }
 
-	@Override
-	protected long getDelay() {
-		return this.worldHandler.getConfig().getRegenTimer();
-	}
+    @Override
+    protected long getDelay() {
+        return this.worldHandler.getConfig().getRegenTimer();
+    }
 
-	@Override
-	protected void setNextConfigTime(final long date) {
-		this.worldHandler.getConfig().setNextRegenTaskTime(date);
-	}
+    @Override
+    protected void setNextConfigTime(final long date) {
+        this.worldHandler.getConfig().setNextRegenTaskTime(date);
+    }
 }

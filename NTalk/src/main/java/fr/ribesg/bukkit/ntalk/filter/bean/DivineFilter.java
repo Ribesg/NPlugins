@@ -18,49 +18,49 @@ import java.util.Map;
  */
 public class DivineFilter extends TimedFilter {
 
-	private final int minHealth;
-	private final int entityAmount;
+    private final int minHealth;
+    private final int entityAmount;
 
-	public DivineFilter(final String outputString, final String filteredString, final boolean regex, final long duration, final int minHealth, final int entityAmount) {
-		super(outputString, filteredString, regex, ChatFilterResult.DIVINE_PUNISHMENT, duration);
-		this.minHealth = minHealth;
-		this.entityAmount = entityAmount;
-	}
+    public DivineFilter(final String outputString, final String filteredString, final boolean regex, final long duration, final int minHealth, final int entityAmount) {
+        super(outputString, filteredString, regex, ChatFilterResult.DIVINE_PUNISHMENT, duration);
+        this.minHealth = minHealth;
+        this.entityAmount = entityAmount;
+    }
 
-	public int getMinHealth() {
-		return this.minHealth;
-	}
+    public int getMinHealth() {
+        return this.minHealth;
+    }
 
-	public int getEntityAmount() {
-		return this.entityAmount;
-	}
+    public int getEntityAmount() {
+        return this.entityAmount;
+    }
 
-	// ############ //
-	// ## Saving ## //
-	// ############ //
+    // ############ //
+    // ## Saving ## //
+    // ############ //
 
-	@Override
-	public Map<String, Object> getConfigMap() {
-		final Map<String, Object> map = super.getConfigMap();
-		map.put("minHealth", this.minHealth);
-		map.put("entityAmount", this.entityAmount);
-		return map;
-	}
+    @Override
+    public Map<String, Object> getConfigMap() {
+        final Map<String, Object> map = super.getConfigMap();
+        map.put("minHealth", this.minHealth);
+        map.put("entityAmount", this.entityAmount);
+        return map;
+    }
 
-	// ############# //
-	// ## Loading ## //
-	// ############# //
+    // ############# //
+    // ## Loading ## //
+    // ############# //
 
-	public static DivineFilter loadFromConfig(final String key, final Map<String, Object> values) {
-		try {
-			final String filteredString = (String)values.get("filteredString");
-			final boolean regex = (boolean)values.get("isRegex");
-			final long duration = (int)values.get("duration");
-			final int minHealth = (int)values.get("minHealth");
-			final int entityAmount = (int)values.get("entityAmount");
-			return new DivineFilter(key, filteredString, regex, duration, minHealth, entityAmount);
-		} catch (final NullPointerException e) {
-			throw new IllegalArgumentException("Missing value", e);
-		}
-	}
+    public static DivineFilter loadFromConfig(final String key, final Map<String, Object> values) {
+        try {
+            final String filteredString = (String)values.get("filteredString");
+            final boolean regex = (boolean)values.get("isRegex");
+            final long duration = (int)values.get("duration");
+            final int minHealth = (int)values.get("minHealth");
+            final int entityAmount = (int)values.get("entityAmount");
+            return new DivineFilter(key, filteredString, regex, duration, minHealth, entityAmount);
+        } catch (final NullPointerException e) {
+            throw new IllegalArgumentException("Missing value", e);
+        }
+    }
 }

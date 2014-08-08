@@ -32,146 +32,146 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class DbConfig extends AbstractConfig<NGeneral> {
 
-	public DbConfig(final NGeneral instance) {
-		super(instance);
-	}
+    public DbConfig(final NGeneral instance) {
+        super(instance);
+    }
 
-	@Override
-	protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
+    @Override
+    protected void handleValues(final YamlConfiguration config) throws InvalidConfigurationException {
 
-		// #############
-		// ## FlyMode ##
-		// #############
+        // #############
+        // ## FlyMode ##
+        // #############
 
-		if (config.isList("flyModePlayers")) {
-			final List<String> flyModePlayersStrings = config.getStringList("flyModePlayers");
-			final List<UUID> flyModePlayers = new LinkedList<>();
-			for (final String idString : flyModePlayersStrings) {
-				UUID id = null;
-				if (PlayerIdsUtil.isValidUuid(idString)) {
-					id = UUID.fromString(idString);
-				} else if (PlayerIdsUtil.isValidMinecraftUserName(idString)) {
-					id = UuidDb.getId(Node.GENERAL, idString, true);
-				}
-				if (id == null) {
-					throw new InvalidConfigurationException("Unknown playerId '" + idString + "' found in db.yml under section 'flyModePlayers'");
-				} else {
-					flyModePlayers.add(id);
-				}
-			}
-			this.plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers().addAll(flyModePlayers);
-		}
+        if (config.isList("flyModePlayers")) {
+            final List<String> flyModePlayersStrings = config.getStringList("flyModePlayers");
+            final List<UUID> flyModePlayers = new LinkedList<>();
+            for (final String idString : flyModePlayersStrings) {
+                UUID id = null;
+                if (PlayerIdsUtil.isValidUuid(idString)) {
+                    id = UUID.fromString(idString);
+                } else if (PlayerIdsUtil.isValidMinecraftUserName(idString)) {
+                    id = UuidDb.getId(Node.GENERAL, idString, true);
+                }
+                if (id == null) {
+                    throw new InvalidConfigurationException("Unknown playerId '" + idString + "' found in db.yml under section 'flyModePlayers'");
+                } else {
+                    flyModePlayers.add(id);
+                }
+            }
+            this.plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers().addAll(flyModePlayers);
+        }
 
-		// #############
-		// ## GodMode ##
-		// #############
+        // #############
+        // ## GodMode ##
+        // #############
 
-		if (config.isList("godModePlayers")) {
-			final List<String> godModePlayersStrings = config.getStringList("godModePlayers");
-			final List<UUID> godModePlayers = new LinkedList<>();
-			for (final String idString : godModePlayersStrings) {
-				UUID id = null;
-				if (PlayerIdsUtil.isValidUuid(idString)) {
-					id = UUID.fromString(idString);
-				} else if (PlayerIdsUtil.isValidMinecraftUserName(idString)) {
-					id = UuidDb.getId(Node.GENERAL, idString, true);
-				}
-				if (id == null) {
-					throw new InvalidConfigurationException("Unknown playerId '" + idString + "' found in db.yml under section 'godModePlayers'");
-				} else {
-					godModePlayers.add(id);
-				}
-			}
-			this.plugin.getFeatures().get(GodModeFeature.class).getGodPlayers().addAll(godModePlayers);
-		}
+        if (config.isList("godModePlayers")) {
+            final List<String> godModePlayersStrings = config.getStringList("godModePlayers");
+            final List<UUID> godModePlayers = new LinkedList<>();
+            for (final String idString : godModePlayersStrings) {
+                UUID id = null;
+                if (PlayerIdsUtil.isValidUuid(idString)) {
+                    id = UUID.fromString(idString);
+                } else if (PlayerIdsUtil.isValidMinecraftUserName(idString)) {
+                    id = UuidDb.getId(Node.GENERAL, idString, true);
+                }
+                if (id == null) {
+                    throw new InvalidConfigurationException("Unknown playerId '" + idString + "' found in db.yml under section 'godModePlayers'");
+                } else {
+                    godModePlayers.add(id);
+                }
+            }
+            this.plugin.getFeatures().get(GodModeFeature.class).getGodPlayers().addAll(godModePlayers);
+        }
 
-		// #################
-		// ## ItemNetwork ##
-		// #################
+        // #################
+        // ## ItemNetwork ##
+        // #################
 
-		if (config.isConfigurationSection("itemnetworks")) {
-			final ItemNetworkFeature feature = this.plugin.getFeatures().get(ItemNetworkFeature.class);
-			final ConfigurationSection inetSection = config.getConfigurationSection("itemnetworks");
-			for (final String networkName : inetSection.getKeys(false)) {
-				final ConfigurationSection networkSection = inetSection.getConfigurationSection(networkName);
-				final String networkCreator = networkSection.getString("creator");
-				final ItemNetwork network = new ItemNetwork(feature, networkName, networkCreator);
-				if (networkSection.isConfigurationSection("receivers")) {
-					final ConfigurationSection receiversSection = networkSection.getConfigurationSection("receivers");
-					for (final String key : receiversSection.getKeys(false)) {
-						final ConfigurationSection receiverSection = receiversSection.getConfigurationSection(key);
-						final NLocation location = NLocation.toNLocation(receiverSection.getString("location"));
-						final String acceptsString = receiverSection.getString("accepts");
-						final ReceiverSign receiverSign = new ReceiverSign(this.plugin, location, acceptsString);
-						network.getReceivers().add(receiverSign);
-					}
-				}
-				feature.getNetworks().put(networkName.toLowerCase(), network);
-			}
-		}
-	}
+        if (config.isConfigurationSection("itemnetworks")) {
+            final ItemNetworkFeature feature = this.plugin.getFeatures().get(ItemNetworkFeature.class);
+            final ConfigurationSection inetSection = config.getConfigurationSection("itemnetworks");
+            for (final String networkName : inetSection.getKeys(false)) {
+                final ConfigurationSection networkSection = inetSection.getConfigurationSection(networkName);
+                final String networkCreator = networkSection.getString("creator");
+                final ItemNetwork network = new ItemNetwork(feature, networkName, networkCreator);
+                if (networkSection.isConfigurationSection("receivers")) {
+                    final ConfigurationSection receiversSection = networkSection.getConfigurationSection("receivers");
+                    for (final String key : receiversSection.getKeys(false)) {
+                        final ConfigurationSection receiverSection = receiversSection.getConfigurationSection(key);
+                        final NLocation location = NLocation.toNLocation(receiverSection.getString("location"));
+                        final String acceptsString = receiverSection.getString("accepts");
+                        final ReceiverSign receiverSign = new ReceiverSign(this.plugin, location, acceptsString);
+                        network.getReceivers().add(receiverSign);
+                    }
+                }
+                feature.getNetworks().put(networkName.toLowerCase(), network);
+            }
+        }
+    }
 
-	@Override
-	protected String getConfigString() {
-		final StringBuilder content = new StringBuilder();
-		final FrameBuilder frame;
+    @Override
+    protected String getConfigString() {
+        final StringBuilder content = new StringBuilder();
+        final FrameBuilder frame;
 
-		// Header
-		frame = new FrameBuilder();
-		frame.addLine("DbConfig file for NGeneral plugin", FrameBuilder.Option.CENTER);
-		frame.addLine("This file is used to store objects, to make features persistent");
-		frame.addLine("It may be a good idea not to touch anything");
-		frame.addLine("unless you know what you are doing");
-		frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
-		for (final String line : frame.build()) {
-			content.append(line + '\n');
-		}
-		content.append('\n');
+        // Header
+        frame = new FrameBuilder();
+        frame.addLine("DbConfig file for NGeneral plugin", FrameBuilder.Option.CENTER);
+        frame.addLine("This file is used to store objects, to make features persistent");
+        frame.addLine("It may be a good idea not to touch anything");
+        frame.addLine("unless you know what you are doing");
+        frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
+        for (final String line : frame.build()) {
+            content.append(line + '\n');
+        }
+        content.append('\n');
 
-		// #############
-		// ## FlyMode ##
-		// #############
+        // #############
+        // ## FlyMode ##
+        // #############
 
-		if (this.plugin.getPluginConfig().hasFlyModeFeature()) {
-			content.append("flyModePlayers:\n");
-			for (final UUID playerId : this.plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers()) {
-				content.append("- " + playerId + " # " + UuidDb.getName(playerId) + '\n');
-			}
-			content.append('\n');
-		}
+        if (this.plugin.getPluginConfig().hasFlyModeFeature()) {
+            content.append("flyModePlayers:\n");
+            for (final UUID playerId : this.plugin.getFeatures().get(FlyModeFeature.class).getFlyPlayers()) {
+                content.append("- " + playerId + " # " + UuidDb.getName(playerId) + '\n');
+            }
+            content.append('\n');
+        }
 
-		// #############
-		// ## GodMode ##
-		// #############
+        // #############
+        // ## GodMode ##
+        // #############
 
-		if (this.plugin.getPluginConfig().hasGodModeFeature()) {
-			content.append("godModePlayers:\n");
-			for (final UUID playerId : this.plugin.getFeatures().get(GodModeFeature.class).getGodPlayers()) {
-				content.append("- " + playerId + " # " + UuidDb.getName(playerId) + '\n');
-			}
-			content.append('\n');
-		}
+        if (this.plugin.getPluginConfig().hasGodModeFeature()) {
+            content.append("godModePlayers:\n");
+            for (final UUID playerId : this.plugin.getFeatures().get(GodModeFeature.class).getGodPlayers()) {
+                content.append("- " + playerId + " # " + UuidDb.getName(playerId) + '\n');
+            }
+            content.append('\n');
+        }
 
-		// #################
-		// ## ItemNetwork ##
-		// #################
+        // #################
+        // ## ItemNetwork ##
+        // #################
 
-		if (this.plugin.getPluginConfig().hasItemNetworkFeature()) {
-			content.append("itemnetworks:\n");
-			for (final ItemNetwork network : this.plugin.getFeatures().get(ItemNetworkFeature.class).getNetworks().values()) {
-				content.append("  " + network.getName() + ":\n");
-				content.append("    creator: " + network.getCreator() + '\n');
-				content.append("    receivers:\n");
-				int i = 1;
-				for (final ReceiverSign receiver : network.getReceivers()) {
-					content.append("      receiver" + i++ + ":\n");
-					content.append("        location: " + receiver.getLocation() + '\n');
-					content.append("        accepts: \"" + receiver.getAcceptsString() + "\"\n");
-				}
-			}
-			content.append('\n');
-		}
+        if (this.plugin.getPluginConfig().hasItemNetworkFeature()) {
+            content.append("itemnetworks:\n");
+            for (final ItemNetwork network : this.plugin.getFeatures().get(ItemNetworkFeature.class).getNetworks().values()) {
+                content.append("  " + network.getName() + ":\n");
+                content.append("    creator: " + network.getCreator() + '\n');
+                content.append("    receivers:\n");
+                int i = 1;
+                for (final ReceiverSign receiver : network.getReceivers()) {
+                    content.append("      receiver" + i++ + ":\n");
+                    content.append("        location: " + receiver.getLocation() + '\n');
+                    content.append("        accepts: \"" + receiver.getAcceptsString() + "\"\n");
+                }
+            }
+            content.append('\n');
+        }
 
-		return content.toString();
-	}
+        return content.toString();
+    }
 }

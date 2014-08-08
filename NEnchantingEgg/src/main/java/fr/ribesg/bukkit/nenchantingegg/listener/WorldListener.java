@@ -32,85 +32,85 @@ import org.bukkit.event.world.ChunkLoadEvent;
 
 public class WorldListener implements Listener {
 
-	private final NEnchantingEgg plugin;
+    private final NEnchantingEgg plugin;
 
-	public WorldListener(final NEnchantingEgg instance) {
-		this.plugin = instance;
-	}
+    public WorldListener(final NEnchantingEgg instance) {
+        this.plugin = instance;
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onEntityExplode(final EntityExplodeEvent event) {
-		this.plugin.entering(this.getClass(), "onEntityExplode");
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onEntityExplode(final EntityExplodeEvent event) {
+        this.plugin.entering(this.getClass(), "onEntityExplode");
 
-		// Get the chunks considered in this event
-		final Set<Chunk> chunks = new HashSet<>();
-		Chunk c;
-		for (final Block b : event.blockList()) {
-			c = b.getLocation().getChunk();
-			if (!chunks.contains(c)) {
-				if (this.plugin.isDebugEnabled()) {
-					this.plugin.debug("Considering chunk (" + c.getX() + ';' + c.getZ() + ')');
-				}
-				chunks.add(c);
-			}
-		}
+        // Get the chunks considered in this event
+        final Set<Chunk> chunks = new HashSet<>();
+        Chunk c;
+        for (final Block b : event.blockList()) {
+            c = b.getLocation().getChunk();
+            if (!chunks.contains(c)) {
+                if (this.plugin.isDebugEnabled()) {
+                    this.plugin.debug("Considering chunk (" + c.getX() + ';' + c.getZ() + ')');
+                }
+                chunks.add(c);
+            }
+        }
 
-		// Get the altars considered from the chunks
-		final Set<Altar> altars = new HashSet<>();
-		ChunkCoord coord;
-		Altar altar;
-		for (final Chunk chunk : chunks) {
-			coord = new ChunkCoord(chunk);
-			altar = this.plugin.getAltars().get(coord);
-			if (altar != null) {
-				if (this.plugin.isDebugEnabled()) {
-					this.plugin.debug("Considering altar at location " + altar.getCenterLocation());
-				}
-				altars.add(altar);
-			}
-		}
+        // Get the altars considered from the chunks
+        final Set<Altar> altars = new HashSet<>();
+        ChunkCoord coord;
+        Altar altar;
+        for (final Chunk chunk : chunks) {
+            coord = new ChunkCoord(chunk);
+            altar = this.plugin.getAltars().get(coord);
+            if (altar != null) {
+                if (this.plugin.isDebugEnabled()) {
+                    this.plugin.debug("Considering altar at location " + altar.getCenterLocation());
+                }
+                altars.add(altar);
+            }
+        }
 
-		// Remove blocks that are part of an altar
-		final Iterator<Block> it = event.blockList().iterator();
-		Block b;
-		while (it.hasNext()) {
-			b = it.next();
-			for (final Altar a : altars) {
-				if (a.isAltarXYZ(b.getX() - a.getCenterLocation().getBlockX(), b.getY() - a.getCenterLocation().getBlockY(), b.getZ() - a.getCenterLocation().getBlockZ())) {
-					if (this.plugin.isDebugEnabled()) {
-						this.plugin.debug("Protecting block at location " + NLocation.toString(b.getLocation()));
-					}
-					it.remove();
-					break;
-				}
-			}
-		}
+        // Remove blocks that are part of an altar
+        final Iterator<Block> it = event.blockList().iterator();
+        Block b;
+        while (it.hasNext()) {
+            b = it.next();
+            for (final Altar a : altars) {
+                if (a.isAltarXYZ(b.getX() - a.getCenterLocation().getBlockX(), b.getY() - a.getCenterLocation().getBlockY(), b.getZ() - a.getCenterLocation().getBlockZ())) {
+                    if (this.plugin.isDebugEnabled()) {
+                        this.plugin.debug("Protecting block at location " + NLocation.toString(b.getLocation()));
+                    }
+                    it.remove();
+                    break;
+                }
+            }
+        }
 
-		this.plugin.exiting(this.getClass(), "onEntityExplode");
-	}
+        this.plugin.exiting(this.getClass(), "onEntityExplode");
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onChunkLoad(final ChunkLoadEvent event) {
-		this.plugin.getAltars().chunkLoad(new ChunkCoord(event.getChunk()));
-	}
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onChunkLoad(final ChunkLoadEvent event) {
+        this.plugin.getAltars().chunkLoad(new ChunkCoord(event.getChunk()));
+    }
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onSnowForm(final BlockFormEvent event) {
-		if (event.getNewState().getType() == Material.SNOW) {
-			final Location loc = event.getBlock().getLocation();
-			final Altar altar = this.plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
-			if (altar != null && altar.preventsBlockPlacement(loc)) {
-				event.setCancelled(true);
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onSnowForm(final BlockFormEvent event) {
+        if (event.getNewState().getType() == Material.SNOW) {
+            final Location loc = event.getBlock().getLocation();
+            final Altar altar = this.plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
+            if (altar != null && altar.preventsBlockPlacement(loc)) {
+                event.setCancelled(true);
+            }
+        }
+    }
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onFlow(final BlockFromToEvent event) {
-		final Location loc = event.getToBlock().getLocation();
-		final Altar altar = this.plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
-		if (altar != null && altar.preventsBlockPlacement(loc)) {
-			event.setCancelled(true);
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onFlow(final BlockFromToEvent event) {
+        final Location loc = event.getToBlock().getLocation();
+        final Altar altar = this.plugin.getAltars().get(new ChunkCoord(loc.getChunk()));
+        if (altar != null && altar.preventsBlockPlacement(loc)) {
+            event.setCancelled(true);
+        }
+    }
 }

@@ -16,8 +16,8 @@ import fr.ribesg.bukkit.ncore.common.logging.DenyFilter;
  */
 public class LoginRegisterFilter implements DenyFilter {
 
-	@Override
-	public boolean denies(final String message) {
-		return message != null && (message.contains(" issued server command: /login") || message.contains(" issued server command: /register"));
-	}
+    @Override
+    public boolean denies(final String message) {
+        return message != null && (message.contains(" issued server command: /login") || message.contains(" issued server command: /register"));
+    }
 }

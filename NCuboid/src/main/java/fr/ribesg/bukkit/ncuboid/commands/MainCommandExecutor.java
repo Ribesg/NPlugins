@@ -28,72 +28,72 @@ import org.bukkit.command.CommandSender;
 
 public class MainCommandExecutor implements CommandExecutor {
 
-	private final NCuboid plugin;
+    private final NCuboid plugin;
 
-	private final Map<String, String>                 aliasesMap;
-	private final Map<String, AbstractSubcmdExecutor> executorsMap;
+    private final Map<String, String>                 aliasesMap;
+    private final Map<String, AbstractSubcmdExecutor> executorsMap;
 
-	public MainCommandExecutor(final NCuboid instance) {
-		this.plugin = instance;
+    public MainCommandExecutor(final NCuboid instance) {
+        this.plugin = instance;
 
-		this.aliasesMap = new HashMap<>(14);
-		this.aliasesMap.put("rld", "reload");
-		this.aliasesMap.put("c", "create");
-		this.aliasesMap.put("d", "delete");
-		this.aliasesMap.put("del", "delete");
-		this.aliasesMap.put("rm", "delete");
-		this.aliasesMap.put("remove", "delete");
-		this.aliasesMap.put("a", "admin");
-		this.aliasesMap.put("u", "user");
-		this.aliasesMap.put("g", "group");
-		this.aliasesMap.put("j", "jail");
-		this.aliasesMap.put("f", "flag");
-		this.aliasesMap.put("at", "attribute");
-		this.aliasesMap.put("att", "attribute");
-		this.aliasesMap.put("attributes", "attribute");
+        this.aliasesMap = new HashMap<>(14);
+        this.aliasesMap.put("rld", "reload");
+        this.aliasesMap.put("c", "create");
+        this.aliasesMap.put("d", "delete");
+        this.aliasesMap.put("del", "delete");
+        this.aliasesMap.put("rm", "delete");
+        this.aliasesMap.put("remove", "delete");
+        this.aliasesMap.put("a", "admin");
+        this.aliasesMap.put("u", "user");
+        this.aliasesMap.put("g", "group");
+        this.aliasesMap.put("j", "jail");
+        this.aliasesMap.put("f", "flag");
+        this.aliasesMap.put("at", "attribute");
+        this.aliasesMap.put("att", "attribute");
+        this.aliasesMap.put("attributes", "attribute");
 
-		this.executorsMap = new HashMap<>(9);
-		this.executorsMap.put("create", new CreateSubcmdExecutor(instance));
-		this.executorsMap.put("delete", new DeleteSubcmdExecutor(instance));
-		this.executorsMap.put("reload", new ReloadSubcmdExecutor(instance));
-		this.executorsMap.put("admin", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.ADMIN));
-		this.executorsMap.put("user", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.USER));
-		this.executorsMap.put("group", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.GROUP));
-		this.executorsMap.put("jail", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.JAIL));
-		this.executorsMap.put("flag", new FlagSubcmdExecutor(instance));
-		this.executorsMap.put("attribute", new AttributeSubcmdExecutor(instance));
-	}
+        this.executorsMap = new HashMap<>(9);
+        this.executorsMap.put("create", new CreateSubcmdExecutor(instance));
+        this.executorsMap.put("delete", new DeleteSubcmdExecutor(instance));
+        this.executorsMap.put("reload", new ReloadSubcmdExecutor(instance));
+        this.executorsMap.put("admin", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.ADMIN));
+        this.executorsMap.put("user", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.USER));
+        this.executorsMap.put("group", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.GROUP));
+        this.executorsMap.put("jail", new AdminUserGroupJailSubcmdExecutor(instance, AdminUserGroupJailSubcmdExecutor.Mode.JAIL));
+        this.executorsMap.put("flag", new FlagSubcmdExecutor(instance));
+        this.executorsMap.put("attribute", new AttributeSubcmdExecutor(instance));
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd, final String cmdLabel, final String[] args) {
-		if ("ncuboid".equals(cmd.getName())) {
-			if (!Perms.hasGeneral(sender)) {
-				this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-				return true;
-			} else {
-				if (args.length == 0) {
-					return this.cmdDefault(sender);
-				} else {
-					final AbstractSubcmdExecutor executor = this.getExecutor(args[0].toLowerCase());
-					return executor != null && executor.execute(sender, args);
-				}
-			}
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command cmd, final String cmdLabel, final String[] args) {
+        if ("ncuboid".equals(cmd.getName())) {
+            if (!Perms.hasGeneral(sender)) {
+                this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+                return true;
+            } else {
+                if (args.length == 0) {
+                    return this.cmdDefault(sender);
+                } else {
+                    final AbstractSubcmdExecutor executor = this.getExecutor(args[0].toLowerCase());
+                    return executor != null && executor.execute(sender, args);
+                }
+            }
+        } else {
+            return false;
+        }
+    }
 
-	private boolean cmdDefault(final CommandSender sender) {
-		// TODO
-		return false;
-	}
+    private boolean cmdDefault(final CommandSender sender) {
+        // TODO
+        return false;
+    }
 
-	private AbstractSubcmdExecutor getExecutor(final String providedName) {
-		return this.executorsMap.get(this.getFromAlias(providedName));
-	}
+    private AbstractSubcmdExecutor getExecutor(final String providedName) {
+        return this.executorsMap.get(this.getFromAlias(providedName));
+    }
 
-	private String getFromAlias(final String providedName) {
-		final String command = this.aliasesMap.get(providedName);
-		return command == null ? providedName : command;
-	}
+    private String getFromAlias(final String providedName) {
+        final String command = this.aliasesMap.get(providedName);
+        return command == null ? providedName : command;
+    }
 }

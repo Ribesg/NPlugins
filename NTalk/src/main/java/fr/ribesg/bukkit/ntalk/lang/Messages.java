@@ -23,37 +23,37 @@ import java.util.Set;
  */
 public class Messages extends AbstractMessages {
 
-	public Messages() {
-		super("Talk");
-	}
+    public Messages() {
+        super("Talk");
+    }
 
-	@Override
-	protected Set<Message> createMessage() {
-		final Set<Message> newMessages = new HashSet<>();
+    @Override
+    protected Set<Message> createMessage() {
+        final Set<Message> newMessages = new HashSet<>();
 
-		// General deny response
-		newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", true));
-		newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", true, "%playerName%"));
-		newMessages.add(new Message(MessageId.talk_nobodyToRespond, "&cYou have nobody to respond to", true));
-		newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", true));
+        // General deny response
+        newMessages.add(new Message(MessageId.noPermissionForCommand, "&cYou do not have the permission to use that command", true));
+        newMessages.add(new Message(MessageId.noPlayerFoundForGivenName, "&cNo online player found for input %playerName%", true, "%playerName%"));
+        newMessages.add(new Message(MessageId.talk_nobodyToRespond, "&cYou have nobody to respond to", true));
+        newMessages.add(new Message(MessageId.cmdOnlyAvailableForPlayers, "&cThis command is only available in game", true));
 
-		// Command - RELOAD
-		newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded!", true));
-		newMessages.add(new Message(MessageId.cmdReloadError, "&An error occured while loading %file%!", true, "%file%"));
+        // Command - RELOAD
+        newMessages.add(new Message(MessageId.cmdReloadMessages, "&aMessages reloaded!", true));
+        newMessages.add(new Message(MessageId.cmdReloadError, "&An error occured while loading %file%!", true, "%file%"));
 
-		// Command - NICK
-		newMessages.add(new Message(MessageId.talk_youNickNamed, "&aYou renamed %realName% %nickName%", true, "%realName%", "%nickName%"));
-		newMessages.add(new Message(MessageId.talk_youDeNickNamed, "&aYou reseted the name of %realName%", true, "%realName%"));
-		newMessages.add(new Message(MessageId.talk_youWereNickNamed, "&aYou were renamed %nickName% by %playerName%", true, "%nickName%", "%playerName%"));
-		newMessages.add(new Message(MessageId.talk_youWereDeNickNamed, "&aYour name was reseted by %playerName%", true, "%playerName%"));
-		newMessages.add(new Message(MessageId.talk_invalidUsername, "&cThe username '%username%' is invalid!", true, "%username%"));
-		newMessages.add(new Message(MessageId.talk_invalidNickname, "&cThe nickname '%nickname%&c' is invalid!", true, "%nickname%"));
+        // Command - NICK
+        newMessages.add(new Message(MessageId.talk_youNickNamed, "&aYou renamed %realName% %nickName%", true, "%realName%", "%nickName%"));
+        newMessages.add(new Message(MessageId.talk_youDeNickNamed, "&aYou reseted the name of %realName%", true, "%realName%"));
+        newMessages.add(new Message(MessageId.talk_youWereNickNamed, "&aYou were renamed %nickName% by %playerName%", true, "%nickName%", "%playerName%"));
+        newMessages.add(new Message(MessageId.talk_youWereDeNickNamed, "&aYour name was reseted by %playerName%", true, "%playerName%"));
+        newMessages.add(new Message(MessageId.talk_invalidUsername, "&cThe username '%username%' is invalid!", true, "%username%"));
+        newMessages.add(new Message(MessageId.talk_invalidNickname, "&cThe nickname '%nickname%&c' is invalid!", true, "%nickname%"));
 
-		// Chat Filter reasons
-		newMessages.add(new Message(MessageId.talk_filterMutedReason, "Use of word '%word%'", false, "%word%"));
-		newMessages.add(new Message(MessageId.talk_filterBannedReason, "Use of word '%word%'", false, "%word%"));
-		newMessages.add(new Message(MessageId.talk_filterJailedReason, "Use of word '%word%'", false, "%word%"));
+        // Chat Filter reasons
+        newMessages.add(new Message(MessageId.talk_filterMutedReason, "Use of word '%word%'", false, "%word%"));
+        newMessages.add(new Message(MessageId.talk_filterBannedReason, "Use of word '%word%'", false, "%word%"));
+        newMessages.add(new Message(MessageId.talk_filterJailedReason, "Use of word '%word%'", false, "%word%"));
 
-		return newMessages;
-	}
+        return newMessages;
+    }
 }

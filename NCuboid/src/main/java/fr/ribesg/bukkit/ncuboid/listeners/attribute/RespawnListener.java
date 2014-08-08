@@ -27,30 +27,30 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class RespawnListener extends AbstractListener {
 
-	private final Map<String, NLocation> deathLocations;
+    private final Map<String, NLocation> deathLocations;
 
-	public RespawnListener(final NCuboid instance) {
-		super(instance);
-		this.deathLocations = new HashMap<>();
-	}
+    public RespawnListener(final NCuboid instance) {
+        super(instance);
+        this.deathLocations = new HashMap<>();
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerDeath(final PlayerDeathEvent event) {
-		this.deathLocations.put(event.getEntity().getName(), new NLocation(event.getEntity().getLocation()));
-	}
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerDeath(final PlayerDeathEvent event) {
+        this.deathLocations.put(event.getEntity().getName(), new NLocation(event.getEntity().getLocation()));
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerRespawn(final PlayerRespawnEvent event) {
-		final NLocation loc = this.deathLocations.remove(event.getPlayer().getName());
-		if (loc != null) {
-			final SortedSet<GeneralRegion> regions = this.getPlugin().getDb().getAllByLocation(loc);
-			for (final GeneralRegion region : regions) {
-				final Location respawnPoint = region.getLocationAttribute(Attribute.RESPAWN_POINT);
-				if (respawnPoint != null) {
-					event.setRespawnLocation(respawnPoint);
-					break;
-				}
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerRespawn(final PlayerRespawnEvent event) {
+        final NLocation loc = this.deathLocations.remove(event.getPlayer().getName());
+        if (loc != null) {
+            final SortedSet<GeneralRegion> regions = this.getPlugin().getDb().getAllByLocation(loc);
+            for (final GeneralRegion region : regions) {
+                final Location respawnPoint = region.getLocationAttribute(Attribute.RESPAWN_POINT);
+                if (respawnPoint != null) {
+                    event.setRespawnLocation(respawnPoint);
+                    break;
+                }
+            }
+        }
+    }
 }

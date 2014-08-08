@@ -23,120 +23,120 @@ import org.bukkit.plugin.PluginManager;
 
 public class NTalk extends NPlugin implements TalkNode {
 
-	// Configs
-	private Messages messages;
-	private Config   pluginConfig;
+    // Configs
+    private Messages messages;
+    private Config   pluginConfig;
 
-	// Useful Nodes
-	// // None
+    // Useful Nodes
+    // // None
 
-	// Formater
-	private Formater formater;
+    // Formater
+    private Formater formater;
 
-	// Chat Filter
-	private ChatFilter chatFilter;
+    // Chat Filter
+    private ChatFilter chatFilter;
 
-	@Override
-	protected String getMinCoreVersion() {
-		return "0.6.9";
-	}
+    @Override
+    protected String getMinCoreVersion() {
+        return "0.6.9";
+    }
 
-	@Override
-	protected void loadMessages() throws IOException {
-		this.debug("Loading plugin Messages...");
-		if (!this.getDataFolder().isDirectory()) {
-			this.getDataFolder().mkdir();
-		}
+    @Override
+    protected void loadMessages() throws IOException {
+        this.debug("Loading plugin Messages...");
+        if (!this.getDataFolder().isDirectory()) {
+            this.getDataFolder().mkdir();
+        }
 
-		final Messages messages = new Messages();
-		messages.loadMessages(this);
+        final Messages messages = new Messages();
+        messages.loadMessages(this);
 
-		this.messages = messages;
-	}
+        this.messages = messages;
+    }
 
-	@Override
-	public boolean onNodeEnable() {
-		// Config
-		try {
-			this.debug("Loading configuration...");
-			this.pluginConfig = new Config(this);
-			this.pluginConfig.loadConfig();
-		} catch (final IOException | InvalidConfigurationException e) {
-			this.error("An error occured when NTalk tried to load config.yml", e);
-			return false;
-		}
+    @Override
+    public boolean onNodeEnable() {
+        // Config
+        try {
+            this.debug("Loading configuration...");
+            this.pluginConfig = new Config(this);
+            this.pluginConfig.loadConfig();
+        } catch (final IOException | InvalidConfigurationException e) {
+            this.error("An error occured when NTalk tried to load config.yml", e);
+            return false;
+        }
 
-		// Chat filter
-		if (this.pluginConfig.isChatFiltersEnabled()) {
-			try {
-				this.debug("Loading Chat Filters...");
-				this.chatFilter = new ChatFilter(this);
-				this.chatFilter.loadConfig("filters.yml");
-			} catch (final IOException | InvalidConfigurationException e) {
-				this.error("An error occured when NTalk tried to load filters.yml", e);
-				return false;
-			}
-		}
+        // Chat filter
+        if (this.pluginConfig.isChatFiltersEnabled()) {
+            try {
+                this.debug("Loading Chat Filters...");
+                this.chatFilter = new ChatFilter(this);
+                this.chatFilter.loadConfig("filters.yml");
+            } catch (final IOException | InvalidConfigurationException e) {
+                this.error("An error occured when NTalk tried to load filters.yml", e);
+                return false;
+            }
+        }
 
-		this.debug("Building formater...");
-		this.formater = new Formater(this);
+        this.debug("Building formater...");
+        this.formater = new Formater(this);
 
-		// Listeners
-		this.debug("Registering Listeners...");
-		final PluginManager pm = this.getServer().getPluginManager();
-		pm.registerEvents(new TalkListener(this), this);
+        // Listeners
+        this.debug("Registering Listeners...");
+        final PluginManager pm = this.getServer().getPluginManager();
+        pm.registerEvents(new TalkListener(this), this);
 
-		// Command
-		this.debug("Registering Commands...");
-		final TalkCommandExecutor executor = new TalkCommandExecutor(this);
-		this.setCommandExecutor("ntalk", executor);
-		this.setCommandExecutor("pm", executor);
-		this.setCommandExecutor("pr", executor);
-		this.setCommandExecutor("nick", executor);
+        // Command
+        this.debug("Registering Commands...");
+        final TalkCommandExecutor executor = new TalkCommandExecutor(this);
+        this.setCommandExecutor("ntalk", executor);
+        this.setCommandExecutor("pm", executor);
+        this.setCommandExecutor("pr", executor);
+        this.setCommandExecutor("nick", executor);
 
-		// We need to access permissions in the AsyncPlayerChatEvent handler
-		// For this purpose, we need to use the AsyncPermAccessor
-		this.debug("Initializing Asynchronous Permissions Accessor...");
-		AsyncPermAccessor.init(this);
+        // We need to access permissions in the AsyncPlayerChatEvent handler
+        // For this purpose, we need to use the AsyncPermAccessor
+        this.debug("Initializing Asynchronous Permissions Accessor...");
+        AsyncPermAccessor.init(this);
 
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	protected void handleOtherNodes() {
-		// Nothing to do here for now
-	}
+    @Override
+    protected void handleOtherNodes() {
+        // Nothing to do here for now
+    }
 
-	@Override
-	public void onNodeDisable() {
-		try {
-			this.pluginConfig.writeConfig();
-		} catch (final IOException e) {
-			this.error("An error occured when NTalk tried to save config.yml", e);
-		}
-	}
+    @Override
+    public void onNodeDisable() {
+        try {
+            this.pluginConfig.writeConfig();
+        } catch (final IOException e) {
+            this.error("An error occured when NTalk tried to save config.yml", e);
+        }
+    }
 
-	public Formater getFormater() {
-		return this.formater;
-	}
+    public Formater getFormater() {
+        return this.formater;
+    }
 
-	public ChatFilter getChatFilter() {
-		return this.chatFilter;
-	}
+    public ChatFilter getChatFilter() {
+        return this.chatFilter;
+    }
 
-	@Override
-	public Messages getMessages() {
-		return this.messages;
-	}
+    @Override
+    public Messages getMessages() {
+        return this.messages;
+    }
 
-	public Config getPluginConfig() {
-		return this.pluginConfig;
-	}
+    public Config getPluginConfig() {
+        return this.pluginConfig;
+    }
 
-	// API for other nodes
+    // API for other nodes
 
-	@Override
-	public String getNodeName() {
-		return TALK;
-	}
+    @Override
+    public String getNodeName() {
+        return TALK;
+    }
 }

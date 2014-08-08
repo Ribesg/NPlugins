@@ -22,44 +22,44 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class TemporaryPunishmentCleanerTask extends BukkitRunnable {
 
-	private final NPlayer plugin;
+    private final NPlayer plugin;
 
-	public TemporaryPunishmentCleanerTask(final NPlayer instance) {
-		super();
-		this.plugin = instance;
-	}
+    public TemporaryPunishmentCleanerTask(final NPlayer instance) {
+        super();
+        this.plugin = instance;
+    }
 
-	@Override
-	public void run() {
-		final Set<Punishment> toBeRemoved = new HashSet<>();
-		for (final Punishment p : this.plugin.getPunishmentDb().getTempPunishmentEndDateMap().headMap(System.currentTimeMillis()).values()) {
-			toBeRemoved.add(p);
-		}
-		for (final Punishment p : toBeRemoved) {
-			this.plugin.getPunishmentDb().remove(p);
-			if (p.getType() == PunishmentType.JAIL) {
-				this.plugin.getCuboidNode().unJail(UUID.fromString(p.getPunished()));
-			}
-			String punished = p.getPunished();
-			if (!IPValidator.isValidIp(punished)) {
-				punished = UuidDb.getName(UUID.fromString(p.getPunished()));
-			}
-			switch (p.getType()) {
-				case BAN:
-					this.plugin.broadcastMessage(MessageId.player_unBannedBroadcast, punished);
-					break;
-				case IPBAN:
-					this.plugin.broadcastMessage(MessageId.player_unBannedIpBroadcast, punished);
-					break;
-				case JAIL:
-					this.plugin.broadcastMessage(MessageId.player_unJailedBroadcast, punished);
-					break;
-				case MUTE:
-					this.plugin.broadcastMessage(MessageId.player_unMutedBroadcast, punished);
-					break;
-				default:
-					break;
-			}
-		}
-	}
+    @Override
+    public void run() {
+        final Set<Punishment> toBeRemoved = new HashSet<>();
+        for (final Punishment p : this.plugin.getPunishmentDb().getTempPunishmentEndDateMap().headMap(System.currentTimeMillis()).values()) {
+            toBeRemoved.add(p);
+        }
+        for (final Punishment p : toBeRemoved) {
+            this.plugin.getPunishmentDb().remove(p);
+            if (p.getType() == PunishmentType.JAIL) {
+                this.plugin.getCuboidNode().unJail(UUID.fromString(p.getPunished()));
+            }
+            String punished = p.getPunished();
+            if (!IPValidator.isValidIp(punished)) {
+                punished = UuidDb.getName(UUID.fromString(p.getPunished()));
+            }
+            switch (p.getType()) {
+                case BAN:
+                    this.plugin.broadcastMessage(MessageId.player_unBannedBroadcast, punished);
+                    break;
+                case IPBAN:
+                    this.plugin.broadcastMessage(MessageId.player_unBannedIpBroadcast, punished);
+                    break;
+                case JAIL:
+                    this.plugin.broadcastMessage(MessageId.player_unJailedBroadcast, punished);
+                    break;
+                case MUTE:
+                    this.plugin.broadcastMessage(MessageId.player_unMutedBroadcast, punished);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

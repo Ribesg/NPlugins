@@ -18,25 +18,25 @@ import java.util.Map;
  */
 public abstract class TimedFilter extends Filter {
 
-	private final long duration;
+    private final long duration;
 
-	protected TimedFilter(final String outputString, final String filteredString, final boolean regex, final ChatFilterResult responseType, final long duration) {
-		super(outputString, filteredString, regex, responseType);
-		this.duration = duration;
-	}
+    protected TimedFilter(final String outputString, final String filteredString, final boolean regex, final ChatFilterResult responseType, final long duration) {
+        super(outputString, filteredString, regex, responseType);
+        this.duration = duration;
+    }
 
-	public long getDuration() {
-		return this.duration;
-	}
+    public long getDuration() {
+        return this.duration;
+    }
 
-	// ############ //
-	// ## Saving ## //
-	// ############ //
+    // ############ //
+    // ## Saving ## //
+    // ############ //
 
-	@Override
-	public Map<String, Object> getConfigMap() {
-		final Map<String, Object> map = super.getConfigMap();
-		map.put("duration", this.duration);
-		return map;
-	}
+    @Override
+    public Map<String, Object> getConfigMap() {
+        final Map<String, Object> map = super.getConfigMap();
+        map.put("duration", this.duration);
+        return map;
+    }
 }

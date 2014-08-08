@@ -25,38 +25,38 @@ import java.util.Map;
  */
 public class Features {
 
-	private final Map<FeatureType, Feature> features;
+    private final Map<FeatureType, Feature> features;
 
-	public Features(final NGeneral plugin) {
-		this.features = new EnumMap<>(FeatureType.class);
+    public Features(final NGeneral plugin) {
+        this.features = new EnumMap<>(FeatureType.class);
 
-		// Create Feature instances
-		this.features.put(FeatureType.AUTO_AFK, new AutoAfkFeature(plugin));
-		this.features.put(FeatureType.FLY_MODE, new FlyModeFeature(plugin));
-		this.features.put(FeatureType.GOD_MODE, new GodModeFeature(plugin));
-		this.features.put(FeatureType.ITEM_NETWORK, new ItemNetworkFeature(plugin));
-		this.features.put(FeatureType.PROTECTION_SIGNS, new ProtectionSignFeature(plugin));
-		this.features.put(FeatureType.SPY_MODE, new SpyModeFeature(plugin));
-	}
+        // Create Feature instances
+        this.features.put(FeatureType.AUTO_AFK, new AutoAfkFeature(plugin));
+        this.features.put(FeatureType.FLY_MODE, new FlyModeFeature(plugin));
+        this.features.put(FeatureType.GOD_MODE, new GodModeFeature(plugin));
+        this.features.put(FeatureType.ITEM_NETWORK, new ItemNetworkFeature(plugin));
+        this.features.put(FeatureType.PROTECTION_SIGNS, new ProtectionSignFeature(plugin));
+        this.features.put(FeatureType.SPY_MODE, new SpyModeFeature(plugin));
+    }
 
-	public void initialize() {
-		for (final Feature feature : this.features.values()) {
-			if (feature.isEnabled()) {
-				feature.initialize();
-			}
-		}
-	}
+    public void initialize() {
+        for (final Feature feature : this.features.values()) {
+            if (feature.isEnabled()) {
+                feature.initialize();
+            }
+        }
+    }
 
-	public void terminate() {
-		for (final Feature feature : this.features.values()) {
-			if (feature.isEnabled()) {
-				feature.terminate();
-			}
-		}
-	}
+    public void terminate() {
+        for (final Feature feature : this.features.values()) {
+            if (feature.isEnabled()) {
+                feature.terminate();
+            }
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public <T extends Feature> T get(final Class<T> clazz) {
-		return (T)this.features.get(FeatureType.fromClass(clazz));
-	}
+    @SuppressWarnings("unchecked")
+    public <T extends Feature> T get(final Class<T> clazz) {
+        return (T)this.features.get(FeatureType.fromClass(clazz));
+    }
 }

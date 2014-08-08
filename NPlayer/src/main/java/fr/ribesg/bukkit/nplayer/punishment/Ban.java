@@ -11,21 +11,21 @@ package fr.ribesg.bukkit.nplayer.punishment;
 
 public class Ban extends Punishment {
 
-	public Ban(final String banned, final String reason) {
-		super(banned, PunishmentType.BAN, reason);
-	}
+    public Ban(final String banned, final String reason) {
+        super(banned, PunishmentType.BAN, reason);
+    }
 
-	public Ban(final String punished, final String reason, final long endDate) {
-		super(punished, PunishmentType.BAN, reason, endDate);
-	}
+    public Ban(final String punished, final String reason, final long endDate) {
+        super(punished, PunishmentType.BAN, reason, endDate);
+    }
 
-	@Override
-	public String toString() {
-		return "Ban{" +
-		       "punished='" + this.punished + '\'' +
-		       ", type=" + this.type +
-		       ", endDate=" + this.endDate +
-		       ", reason='" + this.reason + '\'' +
-		       '}';
-	}
+    @Override
+    public String toString() {
+        return "Ban{" +
+               "punished='" + this.punished + '\'' +
+               ", type=" + this.type +
+               ", endDate=" + this.endDate +
+               ", reason='" + this.reason + '\'' +
+               '}';
+    }
 }

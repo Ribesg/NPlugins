@@ -21,12 +21,12 @@ import org.bukkit.Location;
  */
 public interface WorldNode extends Node {
 
-	/**
-	 * Gets the Location of the provided world's spawn point.
-	 *
-	 * @param worldName the world name
-	 *
-	 * @return the spawn location or null if no world found
-	 */
-	public Location getWorldSpawnLocation(final String worldName);
+    /**
+     * Gets the Location of the provided world's spawn point.
+     *
+     * @param worldName the world name
+     *
+     * @return the spawn location or null if no world found
+     */
+    public Location getWorldSpawnLocation(final String worldName);
 }

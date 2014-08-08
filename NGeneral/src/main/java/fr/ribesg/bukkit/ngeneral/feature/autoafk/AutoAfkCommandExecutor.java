@@ -19,33 +19,33 @@ import org.bukkit.entity.Player;
 
 public class AutoAfkCommandExecutor implements CommandExecutor {
 
-	private final AutoAfkFeature feature;
+    private final AutoAfkFeature feature;
 
-	public AutoAfkCommandExecutor(final AutoAfkFeature feature) {
-		this.feature = feature;
-	}
+    public AutoAfkCommandExecutor(final AutoAfkFeature feature) {
+        this.feature = feature;
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if ("afk".equals(command.getName())) {
-			if (!Perms.hasAfk(sender)) {
-				this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
-			} else if (!(sender instanceof Player)) {
-				this.feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-			} else {
-				final Player player = (Player)sender;
-				String reason = "";
-				for (final String arg : args) {
-					reason += arg + ' ';
-				}
-				if (!reason.isEmpty()) {
-					reason = reason.substring(0, reason.length() - 1);
-				}
-				this.feature.setAfk(player.getName(), !this.feature.isAfk(player), reason);
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+        if ("afk".equals(command.getName())) {
+            if (!Perms.hasAfk(sender)) {
+                this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+            } else if (!(sender instanceof Player)) {
+                this.feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+            } else {
+                final Player player = (Player)sender;
+                String reason = "";
+                for (final String arg : args) {
+                    reason += arg + ' ';
+                }
+                if (!reason.isEmpty()) {
+                    reason = reason.substring(0, reason.length() - 1);
+                }
+                this.feature.setAfk(player.getName(), !this.feature.isAfk(player), reason);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

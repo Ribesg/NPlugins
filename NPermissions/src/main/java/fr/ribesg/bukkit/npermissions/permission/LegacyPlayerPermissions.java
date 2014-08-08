@@ -20,36 +20,36 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class LegacyPlayerPermissions extends PlayerPermissions {
 
-	/**
-	 * Legacy Player Permissions constructor.
-	 * <p>
-	 * This constructor will also add the maingroup.groupname Permission to
-	 * this Permissions Set.
-	 *
-	 * @param manager    the Permissions Manager
-	 * @param playerName the last known name of the Player
-	 * @param priority   the priority of this Permissions Set
-	 * @param mainGroup  the main Group of the Player
-	 */
-	public LegacyPlayerPermissions(final PermissionsManager manager, final String playerName, final int priority, final String mainGroup) {
-		super(manager, null, playerName, priority, mainGroup);
-	}
+    /**
+     * Legacy Player Permissions constructor.
+     * <p>
+     * This constructor will also add the maingroup.groupname Permission to
+     * this Permissions Set.
+     *
+     * @param manager    the Permissions Manager
+     * @param playerName the last known name of the Player
+     * @param priority   the priority of this Permissions Set
+     * @param mainGroup  the main Group of the Player
+     */
+    public LegacyPlayerPermissions(final PermissionsManager manager, final String playerName, final int priority, final String mainGroup) {
+        super(manager, null, playerName, priority, mainGroup);
+    }
 
-	/**
-	 * Saves a representation of this LegacyPlayerPermissions under a
-	 * CongigurationSection, usually the _legacy section of a players.yml
-	 * file.
-	 *
-	 * @param parentSection the ConfigurationSection under which this
-	 *                      LegacyPlayerPermissions representation will be
-	 *                      saved
-	 */
-	public void save(final ConfigurationSection parentSection) {
-		final ConfigurationSection thisSection = parentSection.createSection(this.getPlayerName());
-		thisSection.set("mainGroup", this.getMainGroup());
-		if (!this.getGroups().isEmpty()) {
-			thisSection.set("groups", new LinkedList<>(this.getGroups()));
-		}
-		super.saveCommon(thisSection);
-	}
+    /**
+     * Saves a representation of this LegacyPlayerPermissions under a
+     * CongigurationSection, usually the _legacy section of a players.yml
+     * file.
+     *
+     * @param parentSection the ConfigurationSection under which this
+     *                      LegacyPlayerPermissions representation will be
+     *                      saved
+     */
+    public void save(final ConfigurationSection parentSection) {
+        final ConfigurationSection thisSection = parentSection.createSection(this.getPlayerName());
+        thisSection.set("mainGroup", this.getMainGroup());
+        if (!this.getGroups().isEmpty()) {
+            thisSection.set("groups", new LinkedList<>(this.getGroups()));
+        }
+        super.saveCommon(thisSection);
+    }
 }

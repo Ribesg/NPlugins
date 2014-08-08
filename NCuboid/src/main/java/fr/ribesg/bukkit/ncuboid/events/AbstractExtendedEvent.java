@@ -21,35 +21,35 @@ import org.bukkit.event.HandlerList;
  */
 public abstract class AbstractExtendedEvent extends Event {
 
-	// Handlers
-	private static final HandlerList HANDLERS = new HandlerList();
+    // Handlers
+    private static final HandlerList HANDLERS = new HandlerList();
 
-	public static HandlerList getHandlerList() {
-		return HANDLERS;
-	}
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return HANDLERS;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
 
-	// Plugin instance
-	private final NCuboid plugin;
+    // Plugin instance
+    private final NCuboid plugin;
 
-	// Actual Event Extension
-	private final Event baseEvent;
+    // Actual Event Extension
+    private final Event baseEvent;
 
-	public AbstractExtendedEvent(final NCuboid instance, final Event event) {
-		super();
-		this.plugin = instance;
-		this.baseEvent = event;
-	}
+    public AbstractExtendedEvent(final NCuboid instance, final Event event) {
+        super();
+        this.plugin = instance;
+        this.baseEvent = event;
+    }
 
-	public NCuboid getPlugin() {
-		return this.plugin;
-	}
+    public NCuboid getPlugin() {
+        return this.plugin;
+    }
 
-	public Event getBaseEvent() {
-		return this.baseEvent;
-	}
+    public Event getBaseEvent() {
+        return this.baseEvent;
+    }
 }

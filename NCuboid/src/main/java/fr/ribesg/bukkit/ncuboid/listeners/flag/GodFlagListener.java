@@ -30,47 +30,47 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class GodFlagListener extends AbstractListener {
 
-	private final Set<String> godPlayers;
+    private final Set<String> godPlayers;
 
-	public GodFlagListener(final NCuboid instance) {
-		super(instance);
-		this.godPlayers = new HashSet<>();
-	}
+    public GodFlagListener(final NCuboid instance) {
+        super(instance);
+        this.godPlayers = new HashSet<>();
+    }
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
-		final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
-		if (!ext.isCustomCancelled()) {
-			if (this.godPlayers.contains(event.getPlayer().getName())) {
-				if (ext.getToRegion() == null || !ext.getToRegion().getFlag(Flag.GOD)) {
-					this.godPlayers.remove(event.getPlayer().getName());
-				}
-			} else if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.GOD)) {
-				this.godPlayers.add(event.getPlayer().getName());
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
+        final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
+        if (!ext.isCustomCancelled()) {
+            if (this.godPlayers.contains(event.getPlayer().getName())) {
+                if (ext.getToRegion() == null || !ext.getToRegion().getFlag(Flag.GOD)) {
+                    this.godPlayers.remove(event.getPlayer().getName());
+                }
+            } else if (ext.getToRegion() != null && ext.getToRegion().getFlag(Flag.GOD)) {
+                this.godPlayers.add(event.getPlayer().getName());
+            }
+        }
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onEntityDamage(final ExtendedEntityDamageEvent ext) {
-		final EntityDamageEvent event = (EntityDamageEvent)ext.getBaseEvent();
-		if (event.getEntityType() == EntityType.PLAYER) {
-			if (this.godPlayers.contains(((Player)event.getEntity()).getName())) {
-				event.setCancelled(true);
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onEntityDamage(final ExtendedEntityDamageEvent ext) {
+        final EntityDamageEvent event = (EntityDamageEvent)ext.getBaseEvent();
+        if (event.getEntityType() == EntityType.PLAYER) {
+            if (this.godPlayers.contains(((Player)event.getEntity()).getName())) {
+                event.setCancelled(true);
+            }
+        }
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerJoin(final ExtendedPlayerJoinEvent ext) {
-		final PlayerJoinEvent event = (PlayerJoinEvent)ext.getBaseEvent();
-		if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.INVISIBLE)) {
-			this.godPlayers.add(event.getPlayer().getName());
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerJoin(final ExtendedPlayerJoinEvent ext) {
+        final PlayerJoinEvent event = (PlayerJoinEvent)ext.getBaseEvent();
+        if (ext.getRegion() != null && ext.getRegion().getFlag(Flag.INVISIBLE)) {
+            this.godPlayers.add(event.getPlayer().getName());
+        }
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerQuit(final PlayerQuitEvent event) {
-		this.godPlayers.remove(event.getPlayer().getName());
-	}
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerQuit(final PlayerQuitEvent event) {
+        this.godPlayers.remove(event.getPlayer().getName());
+    }
 }

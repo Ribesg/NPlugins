@@ -11,14 +11,14 @@ package fr.ribesg.com.mojang.api.http;
 
 public class HttpBody {
 
-	public static final byte[] EMPTY = new byte[0];
-	private final String bodyString;
+    public static final byte[] EMPTY = new byte[0];
+    private final String bodyString;
 
-	public HttpBody(final String bodyString) {
-		this.bodyString = bodyString;
-	}
+    public HttpBody(final String bodyString) {
+        this.bodyString = bodyString;
+    }
 
-	public byte[] getBytes() {
-		return this.bodyString != null ? this.bodyString.getBytes() : EMPTY;
-	}
+    public byte[] getBytes() {
+        return this.bodyString != null ? this.bodyString.getBytes() : EMPTY;
+    }
 }

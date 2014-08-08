@@ -19,58 +19,58 @@ import org.bukkit.command.CommandSender;
 
 public class ItemNetworkCommandExecutor implements CommandExecutor {
 
-	private final ItemNetworkFeature feature;
+    private final ItemNetworkFeature feature;
 
-	public ItemNetworkCommandExecutor(final ItemNetworkFeature feature) {
-		this.feature = feature;
-	}
+    public ItemNetworkCommandExecutor(final ItemNetworkFeature feature) {
+        this.feature = feature;
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
-		if ("itemnetwork".equals(command.getName())) {
-			if (!Perms.hasItemNetwork(sender)) {
-				this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
-				return true;
-			} else {
-				if (args.length < 2) {
-					return false;
-				} else {
-					final String networkName = args[1];
-					final ItemNetwork network = this.feature.getNetworks().get(networkName.toLowerCase());
-					switch (args[0].toLowerCase()) {
-						case "c":
-						case "create":
-							if (network != null) {
-								this.feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_alreadyExists, networkName);
-								return true;
-							} else {
-								final ItemNetwork newItemNetwork = new ItemNetwork(this.feature, networkName, sender.getName());
-								this.feature.getNetworks().put(networkName.toLowerCase(), newItemNetwork);
-								newItemNetwork.initialize();
-								this.feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_created, networkName);
-								return true;
-							}
-						case "d":
-						case "delete":
-							if (network == null) {
-								this.feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_unknown, networkName);
-								return true;
-							} else if (network.getCreator().equals(sender.getName()) || Perms.isAdmin(sender)) {
-								network.terminate();
-								this.feature.getNetworks().remove(networkName.toLowerCase());
-								this.feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_deleted, networkName);
-								return true;
-							} else {
-								this.feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_youNeedToBeCreator);
-								return true;
-							}
-						default:
-							return false;
-					}
-				}
-			}
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
+        if ("itemnetwork".equals(command.getName())) {
+            if (!Perms.hasItemNetwork(sender)) {
+                this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+                return true;
+            } else {
+                if (args.length < 2) {
+                    return false;
+                } else {
+                    final String networkName = args[1];
+                    final ItemNetwork network = this.feature.getNetworks().get(networkName.toLowerCase());
+                    switch (args[0].toLowerCase()) {
+                        case "c":
+                        case "create":
+                            if (network != null) {
+                                this.feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_alreadyExists, networkName);
+                                return true;
+                            } else {
+                                final ItemNetwork newItemNetwork = new ItemNetwork(this.feature, networkName, sender.getName());
+                                this.feature.getNetworks().put(networkName.toLowerCase(), newItemNetwork);
+                                newItemNetwork.initialize();
+                                this.feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_created, networkName);
+                                return true;
+                            }
+                        case "d":
+                        case "delete":
+                            if (network == null) {
+                                this.feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_unknown, networkName);
+                                return true;
+                            } else if (network.getCreator().equals(sender.getName()) || Perms.isAdmin(sender)) {
+                                network.terminate();
+                                this.feature.getNetworks().remove(networkName.toLowerCase());
+                                this.feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_deleted, networkName);
+                                return true;
+                            } else {
+                                this.feature.getPlugin().sendMessage(sender, MessageId.general_itemnetwork_youNeedToBeCreator);
+                                return true;
+                            }
+                        default:
+                            return false;
+                    }
+                }
+            }
+        } else {
+            return false;
+        }
+    }
 }

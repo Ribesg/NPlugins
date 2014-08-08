@@ -18,14 +18,14 @@ import org.bukkit.event.world.WorldLoadEvent;
 
 public class WorldLoadingListener extends AbstractListener {
 
-	public WorldLoadingListener(final NCuboid instance) {
-		super(instance);
-	}
+    public WorldLoadingListener(final NCuboid instance) {
+        super(instance);
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL)
-	public void onWorldLoad(final WorldLoadEvent event) {
-		if (this.getPlugin().getDb().getByWorld(event.getWorld().getName()) == null) {
-			this.getPlugin().getDb().addByWorld(new WorldRegion(event.getWorld().getName()));
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onWorldLoad(final WorldLoadEvent event) {
+        if (this.getPlugin().getDb().getByWorld(event.getWorld().getName()) == null) {
+            this.getPlugin().getDb().addByWorld(new WorldRegion(event.getWorld().getName()));
+        }
+    }
 }

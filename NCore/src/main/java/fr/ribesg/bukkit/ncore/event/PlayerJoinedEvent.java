@@ -20,19 +20,19 @@ import org.bukkit.event.player.PlayerEvent;
  */
 public class PlayerJoinedEvent extends PlayerEvent {
 
-	// Handlers
-	private static final HandlerList HANDLERS = new HandlerList();
+    // Handlers
+    private static final HandlerList HANDLERS = new HandlerList();
 
-	public static HandlerList getHandlerList() {
-		return HANDLERS;
-	}
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
 
-	public PlayerJoinedEvent(final Player who) {
-		super(who);
-	}
+    public PlayerJoinedEvent(final Player who) {
+        super(who);
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return HANDLERS;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return HANDLERS;
+    }
 }

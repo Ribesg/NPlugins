@@ -20,15 +20,15 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatFlagListener extends AbstractListener {
 
-	public ChatFlagListener(final NCuboid instance) {
-		super(instance);
-	}
+    public ChatFlagListener(final NCuboid instance) {
+        super(instance);
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerChat(final AsyncPlayerChatEvent event) {
-		final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getPlayer().getLocation());
-		if (region != null && region.getFlag(Flag.CHAT) && !region.isUser(event.getPlayer(), true)) {
-			event.setCancelled(true);
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerChat(final AsyncPlayerChatEvent event) {
+        final GeneralRegion region = this.getPlugin().getDb().getPriorByLocation(event.getPlayer().getLocation());
+        if (region != null && region.getFlag(Flag.CHAT) && !region.isUser(event.getPlayer(), true)) {
+            event.setCancelled(true);
+        }
+    }
 }

@@ -19,42 +19,42 @@ import java.util.SortedSet;
 
 public class ExtendedPlayerGridMoveEvent extends AbstractExtendedEvent {
 
-	private final GeneralRegion            fromRegion;
-	private final SortedSet<GeneralRegion> fromRegions;
-	private final GeneralRegion            toRegion;
-	private final SortedSet<GeneralRegion> toRegions;
-	private       boolean                  customCancelled;
+    private final GeneralRegion            fromRegion;
+    private final SortedSet<GeneralRegion> fromRegions;
+    private final GeneralRegion            toRegion;
+    private final SortedSet<GeneralRegion> toRegions;
+    private       boolean                  customCancelled;
 
-	public ExtendedPlayerGridMoveEvent(final RegionDb db, final PlayerGridMoveEvent event) {
-		super(db.getPlugin(), event);
-		this.fromRegions = db.getAllByLocation(event.getFrom());
-		this.fromRegion = db.getPrior(this.fromRegions);
-		this.toRegions = db.getAllByLocation(event.getTo());
-		this.toRegion = db.getPrior(this.toRegions);
-		this.customCancelled = false;
-	}
+    public ExtendedPlayerGridMoveEvent(final RegionDb db, final PlayerGridMoveEvent event) {
+        super(db.getPlugin(), event);
+        this.fromRegions = db.getAllByLocation(event.getFrom());
+        this.fromRegion = db.getPrior(this.fromRegions);
+        this.toRegions = db.getAllByLocation(event.getTo());
+        this.toRegion = db.getPrior(this.toRegions);
+        this.customCancelled = false;
+    }
 
-	public boolean isCustomCancelled() {
-		return this.customCancelled;
-	}
+    public boolean isCustomCancelled() {
+        return this.customCancelled;
+    }
 
-	public void setCustomCancelled(final boolean customCancelled) {
-		this.customCancelled = customCancelled;
-	}
+    public void setCustomCancelled(final boolean customCancelled) {
+        this.customCancelled = customCancelled;
+    }
 
-	public GeneralRegion getFromRegion() {
-		return this.fromRegion;
-	}
+    public GeneralRegion getFromRegion() {
+        return this.fromRegion;
+    }
 
-	public Set<GeneralRegion> getFromRegions() {
-		return this.fromRegions;
-	}
+    public Set<GeneralRegion> getFromRegions() {
+        return this.fromRegions;
+    }
 
-	public GeneralRegion getToRegion() {
-		return this.toRegion;
-	}
+    public GeneralRegion getToRegion() {
+        return this.toRegion;
+    }
 
-	public Set<GeneralRegion> getToRegions() {
-		return this.toRegions;
-	}
+    public Set<GeneralRegion> getToRegions() {
+        return this.toRegions;
+    }
 }

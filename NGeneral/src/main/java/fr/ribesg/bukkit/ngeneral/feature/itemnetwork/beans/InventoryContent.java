@@ -17,19 +17,19 @@ import org.bukkit.inventory.ItemStack;
 
 public class InventoryContent {
 
-	private final NLocation       origin;
-	private final List<ItemStack> items;
+    private final NLocation       origin;
+    private final List<ItemStack> items;
 
-	public InventoryContent(final NLocation origin, final List<ItemStack> items) {
-		this.origin = origin;
-		this.items = items;
-	}
+    public InventoryContent(final NLocation origin, final List<ItemStack> items) {
+        this.origin = origin;
+        this.items = items;
+    }
 
-	public NLocation getOrigin() {
-		return this.origin;
-	}
+    public NLocation getOrigin() {
+        return this.origin;
+    }
 
-	public List<ItemStack> getItems() {
-		return this.items;
-	}
+    public List<ItemStack> getItems() {
+        return this.items;
+    }
 }

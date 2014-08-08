@@ -21,35 +21,35 @@ import org.bukkit.inventory.ItemStack;
 
 public class RepairCommand implements CommandExecutor {
 
-	private static final String COMMAND = "repair";
+    private static final String COMMAND = "repair";
 
-	private final NGeneral plugin;
+    private final NGeneral plugin;
 
-	public RepairCommand(final NGeneral instance) {
-		this.plugin = instance;
-		this.plugin.setCommandExecutor(COMMAND, this);
-	}
+    public RepairCommand(final NGeneral instance) {
+        this.plugin = instance;
+        this.plugin.setCommandExecutor(COMMAND, this);
+    }
 
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-		if (command.getName().equals(COMMAND)) {
-			if (!Perms.hasRepair(sender)) {
-				this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
-			} else if (!(sender instanceof Player)) {
-				this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
-			} else {
-				final Player player = (Player)sender;
-				final ItemStack is = player.getItemInHand();
-				if (is == null || is.getType().getMaxDurability() == 0) {
-					this.plugin.sendMessage(sender, MessageId.general_repair_cannot);
-				} else {
-					is.setDurability((short)0);
-					this.plugin.sendMessage(sender, MessageId.general_repair_done);
-				}
-			}
-			return true;
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+        if (command.getName().equals(COMMAND)) {
+            if (!Perms.hasRepair(sender)) {
+                this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
+            } else if (!(sender instanceof Player)) {
+                this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
+            } else {
+                final Player player = (Player)sender;
+                final ItemStack is = player.getItemInHand();
+                if (is == null || is.getType().getMaxDurability() == 0) {
+                    this.plugin.sendMessage(sender, MessageId.general_repair_cannot);
+                } else {
+                    is.setDurability((short)0);
+                    this.plugin.sendMessage(sender, MessageId.general_repair_done);
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

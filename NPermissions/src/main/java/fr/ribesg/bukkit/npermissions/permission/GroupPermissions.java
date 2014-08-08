@@ -25,96 +25,96 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 public class GroupPermissions extends PermissionsSet {
 
-	/**
-	 * The default priority for groups is 0
-	 */
-	protected static final int DEFAULT_GROUP_PRIORITY = 0;
+    /**
+     * The default priority for groups is 0
+     */
+    protected static final int DEFAULT_GROUP_PRIORITY = 0;
 
-	/**
-	 * A Collection of all N+1 Groups in this Group's hierarchy
-	 */
-	protected final Set<String> superGroups;
+    /**
+     * A Collection of all N+1 Groups in this Group's hierarchy
+     */
+    protected final Set<String> superGroups;
 
-	/**
-	 * Group Permissions constructor.
-	 * <p>
-	 * This constructor will also add the group.groupname Permission to
-	 * this Permissions Set.
-	 *
-	 * @param manager   the Permissions Manager
-	 * @param groupName the name of this Group
-	 * @param priority  the priority of this Permissions Set
-	 */
-	public GroupPermissions(final PermissionsManager manager, final String groupName, final int priority) {
-		super(manager, groupName, priority);
-		this.superGroups = new LinkedHashSet<>();
+    /**
+     * Group Permissions constructor.
+     * <p>
+     * This constructor will also add the group.groupname Permission to
+     * this Permissions Set.
+     *
+     * @param manager   the Permissions Manager
+     * @param groupName the name of this Group
+     * @param priority  the priority of this Permissions Set
+     */
+    public GroupPermissions(final PermissionsManager manager, final String groupName, final int priority) {
+        super(manager, groupName, priority);
+        this.superGroups = new LinkedHashSet<>();
 
-		// Add this Group's permission
-		this.permissions.put("group." + groupName.toLowerCase(), true);
-	}
+        // Add this Group's permission
+        this.permissions.put("group." + groupName.toLowerCase(), true);
+    }
 
-	/**
-	 * Gets the name of the Group this GroupPermissions represents.
-	 *
-	 * @return the name of the Group this GroupPermissions represents
-	 */
-	public String getGroupName() {
-		return this.getName();
-	}
+    /**
+     * Gets the name of the Group this GroupPermissions represents.
+     *
+     * @return the name of the Group this GroupPermissions represents
+     */
+    public String getGroupName() {
+        return this.getName();
+    }
 
-	/**
-	 * Adds a N+1 Group in this Group's hierarchy.
-	 *
-	 * @param group the N+1 Group to add
-	 */
-	public void addSuperGroup(final String group) {
-		this.superGroups.add(group);
-	}
+    /**
+     * Adds a N+1 Group in this Group's hierarchy.
+     *
+     * @param group the N+1 Group to add
+     */
+    public void addSuperGroup(final String group) {
+        this.superGroups.add(group);
+    }
 
-	/**
-	 * Gets all 'group.x' permissions this Group provides.
-	 *
-	 * @return all 'group.x' permissions this Group provides
-	 */
-	public SortedSet<String> getAllGroupPerms() {
-		final SortedSet<String> result = new TreeSet<>();
-		result.add("group." + this.getGroupName().toLowerCase());
-		for (final String superGroup : new TreeSet<>(this.superGroups)) {
-			result.addAll(this.manager.getGroups().get(superGroup).getAllGroupPerms());
-		}
-		return result;
-	}
+    /**
+     * Gets all 'group.x' permissions this Group provides.
+     *
+     * @return all 'group.x' permissions this Group provides
+     */
+    public SortedSet<String> getAllGroupPerms() {
+        final SortedSet<String> result = new TreeSet<>();
+        result.add("group." + this.getGroupName().toLowerCase());
+        for (final String superGroup : new TreeSet<>(this.superGroups)) {
+            result.addAll(this.manager.getGroups().get(superGroup).getAllGroupPerms());
+        }
+        return result;
+    }
 
-	/**
-	 * Saves a representation of this GroupPermissions under a
-	 * CongigurationSection, usually the root of a groups.yml file.
-	 *
-	 * @param parentSection the ConfigurationSection under which this
-	 *                      GroupPermissions representation will be saved
-	 */
-	public void save(final ConfigurationSection parentSection) {
-		final ConfigurationSection thisSection = parentSection.createSection(this.name);
-		if (!this.superGroups.isEmpty()) {
-			thisSection.set("extends", new LinkedList<>(this.superGroups));
-		}
-		super.saveCommon(thisSection);
-	}
+    /**
+     * Saves a representation of this GroupPermissions under a
+     * CongigurationSection, usually the root of a groups.yml file.
+     *
+     * @param parentSection the ConfigurationSection under which this
+     *                      GroupPermissions representation will be saved
+     */
+    public void save(final ConfigurationSection parentSection) {
+        final ConfigurationSection thisSection = parentSection.createSection(this.name);
+        if (!this.superGroups.isEmpty()) {
+            thisSection.set("extends", new LinkedList<>(this.superGroups));
+        }
+        super.saveCommon(thisSection);
+    }
 
-	@Override
-	public int getDefaultPriority() {
-		return DEFAULT_GROUP_PRIORITY;
-	}
+    @Override
+    public int getDefaultPriority() {
+        return DEFAULT_GROUP_PRIORITY;
+    }
 
-	/**
-	 * Priorities does not count vertically.
-	 */
-	@Override
-	public Map<String, Boolean> computePermissions(Map<String, Boolean> resultMap) {
-		for (final String groupName : this.superGroups) {
-			final GroupPermissions group = this.manager.getGroups().get(groupName);
-			resultMap = group.computePermissions(resultMap);
-		}
-		resultMap.putAll(this.permissions);
-		return resultMap;
-	}
+    /**
+     * Priorities does not count vertically.
+     */
+    @Override
+    public Map<String, Boolean> computePermissions(Map<String, Boolean> resultMap) {
+        for (final String groupName : this.superGroups) {
+            final GroupPermissions group = this.manager.getGroups().get(groupName);
+            resultMap = group.computePermissions(resultMap);
+        }
+        resultMap.putAll(this.permissions);
+        return resultMap;
+    }
 }

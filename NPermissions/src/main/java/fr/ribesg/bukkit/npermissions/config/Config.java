@@ -17,55 +17,55 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Config extends AbstractConfig<NPermissions> {
 
-	private String  defaultGroup;
-	private boolean perWorldPermissions;
+    private String  defaultGroup;
+    private boolean perWorldPermissions;
 
-	/**
-	 * @param instance the plugin instance
-	 */
-	public Config(final NPermissions instance) {
-		super(instance);
-		this.defaultGroup = "user";
-		this.perWorldPermissions = false;
-	}
+    /**
+     * @param instance the plugin instance
+     */
+    public Config(final NPermissions instance) {
+        super(instance);
+        this.defaultGroup = "user";
+        this.perWorldPermissions = false;
+    }
 
-	@Override
-	protected void handleValues(final YamlConfiguration config) {
-		this.defaultGroup = config.getString("defaultGroup", "user");
-		this.perWorldPermissions = config.getBoolean("perWorldPermissions", false);
-	}
+    @Override
+    protected void handleValues(final YamlConfiguration config) {
+        this.defaultGroup = config.getString("defaultGroup", "user");
+        this.perWorldPermissions = config.getBoolean("perWorldPermissions", false);
+    }
 
-	@Override
-	protected String getConfigString() {
-		final StringBuilder content = new StringBuilder();
-		final FrameBuilder frame;
+    @Override
+    protected String getConfigString() {
+        final StringBuilder content = new StringBuilder();
+        final FrameBuilder frame;
 
-		// Header
-		frame = new FrameBuilder();
-		frame.addLine("Config file for NPermissions plugin", FrameBuilder.Option.CENTER);
-		frame.addLine("If you don't understand something, please ask on dev.bukkit.org");
-		frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
-		for (final String line : frame.build()) {
-			content.append(line).append('\n');
-		}
-		content.append('\n');
+        // Header
+        frame = new FrameBuilder();
+        frame.addLine("Config file for NPermissions plugin", FrameBuilder.Option.CENTER);
+        frame.addLine("If you don't understand something, please ask on dev.bukkit.org");
+        frame.addLine("Ribesg", FrameBuilder.Option.RIGHT);
+        for (final String line : frame.build()) {
+            content.append(line).append('\n');
+        }
+        content.append('\n');
 
-		// TODO add some doc comment before this
-		content.append("# First-join users are affected to this group.\n");
-		content.append("defaultGroup: ").append(this.defaultGroup).append("\n\n");
+        // TODO add some doc comment before this
+        content.append("# First-join users are affected to this group.\n");
+        content.append("defaultGroup: ").append(this.defaultGroup).append("\n\n");
 
-		content.append("# Enable per-world permissions.\n");
-		content.append("# Start and stop the server once with this enabled to generate appropriate files.\n");
-		content.append("perWorldPermissions: ").append(this.perWorldPermissions).append("\n\n");
+        content.append("# Enable per-world permissions.\n");
+        content.append("# Start and stop the server once with this enabled to generate appropriate files.\n");
+        content.append("perWorldPermissions: ").append(this.perWorldPermissions).append("\n\n");
 
-		return content.toString();
-	}
+        return content.toString();
+    }
 
-	public String getDefaultGroup() {
-		return this.defaultGroup;
-	}
+    public String getDefaultGroup() {
+        return this.defaultGroup;
+    }
 
-	public boolean hasPerWorldPermissions() {
-		return this.perWorldPermissions;
-	}
+    public boolean hasPerWorldPermissions() {
+        return this.perWorldPermissions;
+    }
 }

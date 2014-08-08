@@ -20,72 +20,72 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public abstract class AsyncThenSyncOperation {
 
-	private final Plugin  plugin;
-	private       boolean ran;
+    private final Plugin  plugin;
+    private       boolean ran;
 
-	/**
-	 * Builds an AsyncThenSyncOperation.
-	 * <p>
-	 * Call {@link #run()} to launch the operation.
-	 *
-	 * @param plugin the plugin instance to link BukkitRunnables to
-	 */
-	public AsyncThenSyncOperation(final Plugin plugin) {
-		this(plugin, false);
-	}
+    /**
+     * Builds an AsyncThenSyncOperation.
+     * <p>
+     * Call {@link #run()} to launch the operation.
+     *
+     * @param plugin the plugin instance to link BukkitRunnables to
+     */
+    public AsyncThenSyncOperation(final Plugin plugin) {
+        this(plugin, false);
+    }
 
-	/**
-	 * Builds an AsyncThenSyncOperation.
-	 * <p>
-	 * If you set the runNow parameter to false, call {@link #run()} later to
-	 * launch the operation.
-	 *
-	 * @param plugin the plugin instance to link BukkitRunnables to
-	 * @param runNow if the constructor should call {@link #run()} itself or
-	 *               not
-	 */
-	public AsyncThenSyncOperation(final Plugin plugin, final boolean runNow) {
-		this.plugin = plugin;
-		this.ran = false;
-		if (runNow) {
-			this.run();
-		}
-	}
+    /**
+     * Builds an AsyncThenSyncOperation.
+     * <p>
+     * If you set the runNow parameter to false, call {@link #run()} later to
+     * launch the operation.
+     *
+     * @param plugin the plugin instance to link BukkitRunnables to
+     * @param runNow if the constructor should call {@link #run()} itself or
+     *               not
+     */
+    public AsyncThenSyncOperation(final Plugin plugin, final boolean runNow) {
+        this.plugin = plugin;
+        this.ran = false;
+        if (runNow) {
+            this.run();
+        }
+    }
 
-	/**
-	 * Actually runs the Operation. Can't be called multiple times.
-	 */
-	public void run() {
-		if (this.ran) {
-			throw new IllegalStateException("Can only run once.");
-		}
-		this.ran = true;
-		Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new BukkitRunnable() {
-			@Override
-			public void run() {
-				fr.ribesg.bukkit.ncore.common.AsyncThenSyncOperation.this.execAsyncFirst();
-				Bukkit.getScheduler().runTask(fr.ribesg.bukkit.ncore.common.AsyncThenSyncOperation.this.plugin, new BukkitRunnable() {
-					@Override
-					public void run() {
-						fr.ribesg.bukkit.ncore.common.AsyncThenSyncOperation.this.execSyncThen();
-					}
-				});
-			}
-		});
-	}
+    /**
+     * Actually runs the Operation. Can't be called multiple times.
+     */
+    public void run() {
+        if (this.ran) {
+            throw new IllegalStateException("Can only run once.");
+        }
+        this.ran = true;
+        Bukkit.getScheduler().runTaskAsynchronously(this.plugin, new BukkitRunnable() {
+            @Override
+            public void run() {
+                fr.ribesg.bukkit.ncore.common.AsyncThenSyncOperation.this.execAsyncFirst();
+                Bukkit.getScheduler().runTask(fr.ribesg.bukkit.ncore.common.AsyncThenSyncOperation.this.plugin, new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        fr.ribesg.bukkit.ncore.common.AsyncThenSyncOperation.this.execSyncThen();
+                    }
+                });
+            }
+        });
+    }
 
-	/**
-	 * This method will be executed on a different thread than the main one.
-	 * It should be used to do some blocking network call, and other
-	 * heavy/long/slow things not requiring the Bukkit API.
-	 */
-	protected abstract void execAsyncFirst();
+    /**
+     * This method will be executed on a different thread than the main one.
+     * It should be used to do some blocking network call, and other
+     * heavy/long/slow things not requiring the Bukkit API.
+     */
+    protected abstract void execAsyncFirst();
 
-	/**
-	 * This method will be executed on the main thread only after
-	 * {@link #execAsyncFirst()} has completed.
-	 * It should be used to use data computed/acquired in the Async part
-	 * of this operation.
-	 */
-	protected abstract void execSyncThen();
+    /**
+     * This method will be executed on the main thread only after
+     * {@link #execAsyncFirst()} has completed.
+     * It should be used to use data computed/acquired in the Async part
+     * of this operation.
+     */
+    protected abstract void execSyncThen();
 }

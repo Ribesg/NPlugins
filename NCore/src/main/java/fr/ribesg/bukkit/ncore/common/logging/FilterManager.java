@@ -25,60 +25,60 @@ import org.apache.logging.log4j.core.filter.RegexFilter;
  */
 public class FilterManager {
 
-	/**
-	 * Adds a new RegexFilter to log4j2.
-	 *
-	 * @param regex a regex String
-	 */
-	public void addRegexFilter(final String regex) {
-		this.addFilter(RegexFilter.createFilter(regex, "FALSE", "DENY", "NEUTRAL"));
-	}
+    /**
+     * Adds a new RegexFilter to log4j2.
+     *
+     * @param regex a regex String
+     */
+    public void addRegexFilter(final String regex) {
+        this.addFilter(RegexFilter.createFilter(regex, "FALSE", "DENY", "NEUTRAL"));
+    }
 
-	/**
-	 * Adds a new DenyFilter to log4j2.
-	 *
-	 * @param denyFilter the filter
-	 */
-	public void addDenyFilter(final DenyFilter denyFilter) {
-		this.addFilter(new Log4jDenyFilter(denyFilter));
-	}
+    /**
+     * Adds a new DenyFilter to log4j2.
+     *
+     * @param denyFilter the filter
+     */
+    public void addDenyFilter(final DenyFilter denyFilter) {
+        this.addFilter(new Log4jDenyFilter(denyFilter));
+    }
 
-	/**
-	 * Adds a new log4j Filter to log4j.
-	 *
-	 * @param log4jFilter a log4j filter
-	 */
-	private void addFilter(final Filter log4jFilter) {
-		final LoggerContext context = (LoggerContext)LogManager.getContext(false);
-		final Configuration config = context.getConfiguration();
-		for (final LoggerConfig loggerConfig : config.getLoggers().values()) {
-			loggerConfig.addFilter(log4jFilter);
-		}
-	}
+    /**
+     * Adds a new log4j Filter to log4j.
+     *
+     * @param log4jFilter a log4j filter
+     */
+    private void addFilter(final Filter log4jFilter) {
+        final LoggerContext context = (LoggerContext)LogManager.getContext(false);
+        final Configuration config = context.getConfiguration();
+        for (final LoggerConfig loggerConfig : config.getLoggers().values()) {
+            loggerConfig.addFilter(log4jFilter);
+        }
+    }
 
-	/**
-	 * Represents a log4j2 DenyFilter wrapper
-	 */
-	private class Log4jDenyFilter extends AbstractFilter {
+    /**
+     * Represents a log4j2 DenyFilter wrapper
+     */
+    private class Log4jDenyFilter extends AbstractFilter {
 
-		/**
-		 * The actual DenyFilter
-		 */
-		private final DenyFilter denyFilter;
+        /**
+         * The actual DenyFilter
+         */
+        private final DenyFilter denyFilter;
 
-		/**
-		 * Builds a Log4jDenyFilter from a DenyFilter.
-		 *
-		 * @param denyFilter a DenyFilter
-		 */
-		private Log4jDenyFilter(final DenyFilter denyFilter) {
-			super();
-			this.denyFilter = denyFilter;
-		}
+        /**
+         * Builds a Log4jDenyFilter from a DenyFilter.
+         *
+         * @param denyFilter a DenyFilter
+         */
+        private Log4jDenyFilter(final DenyFilter denyFilter) {
+            super();
+            this.denyFilter = denyFilter;
+        }
 
-		@Override
-		public Result filter(final LogEvent event) {
-			return this.denyFilter.denies(event.getMessage().getFormattedMessage()) ? Result.DENY : Result.NEUTRAL;
-		}
-	}
+        @Override
+        public Result filter(final LogEvent event) {
+            return this.denyFilter.denies(event.getMessage().getFormattedMessage()) ? Result.DENY : Result.NEUTRAL;
+        }
+    }
 }

@@ -32,95 +32,95 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Arboricide extends NEnchantment {
 
-	public Arboricide(final NEnchantingEgg instance) {
-		super(instance, "Arboricide", Enchantment.DIG_SPEED);
-	}
+    public Arboricide(final NEnchantingEgg instance) {
+        super(instance, "Arboricide", Enchantment.DIG_SPEED);
+    }
 
-	@Override
-	public boolean canEnchant(final ItemStack is) {
-		final Material type = is.getType();
-		return !this.hasEnchantment(is) && is.getEnchantmentLevel(this.requiredEnchantment) == 10 &&
-		       (type == Material.DIAMOND_AXE || type == Material.GOLD_AXE || type == Material.IRON_AXE ||
-		        type == Material.STONE_AXE || type == Material.WOOD_AXE);
-	}
+    @Override
+    public boolean canEnchant(final ItemStack is) {
+        final Material type = is.getType();
+        return !this.hasEnchantment(is) && is.getEnchantmentLevel(this.requiredEnchantment) == 10 &&
+               (type == Material.DIAMOND_AXE || type == Material.GOLD_AXE || type == Material.IRON_AXE ||
+                type == Material.STONE_AXE || type == Material.WOOD_AXE);
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void handleEvent(final BlockBreakEvent event) {
-		if (this.hasEnchantment(event.getPlayer().getItemInHand())) {
-			final Block block = event.getBlock();
-			final int x = block.getX(), y = block.getY(), z = block.getZ();
-			final World world = block.getWorld();
-			final Material type = block.getType();
-			if (type == Material.LOG || type == Material.LOG_2) {
-				this.plugin.debug("Destroying " + NLocation.toString(block.getLocation()));
-				if (world.getBlockAt(x - 1, y, z).getType() != type &&
-				    world.getBlockAt(x + 1, y, z).getType() != type &&
-				    world.getBlockAt(x, y, z - 1).getType() != type &&
-				    world.getBlockAt(x, y, z + 1).getType() != type) {
-					final List<Set<NLocation>> toBeDestroyed = new LinkedList<>();
-					final Set<NLocation> allBlocksSet = new HashSet<>();
-					Set<NLocation> previousSet = new HashSet<>();
-					previousSet.add(new NLocation(world.getName(), x, y, z));
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void handleEvent(final BlockBreakEvent event) {
+        if (this.hasEnchantment(event.getPlayer().getItemInHand())) {
+            final Block block = event.getBlock();
+            final int x = block.getX(), y = block.getY(), z = block.getZ();
+            final World world = block.getWorld();
+            final Material type = block.getType();
+            if (type == Material.LOG || type == Material.LOG_2) {
+                this.plugin.debug("Destroying " + NLocation.toString(block.getLocation()));
+                if (world.getBlockAt(x - 1, y, z).getType() != type &&
+                    world.getBlockAt(x + 1, y, z).getType() != type &&
+                    world.getBlockAt(x, y, z - 1).getType() != type &&
+                    world.getBlockAt(x, y, z + 1).getType() != type) {
+                    final List<Set<NLocation>> toBeDestroyed = new LinkedList<>();
+                    final Set<NLocation> allBlocksSet = new HashSet<>();
+                    Set<NLocation> previousSet = new HashSet<>();
+                    previousSet.add(new NLocation(world.getName(), x, y, z));
 
-					boolean found = true;
-					while (found) {
-						found = false;
-						final Set<NLocation> nextSet = new HashSet<>();
-						for (final NLocation l : previousSet) {
-							for (int by = l.getBlockY(); by <= l.getBlockY() + 1; by++) {
-								for (int bx = l.getBlockX() - 1; bx <= l.getBlockX() + 1; bx++) {
-									for (int bz = l.getBlockZ() - 1; bz <= l.getBlockZ() + 1; bz++) {
-										final NLocation newLoc = new NLocation(world.getName(), bx, by, bz);
-										if (!allBlocksSet.contains(newLoc) && world.getBlockAt(bx, by, bz).getType() == type) {
-											nextSet.add(newLoc);
-											allBlocksSet.add(newLoc);
-											found = true;
-										}
-									}
-								}
-							}
-						}
-						if (found) {
-							toBeDestroyed.add(nextSet);
-							previousSet = nextSet;
-						}
-					}
-					if (!toBeDestroyed.isEmpty()) {
-						this.launchDestroyTask(toBeDestroyed);
-					}
-				}
-			}
-		}
-	}
+                    boolean found = true;
+                    while (found) {
+                        found = false;
+                        final Set<NLocation> nextSet = new HashSet<>();
+                        for (final NLocation l : previousSet) {
+                            for (int by = l.getBlockY(); by <= l.getBlockY() + 1; by++) {
+                                for (int bx = l.getBlockX() - 1; bx <= l.getBlockX() + 1; bx++) {
+                                    for (int bz = l.getBlockZ() - 1; bz <= l.getBlockZ() + 1; bz++) {
+                                        final NLocation newLoc = new NLocation(world.getName(), bx, by, bz);
+                                        if (!allBlocksSet.contains(newLoc) && world.getBlockAt(bx, by, bz).getType() == type) {
+                                            nextSet.add(newLoc);
+                                            allBlocksSet.add(newLoc);
+                                            found = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (found) {
+                            toBeDestroyed.add(nextSet);
+                            previousSet = nextSet;
+                        }
+                    }
+                    if (!toBeDestroyed.isEmpty()) {
+                        this.launchDestroyTask(toBeDestroyed);
+                    }
+                }
+            }
+        }
+    }
 
-	private void launchDestroyTask(final List<Set<NLocation>> toBeDestroyed) {
-		new BukkitRunnable() {
+    private void launchDestroyTask(final List<Set<NLocation>> toBeDestroyed) {
+        new BukkitRunnable() {
 
-			final Random random = new Random();
-			final World world = toBeDestroyed.get(0).iterator().next().getWorld();
-			int i;
+            final Random random = new Random();
+            final World world = toBeDestroyed.get(0).iterator().next().getWorld();
+            int i;
 
-			@Override
-			public void run() {
-				if (this.i < toBeDestroyed.size()) {
-					final Set<NLocation> locs = toBeDestroyed.get(this.i);
-					final Iterator<NLocation> it = locs.iterator();
-					NLocation loc;
-					while (it.hasNext()) {
-						loc = it.next();
-						if (this.random.nextFloat() > 0.75) {
-							this.world.playSound(loc.toBukkitLocation(), Sound.DIG_WOOD, 1f, 1f);
-							this.world.getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()).breakNaturally();
-							it.remove();
-						}
-					}
-					if (locs.isEmpty()) {
-						this.i++;
-					}
-				} else {
-					this.cancel();
-				}
-			}
-		}.runTaskTimer(this.plugin, 1, 1);
-	}
+            @Override
+            public void run() {
+                if (this.i < toBeDestroyed.size()) {
+                    final Set<NLocation> locs = toBeDestroyed.get(this.i);
+                    final Iterator<NLocation> it = locs.iterator();
+                    NLocation loc;
+                    while (it.hasNext()) {
+                        loc = it.next();
+                        if (this.random.nextFloat() > 0.75) {
+                            this.world.playSound(loc.toBukkitLocation(), Sound.DIG_WOOD, 1f, 1f);
+                            this.world.getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()).breakNaturally();
+                            it.remove();
+                        }
+                    }
+                    if (locs.isEmpty()) {
+                        this.i++;
+                    }
+                } else {
+                    this.cancel();
+                }
+            }
+        }.runTaskTimer(this.plugin, 1, 1);
+    }
 }

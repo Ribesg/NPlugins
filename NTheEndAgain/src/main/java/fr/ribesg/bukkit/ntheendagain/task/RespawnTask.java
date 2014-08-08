@@ -16,36 +16,36 @@ import fr.ribesg.bukkit.ntheendagain.handler.EndWorldHandler;
  */
 public class RespawnTask extends RandomRepeatingTask {
 
-	public RespawnTask(final EndWorldHandler handler) {
-		super(handler);
-	}
+    public RespawnTask(final EndWorldHandler handler) {
+        super(handler);
+    }
 
-	@Override
-	public boolean exec() {
-		this.worldHandler.getPlugin().entering(this.getClass(), "exec");
+    @Override
+    public boolean exec() {
+        this.worldHandler.getPlugin().entering(this.getClass(), "exec");
 
-		final boolean res = this.worldHandler.getRespawnHandler().respawn();
+        final boolean res = this.worldHandler.getRespawnHandler().respawn();
 
-		this.worldHandler.getPlugin().exiting(this.getClass(), "exec", Boolean.toString(res));
-		return res;
-	}
+        this.worldHandler.getPlugin().exiting(this.getClass(), "exec", Boolean.toString(res));
+        return res;
+    }
 
-	@Override
-	protected long getInitialDelay() {
-		long nextRespawnTaskTime = this.worldHandler.getConfig().getNextRespawnTaskTime();
-		if (this.worldHandler.getConfig().getRespawnType() == 4) {
-			nextRespawnTaskTime = 0;
-		}
-		return this.buildInitialDelay(nextRespawnTaskTime);
-	}
+    @Override
+    protected long getInitialDelay() {
+        long nextRespawnTaskTime = this.worldHandler.getConfig().getNextRespawnTaskTime();
+        if (this.worldHandler.getConfig().getRespawnType() == 4) {
+            nextRespawnTaskTime = 0;
+        }
+        return this.buildInitialDelay(nextRespawnTaskTime);
+    }
 
-	@Override
-	protected long getDelay() {
-		return this.worldHandler.getConfig().getRandomRespawnTimer();
-	}
+    @Override
+    protected long getDelay() {
+        return this.worldHandler.getConfig().getRandomRespawnTimer();
+    }
 
-	@Override
-	protected void setNextConfigTime(final long date) {
-		this.worldHandler.getConfig().setNextRespawnTaskTime(date);
-	}
+    @Override
+    protected void setNextConfigTime(final long date) {
+        this.worldHandler.getConfig().setNextRespawnTaskTime(date);
+    }
 }

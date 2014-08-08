@@ -23,23 +23,23 @@ import org.bukkit.event.EventPriority;
 
 public class ClosedFlagListener extends AbstractListener {
 
-	public ClosedFlagListener(final NCuboid instance) {
-		super(instance);
-	}
+    public ClosedFlagListener(final NCuboid instance) {
+        super(instance);
+    }
 
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
-		final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
-		if (!ext.isCustomCancelled()) {
-			final GeneralRegion from = ext.getFromRegion();
-			if (from != null && from.getFlag(Flag.CLOSED) && !ext.getToRegions().contains(from)) {
-				Location loc = from.getLocationAttribute(Attribute.INTERNAL_POINT);
-				if (loc == null) {
-					loc = event.getFrom();
-				}
-				event.setTo(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getBlockY() + 0.1, loc.getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
-				ext.setCustomCancelled(true);
-			}
-		}
-	}
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerGridMove(final ExtendedPlayerGridMoveEvent ext) {
+        final PlayerGridMoveEvent event = (PlayerGridMoveEvent)ext.getBaseEvent();
+        if (!ext.isCustomCancelled()) {
+            final GeneralRegion from = ext.getFromRegion();
+            if (from != null && from.getFlag(Flag.CLOSED) && !ext.getToRegions().contains(from)) {
+                Location loc = from.getLocationAttribute(Attribute.INTERNAL_POINT);
+                if (loc == null) {
+                    loc = event.getFrom();
+                }
+                event.setTo(new Location(loc.getWorld(), loc.getBlockX() + 0.5, loc.getBlockY() + 0.1, loc.getBlockZ() + 0.5, event.getTo().getYaw(), event.getTo().getPitch()));
+                ext.setCustomCancelled(true);
+            }
+        }
+    }
 }

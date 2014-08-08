@@ -19,25 +19,25 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 public class FireworkStep extends Step {
 
-	private final RelativeFirework firework;
+    private final RelativeFirework firework;
 
-	public FireworkStep(final int delay, final RelativeFirework firework) {
-		super(delay);
-		this.firework = firework;
-	}
+    public FireworkStep(final int delay, final RelativeFirework firework) {
+        super(delay);
+        this.firework = firework;
+    }
 
-	@Override
-	public void doStep(final Altar altar) {
-		final Location loc = altar.getCenterLocation().toBukkitLocation().add(this.firework.getRelativeLocation());
-		final Firework f = (Firework)loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
-		if (f != null) {
-			if (this.firework.hasVelocity()) {
-				f.setVelocity(this.firework.getVelocity());
-			}
-			final FireworkMeta meta = f.getFireworkMeta();
-			meta.addEffects(this.firework.getEffects());
-			meta.setPower(0);
-			f.setFireworkMeta(meta);
-		}
-	}
+    @Override
+    public void doStep(final Altar altar) {
+        final Location loc = altar.getCenterLocation().toBukkitLocation().add(this.firework.getRelativeLocation());
+        final Firework f = (Firework)loc.getWorld().spawnEntity(loc, EntityType.FIREWORK);
+        if (f != null) {
+            if (this.firework.hasVelocity()) {
+                f.setVelocity(this.firework.getVelocity());
+            }
+            final FireworkMeta meta = f.getFireworkMeta();
+            meta.addEffects(this.firework.getEffects());
+            meta.setPower(0);
+            f.setFireworkMeta(meta);
+        }
+    }
 }

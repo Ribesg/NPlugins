@@ -18,25 +18,25 @@ import org.bukkit.entity.Player;
 
 public class MovedTooQuicklyDenyFilter implements DenyFilter {
 
-	private static final String MOVED_TOO_QUICKLY = "moved too quickly!";
+    private static final String MOVED_TOO_QUICKLY = "moved too quickly!";
 
-	private final NTheEndAgain plugin;
+    private final NTheEndAgain plugin;
 
-	public MovedTooQuicklyDenyFilter(final NTheEndAgain instance) {
-		this.plugin = instance;
-	}
+    public MovedTooQuicklyDenyFilter(final NTheEndAgain instance) {
+        this.plugin = instance;
+    }
 
-	@Override
-	public boolean denies(final String message) {
-		if (message != null && message.contains(MOVED_TOO_QUICKLY)) {
-			final String beforeMovedTooQuickly = message.substring(0, message.indexOf(MOVED_TOO_QUICKLY));
-			final String[] beforeMovedTooQuicklySplit = beforeMovedTooQuickly.split(" ");
-			final String playerName = beforeMovedTooQuicklySplit[beforeMovedTooQuicklySplit.length - 1];
-			final Player player = Bukkit.getPlayerExact(playerName);
-			final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(player.getWorld().getName()));
-			return handler != null && handler.getConfig().getFilterMovedTooQuicklySpam() == 1;
-		} else {
-			return false;
-		}
-	}
+    @Override
+    public boolean denies(final String message) {
+        if (message != null && message.contains(MOVED_TOO_QUICKLY)) {
+            final String beforeMovedTooQuickly = message.substring(0, message.indexOf(MOVED_TOO_QUICKLY));
+            final String[] beforeMovedTooQuicklySplit = beforeMovedTooQuickly.split(" ");
+            final String playerName = beforeMovedTooQuicklySplit[beforeMovedTooQuicklySplit.length - 1];
+            final Player player = Bukkit.getPlayerExact(playerName);
+            final EndWorldHandler handler = this.plugin.getHandler(StringUtil.toLowerCamelCase(player.getWorld().getName()));
+            return handler != null && handler.getConfig().getFilterMovedTooQuicklySpam() == 1;
+        } else {
+            return false;
+        }
+    }
 }

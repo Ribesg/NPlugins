@@ -17,26 +17,26 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class UpdaterTask extends BukkitRunnable {
 
-	private final Updater updater;
+    private final Updater updater;
 
-	public UpdaterTask(final Updater updater) {
-		super();
-		this.updater = updater;
-	}
+    public UpdaterTask(final Updater updater) {
+        super();
+        this.updater = updater;
+    }
 
-	@Override
-	public void run() {
-		this.updater.checkForUpdates();
-		new BukkitRunnable() {
+    @Override
+    public void run() {
+        this.updater.checkForUpdates();
+        new BukkitRunnable() {
 
-			@Override
-			public void run() {
-				for (final Player player : Bukkit.getOnlinePlayers()) {
-					if (Perms.hasUpdaterNotice(player)) {
-						UpdaterTask.this.updater.notice(player);
-					}
-				}
-			}
-		}.runTaskLater(this.updater.getPlugin(), 30 * 20L);
-	}
+            @Override
+            public void run() {
+                for (final Player player : Bukkit.getOnlinePlayers()) {
+                    if (Perms.hasUpdaterNotice(player)) {
+                        UpdaterTask.this.updater.notice(player);
+                    }
+                }
+            }
+        }.runTaskLater(this.updater.getPlugin(), 30 * 20L);
+    }
 }

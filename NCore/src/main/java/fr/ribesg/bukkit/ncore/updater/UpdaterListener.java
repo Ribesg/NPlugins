@@ -20,17 +20,17 @@ import org.bukkit.event.Listener;
 
 public class UpdaterListener implements Listener {
 
-	private final NCore plugin;
+    private final NCore plugin;
 
-	public UpdaterListener(final NCore instance) {
-		this.plugin = instance;
-	}
+    public UpdaterListener(final NCore instance) {
+        this.plugin = instance;
+    }
 
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerJoined(final PlayerJoinedEvent event) {
-		final Player player = event.getPlayer();
-		if (Perms.hasUpdaterNotice(player) && this.plugin.getUpdater() != null) {
-			this.plugin.getUpdater().notice(player);
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerJoined(final PlayerJoinedEvent event) {
+        final Player player = event.getPlayer();
+        if (Perms.hasUpdaterNotice(player) && this.plugin.getUpdater() != null) {
+            this.plugin.getUpdater().notice(player);
+        }
+    }
 }
