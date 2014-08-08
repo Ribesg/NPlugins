@@ -89,7 +89,7 @@ public class DamageListener implements Listener {
 					if (RANDOM.nextFloat() < 0.025f) {
 						velocity.setY(10);
 					}
-					velocity.normalize().multiply(1.75f);
+					velocity.normalize().multiply(handler.getConfig().getEdPushForce());
 					Bukkit.getScheduler().runTask(plugin, new BukkitRunnable() {
 
 						@Override

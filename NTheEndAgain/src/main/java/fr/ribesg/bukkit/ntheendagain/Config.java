@@ -45,6 +45,9 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 	private final static int DEFAULT_edPushesPlayers = 1;
 	private int edPushesPlayers;
 
+	private final static float DEFAULT_edPushForce = 1.75f;
+	private float edPushForce;
+
 	private final static int DEFAULT_edEggHandling = 0;
 	private int edEggHandling;
 
@@ -124,6 +127,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		setEdHealth(DEFAULT_edHealth);
 		setEdDamageMultiplier(DEFAULT_edDamageMultiplier);
 		setEdPushesPlayers(DEFAULT_edPushesPlayers);
+		setEdPushForce(DEFAULT_edPushForce);
 		setEdEggHandling(DEFAULT_edEggHandling);
 		setEdExpHandling(DEFAULT_edExpHandling);
 		setEdExpReward(DEFAULT_edExpReward);
@@ -188,6 +192,12 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		if (!match(getEdPushesPlayers(), 0, 1)) {
 			wrongValue(fileName, "edPushesPlayers", getEdPushesPlayers(), DEFAULT_edPushesPlayers);
 			setEdPushesPlayers(DEFAULT_edPushesPlayers);
+		}
+
+		setEdPushForce((float) config.getDouble("edPushForce", DEFAULT_edPushForce));
+		if (!match(getEdPushForce(), 0.01f, 10f)) {
+			wrongValue(fileName, "edPushForce", getEdPushForce(), DEFAULT_edPushForce);
+			setEdPushForce(DEFAULT_edPushForce);
 		}
 
 		setEdEggHandling(config.getInt("edEggHandling", DEFAULT_edEggHandling));
@@ -416,6 +426,11 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 		content.append("#       1: Enabled.\n");
 		content.append("#\n");
 		content.append("edPushesPlayers: " + getEdPushesPlayers() + "\n\n");
+
+		// edPushForce
+		content.append("# Simulated EnderDragon Push force. Default: " + DEFAULT_edPushForce + '\n');
+		content.append("# Should be a value between 0.01 and 10.0\n");
+		content.append("edPushForce: " + getEdPushForce() + "\n\n");
 
 		// edEggHandling
 		content.append("# The way the DragonEgg will spawn. Default: " + DEFAULT_edEggHandling + "\n");
@@ -779,6 +794,14 @@ public class Config extends AbstractConfig<NTheEndAgain> {
 
 	private void setEdPushesPlayers(final int edPushesPlayers) {
 		this.edPushesPlayers = edPushesPlayers;
+	}
+
+	public float getEdPushForce() {
+		return edPushForce;
+	}
+
+	public void setEdPushForce(final float edPushForce) {
+		this.edPushForce = edPushForce;
 	}
 
 	// EnderCrystals
