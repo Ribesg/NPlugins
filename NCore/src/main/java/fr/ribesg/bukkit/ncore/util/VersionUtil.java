@@ -69,7 +69,7 @@ public class VersionUtil {
      * @param a a version String
      * @param b another version String
      *
-     * @return -1 if a is older than be, 1 if b is older than a, 0 otherwise
+     * @return -1 if a is older than b, 1 if b is older than a, 0 otherwise
      */
     public static int compare(final String a, final String b) {
         final Matcher aMatcher = VERSION_PARTS_REGEX.matcher(a);
