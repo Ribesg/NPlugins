@@ -158,10 +158,6 @@ public abstract class GeneralRegion extends Region implements Comparable<General
         return this.rights.isUser(player);
     }
 
-    public boolean isUser(final Player player, final boolean async) {
-        return this.rights.isUser(player, async);
-    }
-
     public boolean isUserId(final UUID id) {
         return this.rights.isUserId(id);
     }

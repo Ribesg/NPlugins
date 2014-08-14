@@ -16,3 +16,113 @@ commands:
         aliases: [c,cubo,cuboid]
         usage: |
             /<command> help
+
+permissions:
+
+  ncuboid.admin:
+    description: NCuboid plugin admin
+    default: false
+    children:
+      ncuboid.user: true
+      ncuboid.seeinvisible:
+        default: false
+      ncuboid.cmd.jail:
+        default: false
+      ncuboid.cmd.reload:
+        default: false
+      
+      ncuboid.flag.booster:
+         default: false
+      ncuboid.flag.chat:
+         default: false
+      ncuboid.flag.closed:
+         default: false
+      ncuboid.flag.creative:
+         default: false
+      ncuboid.flag.explosionblock:
+         default: false
+      ncuboid.flag.explosionitem:
+         default: false
+      ncuboid.flag.explosionplayer:
+         default: false
+      ncuboid.flag.feed:
+         default: false
+      ncuboid.flag.god:
+         default: false
+      ncuboid.flag.heal:
+         default: false
+      ncuboid.flag.hidden:
+         default: false
+      ncuboid.flag.invisible:
+         default: false
+      ncuboid.flag.jail:
+         default: false
+      ncuboid.flag.mob:
+         default: false
+      ncuboid.flag.pass:
+         default: false
+      ncuboid.flag.permanent:
+         default: false
+      ncuboid.flag.pvphide:
+         default: false
+      ncuboid.flag.snow:
+         default: false
+      ncuboid.flag.teleport:
+         default: false
+      ncuboid.flag.warpgate:
+         default: false
+
+      ncuboid.attribute.explosionblockdrop:
+         default: false
+      ncuboid.attribute.externalpoint:
+         default: false
+      ncuboid.attribute.internalpoint:
+         default: false
+      ncuboid.attribute.respawnpoint:
+         default: false
+
+  ncuboid.user:
+    description: NCuboid plugin user
+    default: false
+    children:
+        
+      ncuboid.cmd.admin:
+        default: false
+      ncuboid.cmd.attribute:
+        default: false
+      ncuboid.cmd.create:
+        default: false
+      ncuboid.cmd.cuboid:
+        default: false
+      ncuboid.cmd.delete:
+        default: false
+      ncuboid.cmd.flag:
+        default: false
+      ncuboid.cmd.group:
+        default: false
+      ncuboid.cmd.user:
+        default: false
+
+      ncuboid.flag.build:
+         default: false
+      ncuboid.flag.chest:
+         default: false
+      ncuboid.flag.drop:
+         default: false
+      ncuboid.flag.endermangrief:
+         default: false
+      ncuboid.flag.farm:
+         default: false
+      ncuboid.flag.fire:
+         default: false
+      ncuboid.flag.pickup:
+         default: false
+      ncuboid.flag.pvp:
+         default: false
+      ncuboid.flag.use:
+         default: false
+
+      ncuboid.attribute.farewellmessage:
+         default: false
+      ncuboid.attribute.welcomemessage:
+         default: false

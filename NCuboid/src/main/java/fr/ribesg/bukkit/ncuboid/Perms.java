@@ -16,14 +16,14 @@ import fr.ribesg.bukkit.ncuboid.beans.Flag;
 import java.util.EnumMap;
 import java.util.Map;
 
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permissible;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 
 public class Perms {
 
     // Cuboid node permissions
-    private static final String ADMIN                = "ncuboid.admin";
-    private static final String USER                 = "ncuboid.user";
+    private static final String PLUGIN_ADMIN         = "ncuboid.admin";
+    private static final String PLUGIN_USER          = "ncuboid.user";
     private static final String SEE_INVISIBLE_CUBOID = "ncuboid.seeinvisible";
     private static final String CMD_GENERAL          = "ncuboid.cmd.cuboid";
     private static final String CMD_RELOAD           = "ncuboid.cmd.reload";
@@ -38,6 +38,77 @@ public class Perms {
 
     // Flag permissions
     private static Map<Flag, String> flagPermissions;
+
+    // Flag attributes permissions, linked to their related Flag permission
+    private static Map<Attribute, String> attributesPermissions;
+
+    public static boolean hasAdmin(final CommandSender permissible) {
+        return has(permissible, CMD_ADMIN);
+    }
+
+    public static boolean hasAttribute(final CommandSender permissible) {
+        return has(permissible, CMD_ATTRIBUTE);
+    }
+
+    public static boolean hasAttribute(final CommandSender permissible, final Attribute att) {
+        return has(permissible, getAttributePermission(att));
+    }
+
+    public static boolean hasCreate(final CommandSender permissible) {
+        return has(permissible, CMD_CREATE);
+    }
+
+    public static boolean hasDelete(final CommandSender permissible) {
+        return has(permissible, CMD_DELETE);
+    }
+
+    public static boolean hasFlag(final CommandSender permissible) {
+        return has(permissible, CMD_FLAG);
+    }
+
+    public static boolean hasFlag(final CommandSender permissible, final Flag f) {
+        return has(permissible, getFlagPermission(f));
+    }
+
+    public static boolean hasGeneral(final CommandSender permissible) {
+        return has(permissible, CMD_GENERAL);
+    }
+
+    public static boolean hasGroup(final CommandSender permissible) {
+        return has(permissible, CMD_GROUP);
+    }
+
+    public static boolean hasJail(final CommandSender permissible) {
+        return has(permissible, CMD_JAIL);
+    }
+
+    public static boolean hasReload(final CommandSender permissible) {
+        return has(permissible, CMD_RELOAD);
+    }
+
+    public static boolean hasSeeInvisibleCuboid(final CommandSender permissible) {
+        return has(permissible, SEE_INVISIBLE_CUBOID);
+    }
+
+    public static boolean hasUser(final CommandSender permissible) {
+        return has(permissible, CMD_USER);
+    }
+
+    public static boolean isAdmin(final CommandSender permissible) {
+        return has(permissible, PLUGIN_ADMIN);
+    }
+
+    public static boolean isUser(final CommandSender permissible) {
+        return has(permissible, PLUGIN_USER);
+    }
+
+    public static boolean has(final CommandSender permissible, final String permission) {
+        if (Bukkit.isPrimaryThread()) {
+            return permissible.hasPermission(permission);
+        } else {
+            return AsyncPermAccessor.has(permissible.getName(), permission);
+        }
+    }
 
     private static String getFlagPermission(final Flag f) {
         if (flagPermissions == null) {
@@ -75,10 +146,7 @@ public class Perms {
         return flagPermissions.get(f);
     }
 
-    // Flag attributes permissions, linked to their related Flag permission
-    private static Map<Attribute, String> attributesPermissions;
-
-    private static String getAttributePermission(final Attribute fa) {
+    private static String getAttributePermission(final Attribute att) {
         if (attributesPermissions == null) {
             attributesPermissions = new EnumMap<>(Attribute.class);
 
@@ -105,98 +173,6 @@ public class Perms {
             // Vectors
             attributesPermissions.put(Attribute.BOOSTER_VECTOR, "ncuboid.flag.booster");
         }
-        return attributesPermissions.get(fa);
-    }
-
-    public static boolean isAdmin(final Permissible user) {
-        return user.isOp() || user.hasPermission(ADMIN);
-    }
-
-    public static boolean isAdmin(final Player player, final boolean async) {
-        final String playerName = player.getName();
-        return async ? AsyncPermAccessor.isOp(playerName) || AsyncPermAccessor.has(playerName, ADMIN) : player.isOp() || player.hasPermission(ADMIN);
-    }
-
-    public static boolean hasFlag(final Permissible user, final Flag f) {
-        final String perm = getFlagPermission(f);
-        final boolean isUser;
-        switch (f) {
-            case BUILD:
-            case CHEST:
-            case ENDERMANGRIEF:
-            case EXPLOSION_BLOCK:
-            case EXPLOSION_ITEM:
-            case EXPLOSION_PLAYER:
-            case FARM:
-            case FIRE:
-            case MOB:
-            case SNOW:
-            case USE:
-                isUser = true;
-                break;
-            default:
-                isUser = false;
-                break;
-        }
-        return isAdmin(user) || user.hasPermission(perm) || isUser && user.hasPermission(USER);
-    }
-
-    public static boolean hasAttribute(final Permissible user, final Attribute fa) {
-        final String perm = getAttributePermission(fa);
-        final boolean isUser;
-        switch (fa) {
-            case FAREWELL_MESSAGE:
-            case WELCOME_MESSAGE:
-                isUser = true;
-                break;
-            default:
-                isUser = false;
-                break;
-        }
-        return isAdmin(user) || user.hasPermission(perm) || isUser && user.hasPermission(USER);
-    }
-
-    public static boolean hasSeeInvisibleCuboid(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(SEE_INVISIBLE_CUBOID);
-    }
-
-    public static boolean hasGeneral(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_GENERAL) || user.hasPermission(USER);
-    }
-
-    public static boolean hasReload(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_RELOAD);
-    }
-
-    public static boolean hasCreate(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_CREATE) || user.hasPermission(USER);
-    }
-
-    public static boolean hasDelete(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_DELETE) || user.hasPermission(USER);
-    }
-
-    public static boolean hasFlag(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_FLAG) || user.hasPermission(USER);
-    }
-
-    public static boolean hasAttribute(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_ATTRIBUTE) || user.hasPermission(USER);
-    }
-
-    public static boolean hasJail(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_JAIL) || user.hasPermission(ADMIN);
-    }
-
-    public static boolean hasAdmin(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_ADMIN) || user.hasPermission(USER);
-    }
-
-    public static boolean hasUser(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_USER) || user.hasPermission(USER);
-    }
-
-    public static boolean hasGroup(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_GROUP) || user.hasPermission(USER);
+        return attributesPermissions.get(att);
     }
 }
