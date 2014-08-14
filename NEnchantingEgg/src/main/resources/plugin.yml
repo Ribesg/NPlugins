@@ -17,3 +17,17 @@ commands:
     aliases: [nee]
     usage: |
       /<command> reload messages
+
+permissions:
+
+  nenchantingegg.admin:
+    description: NEnchantingEgg plugin admin
+    default: false
+    children:
+      nenchantingegg.cmd.reload:
+        default: false
+  
+  nenchantingegg.user:
+    description: NEnchantingEgg plugin user - useless for now
+    default: false
+    children: []

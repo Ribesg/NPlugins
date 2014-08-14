@@ -9,23 +9,34 @@
 
 package fr.ribesg.bukkit.nenchantingegg;
 
-import org.bukkit.permissions.Permissible;
+import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 
 public class Perms {
 
-    private static final String ADMIN      = "nenchantingegg.admin";
-    private static final String USER       = "nenchantingegg.user";
-    private static final String CMD_RELOAD = "nenchantingegg.cmd.reload";
+    private static final String PLUGIN_ADMIN = "nenchantingegg.admin";
+    private static final String PLUGIN_USER  = "nenchantingegg.user";
+    private static final String CMD_RELOAD   = "nenchantingegg.cmd.reload";
 
-    public static boolean isAdmin(final Permissible user) {
-        return user.isOp() || user.hasPermission(ADMIN);
+    public static boolean isAdmin(final CommandSender permissible) {
+        return has(permissible, PLUGIN_ADMIN);
     }
 
-    public static boolean isUser(final Permissible user) {
-        return user.hasPermission(USER);
+    public static boolean isUser(final CommandSender permissible) {
+        return has(permissible, PLUGIN_USER);
     }
 
-    public static boolean hasReload(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_RELOAD);
+    public static boolean hasReload(final CommandSender permissible) {
+        return has(permissible, CMD_RELOAD);
+    }
+
+    public static boolean has(final CommandSender permissible, final String permission) {
+        if (Bukkit.isPrimaryThread()) {
+            return permissible.hasPermission(permission);
+        } else {
+            return AsyncPermAccessor.has(permissible.getName(), permission);
+        }
     }
 }
