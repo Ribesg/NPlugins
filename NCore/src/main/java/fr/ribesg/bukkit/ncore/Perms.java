@@ -9,6 +9,9 @@
 
 package fr.ribesg.bukkit.ncore;
 
+import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 public class Perms {
@@ -18,15 +21,23 @@ public class Perms {
 
     private static final String UPDATER_NOTICE = "ncore.updater.notice";
 
-    public static boolean hasDebug(final CommandSender sender) {
-        return sender.isOp() || sender.hasPermission(CMD_DEBUG);
+    public static boolean hasDebug(final CommandSender permissible) {
+        return has(permissible, CMD_DEBUG);
     }
 
-    public static boolean hasUpdater(final CommandSender sender) {
-        return sender.isOp() || sender.hasPermission(CMD_UPDATER);
+    public static boolean hasUpdater(final CommandSender permissible) {
+        return has(permissible, CMD_UPDATER);
     }
 
-    public static boolean hasUpdaterNotice(final CommandSender sender) {
-        return sender.isOp() || sender.hasPermission(UPDATER_NOTICE);
+    public static boolean hasUpdaterNotice(final CommandSender permissible) {
+        return has(permissible, UPDATER_NOTICE);
+    }
+
+    public static boolean has(final CommandSender permissible, final String permission) {
+        if (Bukkit.isPrimaryThread()) {
+            return permissible.hasPermission(permission);
+        } else {
+            return AsyncPermAccessor.has(permissible.getName(), permission);
+        }
     }
 }

@@ -20,3 +20,55 @@ commands:
     usage: |
       /<command> status|check <nodeName>|all
       /<command> download|dl <nodeName>
+
+permissions:
+
+  ########################
+  ## Global permissions ##
+  ########################
+
+  nplugins.admin:
+    description: Global NPlugins suite admin
+    default: false
+    children:
+      nplugins.user: true
+      ncore.admin: true
+      ncuboid.admin: true
+      nenchantingegg.admin: true
+      ngeneral.admin: true
+      npermissions.admin: true
+      nplayer.admin: true
+      ntalk.admin: true
+      ntheendagain.admin: true
+      nworld.admin: true
+
+  nplugins.user:
+    description: Global NPlugins suite user
+    default: false
+    children:
+      ncore.user: true
+      ncuboid.user: true
+      nenchantingegg.user: true
+      ngeneral.user: true
+      npermissions.user: true
+      nplayer.user: true
+      ntalk.user: true
+      ntheendagain.user: true
+      nworld.user: true
+
+  #######################
+  ## NCore permissions ##
+  #######################
+  
+  ncore.admin:
+    description: NCore plugin admin
+    default: false
+    children:
+      ncore.cmd.debug: true
+      ncore.cmd.updater: true
+      ncore.updater.notice: true
+
+  ncore.user:
+    description: NCore plugin user - useless for now
+    default: false
+    children: []
