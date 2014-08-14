@@ -114,3 +114,83 @@ commands:
     description: Spy Command
     usage: |
       /<command> [playerName]
+
+permissions:
+
+  ngeneral.admin:
+    description: NGeneral plugin admin
+    default: false
+    children:
+
+      ngeneral.cmd.reload:
+         default: false
+      ngeneral.cmd.god:
+         default: false
+      ngeneral.cmd.god.others:
+         default: false
+      ngeneral.cmd.fly:
+         default: false
+      ngeneral.cmd.fly.others:
+         default: false
+      ngeneral.cmd.flyspeed:
+         default: false
+      ngeneral.cmd.flyspeed.others:
+         default: false
+      ngeneral.cmd.walkspeed:
+         default: false
+      ngeneral.cmd.walkspeed.others:
+         default: false
+      ngeneral.cmd.time:
+         default: false
+      ngeneral.cmd.weather:
+         default: false
+      ngeneral.cmd.repair:
+         default: false
+      ngeneral.cmd.nightvision:
+         default: false
+      ngeneral.cmd.itemnetwork.all:
+         default: false
+      ngeneral.cmd.spy:
+         default: false
+      ngeneral.cmd.tp:
+         default: false
+      ngeneral.cmd.tppos:
+         default: false
+      ngeneral.cmd.tphere:
+         default: false
+      ngeneral.cmd.tpthere:
+         default: false
+      ngeneral.cmd.tpworld:
+         default: false
+      ngeneral.cmd.tpback:
+         default: false
+      ngeneral.cmd.heal:
+         default: false
+      ngeneral.cmd.health:
+         default: false
+      ngeneral.cmd.feed:
+         default: false
+      ngeneral.cmd.food:
+         default: false
+
+      ngeneral.protectionsign.bypass:
+         default: false
+      ngeneral.protectionsign.break:
+         default: false
+
+  ngeneral.user:
+    description: NGeneral plugin admin
+    default: false
+    children:
+
+      ngeneral.cmd.afk:
+         default: false
+      ngeneral.cmd.busy:
+         default: false
+      ngeneral.cmd.itemnetwork:
+         default: false
+
+      ngeneral.protectionsign:
+         default: false
+      ngeneral.signcolors:
+         default: false
