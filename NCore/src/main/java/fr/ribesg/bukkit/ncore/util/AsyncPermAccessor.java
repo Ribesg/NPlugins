@@ -21,6 +21,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -33,7 +34,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 /**
- * This tool allow Asynchronous access to a Player's permission.
+ * This tool allow Asynchronous access to a Permissible's permission.
  * The {@link #init(Plugin)} method should be
  * called by at least one Plugin synchronously before any sync or async
  * access.
@@ -50,37 +51,37 @@ public final class AsyncPermAccessor implements Listener {
     // ########################### //
 
     /**
-     * Checks if a Player had a Permission on the last update.
+     * Checks if a Permissible had a Permission on the last update.
      *
-     * @param playerName     the player's name
-     * @param permissionNode the permission to check
+     * @param permissibleName the permissible's name
+     * @param permissionNode  the permission to check
      *
-     * @return true if the provided Player had the provided Permission on
-     * the last update, false otherwise
+     * @return true if the provided Permissible had the provided Permission
+     * on the last update, false otherwise
      */
-    public static boolean has(final String playerName, final String permissionNode) {
+    public static boolean has(final String permissibleName, final String permissionNode) {
         checkState();
         UPDATE_LOCK.readLock().lock();
         try {
-            return instance._has(playerName, permissionNode);
+            return instance._has(permissibleName, permissionNode);
         } finally {
             UPDATE_LOCK.readLock().unlock();
         }
     }
 
     /**
-     * Checks if a Player was Op on the last update.
+     * Checks if a Permissible was Op on the last update.
      *
-     * @param playerName the player's name
+     * @param permissibleName the permissible's name
      *
      * @return true if the provided Player was Op on the last update,
      * false otherwise
      */
-    public static boolean isOp(final String playerName) {
+    public static boolean isOp(final String permissibleName) {
         checkState();
         UPDATE_LOCK.readLock().lock();
         try {
-            return instance._isOp(playerName);
+            return instance._isOp(permissibleName);
         } finally {
             UPDATE_LOCK.readLock().unlock();
         }
@@ -157,7 +158,7 @@ public final class AsyncPermAccessor implements Listener {
     // ######################## //
 
     /**
-     * Stores permissions per player, sets backed by Concurrent maps
+     * Stores permissions per permissible, sets backed by Concurrent maps
      */
     private final Map<String, Set<String>> permissions;
 
@@ -217,40 +218,40 @@ public final class AsyncPermAccessor implements Listener {
     }
 
     /**
-     * Checks if a Player had a Permission on the last update.
+     * Checks if a Permissible had a Permission on the last update.
      *
-     * @param playerName     the player's name
-     * @param permissionNode the permission to check
+     * @param permissibleName the permissible's name
+     * @param permissionNode  the permission to check
      *
-     * @return true if the provided Player had the provided Permission on
-     * the last update, false otherwise
+     * @return true if the provided Pemrissible had the provided Permission
+     * on the last update, false otherwise
      *
      * @see #has(String, String)
      */
-    private boolean _has(final String playerName, final String permissionNode) {
-        final Set<String> playerPerms = this.permissions.get(playerName);
-        return playerPerms != null && playerPerms.contains(permissionNode);
+    private boolean _has(final String permissibleName, final String permissionNode) {
+        final Set<String> perms = this.permissions.get(permissibleName);
+        return perms != null && perms.contains(permissionNode);
     }
 
     /**
-     * Checks if a Player was Op on the last update.
+     * Checks if a Permissible was Op on the last update.
      *
-     * @param playerName the player's name
+     * @param permissibleName the permissible's name
      *
-     * @return true if the provided Player was Op on the last update,
+     * @return true if the provided Permissible was Op on the last update,
      * false otherwise
      *
      * @see #isOp(String)
      */
-    private boolean _isOp(final String playerName) {
-        return this.ops.contains(playerName);
+    private boolean _isOp(final String permissibleName) {
+        return this.ops.contains(permissibleName);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     private void onPlayerJoin(final PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         this.players.add(player);
-        this.updatePlayer(player);
+        this.updatePermissible(player);
         this.playerCount++;
     }
 
@@ -271,41 +272,44 @@ public final class AsyncPermAccessor implements Listener {
     }
 
     /**
-     * Update all permissions and op state of all connected players.
+     * Update all permissions and op state of all connected players and of
+     * the ConsoleSender.
      */
     private void update() {
+        this.updatePermissible(Bukkit.getConsoleSender());
         for (final Player player : Bukkit.getOnlinePlayers()) {
-            this.updatePlayer(player);
+            this.updatePermissible(player);
         }
     }
 
     /**
-     * Update all permissions and op state of the provided player.
+     * Update all permissions and op state of the provided permissible.
      *
-     * @param player the player
+     * @param permissible the permissible
      */
-    private void updatePlayer(final Player player) {
-        if (player.isOnline()) {
-            final String playerName = player.getName();
-            if (player.isOp()) {
-                this.ops.add(playerName);
+    private void updatePermissible(final CommandSender permissible) {
+        final boolean isPlayer = permissible instanceof Player;
+        if (isPlayer && !((Player)permissible).isOnline()) {
+            this.forgetPlayer((Player)permissible);
+        } else {
+            final String name = (isPlayer ? "" : "_") + permissible.getName();
+            if (permissible.isOp()) {
+                this.ops.add(name);
             } else {
-                this.ops.remove(playerName);
+                this.ops.remove(name);
             }
-            Set<String> playerPerms = this.permissions.get(playerName);
-            if (playerPerms == null) {
-                playerPerms = new HashSet<>();
+            Set<String> perms = this.permissions.get(name);
+            if (perms == null) {
+                perms = new HashSet<>();
             } else {
-                playerPerms.clear();
+                perms.clear();
             }
-            for (final PermissionAttachmentInfo perm : player.getEffectivePermissions()) {
+            for (final PermissionAttachmentInfo perm : permissible.getEffectivePermissions()) {
                 if (perm.getValue()) {
-                    playerPerms.add(perm.getPermission());
+                    perms.add(perm.getPermission());
                 }
             }
-            this.permissions.put(playerName, playerPerms);
-        } else {
-            this.forgetPlayer(player);
+            this.permissions.put(name, perms);
         }
     }
 
@@ -349,7 +353,7 @@ public final class AsyncPermAccessor implements Listener {
                             if (!this.it.hasNext()) {
                                 this.it = AsyncPermAccessor.this.players.iterator();
                             }
-                            AsyncPermAccessor.this.updatePlayer(this.it.next());
+                            AsyncPermAccessor.this.updatePermissible(this.it.next());
                         }
                     }
                 } finally {
