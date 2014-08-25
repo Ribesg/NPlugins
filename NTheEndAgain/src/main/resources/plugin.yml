@@ -15,3 +15,32 @@ commands:
     aliases: [end,ntheendagain]
     usage: |
       /<command> help
+
+permissions:
+
+  ntheendagain.admin:
+    description: NTheEndAgain plugin admin
+    default: false
+    children:
+      ntheendagain.user: true
+      ntheendagain.cmd.reload:
+        default: false
+      ntheendagain.cmd.regen:
+        default: false
+      ntheendagain.cmd.respawn:
+        default: false
+      ntheendagain.cmd.chunkprotect:
+        default: false
+      ntheendagain.cmd.chunkunprotect:
+        default: false
+
+  ntheendagain.user:
+    description: NTheEndAgain plugin user
+    default: false
+    children:
+      ntheendagain.cmd.help:
+        default: false
+      ntheendagain.cmd.nb:
+        default: false
+      ntheendagain.cmd.chunkinfo:
+        default: false

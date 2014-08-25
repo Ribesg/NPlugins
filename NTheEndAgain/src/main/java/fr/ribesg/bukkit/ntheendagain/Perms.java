@@ -9,12 +9,15 @@
 
 package fr.ribesg.bukkit.ntheendagain;
 
-import org.bukkit.permissions.Permissible;
+import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 
 public class Perms {
 
-    private static final String ADMIN              = "ntheendagain.admin";
-    private static final String USER               = "ntheendagain.user";
+    private static final String PLUGIN_ADMIN       = "ntheendagain.admin";
+    private static final String PLUGIN_USER        = "ntheendagain.user";
     private static final String CMD_HELP           = "ntheendagain.cmd.help";
     private static final String CMD_RELOAD         = "ntheendagain.cmd.reload";
     private static final String CMD_REGEN          = "ntheendagain.cmd.regen";
@@ -24,35 +27,51 @@ public class Perms {
     private static final String CMD_CHUNKPROTECT   = "ntheendagain.cmd.chunkprotect";
     private static final String CMD_CHUNKUNPROTECT = "ntheendagain.cmd.chunkunprotect";
 
-    public static boolean hasHelp(final Permissible user) {
-        return user.isOp() || user.hasPermission(CMD_HELP) || user.hasPermission(USER) || user.hasPermission(ADMIN);
+    public static boolean isAdmin(final CommandSender permissible) {
+        return has(permissible, PLUGIN_ADMIN);
     }
 
-    public static boolean hasReload(final Permissible user) {
-        return user.isOp() || user.hasPermission(CMD_RELOAD) || user.hasPermission(ADMIN);
+    public static boolean isUser(final CommandSender permissible) {
+        return has(permissible, PLUGIN_USER);
     }
 
-    public static boolean hasRegen(final Permissible user) {
-        return user.isOp() || user.hasPermission(CMD_REGEN) || user.hasPermission(ADMIN);
+    public static boolean hasHelp(final CommandSender permissible) {
+        return has(permissible, CMD_HELP);
     }
 
-    public static boolean hasRespawn(final Permissible user) {
-        return user.isOp() || user.hasPermission(CMD_RESPAWN) || user.hasPermission(ADMIN);
+    public static boolean hasReload(final CommandSender permissible) {
+        return has(permissible, CMD_RELOAD);
     }
 
-    public static boolean hasNb(final Permissible user) {
-        return user.isOp() || user.hasPermission(CMD_NB) || user.hasPermission(USER) || user.hasPermission(ADMIN);
+    public static boolean hasRegen(final CommandSender permissible) {
+        return has(permissible, CMD_REGEN);
     }
 
-    public static boolean hasChunkInfo(final Permissible user) {
-        return user.isOp() || user.hasPermission(CMD_CHUNKINFO) || user.hasPermission(USER) || user.hasPermission(ADMIN);
+    public static boolean hasRespawn(final CommandSender permissible) {
+        return has(permissible, CMD_RESPAWN);
     }
 
-    public static boolean hasChunkProtect(final Permissible user) {
-        return user.isOp() || user.hasPermission(CMD_CHUNKPROTECT) || user.hasPermission(ADMIN);
+    public static boolean hasNb(final CommandSender permissible) {
+        return has(permissible, CMD_NB);
     }
 
-    public static boolean hasChunkUnprotect(final Permissible user) {
-        return user.isOp() || user.hasPermission(CMD_CHUNKUNPROTECT) || user.hasPermission(ADMIN);
+    public static boolean hasChunkInfo(final CommandSender permissible) {
+        return has(permissible, CMD_CHUNKINFO);
+    }
+
+    public static boolean hasChunkProtect(final CommandSender permissible) {
+        return has(permissible, CMD_CHUNKPROTECT);
+    }
+
+    public static boolean hasChunkUnprotect(final CommandSender permissible) {
+        return has(permissible, CMD_CHUNKUNPROTECT);
+    }
+
+    public static boolean has(final CommandSender permissible, final String permission) {
+        if (Bukkit.isPrimaryThread()) {
+            return permissible.hasPermission(permission);
+        } else {
+            return AsyncPermAccessor.has(permissible.getName(), permission);
+        }
     }
 }
