@@ -10,72 +10,62 @@
 package fr.ribesg.bukkit.ntalk;
 
 import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
-
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class Perms {
 
-    private static final String ADMIN      = "ntalk.admin";
-    private static final String USER       = "ntalk.user";
-    private static final String SPY        = "ntalk.spy";
-    private static final String COLOR      = "ntalk.color";
-    private static final String CMD_RELOAD = "ntalk.cmd.reload";
-    private static final String CMD_PM     = "ntalk.cmd.pm";
-    private static final String CMD_PR     = "ntalk.cmd.pr";
-    private static final String CMD_NICK   = "ntalk.cmd.nick";
-    private static final String SEE_NICKS  = "ntalk.seenicks";
+	private static final String PLUGIN_ADMIN = "ntalk.admin";
+	private static final String PLUGIN_USER  = "ntalk.user";
+	private static final String COLOR        = "ntalk.color";
+	private static final String CMD_RELOAD   = "ntalk.cmd.reload";
+	private static final String CMD_PM       = "ntalk.cmd.pm";
+	private static final String CMD_PR       = "ntalk.cmd.pr";
+	private static final String CMD_NICK     = "ntalk.cmd.nick";
+	private static final String CMD_SPY      = "ntalk.cmd.spy";
+	private static final String SEE_NICKS    = "ntalk.seenicks";
 
-    public static boolean hasAdmin(final CommandSender user, final boolean async) {
-        if (async) {
-            if (!(user instanceof Player)) {
-                throw new UnsupportedOperationException();
-            }
-            return AsyncPermAccessor.isOp(user.getName()) || AsyncPermAccessor.has(user.getName(), ADMIN);
-        } else {
-            return user.isOp() || user.hasPermission(ADMIN);
-        }
-    }
+	public static boolean isAdmin(final CommandSender permissible) {
+		return has(permissible, PLUGIN_ADMIN);
+	}
 
-    public static boolean hasReload(final CommandSender user) {
-        return hasAdmin(user, false) || user.hasPermission(CMD_RELOAD);
-    }
+	public static boolean isUser(final CommandSender permissible) {
+		return has(permissible, PLUGIN_USER);
+	}
 
-    public static boolean hasPrivateMessage(final CommandSender user) {
-        return hasAdmin(user, false) || user.hasPermission(CMD_PM) || user.hasPermission(USER);
-    }
+	public static boolean hasReload(final CommandSender permissible) {
+		return has(permissible, CMD_RELOAD);
+	}
 
-    public static boolean hasPrivateResponse(final CommandSender user) {
-        return hasAdmin(user, false) || user.hasPermission(CMD_PR) || user.hasPermission(USER);
-    }
+	public static boolean hasPrivateMessage(final CommandSender permissible) {
+		return has(permissible, CMD_PM);
+	}
 
-    public static boolean hasNick(final CommandSender user) {
-        return hasAdmin(user, false) || user.hasPermission(CMD_NICK);
-    }
+	public static boolean hasPrivateResponse(final CommandSender permissible) {
+		return has(permissible, CMD_PR);
+	}
 
-    public static boolean hasSpy(final CommandSender user) {
-        return hasAdmin(user, false) || user.hasPermission(SPY);
-    }
+	public static boolean hasNick(final CommandSender permissible) {
+		return has(permissible, CMD_NICK);
+	}
 
-    public static boolean hasColor(final CommandSender user, final boolean async) {
-        if (async) {
-            if (!(user instanceof Player)) {
-                throw new UnsupportedOperationException();
-            }
-            return hasAdmin(user, true) || AsyncPermAccessor.has(user.getName(), COLOR);
-        } else {
-            return hasAdmin(user, false) || user.hasPermission(COLOR);
-        }
-    }
+	public static boolean hasColor(final CommandSender permissible) {
+		return has(permissible, COLOR);
+	}
 
-    public static boolean hasSeeNicks(final CommandSender user, final boolean async) {
-        if (async) {
-            if (!(user instanceof Player)) {
-                throw new UnsupportedOperationException();
-            }
-            return hasAdmin(user, true) || AsyncPermAccessor.has(user.getName(), SEE_NICKS);
-        } else {
-            return hasAdmin(user, false) || user.hasPermission(SEE_NICKS);
-        }
-    }
+	public static boolean hasSeeNicks(final CommandSender permissible) {
+		return has(permissible, SEE_NICKS);
+	}
+
+	public static boolean hasSpy(final CommandSender permissible) {
+		return has(permissible, CMD_SPY);
+	}
+
+	public static boolean has(final CommandSender permissible, final String permission) {
+		if (Bukkit.isPrimaryThread()) {
+			return permissible.hasPermission(permission);
+		} else {
+			return AsyncPermAccessor.has(permissible.getName(), permission);
+		}
+	}
 }

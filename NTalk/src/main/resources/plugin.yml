@@ -28,3 +28,30 @@ commands:
     description: Nickname
     usage: |
       /<command> <realName> <nickName>
+
+permissions:
+
+  ntalk.admin:
+    description: NTalk plugin admin
+    default: false
+    children:
+      ntalk.user: true
+      ntalk.color:
+        default: false
+      ntalk.cmd.reload:
+        default: false
+      ntalk.cmd.nick:
+        default: false
+      ntalk.cmd.spy:
+        default: false
+      ntalk.seenicks:
+        default: false
+
+  ntalk.user:
+    description: NTalk plugin user
+    default: false
+    children:
+      ntalk.cmd.pm:
+        default: false
+      ntalk.cmd.pr:
+        default: false

@@ -163,7 +163,7 @@ public class TalkCommandExecutor implements CommandExecutor {
                 final String[] formattedMessage = this.sendMessage(sender, target, messageBuilder.toString());
                 for (final Player p : this.plugin.getServer().getOnlinePlayers()) {
                     if (Perms.hasSpy(p) && p != target && p != sender) {
-                        p.sendMessage(formattedMessage[Perms.hasSeeNicks(p, false) ? 0 : 1]);
+                        p.sendMessage(formattedMessage[Perms.hasSeeNicks(p) ? 0 : 1]);
                     }
                 }
                 if (target != this.plugin.getServer().getConsoleSender()) {
@@ -223,7 +223,7 @@ public class TalkCommandExecutor implements CommandExecutor {
             final String[] formattedMessage = this.sendMessage(from, to, message);
             for (final CommandSender spy : spySet) {
                 if (spy != from && spy != to) {
-                    spy.sendMessage(formattedMessage[Perms.hasSeeNicks(spy, false) ? 0 : 1]);
+                    spy.sendMessage(formattedMessage[Perms.hasSeeNicks(spy) ? 0 : 1]);
                 }
             }
         }
@@ -231,8 +231,8 @@ public class TalkCommandExecutor implements CommandExecutor {
 
     private String[] sendMessage(final CommandSender from, final CommandSender to, final String message) {
         final String[] formattedMessage = this.plugin.getFormater().parsePM(from, to, message);
-        from.sendMessage(formattedMessage[Perms.hasSeeNicks(from, false) ? 0 : 1]);
-        to.sendMessage(formattedMessage[Perms.hasSeeNicks(to, false) ? 0 : 1]);
+        from.sendMessage(formattedMessage[Perms.hasSeeNicks(from) ? 0 : 1]);
+        to.sendMessage(formattedMessage[Perms.hasSeeNicks(to) ? 0 : 1]);
         this.lastReceivedPmMap.put(to.getName(), from.getName());
         return formattedMessage;
     }

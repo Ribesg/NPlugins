@@ -163,7 +163,7 @@ public class TalkListener implements Listener {
         final String[] formats = this.plugin.getFormater().getFormat(event.getPlayer(), true);
         event.setFormat(formats[0]);
         String message = event.getMessage().trim();
-        if (Perms.hasColor(event.getPlayer(), true)) {
+        if (Perms.hasColor(event.getPlayer())) {
             message = ColorUtil.colorize(message);
         }
         event.setMessage(message); // Reformat the message
@@ -172,7 +172,7 @@ public class TalkListener implements Listener {
         final Set<Player> players = new HashSet<>();
         while (it.hasNext()) {
             final Player player = it.next();
-            if (!Perms.hasSeeNicks(player, true)) {
+            if (!Perms.hasSeeNicks(player)) {
                 it.remove();
                 players.add(player);
             }
