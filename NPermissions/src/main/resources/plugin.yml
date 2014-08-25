@@ -28,6 +28,7 @@ permissions:
     description: NPermissions plugin admin
     default: false
     children:
+      npermissions.user: true
       npermissions.cmd.reload:
         default: false
       npermissions.cmd.reload.messages:

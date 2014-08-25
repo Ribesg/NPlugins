@@ -24,6 +24,7 @@ permissions:
     default: false
     children:
       ncuboid.user: true
+
       ncuboid.seeinvisible:
         default: false
       ncuboid.cmd.jail:

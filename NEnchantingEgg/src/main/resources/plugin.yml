@@ -24,6 +24,7 @@ permissions:
     description: NEnchantingEgg plugin admin
     default: false
     children:
+      nenchantingegg.user: true
       nenchantingegg.cmd.reload:
         default: false
   

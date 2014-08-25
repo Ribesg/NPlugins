@@ -121,6 +121,7 @@ permissions:
     description: NGeneral plugin admin
     default: false
     children:
+      ngeneral.user: true
 
       ngeneral.cmd.reload:
          default: false

@@ -64,9 +64,13 @@ permissions:
     description: NCore plugin admin
     default: false
     children:
-      ncore.cmd.debug: true
-      ncore.cmd.updater: true
-      ncore.updater.notice: true
+      ncore.user: true
+      ncore.cmd.debug:
+        default: false
+      ncore.cmd.updater:
+        default: false
+      ncore.updater.notice:
+        default: false
 
   ncore.user:
     description: NCore plugin user - useless for now

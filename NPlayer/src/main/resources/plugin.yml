@@ -87,6 +87,7 @@ permissions:
     description: NPlayer plugin admin
     default: false
     children:
+      nplayer.user: true
       nplayer.cmd.reload:
         default: false
       nplayer.cmd.forcelogin:
