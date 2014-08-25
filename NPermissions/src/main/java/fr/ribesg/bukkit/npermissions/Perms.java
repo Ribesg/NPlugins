@@ -9,38 +9,48 @@
 
 package fr.ribesg.bukkit.npermissions;
 
-import org.bukkit.permissions.Permissible;
+import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 
 public class Perms {
 
-    private static final String ADMIN                  = "npermissions.admin";
-    private static final String USER                   = "npermissions.user";
-    private static final String CMD_RELOAD             = "npermissions.cmd.reload";
-    private static final String CMD_RELOAD_MESSAGES    = "npermissions.cmd.reload.messages";
-    private static final String CMD_RELOAD_PERMISSIONS = "npermissions.cmd.reload.permissions";
-    private static final String CMD_SETGROUP           = "npermissions.cmd.setgroup";
+	private static final String PLUGIN_ADMIN           = "npermissions.admin";
+	private static final String PLUGIN_USER            = "npermissions.user";
+	private static final String CMD_RELOAD             = "npermissions.cmd.reload";
+	private static final String CMD_RELOAD_MESSAGES    = "npermissions.cmd.reload.messages";
+	private static final String CMD_RELOAD_PERMISSIONS = "npermissions.cmd.reload.permissions";
+	private static final String CMD_SETGROUP           = "npermissions.cmd.setgroup";
 
-    public static boolean isAdmin(final Permissible user) {
-        return user.isOp() || user.hasPermission(ADMIN);
-    }
+	public static boolean isAdmin(final CommandSender permissible) {
+		return has(permissible, PLUGIN_ADMIN);
+	}
 
-    public static boolean isUser(final Permissible user) {
-        return user.hasPermission(USER);
-    }
+	public static boolean isUser(final CommandSender permissible) {
+		return has(permissible, PLUGIN_USER);
+	}
 
-    public static boolean hasReload(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_RELOAD);
-    }
+	public static boolean hasReload(final CommandSender permissible) {
+		return has(permissible, CMD_RELOAD);
+	}
 
-    public static boolean hasReloadMessages(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_RELOAD_MESSAGES);
-    }
+	public static boolean hasReloadMessages(final CommandSender permissible) {
+		return has(permissible, CMD_RELOAD_MESSAGES);
+	}
 
-    public static boolean hasReloadPermissions(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_RELOAD_PERMISSIONS);
-    }
+	public static boolean hasReloadPermissions(final CommandSender permissible) {
+		return has(permissible, CMD_RELOAD_PERMISSIONS);
+	}
 
-    public static boolean hasSetGroup(final Permissible user) {
-        return isAdmin(user) || user.hasPermission(CMD_SETGROUP);
-    }
+	public static boolean hasSetGroup(final CommandSender permissible) {
+		return has(permissible, CMD_SETGROUP);
+	}
+
+	public static boolean has(final CommandSender permissible, final String permission) {
+		if (Bukkit.isPrimaryThread()) {
+			return permissible.hasPermission(permission);
+		} else {
+			return AsyncPermAccessor.has(permissible.getName(), permission);
+		}
+	}
 }

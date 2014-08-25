@@ -21,3 +21,27 @@ commands:
     aliases: [setg]
     usage: |
       /<command> <playerName|UUID>[,...] <groupName> [force]
+
+permissions:
+
+  npermissions.admin:
+    description: NPermissions plugin admin
+    default: false
+    children:
+      npermissions.cmd.reload:
+        default: false
+      npermissions.cmd.reload.messages:
+        default: false
+        children:
+          npermissions.cmd.reload: true
+      npermissions.cmd.reload.permissions:
+        default: false
+        children:
+          npermissions.cmd.reload: true
+      npermissions.cmd.setgroup:
+        default: false
+  
+  npermissions.user:
+    description: NPermissions plugin user - useless for now
+    default: false
+    children: []
