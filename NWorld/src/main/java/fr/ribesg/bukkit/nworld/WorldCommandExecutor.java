@@ -102,7 +102,7 @@ public class WorldCommandExecutor implements CommandExecutor {
             // Lists available worlds
             this.plugin.sendMessage(sender, MessageId.world_availableWorlds);
             for (final GeneralWorld world : this.plugin.getWorlds()) {
-                final boolean hasPermission = Perms.hasRequiredPermission(sender, world.getRequiredPermission());
+                final boolean hasPermission = Perms.has(sender, world.getRequiredPermission());
                 if (world.isEnabled()) {
                     if (hasPermission) {
                         if (world.isHidden()) {
@@ -113,7 +113,7 @@ public class WorldCommandExecutor implements CommandExecutor {
                     } else if (!world.isHidden()) {
                         sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.RED + world.getWorldName());
                     }
-                } else if (Perms.hasAdmin(sender)) {
+                } else if (Perms.isAdmin(sender)) {
                     sender.sendMessage(ChatColor.GRAY + "- " + ChatColor.BLACK + world.getWorldName());
                 }
             }
@@ -160,7 +160,7 @@ public class WorldCommandExecutor implements CommandExecutor {
         final Player player = (Player)sender;
         final GeneralWorld world = this.plugin.getWorlds().get(givenWorldName);
         if (world != null && world.isEnabled()) {
-            if (Perms.hasRequiredPermission(player, world.getRequiredPermission()) || Perms.hasWorldWarpAll(player)) {
+            if (Perms.has(player, world.getRequiredPermission()) || Perms.hasWorldWarpAll(player)) {
                 final Location loc = world.getSpawnLocation().toBukkitLocation();
                 loc.getChunk().load();
                 Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
@@ -594,7 +594,7 @@ public class WorldCommandExecutor implements CommandExecutor {
             final StringBuilder builder = new StringBuilder();
             for (final Warp warp : this.plugin.getWarps()) {
                 if (warp.isEnabled()) {
-                    final boolean hasPermission = Perms.hasRequiredPermission(sender, warp.getRequiredPermission()) || Perms.hasWarpAll(sender);
+                    final boolean hasPermission = Perms.has(sender, warp.getRequiredPermission()) || Perms.hasWarpAll(sender);
                     if (hasPermission) {
                         if (warp.isHidden()) {
                             builder.append(ChatColor.GRAY + ", " + ChatColor.DARK_GREEN + warp.getName());
@@ -644,7 +644,7 @@ public class WorldCommandExecutor implements CommandExecutor {
         final String warpName = givenWarpName.toLowerCase();
         final Warp warp = this.plugin.getWarps().get(warpName);
         if (warp != null) {
-            if (Perms.hasRequiredPermission(player, warp.getRequiredPermission()) || Perms.hasWarpAll(player)) {
+            if (Perms.has(player, warp.getRequiredPermission()) || Perms.hasWarpAll(player)) {
                 final Location loc = warp.getLocation().toBukkitLocation();
                 if (loc == null) {
                     this.plugin.sendMessage(sender, MessageId.world_warpUnloadedWorld, warp.getLocation().getWorldName(), warp.getName());

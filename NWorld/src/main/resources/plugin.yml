@@ -41,3 +41,74 @@ commands:
     description: Remove a Warp
     usage: |
       /<command> <warpName>
+
+permissions:
+
+  nworld.admin:
+    description: NWorld plugin admin
+    default: false
+    children:
+      nworld.user: true
+      nworld.cmd.world.all:
+        default: false
+        children:
+          nworld.cmd.world: true
+      nworld.cmd.world.create:
+        default: false
+        children:
+          nworld.cmd.world: true
+      nworld.cmd.world.load:
+        default: false
+        children:
+          nworld.cmd.world: true
+      nworld.cmd.world.unload:
+        default: false
+        children:
+          nworld.cmd.world: true
+      nworld.cmd.world.sethidden:
+        default: false
+        children:
+          nworld.cmd.world: true
+      nworld.cmd.world.setperm:
+        default: false
+        children:
+          nworld.cmd.world: true
+      nworld.cmd.world.setnether:
+        default: false
+        children:
+          nworld.cmd.world: true
+      nworld.cmd.world.setend:
+        default: false
+        children:
+          nworld.cmd.world: true
+      nworld.cmd.reload:
+        default: false
+      nworld.cmd.setspawn:
+        default: false
+      nworld.cmd.warp.all:
+        default: false
+        children:
+          nworld.cmd.warp: true
+      nworld.cmd.warp.sethidden:
+        default: false
+        children:
+          nworld.cmd.warp: true
+      nworld.cmd.warp.setperm:
+        default: false
+        children:
+          nworld.cmd.warp: true
+      nworld.cmd.setwarp:
+        default: false
+      nworld.cmd.delwarp:
+        default: false
+
+  nworld.user:
+    description: NWorld plugin user
+    default: false
+    children:
+      nworld.cmd.world:
+        default: false
+      nworld.cmd.spawn:
+        default: false
+      nworld.cmd.warp:
+        default: false
