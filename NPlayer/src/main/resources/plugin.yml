@@ -80,3 +80,77 @@ commands:
     description: Kick command
     usage: |
       /<command> <playerName> <reason>
+
+permissions:
+
+  nplayer.admin:
+    description: NPlayer plugin admin
+    default: false
+    children:
+      nplayer.cmd.reload:
+        default: false
+      nplayer.cmd.forcelogin:
+        default: false
+      nplayer.cmd.info.admin:
+        default: false
+        children:
+          nplayer.cmd.info: true
+      nplayer.cmd.home.others:
+        default: false
+        children:
+          nplayer.cmd.home: true
+      nplayer.cmd.sethome.others:
+        default: false
+        children:
+          nplayer.cmd.sethome: true
+      nplayer.cmd.ban:
+        default: false
+      nplayer.cmd.ban.permanent:
+        default: false
+        children:
+          nplayer.cmd.ban: true
+      nplayer.cmd.unban:
+        default: false
+      nplayer.cmd.banip:
+        default: false
+      nplayer.cmd.banip.permanent:
+        default: false
+        children:
+          nplayer.cmd.banip: true
+      nplayer.cmd.unbanip:
+        default: false
+      nplayer.cmd.jail:
+        default: false
+      nplayer.cmd.jail.permanent:
+        default: false
+        children:
+          nplayer.cmd.jail: true
+      nplayer.cmd.unjail:
+        default: false
+      nplayer.cmd.mute:
+        default: false
+      nplayer.cmd.mute.permanent:
+        default: false
+        children:
+          nplayer.cmd.mute: true
+      nplayer.cmd.unmute:
+        default: false
+      nplayer.cmd.kick:
+        default: false
+
+  nplayer.user:
+    description: NPlayer plugin user
+    default: false
+    children:
+      nplayer.cmd.login:
+        default: false
+      nplayer.cmd.logout:
+        default: false
+      nplayer.cmd.register:
+        default: false
+      nplayer.cmd.info:
+        default: false
+      nplayer.cmd.home:
+        default: false
+      nplayer.cmd.sethome:
+        default: false
