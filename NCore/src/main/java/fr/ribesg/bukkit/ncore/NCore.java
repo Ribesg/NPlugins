@@ -13,7 +13,6 @@ import fr.ribesg.bukkit.ncore.common.logging.FilterManager;
 import fr.ribesg.bukkit.ncore.config.Config;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.event.NEventsListener;
-import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.node.enchantingegg.EnchantingEggNode;
@@ -25,22 +24,16 @@ import fr.ribesg.bukkit.ncore.node.theendagain.TheEndAgainNode;
 import fr.ribesg.bukkit.ncore.node.world.WorldNode;
 import fr.ribesg.bukkit.ncore.updater.Updater;
 import fr.ribesg.bukkit.ncore.updater.UpdaterListener;
-import fr.ribesg.bukkit.ncore.util.ColorUtil;
 import fr.ribesg.bukkit.ncore.util.FrameBuilder;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -100,12 +93,14 @@ public class NCore extends JavaPlugin {
 
             @Override
             public void run() {
-                fr.ribesg.bukkit.ncore.NCore.this.afterNodesLoad();
+                NCore.this.afterNodesLoad();
             }
         }, 5 * 20L /* ~5 seconds */);
 
         Bukkit.getPluginManager().registerEvents(new NEventsListener(this), this);
         Bukkit.getPluginManager().registerEvents(new UpdaterListener(this), this);
+
+        new NCommandExecutor(this);
     }
 
     @Override
@@ -114,95 +109,6 @@ public class NCore extends JavaPlugin {
             this.uuidDb.writeConfig();
         } catch (final IOException e) {
             this.logger.log(Level.SEVERE, "An error occured when NCore tried to save uuidDb.yml", e);
-        }
-    }
-
-    @Override
-    public boolean onCommand(final CommandSender sender, final Command cmd, final String label, final String[] args) {
-        if ("debug".equals(cmd.getName())) {
-            if (!Perms.hasDebug(sender)) {
-                sender.sendMessage(ColorUtil.colorize("&cYou do not have the permission to use that command"));
-                return true;
-            }
-            if (args.length < 1 || args.length > 2) {
-                return false;
-            } else {
-                final String header = String.valueOf(ChatColor.DARK_GRAY) + ChatColor.BOLD + "DEBUG " + ChatColor.RESET;
-                final String nodeName = args[args.length - 1];
-                final Plugin plugin = Bukkit.getPluginManager().getPlugin(nodeName);
-                if (plugin == null || !(plugin instanceof NPlugin) && plugin != this) {
-                    sender.sendMessage(header + ChatColor.RED + '\'' + nodeName + "' is unknown or unloaded!");
-                } else {
-                    final boolean value;
-                    if (plugin == this) {
-                        if (args.length == 1) {
-                            value = !this.debugEnabled;
-                        } else {
-                            value = Boolean.parseBoolean(args[0]);
-                        }
-                        this.setDebugEnabled(value);
-                    } else {
-                        final NPlugin nPlugin = (NPlugin)plugin;
-                        if (args.length == 1) {
-                            value = !nPlugin.isDebugEnabled();
-                        } else {
-                            value = Boolean.parseBoolean(args[0]);
-                        }
-                        nPlugin.setDebugEnabled(value);
-                    }
-                    sender.sendMessage(header + ChatColor.GREEN + '\'' + nodeName + "' now has debug mode " + ChatColor.GOLD +
-                                       (value ? "enabled" : "disabled") + ChatColor.GREEN + '!');
-                    try {
-                        final List<String> debugEnabledList = this.pluginConfig.getDebugEnabled();
-                        if (value) {
-                            debugEnabledList.add(plugin.getName());
-                        } else {
-                            debugEnabledList.remove(plugin.getName());
-                        }
-                        this.pluginConfig.loadConfig();
-                        this.pluginConfig.setDebugEnabled(debugEnabledList);
-                        this.pluginConfig.writeConfig();
-                    } catch (final InvalidConfigurationException | IOException ignored) {
-                        // Not a real problem
-                    }
-                }
-                return true;
-            }
-        } else if ("updater".equals(cmd.getName())) {
-            if (!Perms.hasUpdater(sender)) {
-                sender.sendMessage(ColorUtil.colorize("&cYou do not have the permission to use that command"));
-                return true;
-            }
-            if (this.updater == null) {
-                sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Updater is disabled in config");
-            } else if (args.length != 2) {
-                return false;
-            } else {
-                final String action = args[0].toLowerCase();
-                final String nodeName = args[1];
-                final boolean all = "all".equalsIgnoreCase(args[1]);
-                if (!all && this.updater.getPlugins().get(nodeName.toLowerCase()) == null) {
-                    sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Unknown Node: " + nodeName);
-                } else {
-                    switch (action) {
-                        case "check":
-                        case "status":
-                            this.updater.checkForUpdates(sender, all ? null : nodeName);
-                            break;
-                        case "download":
-                        case "dl":
-                            if (all) {
-                                sender.sendMessage(Updater.PREFIX + ChatColor.RED + "Please select a specific Node to download");
-                            } else {
-                                this.updater.downloadUpdate(sender, nodeName);
-                            }
-                            break;
-                    }
-                }
-            }
-            return true;
-        } else {
-            return false;
         }
     }
 
