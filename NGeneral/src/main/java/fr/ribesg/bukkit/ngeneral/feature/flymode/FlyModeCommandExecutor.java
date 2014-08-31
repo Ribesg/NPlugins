@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ngeneral.feature.flymode;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.util.ArgumentParser;
 import fr.ribesg.bukkit.ngeneral.Perms;
 
 import java.util.HashSet;
@@ -22,28 +23,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class FlyModeCommandExecutor implements CommandExecutor {
-
-    private static Set<String> enabled;
-
-    private static Set<String> getEnabled() {
-        if (enabled == null) {
-            enabled = new HashSet<>(2);
-            enabled.add("enable");
-            enabled.add("on");
-        }
-        return enabled;
-    }
-
-    private static Set<String> disabled;
-
-    private static Set<String> getDisabled() {
-        if (disabled == null) {
-            disabled = new HashSet<>(2);
-            disabled.add("disable");
-            disabled.add("off");
-        }
-        return disabled;
-    }
 
     private final FlyModeFeature feature;
 
@@ -69,43 +48,39 @@ public class FlyModeCommandExecutor implements CommandExecutor {
                 }
                 return true;
             } else if (args.length == 1) {
-                final String arg0 = args[0].toLowerCase();
-                if (getEnabled().contains(arg0)) {
+                final Boolean value = ArgumentParser.parseBoolean(args[0]);
+                if (value == null) {
+                    if (Perms.hasFlyOthers(sender)) {
+                        final String[] names = args[0].split(",");
+                        this.setAll(sender, names, null);
+                    } else {
+                        this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
+                    }
+                } else if (value) {
                     if (!(sender instanceof Player)) {
                         this.feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
                     } else {
                         this.feature.setFlyMode((Player)sender, true);
                         this.feature.getPlugin().sendMessage(sender, MessageId.general_fly_enabled);
                     }
-                } else if (getDisabled().contains(arg0)) {
+                } else {
                     if (!(sender instanceof Player)) {
                         this.feature.getPlugin().sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
                     } else {
                         this.feature.setFlyMode((Player)sender, false);
                         this.feature.getPlugin().sendMessage(sender, MessageId.general_fly_disabled);
                     }
-                } else if (Perms.hasFlyOthers(sender)) {
-                    final String[] names = arg0.split(",");
-                    this.setAll(sender, names, null);
-                } else {
-                    this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
                 }
                 return true;
             } else if (args.length == 2) {
                 if (!Perms.hasFlyOthers(sender)) {
                     this.feature.getPlugin().sendMessage(sender, MessageId.noPermissionForCommand);
                 } else {
-                    final String arg0 = args[0].toLowerCase();
-                    final Boolean value;
-                    final String arg1 = args[1].toLowerCase();
-                    if (getEnabled().contains(arg0)) {
-                        value = true;
-                    } else if (getDisabled().contains(arg0)) {
-                        value = false;
-                    } else {
+                    final Boolean value = ArgumentParser.parseBoolean(args[0]);
+                    if (value == null) {
                         return false;
                     }
-                    final String[] names = arg1.split(",");
+                    final String[] names = args[1].split(",");
                     this.setAll(sender, names, value);
                 }
                 return true;

@@ -12,6 +12,7 @@ package fr.ribesg.bukkit.nplayer;
 import fr.ribesg.bukkit.ncore.config.UuidDb;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.Node;
+import fr.ribesg.bukkit.ncore.util.ArgumentParser;
 import fr.ribesg.bukkit.ncore.util.StringUtil;
 import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.nplayer.security.Security;
@@ -299,12 +300,15 @@ public class PlayerCommandHandler implements CommandExecutor, Listener {
                     } else if (args.length == 2) {
                         if ("autologout".equals(args[0]) || "auto".equals(args[0])) {
                             autoLogout = true;
-                            if ("enable".equals(args[1])) {
-                                this.plugin.debug("Enable auto-logout");
-                                enable = true;
-                            } else if ("disable".equals(args[1])) {
-                                this.plugin.debug("Disable auto-logout");
-                                disable = true;
+                            final Boolean value = ArgumentParser.parseBoolean(args[1]);
+                            if (value != null) {
+                                if (value) {
+                                    this.plugin.debug("Enable auto-logout");
+                                    enable = true;
+                                } else {
+                                    this.plugin.debug("Disable auto-logout");
+                                    disable = true;
+                                }
                             }
                         }
                     }

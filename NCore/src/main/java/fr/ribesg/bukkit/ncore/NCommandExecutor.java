@@ -11,6 +11,7 @@ package fr.ribesg.bukkit.ncore;
 
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.updater.Updater;
+import fr.ribesg.bukkit.ncore.util.ArgumentParser;
 import fr.ribesg.bukkit.ncore.util.ColorUtil;
 
 import java.io.IOException;
@@ -60,12 +61,15 @@ public class NCommandExecutor implements CommandExecutor {
             if (plugin == null || !(plugin instanceof NPlugin) && plugin != this) {
                 sender.sendMessage(header + ChatColor.RED + '\'' + nodeName + "' is unknown or unloaded!");
             } else {
-                final boolean value;
+                final Boolean value;
                 if (plugin == this) {
                     if (args.length == 1) {
                         value = !this.plugin.isDebugEnabled();
                     } else {
-                        value = Boolean.parseBoolean(args[0]);
+                        value = ArgumentParser.parseBoolean(args[0]);
+                    }
+                    if (value == null) {
+                        return false;
                     }
                     this.plugin.setDebugEnabled(value);
                 } else {
@@ -73,7 +77,10 @@ public class NCommandExecutor implements CommandExecutor {
                     if (args.length == 1) {
                         value = !nPlugin.isDebugEnabled();
                     } else {
-                        value = Boolean.parseBoolean(args[0]);
+                        value = ArgumentParser.parseBoolean(args[0]);
+                    }
+                    if (value == null) {
+                        return false;
                     }
                     nPlugin.setDebugEnabled(value);
                 }

@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ncuboid.commands.subexecutors;
 
 import fr.ribesg.bukkit.ncore.lang.MessageId;
+import fr.ribesg.bukkit.ncore.util.ArgumentParser;
 import fr.ribesg.bukkit.ncuboid.NCuboid;
 import fr.ribesg.bukkit.ncuboid.Perms;
 import fr.ribesg.bukkit.ncuboid.beans.Flag;
@@ -23,9 +24,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
-
-    private static final Pattern ENABLE_REGEX  = Pattern.compile("^(on|enabled?|true|1)$");
-    private static final Pattern DISABLE_REGEX = Pattern.compile("^(off|disabled?|false|0)$");
 
     public FlagSubcmdExecutor(final NCuboid instance) {
         super(instance);
@@ -64,13 +62,8 @@ public class FlagSubcmdExecutor extends AbstractSubcmdExecutor {
                 return true;
             } else {
                 // Get provided value
-                final String valueString = args[2].toLowerCase();
-                final boolean value;
-                if (ENABLE_REGEX.matcher(valueString).matches()) {
-                    value = true;
-                } else if (DISABLE_REGEX.matcher(valueString).matches()) {
-                    value = false;
-                } else {
+                final Boolean value = ArgumentParser.parseBoolean(args[2]);
+                if (value == null) {
                     this.getPlugin().sendMessage(sender, MessageId.cuboid_cmdFlagUnknownValue, args[2]);
                     return true;
                 }

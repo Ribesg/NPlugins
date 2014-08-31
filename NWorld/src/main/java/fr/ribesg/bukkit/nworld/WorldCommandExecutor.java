@@ -423,7 +423,10 @@ public class WorldCommandExecutor implements CommandExecutor {
             return false;
         }
         final String worldName = args[0];
-        final boolean hidden = Boolean.parseBoolean(args[1]);
+        final Boolean hidden = ArgumentParser.parseBoolean(args[1]);
+        if (hidden == null) {
+            return false;
+        }
         final GeneralWorld world = this.plugin.getWorlds().get(worldName);
         if (world != null) {
             world.setHidden(hidden);
@@ -472,7 +475,10 @@ public class WorldCommandExecutor implements CommandExecutor {
             return false;
         }
         final String worldName = args[0];
-        final boolean value = Boolean.parseBoolean(args[1]);
+        final Boolean value = ArgumentParser.parseBoolean(args[1]);
+        if (value == null) {
+            return false;
+        }
         final AdditionalWorld world = this.plugin.getWorlds().getAdditional().get(worldName);
         if (world != null) {
             if (world.hasNether()) {
@@ -506,7 +512,10 @@ public class WorldCommandExecutor implements CommandExecutor {
             return false;
         }
         final String worldName = args[0];
-        final boolean value = Boolean.parseBoolean(args[1]);
+        final Boolean value = ArgumentParser.parseBoolean(args[1]);
+        if (value == null) {
+            return false;
+        }
         final AdditionalWorld world = this.plugin.getWorlds().getAdditional().get(worldName);
         if (world != null) {
             if (world.hasEnd()) {
@@ -682,7 +691,10 @@ public class WorldCommandExecutor implements CommandExecutor {
             return false;
         }
         final String warpName = args[0];
-        final boolean hidden = Boolean.parseBoolean(args[1]);
+        final Boolean hidden = ArgumentParser.parseBoolean(args[1]);
+        if (hidden == null) {
+            return false;
+        }
         final Warp warp = this.plugin.getWarps().get(warpName);
         if (warp != null) {
             warp.setHidden(hidden);

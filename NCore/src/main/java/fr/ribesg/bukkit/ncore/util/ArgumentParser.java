@@ -18,6 +18,34 @@ import java.util.List;
 public class ArgumentParser {
 
     /**
+     * Parses a value and try to determine if it's true or false.
+     *
+     * @param value the String value
+     *
+     * @return null if not recognized, the value otherwise
+     */
+    public static Boolean parseBoolean(final String value) {
+        switch (value.toLowerCase()) {
+            case "true":
+            case "1":
+            case "yes":
+            case "enable":
+            case "enabled":
+            case "on":
+                return true;
+            case "false":
+            case "0":
+            case "no":
+            case "disable":
+            case "disabled":
+            case "off":
+                return false;
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Transform a Bukkit-provided args array, considering quotes in the original String.
      * Example:
      * - Input  = { a | 'b | c | d' | "e | f | g" | h"i | j" | "k | l'm | n" | 'o | p | q }
