@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ncuboid;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
+import fr.ribesg.bukkit.ncore.info.Info;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
 import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
@@ -56,6 +57,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -248,6 +250,11 @@ public class NCuboid extends NPlugin implements CuboidNode {
     @Override
     public String getNodeName() {
         return CUBOID;
+    }
+
+    @Override
+    public void populateInfo(final CommandSender sender, final String query, final Info infoObject) {
+        // TODO Implement method
     }
 
     @Override

@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.npermissions;
 
+import fr.ribesg.bukkit.ncore.info.Info;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.permissions.PermissionsNode;
 import fr.ribesg.bukkit.npermissions.config.Config;
@@ -30,6 +31,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
@@ -214,5 +216,10 @@ public class NPermissions extends NPlugin implements PermissionsNode {
     @Override
     public String getNodeName() {
         return PERMISSIONS;
+    }
+
+    @Override
+    public void populateInfo(final CommandSender sender, final String query, final Info infoObject) {
+        // TODO Implement method
     }
 }

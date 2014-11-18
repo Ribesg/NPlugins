@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.nworld;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
+import fr.ribesg.bukkit.ncore.info.Info;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.world.WorldNode;
 import fr.ribesg.bukkit.nworld.config.Config;
@@ -27,6 +28,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
@@ -249,6 +251,11 @@ public class NWorld extends NPlugin implements WorldNode {
     @Override
     public String getNodeName() {
         return WORLD;
+    }
+
+    @Override
+    public void populateInfo(final CommandSender sender, final String query, final Info infoObject) {
+        // TODO Implement method
     }
 
     @Override

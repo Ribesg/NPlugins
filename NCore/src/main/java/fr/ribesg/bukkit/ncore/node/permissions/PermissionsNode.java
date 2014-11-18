@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncore.node.permissions;
 
+import fr.ribesg.bukkit.ncore.info.InfoCommandHandler;
 import fr.ribesg.bukkit.ncore.node.Node;
 
 /**
@@ -17,6 +18,6 @@ import fr.ribesg.bukkit.ncore.node.Node;
  *
  * @author Ribesg
  */
-public interface PermissionsNode extends Node {
+public interface PermissionsNode extends Node, InfoCommandHandler {
 
 }

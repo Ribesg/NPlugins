@@ -20,6 +20,10 @@ commands:
     usage: |
       /<command> status|check <nodeName>|all
       /<command> download|dl <nodeName>
+  info:
+    description: Info Command
+    usage: |
+      /<command> <anything>
 
 permissions:
 
@@ -67,6 +71,10 @@ permissions:
       ncore.user: true
       ncore.cmd.debug:
         default: false
+      ncore.cmd.info.admin:
+        default: false
+        children: []
+          # TODO Children permissions for each thing you can /info
       ncore.cmd.updater:
         default: false
       ncore.updater.notice:

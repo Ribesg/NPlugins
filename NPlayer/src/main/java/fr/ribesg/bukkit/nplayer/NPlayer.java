@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.nplayer;
 
 import fr.ribesg.bukkit.ncore.config.UuidDb;
+import fr.ribesg.bukkit.ncore.info.Info;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.node.cuboid.CuboidNode;
@@ -27,6 +28,7 @@ import fr.ribesg.bukkit.nplayer.user.UserDb;
 
 import java.io.IOException;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
@@ -241,5 +243,10 @@ public class NPlayer extends NPlugin implements PlayerNode {
     @Override
     public String getNodeName() {
         return PLAYER;
+    }
+
+    @Override
+    public void populateInfo(final CommandSender sender, final String query, final Info infoObject) {
+        // TODO Implement method
     }
 }

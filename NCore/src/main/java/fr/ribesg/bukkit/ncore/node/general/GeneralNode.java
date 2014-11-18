@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncore.node.general;
 
+import fr.ribesg.bukkit.ncore.info.InfoCommandHandler;
 import fr.ribesg.bukkit.ncore.node.Node;
 
 import java.util.UUID;
@@ -19,7 +20,7 @@ import java.util.UUID;
  *
  * @author Ribesg
  */
-public interface GeneralNode extends Node {
+public interface GeneralNode extends Node, InfoCommandHandler {
 
     /**
      * Checks if a Player is in Spy Mode.

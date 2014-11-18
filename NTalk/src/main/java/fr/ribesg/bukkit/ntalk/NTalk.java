@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ntalk;
 
+import fr.ribesg.bukkit.ncore.info.Info;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.talk.TalkNode;
 import fr.ribesg.bukkit.ncore.util.AsyncPermAccessor;
@@ -18,6 +19,7 @@ import fr.ribesg.bukkit.ntalk.lang.Messages;
 
 import java.io.IOException;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.PluginManager;
 
@@ -138,5 +140,10 @@ public class NTalk extends NPlugin implements TalkNode {
     @Override
     public String getNodeName() {
         return TALK;
+    }
+
+    @Override
+    public void populateInfo(final CommandSender sender, final String query, final Info infoObject) {
+        // TODO Implement method
     }
 }

@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ngeneral;
 
+import fr.ribesg.bukkit.ncore.info.Info;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
 import fr.ribesg.bukkit.ncore.node.general.GeneralNode;
@@ -193,6 +194,11 @@ public class NGeneral extends NPlugin implements GeneralNode {
     @Override
     public String getNodeName() {
         return GENERAL;
+    }
+
+    @Override
+    public void populateInfo(final CommandSender sender, final String query, final Info infoObject) {
+        // TODO Implement method
     }
 
     @Override

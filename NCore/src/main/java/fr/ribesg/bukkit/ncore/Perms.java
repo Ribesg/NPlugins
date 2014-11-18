@@ -16,13 +16,18 @@ import org.bukkit.command.CommandSender;
 
 public class Perms {
 
-    private static final String CMD_DEBUG   = "ncore.cmd.debug";
-    private static final String CMD_UPDATER = "ncore.cmd.updater";
+    private static final String CMD_DEBUG      = "ncore.cmd.debug";
+    private static final String CMD_INFO_ADMIN = "ncore.cmd.info.admin";
+    private static final String CMD_UPDATER    = "ncore.cmd.updater";
 
     private static final String UPDATER_NOTICE = "ncore.updater.notice";
 
     public static boolean hasDebug(final CommandSender permissible) {
         return has(permissible, CMD_DEBUG);
+    }
+
+    public static boolean hasInfoAdmin(final CommandSender permissible) {
+        return has(permissible, CMD_INFO_ADMIN);
     }
 
     public static boolean hasUpdater(final CommandSender permissible) {

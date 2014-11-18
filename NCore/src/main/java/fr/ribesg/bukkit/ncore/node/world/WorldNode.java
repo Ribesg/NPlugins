@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncore.node.world;
 
+import fr.ribesg.bukkit.ncore.info.InfoCommandHandler;
 import fr.ribesg.bukkit.ncore.node.Node;
 
 import org.bukkit.Location;
@@ -19,7 +20,7 @@ import org.bukkit.Location;
  *
  * @author Ribesg
  */
-public interface WorldNode extends Node {
+public interface WorldNode extends Node, InfoCommandHandler {
 
     /**
      * Gets the Location of the provided world's spawn point.

@@ -10,6 +10,7 @@
 package fr.ribesg.bukkit.ncore.node.cuboid;
 
 import fr.ribesg.bukkit.ncore.common.NLocation;
+import fr.ribesg.bukkit.ncore.info.InfoCommandHandler;
 import fr.ribesg.bukkit.ncore.node.Node;
 
 import java.util.Set;
@@ -23,7 +24,7 @@ import org.bukkit.entity.Player;
  *
  * @author Ribesg
  */
-public interface CuboidNode extends Node {
+public interface CuboidNode extends Node, InfoCommandHandler {
 
     /**
      * Checks if a Player is jailed. Not case sensitive.

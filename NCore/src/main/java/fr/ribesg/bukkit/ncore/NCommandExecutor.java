@@ -9,12 +9,17 @@
 
 package fr.ribesg.bukkit.ncore;
 
+import fr.ribesg.bukkit.ncore.info.Info;
+import fr.ribesg.bukkit.ncore.info.Info.Type;
+import fr.ribesg.bukkit.ncore.info.InfoCommandHandler;
 import fr.ribesg.bukkit.ncore.node.NPlugin;
+import fr.ribesg.bukkit.ncore.node.Node;
 import fr.ribesg.bukkit.ncore.updater.Updater;
 import fr.ribesg.bukkit.ncore.util.ArgumentParser;
 import fr.ribesg.bukkit.ncore.util.ColorUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -32,6 +37,7 @@ public class NCommandExecutor implements CommandExecutor {
     public NCommandExecutor(final NCore instance) {
         this.plugin = instance;
         this.plugin.getCommand("debug").setExecutor(this);
+        this.plugin.getCommand("info").setExecutor(this);
         this.plugin.getCommand("updater").setExecutor(this);
     }
 
@@ -40,6 +46,8 @@ public class NCommandExecutor implements CommandExecutor {
         switch (cmd.getName()) {
             case "debug":
                 return this.onDebugCommand(sender, args);
+            case "info":
+                return this.onInfoCommand(sender, args);
             case "updater":
                 return this.onUpdaterCommand(sender, args);
             default:
@@ -102,6 +110,100 @@ public class NCommandExecutor implements CommandExecutor {
             }
             return true;
         }
+    }
+
+    private boolean onInfoCommand(final CommandSender sender, final String[] args) {
+        final String query;
+        final Type type;
+        if (args.length == 1) {
+            query = args[0];
+            type = Type.FULL;
+        } else if (args.length == 2) {
+            query = args[1];
+            switch (args[0].toLowerCase()) {
+                case "player":
+                case "p":
+                    type = Type.PLAYER;
+                    break;
+                case "region":
+                case "r":
+                case "cuboid":
+                case "cubo":
+                case "c":
+                    type = Type.REGION;
+                    break;
+                case "warp":
+                    type = Type.WARP;
+                    break;
+                case "world":
+                    type = Type.WORLD;
+                    break;
+                default:
+                    return false;
+            }
+        } else {
+            return false;
+        }
+        final List<String> nodes = new ArrayList<>();
+        switch (type) {
+            case FULL:
+                nodes.add(Node.CUBOID);
+                nodes.add(Node.GENERAL);
+                nodes.add(Node.PERMISSIONS);
+                nodes.add(Node.PLAYER);
+                nodes.add(Node.TALK);
+                nodes.add(Node.WORLD);
+                break;
+            case PLAYER:
+                nodes.add(Node.CUBOID);
+                nodes.add(Node.GENERAL);
+                nodes.add(Node.PERMISSIONS);
+                nodes.add(Node.PLAYER);
+                nodes.add(Node.TALK);
+                break;
+            case REGION:
+                nodes.add(Node.CUBOID);
+                break;
+            case WARP:
+                nodes.add(Node.WORLD);
+                break;
+            case WORLD:
+                nodes.add(Node.CUBOID);
+                nodes.add(Node.WORLD);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown type: " + type);
+        }
+
+        final Info info = new Info();
+        for (final String nodeName : nodes) {
+            final Plugin plugin = Bukkit.getPluginManager().getPlugin(nodeName);
+            if (plugin != null && plugin instanceof InfoCommandHandler) {
+                ((InfoCommandHandler)plugin).populateInfo(sender, query, info);
+            }
+        }
+
+        /*
+         * TODO Output Info object content
+         * Will be done once the Chat API is a thing
+         */
+        if (info.hasPlayerInfo()) {
+            // TODO
+        }
+        if (info.hasRegionInfo()) {
+            // TODO
+        }
+        if (info.hasWarpInfo()) {
+            // TODO
+        }
+        if (info.hasWorldInfo()) {
+            // TODO
+        }
+        if (info.hasEntryNotes()) {
+            // TODO
+        }
+
+        return true;
     }
 
     private boolean onUpdaterCommand(final CommandSender sender, final String[] args) {
