@@ -81,7 +81,13 @@ public class NCommandExecutor implements CommandExecutor {
                     }
                     this.plugin.setDebugEnabled(value);
                 } else {
-                    final NPlugin nPlugin = (NPlugin)plugin;
+                    final NPlugin nPlugin;
+                    try {
+                        nPlugin = (NPlugin)plugin;
+                    } catch (final ClassCastException e) {
+                        sender.sendMessage(header + ChatColor.RED + '\'' + nodeName + "' is invalid!");
+                        return true;
+                    }
                     if (args.length == 1) {
                         value = !nPlugin.isDebugEnabled();
                     } else {
