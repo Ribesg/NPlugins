@@ -59,7 +59,7 @@ public class NCore extends JavaPlugin {
     @Override
     public void onEnable() {
         this.logger = this.getLogger();
-        this.filterManager = new FilterManager();
+        this.filterManager = FilterManager.create();
 
         try {
             this.metrics = new Metrics(this);
