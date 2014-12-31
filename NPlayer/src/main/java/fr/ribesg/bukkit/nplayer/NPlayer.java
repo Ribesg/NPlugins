@@ -79,12 +79,14 @@ public class NPlayer extends NPlugin implements PlayerNode {
             return false;
         }
 
-        if (this.pluginConfig.getAuthenticationMode() == 0) {
+        if (this.pluginConfig.getAuthenticationMode() != 1) {
             this.debug("Registering LoginRegisterFilter...");
             this.getCore().getFilterManager().addDenyFilter(new LoginRegisterFilter());
 
             this.debug("Initializing LoggedOutUserHandler...");
             this.loggedOutUserHandler = new LoggedOutUserHandler(this);
+        } else {
+            this.loggedOutUserHandler = null;
         }
 
         this.debug("Creating UserDb...");

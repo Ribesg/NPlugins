@@ -38,18 +38,18 @@ public class PlayerListener implements Listener {
     public void onPlayerJoined(final PlayerJoinedEvent event) {
         final Player player = event.getPlayer();
         final String playerIp = player.getAddress().getAddress().getHostAddress();
-        if (this.authenticationMode != 0) {
+        if (this.authenticationMode != 1) {
             this.loggedOutUserHandler.notifyConnect(player);
         }
         final User user = this.plugin.getUserDb().get(player.getUniqueId());
-        if (this.authenticationMode == 0) {
+        if (this.authenticationMode == 1) {
             // Authentication disabled
             if (user == null) {
                 this.plugin.getUserDb().newUser(player.getUniqueId(), null, playerIp);
             } else if (!user.getLastIp().equals(playerIp)) {
                 user.newIp(playerIp);
             }
-        } else if (this.authenticationMode == 1) {
+        } else if (this.authenticationMode == 0) {
             // Authentication enabled
             if (user == null || user.getPasswordHash() == null) {
                 // Unknown, should /register
