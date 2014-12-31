@@ -63,7 +63,7 @@ permissions:
   #######################
   ## NCore permissions ##
   #######################
-  
+
   ncore.admin:
     description: NCore plugin admin
     default: false
