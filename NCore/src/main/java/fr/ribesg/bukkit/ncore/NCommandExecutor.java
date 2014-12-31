@@ -66,11 +66,11 @@ public class NCommandExecutor implements CommandExecutor {
             final String header = String.valueOf(ChatColor.DARK_GRAY) + ChatColor.BOLD + "DEBUG " + ChatColor.RESET;
             final String nodeName = args[args.length - 1];
             final Plugin plugin = Bukkit.getPluginManager().getPlugin(nodeName);
-            if (plugin == null || !(plugin instanceof NPlugin) && plugin != this) {
+            if (plugin == null || !(plugin instanceof NPlugin) && plugin != this.plugin) {
                 sender.sendMessage(header + ChatColor.RED + '\'' + nodeName + "' is unknown or unloaded!");
             } else {
                 final Boolean value;
-                if (plugin == this) {
+                if (plugin == this.plugin) {
                     if (args.length == 1) {
                         value = !this.plugin.isDebugEnabled();
                     } else {
