@@ -1,11 +1,15 @@
 [![Build Status](https://travis-ci.org/Ribesg/NPlugins.svg?branch=master)](https://travis-ci.org/Ribesg/NPlugins)
 NPlugins
 =====
-Informations about the project:  
+Informations about the project:
 	http://dev.bukkit.org/bukkit-plugins/ncore/
 
-Jenkins server:  
+Bamboo (Build server):
 	http://ci.ribesg.fr/
+JIRA (issues, bugs, suggestions):
+	http://jira.ribesg.fr/
+Confluence (Wiki):
+	http://wiki.ribesg.fr/
 
 Interacting with the NPlugins suite:
 ```xml
@@ -27,7 +31,7 @@ Interacting with the NPlugins suite:
 </dependencies>
 ...
 ```
-Then you can just listen to [available events](http://wiki.ribesg.fr/NPlugins/Developer/Available_Events), or if you want to use some Node API, wait ~5 ticks then get it from the Core.
+Then you can just listen to available events, or if you want to use some Node API, wait ~5 ticks then get it from the Core.
 
 Snapshots are available too, in the following repository:
 ```xml
