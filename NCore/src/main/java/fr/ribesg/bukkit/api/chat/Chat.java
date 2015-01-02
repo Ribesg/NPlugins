@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NCore - Chat.java                           *
  * Full Class name: fr.ribesg.bukkit.api.chat.Chat                         *
  *                                                                         *
- *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
+ *                Copyright (c) 2012-2015 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -12,7 +12,6 @@ package fr.ribesg.bukkit.api.chat;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
@@ -128,7 +127,7 @@ public final class Chat {
         }
         result.append("]}");
         final String resultString = result.toString();
-        Chat.LOGGER.log(Level.INFO, "DEBUG         Converted Message to " + resultString);
+        Chat.LOGGER.info("DEBUG         Converted Message to " + resultString);
         return resultString;
     }
 
@@ -202,6 +201,7 @@ public final class Chat {
                         builder.append("\",\"action\":\"show_item\"}");
                         if (text == null) {
                             // TODO Append item name as "translate" (?)
+                            builder.append("\"text\":\"").append(hover.getItem().getType()).append('"');
                         }
                         break;
                     case SHOW_TEXT:
