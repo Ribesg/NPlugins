@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NCore - UuidDb.java                         *
  * Full Class name: fr.ribesg.bukkit.ncore.config.UuidDb                   *
  *                                                                         *
- *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
+ *                Copyright (c) 2012-2015 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
@@ -25,10 +25,10 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang.Validate;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -46,7 +46,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class UuidDb extends AbstractConfig<NCore> implements Listener {
 
-    private static final Logger LOGGER = LogManager.getLogger(UuidDb.class);
+    private static final Logger LOGGER = Logger.getLogger(UuidDb.class.getName());
 
     private static final ProfileRepository mojangRepo = new HttpProfileRepository("minecraft");
     private static UuidDb instance;
@@ -107,15 +107,15 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
 
     private static Profile getMojangProfile(final String nodeName, final String name, final int tries) {
         Validate.isTrue(tries > 0, "We should at least try once...");
-        LOGGER.debug('[' + nodeName + "] [UuidDb] Getting UUID from Mojang for Player name '" + name + "'...");
+        LOGGER.fine('[' + nodeName + "] [UuidDb] Getting UUID from Mojang for Player name '" + name + "'...");
         for (int i = 0; i < tries; i++) {
-            LOGGER.debug('[' + nodeName + "] [UuidDb] Try " + (i + 1) + "...");
+            LOGGER.fine('[' + nodeName + "] [UuidDb] Try " + (i + 1) + "...");
             final Profile[] res = mojangRepo.findProfilesByNames(name);
             if (res.length > 0) {
                 return res[0];
             }
         }
-        LOGGER.warn('[' + nodeName + "] Failed to get Mojang's UUID for Player name '" + name + "'!");
+        LOGGER.warning('[' + nodeName + "] Failed to get Mojang's UUID for Player name '" + name + "'!");
         return null;
     }
 
@@ -181,7 +181,7 @@ public class UuidDb extends AbstractConfig<NCore> implements Listener {
                         UuidDb.this.updated = false;
                         UuidDb.this.writeConfig();
                     } catch (final IOException e) {
-                        UuidDb.LOGGER.error("[NCore] An error occured when NCore tried to save uuidDb.yml", e);
+                        UuidDb.LOGGER.log(Level.SEVERE, "[NCore] An error occured when NCore tried to save uuidDb.yml", e);
                     }
                 }
             }
