@@ -2,7 +2,7 @@
  * Project file:    NPlugins - NTalk - NTalk.java                          *
  * Full Class name: fr.ribesg.bukkit.ntalk.NTalk                           *
  *                                                                         *
- *                Copyright (c) 2012-2014 Ribesg - www.ribesg.fr           *
+ *                Copyright (c) 2012-2015 Ribesg - www.ribesg.fr           *
  *   This file is under GPLv3 -> http://www.gnu.org/licenses/gpl-3.0.txt   *
  *    Please contact me at ribesg[at]yahoo.fr if you improve this file!    *
  ***************************************************************************/
