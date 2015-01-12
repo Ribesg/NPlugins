@@ -69,52 +69,77 @@ public class ItemBuilder {
     private static Set<Material> getPossibleMainItems() {
         if (possibleMainItems == null) {
             possibleMainItems = EnumSet.of(
-                    Material.IRON_SPADE,
-                    Material.IRON_PICKAXE,
-                    Material.IRON_AXE,
-                    Material.BOW,
-                    Material.IRON_SWORD,
-                    Material.WOOD_SWORD,
-                    Material.WOOD_SPADE,
-                    Material.WOOD_PICKAXE,
+                    // Axes
                     Material.WOOD_AXE,
-                    Material.STONE_SWORD,
-                    Material.STONE_SPADE,
-                    Material.STONE_PICKAXE,
                     Material.STONE_AXE,
-                    Material.DIAMOND_SWORD,
-                    Material.DIAMOND_SPADE,
-                    Material.DIAMOND_PICKAXE,
-                    Material.DIAMOND_AXE,
-                    Material.GOLD_SWORD,
-                    Material.GOLD_SPADE,
-                    Material.GOLD_PICKAXE,
+                    Material.IRON_AXE,
                     Material.GOLD_AXE,
+                    Material.DIAMOND_AXE,
+
+                    // Pickaxes
+                    Material.WOOD_PICKAXE,
+                    Material.IRON_PICKAXE,
+                    Material.GOLD_PICKAXE,
+                    Material.DIAMOND_PICKAXE,
+                    Material.STONE_PICKAXE,
+
+                    // Shovels
+                    Material.WOOD_SPADE,
+                    Material.STONE_SPADE,
+                    Material.IRON_SPADE,
+                    Material.GOLD_SPADE,
+                    Material.DIAMOND_SPADE,
+
+                    // Hoes
                     Material.WOOD_HOE,
                     Material.STONE_HOE,
                     Material.IRON_HOE,
-                    Material.DIAMOND_HOE,
                     Material.GOLD_HOE,
+                    Material.DIAMOND_HOE,
+
+                    // Weapons
+                    Material.BOW,
+                    Material.WOOD_SWORD,
+                    Material.STONE_SWORD,
+                    Material.IRON_SWORD,
+                    Material.GOLD_SWORD,
+                    Material.DIAMOND_SWORD,
+
+                    // Leather Armor
                     Material.LEATHER_HELMET,
                     Material.LEATHER_CHESTPLATE,
                     Material.LEATHER_LEGGINGS,
                     Material.LEATHER_BOOTS,
-                    Material.CHAINMAIL_HELMET,
-                    Material.CHAINMAIL_CHESTPLATE,
-                    Material.CHAINMAIL_LEGGINGS,
-                    Material.CHAINMAIL_BOOTS,
+
+                    // Iron Armor
                     Material.IRON_HELMET,
                     Material.IRON_CHESTPLATE,
                     Material.IRON_LEGGINGS,
                     Material.IRON_BOOTS,
+
+                    // Gold Armor
+                    Material.GOLD_HELMET,
+                    Material.GOLD_CHESTPLATE,
+                    Material.GOLD_LEGGINGS,
+                    Material.GOLD_BOOTS,
+
+                    // Diamond Armor
                     Material.DIAMOND_HELMET,
                     Material.DIAMOND_CHESTPLATE,
                     Material.DIAMOND_LEGGINGS,
                     Material.DIAMOND_BOOTS,
-                    Material.GOLD_HELMET,
-                    Material.GOLD_CHESTPLATE,
-                    Material.GOLD_LEGGINGS,
-                    Material.GOLD_BOOTS
+
+                    // Chainmail Armor
+                    Material.CHAINMAIL_HELMET,
+                    Material.CHAINMAIL_CHESTPLATE,
+                    Material.CHAINMAIL_LEGGINGS,
+                    Material.CHAINMAIL_BOOTS,
+
+                    // Misc
+                    Material.CARROT_STICK,
+                    Material.FISHING_ROD,
+                    Material.FLINT_AND_STEEL,
+                    Material.SHEARS
             );
         }
         return possibleMainItems;
@@ -159,6 +184,8 @@ public class ItemBuilder {
             case DIAMOND_AXE:
             case GOLD_PICKAXE:
             case GOLD_AXE:
+            case FISHING_ROD:
+            case CARROT_STICK:
                 return 3;
             case IRON_SWORD:
             case WOOD_SWORD:
@@ -170,6 +197,7 @@ public class ItemBuilder {
             case IRON_HOE:
             case DIAMOND_HOE:
             case GOLD_HOE:
+            case SHEARS:
                 return 2;
             default:
                 return 1;
