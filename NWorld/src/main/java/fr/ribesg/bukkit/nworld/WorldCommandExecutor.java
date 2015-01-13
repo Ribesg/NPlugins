@@ -58,14 +58,14 @@ public class WorldCommandExecutor implements CommandExecutor {
             }
         } else if ("spawn".equals(command.getName())) {
             if (Perms.hasSpawn(sender)) {
-                return this.cmdSpawn(sender);
+                return this.cmdSpawn(sender, args);
             } else {
                 this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
             }
         } else if ("setspawn".equals(command.getName())) {
             if (Perms.hasSetSpawn(sender)) {
-                return this.cmdSetSpawn(sender);
+                return this.cmdSetSpawn(sender, args);
             } else {
                 this.plugin.sendMessage(sender, MessageId.noPermissionForCommand);
                 return true;
@@ -565,12 +565,25 @@ public class WorldCommandExecutor implements CommandExecutor {
         }
     }
 
-    private boolean cmdSpawn(final CommandSender sender) {
+    private boolean cmdSpawn(final CommandSender sender, final String[] args) {
         if (!(sender instanceof Player)) {
             this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
             return true;
         }
         final Player player = (Player)sender;
+        if (args.length > 0 && "first".equalsIgnoreCase(args[0])) {
+            if (Perms.hasFirstSpawn(sender)) {
+                final Location loc = this.plugin.getPluginConfig().getFirstSpawnLocation().toBukkitLocation();
+                if (loc == null) {
+                    this.plugin.error("First spawn location is in an unknown world, cancelling teleportation.");
+                    this.plugin.sendMessage(player, MessageId.world_invalidFirstSpawnPoint);
+                } else {
+                    player.teleport(loc);
+                    this.plugin.sendMessage(player, MessageId.world_teleportingToFirstSpawn);
+                }
+                return true;
+            }
+        }
         final int spawnBehaviour = this.plugin.getPluginConfig().getSpawnCommandBehaviour();
         final String worldName;
         if (spawnBehaviour == 0) {
@@ -584,12 +597,20 @@ public class WorldCommandExecutor implements CommandExecutor {
         return true;
     }
 
-    private boolean cmdSetSpawn(final CommandSender sender) {
+    private boolean cmdSetSpawn(final CommandSender sender, final String[] args) {
         if (!(sender instanceof Player)) {
             this.plugin.sendMessage(sender, MessageId.cmdOnlyAvailableForPlayers);
             return true;
         }
         final Player player = (Player)sender;
+        if (args.length > 0 && "first".equalsIgnoreCase(args[0])) {
+            if (Perms.hasSetFirstSpawn(sender)) {
+                final NLocation loc = new NLocation(player.getLocation());
+                this.plugin.getPluginConfig().setFirstSpawnLocation(loc);
+                this.plugin.sendMessage(player, MessageId.world_firstSpawnPointChanged);
+                return true;
+            }
+        }
         final GeneralWorld world = this.plugin.getWorlds().get(player.getWorld().getName());
         world.setSpawnLocation(player.getLocation());
         this.plugin.sendMessage(player, MessageId.world_settingSpawnPoint, player.getWorld().getName());

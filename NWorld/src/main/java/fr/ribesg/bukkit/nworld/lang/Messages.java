@@ -73,6 +73,9 @@ public class Messages extends AbstractMessages {
         // Command - SPAWN
         newMessages.add(new Message(MessageId.world_teleportingToSpawn, "&aTeleportation to the spawn point...", true));
         newMessages.add(new Message(MessageId.world_settingSpawnPoint, "&aSpawn point of world %worldName% set", true, "%worldName%"));
+        newMessages.add(new Message(MessageId.world_invalidFirstSpawnPoint, "&cError: the first spawn point is in an unknown/unloaded world", true));
+        newMessages.add(new Message(MessageId.world_teleportingToFirstSpawn, "&aTeleportation to the first spawn point...", true));
+        newMessages.add(new Message(MessageId.world_firstSpawnPointChanged, "&aFirst spawn point set", true));
 
         // Command - WARP
         newMessages.add(new Message(MessageId.world_availableWarps, "&aList of existing warps:", true));

@@ -179,6 +179,9 @@ public enum MessageId {
 
     world_teleportingToSpawn,
     world_settingSpawnPoint,
+    world_invalidFirstSpawnPoint,
+    world_teleportingToFirstSpawn,
+    world_firstSpawnPointChanged,
 
     world_teleportedToWarp,
 

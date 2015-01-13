@@ -46,6 +46,9 @@ public class Config extends AbstractConfig<NWorld> {
     private int broadcastOnWorldLoad;
     private int broadcastOnWorldUnload;
 
+    // Firstspawn
+    private NLocation firstSpawnLocation;
+
     // Worlds
     private final Worlds worlds;
 
@@ -66,6 +69,7 @@ public class Config extends AbstractConfig<NWorld> {
         this.broadcastOnWorldCreate = 0;
         this.broadcastOnWorldLoad = 0;
         this.broadcastOnWorldUnload = 0;
+        this.firstSpawnLocation = new NLocation(Bukkit.getWorlds().get(0).getSpawnLocation());
     }
 
     @Override
@@ -115,6 +119,16 @@ public class Config extends AbstractConfig<NWorld> {
         if (this.broadcastOnWorldUnload < 0 || this.broadcastOnWorldUnload > 1) {
             this.wrongValue("config.yml", "broadcastOnWorldUnload", this.broadcastOnWorldUnload, 0);
             this.setBroadcastOnWorldUnload(0);
+        }
+
+        // firstSpawnLocation. Default: main world default spawn location
+        // Possible values: NLocation string representation
+        final NLocation defaultLocation = this.firstSpawnLocation;
+        final String defaultLocationString = defaultLocation.toStringPlus();
+        this.setFirstSpawnLocation(NLocation.toNLocation(config.getString("firstSpawnLocation", defaultLocationString)));
+        if (this.firstSpawnLocation == null) {
+            this.wrongValue("config.yml", "firstSpawnLocation", this.firstSpawnLocation, defaultLocation);
+            this.firstSpawnLocation = defaultLocation;
         }
 
         // ############
@@ -587,6 +601,11 @@ public class Config extends AbstractConfig<NWorld> {
         content.append("# Default : 0\n");
         content.append("broadcastOnWorldUnload: " + this.broadcastOnWorldUnload + "\n\n");
 
+        // First spawn location
+        content.append("# Player are teleported here the first time they join the server.\n");
+        content.append("# Please don't change this value here; use the \"/setspawn first\" command instead\n");
+        content.append("firstSpawnLocation: " + this.firstSpawnLocation.toStringPlus() + "\n\n");
+
         // ############
         // ## Worlds ##
         // ############
@@ -744,6 +763,14 @@ public class Config extends AbstractConfig<NWorld> {
 
     private void setBroadcastOnWorldUnload(final int broadcastOnWorldUnload) {
         this.broadcastOnWorldUnload = broadcastOnWorldUnload;
+    }
+
+    public NLocation getFirstSpawnLocation() {
+        return this.firstSpawnLocation;
+    }
+
+    public void setFirstSpawnLocation(final NLocation firstSpawnLocation) {
+        this.firstSpawnLocation = firstSpawnLocation;
     }
 
     // Getters for worlds and warps objects

@@ -22,11 +22,11 @@ commands:
   spawn:
     description: Spawn command
     usage: |
-      /<command>
+      /<command> ["first"]
   setspawn:
     description: Set the spawn
     usage: |
-      /<command>
+      /<command> ["first"]
   warp:
     description: Warp to a point
     usage: |
@@ -85,6 +85,13 @@ permissions:
         default: false
       nworld.cmd.setspawn:
         default: false
+        children:
+          nworld.cmd.spawn: true
+          nworld.cmd.setfirstspawn:
+            default: false
+            children:
+              nworld.cmd.firstspawn:
+                default: false
       nworld.cmd.warp.all:
         default: false
         children:

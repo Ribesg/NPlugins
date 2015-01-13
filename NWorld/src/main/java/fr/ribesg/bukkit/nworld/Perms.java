@@ -30,6 +30,8 @@ public class Perms {
     private static final String CMD_RELOAD          = "nworld.cmd.reload";
     private static final String CMD_SPAWN           = "nworld.cmd.spawn";
     private static final String CMD_SETSPAWN        = "nworld.cmd.setspawn";
+    private static final String CMD_FIRSTSPAWN      = "nworld.cmd.firstspawn";
+    private static final String CMD_SETFIRSTSPAWN   = "nworld.cmd.setfirstspawn";
     private static final String CMD_WARP            = "nworld.cmd.warp";
     private static final String CMD_WARP_ALL        = "nworld.cmd.warp.all";
     private static final String CMD_WARP_SETHIDDEN  = "nworld.cmd.warp.sethidden";
@@ -91,6 +93,14 @@ public class Perms {
 
     public static boolean hasSetSpawn(final CommandSender permissible) {
         return has(permissible, CMD_SETSPAWN);
+    }
+
+    public static boolean hasFirstSpawn(final CommandSender permissible) {
+        return has(permissible, CMD_FIRSTSPAWN);
+    }
+
+    public static boolean hasSetFirstSpawn(final CommandSender permissible) {
+        return has(permissible, CMD_SETFIRSTSPAWN);
     }
 
     public static boolean hasWarp(final CommandSender permissible) {

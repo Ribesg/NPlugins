@@ -27,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -64,6 +65,16 @@ public class NListener implements Listener {
 
     public NListener(final NWorld instance) {
         this.plugin = instance;
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPlayerJoin(final PlayerJoinEvent event) {
+        if (!event.getPlayer().hasPlayedBefore()) {
+            final Location loc = this.plugin.getPluginConfig().getFirstSpawnLocation().toBukkitLocation();
+            if (loc != null) {
+                event.getPlayer().teleport(loc);
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
