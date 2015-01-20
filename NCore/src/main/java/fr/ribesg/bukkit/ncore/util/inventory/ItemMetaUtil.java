@@ -167,21 +167,21 @@ public class ItemMetaUtil {
         final ItemMeta meta = is.getItemMeta();
 
         if (meta instanceof BookMeta) {
-            saveBookMetaToConfigSection(itemSection, (BookMeta)meta);
+            saveBookMetaToConfigSection(createAndGetSection(itemSection, "meta"), (BookMeta)meta);
         } else if (meta instanceof EnchantmentStorageMeta) {
-            saveEnchantmentStorageMetaToConfigSection(itemSection, (EnchantmentStorageMeta)meta);
+            saveEnchantmentStorageMetaToConfigSection(createAndGetSection(itemSection, "meta"), (EnchantmentStorageMeta)meta);
         } else if (meta instanceof FireworkEffectMeta) {
-            saveFireworkEffectMetaToConfigSection(itemSection, (FireworkEffectMeta)meta);
+            saveFireworkEffectMetaToConfigSection(createAndGetSection(itemSection, "meta"), (FireworkEffectMeta)meta);
         } else if (meta instanceof FireworkMeta) {
-            saveFireworkMetaToConfigSection(itemSection, (FireworkMeta)meta);
+            saveFireworkMetaToConfigSection(createAndGetSection(itemSection, "meta"), (FireworkMeta)meta);
         } else if (meta instanceof LeatherArmorMeta) {
-            saveLeatherArmorMetaToConfigSection(itemSection, (LeatherArmorMeta)meta);
+            saveLeatherArmorMetaToConfigSection(createAndGetSection(itemSection, "meta"), (LeatherArmorMeta)meta);
         } else if (meta instanceof MapMeta) {
-            saveMapMetaToConfigSection(itemSection, (MapMeta)meta);
+            saveMapMetaToConfigSection(createAndGetSection(itemSection, "meta"), (MapMeta)meta);
         } else if (meta instanceof PotionMeta) {
-            savePotionMetaToConfigSection(itemSection, (PotionMeta)meta);
+            savePotionMetaToConfigSection(createAndGetSection(itemSection, "meta"), (PotionMeta)meta);
         } else if (meta instanceof SkullMeta) {
-            saveSkullMetaToConfigSection(itemSection, (SkullMeta)meta);
+            saveSkullMetaToConfigSection(createAndGetSection(itemSection, "meta"), (SkullMeta)meta);
         }
 
         if (meta.hasDisplayName()) {
