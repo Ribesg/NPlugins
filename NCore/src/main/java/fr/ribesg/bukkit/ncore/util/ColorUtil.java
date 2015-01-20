@@ -9,6 +9,7 @@
 
 package fr.ribesg.bukkit.ncore.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -89,10 +90,11 @@ public class ColorUtil {
      * @return the modified Strings
      */
     public static String[] decolorize(final String[] toDecolorize) {
+        final String[] result = new String[toDecolorize.length];
         for (int i = 0; i < toDecolorize.length; i++) {
-            toDecolorize[i] = decolorize(toDecolorize[i]);
+            result[i] = decolorize(toDecolorize[i]);
         }
-        return toDecolorize;
+        return result;
     }
 
     /**
@@ -103,10 +105,11 @@ public class ColorUtil {
      * @return the modified Strings
      */
     public static List<String> decolorize(final List<String> toDecolorize) {
-        for (int i = 0; i < toDecolorize.size(); i++) {
-            toDecolorize.set(i, decolorize(toDecolorize.get(i)));
+        final List<String> result = new ArrayList<>(toDecolorize.size());
+        for (String s : toDecolorize) {
+            result.add(decolorize(s));
         }
-        return toDecolorize;
+        return result;
     }
 
     /**
