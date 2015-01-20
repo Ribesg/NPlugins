@@ -20,27 +20,27 @@ permissions:
 
   ntheendagain.admin:
     description: NTheEndAgain plugin admin
-    default: false
+    default: op
     children:
       ntheendagain.user: true
       ntheendagain.cmd.reload:
-        default: false
+        default: op
       ntheendagain.cmd.regen:
-        default: false
+        default: op
       ntheendagain.cmd.respawn:
-        default: false
+        default: op
       ntheendagain.cmd.chunkprotect:
-        default: false
+        default: op
       ntheendagain.cmd.chunkunprotect:
-        default: false
+        default: op
 
   ntheendagain.user:
     description: NTheEndAgain plugin user
-    default: false
+    default: op
     children:
       ntheendagain.cmd.help:
-        default: false
+        default: op
       ntheendagain.cmd.nb:
-        default: false
+        default: op
       ntheendagain.cmd.chunkinfo:
-        default: false
+        default: op

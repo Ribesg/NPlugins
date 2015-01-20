@@ -119,79 +119,79 @@ permissions:
 
   ngeneral.admin:
     description: NGeneral plugin admin
-    default: false
+    default: op
     children:
       ngeneral.user: true
 
       ngeneral.cmd.reload:
-         default: false
+         default: op
       ngeneral.cmd.god:
-         default: false
+         default: op
       ngeneral.cmd.god.others:
-         default: false
+         default: op
       ngeneral.cmd.fly:
-         default: false
+         default: op
       ngeneral.cmd.fly.others:
-         default: false
+         default: op
       ngeneral.cmd.flyspeed:
-         default: false
+         default: op
       ngeneral.cmd.flyspeed.others:
-         default: false
+         default: op
       ngeneral.cmd.walkspeed:
-         default: false
+         default: op
       ngeneral.cmd.walkspeed.others:
-         default: false
+         default: op
       ngeneral.cmd.time:
-         default: false
+         default: op
       ngeneral.cmd.weather:
-         default: false
+         default: op
       ngeneral.cmd.repair:
-         default: false
+         default: op
       ngeneral.cmd.nightvision:
-         default: false
+         default: op
       ngeneral.cmd.itemnetwork.all:
-         default: false
+         default: op
       ngeneral.cmd.spy:
-         default: false
+         default: op
       ngeneral.cmd.tp:
-         default: false
+         default: op
       ngeneral.cmd.tppos:
-         default: false
+         default: op
       ngeneral.cmd.tphere:
-         default: false
+         default: op
       ngeneral.cmd.tpthere:
-         default: false
+         default: op
       ngeneral.cmd.tpworld:
-         default: false
+         default: op
       ngeneral.cmd.tpback:
-         default: false
+         default: op
       ngeneral.cmd.heal:
-         default: false
+         default: op
       ngeneral.cmd.health:
-         default: false
+         default: op
       ngeneral.cmd.feed:
-         default: false
+         default: op
       ngeneral.cmd.food:
-         default: false
+         default: op
 
       ngeneral.protectionsign.bypass:
-         default: false
+         default: op
       ngeneral.protectionsign.break:
-         default: false
+         default: op
 
   ngeneral.user:
     description: NGeneral plugin admin
-    default: false
+    default: op
     children:
 
       ngeneral.cmd.afk:
-         default: false
+         default: op
       ngeneral.cmd.busy:
-         default: false
+         default: op
       ngeneral.cmd.itemnetwork:
-         default: false
+         default: op
 
       ngeneral.protectionsign:
-         default: false
+         default: op
       ngeneral.signcolors:
-         default: false
+         default: op

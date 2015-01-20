@@ -22,13 +22,13 @@ permissions:
 
   nenchantingegg.admin:
     description: NEnchantingEgg plugin admin
-    default: false
+    default: op
     children:
       nenchantingegg.user: true
       nenchantingegg.cmd.reload:
-        default: false
-  
+        default: op
+
   nenchantingegg.user:
     description: NEnchantingEgg plugin user - useless for now
-    default: false
+    default: op
     children: []

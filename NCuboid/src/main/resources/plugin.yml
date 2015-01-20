@@ -21,109 +21,109 @@ permissions:
 
   ncuboid.admin:
     description: NCuboid plugin admin
-    default: false
+    default: op
     children:
       ncuboid.user: true
 
       ncuboid.seeinvisible:
-        default: false
+        default: op
       ncuboid.cmd.jail:
-        default: false
+        default: op
       ncuboid.cmd.reload:
-        default: false
-      
+        default: op
+
       ncuboid.flag.booster:
-         default: false
+         default: op
       ncuboid.flag.chat:
-         default: false
+         default: op
       ncuboid.flag.closed:
-         default: false
+         default: op
       ncuboid.flag.creative:
-         default: false
+         default: op
       ncuboid.flag.explosionblock:
-         default: false
+         default: op
       ncuboid.flag.explosionitem:
-         default: false
+         default: op
       ncuboid.flag.explosionplayer:
-         default: false
+         default: op
       ncuboid.flag.feed:
-         default: false
+         default: op
       ncuboid.flag.god:
-         default: false
+         default: op
       ncuboid.flag.heal:
-         default: false
+         default: op
       ncuboid.flag.hidden:
-         default: false
+         default: op
       ncuboid.flag.invisible:
-         default: false
+         default: op
       ncuboid.flag.jail:
-         default: false
+         default: op
       ncuboid.flag.mob:
-         default: false
+         default: op
       ncuboid.flag.pass:
-         default: false
+         default: op
       ncuboid.flag.permanent:
-         default: false
+         default: op
       ncuboid.flag.pvphide:
-         default: false
+         default: op
       ncuboid.flag.snow:
-         default: false
+         default: op
       ncuboid.flag.teleport:
-         default: false
+         default: op
       ncuboid.flag.warpgate:
-         default: false
+         default: op
 
       ncuboid.attribute.explosionblockdrop:
-         default: false
+         default: op
       ncuboid.attribute.externalpoint:
-         default: false
+         default: op
       ncuboid.attribute.internalpoint:
-         default: false
+         default: op
       ncuboid.attribute.respawnpoint:
-         default: false
+         default: op
 
   ncuboid.user:
     description: NCuboid plugin user
-    default: false
+    default: op
     children:
-        
+
       ncuboid.cmd.admin:
-        default: false
+        default: op
       ncuboid.cmd.attribute:
-        default: false
+        default: op
       ncuboid.cmd.create:
-        default: false
+        default: op
       ncuboid.cmd.cuboid:
-        default: false
+        default: op
       ncuboid.cmd.delete:
-        default: false
+        default: op
       ncuboid.cmd.flag:
-        default: false
+        default: op
       ncuboid.cmd.group:
-        default: false
+        default: op
       ncuboid.cmd.user:
-        default: false
+        default: op
 
       ncuboid.flag.build:
-         default: false
+         default: op
       ncuboid.flag.chest:
-         default: false
+         default: op
       ncuboid.flag.drop:
-         default: false
+         default: op
       ncuboid.flag.endermangrief:
-         default: false
+         default: op
       ncuboid.flag.farm:
-         default: false
+         default: op
       ncuboid.flag.fire:
-         default: false
+         default: op
       ncuboid.flag.pickup:
-         default: false
+         default: op
       ncuboid.flag.pvp:
-         default: false
+         default: op
       ncuboid.flag.use:
-         default: false
+         default: op
 
       ncuboid.attribute.farewellmessage:
-         default: false
+         default: op
       ncuboid.attribute.welcomemessage:
-         default: false
+         default: op

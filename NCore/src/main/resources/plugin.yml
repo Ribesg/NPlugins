@@ -33,7 +33,7 @@ permissions:
 
   nplugins.admin:
     description: Global NPlugins suite admin
-    default: false
+    default: op
     children:
       nplugins.user: true
       ncore.admin: true
@@ -48,7 +48,7 @@ permissions:
 
   nplugins.user:
     description: Global NPlugins suite user
-    default: false
+    default: op
     children:
       ncore.user: true
       ncuboid.user: true
@@ -66,21 +66,21 @@ permissions:
 
   ncore.admin:
     description: NCore plugin admin
-    default: false
+    default: op
     children:
       ncore.user: true
       ncore.cmd.debug:
-        default: false
+        default: op
       ncore.cmd.info.admin:
-        default: false
+        default: op
         children: []
           # TODO Children permissions for each thing you can /info
       ncore.cmd.updater:
-        default: false
+        default: op
       ncore.updater.notice:
-        default: false
+        default: op
 
   ncore.user:
     description: NCore plugin user - useless for now
-    default: false
+    default: op
     children: []

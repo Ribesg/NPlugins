@@ -33,25 +33,25 @@ permissions:
 
   ntalk.admin:
     description: NTalk plugin admin
-    default: false
+    default: op
     children:
       ntalk.user: true
       ntalk.color:
-        default: false
+        default: op
       ntalk.cmd.reload:
-        default: false
+        default: op
       ntalk.cmd.nick:
-        default: false
+        default: op
       ntalk.cmd.spy:
-        default: false
+        default: op
       ntalk.seenicks:
-        default: false
+        default: op
 
   ntalk.user:
     description: NTalk plugin user
-    default: false
+    default: op
     children:
       ntalk.cmd.pm:
-        default: false
+        default: op
       ntalk.cmd.pr:
-        default: false
+        default: op

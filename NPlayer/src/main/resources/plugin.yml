@@ -85,73 +85,73 @@ permissions:
 
   nplayer.admin:
     description: NPlayer plugin admin
-    default: false
+    default: op
     children:
       nplayer.user: true
       nplayer.cmd.reload:
-        default: false
+        default: op
       nplayer.cmd.forcelogin:
-        default: false
+        default: op
       nplayer.cmd.info.admin:
-        default: false
+        default: op
         children:
           nplayer.cmd.info: true
       nplayer.cmd.home.others:
-        default: false
+        default: op
         children:
           nplayer.cmd.home: true
       nplayer.cmd.sethome.others:
-        default: false
+        default: op
         children:
           nplayer.cmd.sethome: true
       nplayer.cmd.ban:
-        default: false
+        default: op
       nplayer.cmd.ban.permanent:
-        default: false
+        default: op
         children:
           nplayer.cmd.ban: true
       nplayer.cmd.unban:
-        default: false
+        default: op
       nplayer.cmd.banip:
-        default: false
+        default: op
       nplayer.cmd.banip.permanent:
-        default: false
+        default: op
         children:
           nplayer.cmd.banip: true
       nplayer.cmd.unbanip:
-        default: false
+        default: op
       nplayer.cmd.jail:
-        default: false
+        default: op
       nplayer.cmd.jail.permanent:
-        default: false
+        default: op
         children:
           nplayer.cmd.jail: true
       nplayer.cmd.unjail:
-        default: false
+        default: op
       nplayer.cmd.mute:
-        default: false
+        default: op
       nplayer.cmd.mute.permanent:
-        default: false
+        default: op
         children:
           nplayer.cmd.mute: true
       nplayer.cmd.unmute:
-        default: false
+        default: op
       nplayer.cmd.kick:
-        default: false
+        default: op
 
   nplayer.user:
     description: NPlayer plugin user
-    default: false
+    default: op
     children:
       nplayer.cmd.login:
-        default: false
+        default: op
       nplayer.cmd.logout:
-        default: false
+        default: op
       nplayer.cmd.register:
-        default: false
+        default: op
       nplayer.cmd.info:
-        default: false
+        default: op
       nplayer.cmd.home:
-        default: false
+        default: op
       nplayer.cmd.sethome:
-        default: false
+        default: op

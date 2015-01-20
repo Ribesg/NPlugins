@@ -46,76 +46,76 @@ permissions:
 
   nworld.admin:
     description: NWorld plugin admin
-    default: false
+    default: op
     children:
       nworld.user: true
       nworld.cmd.world.all:
-        default: false
+        default: op
         children:
           nworld.cmd.world: true
       nworld.cmd.world.create:
-        default: false
+        default: op
         children:
           nworld.cmd.world: true
       nworld.cmd.world.load:
-        default: false
+        default: op
         children:
           nworld.cmd.world: true
       nworld.cmd.world.unload:
-        default: false
+        default: op
         children:
           nworld.cmd.world: true
       nworld.cmd.world.sethidden:
-        default: false
+        default: op
         children:
           nworld.cmd.world: true
       nworld.cmd.world.setperm:
-        default: false
+        default: op
         children:
           nworld.cmd.world: true
       nworld.cmd.world.setnether:
-        default: false
+        default: op
         children:
           nworld.cmd.world: true
       nworld.cmd.world.setend:
-        default: false
+        default: op
         children:
           nworld.cmd.world: true
       nworld.cmd.reload:
-        default: false
+        default: op
       nworld.cmd.setspawn:
-        default: false
+        default: op
         children:
           nworld.cmd.spawn: true
           nworld.cmd.setfirstspawn:
-            default: false
+            default: op
             children:
               nworld.cmd.firstspawn:
-                default: false
+                default: op
       nworld.cmd.warp.all:
-        default: false
+        default: op
         children:
           nworld.cmd.warp: true
       nworld.cmd.warp.sethidden:
-        default: false
+        default: op
         children:
           nworld.cmd.warp: true
       nworld.cmd.warp.setperm:
-        default: false
+        default: op
         children:
           nworld.cmd.warp: true
       nworld.cmd.setwarp:
-        default: false
+        default: op
       nworld.cmd.delwarp:
-        default: false
+        default: op
 
   nworld.user:
     description: NWorld plugin user
-    default: false
+    default: op
     children:
       nworld.cmd.world:
-        default: false
+        default: op
       nworld.cmd.spawn:
-        default: false
+        default: op
       nworld.cmd.warp:
-        default: false
+        default: op

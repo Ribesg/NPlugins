@@ -26,23 +26,23 @@ permissions:
 
   npermissions.admin:
     description: NPermissions plugin admin
-    default: false
+    default: op
     children:
       npermissions.user: true
       npermissions.cmd.reload:
-        default: false
+        default: op
       npermissions.cmd.reload.messages:
-        default: false
+        default: op
         children:
           npermissions.cmd.reload: true
       npermissions.cmd.reload.permissions:
-        default: false
+        default: op
         children:
           npermissions.cmd.reload: true
       npermissions.cmd.setgroup:
-        default: false
-  
+        default: op
+
   npermissions.user:
     description: NPermissions plugin user - useless for now
-    default: false
+    default: op
     children: []
