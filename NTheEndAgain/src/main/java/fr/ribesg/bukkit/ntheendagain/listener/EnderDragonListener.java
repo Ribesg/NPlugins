@@ -413,7 +413,7 @@ public class EnderDragonListener implements Listener {
                 } else if (handler.getNumberOfAliveEnderDragons() == 0) {
                     if (config.getRespawnType() == 2) {
                         handler.getRespawnHandler().respawnLater();
-                    } else if (config.getRespawnType() == 6) {
+                    }/* else if (config.getRespawnType() == 6) {
                         config.setNextRespawnTaskTime(System.currentTimeMillis() + config.getRandomRespawnTimer() * 1000);
                         handler.getTasks().add(Bukkit.getScheduler().runTaskLater(this.plugin, new BukkitRunnable() {
 
@@ -422,7 +422,7 @@ public class EnderDragonListener implements Listener {
                                 handler.getRespawnHandler().respawn();
                             }
                         }, config.getNextRespawnTaskTime() / 1000 * 20));
-                    }
+                    }*/
                 }
             }
         }

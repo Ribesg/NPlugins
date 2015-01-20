@@ -290,7 +290,7 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         }
 
         this.setRespawnType(config.getInt("respawnType", DEFAULT_respawnType));
-        if (!this.match(this.regenType, 0, 6)) {
+        if (!this.match(this.regenType, 0, 5)) {
             this.wrongValue(fileName, "respawnType", this.respawnType, DEFAULT_respawnType);
             this.setRespawnType(DEFAULT_respawnType);
         }
@@ -592,7 +592,8 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         content.append("#       3: On server start.\n");
         content.append("#       4: Periodic - From load time. Respawn every X seconds after boot/load.\n");
         content.append("#       5: Periodic - Persistent. Respawn every X seconds, persistent through reboots/reloads\n");
-        content.append("#       6: NEW - Respawn every X seconds after the last Dragon alive's death, persistent through reboots/reloads\n");
+        content.append("#\n");
+        content.append("# IMPORTANT NOTE: Regen type 6 is buggy and was removed. Sorry for this, it will be possible again in a future version (a complete rewrite).\n");
         content.append("#\n");
         content.append("respawnType: " + this.respawnType + "\n\n");
 
