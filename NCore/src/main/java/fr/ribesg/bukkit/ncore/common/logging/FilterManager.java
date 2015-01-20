@@ -24,7 +24,7 @@ public abstract class FilterManager {
      * @return a FilterManager
      */
     public static FilterManager create() {
-        if (FilterManager.manager != null) {
+        if (FilterManager.manager == null) {
             try {
                 Class.forName("org.apache.logging.log4j.LogManager");
                 // No exception? Log4j!
