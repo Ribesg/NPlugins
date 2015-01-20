@@ -9,8 +9,9 @@
 
 package fr.ribesg.bukkit.nplayer.user;
 
+import fr.ribesg.bukkit.ncore.common.collection.bimap.SortedBiMap;
+import fr.ribesg.bukkit.ncore.common.collection.bimap.TreeBiMap;
 import fr.ribesg.bukkit.ncore.event.PlayerGridMoveEvent;
-import fr.ribesg.bukkit.ncore.event.PlayerJoinedEvent;
 import fr.ribesg.bukkit.ncore.lang.MessageId;
 import fr.ribesg.bukkit.ncore.util.TimeUtil;
 import fr.ribesg.bukkit.nplayer.NPlayer;
@@ -41,51 +42,73 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class LoggedOutUserHandler implements Listener {
 
-    private final NPlayer             plugin;
-    private final Map<UUID, Location> loggedOutPlayers;
+    private final NPlayer                 plugin;
+    private final Map<UUID, Location>     loggedOutPlayers;
+    private final SortedBiMap<Long, UUID> loggedOutTime;
 
     public LoggedOutUserHandler(final NPlayer plugin) {
         this.plugin = plugin;
         this.loggedOutPlayers = new HashMap<>();
+        this.loggedOutTime = new TreeBiMap<>();
 
         Bukkit.getScheduler().runTaskTimer(plugin, new BukkitRunnable() {
 
             @Override
             public void run() {
-                fr.ribesg.bukkit.nplayer.user.LoggedOutUserHandler.this.poisonLoggedOutPlayers();
+                LoggedOutUserHandler.this.poisonLoggedOutPlayers();
             }
         }, 20 * 5, 20 * 5);
+
+        Bukkit.getScheduler().runTaskTimer(plugin, new BukkitRunnable() {
+            @Override
+            public void run() {
+                LoggedOutUserHandler.this.timeoutLoggedOutPlayers();
+            }
+        }, 20, 20);
     }
 
     public void notifyConnect(final Player player) {
         this.loggedOutPlayers.put(player.getUniqueId(), player.getLocation());
+        this.loggedOutTime.put(System.currentTimeMillis(), player.getUniqueId());
         this.lockPlayer(player);
     }
 
     public void notifyDisconnect(final Player player) {
         this.unlockPlayer(player);
         this.loggedOutPlayers.remove(player.getUniqueId());
+        this.loggedOutTime.removeValue(player.getUniqueId());
     }
 
     public void notifyLogin(final Player player) {
         this.loggedOutPlayers.remove(player.getUniqueId());
+        this.loggedOutTime.removeValue(player.getUniqueId());
         this.unlockPlayer(player);
     }
 
     public void notifyLogout(final Player player) {
         this.loggedOutPlayers.put(player.getUniqueId(), player.getLocation());
+        this.loggedOutTime.put(System.currentTimeMillis(), player.getUniqueId());
         this.lockPlayer(player);
     }
 
     public void poisonLoggedOutPlayers() {
         for (final UUID id : this.loggedOutPlayers.keySet()) {
             this.lockPlayer(Bukkit.getPlayer(id));
+        }
+    }
+
+    public void timeoutLoggedOutPlayers() {
+        Long time;
+        while ((time = this.loggedOutTime.firstKey()) != null && time < System.currentTimeMillis() - 1000 * this.plugin.getPluginConfig().getMaximumLoginTime()) {
+            final UUID id = this.loggedOutTime.removeFirstKey();
+            final Player player = Bukkit.getPlayer(id);
+            player.kickPlayer(this.plugin.getMessages().get(MessageId.player_tookTooLongToLogin)[0]);
+            this.notifyDisconnect(player);
         }
     }
 

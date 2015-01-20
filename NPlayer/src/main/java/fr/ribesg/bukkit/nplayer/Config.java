@@ -18,6 +18,7 @@ public class Config extends AbstractConfig<NPlayer> {
 
     private int authenticationMode;
     private int maximumLoginAttempts;
+    private int maximumLoginTime;
     private int tooManyAttemptsPunishment;
     private int tooManyAttemptsPunishmentDuration;
 
@@ -25,6 +26,7 @@ public class Config extends AbstractConfig<NPlayer> {
         super(instance);
         this.setAuthenticationMode(1);
         this.setMaximumLoginAttempts(3);
+        this.setMaximumLoginTime(120);
         this.setTooManyAttemptsPunishment(1);
         this.setTooManyAttemptsPunishmentDuration(300);
     }
@@ -46,6 +48,14 @@ public class Config extends AbstractConfig<NPlayer> {
         if (!this.match(this.maximumLoginAttempts, 1, Integer.MAX_VALUE)) {
             this.wrongValue("config.yml", "maximumLoginAttempts", this.maximumLoginAttempts, 3);
             this.setMaximumLoginAttempts(3);
+        }
+
+        // maximumLoginTime. Default; 120
+        // Possible values: positive integers
+        this.setMaximumLoginTime(config.getInt("maximumLoginTime", 120));
+        if (!this.match(this.maximumLoginTime, 0, Integer.MAX_VALUE)) {
+            this.wrongValue("config.yml", "maximumLoginTime", this.maximumLoginTime, 120);
+            this.setMaximumLoginTime(120);
         }
 
         // tooManyAttemptsPunishment. Default: 1.
@@ -94,6 +104,10 @@ public class Config extends AbstractConfig<NPlayer> {
         content.append("# Maximum login attempts before punishment. Possible values: Positive integers\n");
         content.append("# Default : 3\n");
         content.append("maximumLoginAttempts: " + this.maximumLoginAttempts + "\n\n");
+
+        content.append("# Maximum login time in seconds before being kicked. Possible values: Positive integers, 0 to disable\n");
+        content.append("# Default : 120\n");
+        content.append("maximumLoginTime: " + this.maximumLoginTime + "\n\n");
 
         // Too Many Attempts Punishment
         content.append("# How do we punish people after too many attempts? Possible values: 0, 1, 2\n");
@@ -152,6 +166,14 @@ public class Config extends AbstractConfig<NPlayer> {
 
     public void setMaximumLoginAttempts(final int maximumLoginAttempts) {
         this.maximumLoginAttempts = maximumLoginAttempts;
+    }
+
+    public int getMaximumLoginTime() {
+        return this.maximumLoginTime;
+    }
+
+    public void setMaximumLoginTime(final int maximumLoginTime) {
+        this.maximumLoginTime = maximumLoginTime;
     }
 
     public int getTooManyAttemptsPunishment() {

@@ -296,6 +296,7 @@ public enum MessageId {
     player_notJailed,
 
     player_standardKickMessage,
+    player_tookTooLongToLogin,
 
     player_loginAttemptsKickMessage,
     player_loginAttemptsBroadcastedKickMessage,
