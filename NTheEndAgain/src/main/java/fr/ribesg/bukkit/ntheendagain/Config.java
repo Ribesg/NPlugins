@@ -20,11 +20,27 @@ import fr.ribesg.bukkit.ncore.util.inventory.ItemStackUtil;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 public class Config extends AbstractConfig<NTheEndAgain> {
 
@@ -103,6 +119,89 @@ public class Config extends AbstractConfig<NTheEndAgain> {
     // Drop Table
     private static final int DEFAULT_dropTableHandling = 1;
     private int dropTableHandling;
+
+    private static final PairList<ItemStack, Float> EXAMPLE_dropTable;
+
+    static {
+        EXAMPLE_dropTable = new PairList<>();
+
+        // Enchanted Diamond sword with title and lore
+        final ItemStack is1 = new ItemStack(Material.DIAMOND_SWORD);
+        is1.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 5);
+        is1.addUnsafeEnchantment(Enchantment.KNOCKBACK, 5);
+        final ItemMeta meta1 = is1.getItemMeta();
+        meta1.setDisplayName("The Great Example Sword");
+        meta1.setLore(Arrays.asList("Such sword", "Very diamond", "Wow"));
+        is1.setItemMeta(meta1);
+        EXAMPLE_dropTable.put(is1, 0.1f);
+
+        // Some book
+        final ItemStack is2 = new ItemStack(Material.WRITTEN_BOOK);
+        final BookMeta meta2 = (BookMeta)is2.getItemMeta();
+        meta2.setTitle(ChatColor.GOLD + "The Holy Example Book");
+        meta2.setPages(
+                "Once upon a time, a developer asked himself what he could write in his example book.",
+                "He decided that showing examples of " + ChatColor.BOLD + "format" + ChatColor.RESET + " and " + ChatColor.GREEN + "colors" + ChatColor.RESET + " could be a good idea.",
+                ChatColor.MAGIC + "THE END" + ChatColor.RESET + " (THE END)"
+        );
+        meta2.setAuthor("Ribesg");
+        is2.setItemMeta(meta2);
+        EXAMPLE_dropTable.put(is2, 0.2f);
+
+        // Some enchantment book
+        final ItemStack is3 = new ItemStack(Material.ENCHANTED_BOOK);
+        final EnchantmentStorageMeta meta3 = (EnchantmentStorageMeta)is3.getItemMeta();
+        meta3.setDisplayName("How to be efficient for dummies");
+        meta3.addStoredEnchant(Enchantment.DIG_SPEED, 10, true);
+        is3.setItemMeta(meta3);
+        EXAMPLE_dropTable.put(is3, 0.3f);
+
+        // TODO Firework effect: doesn't have effects!
+        final ItemStack is4 = new ItemStack(Material.FIREWORK_CHARGE);
+        final FireworkEffectMeta meta4 = (FireworkEffectMeta)is4.getItemMeta();
+        meta4.setEffect(FireworkEffect.builder().flicker(true).trail(true).with(Type.BALL_LARGE).withColor(Color.AQUA).withFade(Color.RED).build());
+        is4.setItemMeta(meta4);
+        EXAMPLE_dropTable.put(is4, 0.4f);
+
+        // Firework
+        final ItemStack is5 = new ItemStack(Material.FIREWORK);
+        final FireworkMeta meta5 = (FireworkMeta)is5.getItemMeta();
+        meta5.addEffect(meta4.getEffect());
+        meta5.addEffect(meta4.getEffect());
+        is5.setItemMeta(meta5);
+        EXAMPLE_dropTable.put(is5, 0.5f);
+
+        // Leather Armor
+        final ItemStack is6 = new ItemStack(Material.LEATHER_HELMET);
+        final LeatherArmorMeta meta6 = (LeatherArmorMeta)is6.getItemMeta();
+        meta6.setColor(Color.AQUA);
+        is6.setItemMeta(meta6);
+        EXAMPLE_dropTable.put(is6, 0.6f);
+
+        // TODO Map (check Map id)
+        final ItemStack is7 = new ItemStack(Material.MAP);
+        is7.setDurability((short)42);
+        final MapMeta meta7 = (MapMeta)is7.getItemMeta();
+        meta7.setScaling(true);
+        is7.setItemMeta(meta7);
+        EXAMPLE_dropTable.put(is7, 0.7f);
+
+        // TODO A Regen Potion with Night Vision (doesn't really work)
+        final ItemStack is8 = new Potion(PotionType.REGEN, 2).toItemStack(1);
+        final PotionMeta meta8 = (PotionMeta)is8.getItemMeta();
+        meta8.addCustomEffect(PotionEffectType.NIGHT_VISION.createEffect(300, 2), false);
+        is8.setItemMeta(meta8);
+        EXAMPLE_dropTable.put(is8, 0.8f);
+
+        // A Skull
+        final ItemStack is9 = new ItemStack(Material.SKULL_ITEM);
+        is9.setDurability((short)3);
+        final SkullMeta meta9 = (SkullMeta)is9.getItemMeta();
+        meta9.setDisplayName(ChatColor.AQUA + "Ribesg's Head");
+        meta9.setOwner("Ribesg");
+        is9.setItemMeta(meta9);
+        EXAMPLE_dropTable.put(is9, 0.9f);
+    }
 
     private final PairList<ItemStack, Float> dropTable;
 
@@ -653,17 +752,15 @@ public class Config extends AbstractConfig<NTheEndAgain> {
         try {
             final YamlConfiguration dummyConfig = new YamlConfiguration();
             final ConfigurationSection dummySection = dummyConfig.createSection("dropTable");
-            final ConfigurationSection exampleDropSection = dummySection.createSection("drop1");
-            final ItemStack is = new ItemStack(Material.DIAMOND_SWORD);
-            final ItemMeta meta = is.getItemMeta();
-            meta.setDisplayName("The Great Example Sword");
-            meta.setLore(Arrays.asList("Such sword", "Very diamond", "Wow"));
-            is.setItemMeta(meta);
-            exampleDropSection.set("probability", 0.25);
-            ItemStackUtil.saveToConfigSection(exampleDropSection, "itemStack", is);
+            int i = 0;
+            for (final Pair<ItemStack, Float> p : EXAMPLE_dropTable) {
+                final ConfigurationSection exampleDropSection = dummySection.createSection("drop" + ++i);
+                exampleDropSection.set("probability", p.getValue());
+                ItemStackUtil.saveToConfigSection(exampleDropSection, "itemStack", p.getKey());
+            }
             content.append(StringUtil.prependLines(dummyConfig.saveToString(), "# "));
         } catch (final InventoryUtilException e) {
-            this.plugin.error("Failed to save example ItemStack!", e);
+            this.plugin.error("Failed to save DropTable Example!", e);
         }
         content.append('\n');
         try {

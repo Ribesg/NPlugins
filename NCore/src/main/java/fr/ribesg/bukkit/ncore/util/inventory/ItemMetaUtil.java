@@ -696,7 +696,7 @@ public class ItemMetaUtil {
             final ConfigurationSection potionSection = metaSection.getConfigurationSection("potion");
             for (final String key : potionSection.getKeys(false)) {
                 if (key.startsWith("potionEffect") && potionSection.isConfigurationSection(key)) {
-                    final ConfigurationSection potionEffectSection = metaSection.getConfigurationSection(key);
+                    final ConfigurationSection potionEffectSection = potionSection.getConfigurationSection(key);
                     final PotionEffectType type = PotionEffectType.getByName(potionEffectSection.getString("type"));
                     final int duration = potionEffectSection.getInt("duration");
                     final int amplifier = potionEffectSection.getInt("amplifier");
