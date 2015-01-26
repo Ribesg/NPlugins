@@ -476,7 +476,7 @@ public class ItemMetaUtil {
     }
 
     private static void saveFireworkEffectMetaToConfigSection(final ConfigurationSection metaSection, final FireworkEffectMeta meta) {
-        saveFireworkEffectMetaToConfigSection(metaSection, meta, "FireworkEffect");
+        saveFireworkEffectMetaToConfigSection(metaSection, meta, "fireworkEffect");
     }
 
     private static void saveFireworkEffectMetaToConfigSection(final ConfigurationSection metaSection, final FireworkEffectMeta meta, final String sectionName) {
