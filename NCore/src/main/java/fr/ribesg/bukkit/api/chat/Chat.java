@@ -19,6 +19,7 @@ import org.apache.commons.lang.Validate;
 
 import org.bukkit.Achievement;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
@@ -53,6 +54,63 @@ public final class Chat {
 
     private static final Logger LOGGER = Logger.getLogger("Chat API");
 
+    // ##################################################################### //
+    // ##                        API Entry points                         ## //
+    // ##################################################################### //
+
+    /**
+     * Sends the provided Mojangson String(s) to the provided
+     * {@link Player}.
+     *
+     * @param to         the player to whom we will send the message(s)
+     * @param mojangsons the message(s) to send
+     *
+     * @see Player#sendMessage(String)
+     */
+    public static void sendMessage(final Player to, final String... mojangsons) {
+        Validate.notNull(to, "The 'to' argument should not be null");
+        Validate.notEmpty(mojangsons, "Please provide at least one Mojangson String");
+        Validate.noNullElements(mojangsons, "The 'mojangsons' argument should not contain null values");
+        for (final String mojangson : mojangsons) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + to.getName() + ' ' + mojangson);
+        }
+    }
+
+    /**
+     * Broadcasts the provided Mojangson String(s) to
+     * {@link Player Players} having the provided permission.
+     *
+     * @param permission a permission required to receive the message(s)
+     * @param mojangsons the message(s) to send
+     *
+     * @see Server#broadcast(String, String)
+     */
+    public static void broadcast(final String permission, final String... mojangsons) {
+        Validate.notEmpty(permission, "The 'permission' argument should not be null nor empty");
+        Validate.notEmpty(mojangsons, "Please provide at least one Mojangson String");
+        Validate.noNullElements(mojangsons, "The 'mojangsons' argument should not contain null values");
+        for (final String mojangson : mojangsons) {
+            for (final Player player : Bukkit.getOnlinePlayers()) {
+                if (player.hasPermission(permission)) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + ' ' + mojangson);
+                }
+            }
+        }
+    }
+
+    /**
+     * Broadcasts the provided Mojangson String(s) to
+     * {@link Player Players} having the default
+     * {@link Server#BROADCAST_CHANNEL_USERS} permission.
+     *
+     * @param mojangsons the message(s) to send
+     *
+     * @see Server#broadcastMessage(String)
+     */
+    public static void broadcastMessage(final String... mojangsons) {
+        Chat.broadcast(Server.BROADCAST_CHANNEL_USERS, mojangsons);
+    }
+
     /**
      * Sends the provided {@link Message Message(s)} to the provided
      * {@link Player}.
@@ -66,9 +124,11 @@ public final class Chat {
         Validate.notNull(to, "The 'to' argument should not be null");
         Validate.notEmpty(messages, "Please provide at least one Message");
         Validate.noNullElements(messages, "The 'messages' argument should not contain null values");
-        for (final Message message : messages) {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + to.getName() + ' ' + Chat.toMojangson(message));
+        final String[] mojangsons = new String[messages.length];
+        for (int i = 0; i < messages.length; i++) {
+            mojangsons[i] = Chat.toMojangson(messages[i]);
         }
+        Chat.sendMessage(to, mojangsons);
     }
 
     /**
@@ -84,13 +144,11 @@ public final class Chat {
         Validate.notEmpty(permission, "The 'permission' argument should not be null nor empty");
         Validate.notEmpty(messages, "Please provide at least one Message");
         Validate.noNullElements(messages, "The 'messages' argument should not contain null values");
-        for (final Message message : messages) {
-            for (final Player player : Bukkit.getOnlinePlayers()) {
-                if (player.hasPermission(permission)) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tellraw " + player.getName() + ' ' + Chat.toMojangson(message));
-                }
-            }
+        final String[] mojangsons = new String[messages.length];
+        for (int i = 0; i < messages.length; i++) {
+            mojangsons[i] = Chat.toMojangson(messages[i]);
         }
+        Chat.broadcast(permission, mojangsons);
     }
 
     /**
@@ -106,41 +164,54 @@ public final class Chat {
         Chat.broadcast(Server.BROADCAST_CHANNEL_USERS, messages);
     }
 
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * * * * * * Methods to convert Message objects to Mojangson * * * * * *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    // ##################################################################### //
+    // ##             Converting Message objects to Mojangson             ## //
+    // ##################################################################### //
+
+    private static int    cachedMessageHash  = -1;
+    private static String cachedMessageValue = "";
 
     /**
      * Converts a {@link Message} to a Mojangson Chat String.
-     *
-     * TODO Add caching
      *
      * @param message the message
      *
      * @return a Mojangson String matching the provided Message
      */
     private static String toMojangson(final Message message) {
-        final StringBuilder result = new StringBuilder();
-        result.append("{\"text\":\"\",\"extra\":[");
-        for (final Part part : message) {
-            Chat.appendPart(result, part);
+        final int hash = message.hashCode();
+        if (Chat.cachedMessageHash == hash) {
+            Chat.LOGGER.info("DEBUG Returning cached Message");
+            return Chat.cachedMessageValue;
+        } else {
+            int extraLevel = 1;
+            final StringBuilder result = new StringBuilder();
+            result.append("{\"text\":\"\",\"extra\":[");
+            for (final Part part : message) {
+                extraLevel = Chat.appendPart(result, part, extraLevel);
+            }
+            for (int i = 0; i < extraLevel; i++) {
+                result.append("]}");
+            }
+            final String resultString = result.toString();
+            Chat.LOGGER.info("DEBUG Converted Message to " + resultString);
+            Chat.cachedMessageHash = hash;
+            Chat.cachedMessageValue = resultString;
+            return resultString;
         }
-        result.append("]}");
-        final String resultString = result.toString();
-        Chat.LOGGER.info("DEBUG         Converted Message to " + resultString);
-        return resultString;
     }
 
     /**
      * Converts a {@link Part} to a Mojangson Chat 'extra' String and appends
      * it to the provided StringBuilder.
      *
-     * TODO Add caching
+     * @param builder    a StringBuilder
+     * @param part       a Part
+     * @param extraLevel the amount of extra levels added to the Mojangson
      *
-     * @param builder a StringBuilder
-     * @param part    a Part
+     * @return the updated amount of extra levels
      */
-    private static void appendPart(final StringBuilder builder, final Part part) {
+    private static int appendPart(final StringBuilder builder, final Part part, int extraLevel) {
         builder.append('{');
         if (part.isLocalizedText()) {
             builder.append("\"translate\":\"")
@@ -161,57 +232,12 @@ public final class Chat {
             }
         } else {
             final String text = part.getText();
-            final Click clickAction = part.getClickAction();
-            final Hover hover = part.getHover();
-            if (text != null) {
-                Chat.appendText(builder, text);
-            }
-            if (clickAction != null) {
-                builder.append(',')
-                       .append("\"clickEvent\":{\"value\":\"")
-                       .append(Chat.escapeString(clickAction.getText()))
-                       .append("\",\"action\":\"");
-                switch (clickAction.getType()) {
-                    case OPEN_URL:
-                        builder.append("open_url");
-                        break;
-                    case SEND_TEXT:
-                        builder.append("run_command");
-                        break;
-                    case SET_TEXT:
-                        builder.append("suggest_command");
-                        break;
-                }
-                builder.append("\"}");
-            }
-            if (hover != null) {
-                builder.append(',')
-                       .append("\"hoverEvent\":{\"value\":\"");
-                switch (hover.getType()) {
-                    case SHOW_ACHIEVEMENT:
-                        builder.append(Chat.getAchievementId(hover.getAchievement()))
-                               .append("\",\"action\":\"show_achievement\"}");
-                        if (text == null) {
-                            // TODO Append achievement name as "translate" (?)
-                            builder.append("\"text\":\"").append(hover.getAchievement().name()).append('"');
-                        }
-                        break;
-                    case SHOW_ITEM:
-                        Chat.appendItem(builder, hover.getItem());
-                        builder.append("\",\"action\":\"show_item\"}");
-                        if (text == null) {
-                            // TODO Append item name as "translate" (?)
-                            builder.append("\"text\":\"").append(hover.getItem().getType()).append('"');
-                        }
-                        break;
-                    case SHOW_TEXT:
-                        builder.append(Chat.escapeString(StringUtils.join(hover.getText(), '\n')));
-                        builder.append("\",\"action\":\"show_text\"}");
-                        break;
-                }
-            }
+            Chat.appendClick(builder, part.getClickAction());
+            Chat.appendHover(builder, part.getHover(), text == null);
+            extraLevel = Chat.appendText(builder, text, extraLevel);
         }
         builder.append('}');
+        return extraLevel;
     }
 
     /**
@@ -219,54 +245,128 @@ public final class Chat {
      * a Mojangson Chat 'extra' String and append it to the provided
      * StringBuilder.
      *
-     * TODO Add caching?
+     * @param builder    a StringBuilder
+     * @param text       a text
+     * @param extraLevel the amount of extra levels added to the Mojangson
      *
-     * @param builder a StringBuilder
-     * @param text    a text
+     * @return the updated amount of extra levels
      */
-    private static void appendText(final StringBuilder builder, final String text) {
-        // TODO Append text
-        builder.append("\"text\":\"").append(Chat.escapeString(text)).append('"');
-        // TODO Handle ChatColor characters
-        // TODO Parse links adding clickEvents
+    private static int appendText(final StringBuilder builder, final String text, int extraLevel) {
+        if (builder.charAt(builder.length() - 1) != '{') {
+            builder.append(',');
+        }
+        if (text.contains("http") || text.indexOf(ChatColor.COLOR_CHAR) != -1) {
+            builder.append("\"text\":\"\",\"extra\":[");
+            ++extraLevel;
+            int httpIndex, colorIndex, tmp;
+            String remainingText = text, url;
+            do {
+                httpIndex = remainingText.indexOf("http");
+                colorIndex = remainingText.indexOf(ChatColor.COLOR_CHAR);
+                if (httpIndex != -1 && (colorIndex == -1 || httpIndex < colorIndex)) {
+                    // The link is the first thing in the String
+                    if (httpIndex != 0) {
+                        builder.append("{\"text\":\"")
+                               .append(Chat.escapeString(remainingText.substring(0, httpIndex)))
+                               .append("\",\"extra\":[");
+                        remainingText = remainingText.substring(httpIndex);
+                    }
+                    tmp = remainingText.indexOf(' ');
+                    tmp = tmp == -1 ? remainingText.length() : tmp;
+                    url = remainingText.substring(0, tmp);
+                    builder.append("{\"text\":\"")
+                           .append(Chat.escapeString(url))
+                           .append('"');
+                    Chat.appendClick(builder, Click.ofOpenUrl(url));
+                    builder.append('}');
+                    if (httpIndex != 0) {
+                        builder.append("]}");
+                    }
+                    remainingText = remainingText.substring(url.length());
+                } else if (colorIndex != -1 && (httpIndex == -1 || colorIndex < httpIndex)) {
+                    // The color change is the first thing in the String
+                    if (colorIndex != 0) {
+                        builder.append("{\"text\":\"")
+                               .append(Chat.escapeString(remainingText.substring(0, colorIndex)))
+                               .append("\",\"extra\":[");
+                        ++extraLevel;
+                        remainingText = remainingText.substring(colorIndex);
+                    }
+                    try {
+                        builder.append("{\"text\":\"\",\"color\":\"")
+                               .append(Chat.getColorString(remainingText.charAt(1)))
+                               .append("\",\"extra\":[");
+                    } catch (final IndexOutOfBoundsException e) {
+                        throw new IllegalArgumentException("Malformed input: incomplete color code", e);
+                    }
+                    ++extraLevel;
+                    remainingText = remainingText.substring(2);
+                } else {
+                    // Can't be at the same place: they're both equal to -1. Just append everything left.
+                    builder.append('"').append(Chat.escapeString(remainingText)).append('"');
+                    remainingText = "";
+                }
+                if (!remainingText.isEmpty()) {
+                    builder.append(',');
+                }
+            } while (!remainingText.isEmpty());
+        } else {
+            builder.append("\"text\":\"").append(Chat.escapeString(text)).append('"');
+        }
+        return extraLevel;
     }
 
-    /**
-     * Gets the String identifier of an {@link Achievement} that the client
-     * can understand.
-     *
-     * @param achievement the achievement
-     *
-     * @return the achievement's identifier
-     */
-    private static String getAchievementId(final Achievement achievement) {
-        switch (achievement) {
-            case BUILD_WORKBENCH:
-                return "buildWorkBench";
-            case GET_DIAMONDS:
-                return "diamonds";
-            case NETHER_PORTAL:
-                return "portal";
-            case GHAST_RETURN:
-                return "ghast";
-            case GET_BLAZE_ROD:
-                return "blazeRod";
-            case BREW_POTION:
-                return "potion";
-            case END_PORTAL:
-                return "theEnd";
-            case THE_END:
-                return "theEnd2";
-            default:
-                final char[] chars = achievement.name().toLowerCase().toCharArray();
-                for (int i = 0; i < chars.length - 1; i++) {
-                    if (chars[i] == '_') {
-                        i++;
-                        chars[i] = Character.toTitleCase(chars[i]);
+    private static void appendClick(final StringBuilder builder, final Click clickAction) {
+        if (clickAction != null) {
+            if (builder.charAt(builder.length() - 1) != '{') {
+                builder.append(',');
+            }
+            builder.append("\"clickEvent\":{\"value\":\"")
+                   .append(Chat.escapeString(clickAction.getText()))
+                   .append("\",\"action\":\"");
+            switch (clickAction.getType()) {
+                case OPEN_URL:
+                    builder.append("open_url");
+                    break;
+                case SEND_TEXT:
+                    builder.append("run_command");
+                    break;
+                case SET_TEXT:
+                    builder.append("suggest_command");
+                    break;
+            }
+            builder.append("\"}");
+        }
+    }
+
+    private static void appendHover(final StringBuilder builder, final Hover hover, final boolean noText) {
+        if (hover != null) {
+            if (builder.charAt(builder.length() - 1) != '{') {
+                builder.append(',');
+            }
+            builder.append("\"hoverEvent\":{\"value\":\"");
+            switch (hover.getType()) {
+                case SHOW_ACHIEVEMENT:
+                    builder.append(Chat.getAchievementId(hover.getAchievement()))
+                           .append("\",\"action\":\"show_achievement\"}");
+                    if (noText) {
+                        // FIXME Append achievement name as "translate" (How?)
+                        builder.append("\"text\":\"").append(hover.getAchievement().name()).append('"');
                     }
-                }
-                final String result = new String(chars);
-                return "achievement." + result.replace("_", "");
+                    break;
+                case SHOW_ITEM:
+                    Chat.appendItem(builder, hover.getItem());
+                    builder.append("\",\"action\":\"show_item\"}");
+                    if (noText) {
+                        // FIXME Append item name as "translate" (How?)
+                        builder.append("\"text\":\"").append(hover.getItem().getType()).append('"');
+                    }
+                    break;
+                case SHOW_TEXT:
+                    builder.append(Chat.escapeString(StringUtils.join(hover.getText(), '\n')));
+                    builder.append("\",\"action\":\"show_text\"}");
+                    break;
+            }
         }
     }
 
@@ -407,6 +507,66 @@ public final class Chat {
     }
 
     /**
+     * Gets a Mojangson color String based on a color character.
+     *
+     * @param colorChar a color char
+     *
+     * @return a Mojangson color String
+     */
+    private static String getColorString(final char colorChar) {
+        final ChatColor color = ChatColor.getByChar(colorChar);
+        if (color == null) {
+            throw new IllegalArgumentException("Invalid color char: " + colorChar);
+        } else {
+            switch (color) {
+                case MAGIC:
+                    return "obfuscated";
+                default:
+                    return color.name().toLowerCase();
+            }
+        }
+    }
+
+    /**
+     * Gets the String identifier of an {@link Achievement} that the client
+     * can understand.
+     *
+     * @param achievement the achievement
+     *
+     * @return the achievement's identifier
+     */
+    private static String getAchievementId(final Achievement achievement) {
+        switch (achievement) {
+            case BUILD_WORKBENCH:
+                return "buildWorkBench";
+            case GET_DIAMONDS:
+                return "diamonds";
+            case NETHER_PORTAL:
+                return "portal";
+            case GHAST_RETURN:
+                return "ghast";
+            case GET_BLAZE_ROD:
+                return "blazeRod";
+            case BREW_POTION:
+                return "potion";
+            case END_PORTAL:
+                return "theEnd";
+            case THE_END:
+                return "theEnd2";
+            default:
+                final char[] chars = achievement.name().toLowerCase().toCharArray();
+                for (int i = 0; i < chars.length - 1; i++) {
+                    if (chars[i] == '_') {
+                        i++;
+                        chars[i] = Character.toTitleCase(chars[i]);
+                    }
+                }
+                final String result = new String(chars);
+                return "achievement." + result.replace("_", "");
+        }
+    }
+
+    /**
      * Escapes a String for JSON compatibility.
      *
      * @param input a String
@@ -442,9 +602,7 @@ public final class Chat {
         }
     }
 
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    // ##################################################################### //
 
     /**
      * This class shouldn't be instantiated.
